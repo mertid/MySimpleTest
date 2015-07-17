@@ -28,6 +28,8 @@
 #import "TEALCollectNetworkService.h"
 #import "TEALTagNetworkService.h"
 
+// Events
+#import "TEALApplicationLifecycle.h"
 
 // Dispatch
 
@@ -55,7 +57,8 @@
                         TEALDispatchManagerDelegate,
                         TEALDispatchManagerConfiguration,
                         TEALVisitorProfileStoreConfiguration,
-                        TEALCollectNetworkServiceConfiguration>
+                        TEALCollectNetworkServiceConfiguration,
+                        TEALTagNetworkServiceConfiguration>
 
 @property (strong, nonatomic) TEALSettingsStore *settingsStore;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
@@ -68,6 +71,8 @@
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
 
 @property (strong, nonatomic) NSArray *dispatchNetworkServices;
+
+@property (strong, nonatomic) TEALApplicationLifecycle *lifecycle;
 
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
@@ -164,6 +169,7 @@
     // TODO: Move later + Needs settings
     [self setupNetworkServicesForSettings:settings];
 
+    [self setupLifecycleForSettings:settings];
     
     [self fetchSettings:settings
              completion:setupCompletion];
@@ -171,18 +177,54 @@
     [self setupSettingsReachabilitiyCallbacks];
 }
 
+- (void) setupLifecycleForSettings:(TEALSettings *) settings {
+    
+    if (settings.lifecycleEnabled){
+        self.lifecycle = [[TEALApplicationLifecycle alloc] init];
+        
+        __weak Tealium *weakSelf = self;
+        
+        [weakSelf.lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
+            
+            if (!weakSelf.enabled) {
+                
+                // TODO: add reporting for instance
+                TEAL_LogVerbose(@"Lifecycle Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
+                return;
+            }
+            
+            [weakSelf.operationManager addOperationWithBlock:^{
+                
+                [weakSelf sendEvent:TEALEventTypeLink
+                           withData:dataDictionary];
+            }];
+        }];
+        
+    } else if (self.lifecycle){
+        [self.lifecycle disable];
+        self.lifecycle = nil;
+    }
+    
+}
+
 
 - (void) setupNetworkServicesForSettings:(TEALSettings *)settings {
     
-    // TODO
+    NSMutableArray *possibleNetworkServices = [NSMutableArray array];
     
-    // if settings.useCOllect = True do this
+    if (settings.tagManagementEnabled){
+        TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
+        [possibleNetworkServices addObject:tagService];
+    }
     
-    TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
-    TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
+    if (settings.audienceStreamEnabled){
+        TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
+        [possibleNetworkServices addObject:collectService];
+    }
     
-    self.dispatchNetworkServices = @[collectService,
-                                     tagService];
+    // TODO: Use NSOperations
+    
+    self.dispatchNetworkServices = [NSArray arrayWithArray:possibleNetworkServices];
     
     for (id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
         [service setup];
@@ -312,6 +354,8 @@
     
     __weak Tealium *instance = [[self class] sharedInstance];
     
+    // TODO: move these to the instance methods
+    
     if (!instance.enabled) {
         TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
         return;
@@ -422,6 +466,7 @@
 
     for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
         
+        // TODO:
         // two completions ?
         // build composite obj / nsoperation ?
         // if one service fails, should the disaptch requeue

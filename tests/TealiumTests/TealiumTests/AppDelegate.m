@@ -26,10 +26,16 @@
     
     configuration.logLevel = TEALLogLevelExtremeVerbosity;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    configuration.tagManagementEnabled = YES;
+    configuration.audienceStreamEnabled = NO;
+    configuration.lifecycleEnabled = YES;
     
     [Tealium enableWithConfiguration:configuration];
     
     [Tealium sendEventWithData:@{@"lifecyle_type": @"launch"}];
+    
+    
+    
     return YES;
 }
 

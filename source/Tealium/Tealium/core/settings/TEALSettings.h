@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, TEALSettingsStatus) {
 #pragma mark - Configuration
 
 @property (nonatomic) BOOL useHTTP;
-@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
+@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;  // ? Move to MPS
 @property (nonatomic) TEALLogLevel logLevel;
 
 #pragma mark - Mobile Publish Settings
@@ -57,6 +57,11 @@ typedef NS_ENUM(NSUInteger, TEALSettingsStatus) {
 @property (nonatomic) BOOL shouldLowBatterySuppress;
 
 @property (nonatomic) BOOL shouldSendWifiOnly;
+
+@property (nonatomic) BOOL tagManagementEnabled;
+@property (nonatomic) BOOL audienceStreamEnabled;
+@property (nonatomic) BOOL lifecycleEnabled;
+
 
 + (instancetype) settingWithConfiguration:(TEALConfiguration *)configuration
                                 visitorID:(NSString *)visitorID;

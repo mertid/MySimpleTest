@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
+// TODO: Make a strings file instead?
+
 #import <Foundation/Foundation.h>
 
 #pragma mark - UDO / Datasource Keys

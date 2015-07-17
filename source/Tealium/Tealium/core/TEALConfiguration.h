@@ -105,6 +105,10 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @property (copy, nonatomic) NSString *audienceStreamProfile;
 
+@property (nonatomic) BOOL tagManagementEnabled;
+@property (nonatomic) BOOL audienceStreamEnabled;
+@property (nonatomic) BOOL lifecycleEnabled;
+
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
  *
