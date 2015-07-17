@@ -28,6 +28,6 @@ extern NSString const * TEALCollectKey_Environment;
 extern NSString const * TEALCollectKey_VisitorID;
 extern NSString const * TEALCollectKey_TraceID;
 
-@interface TEALCollectDatasources : NSObject
+@interface TEALDatasources : NSObject
 
 @end

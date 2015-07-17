@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALCollectAPIHelpers.h"
+#import "TEALAPIHelpers.h"
 #import "TEALSettings.h"
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 #import "TEALNetworkHelpers.h"
 
-@implementation TEALCollectAPIHelpers
+@implementation TEALAPIHelpers
 
 + (NSURL *) profileURLFromSettings:(TEALSettings *)settings {
     
@@ -71,7 +71,12 @@
 }
 
 #pragma MPS / Mobile Publish Settings Helpers
-               
+
++ (NSString *) mobileHTMLURLStringFromSettings:(TEALSettings *)settings{
+    return [TEALAPIHelpers mobilePublishSettingsURLStringFromSettings:settings];
+}
+
+
 + (NSString *) mobilePublishSettingsURLStringFromSettings:(TEALSettings *)settings {
     
     if (![settings isValid]) {

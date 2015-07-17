@@ -9,7 +9,7 @@
 #import "Tealium.h"
 
 #import "TEALSettingsStore.h"
-#import "TEALCollectDispatchManager.h"
+#import "TEALDispatchManager.h"
 
 //#import "TEALDatasourceManager.h"
 
@@ -19,12 +19,15 @@
 // Queue / Operation Managers
 
 #import "TEALOperationManager.h"
-#import "TEALCollectDispatchManager.h"
 
 // Networking
 
 #import "TEALURLSessionManager.h"
 #import "TEALNetworkHelpers.h"
+#import "TEALDispatchNetworkService.h"
+#import "TEALCollectNetworkService.h"
+#import "TEALTagNetworkService.h"
+
 
 // Dispatch
 
@@ -36,7 +39,7 @@
 
 // Datasources
 
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 #import "TEALDataSourceStore.h"
 #import "TEALDatasourceStore+TealiumAdditions.h"
 
@@ -46,12 +49,16 @@
 
 // API
 
-#import "TEALCollectAPIHelpers.h"
+#import "TEALAPIHelpers.h"
 
-@interface Tealium () <TEALSettingsStoreConfiguration, TEALCollectDispatchManagerDelegate, TEALCollectDispatchManagerConfiguration, TEALVisitorProfileStoreConfiguration>
+@interface Tealium () <TEALSettingsStoreConfiguration,
+                        TEALDispatchManagerDelegate,
+                        TEALDispatchManagerConfiguration,
+                        TEALVisitorProfileStoreConfiguration,
+                        TEALCollectNetworkServiceConfiguration>
 
 @property (strong, nonatomic) TEALSettingsStore *settingsStore;
-@property (strong, nonatomic) TEALCollectDispatchManager *dispatchManager;
+@property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 @property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
 
 @property (strong, nonatomic) TEALDatasourceStore *datasourceStore;
@@ -59,6 +66,8 @@
 @property (strong, nonatomic) TEALOperationManager *operationManager;
 
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+
+@property (strong, nonatomic) NSArray *dispatchNetworkServices;
 
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
@@ -102,8 +111,6 @@
         
         [_settingsStore unarchiveCurrentSettings];
         
-        _dispatchManager    = [TEALCollectDispatchManager dispatchManagerWithConfiguration:self
-                                                                                  delegate:self];
     }
     
     return self;
@@ -144,16 +151,43 @@
     
     self.visitorID = visitorID;
     
+    // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
     TEALSettings *settings = [self.settingsStore settingsFromConfiguration:configuration visitorID:visitorID];
     
     [TEALLogger setLogLevel:settings.logLevel];
     
+    // TODO: Move later + Needs settings
+    self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
+                                                                       delegate:self];
+    // TODO: Move later + Needs settings
+    [self setupNetworkServicesForSettings:settings];
+
+    
     [self fetchSettings:settings
              completion:setupCompletion];
     
     [self setupSettingsReachabilitiyCallbacks];
+}
+
+
+- (void) setupNetworkServicesForSettings:(TEALSettings *)settings {
+    
+    // TODO
+    
+    // if settings.useCOllect = True do this
+    
+    TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
+    TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
+    
+    self.dispatchNetworkServices = @[collectService,
+                                     tagService];
+    
+    for (id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+        [service setup];
+    }
+
 }
 
 - (void) fetchSettings:(TEALSettings *)settings
@@ -209,7 +243,7 @@
         case TEALSettingsStatusNew:
         case TEALSettingsStatusLoadedArchive:
         case TEALSettingsStatusLoadedRemote:
-            
+
             break;
         case TEALSettingsStatusInvalid:
             TEAL_LogVerbose(@"Invalid Settings library is shutting now.  Please enable with valid configuration.");
@@ -243,7 +277,7 @@
         return nil;
     }
     
-    return [TEALCollectAPIHelpers mobilePublishSettingsURLStringFromSettings:settings];
+    return [TEALAPIHelpers mobilePublishSettingsURLStringFromSettings:settings];
 }
 
 - (NSDictionary *) mobilePublishSettingsURLParams {
@@ -336,7 +370,7 @@
     [self.dispatchManager archiveDispatchQueue];
 }
 
-- (void) dispatchManager:(TEALCollectDispatchManager *)dispatchManager didProcessDispatch:(TEALDispatch *)dispatch status:(TEALDispatchStatus)status {
+- (void) dispatchManager:(TEALDispatchManager *)dispatchManager didProcessDispatch:(TEALDispatch *)dispatch status:(TEALDispatchStatus)status {
     
     if (self.settingsStore.currentSettings.logLevel >= TEALLogLevelVerbose) {
         
@@ -366,7 +400,7 @@
     }];
 }
 
-#pragma mark - TEALCollectDispatchManagerDelegate methods
+#pragma mark - TEALDispatchManagerDelegate methods
 
 - (BOOL) shouldAttemptDispatch {
     
@@ -381,17 +415,50 @@
     return shouldAttempt;
 }
 
-#pragma mark - TEALCollectDispatchManagerConfiguration methods
+
+- (void) dispatchManager:(TEALDispatchManager *)dataManager
+        requestsDispatch:(TEALDispatch *)dispatch
+         completionBlock:(TEALDispatchBlock)completionBlock {
+
+    for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+        
+        // two completions ?
+        // build composite obj / nsoperation ?
+        // if one service fails, should the disaptch requeue
+        
+        [service sendDispatch:dispatch
+                   completion:completionBlock];
+    }
+}
+
+- (void) willEnqueueDispatch:(TEALDispatch *)dispatch {
+    
+}
+
+- (void) didEnqueueDispatch:(TEALDispatch *)dispatch {
+    
+}
+
+- (void) didUpdateDispatchQueues {
+    
+}
+
+- (BOOL) shouldRemoveDispatch:(TEALDispatch *)dispatch {
+
+    return NO;
+}
+
+- (void) willRunDispatchQueueWithCount:(NSUInteger)count {
+    
+}
+- (void) didRunDispatchQueueWithCount:(NSUInteger)count {
+    
+}
+
+#pragma mark - TEALDispatchManagerConfiguration methods
 
 - (NSDictionary *) datasourcesForEventType:(TEALEventType)eventType {
     return [self.datasourceStore datasourcesForEventType:eventType];
-}
-
-- (NSString *) dispatchURLString {
-    
-    TEALSettings *settings = self.settingsStore.currentSettings;
-    
-    return [TEALCollectAPIHelpers sendDataURLStringFromSettings:settings];
 }
 
 - (NSUInteger) dispatchBatchSize {
@@ -401,11 +468,30 @@
     return [settings dispatchSize];
 }
 
-- (NSUInteger) offlineDispatchQueueCapacity {
+- (NSUInteger) dispatchQueueCapacity {
     
     TEALSettings *settings = self.settingsStore.currentSettings;
     
     return [settings offlineDispatchQueueSize];
+}
+
+#pragma mark - TEALCollectNetworkServiceConfiguration
+
+- (NSString *) collectDispatchURLString {
+    
+    TEALSettings *settings = self.settingsStore.currentSettings;
+    
+    return [TEALAPIHelpers sendDataURLStringFromSettings:settings];
+}
+
+#pragma mark - TEALTagNetworkServiceConfiguration
+
+- (NSString*) tagTargetURLString {
+    
+    TEALSettings *settings = self.settingsStore.currentSettings;
+    
+    return [TEALAPIHelpers mobileHTMLURLStringFromSettings:settings];
+    
 }
 
 #pragma mark - Profile
@@ -466,14 +552,14 @@
     
     TEALSettings *settings = self.settingsStore.currentSettings;
     
-    return [TEALCollectAPIHelpers profileURLFromSettings:settings];
+    return [TEALAPIHelpers profileURLFromSettings:settings];
 }
 
 - (NSURL *) profileDefinitionURL {
     
     TEALSettings *settings = self.settingsStore.currentSettings;
     
-    return [TEALCollectAPIHelpers profileDefinitionsURLFromSettings:settings];
+    return [TEALAPIHelpers profileDefinitionsURLFromSettings:settings];
 }
 
 #pragma mark - Visitor ID

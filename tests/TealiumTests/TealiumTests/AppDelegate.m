@@ -25,9 +25,11 @@
                                                                        environment:@"dev"];
     
     configuration.logLevel = TEALLogLevelExtremeVerbosity;
+    configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
     [Tealium enableWithConfiguration:configuration];
     
+    [Tealium sendEventWithData:@{@"lifecyle_type": @"launch"}];
     return YES;
 }
 

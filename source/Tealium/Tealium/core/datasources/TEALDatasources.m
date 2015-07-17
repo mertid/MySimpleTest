@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 
 #pragma mark - UDO / Datasource Keys
 
@@ -28,6 +28,6 @@ NSString const * TEALCollectKey_Environment  = @"tealium_environment";
 NSString const * TEALCollectKey_VisitorID    = @"tealium_vid";
 NSString const * TEALCollectKey_TraceID      = @"tealium_trace_id";
 
-@implementation TEALCollectDatasources
+@implementation TEALDatasources
 
 @end

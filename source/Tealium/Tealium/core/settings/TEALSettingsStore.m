@@ -12,7 +12,7 @@
 #import "TEALOperationManager.h"
 #import "TEALURLSessionManager.h"
 #import "TEALConfiguration.h"
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 #import "TEALError.h"
 #import "TEALLogger.h"
 
@@ -242,6 +242,8 @@ static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.au
     NSString *mpsDataString = [scriptContents substringWithRange:mpsRange];
     
     TEAL_LogExtreamVerbosity(@"mpsDataString: %@", mpsDataString);
+    
+    // TODO: check for missing utag and / or tags
     
     NSData *mpsJSONData = [mpsDataString dataUsingEncoding:NSUTF8StringEncoding];
     

@@ -7,7 +7,7 @@
 //
 
 #import "TEALDatasourceStore.h"
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 #import "TEALEvent.h"
 
 @interface TEALDatasourceStore (TealiumAdditions)

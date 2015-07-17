@@ -10,10 +10,11 @@
 
 @class TEALSettings;
 
-@interface TEALCollectAPIHelpers : NSObject
+@interface TEALAPIHelpers : NSObject
 
 #pragma mark - Get Data
 
+// TODO: possibly change to visitorProfileURL... or subclass a TEALCollectAPIHelpers
 + (NSURL *) profileURLFromSettings:(TEALSettings *)settings;
 + (NSURL *) profileDefinitionsURLFromSettings:(TEALSettings *)settings;
 
@@ -23,6 +24,7 @@
 
 #pragma MPS / Mobile Publish Settings Helpers
 
++ (NSString *) mobileHTMLURLStringFromSettings:(TEALSettings *)settings;
 + (NSString *) mobilePublishSettingsURLStringFromSettings:(TEALSettings *)settings;
 
 @end

@@ -10,7 +10,7 @@
 
 @interface TEALDispatch : NSObject <NSCoding>
 
-@property (strong, nonatomic) NSObject<NSCoding> *payload;
+@property (strong, nonatomic) NSDictionary *payload;
 @property (nonatomic) NSTimeInterval timestamp;
 @property (nonatomic) BOOL queued;
 
