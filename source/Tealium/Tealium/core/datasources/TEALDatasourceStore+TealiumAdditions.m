@@ -100,11 +100,23 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     return datasources;
 }
 
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType {
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType title:(NSString *)title {
 
     NSMutableDictionary *datasources = [NSMutableDictionary new];
 
     datasources[TEALDatasourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
+    if (title) {
+        switch (eventType) {
+            case TEALEventTypeLink:
+                datasources[TEALDatasourceKey_EventTitle] = title;
+                break;
+            case TEALEventTypeView:
+                datasources[TEALDatasourceKey_ViewTitle] = title;
+                break;
+            default:
+                break;
+        }
+    }
     
     return datasources;
 }

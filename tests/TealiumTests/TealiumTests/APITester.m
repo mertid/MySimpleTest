@@ -95,19 +95,21 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     NSDictionary *data = @{ @"custom_key" : @"custom_value"};
     
-    [Tealium sendViewWithData:data];
+    [[Tealium sharedInstance] trackViewWithTitle:@"APITester" dataSources:data];
+    
 }
 
 - (void) sendCollectEvent {
     
     NSDictionary *data = @{ @"custom_key" : @"custom_value"};
     
-    [Tealium sendEventWithData:data];
+    [[Tealium sharedInstance] trackEventWithTitle:@"APITester" dataSources:data];
+
 }
 
 - (void) fetchVisitorProfile {
     
-    [Tealium fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+    [[Tealium sharedInstance] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
         
         if (error) {
             NSLog(@"test app failed to receive profile with error: %@", [error localizedDescription]);
@@ -120,7 +122,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) accessLastLoadedVisitorProfile {
     
-    TEALVisitorProfile *profile = [Tealium cachedVisitorProfileCopy];
+    TEALVisitorProfile *profile = [[Tealium sharedInstance] cachedVisitorProfileCopy];
     
     if (profile) {
         NSLog(@"last loaded profile: %@", profile);
@@ -135,11 +137,11 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) joinTraceWithToken:(NSString *)token {
     
-    [Tealium joinTraceWithToken:token];
+    [[Tealium sharedInstance] joinTraceWithToken:token];
 }
 
 - (void) leaveTrace {
-    [Tealium leaveTrace];
+    [[Tealium sharedInstance] leaveTrace];
 }
 
 @end

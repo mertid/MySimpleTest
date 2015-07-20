@@ -12,6 +12,9 @@
 
 @interface AppDelegate ()
 
+
+@property (strong, nonatomic) Tealium *tealiumInstance;
+
 @end
 
 @implementation AppDelegate
@@ -30,11 +33,14 @@
     configuration.audienceStreamEnabled = NO;
     configuration.lifecycleEnabled = YES;
     
-    [Tealium enableWithConfiguration:configuration];
+    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
     
-    [Tealium sendEventWithData:@{@"lifecyle_type": @"launch"}];
+    [self.tealiumInstance trackEventWithTitle:@"testInstanceLaunch" dataSources:nil];
     
+    [Tealium sharedInstanceWithConfiguration:configuration];
     
+    [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
+
     
     return YES;
 }

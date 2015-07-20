@@ -18,6 +18,6 @@
 
 - (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType;
 
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType;
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType title:(NSString *)title;
 
 @end
