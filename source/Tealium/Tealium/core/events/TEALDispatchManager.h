@@ -41,8 +41,6 @@
 
 @protocol TEALDispatchManagerConfiguration <NSObject>
 
-- (NSDictionary *) datasourcesForEventType:(TEALEventType)eventType;
-
 - (NSUInteger) dispatchBatchSize;
 
 - (NSUInteger) dispatchQueueCapacity;
@@ -65,9 +63,8 @@
 
 #pragma mark - enqueue / dequeue dispatches
 
-- (void) addDispatchForEvent:(TEALEventType)eventType
-                    withData:(NSDictionary *)userInfo
-             completionBlock:(TEALDispatchBlock)completionBlock;
+- (void) addDispatch:(TEALDispatch *)dispatch
+     completionBlock:(TEALDispatchBlock)completionBlock;
 
 - (void) unarchiveDispatchQueue;
 - (void) archiveDispatchQueue;

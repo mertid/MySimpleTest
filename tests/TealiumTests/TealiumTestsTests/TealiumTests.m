@@ -12,7 +12,7 @@
 #import <Tealium/Tealium.h>
 #import <Tealium/TEALSettings.h>
 #import "Tealium+PrivateHeader.h"
-
+#import <Tealium/TEALDispatch.h>
 
 @interface TealiumTests : XCTestCase
 
@@ -164,10 +164,11 @@
         XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
     };
     
-    [self.library.dispatchManager addDispatchForEvent:TEALEventTypeLink
-                                             withData:@{@"test_key":@"test_value"}
-                                      completionBlock:completion];
-    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
+                                                   withData:@{@"test_key":@"test_value"}];
+    [self.library.dispatchManager addDispatch:dispatch
+                              completionBlock:completion];
+
     self.library.settingsStore.currentSettings.dispatchSize = 5;
     
     completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
@@ -176,9 +177,11 @@
     };
     
     for (NSInteger xi = 0; xi < 5; xi ++) {
-        [self.library.dispatchManager addDispatchForEvent:TEALEventTypeLink
-                                                 withData:@{@"test_key":@"test_value"}
-                                          completionBlock:completion];
+        
+        TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
+                                                       withData:@{@"test_key":@"test_value"}];
+        [self.library.dispatchManager addDispatch:dispatch
+                                  completionBlock:completion];
     }
 }
 

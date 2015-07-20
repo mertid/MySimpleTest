@@ -407,9 +407,15 @@
         }
     };
     
-    [self.dispatchManager addDispatchForEvent:eventType
-                                     withData:customData
-                              completionBlock:completion];
+    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:eventType withData:customData];
+    
+    // capture time datasources
+    NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType];
+
+    [self addDatasources:datasources toDisaptch:dispatch];
+    
+    [self.dispatchManager addDispatch:dispatch
+                      completionBlock:completion];
     
     [self.dispatchManager archiveDispatchQueue];
 }
@@ -459,11 +465,32 @@
     return shouldAttempt;
 }
 
+- (void) addDatasources:(NSDictionary *)datasources toDisaptch:(TEALDispatch *)dispatch {
+    
+    NSDictionary *userInfo = dispatch.payload;
+    
+    if (userInfo) {
+        NSMutableDictionary *combined = [NSMutableDictionary dictionaryWithDictionary:datasources];
+        
+        [combined addEntriesFromDictionary:userInfo];
+        datasources = combined;
+    }
+    
+    dispatch.payload = datasources;
+
+}
 
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock {
 
+    // Send Time (static) datasources
+    
+    NSDictionary *datasources = [self.datasourceStore transmissionTimeDatasourcesForEventType:dispatch.eventType];
+
+    [self addDatasources:datasources
+              toDisaptch:dispatch];
+    
     for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
         
         // TODO:
@@ -501,10 +528,6 @@
 }
 
 #pragma mark - TEALDispatchManagerConfiguration methods
-
-- (NSDictionary *) datasourcesForEventType:(TEALEventType)eventType {
-    return [self.datasourceStore datasourcesForEventType:eventType];
-}
 
 - (NSUInteger) dispatchBatchSize {
     

@@ -84,41 +84,6 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 #pragma mark - enqueue / dequeue dispatches
 
-- (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withData:(NSDictionary *)userInfo {
-    
-    NSDictionary *datasources = [self.configuration datasourcesForEventType:eventType];
-    
-    if (userInfo) {
-        
-        NSMutableDictionary *combined = [NSMutableDictionary dictionaryWithDictionary:datasources];
-        
-        [combined addEntriesFromDictionary:userInfo];
-        datasources = combined;
-    }
-    
-    TEALDispatch *dispatch = [TEALDispatch new];
-    
-    dispatch.payload    = datasources;
-    dispatch.timestamp  = [[NSDate date] timeIntervalSince1970];
-    
-    return dispatch;
-}
-
-- (void) addDispatchForEvent:(TEALEventType)eventType
-                    withData:(NSDictionary *)userInfo
-             completionBlock:(TEALDispatchBlock)completionBlock {
-    
-    TEALDispatch *dispatch = [self dispatchForEvent:eventType withData:userInfo];
-    
-    TEALDispatchBlock dispatchCompletion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-        
-        completionBlock(status, dispatch, error);
-    };
-    
-    [self addDispatch:dispatch
-      completionBlock:dispatchCompletion];
-}
-
 - (void) addDispatch:(TEALDispatch *)aDispatch completionBlock:(TEALDispatchBlock)completionBlock {
 
     [self purgeStaleDispatches];
