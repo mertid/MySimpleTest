@@ -19,6 +19,8 @@ NSString * const TEALDatasourceKey_UUID             = @"uuid";
 NSString * const TEALDatasourceKey_ApplicationName  = @"app_name";
 NSString * const TEALDatasourceKey_Timestamp        = @"timestamp";
 NSString * const TEALDatasourceKey_CallType         = @"callType";
+NSString * const TEALDatasourceKey_EventTitle       = @"link_id";
+NSString * const TEALDatasourceKey_ViewTitle        = @"screen_title";
 
 NSString * const TEALDatasourceKey_LifecycleType    = @"lifecycle_type";
 

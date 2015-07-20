@@ -60,6 +60,7 @@
                         TEALCollectNetworkServiceConfiguration,
                         TEALTagNetworkServiceConfiguration>
 
+
 @property (strong, nonatomic) TEALSettingsStore *settingsStore;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 @property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
@@ -78,28 +79,33 @@
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
 @property (readwrite) BOOL enabled;
 
-
-
 @end
+
+__strong static Tealium *_sharedObject = nil;
 
 @implementation Tealium
 
 + (instancetype) sharedInstance {
     
-    static dispatch_once_t onceToken = 0;
-    __strong static Tealium *_sharedObject = nil;
-    
-    dispatch_once(&onceToken, ^{
-        _sharedObject = [[Tealium alloc] initPrivate];
-    });
-    
     return _sharedObject;
+}
+
++ (void) setSharedInstance:(Tealium *)instance {
+    _sharedObject = instance;
 }
 
 - (instancetype) init {
     [NSException raise:@"should not be initialized directly"
                 format:@"please use [Tealium sharedInstance] or public class methods"];
     return nil;
+}
+
++ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
+
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration];
+    [Tealium setSharedInstance:instance];
+    return instance;
+
 }
 
 - (instancetype) initPrivate {
@@ -123,29 +129,25 @@
 
 #pragma mark - Enable / Disable / Configure settings / startup
 
-+ (void) enableWithConfiguration:(TEALConfiguration *)configuration {
-    
-    [[self class] enableWithConfiguration:configuration
-                               completion:nil];
-}
 
-+ (void) enableWithConfiguration:(TEALConfiguration *)configuration
-                      completion:(TEALBooleanCompletionBlock)completion {
+
++ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration {
     
-    __weak Tealium *instance = [[self class] sharedInstance];
+    Tealium *instance = [[Tealium alloc] initPrivate];
     
-    [instance.operationManager addOperationWithBlock:^{
-        
-        [instance setupConfiguration:configuration completion:completion];
-        
+    __weak Tealium *weakInstance = instance;
+    
+    [weakInstance.operationManager addOperationWithBlock:^{
+        [weakInstance setupConfiguration:configuration completion:nil];
     }];
     
-    [instance enable];
+    return instance;
 }
 
 - (void) setupConfiguration:(TEALConfiguration *)configuration
                  completion:(TEALBooleanCompletionBlock)setupCompletion {
     
+    self.enabled = YES;
     
     self.datasourceStore = [TEALDatasourceStore sharedStore];
     [self.datasourceStore loadWithUUIDKey:configuration.accountName];
@@ -175,6 +177,8 @@
              completion:setupCompletion];
     
     [self setupSettingsReachabilitiyCallbacks];
+    
+    
 }
 
 - (void) setupLifecycleForSettings:(TEALSettings *) settings {
@@ -186,18 +190,7 @@
         
         [weakSelf.lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
             
-            if (!weakSelf.enabled) {
-                
-                // TODO: add reporting for instance
-                TEAL_LogVerbose(@"Lifecycle Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
-                return;
-            }
-            
-            [weakSelf.operationManager addOperationWithBlock:^{
-                
-                [weakSelf sendEvent:TEALEventTypeLink
-                           withData:dataDictionary];
-            }];
+            [weakSelf trackEventWithTitle:nil dataSources:dataDictionary];
         }];
         
     } else if (self.lifecycle){
@@ -289,7 +282,7 @@
             break;
         case TEALSettingsStatusInvalid:
             TEAL_LogVerbose(@"Invalid Settings library is shutting now.  Please enable with valid configuration.");
-            [Tealium disable];
+            [self disable];
             break;
     }
 }
@@ -329,9 +322,6 @@
 
 #pragma mark - Enable/Disable
 
-+ (void) disable {
-    [[self sharedInstance] disable];
-}
 
 - (void) disable {
     @synchronized(self) {
@@ -350,41 +340,36 @@
 
 #pragma mark - Tracking / Send Data
 
-+ (void) sendEventWithData:(NSDictionary *)customData {
+- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    __weak Tealium *instance = [[self class] sharedInstance];
+    __weak Tealium *weakSelf = self;
     
-    // TODO: move these to the instance methods
+    [weakSelf.operationManager addOperationWithBlock:^{
+       
+        [weakSelf sendEvent:TEALEventTypeLink withData:clientDataSources title:title];
+
+    }];
     
-    if (!instance.enabled) {
-        TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
-        return;
-    }
+}
+
+- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    [instance.operationManager addOperationWithBlock:^{
+    __weak Tealium *weakSelf = self;
+
+    [weakSelf.operationManager addOperationWithBlock:^{
         
-        [instance sendEvent:TEALEventTypeLink
-                   withData:customData];
+        [weakSelf sendEvent:TEALEventTypeView withData:clientDataSources title:title];
+        
     }];
 }
 
-+ (void) sendViewWithData:(NSDictionary *)customData {
+- (void) sendEvent:(TEALEventType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
     
-    __weak Tealium *instance = [[self class] sharedInstance];
-    
-    if (!instance.enabled) {
-        TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
+    if (!self.enabled) {
+        TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
+        TEAL_LogExtreamVerbosity(@"Title:%@ , DataSources: %@", title, customData);
         return;
     }
-    
-    [instance.operationManager addOperationWithBlock:^{
-        
-        [instance sendEvent:TEALEventTypeView
-                   withData:customData];
-    }];
-}
-
-- (void) sendEvent:(TEALEventType)eventType withData:(NSDictionary *)customData {
     
     __weak Tealium *weakSelf = self;
     
@@ -410,7 +395,7 @@
     TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:eventType withPayload:customData];
     
     // capture time datasources
-    NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType];
+    NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType title:title];
 
     [self addDatasources:datasources toDisaptch:dispatch];
     
@@ -444,7 +429,7 @@
         return;
     }
     
-    [self fetchProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
         
         TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
     }];
@@ -564,53 +549,41 @@
 
 #pragma mark - Profile
 
-+ (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
-    
-    __weak Tealium *instance = [[self class] sharedInstance];
-    
-    if (!instance.enabled) {
-        TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __func__);
-        return;
-    }
-    
-    [instance.operationManager addOperationWithBlock:^{
-        
-        [instance fetchProfileWithCompletion:completion];
-    }];
-}
-
-- (void) fetchProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
+- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
     
     __weak Tealium *weakSelf = self;
     
+    [weakSelf.operationManager addOperationWithBlock:^{
+
     if (!self.enabled) {
+        TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
         return; // No fail log because these they should be logged once for each public method
     }
     
     
-    TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
+        TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
+            
+            if (profile) {
+                TEAL_LogVerbose(@"got profile!!! : %@", profile);
+                
+                weakSelf.cachedProfile = profile;
+                
+                completion(weakSelf.cachedProfile, nil);
+                
+            } else {
+                TEAL_LogVerbose(@"problem fetching profile: %@", [error localizedDescription]);
+            }
+        };
+        [weakSelf.profileStore fetchProfileWithCompletion:storeCompletion];
         
-        if (profile) {
-            TEAL_LogVerbose(@"got profile!!! : %@", profile);
-            
-            weakSelf.cachedProfile = profile;
-            
-            completion(weakSelf.cachedProfile, nil);
-            
-        } else {
-            TEAL_LogVerbose(@"problem fetching profile: %@", [error localizedDescription]);
-        }
-    };
-    [self.profileStore fetchProfileWithCompletion:storeCompletion];
+    }];
 }
 
-+ (TEALVisitorProfile *) cachedVisitorProfileCopy {
+- (TEALVisitorProfile *) cachedVisitorProfileCopy {
     
-    Tealium *instance = [self sharedInstance];
-    
-    @synchronized(instance) {
+    @synchronized(self) {
         
-        return instance.cachedProfile;
+        return [self.cachedProfile copy];
     }
 }
 
@@ -632,59 +605,49 @@
 
 #pragma mark - Visitor ID
 
-+ (NSString *) visitorID {
+- (NSString *) visitorIDCopy {
     
-    Tealium *instance = [self sharedInstance];
-    
-    @synchronized(instance) {
+    @synchronized(self) {
         
-        return instance.visitorID;
+        return [self.visitorID copy];
     }
 }
-
 
 #pragma mark - Trace
 
-+ (void) joinTraceWithToken:(NSString *)token {
-    
-    __weak Tealium *instance = [[self class] sharedInstance];
-    
-    [instance.operationManager addOperationWithBlock:^{
-        [instance joinTraceWithToken:token];
-    }];
-}
 
 - (void) joinTraceWithToken:(NSString *)token {
     
-    if (!self.enabled) {
-        TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __func__);
-        return;
-    }
+    __weak Tealium *weakSelf = self;
     
-    if (!token || ![token length]) {
-        return;
-    }
-    
-    [self.settingsStore.currentSettings storeTraceID:token];
-}
-
-+ (void) leaveTrace {
-    
-    __weak Tealium *instance = [[self class] sharedInstance];
-    
-    [instance.operationManager addOperationWithBlock:^{
-        [instance leaveTrace];
+    [weakSelf.operationManager addOperationWithBlock:^{
+        if (!weakSelf.enabled) {
+            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            return;
+        }
+        
+        if (!token || ![token length]) {
+            return;
+        }
+        
+        [weakSelf.settingsStore.currentSettings storeTraceID:token];
     }];
+    
 }
 
 - (void) leaveTrace {
     
-    if (!self.enabled) {
-        TEAL_LogVerbose(@"AudienceStream Library Disabled, Ignoring: %s", __func__);
-        return;
-    }
+    __weak Tealium *weakSelf = self;
     
-    [self.settingsStore.currentSettings disableTrace];
+    [weakSelf.operationManager addOperationWithBlock:^{
+        if (!weakSelf.enabled) {
+            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            return;
+        }
+        
+        [weakSelf.settingsStore.currentSettings disableTrace];
+    }];
+
 }
 
 

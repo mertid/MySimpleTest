@@ -35,7 +35,7 @@
 
 - (void) tearDown {
     
-    [Tealium disable];
+    [[Tealium sharedInstance] disable];
     self.library = nil;
     
     [super tearDown];
@@ -45,17 +45,21 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
-    if (!config) {
-        config = self.configuration;
-    }
-
-    __block BOOL isReady = NO;
     
-    [self.library setupConfiguration:config
-                          completion:^(BOOL success, NSError *error) {
-                              isReady = YES;
-                          }];
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    // TODO: Hook up to use protocol
+    
+//    if (!config) {
+//        config = self.configuration;
+//    }
+//
+//    __block BOOL isReady = NO;
+//    
+//    self.library = [Tealium instanceWithConfiguration:<#(TEALConfiguration *)#>]
+//    [self.library setupConfiguration:config
+//                          completion:^(BOOL success, NSError *error) {
+//                              isReady = YES;
+//                          }];
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
 }
 
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {

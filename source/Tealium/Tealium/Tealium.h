@@ -47,38 +47,38 @@
  *
  *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
  */
-+ (void) enableWithConfiguration:(TEALConfiguration *)configuration;
++ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration;
 
-/**
- *  Starts the Tealium Mobile Library with the given configuration object.
- *
- *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
- *  @param completion    TEALBooleanCompletionBlock which is called after settings have loaded and visitorID has been created or restored.
- */
-+ (void) enableWithConfiguration:(TEALConfiguration *)configuration
-                      completion:(TEALBooleanCompletionBlock)completion;
++ (void) setSharedInstance:(Tealium *)instance;
+
+
++ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration;
+
++ (instancetype) sharedInstance;
 
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
  */
-+ (void) disable;
+- (void) disable;
 
 # pragma mark - Send Collect Data
 
 /**
  *  Sends an event to Collect.  Event are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
  *
- *  @param customData Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
+ *  @param title String title of event
+ *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
  */
-+ (void) sendEventWithData:(NSDictionary *)customData;
+- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
 
 /**
  *  Sends a view to Collect.  Views are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
  *
- *  @param customData Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
+ *  @param title String title of view
+ *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
  */
 
-+ (void) sendViewWithData:(NSDictionary *)customData;
+- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
 
 # pragma mark - Get Collect Data
 
@@ -87,21 +87,21 @@
  *
  *  @param completion Completion block with retrieved TEALVisitorProfile instance and an error should any problems occur.
  */
-+ (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion;
+- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion;
 
 /**
  *  Last retrieved profile instance.  This is updated every time the profile is queried.  Depending on the settings the library was enabled with, this could be after every sendEvent:customData: call or only on explicit request.
  *
  *  @return Returns valid TEALVisitorProfile object.  Its properties might be nil of nothing is loaded into them yet.
  */
-+ (TEALVisitorProfile *) cachedVisitorProfileCopy;
+- (TEALVisitorProfile *) cachedVisitorProfileCopy;
 
 /**
- *  Unique visitor ID per Account / Device combination.
+ *  Copy of the Unique visitor ID per Account / Device combination.
  *
  *  @return String value of the visitorID for the Account the library was enabled with.
  */
-+ (NSString *) visitorID;
+- (NSString *) visitorIDCopy;
 
 #pragma mark - Trace
 
@@ -110,11 +110,11 @@
  *
  *  @param token String value should match the code provided via the AudienceStream web UI.
  */
-+ (void) joinTraceWithToken:(NSString *)token;
+- (void) joinTraceWithToken:(NSString *)token;
 
 /**
  *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
  */
-+ (void) leaveTrace;
+- (void) leaveTrace;
 
 @end

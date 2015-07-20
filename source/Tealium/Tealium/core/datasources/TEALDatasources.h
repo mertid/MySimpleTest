@@ -21,6 +21,9 @@ extern NSString * const TEALDatasourceKey_UUID;
 extern NSString * const TEALDatasourceKey_ApplicationName;
 extern NSString * const TEALDatasourceKey_Timestamp;
 extern NSString * const TEALDatasourceKey_CallType;
+extern NSString * const TEALDatasourceKey_EventTitle;
+extern NSString * const TEALDatasourceKey_ViewTitle;
+
 
 extern NSString * const TEALDatasourceKey_LifecycleType;
 
