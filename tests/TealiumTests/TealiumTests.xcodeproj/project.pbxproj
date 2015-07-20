@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		37A75AD71B57109E00E6E9E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75AD61B57109E00E6E9E2 /* main.m */; };
 		37A75ADA1B57109E00E6E9E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75AD91B57109E00E6E9E2 /* AppDelegate.m */; };
-		37A75ADD1B57109E00E6E9E2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75ADC1B57109E00E6E9E2 /* ViewController.m */; };
 		37A75AE01B57109E00E6E9E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A75ADE1B57109E00E6E9E2 /* Main.storyboard */; };
 		37A75AE21B57109E00E6E9E2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE11B57109E00E6E9E2 /* Images.xcassets */; };
 		37A75AE51B57109E00E6E9E2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE31B57109E00E6E9E2 /* LaunchScreen.xib */; };
@@ -18,6 +17,7 @@
 		37EBA2401B571A960010CB75 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */; };
 		37EBA24D1B571D4D0010CB75 /* TealiumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24B1B571D4D0010CB75 /* TealiumTests.m */; };
 		37EBA24E1B571D4D0010CB75 /* TEALSettingsStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */; };
+		71DCA7B71B5968A1001706CF /* APITester.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DCA7B61B5968A1001706CF /* APITester.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +57,6 @@
 		37A75AD61B57109E00E6E9E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		37A75AD81B57109E00E6E9E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		37A75AD91B57109E00E6E9E2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		37A75ADB1B57109E00E6E9E2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		37A75ADC1B57109E00E6E9E2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		37A75ADF1B57109E00E6E9E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		37A75AE11B57109E00E6E9E2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		37A75AE41B57109E00E6E9E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -70,6 +68,8 @@
 		37EBA24A1B571D4D0010CB75 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
 		37EBA24B1B571D4D0010CB75 /* TealiumTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumTests.m; sourceTree = "<group>"; };
 		37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsStoreTests.m; sourceTree = "<group>"; };
+		71DCA7B51B5968A1001706CF /* APITester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APITester.h; sourceTree = "<group>"; };
+		71DCA7B61B5968A1001706CF /* APITester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APITester.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +117,8 @@
 				37EBA2381B57188D0010CB75 /* Tealium Source */,
 				37A75AD81B57109E00E6E9E2 /* AppDelegate.h */,
 				37A75AD91B57109E00E6E9E2 /* AppDelegate.m */,
-				37A75ADB1B57109E00E6E9E2 /* ViewController.h */,
-				37A75ADC1B57109E00E6E9E2 /* ViewController.m */,
+				71DCA7B51B5968A1001706CF /* APITester.h */,
+				71DCA7B61B5968A1001706CF /* APITester.m */,
 				37A75ADE1B57109E00E6E9E2 /* Main.storyboard */,
 				37A75AE11B57109E00E6E9E2 /* Images.xcassets */,
 				37A75AE31B57109E00E6E9E2 /* LaunchScreen.xib */,
@@ -305,9 +305,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37A75ADD1B57109E00E6E9E2 /* ViewController.m in Sources */,
 				37A75ADA1B57109E00E6E9E2 /* AppDelegate.m in Sources */,
 				37A75AD71B57109E00E6E9E2 /* main.m in Sources */,
+				71DCA7B71B5968A1001706CF /* APITester.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

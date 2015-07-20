@@ -31,6 +31,9 @@
         setting.useHTTP             = configuration.useHTTP;
         setting.pollingFrequency    = configuration.pollingFrequency;
         setting.logLevel            = configuration.logLevel;
+        setting.tagManagementEnabled = configuration.tagManagementEnabled;
+        setting.audienceStreamEnabled = configuration.audienceStreamEnabled;
+        setting.lifecycleEnabled    = configuration.lifecycleEnabled;
     }
     
     return setting;
@@ -59,6 +62,9 @@
     self = [self init];
     
     if (self) {
+        
+        // TODO: Make constants
+        
         _account                = [aDecoder decodeObjectForKey:@"account"];
         _tiqProfile             = [aDecoder decodeObjectForKey:@"tiqProfile"];
         _asProfile              = [aDecoder decodeObjectForKey:@"asProfile"];
@@ -76,6 +82,9 @@
         _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
         _shouldLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
         _shouldSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
+        _tagManagementEnabled           = [aDecoder decodeBoolForKey:@"tagManagmentEnabled"];
+        _audienceStreamEnabled          = [aDecoder decodeBoolForKey:@"audienceStreamEnabled"];
+        _lifecycleEnabled             = [aDecoder decodeBoolForKey:@"lifecycleEnabled"];
 
         
         TEALSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
@@ -111,6 +120,9 @@
     [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@""];
     [aCoder encodeBool:self.shouldLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
     [aCoder encodeBool:self.shouldSendWifiOnly forKey:@"shouldSendWifiOnly"];
+    [aCoder encodeBool:self.tagManagementEnabled forKey:@"tagManagementEnabled"];
+    [aCoder encodeBool:self.audienceStreamEnabled forKey:@"audienceStreamEnabled"];
+    [aCoder encodeBool:self.lifecycleEnabled forKey:@"lifecycleEnabled"];
     
 }
 

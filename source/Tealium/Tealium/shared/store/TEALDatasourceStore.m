@@ -8,6 +8,8 @@
 
 #import "TEALDatasourceStore.h"
 
+// TODO: typo?
+
 const char * kTEALDatasoruceStoreQueueName = "com.tealium.datasource-store-queue";
 
 @interface TEALDatasourceStore ()

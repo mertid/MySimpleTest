@@ -11,6 +11,7 @@
 #import "TEALDataQueue.h"
 
 #import "TEALDispatchConstants.h"
+#import "TEALSystemProtocols.h"
 
 @class TEALDispatchManager;
 
@@ -20,11 +21,9 @@
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock;
 
+
 - (BOOL) shouldAttemptDispatch;
 
-- (NSUInteger) dispatchBatchSize;
-
-- (NSUInteger) offlineDispatchQueueCapacity;
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch;
 
@@ -32,10 +31,18 @@
 
 - (void) didUpdateDispatchQueues;
 
-- (BOOL) hasDispatchExpired:(TEALDispatch *)dispatch;
+- (BOOL) shouldRemoveDispatch:(TEALDispatch *)dispatch;
 
 - (void) willRunDispatchQueueWithCount:(NSUInteger)count;
 - (void) didRunDispatchQueueWithCount:(NSUInteger)count;
+
+@end
+
+@protocol TEALDispatchManagerConfiguration <NSObject>
+
+- (NSUInteger) dispatchBatchSize;
+
+- (NSUInteger) dispatchQueueCapacity;
 
 @end
 
@@ -45,19 +52,29 @@
 @property (strong, nonatomic, readonly) TEALDataQueue *queuedDispatches;
 
 
-+ (instancetype) managerWithDelegate:(id<TEALDispatchManagerDelegate>)delegate;
++ (instancetype) dispatchManagerWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
+                                         delegate:(id<TEALDispatchManagerDelegate>)delegate;
 
-- (instancetype) initWithDelegate:(id<TEALDispatchManagerDelegate>)delegate;
+- (instancetype) initWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
+                              delegate:(id<TEALDispatchManagerDelegate>)delegate;
 
 - (void) updateQueuedCapacity:(NSUInteger)capacity;
 
 #pragma mark - enqueue / dequeue dispatches
 
-- (void) addDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock;
+- (void) addDispatch:(TEALDispatch *)dispatch
+     completionBlock:(TEALDispatchBlock)completionBlock;
+
+- (void) unarchiveDispatchQueue;
+- (void) archiveDispatchQueue;
+
+// RECOMMEND: renaming to runDispatchQueue - to match with disableDispatchQueue
+- (void) runQueuedDispatches;
+
+// private ?
+//- (void) addDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock;
 
 - (void) purgeStaleDispatches;
-
-- (void) runDispatchQueue;
 
 - (void) disableDispatchQueue;
 

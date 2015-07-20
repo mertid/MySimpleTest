@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TEALEvent.h"
 
 @interface TEALDispatch : NSObject <NSCoding>
 
-@property (strong, nonatomic) NSObject<NSCoding> *payload;
+@property (nonatomic) TEALEventType eventType;
+@property (strong, nonatomic) NSDictionary *payload;
 @property (nonatomic) NSTimeInterval timestamp;
 @property (nonatomic) BOOL queued;
+
++ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withPayload:(NSDictionary *)payload;
 
 @end

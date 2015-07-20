@@ -75,7 +75,7 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     return datasources;
 }
 
-- (NSDictionary *) datasourcesForEventType:(TEALEventType)eventType {
+- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
 
@@ -99,6 +99,16 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     
     return datasources;
 }
+
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType {
+
+    NSMutableDictionary *datasources = [NSMutableDictionary new];
+
+    datasources[TEALDatasourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
+    
+    return datasources;
+}
+
 
 - (NSDictionary *) queuedFlagWithValue:(BOOL)value {
     

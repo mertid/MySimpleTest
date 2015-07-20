@@ -10,6 +10,12 @@
 
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
+//#import "TEALNetworkHelpers.h"
+
+#import "TEALLogger.h"
+
+static NSString * const Tealium_DispatchQueueKey = @"com.tealium.dispatch_queue";
+static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 @interface TEALDispatchManager ()
 
@@ -18,38 +24,49 @@
 @property (strong, nonatomic) TEALDataQueue *processingQueue;
 
 @property (weak, nonatomic) id<TEALDispatchManagerDelegate> delegate;
+@property (weak, nonatomic) id<TEALDispatchManagerConfiguration> configuration;
+
+@property (strong, nonatomic) dispatch_queue_t ioQueue;
 
 @end
 
 @implementation TEALDispatchManager
 
-+ (instancetype) managerWithDelegate:(id<TEALDispatchManagerDelegate>)delegate {
++ (instancetype) dispatchManagerWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
+                                         delegate:(id<TEALDispatchManagerDelegate>)delegate {
 
-    return [[TEALDispatchManager alloc] initWithDelegate:delegate];
+    return [[[self class] alloc] initWithConfiguration:configuration
+                                              delegate:delegate];
 }
 
-- (instancetype) initWithDelegate:(id<TEALDispatchManagerDelegate>)delegate {
+- (instancetype) initWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
+                              delegate:(id<TEALDispatchManagerDelegate>)delegate {
 
-    self = [super init];
+    self = [self init];
     
     if (self) {
+        _configuration      = configuration;
+        _delegate           = delegate;
+        _ioQueue            = dispatch_queue_create([Tealium_IOQueueKey cStringUsingEncoding:NSUTF8StringEncoding],
+                                                    DISPATCH_QUEUE_SERIAL);
         
-        _delegate = delegate;
+        NSUInteger dispatchCapacity = [_configuration dispatchQueueCapacity];
         
-        NSUInteger dispatchCapacity = [_delegate offlineDispatchQueueCapacity];
-
         _queuedDispatches = [TEALDataQueue queueWithCapacity:dispatchCapacity];
-
+        
         _sentDispatches = [TEALDataQueue queueWithCapacity:12];
         
         _processingQueue = nil;
+
     }
+    
     return self;
 }
 
+
 - (void) updateQueuedCapacity:(NSUInteger)capacity {
 
-    [self runDispatchQueue];
+    [self runQueuedDispatches];
     [self.queuedDispatches updateCapacity:capacity];
 }
 
@@ -71,7 +88,7 @@
 
     [self purgeStaleDispatches];
     
-    NSUInteger batchSize    = [self.delegate dispatchBatchSize];
+    NSUInteger batchSize    = [self.configuration dispatchBatchSize];
     NSUInteger queueCount   = [self.queuedDispatches count];
     
     BOOL shouldBatch = batchSize > 1;
@@ -95,7 +112,7 @@
     }
 
     if ([self.queuedDispatches count] >= batchSize) {
-        [self runDispatchQueue];
+        [self runQueuedDispatches];
     }
     
     [self.delegate didUpdateDispatchQueues];
@@ -148,7 +165,7 @@
             
             TEALDispatch *dispatch = (TEALDispatch *)obj;
             
-            if ([self.delegate hasDispatchExpired:dispatch]) {
+            if ([self.delegate shouldRemoveDispatch:dispatch]) {
                 [purgeData addObject:dispatch];
             }
         }
@@ -160,7 +177,7 @@
     }
 }
 
-- (void) runDispatchQueue {
+- (void) runQueuedDispatches {
     
     if ([self.delegate shouldAttemptDispatch]) {
 
@@ -288,6 +305,65 @@
 - (NSUInteger) sentDispatchCount {
     
     return [self.sentDispatches count];
+}
+
+
+
+#pragma mark - Archive I/O
+
+- (void) unarchiveDispatchQueue {
+    
+    NSMutableArray *archivedDispatches = [[NSUserDefaults standardUserDefaults] objectForKey:Tealium_DispatchQueueKey];
+    
+    if (![archivedDispatches count]) {
+        return;
+    }
+    
+    
+    for (id obj in archivedDispatches) {
+        
+        TEALDispatch *dispatch = nil;
+        
+        if ([obj isKindOfClass:[NSData class]]) {
+            
+            dispatch = [NSKeyedUnarchiver unarchiveObjectWithData:obj];
+        }
+        
+        if (dispatch) {
+            [self.queuedDispatches enqueueObject:dispatch];
+        }
+    }
+    
+    NSUInteger dispatchCount = [self queuedDispatchCount];
+    
+    if (dispatchCount) {
+        TEAL_LogNormal(@"%lu archived dispatches have been enqueued.", (unsigned long)dispatchCount);
+    }
+}
+
+- (void) archiveDispatchQueue {
+    
+    NSArray *queue = [self.queuedDispatches allQueuedObjects];
+    
+    NSMutableArray *dataObjects = [NSMutableArray arrayWithCapacity:queue.count];
+    
+    for (id<NSCoding> obj in queue) {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:obj];
+        [dataObjects addObject:data];
+    }
+    
+    dispatch_async(self.ioQueue, ^{
+        
+        [[NSUserDefaults standardUserDefaults] setObject:dataObjects
+                                                  forKey:Tealium_DispatchQueueKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    });
+    
+    NSUInteger count = [dataObjects count];
+    
+    if (count) {
+        TEAL_LogNormal(@"%lu dispatches archived", count);
+    }
 }
 
 @end

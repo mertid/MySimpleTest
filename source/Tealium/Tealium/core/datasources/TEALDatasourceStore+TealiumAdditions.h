@@ -7,7 +7,7 @@
 //
 
 #import "TEALDatasourceStore.h"
-#import "TEALCollectDatasources.h"
+#import "TEALDatasources.h"
 #import "TEALEvent.h"
 
 @interface TEALDatasourceStore (TealiumAdditions)
@@ -16,6 +16,8 @@
 
 - (NSDictionary *) systemInfoDatasources;
 
-- (NSDictionary *) datasourcesForEventType:(TEALEventType)eventType;
+- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType;
+
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType;
 
 @end
