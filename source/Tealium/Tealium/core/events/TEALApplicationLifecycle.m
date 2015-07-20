@@ -11,14 +11,7 @@
 #import "Tealium.h"
 #import "TEALLogger.h"
 
-// TODO: Unify constants
-
-NSString * const TealiumDSK_LifecycleType =                     @"lifecycle_type";
-
-NSString * const TealiumDSV_LifecycleLaunch =                   @"launch";
-NSString * const TealiumDSV_LifecycleWake =                     @"wake";
-NSString * const TealiumDSV_LifecycleSleep =                    @"sleep";
-NSString * const TealiumDSV_LifecycleTerminate =                @"terminate";
+#import "TEALDatasources.h"
 
 @interface TEALApplicationLifecycle ()
 
@@ -65,26 +58,26 @@ NSString * const TealiumDSV_LifecycleTerminate =                @"terminate";
     TEAL_LogNormal(@"Lifecycle event detected: %@", name);
     
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
-        eventName = TealiumDSV_LifecycleLaunch;
+        eventName = TEALDatasourceValue_LifecycleLaunch;
     }
     else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
-        eventName = TealiumDSV_LifecycleSleep;
+        eventName = TEALDatasourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
-        eventName = TealiumDSV_LifecycleWake;
+        eventName = TEALDatasourceValue_LifecycleWake;
     }
     else if ([name isEqualToString:UIApplicationWillResignActiveNotification]){
-        eventName = TealiumDSV_LifecycleSleep;
+        eventName = TEALDatasourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
-        eventName = TealiumDSV_LifecycleSleep;
+        eventName = TEALDatasourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
-        eventName = TealiumDSV_LifecycleTerminate;
+        eventName = TEALDatasourceValue_LifecycleTerminate;
     }
     
     
-    NSDictionary *lifecycleData = @{TealiumDSK_LifecycleType: eventName};
+    NSDictionary *lifecycleData = @{TEALDatasourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {
         // TODO: Add error handling?
