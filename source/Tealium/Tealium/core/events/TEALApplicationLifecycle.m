@@ -24,27 +24,31 @@
 
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block {
     
-    // listen to main thread
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    // listen to main thread events
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationWillEnterForegroundNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationWillResignActiveNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLifecycleEvent:) name:UIApplicationWillTerminateNotification object:nil];
     self.enabled = YES;
     
     self.eventProcessingBlock = block;
     
+    NSArray *events = @[UIApplicationDidFinishLaunchingNotification,
+                        UIApplicationWillEnterForegroundNotification,
+                        UIApplicationDidBecomeActiveNotification,
+                        UIApplicationDidEnterBackgroundNotification,
+                        UIApplicationWillTerminateNotification
+                        ];
+
+    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+       [[NSNotificationCenter defaultCenter] addObserver:self
+                                                selector:@selector(processLifecycleEvent:)
+                                                    name:obj
+                                                  object:nil];
+    }];
 }
 
-- (void) disable{
+- (void) disable {
     
-    if (self.enabled){
+    if (self.enabled) {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         self.enabled = NO;
     }
@@ -66,17 +70,13 @@
     else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
         eventName = TEALDatasourceValue_LifecycleWake;
     }
-    else if ([name isEqualToString:UIApplicationWillResignActiveNotification]){
-        eventName = TEALDatasourceValue_LifecycleSleep;
-    }
     else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
         eventName = TEALDatasourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
         eventName = TEALDatasourceValue_LifecycleTerminate;
     }
-    
-    
+
     NSDictionary *lifecycleData = @{TEALDatasourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {
