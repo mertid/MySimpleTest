@@ -16,6 +16,6 @@
 @property (nonatomic) NSTimeInterval timestamp;
 @property (nonatomic) BOOL queued;
 
-+ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withData:(NSDictionary *)userInfo;
++ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withPayload:(NSDictionary *)payload;
 
 @end

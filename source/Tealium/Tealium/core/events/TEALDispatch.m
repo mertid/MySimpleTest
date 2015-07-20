@@ -7,32 +7,17 @@
 //
 
 #import "TEALDispatch.h"
-#import "TEALDatasources.h"
-#import "NSDate+TealiumAdditions.h"
 
 @implementation TEALDispatch
 
-+ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withData:(NSDictionary *)userInfo {
++ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withPayload:(NSDictionary *)payload {
 
     TEALDispatch *dispatch = [TEALDispatch new];
  
     dispatch.eventType  = eventType;
-    dispatch.payload    = userInfo;
+    dispatch.payload    = payload;
 
-    NSDate *now = [NSDate date];
-    
-    dispatch.timestamp = [now timeIntervalSince1970];
-    
-    NSMutableDictionary *datasources = nil;
-    
-    if (userInfo) {
-        datasources = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-    } else {
-        datasources = [NSMutableDictionary new];
-    }
-    datasources[TEALDatasourceKey_Timestamp] = [now teal_timestampISOStringValue];
-
-    dispatch.payload = [NSDictionary dictionaryWithDictionary:datasources];
+    dispatch.timestamp = [[NSDate date] timeIntervalSince1970];
     
     return dispatch;
 }

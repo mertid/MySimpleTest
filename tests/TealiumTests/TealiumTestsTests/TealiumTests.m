@@ -165,7 +165,7 @@
     };
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-                                                   withData:@{@"test_key":@"test_value"}];
+                                                withPayload:@{@"test_key":@"test_value"}];
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
 
@@ -179,7 +179,7 @@
     for (NSInteger xi = 0; xi < 5; xi ++) {
         
         TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-                                                       withData:@{@"test_key":@"test_value"}];
+                                                    withPayload:@{@"test_key":@"test_value"}];
         [self.library.dispatchManager addDispatch:dispatch
                                   completionBlock:completion];
     }

@@ -407,7 +407,7 @@
         }
     };
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:eventType withData:customData];
+    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:eventType withPayload:customData];
     
     // capture time datasources
     NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType];
