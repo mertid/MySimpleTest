@@ -11,14 +11,11 @@
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasources.h"
-
+#import "TEALEvent.h"
 
 @implementation UIViewController (TealiumTracker)
 
-
-
-
-+ (void)swizzle {
++ (void) swizzle {
     
     Method origMethod = class_getInstanceMethod(self, @selector(viewDidAppear:));
     oViewDidAppear = (void *)method_getImplementation(origMethod);
@@ -39,7 +36,12 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
         
         // TODO: replace placeholder with actual objectForData call
         NSDictionary *objectDataSources = @{TEALDatasourceKey_Autotracked:TEALDatasourceValue_True};
-        [[Tealium sharedInstance] trackViewWithTitle:nil dataSources:objectDataSources];
+
+        NSString *viewTitle = [TEALEvent titleForEvent:TEALEventTypeView
+                                            withObject:self];
+
+        [[Tealium sharedInstance] trackViewWithTitle:viewTitle
+                                         dataSources:objectDataSources];
         
         oViewDidAppear(self, _cmd, a);
     }

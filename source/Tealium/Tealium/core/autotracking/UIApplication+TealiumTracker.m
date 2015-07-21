@@ -10,18 +10,17 @@
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasources.h"
+#import "TEALEvent.h"
 
 @implementation UIApplication (TealiumTracker)
 
 void (*oSendEvent)(id, SEL, UIEvent *e);
 
-
-+ (void)swizzle {
++ (void) swizzle {
     
     Method origMethod1 = class_getInstanceMethod(self, @selector(sendEvent:));
     oSendEvent = (void *)method_getImplementation(origMethod1);
     if(!class_addMethod(self, @selector(sendEvent:), (IMP)teal_sendEvent, method_getTypeEncoding(origMethod1))) method_setImplementation(origMethod1, (IMP)teal_sendEvent);
-    
 }
 
 // duplicate suppression
@@ -75,7 +74,12 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     NSDictionary *dataSources = @{
                                   TEALDatasourceKey_Autotracked:TEALDatasourceValue_True,
                                   @"placeholderTarget": NSStringFromClass([target class])};
-    [[Tealium sharedInstance] trackEventWithTitle:@"testButtonTitle" dataSources:dataSources];
+    
+    NSString *eventTitle = [TEALEvent titleForEvent:TEALEventTypeLink
+                                         withObject:target];
+    
+    [[Tealium sharedInstance] trackEventWithTitle:eventTitle
+                                      dataSources:dataSources];
     
 }
 

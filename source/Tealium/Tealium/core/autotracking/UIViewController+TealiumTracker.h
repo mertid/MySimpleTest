@@ -10,7 +10,7 @@
 
 @interface UIViewController (TealiumTracker)
 
-+ (void)swizzle;
++ (void) swizzle;
 
 
 @end

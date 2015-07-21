@@ -19,6 +19,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.title = @"Second View Controller";
 }
 
 - (void)viewWillAppear:(BOOL)animated{

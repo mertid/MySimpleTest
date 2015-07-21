@@ -19,22 +19,23 @@
 
 @implementation TEALAutotrackingManager
 
-- (void)enableAutotracking {
+- (void) enableAutotracking {
     
     [self enableEventTracking];
     [self enableViewTracking];
 }
 
-- (void)enableEventTracking {
+- (void) enableEventTracking {
+    
     if (!self.eventTrackingEnabled) {
         self.eventTrackingEnabled = YES;
         
         [UIApplication swizzle];
     }
-    
 }
 
-- (void)enableViewTracking {
+- (void) enableViewTracking {
+    
     if (!self.viewTrackingEnabled) {
         self.viewTrackingEnabled = YES;
         
