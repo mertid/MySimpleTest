@@ -28,11 +28,13 @@
 #import "TEALCollectNetworkService.h"
 #import "TEALTagNetworkService.h"
 
+// Autotracking
+#import "TEALAutotrackingManager.h"
+
 // Events
 #import "TEALApplicationLifecycle.h"
 
 // Dispatch
-
 #import "TEALDispatch.h"
 
 // Logging
@@ -74,6 +76,8 @@
 @property (strong, nonatomic) NSArray *dispatchNetworkServices;
 
 @property (strong, nonatomic) TEALApplicationLifecycle *lifecycle;
+
+@property (strong, nonatomic) TEALAutotrackingManager *autotrackingManager;
 
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
@@ -173,11 +177,26 @@ __strong static Tealium *_sharedObject = nil;
 
     [self setupLifecycleForSettings:settings];
     
+    [self setupAutotrackingForSettings:settings];
+    
     [self fetchSettings:settings
              completion:setupCompletion];
     
     [self setupSettingsReachabilitiyCallbacks];
     
+    
+}
+
+- (void) setupAutotrackingForSettings:(TEALSettings *) settings {
+    if (settings.autotrackingEnabled) {
+        self.autotrackingManager = [[TEALAutotrackingManager alloc] init];
+        [self.autotrackingManager enableAutotracking];
+    } else if (self.autotrackingManager) {
+        
+        // TODO: disable
+//        [self.autotrackingManager disable];
+//        self.autotrackingManager = nil;
+    }
     
 }
 

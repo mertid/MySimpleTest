@@ -17,6 +17,8 @@
 		37EBA2401B571A960010CB75 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */; };
 		37EBA24D1B571D4D0010CB75 /* TealiumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24B1B571D4D0010CB75 /* TealiumTests.m */; };
 		37EBA24E1B571D4D0010CB75 /* TEALSettingsStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */; };
+		713248D21B5EAED900543639 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D11B5EAED900543639 /* SecondViewController.m */; };
+		713248D71B5EB65F00543639 /* ShowViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */; };
 		71DCA7B71B5968A1001706CF /* APITester.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DCA7B61B5968A1001706CF /* APITester.m */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +70,10 @@
 		37EBA24A1B571D4D0010CB75 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
 		37EBA24B1B571D4D0010CB75 /* TealiumTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumTests.m; sourceTree = "<group>"; };
 		37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsStoreTests.m; sourceTree = "<group>"; };
+		713248D01B5EAED900543639 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		713248D11B5EAED900543639 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		713248D51B5EB65F00543639 /* ShowViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowViewTableViewCell.h; sourceTree = "<group>"; };
+		713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowViewTableViewCell.m; sourceTree = "<group>"; };
 		71DCA7B51B5968A1001706CF /* APITester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APITester.h; sourceTree = "<group>"; };
 		71DCA7B61B5968A1001706CF /* APITester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APITester.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +125,10 @@
 				37A75AD91B57109E00E6E9E2 /* AppDelegate.m */,
 				71DCA7B51B5968A1001706CF /* APITester.h */,
 				71DCA7B61B5968A1001706CF /* APITester.m */,
+				713248D51B5EB65F00543639 /* ShowViewTableViewCell.h */,
+				713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */,
+				713248D01B5EAED900543639 /* SecondViewController.h */,
+				713248D11B5EAED900543639 /* SecondViewController.m */,
 				37A75ADE1B57109E00E6E9E2 /* Main.storyboard */,
 				37A75AE11B57109E00E6E9E2 /* Images.xcassets */,
 				37A75AE31B57109E00E6E9E2 /* LaunchScreen.xib */,
@@ -305,6 +315,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				713248D21B5EAED900543639 /* SecondViewController.m in Sources */,
+				713248D71B5EB65F00543639 /* ShowViewTableViewCell.m in Sources */,
 				37A75ADA1B57109E00E6E9E2 /* AppDelegate.m in Sources */,
 				37A75AD71B57109E00E6E9E2 /* main.m in Sources */,
 				71DCA7B71B5968A1001706CF /* APITester.m in Sources */,

@@ -32,10 +32,11 @@
     configuration.tagManagementEnabled = YES;
     configuration.audienceStreamEnabled = NO;
     configuration.lifecycleEnabled = YES;
+    configuration.autotrackingEnabled = YES;
     
-    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
-    
-    [self.tealiumInstance trackEventWithTitle:@"testInstanceLaunch" dataSources:nil];
+//    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
+//    
+//    [self.tealiumInstance trackEventWithTitle:@"testInstanceLaunch" dataSources:nil];
     
     [Tealium sharedInstanceWithConfiguration:configuration];
     

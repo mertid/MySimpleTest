@@ -58,6 +58,7 @@ typedef NS_ENUM(NSUInteger, TEALSettingsStatus) {
 
 @property (nonatomic) BOOL shouldSendWifiOnly;
 
+@property (nonatomic) BOOL autotrackingEnabled;
 @property (nonatomic) BOOL tagManagementEnabled;
 @property (nonatomic) BOOL audienceStreamEnabled;
 @property (nonatomic) BOOL lifecycleEnabled;

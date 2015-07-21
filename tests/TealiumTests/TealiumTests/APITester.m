@@ -8,10 +8,12 @@
 
 #import "APITester.h"
 #import <Tealium/Tealium.h>
+#import "ShowViewTableViewCell.h"
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     TealiumAPIMenuItemSendEvent = 0,
     TealiumAPIMenuItemSendView,
+    TealiumAPIMenuItemShowView,
     TealiumAPIMenuItemFetchProfle,
     TealiumAPIMenuItemLogLastProfile,
     TealiumAPIMenuItemNumberOfItems
@@ -24,7 +26,9 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     [super viewDidLoad];
     
     self.title = @"API Sampler";
+    self.autotrackingViewEnabled = YES;
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -43,7 +47,15 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"APIMenuCellIdentifier"];
+    
+    UITableViewCell *cell = nil;
+    
+    if (indexPath.row == TealiumAPIMenuItemShowView){
+        cell = [tableView dequeueReusableCellWithIdentifier:@"autotrackingSwitchCell"];
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"APIMenuCellIdentifier"];
+    }
+    
     
     if (cell) {
         switch (indexPath.row) {
@@ -52,6 +64,16 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
                 break;
             case TealiumAPIMenuItemSendView:
                 cell.textLabel.text = @"Send View";
+                break;
+            case TealiumAPIMenuItemShowView:
+            {
+                cell.textLabel.text = @"Show View";
+                ShowViewTableViewCell *showViewCell = (ShowViewTableViewCell*)cell;
+                showViewCell.autotrackingSwitch.on = self.autotrackingViewEnabled;
+                showViewCell.switchCompletion = ^(BOOL switchEnabled){
+                    self.autotrackingViewEnabled = switchEnabled;
+                };
+            }
                 break;
             case TealiumAPIMenuItemFetchProfle:
                 cell.textLabel.text = @"Fetch Current Profile";
@@ -80,6 +102,9 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
         case TealiumAPIMenuItemSendView:
             [self sendCollectView];
             break;
+        case TealiumAPIMenuItemShowView:
+            [self showView];
+            break;
         case TealiumAPIMenuItemFetchProfle:
             [self fetchVisitorProfile];
             break;
@@ -89,6 +114,13 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
         default:
             break;
     }
+}
+
+- (void) showView {
+    
+    [self performSegueWithIdentifier:@"showView" sender:nil];
+    
+    
 }
 
 - (void) sendCollectView {
@@ -142,6 +174,16 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) leaveTrace {
     [[Tealium sharedInstance] leaveTrace];
+}
+
+
+#pragma mark - SEGUE
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"showView"]) {
+        [segue.destinationViewController teal_setAutotrackingEnabled:self.autotrackingViewEnabled];
+    }
+    
 }
 
 @end

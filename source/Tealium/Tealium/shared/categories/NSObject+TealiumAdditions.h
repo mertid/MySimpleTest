@@ -11,5 +11,8 @@
 @interface NSObject (TealiumAdditions)
 
 - (NSString *) teal_stringValue;
+- (void)teal_setAutotrackingEnabled:(BOOL)enabled;
+- (BOOL)teal_autotrackingEnabled;
+
 
 @end
