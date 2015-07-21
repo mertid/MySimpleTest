@@ -27,12 +27,15 @@ NSString * const TEALDatasourceKey_LifecycleType    = @"lifecycle_type";
 
 #pragma mark - UDO / Datasource Values
 
-NSString * const TEALDatasourceValue_LifecycleLaunch     = @"launch";
-NSString * const TEALDatasourceValue_LifecycleWake       = @"wake";
-NSString * const TEALDatasourceValue_LifecycleSleep      = @"sleep";
-NSString * const TEALDatasourceValue_LifecycleTerminate  = @"terminate";
-NSString * const TEALDatasourceValue_True                = @"true";
-NSString * const TEALDatasourceValue_False               = @"false";
+NSString * const TEALDatasourceValue_LifecycleLaunch    = @"launch";
+NSString * const TEALDatasourceValue_LifecycleWake      = @"wake";
+NSString * const TEALDatasourceValue_LifecycleSleep     = @"sleep";
+NSString * const TEALDatasourceValue_LifecycleTerminate = @"terminate";
+NSString * const TEALDatasourceValue_True               = @"true";
+NSString * const TEALDatasourceValue_False              = @"false";
+NSString * const TEALDatasourceValue_EventName          = @"mobile_link";
+NSString * const TEALDatasourceValue_Pagetype           = @"mobile_view";
+NSString * const TEALDatasourceValue_Platform           = @"ios";
 
 #pragma mark - AudienceStream API Keys
 

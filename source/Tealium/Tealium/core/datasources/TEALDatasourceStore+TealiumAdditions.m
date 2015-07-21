@@ -14,14 +14,15 @@
 #import "NSDate+TealiumAdditions.h"
 #import "NSString+TealiumAdditions.h"
 
-static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.audiencestream.datasources";
+static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.mobile.datasources";
 
 
 @implementation TEALDatasourceStore (TealiumAdditions)
 
 - (void) loadWithUUIDKey:(NSString *)key {
     
-    NSString *storagekey = [kTEALAudienceStreamDatasourceStorageKey copy];
+    NSString *storagekey = [kTEALMobileDatasourceStorageKey copy];
+    
     if (![self unarchiveWithStorageKey:storagekey]) {
         
         [self addStaticDatasource];
@@ -31,15 +32,15 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     
     [TEALDatasourceStore sharedStore][TEALDatasourceKey_UUID] = [TEALSystemHelpers applicationUUIDWithKey:key];
     
-    [self archiveWithStorageKey:kTEALAudienceStreamDatasourceStorageKey];
+    [self archiveWithStorageKey:kTEALMobileDatasourceStorageKey];
 }
 
 
 - (void) addStaticDatasource {
     
-    self[TEALDatasourceKey_EventName]          = @"mobile_link";
-    self[TEALDatasourceKey_Pagetype]           = @"mobile_view";
-    self[TEALDatasourceKey_Platform]           = @"ios";
+    self[TEALDatasourceKey_EventName]   = TEALDatasourceValue_EventName;
+    self[TEALDatasourceKey_Pagetype]    = TEALDatasourceValue_Pagetype;
+    self[TEALDatasourceKey_Platform]    = TEALDatasourceValue_Platform;
 }
 
 - (void) addSystemDatasources {
@@ -105,6 +106,7 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     NSMutableDictionary *datasources = [NSMutableDictionary new];
 
     datasources[TEALDatasourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
+    
     if (title) {
         switch (eventType) {
             case TEALEventTypeLink:
@@ -120,7 +122,6 @@ static NSString * const kTEALAudienceStreamDatasourceStorageKey = @"com.tealium.
     
     return datasources;
 }
-
 
 - (NSDictionary *) queuedFlagWithValue:(BOOL)value {
     
