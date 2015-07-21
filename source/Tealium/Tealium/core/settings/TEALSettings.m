@@ -34,6 +34,7 @@
         setting.tagManagementEnabled = configuration.tagManagementEnabled;
         setting.audienceStreamEnabled = configuration.audienceStreamEnabled;
         setting.lifecycleEnabled    = configuration.lifecycleEnabled;
+        setting.autotrackingEnabled = configuration.autotrackingEnabled;
     }
     
     return setting;

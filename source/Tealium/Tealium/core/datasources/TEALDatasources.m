@@ -10,6 +10,7 @@
 
 #pragma mark - UDO / Datasource Keys
 
+NSString * const TEALDatasourceKey_Autotracked      = @"autotracked";
 NSString * const TEALDatasourceKey_EventName        = @"event_name";
 NSString * const TEALDatasourceKey_Pagetype         = @"page_type";
 NSString * const TEALDatasourceKey_Platform         = @"platform";
@@ -30,6 +31,8 @@ NSString * const TEALDatasourceValue_LifecycleLaunch     = @"launch";
 NSString * const TEALDatasourceValue_LifecycleWake       = @"wake";
 NSString * const TEALDatasourceValue_LifecycleSleep      = @"sleep";
 NSString * const TEALDatasourceValue_LifecycleTerminate  = @"terminate";
+NSString * const TEALDatasourceValue_True                = @"true";
+NSString * const TEALDatasourceValue_False               = @"false";
 
 #pragma mark - AudienceStream API Keys
 

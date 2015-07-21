@@ -29,6 +29,8 @@
 
 #import "TEALBlocks.h"
 
+#import "NSObject+TealiumAdditions.h"
+
 /**
  *  Tealium is the main class for the Tealium Library.
  *

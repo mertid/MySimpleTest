@@ -10,4 +10,6 @@
 
 @interface APITester : UITableViewController
 
+@property (nonatomic) BOOL autotrackingViewEnabled;
+
 @end
