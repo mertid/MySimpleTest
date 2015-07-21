@@ -21,4 +21,7 @@ extern NSString * const TEALEventTypeViewStringValue;
 
 @interface TEALEvent : NSObject
 
++ (NSString *) titleForEvent:(TEALEventType)eventType
+                  withObject:(NSObject *)obj;
+
 @end

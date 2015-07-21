@@ -10,7 +10,7 @@
 
 @interface TEALAutotrackingManager : NSObject
 
-- (void)enableAutotracking;
+- (void) enableAutotracking;
 // TODO: disable
 
 @end

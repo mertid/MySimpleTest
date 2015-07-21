@@ -11,7 +11,7 @@
 
 @interface UIApplication (TealiumTracker)
 
-+ (void)swizzle;
++ (void) swizzle;
 
 
 @end

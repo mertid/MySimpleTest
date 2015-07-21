@@ -36,6 +36,9 @@ extern NSString * const TEALDatasourceValue_LifecycleSleep;
 extern NSString * const TEALDatasourceValue_LifecycleTerminate;
 extern NSString * const TEALDatasourceValue_True;
 extern NSString * const TEALDatasourceValue_False;
+extern NSString * const TEALDatasourceValue_EventName;
+extern NSString * const TEALDatasourceValue_Pagetype;
+extern NSString * const TEALDatasourceValue_Platform;
 
 #pragma mark - AudienceStream API Keys
 
