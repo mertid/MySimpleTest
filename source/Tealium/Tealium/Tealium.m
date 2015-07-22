@@ -10,6 +10,7 @@
 
 #import "TEALSettingsStore.h"
 #import "TEALDispatchManager.h"
+#import "TEALDelegateManager.h"
 
 //#import "TEALDatasourceManager.h"
 
@@ -33,9 +34,6 @@
 
 // Events
 #import "TEALApplicationLifecycle.h"
-
-// Dispatch
-#import "TEALDispatch.h"
 
 // Logging
 
@@ -79,6 +77,8 @@
 
 @property (strong, nonatomic) TEALAutotrackingManager *autotrackingManager;
 
+@property (strong, nonatomic) TEALDelegateManager *delegateManager;
+
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
 @property (readwrite) BOOL enabled;
@@ -121,14 +121,31 @@ __strong static Tealium *_sharedObject = nil;
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
+     
+        _delegateManager    = [[TEALDelegateManager alloc] init];
         
         _settingsStore      = [[TEALSettingsStore alloc] initWithConfiguration:self];
-        
+     
         [_settingsStore unarchiveCurrentSettings];
         
     }
     
     return self;
+}
+
+- (void) setDelegate:(id<TealiumDelegate>)delegate {
+
+    @synchronized(self){
+        
+        [self.delegateManager updateWithDelegate:delegate];
+    }
+    
+}
+
+- (id<TealiumDelegate>) delegate {
+    @synchronized(self){
+        return self.delegateManager.delegate;
+    }
 }
 
 #pragma mark - Enable / Disable / Configure settings / startup
@@ -165,7 +182,10 @@ __strong static Tealium *_sharedObject = nil;
     // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
+    // Merge configuration with saved remote settings:
     TEALSettings *settings = [self.settingsStore settingsFromConfiguration:configuration visitorID:visitorID];
+
+    // Finsish setup with updated settings
     
     [TEALLogger setLogLevel:settings.logLevel];
     
@@ -456,6 +476,8 @@ __strong static Tealium *_sharedObject = nil;
 
 #pragma mark - TEALDispatchManagerDelegate methods
 
+// TODO: handle wifi only, low battery and other settings
+
 - (BOOL) shouldAttemptDispatch {
     
     TEALSettings *settings = self.settingsStore.currentSettings;
@@ -495,16 +517,25 @@ __strong static Tealium *_sharedObject = nil;
     [self addDatasources:datasources
               toDisaptch:dispatch];
     
-    for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+    // for now fire and forget
+    
+    // one more check for network and settings
+    if ([self shouldAttemptDispatch]) {
         
-        // TODO:
-        // two completions ?
-        // build composite obj / nsoperation ?
-        // if one service fails, should the disaptch requeue
+        completionBlock(TEALDispatchStatusSent, dispatch, nil);
         
-        [service sendDispatch:dispatch
-                   completion:completionBlock];
+        for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+
+            [service sendDispatch:dispatch
+                       completion:nil];
+        }
+    } else {
+        
+        NSError *error = nil; // type of network or setting failure
+        completionBlock(TEALDispatchStatusFailed, dispatch, error);
     }
+    
+    
 }
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch {

@@ -8,6 +8,7 @@
 
 #import "TEALEvent.h"
 #import <UIKit/UIKit.h>
+#import "TEALDatasources.h"
 
 // Event Type Strings
 
@@ -100,5 +101,21 @@ NSString * const TEALEventTypeViewStringValue = @"view";
 
     return title;
 }
+
++ (NSDictionary *) datasourcesForEvent:(TEALEventType)eventType
+                            withObject:(NSObject *)obj
+                           autotracked:(BOOL)autotracked {
+    
+    NSMutableDictionary *datasources = [NSMutableDictionary dictionary];
+
+    if (autotracked) {
+        datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_True;
+    }
+    
+    // TODO: add processing center logic for supported object datasources
+    
+    return [NSDictionary dictionaryWithDictionary:datasources];
+}
+
 
 @end

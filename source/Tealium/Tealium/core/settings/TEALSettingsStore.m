@@ -17,8 +17,7 @@
 #import "TEALLogger.h"
 
 
-static NSString * const kTEALAudienceStreamSettingsStorageOldKey = @"com.tealium.audiencestream.settings";
-static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.audiencestream.settings.1";
+static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.settings";
 
 @interface TEALSettingsStore()
 
@@ -50,15 +49,23 @@ static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.au
     TEALSettings *settings = [TEALSettings settingWithConfiguration:configuration
                                                           visitorID:visitorID];
 
+    // Current Settings are settings unarchived from disk, should only override settings not included from MPS
+    // Merge config settings with existing settings:
     if (self.currentSettings) {
-        self.currentSettings.account            = settings.account;
-        self.currentSettings.tiqProfile         = settings.tiqProfile;
-        self.currentSettings.asProfile          = settings.asProfile;
-        self.currentSettings.environment        = settings.environment;
-        self.currentSettings.visitorID          = settings.visitorID;
-        self.currentSettings.useHTTP            = settings.useHTTP;
-        self.currentSettings.pollingFrequency   = settings.pollingFrequency;
-        self.currentSettings.logLevel           = settings.logLevel;
+        self.currentSettings.account                = settings.account;
+        self.currentSettings.tiqProfile             = settings.tiqProfile;
+        self.currentSettings.asProfile              = settings.asProfile;
+        self.currentSettings.environment            = settings.environment;
+        self.currentSettings.visitorID              = settings.visitorID;
+        self.currentSettings.useHTTP                = settings.useHTTP;
+        self.currentSettings.pollingFrequency       = settings.pollingFrequency;
+        self.currentSettings.logLevel               = settings.logLevel;
+        self.currentSettings.lifecycleEnabled       = settings.lifecycleEnabled;
+        self.currentSettings.tagManagementEnabled   = settings.tagManagementEnabled;
+        self.currentSettings.audienceStreamEnabled  = settings.audienceStreamEnabled;
+        
+        // This is loaded from MPS also, don't copy over
+        //self.currentSettings.autotrackingEnabled
     } else {
         self.currentSettings = settings;
     }
@@ -68,25 +75,14 @@ static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.au
 
 - (void) unarchiveCurrentSettings {
 
-    __weak TEALSettingsStore *weakSelf = self;
+    NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:kTEALMobileSettingsStorageKey];
     
-    [[self.configuration operationManager] addIOOperationWithBlock:^{
+    TEALSettings *settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
+    
+    if (settings) {
+        self.currentSettings = settings;
+    }
 
-        NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:kTEALAudienceStreamSettingsStorageKey];
-        
-        TEALSettings *settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
-
-        [weakSelf.configuration.operationManager addOperationWithBlock:^{
-
-            if (settings) {
-                weakSelf.currentSettings = settings;
-            }
-
-        }];
-        
-        // legacy archived TEALSettings contains classes that no longer exist.  unarchiving will crash, safest to remvoe them
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kTEALAudienceStreamSettingsStorageOldKey];
-    }];
 }
 
 - (void) archiveCurrentSettings {
@@ -96,7 +92,7 @@ static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.au
     [[self.configuration operationManager] addIOOperationWithBlock:^{
         
         [[NSUserDefaults standardUserDefaults] setObject:settingsData
-                                                  forKey:kTEALAudienceStreamSettingsStorageKey];
+                                                  forKey:kTEALMobileSettingsStorageKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }];
 }
@@ -155,7 +151,7 @@ static NSString * const kTEALAudienceStreamSettingsStorageKey = @"com.tealium.au
         }
 
         self.currentSettings = settings;
-        
+
         completion( self.currentSettings, parseError );
     };
     

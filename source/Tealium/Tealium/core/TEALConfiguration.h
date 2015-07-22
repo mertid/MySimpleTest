@@ -105,9 +105,16 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @property (copy, nonatomic) NSString *audienceStreamProfile;
 
+// TODO: comments
 @property (nonatomic) BOOL autotrackingEnabled;
+
+// TODO: comments
 @property (nonatomic) BOOL tagManagementEnabled;
+
+// TODO: comments
 @property (nonatomic) BOOL audienceStreamEnabled;
+
+// TODO: comments
 @property (nonatomic) BOOL lifecycleEnabled;
 
 

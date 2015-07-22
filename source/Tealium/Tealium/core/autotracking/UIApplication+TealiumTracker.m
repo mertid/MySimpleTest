@@ -11,6 +11,7 @@
 #import "Tealium.h"
 #import "TEALDatasources.h"
 #import "TEALEvent.h"
+#import "NSObject+TealiumAdditions.h"
 
 @implementation UIApplication (TealiumTracker)
 
@@ -70,13 +71,21 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 
 - (void) teal_autotrackEvent:(UIView *)target {
     
-    // TODO: implement dataForObject here
-    NSDictionary *dataSources = @{
-                                  TEALDatasourceKey_Autotracked:TEALDatasourceValue_True,
-                                  @"placeholderTarget": NSStringFromClass([target class])};
+    if (![target teal_autotrackingEnabled]){
+        return;
+    }
     
     NSString *eventTitle = [TEALEvent titleForEvent:TEALEventTypeLink
                                          withObject:target];
+    
+    NSDictionary *autoDataSources = [TEALEvent datasourcesForEvent:TEALEventTypeLink
+                                                        withObject:target
+                                                       autotracked:YES];
+    
+    NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
+    
+    NSDictionary *customDataSources = [target teal_dataSources];
+    [dataSources addEntriesFromDictionary:customDataSources];
     
     [[Tealium sharedInstance] trackEventWithTitle:eventTitle
                                       dataSources:dataSources];

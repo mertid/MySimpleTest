@@ -24,4 +24,9 @@ extern NSString * const TEALEventTypeViewStringValue;
 + (NSString *) titleForEvent:(TEALEventType)eventType
                   withObject:(NSObject *)obj;
 
++ (NSDictionary *) datasourcesForEvent:(TEALEventType)eventType
+                            withObject:(NSObject *)obj
+                           autotracked:(BOOL)autotracked;
+
+
 @end

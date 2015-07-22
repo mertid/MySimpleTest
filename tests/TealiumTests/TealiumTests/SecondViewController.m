@@ -20,6 +20,7 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Second View Controller";
+    [self teal_setDataSources:@{@"SayWhat?":@"Hello?"}];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
