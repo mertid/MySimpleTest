@@ -57,7 +57,6 @@
 
 + (void) setSharedInstance:(Tealium *)instance;
 
-
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration;
 
 + (instancetype) sharedInstance;

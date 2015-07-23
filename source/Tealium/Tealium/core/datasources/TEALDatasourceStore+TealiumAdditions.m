@@ -84,7 +84,7 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.mobile.d
     
     [datasources addEntriesFromDictionary:systemInfo];
     
-    datasources[TEALDatasourceKey_CallType]         = [TEALNetworkHelpers eventStringFromType:eventType];
+    datasources[TEALDatasourceKey_CallType]         = [TEALEvent stringFromEventType:eventType];
     datasources[TEALDatasourceKey_ApplicationName]  = self[TEALDatasourceKey_ApplicationName];
 
     switch (eventType) {
@@ -119,6 +119,8 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.mobile.d
                 break;
         }
     }
+    
+    datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_False;
     
     return datasources;
 }

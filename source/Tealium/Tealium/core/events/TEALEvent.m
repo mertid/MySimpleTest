@@ -108,14 +108,26 @@ NSString * const TEALEventTypeViewStringValue = @"view";
     
     NSMutableDictionary *datasources = [NSMutableDictionary dictionary];
 
-    if (autotracked) {
-        datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_True;
-    }
+    datasources[TEALDatasourceKey_Autotracked] = autotracked ? TEALDatasourceValue_True : TEALDatasourceValue_False;
     
     // TODO: add processing center logic for supported object datasources
     
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
 
-
++ (NSString *) stringFromEventType:(TEALEventType)eventType {
+    
+    NSString *eventString = nil;
+    
+    switch (eventType) {
+        case TEALEventTypeLink:
+            eventString = TEALEventTypeLinkStringValue;
+            break;
+        case TEALEventTypeView:
+            eventString = TEALEventTypeViewStringValue;
+        default:
+            break;
+    }
+    return eventString;
+}
 @end

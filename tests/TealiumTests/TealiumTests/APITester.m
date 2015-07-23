@@ -125,7 +125,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) sendCollectView {
     
-    NSDictionary *data = @{ @"custom_key" : @"custom_value"};
+    NSDictionary *data = @{ @"custom_key" : @"custom_value_view"};
     
     [[Tealium sharedInstance] trackViewWithTitle:@"APITester" dataSources:data];
     
@@ -133,7 +133,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) sendCollectEvent {
     
-    NSDictionary *data = @{ @"custom_key" : @"custom_value"};
+    NSDictionary *data = @{ @"custom_key" : @"custom_value_event"};
     
     [[Tealium sharedInstance] trackEventWithTitle:@"APITester" dataSources:data];
 

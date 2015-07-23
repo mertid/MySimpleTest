@@ -10,7 +10,7 @@
 
 #import <Tealium/Tealium.h>
 
-@interface AppDelegate ()
+@interface AppDelegate () <TealiumDelegate>
 
 
 @property (strong, nonatomic) Tealium *tealiumInstance;
@@ -43,6 +43,8 @@
     [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
 
     
+    [[Tealium sharedInstance] setDelegate:self];
+    
     return YES;
 }
 
@@ -68,4 +70,33 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark - TEALIUM DELEGATE
+
+- (void) tealiumDidFinishLoadingRemoteSettings:(Tealium *)tealium{
+        NSLog(@"%s, visitorID; %@", __FUNCTION__, [tealium visitorIDCopy]);
+}
+
+- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
+        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+    
+    NSDictionary *payload = dispatch.payload;
+    
+    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void) tealium:(Tealium *)tealium didDestroyDisptach:(TEALDispatch *)dispatch {
+    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+}
+
+- (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
+    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+}
+
+- (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
+        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+}
 @end

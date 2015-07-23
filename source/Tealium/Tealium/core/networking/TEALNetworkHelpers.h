@@ -28,6 +28,4 @@
                                  method:(NSString *)methodString
                                    body:(NSData *)bodyData;
 
-+ (NSString *) eventStringFromType:(TEALEventType)eventType;
-
 @end

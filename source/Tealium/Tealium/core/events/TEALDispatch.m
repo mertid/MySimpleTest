@@ -10,6 +10,9 @@
 
 @implementation TEALDispatch
 
+
+// TODO: add description override
+
 + (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withPayload:(NSDictionary *)payload {
 
     TEALDispatch *dispatch = [TEALDispatch new];
@@ -43,4 +46,12 @@
     [aCoder encodeBool:self.queued forKey:@"queued"];
 }
 
+- (NSString*) description {
+    
+    NSString *description = [NSString stringWithFormat:@"Dispatch eventType: %@ \r payload: %@ \r timestamp: %f",
+                             [TEALEvent stringFromEventType:self.eventType],
+                             self.payload,
+                             self.timestamp];
+    return description;
+}
 @end

@@ -11,8 +11,7 @@
 
 @interface TEALDelegateManager : NSObject <TealiumDelegate>
 
-@property (readonly, nonatomic) id<TealiumDelegate> delegate;
-
 - (void) updateWithDelegate:(id<TealiumDelegate>)delegate;
+- (id<TealiumDelegate>) delegate;
 
 @end
