@@ -33,15 +33,21 @@ void (*oViewDidAppear)(id, SEL, bool a);
 static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
     
     if ([self teal_autotrackingEnabled]) {
-        
-        // TODO: replace placeholder with actual objectForData call
-        NSDictionary *objectDataSources = @{TEALDatasourceKey_Autotracked:TEALDatasourceValue_True};
 
         NSString *viewTitle = [TEALEvent titleForEvent:TEALEventTypeView
                                             withObject:self];
 
+        NSDictionary *autoDataSources = [TEALEvent datasourcesForEvent:TEALEventTypeView
+                                                            withObject:self
+                                                           autotracked:YES];
+        
+        NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
+        
+        NSDictionary *customDataSources = [self teal_dataSources];
+        [dataSources addEntriesFromDictionary:customDataSources];
+        
         [[Tealium sharedInstance] trackViewWithTitle:viewTitle
-                                         dataSources:objectDataSources];
+                                         dataSources:dataSources];
         
         oViewDidAppear(self, _cmd, a);
     }

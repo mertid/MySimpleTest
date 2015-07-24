@@ -26,6 +26,10 @@
     configuration.useHTTP           = NO;
     configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
     configuration.logLevel          = TEALLogLevelNone;
+    configuration.lifecycleEnabled  = YES;
+    configuration.autotrackingEnabled = NO;
+    configuration.tagManagementEnabled = NO;
+    configuration.audienceStreamEnabled = NO;
    
     configuration.audienceStreamProfile = @"main";
     

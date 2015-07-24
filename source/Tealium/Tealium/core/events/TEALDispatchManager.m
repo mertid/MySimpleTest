@@ -100,7 +100,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         [self attemptDispatch:aDispatch
               completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
 
-                  if (status != TEALDispatchStatusSent) {
+                  if (status == TEALDispatchStatusFailed) {
                       [weakSelf enqueueDispatch:dispatch completionBlock:completionBlock];
                   } else if (completionBlock) {
                       completionBlock(status, dispatch, error);
@@ -165,7 +165,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
             
             TEALDispatch *dispatch = (TEALDispatch *)obj;
             
-            if ([self.delegate shouldRemoveDispatch:dispatch]) {
+            if ([self.delegate shouldPurgeDispatch:dispatch]) {
                 [purgeData addObject:dispatch];
             }
         }
@@ -173,7 +173,10 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     }];
     
     if ([purgeData count]) {
-        [self.queuedDispatches dequeueObjects:purgeData withBlock:nil];
+        // Note: little slower than if implemented with the shouldPurgeDispatch
+        [self.queuedDispatches dequeueObjects:purgeData withBlock:^(id dequeuedObject) {
+            [self.delegate didPurgeDispatch:dequeuedObject];
+        }];
     }
 }
 

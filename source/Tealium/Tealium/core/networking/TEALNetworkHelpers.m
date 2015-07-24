@@ -118,20 +118,4 @@
     return request;
 }
 
-+ (NSString *) eventStringFromType:(TEALEventType)eventType {
-    
-    NSString *eventString = nil;
-    
-    switch (eventType) {
-        case TEALEventTypeLink:
-            eventString = TEALEventTypeLinkStringValue;
-            break;
-        case TEALEventTypeView:
-            eventString = TEALEventTypeViewStringValue;
-        default:
-            break;
-    }
-    return eventString;
-}
-
 @end

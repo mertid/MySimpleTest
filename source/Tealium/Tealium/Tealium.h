@@ -27,7 +27,11 @@
 #import "TEALVisitorProfileMetricAttribute.h"
 #import "TEALVisitorProfilePropertyAttribute.h"
 
+// Dispatch
+#import "TEALDispatch.h"
+
 #import "TEALBlocks.h"
+#import "TealiumDelegate.h"
 
 #import "NSObject+TealiumAdditions.h"
 
@@ -53,7 +57,6 @@
 
 + (void) setSharedInstance:(Tealium *)instance;
 
-
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration;
 
 + (instancetype) sharedInstance;
@@ -62,6 +65,9 @@
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
  */
 - (void) disable;
+
+// TODO: comments
+@property (weak, nonatomic) id<TealiumDelegate> delegate;
 
 # pragma mark - Send Collect Data
 

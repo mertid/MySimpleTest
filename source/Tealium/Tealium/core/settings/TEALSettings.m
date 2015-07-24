@@ -22,19 +22,19 @@
     TEALSettings *setting = [[[self class] alloc] init];
     
     if (setting) {
-        setting.account     = configuration.accountName;
-        setting.tiqProfile  = configuration.profileName;
-        setting.asProfile   = configuration.audienceStreamProfile;
-        setting.environment = configuration.environmentName;
-        setting.visitorID   = visitorID;
+        setting.account                 = configuration.accountName;
+        setting.tiqProfile              = configuration.profileName;
+        setting.asProfile               = configuration.audienceStreamProfile;
+        setting.environment             = configuration.environmentName;
+        setting.visitorID               = visitorID;
         
-        setting.useHTTP             = configuration.useHTTP;
-        setting.pollingFrequency    = configuration.pollingFrequency;
-        setting.logLevel            = configuration.logLevel;
-        setting.tagManagementEnabled = configuration.tagManagementEnabled;
-        setting.audienceStreamEnabled = configuration.audienceStreamEnabled;
-        setting.lifecycleEnabled    = configuration.lifecycleEnabled;
-        setting.autotrackingEnabled = configuration.autotrackingEnabled;
+        setting.useHTTP                 = configuration.useHTTP;
+        setting.pollingFrequency        = configuration.pollingFrequency;
+        setting.logLevel                = configuration.logLevel;
+        setting.tagManagementEnabled    = configuration.tagManagementEnabled;
+        setting.audienceStreamEnabled   = configuration.audienceStreamEnabled;
+        setting.lifecycleEnabled        = configuration.lifecycleEnabled;
+        setting.autotrackingEnabled     = configuration.autotrackingEnabled;
     }
     
     return setting;
@@ -85,8 +85,9 @@
         _shouldSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
         _tagManagementEnabled           = [aDecoder decodeBoolForKey:@"tagManagmentEnabled"];
         _audienceStreamEnabled          = [aDecoder decodeBoolForKey:@"audienceStreamEnabled"];
-        _lifecycleEnabled             = [aDecoder decodeBoolForKey:@"lifecycleEnabled"];
-
+        _lifecycleEnabled               = [aDecoder decodeBoolForKey:@"lifecycleEnabled"];
+        _autotrackingEnabled            = [aDecoder decodeBoolForKey:@"autotrackingEnabled"];
+        
         
         TEALSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
         
@@ -124,9 +125,13 @@
     [aCoder encodeBool:self.tagManagementEnabled forKey:@"tagManagementEnabled"];
     [aCoder encodeBool:self.audienceStreamEnabled forKey:@"audienceStreamEnabled"];
     [aCoder encodeBool:self.lifecycleEnabled forKey:@"lifecycleEnabled"];
+    [aCoder encodeBool:self.autotrackingEnabled forKey:@"autotrackingEnabled"];
     
 }
 
++ (BOOL) supportsSecureCoding {
+    return YES;
+}
 
 - (BOOL) isValid {
     return (self.account &&
@@ -171,6 +176,7 @@
     [self storeDispatchExpirationFromSettings:settings];
     [self storeLowBatterySuppressionFromSettings:settings];
     [self storeWifiOnlySettingFromSettings:settings];
+    [self storeUIAutotrackingEnabledFromSettings:settings];
 }
 
 #pragma mark - Mobile Publish Settins
@@ -220,6 +226,16 @@
     }
 }
 
+- (void) storeUIAutotrackingEnabledFromSettings:(NSDictionary *)settings {
+    
+    NSString *uiAutotrackingEnabled = settings[@"ui_auto_tracking"];
+    
+    if (uiAutotrackingEnabled) {
+        self.autotrackingEnabled = [uiAutotrackingEnabled boolValue];
+    }
+}
+
+
 - (NSString *) description {
     
     NSString *displayClass              = NSStringFromClass([self class]);
@@ -227,6 +243,11 @@
     NSString *displayShouldWifiOnly     = [NSString teal_stringFromBool:self.shouldSendWifiOnly];
     NSString *displayShouldBatterySave  = [NSString teal_stringFromBool:self.shouldLowBatterySuppress];
 
+    NSString *displayLifecycle          = [NSString teal_stringFromBool:self.lifecycleEnabled];
+    NSString *displayTagManagement      = [NSString teal_stringFromBool:self.tagManagementEnabled];
+    NSString *displayAudienceStream     = [NSString teal_stringFromBool:self.audienceStreamEnabled];
+    NSString *displayAutotracking       = [NSString teal_stringFromBool:self.autotrackingEnabled];
+    
     NSString *displayStatus             = nil;
     
     switch (self.status) {
@@ -243,7 +264,7 @@
             displayStatus = @"invalid";
             break;
     }
-    return [NSString stringWithFormat:@"\r%@: \r account: %@ \r tiq profile: %@ \r as profile: %@ \r environment: %@ \r visitorID: %@ \r traceID: %@ \r status: %@ \r === Configuration === \r useHttp: %@ \r pollingFrequency: %lu \r logLevel: %d \r === MPS === \r mpsVersion: %@ \r dispatchSize: %ld \r offlineQueueSize: %ld \r numberOfDaysDispatchesAreValue: %ld \r shouldLowBatterySuppress: %@ \r shouldSendWifiOnly: %@ \r",
+    return [NSString stringWithFormat:@"\r%@: \r account: %@ \r tiq profile: %@ \r as profile: %@ \r environment: %@ \r visitorID: %@ \r traceID: %@ \r status: %@ \r === Configuration === \r useHttp: %@ \r pollingFrequency: %lu \r logLevel: %d \r === MPS === \r mpsVersion: %@ \r dispatchSize: %ld \r offlineQueueSize: %ld \r numberOfDaysDispatchesAreValue: %ld \r shouldLowBatterySuppress: %@ \r shouldSendWifiOnly: %@ \r lifecycleEnabled: %@ \r tagManagementEnabled: %@ \r audienceStreamEnabled: %@ \r autotrackingEnabled: %@ \r",
             displayClass,
             self.account,
             self.tiqProfile,
@@ -260,7 +281,11 @@
             (unsigned long)self.offlineDispatchQueueSize,
             (unsigned long)self.numberOfDaysDispatchesAreValid,
             displayShouldBatterySave,
-            displayShouldWifiOnly];
+            displayShouldWifiOnly,
+            displayLifecycle,
+            displayTagManagement,
+            displayAudienceStream,
+            displayAutotracking];
 }
 
 @end

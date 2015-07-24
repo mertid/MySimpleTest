@@ -10,6 +10,8 @@
 
 @interface NSObject (TealiumAdditions)
 
+- (NSDictionary *) teal_dataSources;
+- (void) teal_setDataSources:(NSDictionary *)dataSources;
 - (NSString *) teal_stringValue;
 - (void)teal_setAutotrackingEnabled:(BOOL)enabled;
 - (BOOL)teal_autotrackingEnabled;

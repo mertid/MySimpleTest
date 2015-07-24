@@ -17,13 +17,13 @@
 
 @protocol TEALDispatchManagerDelegate <NSObject>
 
+
+// Internal
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock;
 
-
 - (BOOL) shouldAttemptDispatch;
-
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch;
 
@@ -31,9 +31,12 @@
 
 - (void) didUpdateDispatchQueues;
 
-- (BOOL) shouldRemoveDispatch:(TEALDispatch *)dispatch;
+- (BOOL) shouldPurgeDispatch:(TEALDispatch *)dispatch;
+
+- (void) didPurgeDispatch:(TEALDispatch *)dispatch;
 
 - (void) willRunDispatchQueueWithCount:(NSUInteger)count;
+
 - (void) didRunDispatchQueueWithCount:(NSUInteger)count;
 
 @end

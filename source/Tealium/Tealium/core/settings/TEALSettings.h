@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, TEALSettingsStatus) {
     TEALSettingsStatusInvalid
 };
 
-@interface TEALSettings : NSObject <NSCoding>
+@interface TEALSettings : NSObject <NSSecureCoding>
 
 
 @property (strong, nonatomic) NSString *account;

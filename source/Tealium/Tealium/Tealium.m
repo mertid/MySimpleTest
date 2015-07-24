@@ -10,6 +10,7 @@
 
 #import "TEALSettingsStore.h"
 #import "TEALDispatchManager.h"
+#import "TEALDelegateManager.h"
 
 //#import "TEALDatasourceManager.h"
 
@@ -33,9 +34,6 @@
 
 // Events
 #import "TEALApplicationLifecycle.h"
-
-// Dispatch
-#import "TEALDispatch.h"
 
 // Logging
 
@@ -79,6 +77,8 @@
 
 @property (strong, nonatomic) TEALAutotrackingManager *autotrackingManager;
 
+@property (strong, nonatomic) TEALDelegateManager *delegateManager;
+
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
 @property (readwrite) BOOL enabled;
@@ -121,14 +121,31 @@ __strong static Tealium *_sharedObject = nil;
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
+     
+        _delegateManager    = [[TEALDelegateManager alloc] init];
         
         _settingsStore      = [[TEALSettingsStore alloc] initWithConfiguration:self];
-        
+     
         [_settingsStore unarchiveCurrentSettings];
         
     }
     
     return self;
+}
+
+- (void) setDelegate:(id<TealiumDelegate>)delegate {
+
+    @synchronized(self){
+        
+        [self.delegateManager updateWithDelegate:delegate];
+    }
+    
+}
+
+- (id<TealiumDelegate>) delegate {
+    @synchronized(self){
+        return self.delegateManager.delegate;
+    }
 }
 
 #pragma mark - Enable / Disable / Configure settings / startup
@@ -165,7 +182,10 @@ __strong static Tealium *_sharedObject = nil;
     // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
+    // Merge configuration with saved remote settings:
     TEALSettings *settings = [self.settingsStore settingsFromConfiguration:configuration visitorID:visitorID];
+
+    // Finsish setup with updated settings
     
     [TEALLogger setLogLevel:settings.logLevel];
     
@@ -295,15 +315,19 @@ __strong static Tealium *_sharedObject = nil;
     
     switch (status) {
         case TEALSettingsStatusNew:
+            
+            break;
         case TEALSettingsStatusLoadedArchive:
         case TEALSettingsStatusLoadedRemote:
-
+            [self.delegateManager tealiumDidFinishLoadingRemoteSettings:self];
             break;
         case TEALSettingsStatusInvalid:
             TEAL_LogVerbose(@"Invalid Settings library is shutting now.  Please enable with valid configuration.");
             [self disable];
             break;
     }
+    
+    
 }
 
 - (void) setupSettingsReachabilitiyCallbacks {
@@ -397,7 +421,7 @@ __strong static Tealium *_sharedObject = nil;
         switch (status) {
             case TEALDispatchStatusSent:
             case TEALDispatchStatusQueued:
-                
+            case TEALDispatchStatusShouldDestory:
                 [weakSelf dispatchManager:weakSelf.dispatchManager
                        didProcessDispatch:dispatch
                                    status:status];
@@ -416,7 +440,7 @@ __strong static Tealium *_sharedObject = nil;
     // capture time datasources
     NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType title:title];
 
-    [self addDatasources:datasources toDisaptch:dispatch];
+    [self addDatasources:datasources toDispatch:dispatch];
     
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:completion];
@@ -424,14 +448,35 @@ __strong static Tealium *_sharedObject = nil;
     [self.dispatchManager archiveDispatchQueue];
 }
 
+// Log + Fetch Profile
 - (void) dispatchManager:(TEALDispatchManager *)dispatchManager didProcessDispatch:(TEALDispatch *)dispatch status:(TEALDispatchStatus)status {
     
+    [self logDispatch:dispatch status:status];
+    [self notifyDispatch:dispatch status:status];
+    
+    if (self.settingsStore.currentSettings.pollingFrequency == TEALVisitorProfilePollingFrequencyOnRequest) {
+        return;
+    }
+    
+    
+    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+        
+        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
+    }];
+}
+
+// Delegate Callback
+
+- (void) logDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status {
     if (self.settingsStore.currentSettings.logLevel >= TEALLogLevelVerbose) {
         
         NSString *statusString = @"sent";
         
         if  (status == TEALDispatchStatusQueued) {
             statusString = @"queued";
+        }
+        else if (status == TEALDispatchStatusShouldDestory) {
+            statusString = @"destroyed";
         }
         
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
@@ -444,17 +489,31 @@ __strong static Tealium *_sharedObject = nil;
             TEAL_LogVerbose(@"Successfully %@ dispatch.", statusString)
         }
     }
-    if (self.settingsStore.currentSettings.pollingFrequency == TEALVisitorProfilePollingFrequencyOnRequest) {
-        return;
+}
+
+- (void) notifyDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status {
+    switch (status) {
+        case TEALDispatchStatusSent:
+            [self.delegateManager tealium:self didSendDispatch:dispatch];
+            break;
+        case TEALDispatchStatusQueued:
+            [self.delegateManager tealium:self didQueueDispatch:dispatch];
+            break;
+        case TEALDispatchStatusShouldDestory:
+            [self.delegateManager tealium:self didDestroyDisptach:dispatch];
+            break;
+        default:
+            break;
     }
     
-    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
-        
-        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
-    }];
 }
 
 #pragma mark - TEALDispatchManagerDelegate methods
+
+
+ //Agnostic - use configuration
+ // TODO: handle wifi only, low battery and other settings
+ // ~commHandlers big if else checks
 
 - (BOOL) shouldAttemptDispatch {
     
@@ -469,7 +528,7 @@ __strong static Tealium *_sharedObject = nil;
     return shouldAttempt;
 }
 
-- (void) addDatasources:(NSDictionary *)datasources toDisaptch:(TEALDispatch *)dispatch {
+- (void) addDatasources:(NSDictionary *)datasources toDispatch:(TEALDispatch *)dispatch {
     
     NSDictionary *userInfo = dispatch.payload;
     
@@ -492,19 +551,33 @@ __strong static Tealium *_sharedObject = nil;
     
     NSDictionary *datasources = [self.datasourceStore transmissionTimeDatasourcesForEventType:dispatch.eventType];
 
-    [self addDatasources:datasources
-              toDisaptch:dispatch];
     
-    for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+    [self addDatasources:datasources
+              toDispatch:dispatch];
+    
+    // for now fire and forget
+    
+    // one more check for network and settings
+    if ([self shouldAttemptDispatch]) {
         
-        // TODO:
-        // two completions ?
-        // build composite obj / nsoperation ?
-        // if one service fails, should the disaptch requeue
+        if  ([self.delegateManager tealium:self shouldSendDispatch:dispatch]) {
+            completionBlock(TEALDispatchStatusSent, dispatch, nil);
+            
+            for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+                
+                [service sendDispatch:dispatch
+                           completion:nil];
+            }
+        } else if (completionBlock) {
+            completionBlock(TEALDispatchStatusShouldDestory, dispatch, nil);
+        }
+
+    } else {
         
-        [service sendDispatch:dispatch
-                   completion:completionBlock];
+        NSError *error = nil; // type of network or setting failure
+        completionBlock(TEALDispatchStatusFailed, dispatch, error);
     }
+    
 }
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch {
@@ -519,9 +592,16 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-- (BOOL) shouldRemoveDispatch:(TEALDispatch *)dispatch {
+// Called by shouldPurge
+- (BOOL) shouldPurgeDispatch:(TEALDispatch *)dispatch {
+    // TODO: connect to expiration check
+
 
     return NO;
+}
+
+- (void) didPurgeDispatch:(TEALDispatch *)dispatch {
+    [self.delegateManager tealium:self didDestroyDisptach:dispatch];
 }
 
 - (void) willRunDispatchQueueWithCount:(NSUInteger)count {
@@ -579,6 +659,16 @@ __strong static Tealium *_sharedObject = nil;
         return; // No fail log because these they should be logged once for each public method
     }
     
+        if (!self.settingsStore.currentSettings.audienceStreamEnabled) {
+            
+            TEAL_LogVerbose(@"Audience Stream disabled, Ignoring: %s", __func__);
+            if (completion) {
+                
+                completion(nil, nil);
+            }
+            
+            return;
+        }
     
         TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
             

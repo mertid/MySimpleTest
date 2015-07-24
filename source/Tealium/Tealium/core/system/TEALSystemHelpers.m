@@ -28,16 +28,8 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
 }
 
 + (NSString *) mpsVersionNumber {
-    
-    NSString *tiq = [[self class] tealiumIQlibraryVersion];
-    
-    NSRange range = [tiq rangeOfString:@"."];
-    
-    if (range.location == NSNotFound) {
-        return nil;
-    }
-    
-    return [tiq substringToIndex:range.location];
+    // TODO: standardize this
+    return @"4";
 }
 
 + (NSString *) architecture {
