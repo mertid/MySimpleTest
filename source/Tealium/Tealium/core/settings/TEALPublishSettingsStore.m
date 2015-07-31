@@ -18,15 +18,30 @@
 
 @implementation TEALPublishSettingsStore
 
-- (instancetype) initWithInstanceId:(NSString *)instanceId;{
+- (instancetype) initWithInstanceID:(NSString *)instanceId;{
+    
+    if (!instanceId) {
+        return nil;
+    }
+    
+    if ([[instanceId stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""]){
+        return nil;
+    }
+    
+    
     self = [super init];
     
     if (self){
+        
         _instanceId = instanceId;
     
     }
     
     return self;
+}
+
+- (NSString *) instanceIDCopy {
+    return [self.instanceId copy];
 }
 
 - (TEALPublishSettings *) unarchivePublishSettings {

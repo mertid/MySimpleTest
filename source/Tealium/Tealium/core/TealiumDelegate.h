@@ -13,14 +13,10 @@
 
 @protocol TealiumDelegate <NSObject>
 
-
 @optional
-
-- (void) tealiumDidFinishLoadingRemoteSettings:(Tealium *) tealium; // TODO: Delete
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch;
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch;
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
-- (void) tealium:(Tealium *)tealium didDestroyDisptach:(TEALDispatch *)dispatch; // TODO: Delete
 
 @end

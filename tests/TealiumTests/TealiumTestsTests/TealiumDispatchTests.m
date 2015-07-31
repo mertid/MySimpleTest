@@ -40,11 +40,7 @@
     [super tearDown];
 }
 
-//- (void)testExample {
-//    // This is an example of a functional test case.
-//    XCTAssert(YES, @"Pass");
-//}
-//
+
 //- (void)testPerformanceExample {
 //    // This is an example of a performance test case.
 //    [self measureBlock:^{
@@ -56,47 +52,75 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
+    if (!config) {
+        config = self.configuration;
+    }
+
+    XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
     
-    // TODO: Hook up to use protocol
+    self.library = [Tealium instanceWithConfiguration:config];
+    [self.library setupConfiguration:config
+                          completion:^(BOOL success, NSError *error) {
+                              [finishedLoadingExpectation fulfill];
+                          }];
     
-    //    if (!config) {
-    //        config = self.configuration;
-    //    }
-    //
-    //    __block BOOL isReady = NO;
-    //
-    //    self.library = [Tealium instanceWithConfiguration:<#(TEALConfiguration *)#>]
-    //    [self.library setupConfiguration:config
-    //                          completion:^(BOOL success, NSError *error) {
-    //                              isReady = YES;
-    //                          }];
-    //    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+            NSLog(@"%s error:%@", __FUNCTION__, error);
+    }];
 }
 
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
     self.library.enabled = YES;
     
-    __block BOOL isReady = NO;
+    XCTestExpectation *finishedFetching = [self expectationWithDescription:@"finishFetching"];
     
     [self.library fetchSettings:settings completion:^(BOOL success, NSError *error) {
-        
-        isReady = YES;
+        [finishedFetching fulfill];
     }];
     
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        NSLog(@"%s error:%@", __FUNCTION__, error);
+    }];
 }
 
 
 #pragma mark - Dispatch
 
-//- (void) testEventDispatch {
-//    
+- (void) testEventDispatch {
+    
+    [self enableLibraryWithConfiguration:nil];
+    
+    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+    };
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
+                                                withPayload:@{@"test_key":@"test_value"}];
+    [self.library.dispatchManager addDispatch:dispatch
+                              completionBlock:completion];
+    
+    
+    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
+
+    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        [finished fulfill];
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+    };
+    
+
+    [self.library.dispatchManager addDispatch:dispatch
+                                  completionBlock:completion];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        NSLog(@"%s error:%@", __FUNCTION__, error);
+    }];
+    
+}
+
+//- (void) testEventDispatchQueued {
 //    [self enableLibraryWithConfiguration:nil];
-//    
-//    TEALRemoteSettings *settings = [self.library.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-//    
-//    [self fetchRemoteSettingsWithSettings:settings];
 //    
 //    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
 //        
@@ -108,40 +132,6 @@
 //    [self.library.dispatchManager addDispatch:dispatch
 //                              completionBlock:completion];
 //    
-//    self.library.settingsStore.currentSettings.dispatchSize = 5;
-//    
-//    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        
-//        XCTAssertEqual(status, TEALDispatchStatusQueued, @"Dispatch: %@, should have been queued", dispatch);
-//    };
-//    
-//    for (NSInteger xi = 0; xi < 5; xi ++) {
-//        
-//        TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-//                                                    withPayload:@{@"test_key":@"test_value"}];
-//        [self.library.dispatchManager addDispatch:dispatch
-//                                  completionBlock:completion];
-//    }
-//}
-//
-//
-//- (void) testViewDispatch {
-//    
-//    [self enableLibraryWithConfiguration:nil];
-//    
-//    TEALRemoteSettings *settings = [self.library.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-//    
-//    [self fetchRemoteSettingsWithSettings:settings];
-//    
-//    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        
-//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-//    };
-//    
-//    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeView
-//                                                withPayload:@{@"test_key":@"test_value"}];
-//    [self.library.dispatchManager addDispatch:dispatch
-//                              completionBlock:completion];
 //    
 //    self.library.settingsStore.currentSettings.dispatchSize = 5;
 //    
@@ -158,5 +148,37 @@
 //                                  completionBlock:completion];
 //    }
 //}
+
+- (void) testViewDispatch {
+    
+    [self enableLibraryWithConfiguration:nil];
+    
+    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+    };
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeView
+                                                withPayload:@{@"test_key":@"test_value"}];
+    [self.library.dispatchManager addDispatch:dispatch
+                              completionBlock:completion];
+    
+    
+    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
+    
+    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        [finished fulfill];
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+    };
+    
+    
+    [self.library.dispatchManager addDispatch:dispatch
+                              completionBlock:completion];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        NSLog(@"%s error:%@", __FUNCTION__, error);
+    }];
+    
+}
 
 @end

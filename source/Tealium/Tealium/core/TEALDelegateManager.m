@@ -37,7 +37,7 @@
 
 - (void) tealiumDidFinishLoadingRemoteSettings:(Tealium *) tealium {
     if (self.hasDidFinishLoadingRemoteSettings) {
-        [self.delegate tealiumDidFinishLoadingRemoteSettings:tealium];
+
     }
 }
 
@@ -65,7 +65,7 @@
 
 - (void) tealium:(Tealium *)tealium didDestroyDisptach:(TEALDispatch *)dispatch {
     if (self.hasDidDestroyDispatch) {
-        [self.delegate tealium:tealium didDestroyDisptach:dispatch];
+
     }
 }
 

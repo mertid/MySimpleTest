@@ -41,7 +41,6 @@
 
 #import "TEALDatasources.h"
 #import "TEALDataSourceStore.h"
-#import "TEALDatasourceStore+TealiumAdditions.h"
 
 // Profile
 
@@ -61,6 +60,7 @@
 
 
 //@property (strong, nonatomic) TEALRemoteSettingsStore *settingsStore;
+@property (strong, nonatomic) TEALLogger *logger;
 @property (strong, nonatomic) TEALSettings *settings;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 @property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
@@ -167,8 +167,7 @@ __strong static Tealium *_sharedObject = nil;
 - (void) setupConfiguration:(TEALConfiguration *)configuration
                  completion:(TEALBooleanCompletionBlock)setupCompletion {
     
-    [TEALLogger setLogLevel:configuration.logLevel];
-    
+    self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
     
     if (![TEALConfiguration validConfiguration:configuration]) {
         TEAL_LogNormal(@"Invalid Configuration, check your account, profile and enviornment options.");
@@ -178,11 +177,12 @@ __strong static Tealium *_sharedObject = nil;
         return;
     }
     
-    TEAL_LogNormal(@"%@", configuration);
+    [self.logger logNormal:@"%@", configuration];
 
     self.enabled = YES;
     
     // AudienceStream
+    // TODO: update to use instanceId
     self.datasourceStore = [TEALDatasourceStore sharedStore];
     [self.datasourceStore loadWithUUIDKey:configuration.accountName];
     
@@ -195,31 +195,33 @@ __strong static Tealium *_sharedObject = nil;
     // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
-    [self setupSettingsWithConfiguration:configuration visitorID:visitorID];
-    
-    // TODO: Move later + Needs settings
-    self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
-                                                                        delegate:self];
-    // TODO: Move later
-    [self setupNetworkServicesForSettings:self.settings];
-    
-    [self setupLifecycleForSettings:self.settings];
-    
-    [self setupAutotrackingForSettings:self.settings];
-    
-    // If failed, return saved settings or defaults
-    //    [self fetchRemoteSettings:loadedSettings
-    //                   completion:setupCompletion];
-    
-    
-    
-    [self setupSettingsReachabilityCallbacks];
+    [self setupSettingsWithConfiguration:configuration visitorID:visitorID completion:^(BOOL success, NSError *error) {
+        
+        if (setupCompletion) setupCompletion(success, error);
+        
+        if (success) {
+            self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
+                                                                                delegate:self];
+            
+            [self setupNetworkServicesForSettings:self.settings];
+            
+            [self setupLifecycleForSettings:self.settings];
+            
+            [self setupAutotrackingForSettings:self.settings];
+            
+            [self setupSettingsReachabilityCallbacks];
+            
+        } else {
+            
+            [self disable];
+            
+        }
+    }];
 
-    
     
 }
 
-- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID {
+- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID completion:(TEALBooleanCompletionBlock)setupCompletion{
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
     self.settings.visitorID = visitorID;
@@ -227,19 +229,36 @@ __strong static Tealium *_sharedObject = nil;
     
     __weak TEALSettings *weakSettings = self.settings;
     
-    [weakSettings fetchPublishSettingsWithCompletion:^(BOOL successful, NSError *error) {
-        
-        if (!successful) {
-            [weakSettings loadArchivedSettings];
-            TEAL_LogVerbose(@"Archived Remote Publish Settings loaded: %@", [weakSettings publishSettingsDescription]);
-        } else {
-            TEAL_LogVerbose(@"New Remote Publish Settings loaded: %@", [weakSettings publishSettingsDescription]);
-        }
+    [weakSettings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
         
         if (error) {
-            TEAL_LogNormal(@"%@", [error localizedDescription])
+            [self.logger logNormal:@"Remote Publish Settings: %@", [error localizedDescription]];
         }
         
+        BOOL success = NO;
+        switch (status) {
+            case TEALPublishSettingsStatusDefault:
+                [self.logger logVerbose:@"Using default Remote Publish Settings."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusLoadedArchive:
+                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusLoadedRemote:
+                [self.logger logVerbose:@"New Remote Publish Settings set."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusDisable:
+                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
+                break;
+            default:
+                break;
+        }
+        
+        
+        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
+        if (setupCompletion) setupCompletion (success, nil);
     }];
 }
 
@@ -539,7 +558,6 @@ __strong static Tealium *_sharedObject = nil;
             [self.delegateManager tealium:self didQueueDispatch:dispatch];
             break;
         case TEALDispatchStatusShouldDestory:
-            [self.delegateManager tealium:self didDestroyDisptach:dispatch];
             break;
         default:
             break;
@@ -638,7 +656,7 @@ __strong static Tealium *_sharedObject = nil;
 }
 
 - (void) didPurgeDispatch:(TEALDispatch *)dispatch {
-    [self.delegateManager tealium:self didDestroyDisptach:dispatch];
+
 }
 
 - (void) willRunDispatchQueueWithCount:(NSUInteger)count {

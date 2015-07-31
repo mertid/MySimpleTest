@@ -17,11 +17,13 @@
 
 + (NSString *) teal_descriptionForObject:(NSObject *)object fromDictionary:(NSDictionary *)dictionary{
 
+    // TODO: alphabetize
+    
     // Creates a description string from key values from dictionary
 
     NSString *displayClass              = NSStringFromClass([object class]);
 
-    NSMutableString *descriptionString = [NSMutableString stringWithString:[NSString stringWithFormat:@"\r === %@ === \r", displayClass]];
+    NSMutableString *descriptionString = [NSMutableString stringWithString:[NSString stringWithFormat:@"\r\r === %@ === \r", displayClass]];
     
     NSArray *keys = [dictionary allKeys];
     for (NSString *key in keys){

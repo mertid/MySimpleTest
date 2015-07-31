@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "TEALEvent.h"
+
 @interface TEALDatasourceStore : NSObject
 
 + (instancetype) sharedStore;
@@ -23,5 +25,13 @@
 
 - (BOOL) unarchiveWithStorageKey:(NSString *)key;
 - (void) archiveWithStorageKey:(NSString *)key;
+
+- (void) loadWithUUIDKey:(NSString *)key;
+
+- (NSDictionary *) systemInfoDatasources;
+
+- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType;
+
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType title:(NSString *)title;
 
 @end

@@ -30,23 +30,22 @@
     
     configuration.logLevel = TEALLogLevelExtremeVerbosity;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.tagManagementEnabled = YES;
-    configuration.audienceStreamEnabled = NO;
     configuration.lifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = NO;
-    configuration.autotrackingViewsEnabled = YES;
-    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
+    configuration.autotrackingViewsEnabled = NO;
+//    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
 //    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
 //    
 //    [self.tealiumInstance trackEventWithTitle:@"testInstanceLaunch" dataSources:nil];
     
     [Tealium sharedInstanceWithConfiguration:configuration];
-    
-    [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
-
-    
     [[Tealium sharedInstance] setDelegate:self];
+    
+    
+    if (configuration.autotrackingUIEventsEnabled == NO){
+        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
+    }
     
 #endif
     
@@ -77,12 +76,8 @@
 
 #pragma mark - TEALIUM DELEGATE
 
-- (void) tealiumDidFinishLoadingRemoteSettings:(Tealium *)tealium{
-        NSLog(@"%s, visitorID; %@", __FUNCTION__, [tealium visitorIDCopy]);
-}
-
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
-        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+//        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
     
     NSDictionary *payload = dispatch.payload;
     
@@ -93,15 +88,11 @@
     return YES;
 }
 
-- (void) tealium:(Tealium *)tealium didDestroyDisptach:(TEALDispatch *)dispatch {
-    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
-}
-
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
-    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+//    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
-        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+//        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
 }
 @end

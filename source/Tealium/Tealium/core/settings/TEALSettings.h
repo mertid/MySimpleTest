@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TEALPublishSettings.h"
 
 @class TEALConfiguration;
 @class TEALURLSessionManager;
 
-typedef void (^TEALFetchPublishSettingsCompletionBlock)(BOOL successful, NSError *error);
+typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatus status, NSError *error);
 
 @interface TEALSettings : NSObject
 

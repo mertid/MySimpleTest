@@ -117,4 +117,31 @@
 //    
 }
 
+//- (void) testConfigurationPollingFrequency {
+//
+//    TEALVisitorProfilePollingFrequency targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//
+//    // default
+//    XCTAssertEqual(targetFrequency, self.configuration.pollingFrequency, @"TEALAudienceStreamConfiguration should default to %lu", (unsigned long)targetFrequency);
+//
+//    targetFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//
+//    self.configuration.pollingFrequency = targetFrequency;
+//
+//    TEALRemoteSettings *settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//
+//
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//
+//
+//    targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//
+//    self.configuration.pollingFrequency = targetFrequency;
+//
+//    settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//
+//}
+
 @end

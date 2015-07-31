@@ -12,7 +12,7 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
     TEALPublishSettingsStatusDefault,
     TEALPublishSettingsStatusLoadedRemote,
     TEALPublishSettingsStatusLoadedArchive,
-    TEALPublishSettingsStatusInvalid
+    TEALPublishSettingsStatusDisable
 };
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
@@ -23,10 +23,12 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
 @property (nonatomic) NSInteger numberOfDaysDispatchesAreValid;
-@property (nonatomic) BOOL shouldLowBatterySuppress;
-@property (nonatomic) BOOL shouldSendWifiOnly;
-@property (nonatomic) BOOL shouldAutotrackUIEvents;
-@property (nonatomic) BOOL shouldAutotrackViews;
+@property (nonatomic) BOOL enableLowBatterySuppress;
+@property (nonatomic) BOOL enableSendWifiOnly;
+@property (nonatomic) BOOL enableAudienceStream;
+@property (nonatomic) BOOL enableTagManagement;
+//@property (nonatomic) BOOL shouldAutotrackUIEvents;
+//@property (nonatomic) BOOL shouldAutotrackViews;
 
 - (instancetype) initWithURLString:(NSString *)url;
 

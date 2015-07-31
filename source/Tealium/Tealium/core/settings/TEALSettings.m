@@ -13,7 +13,6 @@
 #import "TEALBlocks.h"
 #import "TEALLogger.h"
 #import "TEALConfiguration.h"
-#import "TEALPublishSettings.h"
 #import "TEALURLSessionManager.h"
 
 @interface TEALSettings()
@@ -87,41 +86,39 @@
                                            reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
                                        suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
         
-        self.publishSettings.status = TEALPublishSettingsStatusInvalid;
+        [self.publishSettings loadArchived];
         
-        completion( nil, error );
+        completion( self.publishSettings.status, error );
         return;
     }
     
-    TEALHTTPResponseBlock requestCompletion = ^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
-        
-        if (connectionError) {
-            
-            completion( NO, connectionError);
-            
-            return;
-        }
-        
-        NSError *parseError = nil;
-        NSDictionary *parsedData = [self mobilePublishSettingsFromHTMLData:data
-                                                                     error:&parseError];
-        
-        if (parsedData) {
-            [self.publishSettings updateWithRawSettings:parsedData];
-            completion( YES, nil);
-        } else {
-            self.publishSettings.status = TEALPublishSettingsStatusInvalid;
-            completion( NO, parseError );
-        }
-        
-    };
-    
-    if (!self.urlSessionManager) {
-        TEAL_LogNormal(@"Missing urlSessionManager");
-    }
+    __weak TEALSettings *weakSelf = self;
     
     [self.urlSessionManager performRequest:request
-                            withCompletion:requestCompletion];
+                            withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
+                                
+                                if (connectionError) {
+                                    
+                                    [weakSelf.publishSettings loadArchived];
+                                    if (completion) completion( weakSelf.publishSettings.status, connectionError);
+                                    
+                                    return;
+                                }
+                                
+                                NSError *parseError = nil;
+                                NSDictionary *parsedData = [weakSelf mobilePublishSettingsFromHTMLData:data
+                                                                                                 error:&parseError];
+                                
+                                if (parsedData) {
+                                    [weakSelf.publishSettings updateWithRawSettings:parsedData];
+                                    if (completion) completion( weakSelf.publishSettings.status, nil);
+                                } else {
+                                    [weakSelf.publishSettings loadArchived];
+                                    if (completion) completion( weakSelf.publishSettings.status, parseError );
+                                }
+                                
+                            
+                            }];
     
     
 }
@@ -132,7 +129,7 @@
 
 
 - (BOOL) isValid {
-    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusInvalid);
+    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
 }
     
 - (BOOL) lifecycleEnabled {
@@ -140,11 +137,11 @@
 }
 
 - (BOOL) tagManagementEnabled {
-    return self.configuration.tagManagementEnabled;
+    return self.publishSettings.enableTagManagement;
 }
 
 - (BOOL) audienceStreamEnabled {
-    return self.configuration.audienceStreamEnabled;
+    return self.publishSettings.enableAudienceStream;
 }
 
 - (BOOL) autotrackingUIEventsEnabled {

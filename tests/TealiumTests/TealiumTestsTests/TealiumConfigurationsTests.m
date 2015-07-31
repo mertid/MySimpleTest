@@ -1,0 +1,159 @@
+//
+//  TealiumCollectTests.m
+//  CollectTests
+//
+//  Created by George Webster on 6/4/15.
+//  Copyright (c) 2015 Tealium Inc. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <XCTest/XCTest.h>
+
+#import <Tealium/Tealium.h>
+#import <Tealium/TEALSettings.h>
+#import "Tealium+PrivateHeader.h"
+
+@interface TealiumConfigurationsTests : XCTestCase
+
+@property (strong) Tealium *library;
+@property TEALConfiguration *configuration;
+
+@end
+
+@implementation TealiumConfigurationsTests
+
+- (void) setUp {
+    [super setUp];
+    
+    self.library = [[Tealium alloc] initPrivate];
+
+}
+
+- (void) tearDown {
+    
+    [[Tealium sharedInstance] disable];
+    self.library = nil;
+    self.configuration = nil;
+    
+    [super tearDown];
+}
+
+#pragma mark - Helpers
+
+- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
+    
+    
+    if (!config) {
+        config = self.configuration;
+    }
+
+    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoading"];
+    
+    self.library = [Tealium instanceWithConfiguration:config];
+    [self.library setupConfiguration:config
+                          completion:^(BOOL success, NSError *error) {
+                              [finishedLoading fulfill];
+                          }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+        NSLog(@"%s error:%@", __FUNCTION__, error);
+    }];
+    
+}
+
+#pragma mark - ACCOUNT PROFILE ENV TESTS
+
+- (void) testNilAccount {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:nil
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+
+}
+
+- (void) testBlankAccount {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"  "
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+    
+}
+
+- (void) testNilTIQProfile {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                             profile:nil
+                                                         environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+    
+}
+
+- (void) testBlankTIQProfile {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                             profile:@"  "
+                                                         environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+    
+}
+
+- (void) testNilEnvironment {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                             profile:@"demo"
+                                                         environment:nil];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+    
+}
+
+- (void) testBlankEnvironment {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                             profile:@"demo"
+                                                         environment:@"  "];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    
+    XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
+    
+}
+
+#pragma mark - AUTOTRACKING ENABLEMENT TESTS
+
+//
+//- (void) testNoMobilePublishSettings {
+//    
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"ios-demo"
+//                                                                environment:@"dev"];
+//    
+//    [self enableLibraryWithConfiguration:config];
+//    
+//    TEALRemoteSettings *settings = [self.library.settingsStore settingsFromConfiguration:config visitorID:@""];
+//    
+//    [self fetchRemoteSettingsWithSettings:settings];
+//    
+//    XCTAssertTrue(self.library.settingsStore.currentSettings.status == TEALSettingsStatusInvalid, @"Stored status should be invalid");
+//    
+//    XCTAssertFalse(self.library.enabled, @"Library should be disabled on invalid settings status");
+//}
+
+
+
+
+
+@end

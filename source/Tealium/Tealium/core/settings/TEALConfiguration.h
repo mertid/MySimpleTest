@@ -112,12 +112,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 @property (nonatomic) BOOL autotrackingViewsEnabled;
 
 // TODO: comments
-@property (nonatomic) BOOL audienceStreamEnabled;
-
-// TODO: comments
-@property (nonatomic) BOOL tagManagementEnabled;
-
-// TODO: comments
 @property (nonatomic) BOOL lifecycleEnabled;
 
 // TODO: comments

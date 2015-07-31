@@ -23,8 +23,6 @@
                                       @"lifecycle enabled":[NSString teal_stringFromBool:self.lifecycleEnabled],
                                       @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
                                       @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-                                      @"tag management enabled":[NSString teal_stringFromBool:self.tagManagementEnabled],
-                                      @"audiencestream enabled":[NSString teal_stringFromBool:self.audienceStreamEnabled],
                                       @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                       @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL]
                                       };
@@ -51,8 +49,6 @@
     configuration.lifecycleEnabled  = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
-    configuration.tagManagementEnabled = NO;
-    configuration.audienceStreamEnabled = NO;
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
    

@@ -31,12 +31,17 @@
         // Default Remote Settings
         _url                            = url;
         _status                         = TEALPublishSettingsStatusDefault;
+        _mpsVersion                     = [TEALSystemHelpers tealiumIQlibraryVersion];
         _numberOfDaysDispatchesAreValid = -1;
         _dispatchSize                   = 1;
         _offlineDispatchQueueSize       = 1000; // -1 is supposed to be inf. but yeah thats alot
-        _shouldLowBatterySuppress       = YES;
-        _shouldSendWifiOnly             = NO;
-        _store = [[TEALPublishSettingsStore alloc] initWithInstanceId:url];
+        _enableLowBatterySuppress       = YES;
+        _enableSendWifiOnly             = NO;
+        _enableAudienceStream           = YES;
+        _enableTagManagement            = NO;
+//        _shouldAutotrackUIEvents        = NO;
+//        _shouldAutotrackViews           = YES;
+        _store = [[TEALPublishSettingsStore alloc] initWithInstanceID:url];
     }
     return self;
 }
@@ -52,9 +57,15 @@
         _numberOfDaysDispatchesAreValid = [aDecoder decodeIntegerForKey:@"numberOfDaysDispatchesAreValid"];
         _dispatchSize                   = [aDecoder decodeIntegerForKey:@"dispatchSize"];
         _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
-        _shouldLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
-        _shouldSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
-        _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceId:_url];
+        _enableLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
+        _enableSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
+        
+        _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
+        _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
+        
+//        _shouldAutotrackUIEvents        = [aDecoder decodeBoolForKey:@"autotrackUIEvents"];
+//        _shouldAutotrackViews           = [aDecoder decodeBoolForKey:@"autotrackViews"];
+        _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceID:_url];
         
         TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
         if (status == TEALPublishSettingsStatusLoadedRemote) {
@@ -73,9 +84,13 @@
     [aCoder encodeObject:self.mpsVersion forKey:@"mpsVersion"];
     [aCoder encodeInteger:self.numberOfDaysDispatchesAreValid forKey:@"numberOfDaysDispatchesAreValid"];
     [aCoder encodeInteger:self.dispatchSize forKey:@"dispatchSize"];
-    [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@""];
-    [aCoder encodeBool:self.shouldLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
-    [aCoder encodeBool:self.shouldSendWifiOnly forKey:@"shouldSendWifiOnly"];
+    [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@"offlineDispatchQueueSize"];
+    [aCoder encodeBool:self.enableLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
+    [aCoder encodeBool:self.enableSendWifiOnly forKey:@"shouldSendWifiOnly"];
+    [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
+    [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
+//    [aCoder encodeBool:self.shouldAutotrackUIEvents forKey:@"autotrackUIEvents"];
+//    [aCoder encodeBool:self.shouldAutotrackViews forKey:@"autotrackViews"];
     
 }
 
@@ -100,11 +115,15 @@
                                             @"status":[NSString stringWithFormat:@"%lu", self.status],
                                             @"url":[NSString teal_dictionarySafeString:self.url],
                                             @"mps version":[NSString teal_dictionarySafeString:self.mpsVersion],
-                                            @"dispatch size":[NSString stringWithFormat:@"%lu", self. dispatchSize],
-                                            @"offline dispatch size":[NSString stringWithFormat:@"%lu", self.offlineDispatchQueueSize],
-                                            @"number of day dispatches valid":[NSString stringWithFormat:@"%lu",self.numberOfDaysDispatchesAreValid],
-                                            @"battery save mode":[NSString teal_stringFromBool:self.shouldLowBatterySuppress],
-                                            @"wifi only mode":[NSString teal_stringFromBool:self.shouldSendWifiOnly]
+                                            @"dispatch size":[NSString stringWithFormat:@"%i", (int)self.dispatchSize],
+                                            @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)self.offlineDispatchQueueSize],
+                                            @"number of day dispatches valid":[NSString stringWithFormat:@"%i",(int)self.numberOfDaysDispatchesAreValid],
+                                            @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
+                                            @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
+                                            @"enable AudienceStream":[NSString teal_stringFromBool:self.enableAudienceStream],
+                                            @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement]
+//                                            @"autotrack ui events":[NSString teal_stringFromBool:self.shouldAutotrackUIEvents],
+//                                            @"autotrack views":[NSString teal_stringFromBool:self.shouldAutotrackViews]
                                             };
     
     return [NSString teal_descriptionForObject:self fromDictionary:descriptionDictionary];
@@ -113,20 +132,41 @@
 - (void) loadArchived {
     TEALPublishSettings *settings = [self.store unarchivePublishSettings];
     
-    self.url = settings.url;
-    self.mpsVersion = settings.mpsVersion;
-    self.dispatchSize = settings.dispatchSize;
-    self.offlineDispatchQueueSize = settings.offlineDispatchQueueSize;
-    self.numberOfDaysDispatchesAreValid = settings.numberOfDaysDispatchesAreValid;
-    self.shouldLowBatterySuppress = settings.shouldLowBatterySuppress;
-    self.shouldSendWifiOnly = settings.shouldSendWifiOnly;
-    self.shouldAutotrackUIEvents = settings.shouldAutotrackUIEvents;
-    self.shouldAutotrackViews = settings.shouldAutotrackViews;
-    
-    self.status = TEALPublishSettingsStatusLoadedArchive;
+    if (settings) {
+        self.url = settings.url;
+        self.mpsVersion = settings.mpsVersion;
+        self.dispatchSize = settings.dispatchSize;
+        self.offlineDispatchQueueSize = settings.offlineDispatchQueueSize;
+        self.numberOfDaysDispatchesAreValid = settings.numberOfDaysDispatchesAreValid;
+        self.enableLowBatterySuppress = settings.enableLowBatterySuppress;
+        self.enableSendWifiOnly = settings.enableSendWifiOnly;
+    //    self.shouldAutotrackUIEvents = settings.shouldAutotrackUIEvents;
+    //    self.shouldAutotrackViews = settings.shouldAutotrackViews;
+        
+        self.status = TEALPublishSettingsStatusLoadedArchive;
+    }
     
 }
 
+- (BOOL) isEqual:(id)object {
+    
+    if (![object isKindOfClass:([TEALPublishSettings class])]) {
+        return NO;
+    }
+    
+    TEALPublishSettings *otherSettings = object;
+    
+    if (![otherSettings.url isEqualToString:self.url]) return  NO;
+    if (![otherSettings.mpsVersion isEqualToString:self.mpsVersion]) return  NO;
+    if (otherSettings.dispatchSize != self.dispatchSize) return  NO;
+    if (otherSettings.offlineDispatchQueueSize != self.offlineDispatchQueueSize) return  NO;
+    if (otherSettings.numberOfDaysDispatchesAreValid != self.numberOfDaysDispatchesAreValid) return  NO;
+    if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
+    if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
+
+    
+    return YES;
+}
 
 #pragma mark - Update Remote Mobile Publish Settings
 
@@ -136,6 +176,7 @@
     
     // TODO: Update to look for acceptable MPS Versions
     if (!self.mpsVersion) {
+        self.status = TEALPublishSettingsStatusDisable;
         return;
     }
     
@@ -193,7 +234,7 @@
     NSString *lowBattery = settings[@"battery_saver"];
 
     if (lowBattery) {
-        self.shouldLowBatterySuppress = [lowBattery boolValue];
+        self.enableLowBatterySuppress = [lowBattery boolValue];
     }
 }
 
@@ -202,7 +243,7 @@
     NSString *wifiOnly = settings[@"wifi_only_sending"];
 
     if (wifiOnly) {
-        self.shouldSendWifiOnly = [wifiOnly boolValue];
+        self.enableSendWifiOnly = [wifiOnly boolValue];
     }
 }
 
@@ -212,8 +253,8 @@
     NSString *uiAutotrackingEnabled = settings[@"ui_auto_tracking"];
 
     if (uiAutotrackingEnabled) {
-        self.shouldAutotrackUIEvents = [uiAutotrackingEnabled boolValue];
-        self.shouldAutotrackViews = [uiAutotrackingEnabled boolValue];
+//        self.shouldAutotrackUIEvents = [uiAutotrackingEnabled boolValue];
+//        self.shouldAutotrackViews = [uiAutotrackingEnabled boolValue];
     }
 }
 

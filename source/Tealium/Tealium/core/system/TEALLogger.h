@@ -17,6 +17,14 @@
 
 @interface TEALLogger : NSObject
 
+- (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
+
+- (void) logNormal:(NSString *) format, ...;
+
+- (void) logVerbose:(NSString *) format, ...;
+
+- (void) logExtremeVerbosity:(NSString *) format, ...;
+
 + (void) setLogLevel:(TEALLogLevel)logLevel;
 
 + (void) logTargetLevel:(TEALLogLevel)targetLevel message:(NSString *)format, ...;
