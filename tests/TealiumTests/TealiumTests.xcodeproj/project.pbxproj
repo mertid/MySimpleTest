@@ -12,11 +12,12 @@
 		37A75AE01B57109E00E6E9E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A75ADE1B57109E00E6E9E2 /* Main.storyboard */; };
 		37A75AE21B57109E00E6E9E2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE11B57109E00E6E9E2 /* Images.xcassets */; };
 		37A75AE51B57109E00E6E9E2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE31B57109E00E6E9E2 /* LaunchScreen.xib */; };
-		37A75AF11B57109E00E6E9E2 /* TealiumTestsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75AF01B57109E00E6E9E2 /* TealiumTestsTests.m */; };
 		37EBA23D1B5718CE0010CB75 /* libTealium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A75B001B57168900E6E9E2 /* libTealium.a */; };
 		37EBA2401B571A960010CB75 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */; };
-		37EBA24D1B571D4D0010CB75 /* TealiumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24B1B571D4D0010CB75 /* TealiumTests.m */; };
+		37EBA24D1B571D4D0010CB75 /* TealiumPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24B1B571D4D0010CB75 /* TealiumPublishSettingsTests.m */; };
 		37EBA24E1B571D4D0010CB75 /* TEALSettingsStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */; };
+		710D71501B62A5CA00CFB715 /* TealiumAudienceStreamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 710D714F1B62A5CA00CFB715 /* TealiumAudienceStreamTests.m */; };
+		710D71521B62A8B400CFB715 /* TealiumDispatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */; };
 		713248D21B5EAED900543639 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D11B5EAED900543639 /* SecondViewController.m */; };
 		713248D71B5EB65F00543639 /* ShowViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */; };
 		71DCA7B71B5968A1001706CF /* APITester.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DCA7B61B5968A1001706CF /* APITester.m */; };
@@ -64,12 +65,13 @@
 		37A75AE41B57109E00E6E9E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		37A75AEA1B57109E00E6E9E2 /* TealiumTestsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumTestsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A75AEF1B57109E00E6E9E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		37A75AF01B57109E00E6E9E2 /* TealiumTestsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumTestsTests.m; sourceTree = "<group>"; };
 		37A75AFA1B57168900E6E9E2 /* Tealium.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tealium.xcodeproj; path = ../../../source/Tealium/Tealium.xcodeproj; sourceTree = "<group>"; };
 		37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		37EBA24A1B571D4D0010CB75 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
-		37EBA24B1B571D4D0010CB75 /* TealiumTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumTests.m; sourceTree = "<group>"; };
+		37EBA24B1B571D4D0010CB75 /* TealiumPublishSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumPublishSettingsTests.m; sourceTree = "<group>"; };
 		37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsStoreTests.m; sourceTree = "<group>"; };
+		710D714F1B62A5CA00CFB715 /* TealiumAudienceStreamTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TealiumAudienceStreamTests.m; path = TealiumTestsTests/TealiumAudienceStreamTests.m; sourceTree = "<group>"; };
+		710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TealiumDispatchTests.m; path = TealiumTestsTests/TealiumDispatchTests.m; sourceTree = "<group>"; };
 		713248D01B5EAED900543639 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		713248D11B5EAED900543639 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		713248D51B5EB65F00543639 /* ShowViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowViewTableViewCell.h; sourceTree = "<group>"; };
@@ -101,6 +103,8 @@
 		37A75AC81B57109E00E6E9E2 = {
 			isa = PBXGroup;
 			children = (
+				710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */,
+				710D714F1B62A5CA00CFB715 /* TealiumAudienceStreamTests.m */,
 				37A75AD31B57109E00E6E9E2 /* TealiumTests */,
 				37A75AED1B57109E00E6E9E2 /* TealiumTestsTests */,
 				37EBA2481B571CF00010CB75 /* Frameworks */,
@@ -150,9 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				37EBA24A1B571D4D0010CB75 /* Tealium+PrivateHeader.h */,
-				37EBA24B1B571D4D0010CB75 /* TealiumTests.m */,
+				37EBA24B1B571D4D0010CB75 /* TealiumPublishSettingsTests.m */,
 				37EBA24C1B571D4D0010CB75 /* TEALSettingsStoreTests.m */,
-				37A75AF01B57109E00E6E9E2 /* TealiumTestsTests.m */,
 				37A75AEE1B57109E00E6E9E2 /* Supporting Files */,
 			);
 			path = TealiumTestsTests;
@@ -328,8 +331,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				37EBA24E1B571D4D0010CB75 /* TEALSettingsStoreTests.m in Sources */,
-				37EBA24D1B571D4D0010CB75 /* TealiumTests.m in Sources */,
-				37A75AF11B57109E00E6E9E2 /* TealiumTestsTests.m in Sources */,
+				710D71521B62A8B400CFB715 /* TealiumDispatchTests.m in Sources */,
+				710D71501B62A5CA00CFB715 /* TealiumAudienceStreamTests.m in Sources */,
+				37EBA24D1B571D4D0010CB75 /* TealiumPublishSettingsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +487,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"TEST=1",
 				);
 				INFOPLIST_FILE = TealiumTestsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -499,6 +504,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "TEST=1";
 				INFOPLIST_FILE = TealiumTestsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

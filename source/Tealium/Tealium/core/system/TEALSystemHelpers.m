@@ -20,7 +20,7 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
 @implementation TEALSystemHelpers
 
 + (NSString *) tealiumIQlibraryVersion {
-    return @"tiq-4.1.2";
+    return @"5.0";
 }
 
 + (NSString *) collectLibraryVersion {

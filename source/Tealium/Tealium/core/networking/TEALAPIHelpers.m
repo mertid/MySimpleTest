@@ -35,8 +35,8 @@
     }
     
     NSString *urlString = [NSString stringWithFormat:@"http://visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
-                           settings.account,
-                           settings.asProfile];
+                           [settings account],
+                           [settings asProfile]];
     
     return [NSURL URLWithString:urlString];
 }
@@ -49,7 +49,7 @@
     
     NSString *urlPrefix = @"https";
     
-    if (settings.useHTTP) {
+    if ([settings useHTTP]) {
         urlPrefix = @"http";
     }
     
@@ -57,8 +57,8 @@
 
     NSMutableDictionary *params = [NSMutableDictionary new];
     
-    params[TEALCollectKey_Account]   = settings.account;
-    params[TEALCollectKey_Profile]   = settings.asProfile;
+    params[TEALCollectKey_Account]   = [settings account];
+    params[TEALCollectKey_Profile]   = [settings asProfile];
     params[TEALCollectKey_VisitorID] = settings.visitorID;
 
     if (settings.traceID) {
@@ -73,6 +73,9 @@
 #pragma MPS / Mobile Publish Settings Helpers
 
 + (NSString *) mobileHTMLURLStringFromSettings:(TEALSettings *)settings{
+    
+    // Currently same destination as MPS location
+    
     return [TEALAPIHelpers mobilePublishSettingsURLStringFromSettings:settings];
 }
 
@@ -83,6 +86,11 @@
         return nil;
     }
     
+    if ([settings overridePublishSettingsURL]) {
+        return [settings overridePublishSettingsURL];
+    }
+    
+    // Default
     NSString *urlPrefix = @"https:";
     
     if (settings.useHTTP) {

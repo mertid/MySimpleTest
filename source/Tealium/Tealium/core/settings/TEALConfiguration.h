@@ -106,17 +106,25 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 @property (copy, nonatomic) NSString *audienceStreamProfile;
 
 // TODO: comments
-@property (nonatomic) BOOL autotrackingEnabled;
+@property (nonatomic) BOOL autotrackingUIEventsEnabled;
 
 // TODO: comments
-@property (nonatomic) BOOL tagManagementEnabled;
+@property (nonatomic) BOOL autotrackingViewsEnabled;
 
 // TODO: comments
 @property (nonatomic) BOOL audienceStreamEnabled;
 
 // TODO: comments
+@property (nonatomic) BOOL tagManagementEnabled;
+
+// TODO: comments
 @property (nonatomic) BOOL lifecycleEnabled;
 
+// TODO: comments
+@property (nonatomic) NSString *overridePublishSettingsURL;
+
+// TODO: comments
+@property (nonatomic) NSString *overridePublishURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
@@ -131,5 +139,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
                                   profile:(NSString *)profileName
                               environment:(NSString *)environmentName;
 
++ (BOOL) validConfiguration:(TEALConfiguration *)configuration;
 
 @end

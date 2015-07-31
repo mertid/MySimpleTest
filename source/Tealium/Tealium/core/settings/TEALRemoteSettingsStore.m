@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Tealium. All rights reserved.
 //
 
-#import "TEALSettingsStore.h"
-#import "TEALSettings.h"
+#import "TEALRemoteSettingsStore.h"
+#import "TEALRemoteSettings.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALOperationManager.h"
 #import "TEALURLSessionManager.h"
@@ -19,15 +19,15 @@
 
 static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.settings";
 
-@interface TEALSettingsStore()
+@interface TEALRemoteSettingsStore()
 
-@property (strong, nonatomic) TEALSettings *currentSettings;
+@property (strong, nonatomic) TEALRemoteSettings *currentSettings;
 
 @end
 
-@implementation TEALSettingsStore
+@implementation TEALRemoteSettingsStore
 
-- (instancetype) initWithConfiguration:(id<TEALSettingsStoreConfiguration>)configuration {
+- (instancetype) initWithConfiguration:(id<TEALRemoteSettingsStoreConfiguration>)configuration {
 
     self = [self init];
     
@@ -40,13 +40,13 @@ static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.set
 
 #pragma mark - Settings Creation / Persistance
 
-- (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *)configuration visitorID:(NSString *)visitorID {
+- (TEALRemoteSettings *) settingsFromConfiguration:(TEALConfiguration *)configuration visitorID:(NSString *)visitorID {
 
     if (!configuration.accountName) {
         return nil;
     }
 
-    TEALSettings *settings = [TEALSettings settingWithConfiguration:configuration
+    TEALRemoteSettings *settings = [TEALRemoteSettings settingWithConfiguration:configuration
                                                           visitorID:visitorID];
 
     // Current Settings are settings unarchived from disk, should only override settings not included from MPS
@@ -64,6 +64,7 @@ static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.set
         self.currentSettings.tagManagementEnabled   = settings.tagManagementEnabled;
         self.currentSettings.audienceStreamEnabled  = settings.audienceStreamEnabled;
         
+        
         // This is loaded from MPS also, don't copy over
         //self.currentSettings.autotrackingEnabled
     } else {
@@ -77,10 +78,11 @@ static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.set
 
     NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:kTEALMobileSettingsStorageKey];
     
-    TEALSettings *settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
+    TEALRemoteSettings *settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
     
     if (settings) {
         self.currentSettings = settings;
+        TEAL_LogVerbose(@"Saved Settings loaded: %@", settings);
     }
 
 }
@@ -99,39 +101,40 @@ static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.set
 
 #pragma mark - Requests
 
-- (void) fetchRemoteSettingsWithSetting:(TEALSettings *)settings
+- (void) fetchRemoteSettingsWithConfiguration:(TEALConfiguration *)configuration
                              completion:(TEALSettingsCompletionBlock)completion {
-
+    
     if (self.currentSettings.status == TEALSettingsStatusLoadedRemote) {
         completion( self.currentSettings, nil );
-        
         return;
     }
-
-    NSString *baseURL = [self.configuration mobilePublishSettingsURLStringForSettings:settings];
+    
+    // Get Publish Settings
+    
+    NSString *baseURL = [self.configuration mobilePublishSettingsURLStringForSettings:configuration];
     NSDictionary *params = [self.configuration mobilePublishSettingsURLParams];
-
+    
     NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
     
     NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
     
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
-
+    
     if (!request) {
         
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
                                       description:@"Settings request unsuccessful"
                                            reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
                                        suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
-
+        
         settings.status = TEALSettingsStatusInvalid;
         
-        completion( settings, error );
+        completion( configuration, error );
         return;
     }
     
     TEALHTTPResponseBlock requestCompletion = ^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
-
+        
         if (connectionError) {
             
             completion( self.currentSettings, connectionError);
@@ -149,15 +152,76 @@ static NSString * const kTEALMobileSettingsStorageKey = @"com.tealium.mobile.set
         } else {
             settings.status = TEALSettingsStatusInvalid;
         }
-
-        self.currentSettings = settings;
-
+        
+        self.currentSettings = configuration;
+        
         completion( self.currentSettings, parseError );
     };
     
     [[self.configuration urlSessionManager] performRequest:request
                                             withCompletion:requestCompletion];
 }
+
+//- (void) fetchRemoteSettingsWithSetting:(TEALRemoteSettings *)settings
+//                             completion:(TEALSettingsCompletionBlock)completion {
+//
+//    if (self.currentSettings.status == TEALSettingsStatusLoadedRemote) {
+//        completion( self.currentSettings, nil );
+//        return;
+//    }
+//
+//    // Get Publish Settings
+//    
+//    NSString *baseURL = [self.configuration mobilePublishSettingsURLStringForSettings:settings];
+//    NSDictionary *params = [self.configuration mobilePublishSettingsURLParams];
+//
+//    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+//    
+//    NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
+//    
+//    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
+//
+//    if (!request) {
+//        
+//        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+//                                      description:@"Settings request unsuccessful"
+//                                           reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
+//                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
+//
+//        settings.status = TEALSettingsStatusInvalid;
+//        
+//        completion( settings, error );
+//        return;
+//    }
+//    
+//    TEALHTTPResponseBlock requestCompletion = ^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
+//
+//        if (connectionError) {
+//            
+//            completion( self.currentSettings, connectionError);
+//            
+//            return;
+//        }
+//        
+//        NSError *parseError = nil;
+//        NSDictionary *parsedData = [self mobilePublishSettingsFromHTMLData:data
+//                                                                     error:&parseError];
+//        
+//        if (parsedData) {
+//            [settings storeMobilePublishSettings:parsedData];
+//            settings.status = TEALSettingsStatusLoadedRemote;
+//        } else {
+//            settings.status = TEALSettingsStatusInvalid;
+//        }
+//
+//        self.currentSettings = settings;
+//
+//        completion( self.currentSettings, parseError );
+//    };
+//    
+//    [[self.configuration urlSessionManager] performRequest:request
+//                                            withCompletion:requestCompletion];
+//}
 
 #pragma mark - Data Helpers
 

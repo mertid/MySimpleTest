@@ -61,6 +61,9 @@
 
 + (instancetype) sharedInstance;
 
+// TODO:
+// destorySharedInstance;
+
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
  */

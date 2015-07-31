@@ -11,6 +11,8 @@
 @interface TEALAutotrackingManager : NSObject
 
 - (void) enableAutotracking;
+- (void) enableEventTracking;
+- (void) enableViewTracking;
 // TODO: disable
 
 @end

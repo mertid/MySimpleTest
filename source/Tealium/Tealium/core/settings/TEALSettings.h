@@ -1,77 +1,49 @@
 //
 //  TEALSettings.h
-//  Tealium Mobile Library
+//  Tealium
 //
-//  Created by George Webster on 12/29/14.
-//  Copyright (c) 2014 Tealium Inc. All rights reserved.
+//  Created by Jason Koo on 7/30/15.
+//  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@class TEALVisitorProfile;
-@class TEALDatasource;
 @class TEALConfiguration;
+@class TEALURLSessionManager;
 
-#import "TEALConfiguration.h"
+typedef void (^TEALFetchPublishSettingsCompletionBlock)(BOOL successful, NSError *error);
 
-typedef NS_ENUM(NSUInteger, TEALSettingsStatus) {
-    TEALSettingsStatusNew,
-    TEALSettingsStatusLoadedRemote,
-    TEALSettingsStatusLoadedArchive,
-    TEALSettingsStatusInvalid
-};
+@interface TEALSettings : NSObject
 
-@interface TEALSettings : NSObject <NSSecureCoding>
+@property (nonatomic, weak) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, weak) NSString *visitorID;
+@property (nonatomic, weak) NSString *traceID;
 
+- (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
-@property (strong, nonatomic) NSString *account;
-@property (strong, nonatomic) NSString *tiqProfile;
-@property (strong, nonatomic) NSString *asProfile;
-@property (strong, nonatomic) NSString *environment;
+- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
 
-@property (strong, nonatomic) NSString *visitorID;
+- (void) loadArchivedSettings;
 
-@property (strong, nonatomic) NSString *traceID;
+- (BOOL) isValid;
+- (BOOL) lifecycleEnabled;
+- (BOOL) tagManagementEnabled;
+- (BOOL) audienceStreamEnabled;
+- (BOOL) autotrackingUIEventsEnabled;
+- (BOOL) autotrackingViewsEnabled;
+- (BOOL) useHTTP;
 
-@property (nonatomic, readonly) NSString *audienceStreamAddressString;
-@property (nonatomic, readonly) NSString *mobileConfigBaseURLString;
+- (NSUInteger) dispatchSize;
+- (NSUInteger) offlineDispatchQueueSize;
+- (NSUInteger) logLevel;
+- (NSUInteger) pollingFrequency;
 
-@property (nonatomic) TEALSettingsStatus status;
-@property (nonatomic, readonly) BOOL isValid;
-
-#pragma mark - Configuration
-
-@property (nonatomic) BOOL useHTTP;
-@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;  // ? Move to MPS
-@property (nonatomic) TEALLogLevel logLevel;
-
-#pragma mark - Mobile Publish Settings
-
-@property (copy, nonatomic) NSString *mpsVersion;
-
-@property (nonatomic) NSUInteger dispatchSize; // batching
-@property (nonatomic) NSUInteger offlineDispatchQueueSize;
-
-@property (nonatomic) NSInteger numberOfDaysDispatchesAreValid;
-
-@property (nonatomic) BOOL shouldLowBatterySuppress;
-
-@property (nonatomic) BOOL shouldSendWifiOnly;
-
-@property (nonatomic) BOOL autotrackingEnabled;
-@property (nonatomic) BOOL tagManagementEnabled;
-@property (nonatomic) BOOL audienceStreamEnabled;
-@property (nonatomic) BOOL lifecycleEnabled;
-
-
-+ (instancetype) settingWithConfiguration:(TEALConfiguration *)configuration
-                                visitorID:(NSString *)visitorID;
-
-#pragma mark - trace
-
-- (void) storeTraceID:(NSString *)traceID;
-- (void) disableTrace;
-
-- (void) storeMobilePublishSettings:(NSDictionary *)rawSettings;
+- (NSString *) account;
+- (NSString *) asProfile;
+- (NSString *) tiqProfile;
+- (NSString *) environment;
+- (NSString *) overridePublishSettingsURL;
+- (NSString *) overridePublishURL;
+- (NSString *) publishSettingsDescription;
 
 @end

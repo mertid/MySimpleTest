@@ -23,8 +23,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+#ifndef TEST
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"non-exists"
                                                                        environment:@"dev"];
     
     configuration.logLevel = TEALLogLevelExtremeVerbosity;
@@ -32,7 +33,9 @@
     configuration.tagManagementEnabled = YES;
     configuration.audienceStreamEnabled = NO;
     configuration.lifecycleEnabled = YES;
-    configuration.autotrackingEnabled = YES;
+    configuration.autotrackingUIEventsEnabled = NO;
+    configuration.autotrackingViewsEnabled = YES;
+    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
 //    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
 //    
@@ -44,6 +47,8 @@
 
     
     [[Tealium sharedInstance] setDelegate:self];
+    
+#endif
     
     return YES;
 }

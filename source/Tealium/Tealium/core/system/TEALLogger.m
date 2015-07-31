@@ -7,10 +7,12 @@
 //
 
 #import "TEALLogger.h"
+#import "TEALSystemHelpers.h"
 
 static TEALLogLevel _audienceStreamLogLevel;
 
 @implementation TEALLogger
+
 
 + (void) setLogLevel:(TEALLogLevel)logLevel {
 
@@ -44,7 +46,9 @@ static TEALLogLevel _audienceStreamLogLevel;
                                          arguments:args];
         va_end(args);
 
-        NSLog(@"%@", message);
+        NSString *version = [TEALSystemHelpers tealiumIQlibraryVersion];
+        
+        NSLog(@"TEALIUM %@: %@", version, message);
     }
 }
 

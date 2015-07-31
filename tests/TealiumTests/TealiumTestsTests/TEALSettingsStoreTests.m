@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
+//#import <Tealium/TEALRemoteSettings.h>
+//#import <Tealium/TEALRemoteSettingsStore.h>
 #import <Tealium/TEALSettings.h>
-#import <Tealium/TEALSettingsStore.h>
 #import <Tealium/TEALOperationManager.h>
 #import <Tealium/TEALURLSessionManager.h>
 #import <Tealium/TEALConfiguration.h>
 
-@interface TEALSettingsStoreTests : XCTestCase <TEALSettingsStoreConfiguration>
+@interface TEALSettingsStoreTests : XCTestCase
 
-@property (strong, nonatomic) TEALSettingsStore *settingsStore;
+//@property (strong, nonatomic) TEALRemoteSettingsStore *settingsStore;
 @property (strong, nonatomic) TEALOperationManager *operationManager;
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
 
@@ -36,7 +37,7 @@
     
     self.urlSessionManager.completionQueue = self.operationManager.underlyingQueue;
     
-    self.settingsStore = [[TEALSettingsStore alloc] initWithConfiguration:self];
+//    self.settingsStore = [[TEALRemoteSettingsStore alloc] initWithConfiguration:self];
     
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                              profile:@"demo"
@@ -48,7 +49,7 @@
     
     self.operationManager = nil;
     self.urlSessionManager = nil;
-    self.settingsStore = nil;
+//    self.settingsStore = nil;
     
     self.configuration = nil;
     
@@ -56,47 +57,47 @@
 }
 
 
-- (void) testConfigurationPollingFrequency {
-    
-    TEALVisitorProfilePollingFrequency targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-    
-    // default
-    XCTAssertEqual(targetFrequency, self.configuration.pollingFrequency, @"TEALAudienceStreamConfiguration should default to %lu", (unsigned long)targetFrequency);
-    
-    targetFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    
-    self.configuration.pollingFrequency = targetFrequency;
-    
-    TEALSettings *settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-    
-    
-    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
-    
-    
-    targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-    
-    self.configuration.pollingFrequency = targetFrequency;
-    
-    settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-    
-    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
-    
-}
-
-- (void) testSettingsStorage {
-    
-    TEALSettings *startSettings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-    
-    __block BOOL isReady = NO;
-    
-    [self.settingsStore fetchRemoteSettingsWithSetting:startSettings completion:^(TEALSettings *endSettings, NSError *error) {
-        
-        XCTAssertTrue([startSettings isEqual:endSettings], @"settings passed to completion should be same object passed in");
-        
-        isReady = YES;
-    }];
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-}
+//- (void) testConfigurationPollingFrequency {
+//    
+//    TEALVisitorProfilePollingFrequency targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//    
+//    // default
+//    XCTAssertEqual(targetFrequency, self.configuration.pollingFrequency, @"TEALAudienceStreamConfiguration should default to %lu", (unsigned long)targetFrequency);
+//    
+//    targetFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//    
+//    self.configuration.pollingFrequency = targetFrequency;
+//    
+//    TEALRemoteSettings *settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//    
+//    
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//    
+//    
+//    targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//    
+//    self.configuration.pollingFrequency = targetFrequency;
+//    
+//    settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//    
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//    
+//}
+//
+//- (void) testSettingsStorage {
+//    
+//    TEALRemoteSettings *startSettings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//    
+//    __block BOOL isReady = NO;
+//    
+//    [self.settingsStore fetchRemoteSettingsWithSetting:startSettings completion:^(TEALRemoteSettings *endSettings, NSError *error) {
+//        
+//        XCTAssertTrue([startSettings isEqual:endSettings], @"settings passed to completion should be same object passed in");
+//        
+//        isReady = YES;
+//    }];
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+//}
 
 #pragma mark - TEALSettingsStoreConfiguration
 

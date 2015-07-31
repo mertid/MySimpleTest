@@ -1,291 +1,303 @@
 //
 //  TEALSettings.m
-//  Tealium Mobile Library
+//  Tealium
 //
-//  Created by George Webster on 12/29/14.
-//  Copyright (c) 2014 Tealium Inc. All rights reserved.
+//  Created by Jason Koo on 7/30/15.
+//  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
+//  BRIEF: Composite of Configurations and Publish Settings (new, default or archived)
 
 #import "TEALSettings.h"
-#import "TEALSystemHelpers.h"
 #import "TEALNetworkHelpers.h"
-#import "NSString+TealiumAdditions.h"
-#import "TEALConfiguration.h"
-
+#import "TEALError.h"
+#import "TEALBlocks.h"
 #import "TEALLogger.h"
+#import "TEALConfiguration.h"
+#import "TEALPublishSettings.h"
+#import "TEALURLSessionManager.h"
+
+@interface TEALSettings()
+
+@property (nonatomic, strong) TEALConfiguration *configuration;
+@property (nonatomic, strong) TEALPublishSettings *publishSettings;
+
+@end
 
 @implementation TEALSettings
 
-+ (instancetype) settingWithConfiguration:(TEALConfiguration *)configuration
-                                visitorID:(NSString *)visitorID {
++ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
     
-    TEALSettings *setting = [[[self class] alloc] init];
     
-    if (setting) {
-        setting.account                 = configuration.accountName;
-        setting.tiqProfile              = configuration.profileName;
-        setting.asProfile               = configuration.audienceStreamProfile;
-        setting.environment             = configuration.environmentName;
-        setting.visitorID               = visitorID;
-        
-        setting.useHTTP                 = configuration.useHTTP;
-        setting.pollingFrequency        = configuration.pollingFrequency;
-        setting.logLevel                = configuration.logLevel;
-        setting.tagManagementEnabled    = configuration.tagManagementEnabled;
-        setting.audienceStreamEnabled   = configuration.audienceStreamEnabled;
-        setting.lifecycleEnabled        = configuration.lifecycleEnabled;
-        setting.autotrackingEnabled     = configuration.autotrackingEnabled;
+    if (configuration.overridePublishSettingsURL) {
+        return configuration.overridePublishSettingsURL;
     }
     
-    return setting;
+    // Default
+    NSString *urlPrefix = @"https:";
+    
+    if (configuration.useHTTP) {
+        urlPrefix = @"http:";
+    }
+    
+    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+            urlPrefix,
+            configuration.accountName,
+            configuration.profileName,
+            configuration.environmentName];
 }
 
-- (instancetype) init {
+#pragma mark - PUBLIC METHODS
+
+- (instancetype) initWithConfiguration:(TEALConfiguration *)configuration {
     self = [super init];
     
     if (self) {
-        _status                         = TEALSettingsStatusNew;
-        // Configuration
-        _useHTTP                        = NO;
-        _pollingFrequency               = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-        // MPS
-        _numberOfDaysDispatchesAreValid = -1;
-        _dispatchSize                   = 1;
-        _offlineDispatchQueueSize       = 1000; // -1 is supposed to be inf. but yeah thats alot
-        _shouldLowBatterySuppress       = YES;
-        _shouldSendWifiOnly             = NO;
+        _configuration = configuration;
+        NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:configuration];
+        _publishSettings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     }
+    
+    
     return self;
 }
 
-- (instancetype) initWithCoder:(NSCoder *)aDecoder {
-    
-    self = [self init];
-    
-    if (self) {
-        
-        // TODO: Make constants
-        
-        _account                = [aDecoder decodeObjectForKey:@"account"];
-        _tiqProfile             = [aDecoder decodeObjectForKey:@"tiqProfile"];
-        _asProfile              = [aDecoder decodeObjectForKey:@"asProfile"];
-        _environment            = [aDecoder decodeObjectForKey:@"environment"];
-        _visitorID              = [aDecoder decodeObjectForKey:@"visitorID"];
 
-        // Configuration
-        _useHTTP                = [aDecoder decodeBoolForKey:@"useHTTP"];
-        _pollingFrequency       = [aDecoder decodeIntegerForKey:@"pollingFrequency"];
+
+- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion {
+    
+    if (!self.configuration) {
+        return;
+    }
+    
+    // Get Publish Settings
+    
+    NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+    NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
+    
+    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+    
+    NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
+    
+    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
+    
+    if (!request) {
         
-        // MPS
-        _mpsVersion                     = [aDecoder decodeObjectForKey:@"mpsVersion"];
-        _numberOfDaysDispatchesAreValid = [aDecoder decodeIntegerForKey:@"numberOfDaysDispatchesAreValid"];
-        _dispatchSize                   = [aDecoder decodeIntegerForKey:@"dispatchSize"];
-        _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
-        _shouldLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
-        _shouldSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
-        _tagManagementEnabled           = [aDecoder decodeBoolForKey:@"tagManagmentEnabled"];
-        _audienceStreamEnabled          = [aDecoder decodeBoolForKey:@"audienceStreamEnabled"];
-        _lifecycleEnabled               = [aDecoder decodeBoolForKey:@"lifecycleEnabled"];
-        _autotrackingEnabled            = [aDecoder decodeBoolForKey:@"autotrackingEnabled"];
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                                      description:@"Settings request unsuccessful"
+                                           reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
+                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
         
+        self.publishSettings.status = TEALPublishSettingsStatusInvalid;
         
-        TEALSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
+        completion( nil, error );
+        return;
+    }
+    
+    TEALHTTPResponseBlock requestCompletion = ^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
         
-        if (status == TEALSettingsStatusLoadedRemote) {
-            status = TEALSettingsStatusLoadedArchive;
+        if (connectionError) {
+            
+            completion( NO, connectionError);
+            
+            return;
         }
         
-        _status = status;
+        NSError *parseError = nil;
+        NSDictionary *parsedData = [self mobilePublishSettingsFromHTMLData:data
+                                                                     error:&parseError];
+        
+        if (parsedData) {
+            [self.publishSettings updateWithRawSettings:parsedData];
+            completion( YES, nil);
+        } else {
+            self.publishSettings.status = TEALPublishSettingsStatusInvalid;
+            completion( NO, parseError );
+        }
+        
+    };
+    
+    if (!self.urlSessionManager) {
+        TEAL_LogNormal(@"Missing urlSessionManager");
     }
     
-    return self;
-}
-
-- (void) encodeWithCoder:(NSCoder *)aCoder {
+    [self.urlSessionManager performRequest:request
+                            withCompletion:requestCompletion];
     
-    [aCoder encodeObject:self.account forKey:@"account"];
-    [aCoder encodeObject:self.tiqProfile forKey:@"tiqProfile"];
-    [aCoder encodeObject:self.asProfile forKey:@"asProfile"];
-    [aCoder encodeObject:self.environment forKey:@"environment"];
-    [aCoder encodeObject:self.visitorID forKey:@"visitorID"];
-    
-    [aCoder encodeInteger:self.status forKey:@"status"];
-    
-    // Configuration
-    [aCoder encodeBool:self.useHTTP forKey:@"useHTTP"];
-    [aCoder encodeInteger:self.pollingFrequency forKey:@"pollingFrequency"];
-    
-    // MPS
-    [aCoder encodeObject:self.mpsVersion forKey:@"mpsVersion"];
-    [aCoder encodeInteger:self.numberOfDaysDispatchesAreValid forKey:@"numberOfDaysDispatchesAreValid"];
-    [aCoder encodeInteger:self.dispatchSize forKey:@"dispatchSize"];
-    [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@""];
-    [aCoder encodeBool:self.shouldLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
-    [aCoder encodeBool:self.shouldSendWifiOnly forKey:@"shouldSendWifiOnly"];
-    [aCoder encodeBool:self.tagManagementEnabled forKey:@"tagManagementEnabled"];
-    [aCoder encodeBool:self.audienceStreamEnabled forKey:@"audienceStreamEnabled"];
-    [aCoder encodeBool:self.lifecycleEnabled forKey:@"lifecycleEnabled"];
-    [aCoder encodeBool:self.autotrackingEnabled forKey:@"autotrackingEnabled"];
     
 }
 
-+ (BOOL) supportsSecureCoding {
-    return YES;
+- (void) loadArchivedSettings {
+    [self.publishSettings loadArchived];
 }
+
 
 - (BOOL) isValid {
-    return (self.account &&
-            self.tiqProfile &&
-            self.asProfile &&
-            self.environment &&
-            self.status != TEALSettingsStatusInvalid);
+    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusInvalid);
+}
+    
+- (BOOL) lifecycleEnabled {
+    return self.configuration.lifecycleEnabled;
 }
 
-- (void) storeTraceID:(NSString *)traceID {
-    
-    self.traceID = traceID;
+- (BOOL) tagManagementEnabled {
+    return self.configuration.tagManagementEnabled;
 }
 
-- (void) disableTrace {
-    self.traceID = nil;
+- (BOOL) audienceStreamEnabled {
+    return self.configuration.audienceStreamEnabled;
 }
 
-- (void) storeMobilePublishSettings:(NSDictionary *)rawSettings {
-    
-
-    self.mpsVersion = [TEALSystemHelpers mpsVersionNumber];
-    
-    if (!self.mpsVersion) {
-        return;
-    }
-    
-    if (![self isValid]) {
-        return;
-    }
-    
-    NSDictionary *settings = rawSettings[self.mpsVersion];
-
-    TEAL_LogVerbose(@"storing settings: %@", settings);
-    
-    if (!settings) {
-        return;
-    }
-    
-    [self storeDispatchSizeFromSettings:settings];
-    [self storeOfflineDispatchQueueSizeFromSettings:settings];
-    [self storeDispatchExpirationFromSettings:settings];
-    [self storeLowBatterySuppressionFromSettings:settings];
-    [self storeWifiOnlySettingFromSettings:settings];
-    [self storeUIAutotrackingEnabledFromSettings:settings];
+- (BOOL) autotrackingUIEventsEnabled {
+    return self.configuration.autotrackingUIEventsEnabled;
 }
 
-#pragma mark - Mobile Publish Settins
-
-- (void) storeDispatchSizeFromSettings:(NSDictionary *)settings {
-
-    NSString *batchSize = settings[@"event_batch_size"];
-    
-    if (batchSize) {
-        self.dispatchSize = [batchSize integerValue];
-    }
+- (BOOL) autotrackingViewsEnabled {
+    return self.configuration.autotrackingViewsEnabled;
 }
 
-- (void) storeOfflineDispatchQueueSizeFromSettings:(NSDictionary *)settings {
-
-    NSString *offlineSize = settings[@"offline_dispatch_limit"];
-    
-    if (offlineSize) {
-        self.offlineDispatchQueueSize = [offlineSize integerValue];
-    }
+- (BOOL) useHTTP {
+    return self.configuration.useHTTP;
 }
 
-- (void) storeDispatchExpirationFromSettings:(NSDictionary *)settings {
-    
-    NSString *dispatchExpiration = settings[@"dispatch_expiration"];
-    
-    if (dispatchExpiration) {
-        self.numberOfDaysDispatchesAreValid = [dispatchExpiration integerValue];
-    }
+- (NSUInteger) dispatchSize {
+    return self.publishSettings.dispatchSize;
 }
 
-- (void) storeLowBatterySuppressionFromSettings:(NSDictionary *)settings {
-    
-    NSString *lowBattery = settings[@"battery_saver"];
-    
-    if (lowBattery) {
-        self.shouldLowBatterySuppress = [lowBattery boolValue];
-    }
+- (NSUInteger) logLevel {
+    return self.configuration.logLevel;
+}
+- (NSUInteger) offlineDispatchQueueSize {
+    return self.publishSettings.offlineDispatchQueueSize;
 }
 
-- (void) storeWifiOnlySettingFromSettings:(NSDictionary *)settings {
-    
-    NSString *wifiOnly = settings[@"wifi_only_sending"];
-    
-    if (wifiOnly) {
-        self.shouldSendWifiOnly = [wifiOnly boolValue];
-    }
+- (NSUInteger) pollingFrequency {
+    return self.configuration.pollingFrequency;
 }
 
-- (void) storeUIAutotrackingEnabledFromSettings:(NSDictionary *)settings {
-    
-    NSString *uiAutotrackingEnabled = settings[@"ui_auto_tracking"];
-    
-    if (uiAutotrackingEnabled) {
-        self.autotrackingEnabled = [uiAutotrackingEnabled boolValue];
-    }
+- (NSString *) account {
+    return self.configuration.accountName;
 }
 
+- (NSString *) asProfile {
+    return self.configuration.audienceStreamProfile;
+}
 
-- (NSString *) description {
-    
-    NSString *displayClass              = NSStringFromClass([self class]);
-    NSString *displayHttp               = [NSString teal_stringFromBool:self.useHTTP];
-    NSString *displayShouldWifiOnly     = [NSString teal_stringFromBool:self.shouldSendWifiOnly];
-    NSString *displayShouldBatterySave  = [NSString teal_stringFromBool:self.shouldLowBatterySuppress];
+- (NSString *) tiqProfile {
+    return self.configuration.profileName;
+}
 
-    NSString *displayLifecycle          = [NSString teal_stringFromBool:self.lifecycleEnabled];
-    NSString *displayTagManagement      = [NSString teal_stringFromBool:self.tagManagementEnabled];
-    NSString *displayAudienceStream     = [NSString teal_stringFromBool:self.audienceStreamEnabled];
-    NSString *displayAutotracking       = [NSString teal_stringFromBool:self.autotrackingEnabled];
+- (NSString *) environment {
+    return self.configuration.environmentName;
+}
+
+- (NSString *) overridePublishSettingsURL {
+    return self.configuration.overridePublishSettingsURL;
+}
+
+- (NSString *) overridePublishURL {
+    return self.configuration.overridePublishURL;
+}
+
+- (NSString *) publishSettingsDescription {
+    return self.publishSettings.description;
+}
+
+#pragma mark - PRIVATE METHODS
+
+- (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
     
-    NSString *displayStatus             = nil;
+    NSDictionary *resultDictionary = nil;
     
-    switch (self.status) {
-        case TEALSettingsStatusNew:
-            displayStatus = @"new";
-            break;
-        case TEALSettingsStatusLoadedRemote:
-            displayStatus = @"remote";
-            break;
-        case TEALSettingsStatusLoadedArchive:
-            displayStatus = @"archive";
-            break;
-        case TEALSettingsStatusInvalid:
-            displayStatus = @"invalid";
-            break;
+    NSString *dataString = [[NSString alloc] initWithData:data
+                                                 encoding:NSUTF8StringEncoding];
+    
+    NSError *regexError = nil;
+    
+    NSString *scriptContentsPattern = @"<script.+>.+</script>";
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:scriptContentsPattern
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&regexError];
+    if (!regex) {
+        *error = regexError;
+        return nil;
     }
-    return [NSString stringWithFormat:@"\r%@: \r account: %@ \r tiq profile: %@ \r as profile: %@ \r environment: %@ \r visitorID: %@ \r traceID: %@ \r status: %@ \r === Configuration === \r useHttp: %@ \r pollingFrequency: %lu \r logLevel: %d \r === MPS === \r mpsVersion: %@ \r dispatchSize: %ld \r offlineQueueSize: %ld \r numberOfDaysDispatchesAreValue: %ld \r shouldLowBatterySuppress: %@ \r shouldSendWifiOnly: %@ \r lifecycleEnabled: %@ \r tagManagementEnabled: %@ \r audienceStreamEnabled: %@ \r autotrackingEnabled: %@ \r",
-            displayClass,
-            self.account,
-            self.tiqProfile,
-            self.asProfile,
-            self.environment,
-            self.visitorID,
-            self.traceID,
-            displayStatus,
-            displayHttp,
-            (unsigned long)self.pollingFrequency,
-            2, // log level
-            self.mpsVersion,
-            (unsigned long)self.dispatchSize,
-            (unsigned long)self.offlineDispatchQueueSize,
-            (unsigned long)self.numberOfDaysDispatchesAreValid,
-            displayShouldBatterySave,
-            displayShouldWifiOnly,
-            displayLifecycle,
-            displayTagManagement,
-            displayAudienceStream,
-            displayAutotracking];
+    
+    __block NSString *scriptContents = nil;
+    
+    [regex enumerateMatchesInString:dataString
+                            options:NSMatchingReportCompletion
+                              range:NSMakeRange(0, dataString.length)
+                         usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                             
+                             if (result) {
+                                 TEAL_LogExtreamVerbosity(@"text checking result: %@", result);
+                             }
+                             
+                             if (result.range.location != NSNotFound) {
+                                 scriptContents = [dataString substringWithRange:result.range];
+                                 
+                                 if (scriptContents) {
+                                     TEAL_LogExtreamVerbosity(@"scriptContents: %@", scriptContents);
+                                 }
+                                 
+                                 *stop = YES;
+                             }
+                         }];
+    
+    if (!scriptContents) {
+        
+        return nil;
+    }
+    
+    NSRange mpsRangeStart = [scriptContents rangeOfString:@"var mps = "
+                                                  options:NSCaseInsensitiveSearch
+                                                    range:NSMakeRange(0, scriptContents.length)];
+    
+    if (mpsRangeStart.location == NSNotFound) {
+        
+        TEAL_LogVerbose(@"mobile publish settings not found! old mobile library extension is not supported.  ");
+        
+        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                              description:@"Mobile publish settings not found."
+                                   reason:@"Mobile publish settings not found. While parsing mobile.html"
+                               suggestion:@"Please enable mobile publish settings in Tealium iQ."];
+        
+        return nil;
+    }
+    
+    NSUInteger startIndex = NSMaxRange( mpsRangeStart );
+    NSUInteger endLength = scriptContents.length - startIndex;
+    NSRange mpsRangeEnd = [scriptContents rangeOfString:@"</script>"
+                                                options:NSCaseInsensitiveSearch
+                                                  range:NSMakeRange(startIndex, endLength)];
+    
+    if (mpsRangeEnd.location == NSNotFound) {
+        return nil;
+    }
+    
+    NSRange mpsRange = NSMakeRange(startIndex, ( mpsRangeEnd.location - startIndex ) );
+    
+    NSString *mpsDataString = [scriptContents substringWithRange:mpsRange];
+    
+    TEAL_LogExtreamVerbosity(@"mpsDataString: %@", mpsDataString);
+    
+    // TODO: check for missing utag and / or tags
+    
+    NSData *mpsJSONData = [mpsDataString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSError *jsonError = nil;
+    
+    resultDictionary = [NSJSONSerialization JSONObjectWithData:mpsJSONData
+                                                       options:NSJSONReadingMutableContainers
+                                                         error:&jsonError];
+    
+    if (!resultDictionary) {
+        *error = jsonError;
+        return nil;
+    }
+    
+    return resultDictionary;
 }
 
 @end

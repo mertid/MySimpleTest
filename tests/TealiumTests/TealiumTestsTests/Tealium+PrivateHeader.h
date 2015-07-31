@@ -7,14 +7,14 @@
 //
 
 #import <Tealium/Tealium.h>
-#import <Tealium/TEALSettingsStore.h>
+#import <Tealium/TEALSettings.h>
 #import <Tealium/TEALDispatchManager.h>
 #import <Tealium/TEALURLSessionManager.h>
 #import <Tealium/TEALVisitorProfileStore.h>
 
 @interface Tealium (Private)
 
-@property (strong, nonatomic) TEALSettingsStore *settingsStore;
+@property (strong, nonatomic) TEALSettings *settings;
 @property (strong, nonatomic) TEALOperationManager *operationManager;
 @property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;

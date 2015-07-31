@@ -11,5 +11,7 @@
 @interface NSString (TealiumAdditions)
 
 + (NSString *) teal_stringFromBool:(BOOL)value;
++ (NSString *) teal_descriptionForObject:(NSObject *)object fromDictionary:(NSDictionary *)dictionary;
++ (NSString *) teal_dictionarySafeString:(NSString *)string;
 
 @end

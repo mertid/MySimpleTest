@@ -30,8 +30,9 @@
     
     self.eventProcessingBlock = block;
     
-    NSArray *events = @[UIApplicationDidFinishLaunchingNotification,
-                        UIApplicationWillEnterForegroundNotification,
+    NSArray *events = @[
+//                        UIApplicationDidFinishLaunchingNotification,
+//                        UIApplicationWillEnterForegroundNotification,
                         UIApplicationDidBecomeActiveNotification,
                         UIApplicationDidEnterBackgroundNotification,
                         UIApplicationWillTerminateNotification
