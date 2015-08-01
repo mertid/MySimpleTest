@@ -24,7 +24,8 @@
                                       @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
                                       @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
                                       @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
-                                      @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL]
+                                      @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
+                                      @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
                                       };
     
     return [NSString teal_descriptionForObject:self fromDictionary:descriptionDict];
@@ -51,6 +52,7 @@
     configuration.autotrackingViewsEnabled = YES;
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
+    configuration.overrideDispatchURL = nil;
    
     configuration.audienceStreamProfile = @"main";
     

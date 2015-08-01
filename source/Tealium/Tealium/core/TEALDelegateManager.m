@@ -43,8 +43,6 @@
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
     if (self.hasDidSendDispatch) {
-        
-        // TODO: client editing of dispatch
         return [self.delegate tealium:tealium shouldSendDispatch:dispatch];
     }
     return YES;

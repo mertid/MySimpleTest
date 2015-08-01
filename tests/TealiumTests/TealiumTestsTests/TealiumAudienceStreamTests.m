@@ -57,9 +57,7 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
-    
-    // TODO: Hook up to use protocol
-    
+        
     //    if (!config) {
     //        config = self.configuration;
     //    }

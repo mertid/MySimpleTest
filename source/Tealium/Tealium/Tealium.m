@@ -224,7 +224,7 @@ __strong static Tealium *_sharedObject = nil;
 - (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID completion:(TEALBooleanCompletionBlock)setupCompletion{
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-    self.settings.visitorID = visitorID;
+    [self.settings setVisitorIDCopy:visitorID];
     self.settings.urlSessionManager = self.urlSessionManager;
     
     __weak TEALSettings *weakSettings = self.settings;
@@ -682,14 +682,14 @@ __strong static Tealium *_sharedObject = nil;
 
 - (NSString *) collectDispatchURLString {
     
-    return [TEALAPIHelpers sendDataURLStringFromSettings:self.settings];
+    return [self.settings dispatchURLString];
 }
 
 #pragma mark - TEALTagNetworkServiceConfiguration
 
 - (NSString*) tagTargetURLString {
     
-    return [TEALAPIHelpers mobileHTMLURLStringFromSettings:self.settings];
+    return [self.settings publishURLString];
     
 }
 
@@ -747,12 +747,12 @@ __strong static Tealium *_sharedObject = nil;
 
 - (NSURL *) profileURL {
     
-    return [TEALAPIHelpers profileURLFromSettings:self.settings];
+    return [self.settings profileURL];
 }
 
 - (NSURL *) profileDefinitionURL {
     
-    return [TEALAPIHelpers profileDefinitionsURLFromSettings:self.settings];
+    return [self.settings profileDefinitionsURL];
 }
 
 #pragma mark - Visitor ID

@@ -17,34 +17,40 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 @interface TEALSettings : NSObject
 
 @property (nonatomic, weak) TEALURLSessionManager *urlSessionManager;
-@property (nonatomic, weak) NSString *visitorID;
 @property (nonatomic, weak) NSString *traceID;
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
-- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
-
-- (void) loadArchivedSettings;
-
-- (BOOL) isValid;
-- (BOOL) lifecycleEnabled;
-- (BOOL) tagManagementEnabled;
 - (BOOL) audienceStreamEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
+- (BOOL) isValid;
+- (BOOL) lifecycleEnabled;
+- (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
-
-- (NSUInteger) dispatchSize;
-- (NSUInteger) offlineDispatchQueueSize;
-- (NSUInteger) logLevel;
-- (NSUInteger) pollingFrequency;
 
 - (NSString *) account;
 - (NSString *) asProfile;
 - (NSString *) tiqProfile;
 - (NSString *) environment;
-- (NSString *) overridePublishSettingsURL;
-- (NSString *) overridePublishURL;
+- (NSString *) dispatchURLString;
 - (NSString *) publishSettingsDescription;
+- (NSString *) publishSettingsURLString;
+- (NSString *) publishURLString;
+//- (NSString *) overridePublishSettingsURL;
+//- (NSString *) overridePublishURL;
+- (NSString *) visitorIDCopy;
+
+- (NSUInteger) dispatchSize;
+- (NSUInteger) logLevel;
+- (NSUInteger) offlineDispatchQueueSize;
+- (NSUInteger) pollingFrequency;
+
+- (NSURL *) profileURL;
+- (NSURL *) profileDefinitionsURL;
+
+- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
+- (void) loadArchivedSettings;
+- (void) setVisitorIDCopy:(NSString *)visitorID;
 
 @end

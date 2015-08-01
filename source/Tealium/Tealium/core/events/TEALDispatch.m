@@ -48,7 +48,7 @@
 
 - (NSString*) description {
     
-    NSString *description = [NSString stringWithFormat:@"Dispatch eventType: %@ \r payload: %@ \r timestamp: %f",
+    NSString *description = [NSString stringWithFormat:@"Dispatch eventType: %@ \r datasources payload: %@ \r timestamp unix: %f",
                              [TEALEvent stringFromEventType:self.eventType],
                              self.payload,
                              self.timestamp];

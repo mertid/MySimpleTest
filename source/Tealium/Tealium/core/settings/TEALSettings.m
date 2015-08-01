@@ -14,18 +14,52 @@
 #import "TEALLogger.h"
 #import "TEALConfiguration.h"
 #import "TEALURLSessionManager.h"
+#import "TEALDatasources.h"
 
 @interface TEALSettings()
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *publishSettings;
+@property (nonatomic, strong) NSString *audienceStreamDispatchURLString;
+@property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
+@property (nonatomic, strong) NSString *tiqPublishURLString;
+@property (nonatomic, strong) NSString *visitorID;
+@property (nonatomic, strong) NSURL *audienceStreamProfileURL;
+@property (nonatomic, strong) NSURL *audienceStreamProfileDefinitionsURL;
 
 @end
 
 @implementation TEALSettings
 
-+ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
+#pragma mark - CLASS METHODS
+
++ (NSString *) dispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
+    
+    NSString *urlPrefix = @"https";
+    
+    if ([settings useHTTP]) {
+        urlPrefix = @"http";
+    }
+    
+    NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    
+    params[TEALCollectKey_Account]   = [settings account];
+    params[TEALCollectKey_Profile]   = [settings asProfile];
+    params[TEALCollectKey_VisitorID] = [settings visitorIDCopy];
+    
+    if (settings.traceID) {
+        params[TEALCollectKey_TraceID] = settings.traceID;
+    }
+    
+    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+    
+    return [baseURLString stringByAppendingString:queryString];
+}
+
++ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
     
     if (configuration.overridePublishSettingsURL) {
         return configuration.overridePublishSettingsURL;
@@ -45,6 +79,53 @@
             configuration.environmentName];
 }
 
++ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
+    
+    if (configuration.overridePublishURL) {
+        return configuration.overridePublishURL;
+    }
+    
+    // Default
+    NSString *urlPrefix = @"https:";
+    
+    if (configuration.useHTTP) {
+        urlPrefix = @"http:";
+    }
+    
+    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+            urlPrefix,
+            configuration.accountName,
+            configuration.profileName,
+            configuration.environmentName];
+}
+
++ (NSURL *) profileURLFromSettings:(TEALSettings *)settings {
+    
+    if (![settings isValid]) {
+        return nil;
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://visitor-service.tealiumiq.com/%@/%@/%@",
+                           settings.account,
+                           settings.asProfile,
+                           [settings visitorIDCopy]];
+    
+    return [NSURL URLWithString:urlString];
+}
+
++ (NSURL *) profileDefinitionsURLFromSettings:(TEALSettings *)settings {
+    
+    if (![settings isValid]) {
+        return nil;
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
+                           [settings account],
+                           [settings asProfile]];
+    
+    return [NSURL URLWithString:urlString];
+}
+
 #pragma mark - PUBLIC METHODS
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration {
@@ -60,7 +141,119 @@
     return self;
 }
 
+- (BOOL) audienceStreamEnabled {
+    return self.publishSettings.enableAudienceStream;
+}
 
+- (BOOL) autotrackingUIEventsEnabled {
+    return self.configuration.autotrackingUIEventsEnabled;
+}
+
+- (BOOL) autotrackingViewsEnabled {
+    return self.configuration.autotrackingViewsEnabled;
+}
+
+- (BOOL) isValid {
+    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
+}
+    
+- (BOOL) lifecycleEnabled {
+    return self.configuration.lifecycleEnabled;
+}
+
+- (BOOL) tagManagementEnabled {
+    return self.publishSettings.enableTagManagement;
+}
+
+- (BOOL) useHTTP {
+    return self.configuration.useHTTP;
+}
+
+- (NSString *) account {
+    return self.configuration.accountName;
+}
+
+- (NSString *) asProfile {
+    return self.configuration.audienceStreamProfile;
+}
+
+- (NSString *) tiqProfile {
+    return self.configuration.profileName;
+}
+
+- (NSString *) environment {
+    return self.configuration.environmentName;
+}
+
+- (NSString *) dispatchURLString {
+    if (!self.audienceStreamDispatchURLString) {
+        self.audienceStreamDispatchURLString = [TEALSettings dispatchURLStringFromConfiguration:self];
+    }
+    return self.audienceStreamDispatchURLString;
+}
+
+- (NSString *) publishSettingsDescription {
+    return self.publishSettings.description;
+}
+
+//- (NSString *) overridePublishSettingsURL {
+//    return self.configuration.overridePublishSettingsURL;
+//}
+//
+//- (NSString *) overridePublishURL {
+//    return self.configuration.overridePublishURL;
+//}
+
+- (NSString *) publishSettingsURLString {
+    if (!self.mobilePublishSettingsURLString){
+        self.mobilePublishSettingsURLString = [self.publishSettings url];
+    }
+    return self.mobilePublishSettingsURLString;
+}
+
+- (NSString *) publishURLString {
+    if (!self.tiqPublishURLString){
+        self.tiqPublishURLString = [TEALSettings publishURLFromConfiguration:self.configuration];
+    }
+    return self.tiqPublishURLString;
+}
+
+- (NSString *) visitorIDCopy {
+    if (!self.visitorID) {
+        return @"";
+    }
+    return [self.visitorID copy];
+}
+
+- (NSUInteger) dispatchSize {
+    return self.publishSettings.dispatchSize;
+}
+
+- (NSUInteger) logLevel {
+    return self.configuration.logLevel;
+}
+
+- (NSUInteger) offlineDispatchQueueSize {
+    return self.publishSettings.offlineDispatchQueueSize;
+}
+
+- (NSUInteger) pollingFrequency {
+    return self.configuration.pollingFrequency;
+}
+
+- (NSURL *) profileURL {
+    if (!self.audienceStreamProfileURL) {
+        self.audienceStreamProfileURL = [TEALSettings profileURLFromSettings:self];
+    }
+    return self.audienceStreamProfileURL;
+}
+
+- (NSURL *) profileDefinitionsURL {
+    if (!self.audienceStreamProfileDefinitionsURL) {
+        self.audienceStreamProfileDefinitionsURL = [TEALSettings profileDefinitionsURLFromSettings:self];
+    }
+    return self.audienceStreamProfileDefinitionsURL;
+}
 
 - (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion {
     
@@ -117,7 +310,7 @@
                                     if (completion) completion( weakSelf.publishSettings.status, parseError );
                                 }
                                 
-                            
+                                
                             }];
     
     
@@ -127,76 +320,9 @@
     [self.publishSettings loadArchived];
 }
 
-
-- (BOOL) isValid {
-    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
-}
+- (void) setVisitorIDCopy:(NSString *)visitorID {
     
-- (BOOL) lifecycleEnabled {
-    return self.configuration.lifecycleEnabled;
-}
-
-- (BOOL) tagManagementEnabled {
-    return self.publishSettings.enableTagManagement;
-}
-
-- (BOOL) audienceStreamEnabled {
-    return self.publishSettings.enableAudienceStream;
-}
-
-- (BOOL) autotrackingUIEventsEnabled {
-    return self.configuration.autotrackingUIEventsEnabled;
-}
-
-- (BOOL) autotrackingViewsEnabled {
-    return self.configuration.autotrackingViewsEnabled;
-}
-
-- (BOOL) useHTTP {
-    return self.configuration.useHTTP;
-}
-
-- (NSUInteger) dispatchSize {
-    return self.publishSettings.dispatchSize;
-}
-
-- (NSUInteger) logLevel {
-    return self.configuration.logLevel;
-}
-- (NSUInteger) offlineDispatchQueueSize {
-    return self.publishSettings.offlineDispatchQueueSize;
-}
-
-- (NSUInteger) pollingFrequency {
-    return self.configuration.pollingFrequency;
-}
-
-- (NSString *) account {
-    return self.configuration.accountName;
-}
-
-- (NSString *) asProfile {
-    return self.configuration.audienceStreamProfile;
-}
-
-- (NSString *) tiqProfile {
-    return self.configuration.profileName;
-}
-
-- (NSString *) environment {
-    return self.configuration.environmentName;
-}
-
-- (NSString *) overridePublishSettingsURL {
-    return self.configuration.overridePublishSettingsURL;
-}
-
-- (NSString *) overridePublishURL {
-    return self.configuration.overridePublishURL;
-}
-
-- (NSString *) publishSettingsDescription {
-    return self.publishSettings.description;
+    self.visitorID = visitorID;
 }
 
 #pragma mark - PRIVATE METHODS
@@ -296,5 +422,6 @@
     
     return resultDictionary;
 }
+
 
 @end

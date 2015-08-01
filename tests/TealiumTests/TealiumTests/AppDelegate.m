@@ -81,6 +81,11 @@
     
     NSDictionary *payload = dispatch.payload;
     
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:dispatch.payload];
+    mDict[@"ClientAddedKey"] = @"clientAddedValue";
+    
+    dispatch.payload = [NSDictionary dictionaryWithDictionary:mDict];
+    
     if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
         return NO;
     }
@@ -89,10 +94,10 @@
 }
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
-//    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
-//        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
 }
 @end

@@ -120,6 +120,9 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 // TODO: comments
 @property (nonatomic) NSString *overridePublishURL;
 
+// TODO: comments
+@property (nonatomic) NSString *overrideDispatchURL;
+
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
  *
