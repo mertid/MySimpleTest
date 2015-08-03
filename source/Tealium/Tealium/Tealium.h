@@ -55,14 +55,22 @@
  */
 + (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration;
 
-+ (void) setSharedInstance:(Tealium *)instance;
-
+/**
+ *  Starts the singleton shared instance of the Tealium Mobile Library with the given configuration object.
+ *
+ *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
+ */
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration;
 
+/**
+ 
+ */
 + (instancetype) sharedInstance;
 
-// TODO:
-// destorySharedInstance;
+/**
+ 
+ */
++ (void) destroySharedInstance;
 
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
@@ -127,5 +135,6 @@
  *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
  */
 - (void) leaveTrace;
+
 
 @end

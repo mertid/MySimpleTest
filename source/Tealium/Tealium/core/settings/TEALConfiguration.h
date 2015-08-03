@@ -136,6 +136,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
                                   profile:(NSString *)profileName
                               environment:(NSString *)environmentName;
 
-+ (BOOL) validConfiguration:(TEALConfiguration *)configuration;
++ (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
 
 @end

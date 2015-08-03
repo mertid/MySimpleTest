@@ -46,9 +46,6 @@
 
 #import "TEALVisitorProfileHelpers.h"
 
-// API
-
-#import "TEALAPIHelpers.h"
 
 @interface Tealium () <
 //                        TEALRemoteSettingsStoreConfiguration,
@@ -84,28 +81,42 @@ __strong static Tealium *_sharedObject = nil;
 
 @implementation Tealium
 
-+ (instancetype) sharedInstance {
+#pragma mark - PRIVATE CLASS METHODS
+
++ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion{
     
-    return _sharedObject;
+    Tealium *instance = [[Tealium alloc] initPrivate];
+    
+    __weak Tealium *weakInstance = instance;
+    
+    [weakInstance.operationManager addOperationWithBlock:^{
+        [weakInstance instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+            if (success) {
+                [weakInstance.dispatchManager runQueuedDispatches];
+                TEAL_LogNormal(@"Library instance ready.");
+            } else {
+                [weakInstance disable];
+                TEAL_LogNormal(@"Library failed to start: %@", error);
+            }
+            if (completion) completion(success, error);
+        }];
+    }];
+    
+    return instance;
 }
+
++ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion {
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
+    [Tealium setSharedInstance:instance];
+    return instance;
+}
+                         
 
 + (void) setSharedInstance:(Tealium *)instance {
     _sharedObject = instance;
 }
 
-- (instancetype) init {
-    [NSException raise:@"should not be initialized directly"
-                format:@"please use [Tealium sharedInstance] or public class methods"];
-    return nil;
-}
-
-+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
-
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration];
-    [Tealium setSharedInstance:instance];
-    return instance;
-
-}
+#pragma mark - PRIVATE INSTANCE METHODS
 
 - (instancetype) initPrivate {
     
@@ -116,7 +127,7 @@ __strong static Tealium *_sharedObject = nil;
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
-     
+        
         _delegateManager    = [[TEALDelegateManager alloc] init];
         
     }
@@ -124,52 +135,18 @@ __strong static Tealium *_sharedObject = nil;
     return self;
 }
 
-- (void) setDelegate:(id<TealiumDelegate>)delegate {
-
-    @synchronized(self){
-        
-        [self.delegateManager updateWithDelegate:delegate];
-    }
-    
+- (instancetype) init {
+    [NSException raise:@"should not be initialized directly"
+                format:@"please use [Tealium sharedInstance] or public class methods"];
+    return nil;
 }
 
-- (id<TealiumDelegate>) delegate {
-    @synchronized(self){
-        return self.delegateManager.delegate;
-    }
-}
-
-#pragma mark - Enable / Disable / Configure settings / startup
-
-
-
-+ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration {
-    
-    Tealium *instance = [[Tealium alloc] initPrivate];
-    
-    __weak Tealium *weakInstance = instance;
-    
-    [weakInstance.operationManager addOperationWithBlock:^{
-        [weakInstance setupConfiguration:configuration completion:^(BOOL success, NSError *error) {
-            if (success) {
-                [weakInstance.dispatchManager runQueuedDispatches];
-                TEAL_LogNormal(@"Library instance ready.");
-            } else {
-                [weakInstance disable];
-                TEAL_LogNormal(@"Library failed to start: %@", error);
-            }
-        }];
-    }];
-    
-    return instance;
-}
-
-- (void) setupConfiguration:(TEALConfiguration *)configuration
+- (void) instanceWithConfiguration:(TEALConfiguration *)configuration
                  completion:(TEALBooleanCompletionBlock)setupCompletion {
     
     self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
     
-    if (![TEALConfiguration validConfiguration:configuration]) {
+    if (![TEALConfiguration isValidConfiguration:configuration]) {
         TEAL_LogNormal(@"Invalid Configuration, check your account, profile and enviornment options.");
         if (setupCompletion) {
             setupCompletion(NO, nil);
@@ -178,7 +155,7 @@ __strong static Tealium *_sharedObject = nil;
     }
     
     [self.logger logNormal:@"%@", configuration];
-
+    
     self.enabled = YES;
     
     // AudienceStream
@@ -217,251 +194,8 @@ __strong static Tealium *_sharedObject = nil;
             
         }
     }];
-
     
-}
-
-- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID completion:(TEALBooleanCompletionBlock)setupCompletion{
     
-    self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-    [self.settings setVisitorIDCopy:visitorID];
-    self.settings.urlSessionManager = self.urlSessionManager;
-    
-    __weak TEALSettings *weakSettings = self.settings;
-    
-    [weakSettings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
-        
-        if (error) {
-            [self.logger logNormal:@"Remote Publish Settings: %@", [error localizedDescription]];
-        }
-        
-        BOOL success = NO;
-        switch (status) {
-            case TEALPublishSettingsStatusDefault:
-                [self.logger logVerbose:@"Using default Remote Publish Settings."];
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusLoadedArchive:
-                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusLoadedRemote:
-                [self.logger logVerbose:@"New Remote Publish Settings set."];
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusDisable:
-                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
-                break;
-            default:
-                break;
-        }
-        
-        
-        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
-        if (setupCompletion) setupCompletion (success, nil);
-    }];
-}
-
-- (void) setupAutotrackingForSettings:(TEALSettings *) settings {
-    
-    if ([settings autotrackingViewsEnabled] || [settings autotrackingUIEventsEnabled]) {
-        self.autotrackingManager = [[TEALAutotrackingManager alloc] init];
-    }
-    if ([settings autotrackingUIEventsEnabled]) {
-        [self.autotrackingManager enableEventTracking];
-    }
-    if ([settings autotrackingViewsEnabled]) {
-        [self.autotrackingManager enableViewTracking];
-    }
-
-//    else if (self.autotrackingManager) {
-        // TODO: disable
-//        [self.autotrackingManager disable];
-//        self.autotrackingManager = nil;
-//    }
-    
-}
-
-- (void) setupLifecycleForSettings:(TEALSettings *) settings {
-    
-    if ([settings lifecycleEnabled]){
-        self.lifecycle = [[TEALApplicationLifecycle alloc] init];
-        
-        __weak Tealium *weakSelf = self;
-        
-        [weakSelf.lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
-            
-            [weakSelf trackEventWithTitle:nil dataSources:dataDictionary];
-        }];
-        
-    } else if (self.lifecycle){
-        [self.lifecycle disable];
-        self.lifecycle = nil;
-    }
-    
-}
-
-
-- (void) setupNetworkServicesForSettings:(TEALSettings *)settings {
-    
-    NSMutableArray *possibleNetworkServices = [NSMutableArray array];
-    
-    if ([settings tagManagementEnabled]){
-        TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
-        [possibleNetworkServices addObject:tagService];
-    }
-    
-    if ([settings audienceStreamEnabled]){
-        TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
-        [possibleNetworkServices addObject:collectService];
-    }
-    
-    // TODO: Use NSOperations
-    
-    self.dispatchNetworkServices = [NSArray arrayWithArray:possibleNetworkServices];
-    
-    for (id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
-        [service setup];
-    }
-
-}
-
-- (void) fetchSettings:(TEALSettings *)settings
-            completion:(TEALBooleanCompletionBlock)fetchCompletion {
-    
-}
-
-//- (void) fetchRemoteSettings:(TEALRemoteSettings *)settings
-//            completion:(TEALBooleanCompletionBlock)fetchCompletion {
-//    
-//    __weak Tealium *weakSelf = self;
-//    
-//    [self.settingsStore fetchRemoteSettingsWithSetting:settings
-//                                            completion:^(TEALRemoteSettings *settings, NSError *error) {
-//                                                
-//                                                BOOL settingsSuccess = NO;
-//                                                
-//                                                if (settings) {
-//                                                    TEAL_LogVerbose(@"Retrieved settings: %@", settings);
-//                                                    
-//                                                    if (settings.status == TEALSettingsStatusLoadedRemote) {
-//                                                        settingsSuccess = YES;
-//                                                    }
-//                                                    
-//                                                    [weakSelf updateStateForSettingsStatus:settings.status];
-//                                                }
-//                                                
-//                                                if (error) {
-//                                                    TEAL_LogVerbose(@"Problems while fetching settings: %@ \r error:%@", settings, [error localizedDescription]);
-//                                                    settingsSuccess = NO;
-//                                                }
-//                                                
-//                                                [weakSelf.operationManager addOperationWithBlock:^{
-//                                                    
-//                                                    [weakSelf.settingsStore archiveCurrentSettings];
-//                                                }];
-//                                                
-//                                                if (fetchCompletion) {
-//                                                    fetchCompletion(settingsSuccess, error);
-//                                                }
-//                                            }];
-//    
-//    
-//    [self.dispatchManager unarchiveDispatchQueue];
-//}
-
-//- (void) updateStateForSettingsStatus:(TEALSettingsStatus)status {
-//    
-//    switch (status) {
-//        case TEALPublishSettingsStatusDefault:
-//            
-//            break;
-//        case TEALPublishSettingsStatusLoadedArchive:
-//        case TEALPublishSettingsStatusLoadedRemote:
-//            [self.delegateManager tealiumDidFinishLoadingRemoteSettings:self];
-//            break;
-//        case TEALPublishSettingsStatusInvalid:
-//            TEAL_LogVerbose(@"Invalid Settings library is shutting now.  Please enable with valid configuration.");
-//            [self disable];
-//            break;
-//    }
-//    
-//    
-//}
-
-- (void) setupSettingsReachabilityCallbacks {
-    
-    if (self.urlSessionManager.reachability.reachableBlock) {
-        return;
-    }
-    
-    __weak Tealium *weakSelf = self;
-    __weak TEALSettings *weakSettings = weakSelf.settings;
-    
-    weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
-        
-        
-        [weakSettings fetchPublishSettingsWithCompletion:nil];
-    };
-}
-
-
-#pragma mark - TEALSettingsStoreConfiguration methods
-
-//- (NSString *) mobilePublishSettingsURLStringForSettings:(TEALRemoteSettings *)settings {
-//    
-//    if (!settings) {
-//        return nil;
-//    }
-//    
-//    return [TEALAPIHelpers mobilePublishSettingsURLStringFromSettings:settings];
-//}
-//
-//- (NSDictionary *) mobilePublishSettingsURLParams {
-//    return [self.datasourceStore systemInfoDatasources];
-//}
-
-
-#pragma mark - Enable/Disable
-
-
-- (void) disable {
-    @synchronized(self) {
-        self.enabled = NO;
-    }
-}
-
-- (void) enable {
-    
-    @synchronized(self) {
-        
-        self.enabled = YES;
-    }
-}
-
-#pragma mark - Tracking / Send Data
-
-- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-       
-        [weakSelf sendEvent:TEALEventTypeLink withData:clientDataSources title:title];
-
-    }];
-    
-}
-
-- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
-    
-    __weak Tealium *weakSelf = self;
-
-    [weakSelf.operationManager addOperationWithBlock:^{
-        
-        [weakSelf sendEvent:TEALEventTypeView withData:clientDataSources title:title];
-        
-    }];
 }
 
 - (void) sendEvent:(TEALEventType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
@@ -497,7 +231,7 @@ __strong static Tealium *_sharedObject = nil;
     
     // capture time datasources
     NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType title:title];
-
+    
     [self addDatasources:datasources toDispatch:dispatch];
     
     [self.dispatchManager addDispatch:dispatch
@@ -506,9 +240,9 @@ __strong static Tealium *_sharedObject = nil;
     [self.dispatchManager archiveDispatchQueue];
 }
 
-// Log + Fetch Profile
 - (void) dispatchManager:(TEALDispatchManager *)dispatchManager didProcessDispatch:(TEALDispatch *)dispatch status:(TEALDispatchStatus)status {
-    
+    // Log + Fetch Profile
+
     [self logDispatch:dispatch status:status];
     [self notifyDispatch:dispatch status:status];
     
@@ -565,8 +299,249 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-#pragma mark - TEALDispatchManagerDelegate methods
+- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID completion:(TEALBooleanCompletionBlock)setupCompletion{
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+    [self.settings setVisitorIDCopy:visitorID];
+    self.settings.urlSessionManager = self.urlSessionManager;
+    
+    __weak TEALSettings *weakSettings = self.settings;
+    
+    [weakSettings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
+        
+        if (error) {
+            [self.logger logNormal:@"Remote Publish Settings: %@", [error localizedDescription]];
+        }
+        
+        BOOL success = NO;
+        switch (status) {
+            case TEALPublishSettingsStatusDefault:
+                [self.logger logVerbose:@"Using default Remote Publish Settings."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusLoadedArchive:
+                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusLoadedRemote:
+                [self.logger logVerbose:@"New Remote Publish Settings set."];
+                success = YES;
+                break;
+            case TEALPublishSettingsStatusDisable:
+                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
+                break;
+            default:
+                break;
+        }
+        
+        
+        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
+        if (setupCompletion) setupCompletion (success, nil);
+    }];
+}
 
+- (void) setupAutotrackingForSettings:(TEALSettings *) settings {
+    
+    if ([settings autotrackingViewsEnabled] || [settings autotrackingUIEventsEnabled]) {
+        self.autotrackingManager = [[TEALAutotrackingManager alloc] init];
+    }
+    if ([settings autotrackingUIEventsEnabled]) {
+        [self.autotrackingManager enableEventTracking];
+    }
+    if ([settings autotrackingViewsEnabled]) {
+        [self.autotrackingManager enableViewTracking];
+    }
+    
+    //    else if (self.autotrackingManager) {
+    // TODO: disable
+    //        [self.autotrackingManager disable];
+    //        self.autotrackingManager = nil;
+    //    }
+    
+}
+
+- (void) setupLifecycleForSettings:(TEALSettings *) settings {
+    
+    if ([settings lifecycleEnabled]){
+        self.lifecycle = [[TEALApplicationLifecycle alloc] init];
+        
+        __weak Tealium *weakSelf = self;
+        
+        [weakSelf.lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
+            
+            [weakSelf trackEventWithTitle:nil dataSources:dataDictionary];
+        }];
+        
+    } else if (self.lifecycle){
+        [self.lifecycle disable];
+        self.lifecycle = nil;
+    }
+    
+}
+
+- (void) setupNetworkServicesForSettings:(TEALSettings *)settings {
+    
+    NSMutableArray *possibleNetworkServices = [NSMutableArray array];
+    
+    if ([settings tagManagementEnabled]){
+        TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
+        [possibleNetworkServices addObject:tagService];
+    }
+    
+    if ([settings audienceStreamEnabled]){
+        TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
+        [possibleNetworkServices addObject:collectService];
+    }
+    
+    // TODO: Use NSOperations
+    
+    self.dispatchNetworkServices = [NSArray arrayWithArray:possibleNetworkServices];
+    
+    for (id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+        [service setup];
+    }
+    
+}
+
+- (void) fetchSettings:(TEALSettings *)settings
+            completion:(TEALBooleanCompletionBlock)fetchCompletion {
+    //    __weak Tealium *weakSelf = self;
+    //
+    //    [self.settingsStore fetchRemoteSettingsWithSetting:settings
+    //                                            completion:^(TEALRemoteSettings *settings, NSError *error) {
+    //
+    //                                                BOOL settingsSuccess = NO;
+    //
+    //                                                if (settings) {
+    //                                                    TEAL_LogVerbose(@"Retrieved settings: %@", settings);
+    //
+    //                                                    if (settings.status == TEALSettingsStatusLoadedRemote) {
+    //                                                        settingsSuccess = YES;
+    //                                                    }
+    //
+    //                                                    [weakSelf updateStateForSettingsStatus:settings.status];
+    //                                                }
+    //
+    //                                                if (error) {
+    //                                                    TEAL_LogVerbose(@"Problems while fetching settings: %@ \r error:%@", settings, [error localizedDescription]);
+    //                                                    settingsSuccess = NO;
+    //                                                }
+    //
+    //                                                [weakSelf.operationManager addOperationWithBlock:^{
+    //
+    //                                                    [weakSelf.settingsStore archiveCurrentSettings];
+    //                                                }];
+    //
+    //                                                if (fetchCompletion) {
+    //                                                    fetchCompletion(settingsSuccess, error);
+    //                                                }
+    //                                            }];
+    //
+    //
+    //    [self.dispatchManager unarchiveDispatchQueue];
+}
+
+- (void) setupSettingsReachabilityCallbacks {
+    
+    if (self.urlSessionManager.reachability.reachableBlock) {
+        return;
+    }
+    
+    __weak Tealium *weakSelf = self;
+    __weak TEALSettings *weakSettings = weakSelf.settings;
+    
+    weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
+        
+        
+        [weakSettings fetchPublishSettingsWithCompletion:nil];
+    };
+}
+
+
+
+#pragma mark - PUBLIC CLASS METHODS
+
++ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
+    
+    return [Tealium sharedInstanceWithConfiguration:configuration completion:nil];
+    
+}
+
++ (instancetype) sharedInstance {
+    
+    return _sharedObject;
+}
+
++ (void) destroySharedInstance {
+    [[Tealium sharedInstance] disable];
+    _sharedObject = nil;
+}
+
++ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration {
+    
+    return [Tealium instanceWithConfiguration:configuration completion:nil];
+
+}
+
+
+#pragma mark - PUBLIC INSTANCE METHODS
+
+- (void) setDelegate:(id<TealiumDelegate>)delegate {
+
+    @synchronized(self){
+        
+        [self.delegateManager updateWithDelegate:delegate];
+    }
+    
+}
+
+- (id<TealiumDelegate>) delegate {
+    @synchronized(self){
+        return self.delegateManager.delegate;
+    }
+}
+
+#pragma mark - Enable / Disable / Configure settings / startup
+
+- (void) disable {
+    @synchronized(self) {
+        self.enabled = NO;
+    }
+}
+
+- (void) enable {
+    
+    @synchronized(self) {
+        
+        self.enabled = YES;
+    }
+}
+
+- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+    
+    __weak Tealium *weakSelf = self;
+    
+    [weakSelf.operationManager addOperationWithBlock:^{
+       
+        [weakSelf sendEvent:TEALEventTypeLink withData:clientDataSources title:title];
+
+    }];
+    
+}
+
+- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+    
+    __weak Tealium *weakSelf = self;
+
+    [weakSelf.operationManager addOperationWithBlock:^{
+        
+        [weakSelf sendEvent:TEALEventTypeView withData:clientDataSources title:title];
+        
+    }];
+}
+
+
+#pragma mark - TEALDispatchManagerDelegate methods
 
  //Agnostic - use configuration
  // TODO: handle wifi only, low battery and other settings
@@ -647,7 +622,6 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-// Called by shouldPurge
 - (BOOL) shouldPurgeDispatch:(TEALDispatch *)dispatch {
     // TODO: connect to expiration check
 
@@ -662,6 +636,7 @@ __strong static Tealium *_sharedObject = nil;
 - (void) willRunDispatchQueueWithCount:(NSUInteger)count {
     
 }
+
 - (void) didRunDispatchQueueWithCount:(NSUInteger)count {
     
 }
@@ -767,7 +742,6 @@ __strong static Tealium *_sharedObject = nil;
 
 #pragma mark - Trace
 
-
 - (void) joinTraceWithToken:(NSString *)token {
     
     __weak Tealium *weakSelf = self;
@@ -801,6 +775,5 @@ __strong static Tealium *_sharedObject = nil;
     }];
 
 }
-
 
 @end

@@ -59,7 +59,7 @@
     XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
     
     self.library = [Tealium instanceWithConfiguration:config];
-    [self.library setupConfiguration:config
+    [self.library instanceWithConfiguration:config
                           completion:^(BOOL success, NSError *error) {
                               [finishedLoadingExpectation fulfill];
                           }];

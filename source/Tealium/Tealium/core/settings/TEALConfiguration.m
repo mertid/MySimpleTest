@@ -30,6 +30,7 @@
     
     return [NSString teal_descriptionForObject:self fromDictionary:descriptionDict];
 }
+
 + (instancetype) configurationWithAccount:(NSString *)accountName
                                   profile:(NSString *)profileName
                               environment:(NSString *)environmentName {
@@ -59,7 +60,7 @@
     return configuration;
 }
 
-+ (BOOL) validConfiguration:(TEALConfiguration *)configuration {
++ (BOOL) isValidConfiguration:(TEALConfiguration *)configuration {
     if (!configuration.accountName) return NO;
     if (!configuration.profileName) return NO;
     if (!configuration.environmentName) return NO;

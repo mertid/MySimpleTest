@@ -22,9 +22,11 @@
 
 @property (nonatomic) BOOL enabled;
 
++ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion;
+
 - (instancetype) initPrivate;
 
-- (void) setupConfiguration:(TEALConfiguration *)configuration
+- (void) instanceWithConfiguration:(TEALConfiguration *)configuration
                  completion:(TEALBooleanCompletionBlock)setupCompletion;
 
 - (void) fetchSettings:(TEALSettings *)settings

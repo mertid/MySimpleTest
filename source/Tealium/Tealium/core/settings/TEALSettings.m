@@ -35,7 +35,6 @@
 
 + (NSString *) dispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
-    
     NSString *urlPrefix = @"https";
     
     if ([settings useHTTP]) {
@@ -129,6 +128,11 @@
 #pragma mark - PUBLIC METHODS
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration {
+    
+    if (![TEALConfiguration isValidConfiguration:configuration]) {
+        return nil;
+    }
+    
     self = [super init];
     
     if (self) {
@@ -154,7 +158,7 @@
 }
 
 - (BOOL) isValid {
-    return ([TEALConfiguration validConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
+    return ([TEALConfiguration isValidConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
 }
     
 - (BOOL) lifecycleEnabled {
@@ -195,14 +199,6 @@
 - (NSString *) publishSettingsDescription {
     return self.publishSettings.description;
 }
-
-//- (NSString *) overridePublishSettingsURL {
-//    return self.configuration.overridePublishSettingsURL;
-//}
-//
-//- (NSString *) overridePublishURL {
-//    return self.configuration.overridePublishURL;
-//}
 
 - (NSString *) publishSettingsURLString {
     if (!self.mobilePublishSettingsURLString){

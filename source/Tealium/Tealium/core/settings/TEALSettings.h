@@ -37,8 +37,6 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;
 - (NSString *) publishURLString;
-//- (NSString *) overridePublishSettingsURL;
-//- (NSString *) overridePublishURL;
 - (NSString *) visitorIDCopy;
 
 - (NSUInteger) dispatchSize;
