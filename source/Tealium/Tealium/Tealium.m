@@ -68,7 +68,6 @@
 @property (strong, nonatomic) TEALAutotrackingManager *autotrackingManager;
 @property (strong, nonatomic) TEALDelegateManager *delegateManager;
 
-@property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
 
 @property (weak, nonatomic) UIWebView *tagManagementWebView;
@@ -159,19 +158,12 @@ __strong static Tealium *_sharedObject = nil;
     
     // AudienceStream
     // TODO: update to use instanceId
-    self.datasourceStore = [TEALDatasourceStore sharedStore];
-    [self.datasourceStore loadWithUUIDKey:configuration.accountName];
-    
-    NSString *accountUUID = self.datasourceStore[TEALDatasourceKey_UUID];
-    
-    NSString *visitorID = [accountUUID stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    
-    self.visitorID = visitorID;
+    self.datasourceStore = [[TEALDatasourceStore alloc]initWithInstanceID:configuration.instanceID];
     
     // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
-    [self setupSettingsWithConfiguration:configuration visitorID:visitorID completion:^(BOOL success, NSError *error) {
+    [self setupSettingsWithConfiguration:configuration visitorID:[self.datasourceStore visitorID] completion:^(BOOL success, NSError *error) {
         
         
         if (success) {
@@ -611,8 +603,7 @@ __strong static Tealium *_sharedObject = nil;
 - (NSString *) visitorIDCopy {
     
     @synchronized(self) {
-        
-        return [self.visitorID copy];
+        return [self.datasourceStore visitorID];
     }
 }
 
@@ -656,6 +647,14 @@ __strong static Tealium *_sharedObject = nil;
     return self.tagManagementWebView;
 }
 
+- (NSDictionary *) persistentDataSourcesCopy {
+    return [self.datasourceStore dataSourcesCopy];
+}
+
+- (void) setPersistentDataSources:(NSDictionary *) newDataSources {
+    
+    [self.datasourceStore setDataSources:newDataSources];
+}
 
 #pragma mark - TEALDispatchManagerDelegate methods
 
@@ -786,6 +785,10 @@ __strong static Tealium *_sharedObject = nil;
 
 
 #pragma mark - TEALVisitorProfileStoreConfiguration
+
+- (NSString *) visitorID {
+    return [self.datasourceStore visitorID];
+}
 
 - (NSURL *) profileURL {
     

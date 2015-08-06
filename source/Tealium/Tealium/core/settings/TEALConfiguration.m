@@ -11,25 +11,7 @@
 
 @implementation TEALConfiguration
 
-- (NSString *) description {
-    
-    NSDictionary *descriptionDict = @{
-                                      @"account":[NSString teal_dictionarySafeString:self.accountName],
-                                      @"tiq profile":[NSString teal_dictionarySafeString:self.profileName],
-                                      @"audiencestream profile":[NSString teal_dictionarySafeString:self.audienceStreamProfile],
-                                      @"use http":[NSString teal_stringFromBool:self.useHTTP],
-                                      @"polling frequency":[NSNumber numberWithUnsignedLong:self.pollingFrequency],
-                                      @"log level":[NSNumber numberWithUnsignedInt:self.logLevel],
-                                      @"lifecycle enabled":[NSString teal_stringFromBool:self.lifecycleEnabled],
-                                      @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
-                                      @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-                                      @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
-                                      @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
-                                      @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
-                                      };
-    
-    return [NSString teal_descriptionForObject:self fromDictionary:descriptionDict];
-}
+#pragma mark - PUBLIC CLASS
 
 + (instancetype) configurationWithAccount:(NSString *)accountName
                                   profile:(NSString *)profileName
@@ -75,5 +57,33 @@
     if ([environmentSpacesRemoved isEqualToString:@""]) return NO;
     
     return YES;
+}
+
+#pragma mark - PUBLIC INSTANCE
+
+- (NSString *) instanceID {
+    return [NSString stringWithFormat:@"%@_%@_%@", self.accountName, self.profileName, self.environmentName];
+}
+
+#pragma mark - PRIVATE INSTANCE
+
+- (NSString *) description {
+    
+    NSDictionary *descriptionDict = @{
+                                      @"account":[NSString teal_dictionarySafeString:self.accountName],
+                                      @"tiq profile":[NSString teal_dictionarySafeString:self.profileName],
+                                      @"audiencestream profile":[NSString teal_dictionarySafeString:self.audienceStreamProfile],
+                                      @"use http":[NSString teal_stringFromBool:self.useHTTP],
+                                      @"polling frequency":[NSNumber numberWithUnsignedLong:self.pollingFrequency],
+                                      @"log level":[NSNumber numberWithUnsignedInt:self.logLevel],
+                                      @"lifecycle enabled":[NSString teal_stringFromBool:self.lifecycleEnabled],
+                                      @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
+                                      @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
+                                      @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
+                                      @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
+                                      @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
+                                      };
+    
+    return [NSString teal_descriptionForObject:self fromDictionary:descriptionDict];
 }
 @end

@@ -5,6 +5,7 @@
 //  Created by George Webster on 2/25/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
+//  BRIEF: Serial background queue manager
 
 #import "TEALOperationManager.h"
 
@@ -24,8 +25,8 @@
     self = [super init];
     
     if (self) {
-        _serialQueue = dispatch_queue_create("com.tealium.audience-stream", DISPATCH_QUEUE_SERIAL);
-        _ioQueue = dispatch_queue_create("com.tealium.as-io-queue", DISPATCH_QUEUE_CONCURRENT);
+        _serialQueue = dispatch_queue_create("com.tealium.serial-queue", DISPATCH_QUEUE_SERIAL);
+        _ioQueue = dispatch_queue_create("com.tealium.io-queue", DISPATCH_QUEUE_CONCURRENT);
         
         _operationQueue = [NSOperationQueue new];
     }

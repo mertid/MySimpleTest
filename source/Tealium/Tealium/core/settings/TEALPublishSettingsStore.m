@@ -9,6 +9,7 @@
 #import "TEALPublishSettingsStore.h"
 #import "TEALPublishSettings.h"
 #import "TEALOperationManager.h"
+#import "TEALLogger.h"
 
 @interface TEALPublishSettingsStore()
 
@@ -21,6 +22,7 @@
 - (instancetype) initWithInstanceID:(NSString *)instanceId;{
     
     if (!instanceId) {
+        TEAL_LogNormal(@"Publish Settings Store initialization attempted without an instance ID.");
         return nil;
     }
     

@@ -24,7 +24,7 @@
 
 + (NSString *) cpuType;
 
-+ (NSString *) applicationUUIDWithKey:(NSString *)key;
+//+ (NSString *) applicationUUIDWithKey:(NSString *)key;
 
 + (NSString *) applicationName;
 

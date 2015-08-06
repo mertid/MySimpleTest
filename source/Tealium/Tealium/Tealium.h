@@ -137,8 +137,19 @@
 #pragma mark - Tag Management
 
 /**
+ *  The UIWebView instance used by the internal tag management system.
+ *
+ *  @return UIWebView if the remote publish settings tag management toggle is TRUE, otherwise will return nil.
  */
 - (UIWebView *) webView;
+
+/*
+ */
+- (NSDictionary *) persistentDataSourcesCopy;
+
+/*
+ */
+- (void) setPersistentDataSources:(NSDictionary *) newDataSources;
 
 
 @end

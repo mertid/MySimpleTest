@@ -128,23 +128,23 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
     return cpu;
 }
 
-+ (NSString *) applicationUUIDWithKey:(NSString *)key {
-    
-    NSString *keyString = [kTEALApplicationUUIDKey stringByAppendingString:key];
-    
-    NSString *applicationUUID = [[NSUserDefaults standardUserDefaults] objectForKey:keyString];
-    
-    if (!applicationUUID) {
-        applicationUUID = [[NSUUID UUID] UUIDString];
-
-        [[NSUserDefaults standardUserDefaults] setObject:applicationUUID
-                                                  forKey:keyString];
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-    return applicationUUID;
-}
+//+ (NSString *) applicationUUIDWithKey:(NSString *)key {
+//    
+//    NSString *keyString = [kTEALApplicationUUIDKey stringByAppendingString:key];
+//    
+//    NSString *applicationUUID = [[NSUserDefaults standardUserDefaults] objectForKey:keyString];
+//    
+//    if (!applicationUUID) {
+//        applicationUUID = [[NSUUID UUID] UUIDString];
+//
+//        [[NSUserDefaults standardUserDefaults] setObject:applicationUUID
+//                                                  forKey:keyString];
+//        
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
+//    
+//    return applicationUUID;
+//}
 
 + (NSString *) applicationName {
     

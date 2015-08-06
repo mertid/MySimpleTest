@@ -134,4 +134,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 
 + (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
 
+- (NSString *) instanceID;
+
 @end
