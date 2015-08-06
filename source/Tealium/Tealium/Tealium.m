@@ -8,11 +8,9 @@
 
 #import "Tealium.h"
 
-//#import "TEALRemoteSettingsStore.h"
 #import "TEALDispatchManager.h"
 #import "TEALDelegateManager.h"
 #import "TEALVisitorProfileStore.h"
-//#import "TEALRemoteSettings.h"
 #import "TEALSettings.h"
 
 // Queue / Operation Managers
@@ -48,7 +46,6 @@
 
 
 @interface Tealium () <
-//                        TEALRemoteSettingsStoreConfiguration,
                         TEALDispatchManagerDelegate,
                         TEALDispatchManagerConfiguration,
                         TEALVisitorProfileStoreConfiguration,
@@ -73,6 +70,9 @@
 
 @property (copy, readwrite) NSString *visitorID;
 @property (copy, readwrite) TEALVisitorProfile *cachedProfile;
+
+@property (weak, nonatomic) UIWebView *tagManagementWebView;
+
 @property (readwrite) BOOL enabled;
 
 @end
@@ -110,7 +110,6 @@ __strong static Tealium *_sharedObject = nil;
     [Tealium setSharedInstance:instance];
     return instance;
 }
-                         
 
 + (void) setSharedInstance:(Tealium *)instance {
     _sharedObject = instance;
@@ -174,7 +173,6 @@ __strong static Tealium *_sharedObject = nil;
     
     [self setupSettingsWithConfiguration:configuration visitorID:visitorID completion:^(BOOL success, NSError *error) {
         
-        if (setupCompletion) setupCompletion(success, error);
         
         if (success) {
             self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
@@ -193,16 +191,19 @@ __strong static Tealium *_sharedObject = nil;
             [self disable];
             
         }
+        
+        if (setupCompletion) setupCompletion(success, error);
+
     }];
     
     
 }
 
-- (void) sendEvent:(TEALEventType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
+- (void) sendEvent:(TEALDispatchType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
     
     if (!self.enabled) {
-        TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __PRETTY_FUNCTION__);
-        TEAL_LogExtreamVerbosity(@"Title:%@ , DataSources: %@", title, customData);
+        [self.logger logNormal:@"Library Disabled, Ignoring dispatch.",nil];
+        [self.logger logVerbose:@"Dispatch title:%@, DataSources:%@", title, customData];
         return;
     }
     
@@ -227,12 +228,7 @@ __strong static Tealium *_sharedObject = nil;
         }
     };
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:eventType withPayload:customData];
-    
-    // capture time datasources
-    NSDictionary *datasources = [self.datasourceStore captureTimeDatasourcesForEventType:eventType title:title];
-    
-    [self addDatasources:datasources toDispatch:dispatch];
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:eventType withPayload:customData];
     
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:completion];
@@ -310,7 +306,7 @@ __strong static Tealium *_sharedObject = nil;
     [weakSettings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
         
         if (error) {
-            [self.logger logNormal:@"Remote Publish Settings: %@", [error localizedDescription]];
+            [self.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
         }
         
         BOOL success = NO;
@@ -385,6 +381,7 @@ __strong static Tealium *_sharedObject = nil;
     
     if ([settings tagManagementEnabled]){
         TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
+        self.tagManagementWebView = tagService.webView;
         [possibleNetworkServices addObject:tagService];
     }
     
@@ -458,7 +455,6 @@ __strong static Tealium *_sharedObject = nil;
 }
 
 
-
 #pragma mark - PUBLIC CLASS METHODS
 
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
@@ -501,8 +497,6 @@ __strong static Tealium *_sharedObject = nil;
     }
 }
 
-#pragma mark - Enable / Disable / Configure settings / startup
-
 - (void) disable {
     @synchronized(self) {
         self.enabled = NO;
@@ -519,11 +513,17 @@ __strong static Tealium *_sharedObject = nil;
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
+    // capture time datasources
+    NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
+                                                                         [self.datasourceStore captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         clientDataSources
+                                                                         ]];
+    
     __weak Tealium *weakSelf = self;
     
     [weakSelf.operationManager addOperationWithBlock:^{
        
-        [weakSelf sendEvent:TEALEventTypeLink withData:clientDataSources title:title];
+        [weakSelf sendEvent:TEALDispatchTypeEvent withData:captureTimeDataSources title:title];
 
     }];
     
@@ -531,13 +531,129 @@ __strong static Tealium *_sharedObject = nil;
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
+    NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
+                                                                         [self.datasourceStore captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         clientDataSources
+                                                                         ]];
     __weak Tealium *weakSelf = self;
 
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        [weakSelf sendEvent:TEALEventTypeView withData:clientDataSources title:title];
+        [weakSelf sendEvent:TEALDispatchTypeView withData:captureTimeDataSources title:title];
         
     }];
+}
+
+- (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries {
+    
+    NSMutableDictionary *compositeDictionary = [NSMutableDictionary dictionary];
+    
+    for (NSDictionary *dictionary in dictionaries) {
+        if ([dictionary isKindOfClass:([NSDictionary class])]){
+            [compositeDictionary addEntriesFromDictionary:dictionary];
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
+    
+}
+
+// AudienceStream
+
+- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
+    
+    __weak Tealium *weakSelf = self;
+    
+    [weakSelf.operationManager addOperationWithBlock:^{
+        
+        if (!self.enabled) {
+            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            return; // No fail log because these they should be logged once for each public method
+        }
+        
+        if (![self.settings audienceStreamEnabled]) {
+            
+            TEAL_LogVerbose(@"Audience Stream disabled, Ignoring: %s", __func__);
+            if (completion) {
+                
+                completion(nil, nil);
+            }
+            
+            return;
+        }
+        
+        TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
+            
+            if (profile) {
+                TEAL_LogVerbose(@"got profile!!! : %@", profile);
+                
+                weakSelf.cachedProfile = profile;
+                
+                completion(weakSelf.cachedProfile, nil);
+                
+            } else {
+                TEAL_LogVerbose(@"problem fetching profile: %@", [error localizedDescription]);
+            }
+        };
+        [weakSelf.profileStore fetchProfileWithCompletion:storeCompletion];
+        
+    }];
+}
+
+- (TEALVisitorProfile *) cachedVisitorProfileCopy {
+    
+    @synchronized(self) {
+        
+        return [self.cachedProfile copy];
+    }
+}
+
+- (NSString *) visitorIDCopy {
+    
+    @synchronized(self) {
+        
+        return [self.visitorID copy];
+    }
+}
+
+- (void) joinTraceWithToken:(NSString *)token {
+    
+    __weak Tealium *weakSelf = self;
+    
+    [weakSelf.operationManager addOperationWithBlock:^{
+        if (!weakSelf.enabled) {
+            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            return;
+        }
+        
+        if (!token || ![token length]) {
+            return;
+        }
+        
+        weakSelf.settings.traceID = token;
+    }];
+    
+}
+
+- (void) leaveTrace {
+    
+    __weak Tealium *weakSelf = self;
+    
+    [weakSelf.operationManager addOperationWithBlock:^{
+        if (!weakSelf.enabled) {
+            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            return;
+        }
+        
+        weakSelf.settings.traceID = nil;
+    }];
+    
+}
+
+// Tag Managment
+
+- (UIWebView *) webView {
+    return self.tagManagementWebView;
 }
 
 
@@ -579,7 +695,7 @@ __strong static Tealium *_sharedObject = nil;
 
     // Send Time (static) datasources
     
-    NSDictionary *datasources = [self.datasourceStore transmissionTimeDatasourcesForEventType:dispatch.eventType];
+    NSDictionary *datasources = [self.datasourceStore transmissionTimeDatasourcesForEventType:dispatch.dispatchType];
 
     
     [self addDatasources:datasources
@@ -668,55 +784,6 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-#pragma mark - Profile
-
-- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-
-    if (!self.enabled) {
-        TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-        return; // No fail log because these they should be logged once for each public method
-    }
-    
-        if (![self.settings audienceStreamEnabled]) {
-            
-            TEAL_LogVerbose(@"Audience Stream disabled, Ignoring: %s", __func__);
-            if (completion) {
-                
-                completion(nil, nil);
-            }
-            
-            return;
-        }
-    
-        TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
-            
-            if (profile) {
-                TEAL_LogVerbose(@"got profile!!! : %@", profile);
-                
-                weakSelf.cachedProfile = profile;
-                
-                completion(weakSelf.cachedProfile, nil);
-                
-            } else {
-                TEAL_LogVerbose(@"problem fetching profile: %@", [error localizedDescription]);
-            }
-        };
-        [weakSelf.profileStore fetchProfileWithCompletion:storeCompletion];
-        
-    }];
-}
-
-- (TEALVisitorProfile *) cachedVisitorProfileCopy {
-    
-    @synchronized(self) {
-        
-        return [self.cachedProfile copy];
-    }
-}
 
 #pragma mark - TEALVisitorProfileStoreConfiguration
 
@@ -730,50 +797,5 @@ __strong static Tealium *_sharedObject = nil;
     return [self.settings profileDefinitionsURL];
 }
 
-#pragma mark - Visitor ID
-
-- (NSString *) visitorIDCopy {
-    
-    @synchronized(self) {
-        
-        return [self.visitorID copy];
-    }
-}
-
-#pragma mark - Trace
-
-- (void) joinTraceWithToken:(NSString *)token {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        if (!weakSelf.enabled) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-            return;
-        }
-        
-        if (!token || ![token length]) {
-            return;
-        }
-        
-        weakSelf.settings.traceID = token;
-    }];
-    
-}
-
-- (void) leaveTrace {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        if (!weakSelf.enabled) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-            return;
-        }
-        
-        weakSelf.settings.traceID = nil;
-    }];
-
-}
 
 @end

@@ -28,8 +28,9 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
 }
 
 + (NSString *) mpsVersionNumber {
-    // TODO: standardize this
-    return @"4";
+    // Version number with .x and .x.x versions stripped
+    
+    return [NSString stringWithFormat:@"%i", [[TEALSystemHelpers tealiumIQlibraryVersion] intValue]];
 }
 
 + (NSString *) architecture {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (TealiumAdditions)
+@interface NSString (Tealium)
 
 + (NSString *) teal_stringFromBool:(BOOL)value;
 + (NSString *) teal_descriptionForObject:(NSObject *)object fromDictionary:(NSDictionary *)dictionary;

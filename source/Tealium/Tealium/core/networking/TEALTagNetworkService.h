@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "TEALDispatchNetworkService.h"
 #import "TEALSystemProtocols.h"
 
@@ -18,6 +18,8 @@
 
 
 @interface TEALTagNetworkService : NSObject <TEALDispatchNetworkService>
+
+@property (strong, nonatomic) UIWebView *webView;
 
 - (instancetype) initWithConfiguration:(id<TEALTagNetworkServiceConfiguration>)configuration;
 

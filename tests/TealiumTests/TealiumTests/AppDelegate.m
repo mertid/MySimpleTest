@@ -28,11 +28,11 @@
                                                                            profile:@"non-exists"
                                                                        environment:@"dev"];
     
-    configuration.logLevel = TEALLogLevelExtremeVerbosity;
+    configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.lifecycleEnabled = YES;
-    configuration.autotrackingUIEventsEnabled = NO;
-    configuration.autotrackingViewsEnabled = NO;
+    configuration.autotrackingUIEventsEnabled = YES;
+    configuration.autotrackingViewsEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
 //    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];

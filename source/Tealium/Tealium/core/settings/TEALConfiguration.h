@@ -40,10 +40,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
      *  Verbose is a more verbose version of normal, expanded logs for each event.  Useful for debugging and verifing during development.
      */
     TEALLogLevelVerbose,
-    /**
-     *  Extremely Verbose will display everything from Verbose with more gross details such has the complete contents of NSURLRequests and their responses.
-     */
-    TEALLogLevelExtremeVerbosity
 };
 
 

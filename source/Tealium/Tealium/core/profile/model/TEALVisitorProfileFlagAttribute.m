@@ -9,7 +9,7 @@
 #import "TEALVisitorProfileFlagAttribute.h"
 #import "TEALVisitorProfile+PrivateHeader.h"
 
-#import "NSString+TealiumAdditions.h"
+#import "NSString+Tealium.h"
 
 @interface TEALVisitorProfileFlagAttribute ()
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIImage (TealiumAdditions)
+@interface UIImage (Tealium)
 
 + (UIImage *) teal_imageWithColor:(UIColor *)color andSize:(CGSize)size;
 

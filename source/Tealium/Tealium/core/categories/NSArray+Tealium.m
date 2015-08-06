@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "NSArray+TealiumAdditions.h"
-#import "NSObject+TealiumAdditions.h"
+#import "NSArray+Tealium.h"
+#import "NSObject+Tealium.h"
 
-@implementation NSArray (TealiumAdditions)
+@implementation NSArray (Tealium)
 
 - (NSArray *) teal_stringifiedArray {
 

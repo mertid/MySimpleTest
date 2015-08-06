@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import <Tealium/Tealium.h>
 #import "Tealium+PrivateHeader.h"
+#import "TEALSettings+PrivateHeader.h"
 
 @interface TealiumTests : XCTestCase
 
@@ -40,14 +41,14 @@
         config = self.configuration;
     }
     
-    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoading"];
+    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
     
     
     [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
         [finishedLoading fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);
     }];
 }
@@ -59,7 +60,8 @@
         config = self.configuration;
     }
     
-    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoading"];
+    
+    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingInstance"];
     
     self.library = [Tealium instanceWithConfiguration:config];
     [self.library instanceWithConfiguration:config
@@ -67,13 +69,33 @@
                               [finishedLoading fulfill];
                           }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);
     }];
     
 }
 
-#pragma mark - TEST PUBLIC APIs
+#pragma mark - PUBLIC APIS TESTS
+
+- (void) testEnableInstanceAndSharedInstance {
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    [self enableSharedInstanceWithConfiguration:config];
+    
+    TEALConfiguration *configInstance = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                            profile:@"ios"
+                                                                        environment:@"dev"];
+    [self enableLibraryWithConfiguration:configInstance];
+    
+    XCTAssertTrue([Tealium sharedInstance], @"SharedInstance was not initialized.");
+    XCTAssertTrue(self.library, @"Library instance was not initialized.");
+    
+}
+
+
+#pragma mark - Shared Instance Tests
 
 - (void) testEnableSharedInstance {
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
@@ -98,5 +120,56 @@
     XCTAssertTrue(![Tealium sharedInstance], @"SharedInstance was not destroyed.");
 }
 
+
+#pragma mark - WebView Tests
+
+- (void) testSharedInstanceDefaultWebView {
+    // Default is no tag management so webview should not be initialized
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    [self enableSharedInstanceWithConfiguration:config];
+
+    XCTAssertTrue(![[Tealium sharedInstance] webView], @"SharedInstance webview was not initialized when it should not have been.");
+
+}
+
+- (void) testSharedInstanceEnableTagManagmentWebView {
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tagmanagement_ON" ofType:@"html"];
+    
+    
+    // Default is no tag management so webview should not be initialized
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+    config.logLevel = TEALLogLevelVerbose;
+    [self enableSharedInstanceWithConfiguration:config];
+    
+    
+    XCTAssertTrue(![[Tealium sharedInstance] webView], @"SharedInstance webview was not initialized when it should have been.");
+    
+}
+
+- (void) testSharedInstanceDisableTagManagmentWebView {
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tagmanagement_OFF" ofType:@"html"];
+    
+    
+    // Default is no tag management so webview should not be initialized
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+    config.logLevel = TEALLogLevelVerbose;
+    [self enableSharedInstanceWithConfiguration:config];
+    
+    XCTAssertTrue(![[Tealium sharedInstance] webView], @"SharedInstance webview was initialized when it should not have been.");
+    
+}
 
 @end

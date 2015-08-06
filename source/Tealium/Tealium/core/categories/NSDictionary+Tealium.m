@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "NSDictionary+TealiumAdditions.h"
-#import "NSArray+TealiumAdditions.h"
-#import "NSObject+TealiumAdditions.h"
+#import "NSDictionary+Tealium.h"
+#import "NSArray+Tealium.h"
+#import "NSObject+Tealium.h"
 
-@implementation NSDictionary (TealiumAdditions)
+@implementation NSDictionary (Tealium)
 
 - (NSDictionary *) teal_stringifiedDictionary {
     

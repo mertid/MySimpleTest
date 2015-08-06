@@ -7,7 +7,7 @@
 //
 
 #import "TEALConfiguration.h"
-#import "NSString+TealiumAdditions.h"
+#import "NSString+Tealium.h"
 
 @implementation TEALConfiguration
 

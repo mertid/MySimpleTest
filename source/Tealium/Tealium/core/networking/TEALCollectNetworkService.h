@@ -10,7 +10,6 @@
 
 #import "TEALDispatchConstants.h"
 #import "TEALSystemProtocols.h"
-#import "TEALEvent.h"
 
 #import "TEALDispatchNetworkService.h"
 

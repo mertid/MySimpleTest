@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 // Configuration
 
@@ -33,7 +33,7 @@
 #import "TEALBlocks.h"
 #import "TealiumDelegate.h"
 
-#import "NSObject+TealiumAdditions.h"
+#import "NSObject+Tealium.h"
 
 /**
  *  Tealium is the main class for the Tealium Library.
@@ -80,7 +80,7 @@
 // TODO: comments
 @property (weak, nonatomic) id<TealiumDelegate> delegate;
 
-# pragma mark - Send Collect Data
+# pragma mark - Track Data
 
 /**
  *  Sends an event to Collect.  Event are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
@@ -99,7 +99,7 @@
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
 
-# pragma mark - Get Collect Data
+# pragma mark - AudienceStream
 
 /**
  *  Retrieves the current visitor profile from AudienceStream.
@@ -122,8 +122,6 @@
  */
 - (NSString *) visitorIDCopy;
 
-#pragma mark - Trace
-
 /**
  *  Joins a trace initiated from the AudienceStream web app with a valid string token provide from the TraceUI
  *
@@ -135,6 +133,12 @@
  *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
  */
 - (void) leaveTrace;
+
+#pragma mark - Tag Management
+
+/**
+ */
+- (UIWebView *) webView;
 
 
 @end

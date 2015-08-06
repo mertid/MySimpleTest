@@ -19,7 +19,6 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 @property (nonatomic) TEALPublishSettingsStatus status;
 @property (nonatomic, strong) NSString *url;
-@property (copy, nonatomic) NSString *mpsVersion;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
 @property (nonatomic) NSInteger numberOfDaysDispatchesAreValid;
@@ -27,12 +26,13 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) BOOL enableSendWifiOnly;
 @property (nonatomic) BOOL enableAudienceStream;
 @property (nonatomic) BOOL enableTagManagement;
-//@property (nonatomic) BOOL shouldAutotrackUIEvents;
-//@property (nonatomic) BOOL shouldAutotrackViews;
 
 - (instancetype) initWithURLString:(NSString *)url;
 
+- (BOOL) areValidRawPublishSettings:(NSDictionary *) rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;
 - (void) loadArchived;
+- (NSString *) mpsVersion;
+- (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
 @end

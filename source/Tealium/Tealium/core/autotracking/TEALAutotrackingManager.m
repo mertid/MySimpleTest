@@ -7,8 +7,8 @@
 //
 
 #import "TEALAutotrackingManager.h"
-#import "UIApplication+TealiumTracker.h"
-#import "UIViewController+TealiumTracker.h"
+#import "UIApplication+Tealium.h"
+#import "UIViewController+Tealium.h"
 
 @interface TEALAutotrackingManager ()
 

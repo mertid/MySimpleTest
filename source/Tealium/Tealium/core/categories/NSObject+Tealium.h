@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (TealiumAdditions)
+@interface NSObject (Tealium)
 
 - (NSDictionary *) teal_dataSources;
 - (void) teal_setDataSources:(NSDictionary *)dataSources;

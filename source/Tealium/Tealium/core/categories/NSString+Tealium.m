@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "NSString+TealiumAdditions.h"
+#import "NSString+Tealium.h"
 
-@implementation NSString (TealiumAdditions)
+@implementation NSString (Tealium)
 
 + (NSString *) teal_stringFromBool:(BOOL)value {
 

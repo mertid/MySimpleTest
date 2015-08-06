@@ -35,6 +35,7 @@
 - (void) enable;
 
 - (void) joinTraceWithToken:(NSString *)token;
+
 - (void) leaveTrace;
 
 @end

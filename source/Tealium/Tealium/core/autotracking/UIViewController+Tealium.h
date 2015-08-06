@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (TealiumTracker)
+@interface UIViewController (Tealium)
 
 + (void) swizzle;
 

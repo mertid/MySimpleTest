@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray (TealiumAdditions)
+@interface NSArray (Tealium)
 
 - (NSArray *) teal_stringifiedArray;
 

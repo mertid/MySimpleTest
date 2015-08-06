@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "NSObject+TealiumAdditions.h"
+#import "NSObject+Tealium.h"
 #import <objc/runtime.h>
-#import "NSDictionary+TealiumAdditions.h"
+#import "NSDictionary+Tealium.h"
 
 static CFStringRef  const TealiumCM_KVOUniqueIdentifier = CFSTR("TealiumAutotracking_KVOUniqueIdentifier");
 char const * const TealiumKVO_CustomData =                      "com.tealium.customdata";
 
-@implementation NSObject (TealiumAdditions)
+@implementation NSObject (Tealium)
 
 - (NSDictionary *) teal_dataSources {
     

@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 tealium. All rights reserved.
 //
 
-#import "UIColor+TealiumAdditions.h"
+#import "UIColor+Tealium.h"
 
-@implementation UIColor (TealiumAdditions)
+@implementation UIColor (Tealium)
 
 + (UIColor *) teal_colorWithHexString:(NSString *)hexString {
     

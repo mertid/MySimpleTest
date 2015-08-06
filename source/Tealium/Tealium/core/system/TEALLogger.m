@@ -60,19 +60,6 @@ static TEALLogLevel _audienceStreamLogLevel;
     [self logVerbosity:TEALLogLevelVerbose message:message];
 }
 
-- (void) logExtremeVerbosity:(NSString *) format, ...{
-    
-    NSString *message = nil;
-    va_list args;
-    va_start(args, format);
-    message = [[NSString alloc] initWithFormat:format
-                                     arguments:args];
-    va_end(args);
-    
-    [self logVerbosity:TEALLogLevelExtremeVerbosity message:message];
-}
-
-
 - (void) logVerbosity:(TEALLogLevel)logLeval message:(NSString *) message{
     
     BOOL shouldLog = NO;
@@ -82,9 +69,6 @@ static TEALLogLevel _audienceStreamLogLevel;
             break;
         case TEALLogLevelVerbose:
             shouldLog = (self.logLevel >= TEALLogLevelVerbose);
-            break;
-        case TEALLogLevelExtremeVerbosity:
-            shouldLog = (self.logLevel >= TEALLogLevelExtremeVerbosity);
             break;
         case TEALLogLevelNone:
             shouldLog = NO;
@@ -111,9 +95,6 @@ static TEALLogLevel _audienceStreamLogLevel;
             break;
         case TEALLogLevelVerbose:
             shouldLog = (_audienceStreamLogLevel >= TEALLogLevelVerbose);
-            break;
-        case TEALLogLevelExtremeVerbosity:
-            shouldLog = (_audienceStreamLogLevel >= TEALLogLevelExtremeVerbosity);
             break;
         case TEALLogLevelNone:
             shouldLog = NO;

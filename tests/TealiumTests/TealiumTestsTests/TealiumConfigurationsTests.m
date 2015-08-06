@@ -16,7 +16,7 @@
 @interface TealiumConfigurationsTests : XCTestCase
 
 @property (strong) Tealium *library;
-@property TEALConfiguration *configuration;
+@property (strong) TEALConfiguration *configuration;
 
 @end
 

@@ -10,15 +10,12 @@
 #import <UIKit/UIKit.h>
 #import "TEALNetworkHelpers.h"
 #import "TEALDatasources.h"
-#import "TEALEvent.h"
 #import "TEALLogger.h"
 #import "TEALDispatch.h"
 #import "TEALOperationManager.h"
-#import "NSDictionary+TealiumAdditions.h"
+#import "NSDictionary+Tealium.h"
 
 @interface TEALTagNetworkService() <UIWebViewDelegate>
-
-@property (strong, nonatomic) UIWebView *webView;
 
 @property (weak, nonatomic) id<TEALTagNetworkServiceConfiguration> configuration;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
@@ -149,7 +146,7 @@
         NSString *trackType = dispatchData[TEALDatasourceKey_CallType];
         
         if(!trackType || trackType == (NSString*)[NSNull null]) {
-            trackType = TEALEventTypeLinkStringValue; //default option
+            trackType = TEALDatasourceValue_Link; //default option
         }
         
         NSString *utagCommand = nil;

@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TEALEvent.h"
-
 @interface TEALNetworkHelpers : NSObject
 
 + (NSString *) urlParamStringFromDictionary:(NSDictionary *)data;

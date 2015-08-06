@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Tealium. All rights reserved.
 //
 
-#import "UIViewController+TealiumTracker.h"
-#import "NSObject+TealiumAdditions.h"
+#import "UIViewController+Tealium.h"
+#import "NSObject+Tealium.h"
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasources.h"
-#import "TEALEvent.h"
+#import "TEALAutotrackDataSources.h"
 
-@implementation UIViewController (TealiumTracker)
+@implementation UIViewController (Tealium)
 
 + (void) swizzle {
     
@@ -34,19 +34,16 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
     
     if ([self teal_autotrackingEnabled]) {
 
-        NSString *viewTitle = [TEALEvent titleForEvent:TEALEventTypeView
-                                            withObject:self];
-
-        NSDictionary *autoDataSources = [TEALEvent datasourcesForEvent:TEALEventTypeView
-                                                            withObject:self
-                                                           autotracked:YES];
+        // Auto captures title
+        NSDictionary *autoDataSources = [TEALAutotrackDataSources datasourcesForDispatchType:TEALDispatchTypeView
+                                                            withObject:self];
         
         NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
         
         NSDictionary *customDataSources = [self teal_dataSources];
         [dataSources addEntriesFromDictionary:customDataSources];
         
-        [[Tealium sharedInstance] trackViewWithTitle:viewTitle
+        [[Tealium sharedInstance] trackViewWithTitle:nil
                                          dataSources:dataSources];
         
         oViewDidAppear(self, _cmd, a);

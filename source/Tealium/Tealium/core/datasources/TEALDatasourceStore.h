@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TEALEvent.h"
+#import "TEALDispatch.h"
 
 @interface TEALDatasourceStore : NSObject
 
@@ -30,8 +30,8 @@
 
 - (NSDictionary *) systemInfoDatasources;
 
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType;
+- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
 
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType title:(NSString *)title;
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 
 @end

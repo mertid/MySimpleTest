@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIApplication (TealiumTracker)
+@interface UIApplication (Tealium)
 
 + (void) swizzle;
 

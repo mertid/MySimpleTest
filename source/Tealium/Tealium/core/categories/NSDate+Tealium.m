@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "NSDate+TealiumAdditions.h"
+#import "NSDate+Tealium.h"
 
-@implementation NSDate (TealiumAdditions)
+@implementation NSDate (Tealium)
 
 - (NSString *) teal_timestampISOStringValue {
 

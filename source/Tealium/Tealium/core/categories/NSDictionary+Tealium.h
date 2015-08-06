@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (TealiumAdditions)
+@interface NSDictionary (Tealium)
 
 - (NSDictionary *) teal_stringifiedDictionary;
 

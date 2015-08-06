@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIColor (TealiumAdditions)
+@interface UIColor (Tealium)
 
 + (UIColor *) teal_colorWithHexString:(NSString *)hexString;
 

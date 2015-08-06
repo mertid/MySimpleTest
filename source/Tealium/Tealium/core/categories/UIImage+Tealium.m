@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 tealium. All rights reserved.
 //
 
-#import "UIImage+TealiumAdditions.h"
+#import "UIImage+Tealium.h"
 
-@implementation UIImage (TealiumAdditions)
+@implementation UIImage (Tealium)
 
 + (UIImage *) teal_imageWithColor:(UIColor *)color andSize:(CGSize)size {
     

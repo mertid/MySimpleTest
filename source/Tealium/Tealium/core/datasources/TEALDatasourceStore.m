@@ -10,8 +10,8 @@
 #import "TEALDatasourceStore.h"
 #import "TEALDatasources.h"
 #import "TEALSystemHelpers.h"
-#import "NSDate+TealiumAdditions.h"
-#import "NSString+TealiumAdditions.h"
+#import "NSDate+Tealium.h"
+#import "NSString+Tealium.h"
 
 
 static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.mobile.datasources";
@@ -177,7 +177,8 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     return datasources;
 }
 
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALEventType)eventType {
+#warning Move to AutotrackDataSources
+- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
     
@@ -185,14 +186,14 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     
     [datasources addEntriesFromDictionary:systemInfo];
     
-    datasources[TEALDatasourceKey_CallType]         = [TEALEvent stringFromEventType:eventType];
+    datasources[TEALDatasourceKey_CallType]         = [TEALDispatch stringFromDispatchType:eventType];
     datasources[TEALDatasourceKey_ApplicationName]  = self[TEALDatasourceKey_ApplicationName];
     
     switch (eventType) {
-        case TEALEventTypeLink:
+        case TEALDispatchTypeEvent:
             datasources[TEALDatasourceKey_EventName] = self[TEALDatasourceKey_EventName];
             break;
-        case TEALEventTypeView:
+        case TEALDispatchTypeView:
             datasources[TEALDatasourceKey_Pagetype] = self[TEALDatasourceKey_Pagetype];
             break;
         default:
@@ -202,7 +203,8 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     return datasources;
 }
 
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALEventType)eventType title:(NSString *)title {
+#warning Move to AutotrackDataSources
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
     
@@ -210,10 +212,10 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     
     if (title) {
         switch (eventType) {
-            case TEALEventTypeLink:
+            case TEALDispatchTypeEvent:
                 datasources[TEALDatasourceKey_EventTitle] = title;
                 break;
-            case TEALEventTypeView:
+            case TEALDispatchTypeView:
                 datasources[TEALDatasourceKey_ViewTitle] = title;
                 break;
             default:

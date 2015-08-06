@@ -282,28 +282,29 @@
     }
     
     __weak TEALSettings *weakSelf = self;
+    __weak TEALPublishSettings *weakPublishSettings = weakSelf.publishSettings;
     
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                                 
                                 if (connectionError) {
                                     
-                                    [weakSelf.publishSettings loadArchived];
-                                    if (completion) completion( weakSelf.publishSettings.status, connectionError);
+                                    [weakPublishSettings loadArchived];
+                                    if (completion) completion( weakPublishSettings.status, connectionError);
                                     
                                     return;
                                 }
                                 
                                 NSError *parseError = nil;
-                                NSDictionary *parsedData = [weakSelf mobilePublishSettingsFromHTMLData:data
+                                NSDictionary *parsedData = [weakPublishSettings mobilePublishSettingsFromHTMLData:data
                                                                                                  error:&parseError];
                                 
-                                if (parsedData) {
-                                    [weakSelf.publishSettings updateWithRawSettings:parsedData];
-                                    if (completion) completion( weakSelf.publishSettings.status, nil);
+                                if ([weakPublishSettings areValidRawPublishSettings:parsedData]) {
+                                    [weakPublishSettings updateWithRawSettings:parsedData];
+                                    if (completion) completion( weakPublishSettings.status, nil);
                                 } else {
-                                    [weakSelf.publishSettings loadArchived];
-                                    if (completion) completion( weakSelf.publishSettings.status, parseError );
+                                    [weakPublishSettings loadArchived];
+                                    if (completion) completion( weakPublishSettings.status, parseError );
                                 }
                                 
                                 
@@ -320,104 +321,5 @@
     
     self.visitorID = visitorID;
 }
-
-#pragma mark - PRIVATE METHODS
-
-- (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
-    
-    NSDictionary *resultDictionary = nil;
-    
-    NSString *dataString = [[NSString alloc] initWithData:data
-                                                 encoding:NSUTF8StringEncoding];
-    
-    NSError *regexError = nil;
-    
-    NSString *scriptContentsPattern = @"<script.+>.+</script>";
-    
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:scriptContentsPattern
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:&regexError];
-    if (!regex) {
-        *error = regexError;
-        return nil;
-    }
-    
-    __block NSString *scriptContents = nil;
-    
-    [regex enumerateMatchesInString:dataString
-                            options:NSMatchingReportCompletion
-                              range:NSMakeRange(0, dataString.length)
-                         usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                             
-                             if (result) {
-                                 TEAL_LogExtreamVerbosity(@"text checking result: %@", result);
-                             }
-                             
-                             if (result.range.location != NSNotFound) {
-                                 scriptContents = [dataString substringWithRange:result.range];
-                                 
-                                 if (scriptContents) {
-                                     TEAL_LogExtreamVerbosity(@"scriptContents: %@", scriptContents);
-                                 }
-                                 
-                                 *stop = YES;
-                             }
-                         }];
-    
-    if (!scriptContents) {
-        
-        return nil;
-    }
-    
-    NSRange mpsRangeStart = [scriptContents rangeOfString:@"var mps = "
-                                                  options:NSCaseInsensitiveSearch
-                                                    range:NSMakeRange(0, scriptContents.length)];
-    
-    if (mpsRangeStart.location == NSNotFound) {
-        
-        TEAL_LogVerbose(@"mobile publish settings not found! old mobile library extension is not supported.  ");
-        
-        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-                              description:@"Mobile publish settings not found."
-                                   reason:@"Mobile publish settings not found. While parsing mobile.html"
-                               suggestion:@"Please enable mobile publish settings in Tealium iQ."];
-        
-        return nil;
-    }
-    
-    NSUInteger startIndex = NSMaxRange( mpsRangeStart );
-    NSUInteger endLength = scriptContents.length - startIndex;
-    NSRange mpsRangeEnd = [scriptContents rangeOfString:@"</script>"
-                                                options:NSCaseInsensitiveSearch
-                                                  range:NSMakeRange(startIndex, endLength)];
-    
-    if (mpsRangeEnd.location == NSNotFound) {
-        return nil;
-    }
-    
-    NSRange mpsRange = NSMakeRange(startIndex, ( mpsRangeEnd.location - startIndex ) );
-    
-    NSString *mpsDataString = [scriptContents substringWithRange:mpsRange];
-    
-    TEAL_LogExtreamVerbosity(@"mpsDataString: %@", mpsDataString);
-    
-    // TODO: check for missing utag and / or tags
-    
-    NSData *mpsJSONData = [mpsDataString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSError *jsonError = nil;
-    
-    resultDictionary = [NSJSONSerialization JSONObjectWithData:mpsJSONData
-                                                       options:NSJSONReadingMutableContainers
-                                                         error:&jsonError];
-    
-    if (!resultDictionary) {
-        *error = jsonError;
-        return nil;
-    }
-    
-    return resultDictionary;
-}
-
 
 @end

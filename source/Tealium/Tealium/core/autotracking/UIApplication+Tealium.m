@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Tealium. All rights reserved.
 //
 
-#import "UIApplication+TealiumTracker.h"
+#import "UIApplication+Tealium.h"
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasources.h"
-#import "TEALEvent.h"
-#import "NSObject+TealiumAdditions.h"
+#import "TEALAutotrackDataSources.h"
+#import "NSObject+Tealium.h"
 
-@implementation UIApplication (TealiumTracker)
+@implementation UIApplication (Tealium)
 
 void (*oSendEvent)(id, SEL, UIEvent *e);
 
@@ -75,19 +75,17 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         return;
     }
     
-    NSString *eventTitle = [TEALEvent titleForEvent:TEALEventTypeLink
-                                         withObject:target];
     
-    NSDictionary *autoDataSources = [TEALEvent datasourcesForEvent:TEALEventTypeLink
-                                                        withObject:target
-                                                       autotracked:YES];
+    // Includes eventTitle
+    NSDictionary *autoDataSources = [TEALAutotrackDataSources datasourcesForDispatchType:TEALDispatchTypeEvent
+                                                        withObject:target];
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
     
     NSDictionary *customDataSources = [target teal_dataSources];
     [dataSources addEntriesFromDictionary:customDataSources];
     
-    [[Tealium sharedInstance] trackEventWithTitle:eventTitle
+    [[Tealium sharedInstance] trackEventWithTitle:nil
                                       dataSources:dataSources];
     
 }

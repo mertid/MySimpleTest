@@ -91,33 +91,57 @@
     
     [self enableLibraryWithConfiguration:nil];
     
+    XCTestExpectation *finished = [self expectationWithDescription:@"finishedEventDispatch"];
+
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
         XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+        [finished fulfill];
     };
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                 withPayload:@{@"test_key":@"test_value"}];
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
     
     
-    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
-
-    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-        [finished fulfill];
-        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-    };
-    
-
-    [self.library.dispatchManager addDispatch:dispatch
-                                  completionBlock:completion];
     
     [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);
     }];
     
 }
+
+//- (void) testEventDispatchDataSources {
+//    [self enableLibraryWithConfiguration:nil];
+//    
+//    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+//        
+//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+//    };
+//    
+//    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
+//                                                withPayload:nil];
+//    [self.library.dispatchManager addDispatch:dispatch
+//                              completionBlock:completion];
+//    
+//    
+//    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
+//    
+//    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+//        [finished fulfill];
+//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+//    };
+//    
+//    
+//    [self.library.dispatchManager addDispatch:dispatch
+//                              completionBlock:completion];
+//    
+//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+//        NSLog(@"%s error:%@", __FUNCTION__, error);
+//    }];
+//}
 
 //- (void) testEventDispatchQueued {
 //    [self enableLibraryWithConfiguration:nil];
@@ -153,27 +177,19 @@
     
     [self enableLibraryWithConfiguration:nil];
     
+    XCTestExpectation *finished = [self expectationWithDescription:@"finishedViewDispatch"];
+
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
         XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+        [finished fulfill];
     };
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeView
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeView
                                                 withPayload:@{@"test_key":@"test_value"}];
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
     
-    
-    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
-    
-    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-        [finished fulfill];
-        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-    };
-    
-    
-    [self.library.dispatchManager addDispatch:dispatch
-                              completionBlock:completion];
     
     [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);

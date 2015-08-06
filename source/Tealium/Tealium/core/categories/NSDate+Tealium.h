@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDate (TealiumAdditions)
+@interface NSDate (Tealium)
 
 - (NSString *) teal_timestampISOStringValue;
 

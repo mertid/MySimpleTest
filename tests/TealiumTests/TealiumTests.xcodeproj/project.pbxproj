@@ -20,8 +20,11 @@
 		710D71521B62A8B400CFB715 /* TealiumDispatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */; };
 		710D7DBB1B6FB571003F01AF /* TEALSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 710D7DBA1B6FB571003F01AF /* TEALSettingsTests.m */; };
 		710D7DBD1B6FBCBD003F01AF /* TealiumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 710D7DBC1B6FBCBD003F01AF /* TealiumTests.m */; };
+		710D7DC41B6FEC89003F01AF /* tagmanagement_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 710D7DC21B6FEC89003F01AF /* tagmanagement_OFF.html */; };
+		710D7DC51B6FEC89003F01AF /* tagmanagement_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 710D7DC31B6FEC89003F01AF /* tagmanagement_ON.html */; };
 		713248D21B5EAED900543639 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D11B5EAED900543639 /* SecondViewController.m */; };
 		713248D71B5EB65F00543639 /* ShowViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */; };
+		71484AA51B713D6C00BE6877 /* TealiumDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71484AA41B713D6C00BE6877 /* TealiumDataSources.m */; };
 		71DCA7B71B5968A1001706CF /* APITester.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DCA7B61B5968A1001706CF /* APITester.m */; };
 /* End PBXBuildFile section */
 
@@ -76,10 +79,14 @@
 		710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TealiumDispatchTests.m; path = TealiumTestsTests/TealiumDispatchTests.m; sourceTree = "<group>"; };
 		710D7DBA1B6FB571003F01AF /* TEALSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsTests.m; sourceTree = "<group>"; };
 		710D7DBC1B6FBCBD003F01AF /* TealiumTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumTests.m; sourceTree = "<group>"; };
+		710D7DBE1B6FD91B003F01AF /* TEALSettings+PrivateHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+PrivateHeader.h"; sourceTree = "<group>"; };
+		710D7DC21B6FEC89003F01AF /* tagmanagement_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tagmanagement_OFF.html; sourceTree = "<group>"; };
+		710D7DC31B6FEC89003F01AF /* tagmanagement_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tagmanagement_ON.html; sourceTree = "<group>"; };
 		713248D01B5EAED900543639 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		713248D11B5EAED900543639 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		713248D51B5EB65F00543639 /* ShowViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowViewTableViewCell.h; sourceTree = "<group>"; };
 		713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowViewTableViewCell.m; sourceTree = "<group>"; };
+		71484AA41B713D6C00BE6877 /* TealiumDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TealiumDataSources.m; path = TealiumTestsTests/TealiumDataSources.m; sourceTree = "<group>"; };
 		71DCA7B51B5968A1001706CF /* APITester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APITester.h; sourceTree = "<group>"; };
 		71DCA7B61B5968A1001706CF /* APITester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APITester.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +114,7 @@
 		37A75AC81B57109E00E6E9E2 = {
 			isa = PBXGroup;
 			children = (
+				71484AA41B713D6C00BE6877 /* TealiumDataSources.m */,
 				710D71511B62A8B400CFB715 /* TealiumDispatchTests.m */,
 				710D714F1B62A5CA00CFB715 /* TealiumAudienceStreamTests.m */,
 				37A75AD31B57109E00E6E9E2 /* TealiumTests */,
@@ -157,9 +165,11 @@
 		37A75AED1B57109E00E6E9E2 /* TealiumTestsTests */ = {
 			isa = PBXGroup;
 			children = (
+				710D7DBF1B6FE85C003F01AF /* mps */,
 				710D7DBC1B6FBCBD003F01AF /* TealiumTests.m */,
 				710D7DBA1B6FB571003F01AF /* TEALSettingsTests.m */,
 				37EBA24A1B571D4D0010CB75 /* Tealium+PrivateHeader.h */,
+				710D7DBE1B6FD91B003F01AF /* TEALSettings+PrivateHeader.h */,
 				37EBA24B1B571D4D0010CB75 /* TealiumConfigurationsTests.m */,
 				37EBA24C1B571D4D0010CB75 /* TEALPublishSettingsStoreTests.m */,
 				37A75AEE1B57109E00E6E9E2 /* Supporting Files */,
@@ -198,6 +208,15 @@
 				37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		710D7DBF1B6FE85C003F01AF /* mps */ = {
+			isa = PBXGroup;
+			children = (
+				710D7DC21B6FEC89003F01AF /* tagmanagement_OFF.html */,
+				710D7DC31B6FEC89003F01AF /* tagmanagement_ON.html */,
+			);
+			path = mps;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,6 +333,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				710D7DC41B6FEC89003F01AF /* tagmanagement_OFF.html in Resources */,
+				710D7DC51B6FEC89003F01AF /* tagmanagement_ON.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +360,7 @@
 				37EBA24E1B571D4D0010CB75 /* TEALPublishSettingsStoreTests.m in Sources */,
 				710D71521B62A8B400CFB715 /* TealiumDispatchTests.m in Sources */,
 				710D71501B62A5CA00CFB715 /* TealiumAudienceStreamTests.m in Sources */,
+				71484AA51B713D6C00BE6877 /* TealiumDataSources.m in Sources */,
 				710D7DBD1B6FBCBD003F01AF /* TealiumTests.m in Sources */,
 				710D7DBB1B6FB571003F01AF /* TEALSettingsTests.m in Sources */,
 				37EBA24D1B571D4D0010CB75 /* TealiumConfigurationsTests.m in Sources */,

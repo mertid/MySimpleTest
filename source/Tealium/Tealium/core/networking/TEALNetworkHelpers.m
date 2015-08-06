@@ -7,7 +7,7 @@
 //
 
 #import "TEALNetworkHelpers.h"
-#import "NSObject+TealiumAdditions.h"
+#import "NSObject+Tealium.h"
 
 @implementation TEALNetworkHelpers
 

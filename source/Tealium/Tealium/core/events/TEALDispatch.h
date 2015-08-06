@@ -7,15 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TEALEvent.h"
+
+typedef NS_ENUM(NSUInteger, TEALDispatchType) {
+    TEALDispatchTypeEvent,
+    TEALDispatchTypeView
+};
+
+extern NSString * const TEALDispatchTypeLinkStringValue;
+extern NSString * const TEALDispatchTypeViewStringValue;
 
 @interface TEALDispatch : NSObject <NSCoding>
 
-@property (nonatomic) TEALEventType eventType;
+@property (nonatomic) TEALDispatchType dispatchType;
 @property (strong, nonatomic) NSDictionary *payload;
 @property (nonatomic) NSTimeInterval timestamp;
 @property (nonatomic) BOOL queued;
 
-+ (TEALDispatch *) dispatchForEvent:(TEALEventType)eventType withPayload:(NSDictionary *)payload;
++ (TEALDispatch *) dispatchForType:(TEALDispatchType)dispatchType withPayload:(NSDictionary *)payload;
++ (NSString *) stringFromDispatchType:(TEALDispatchType)dispatchType;
+
 
 @end
