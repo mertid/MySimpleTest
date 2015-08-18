@@ -11,7 +11,7 @@
 #import "Tealium.h"
 #import "TEALLogger.h"
 
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
 
 @interface TEALApplicationLifecycle ()
 

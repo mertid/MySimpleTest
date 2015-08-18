@@ -9,8 +9,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TEALDispatch.h"
-
 @interface TEALDatasourceStore : NSObject
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
@@ -28,18 +26,10 @@
 //
 //- (void) archiveWithStorageKey:(NSString *)key;
 
-- (void) setDataSources:(NSDictionary *)newDataSources;
-
 - (NSDictionary *) systemInfoDatasources;
-
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
-
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 
 - (NSDictionary *) dataSourcesCopy;
 
-- (NSString *) applicationUUID;
-
-- (NSString *) visitorID;
+- (void) setDataSources:(NSDictionary *)newDataSources;
 
 @end

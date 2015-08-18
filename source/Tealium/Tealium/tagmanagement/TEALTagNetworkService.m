@@ -9,7 +9,7 @@
 #import "TEALTagNetworkService.h"
 #import <UIKit/UIKit.h>
 #import "TEALNetworkHelpers.h"
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
 #import "TEALLogger.h"
 #import "TEALDispatch.h"
 #import "TEALOperationManager.h"

@@ -8,16 +8,15 @@
 
 #import <UIKit/UIDevice.h>
 #import "TEALDatasourceStore.h"
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
+#import "TEALDispatch.h"
 #import "TEALSystemHelpers.h"
 #import "NSDate+Tealium.h"
 #import "NSString+Tealium.h"
 #import "TEALLogger.h"
 
 
-//static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.mobile.datasources";
-
-const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue";
+static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
 
 @interface TEALDatasourceStore ()
 
@@ -31,43 +30,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
 
 @implementation TEALDatasourceStore
 
-//+ (instancetype) sharedStore {
-//    
-//    static dispatch_once_t onceToken = 0;
-//    __strong static TEALDatasourceStore *_sharedStore = nil;
-//    
-//    dispatch_once(&onceToken, ^{
-//        _sharedStore = [[TEALDatasourceStore alloc] initPrivate];
-//    });
-//    
-//    return _sharedStore;
-//}
-//- (instancetype) initPrivate {
-//
-//    self = [super init];
-//
-//    if (self) {
-//        _queue = dispatch_queue_create(kTEALDatasourceStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
-//        _datasources = [NSMutableDictionary new];
-//    }
-//    return self;
-//}
-//- (void) loadWithUUIDKey:(NSString *)key {
-//
-//    NSString *storagekey = [kTEALMobileDatasourceStorageKey copy];
-//
-//    if (![self unarchiveWithStorageKey:storagekey]) {
-//
-//        [self addStaticDatasource];
-//    }
-//
-//    [self addSystemDatasources];
-//
-//    [TEALDatasourceStore sharedStore][TEALDatasourceKey_UUID] = [TEALSystemHelpers applicationUUIDWithKey:key];
-//
-//    [self archiveWithStorageKey:kTEALMobileDatasourceStorageKey];
-//}
-
 #pragma mark - PUBLIC INSTANCE
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
@@ -80,7 +42,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     self = [super init];
     
     if (self) {
-        _queue = dispatch_queue_create(kTEALDatasourceStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
         _datasources = [NSMutableDictionary new];
         _instanceID = instanceID;
         [self unarchiveWithStorageKey:instanceID];
@@ -117,6 +78,18 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
              forKey:key];
 }
 
+- (NSDictionary *) dataSourcesCopy {
+    return [self.datasources copy];
+}
+
+- (void) setDataSources:(NSDictionary *)newDataSources {
+    dispatch_barrier_sync(self.queue, ^{
+        [self.datasources removeAllObjects];
+        [self.datasources addEntriesFromDictionary:newDataSources];
+        [self archiveWithStorageKey:self.instanceID];
+    });
+}
+
 #pragma mark - I/O
 
 - (BOOL) unarchiveWithStorageKey:(NSString *)key {
@@ -149,14 +122,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     }
 }
 
-- (void) setDataSources:(NSDictionary *)newDataSources {
-    dispatch_barrier_sync(self.queue, ^{
-        [self.datasources removeAllObjects];
-        [self.datasources addEntriesFromDictionary:newDataSources];
-        [self archiveWithStorageKey:self.instanceID];
-    });
-}
-
 - (NSDictionary *) systemInfoDatasources {
     
     NSMutableDictionary *datasources = [self datasourcesForKeys:@[TEALDatasourceKey_Platform,
@@ -183,81 +148,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasource-store-queue
     return datasources;
 }
 
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType {
-    
-    NSMutableDictionary *datasources = [NSMutableDictionary new];
-    
-//    NSDictionary *systemInfo = [self systemInfoDatasources];
-//    
-//    [datasources addEntriesFromDictionary:systemInfo];
-//    
-//    datasources[TEALDatasourceKey_CallType]         = [TEALDispatch stringFromDispatchType:eventType];
-//    datasources[TEALDatasourceKey_ApplicationName]  = self[TEALDatasourceKey_ApplicationName];
-//    
-//    switch (eventType) {
-//        case TEALDispatchTypeEvent:
-//            datasources[TEALDatasourceKey_EventName] = self[TEALDatasourceKey_EventName];
-//            break;
-//        case TEALDispatchTypeView:
-//            datasources[TEALDatasourceKey_Pagetype] = self[TEALDatasourceKey_Pagetype];
-//            break;
-//        default:
-//            break;
-//    }
-    
-    return datasources;
-}
-
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
-    
-    NSMutableDictionary *datasources = [NSMutableDictionary new];
-    
-    datasources[TEALDatasourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
-    
-    if (title) {
-        switch (eventType) {
-            case TEALDispatchTypeEvent:
-                datasources[TEALDatasourceKey_EventTitle] = title;
-                break;
-            case TEALDispatchTypeView:
-                datasources[TEALDatasourceKey_ViewTitle] = title;
-                break;
-            default:
-                break;
-        }
-    }
-    
-    datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_False;
-    
-    return datasources;
-}
-
-- (NSDictionary *) dataSourcesCopy {
-    return [self.datasources copy];
-}
-
-- (NSString *) applicationUUID {
-    
-    NSString *applicationUUID = self.datasources[TEALDatasourceKey_UUID];
-    
-    if (!applicationUUID) {
-        applicationUUID = [[NSUUID UUID] UUIDString];
-        
-        self.datasources[TEALDatasourceKey_UUID] = applicationUUID;
-    }
-    
-    return applicationUUID;
-}
-
-- (NSString *) visitorID {
-    NSString *uuid = [self applicationUUID];
-    
-    if (![uuid isKindOfClass:([NSString class])]) {
-        return nil;
-    }
-    
-    return [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
-}
 
 #pragma mark - PRIVATE INSTANCE METHODS
 

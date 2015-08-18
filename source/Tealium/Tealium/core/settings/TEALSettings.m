@@ -14,7 +14,7 @@
 #import "TEALLogger.h"
 #import "TEALConfiguration.h"
 #import "TEALURLSessionManager.h"
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
 
 @interface TEALSettings()
 

@@ -16,7 +16,9 @@
 @optional
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch;
+
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch;
+
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
 
 @end

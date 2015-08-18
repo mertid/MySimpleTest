@@ -94,9 +94,9 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     BOOL shouldBatch = batchSize > 1;
     
     if (!shouldBatch && queueCount == 0) {
-        
-        __weak TEALDispatchManager *weakSelf = self;
-        
+
+        __block typeof(self) __weak weakSelf = self;
+
         [self attemptDispatch:aDispatch
               completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
 
@@ -149,7 +149,6 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self.delegate didUpdateDispatchQueues];
 }
-
 
 - (void) purgeStaleDispatches {
     

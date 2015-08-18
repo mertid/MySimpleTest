@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Tealium. All rights reserved.
 //
 //  BRIEF: Category extension for message tracking
+//  TODO: Rename to UIApplication+TEALAutotracking
 
 #import <UIKit/UIKit.h>
 

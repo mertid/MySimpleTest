@@ -9,7 +9,7 @@
 #import "UIApplication+Tealium.h"
 #import <objc/runtime.h>
 #import "Tealium.h"
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
 #import "TEALAutotrackDataSources.h"
 #import "NSObject+Tealium.h"
 

@@ -17,7 +17,6 @@
 
 @protocol TEALDispatchManagerDelegate <NSObject>
 
-
 // Internal
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch

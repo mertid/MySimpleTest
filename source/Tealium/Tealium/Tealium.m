@@ -37,13 +37,12 @@
 
 // Datasources
 
-#import "TEALDatasources.h"
-#import "TEALDataSourceStore.h"
+#import "TEALDatasourceConstants.h"
+#import "TEALDataSources.h"
 
 // Profile
 
 #import "TEALVisitorProfileHelpers.h"
-
 
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
@@ -52,13 +51,11 @@
                         TEALCollectNetworkServiceConfiguration,
                         TEALTagNetworkServiceConfiguration>
 
-
-//@property (strong, nonatomic) TEALRemoteSettingsStore *settingsStore;
 @property (strong, nonatomic) TEALLogger *logger;
 @property (strong, nonatomic) TEALSettings *settings;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 @property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
-@property (strong, nonatomic) TEALDatasourceStore *datasourceStore;
+@property (strong, nonatomic) TEALDatasources *dataSources;
 @property (strong, nonatomic) TEALOperationManager *operationManager;
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
 
@@ -123,9 +120,7 @@ __strong static Tealium *_sharedObject = nil;
     if (self) {
         _operationManager   = [TEALOperationManager new];
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
-        
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
-        
         _delegateManager    = [[TEALDelegateManager alloc] init];
         
     }
@@ -157,13 +152,12 @@ __strong static Tealium *_sharedObject = nil;
     self.enabled = YES;
     
     // AudienceStream
-    // TODO: update to use instanceId
-    self.datasourceStore = [[TEALDatasourceStore alloc]initWithInstanceID:configuration.instanceID];
+    self.dataSources = [[TEALDatasources alloc]initWithInstanceID:configuration.instanceID];
     
     // TODO: Move later
     self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
     
-    [self setupSettingsWithConfiguration:configuration visitorID:[self.datasourceStore visitorID] completion:^(BOOL success, NSError *error) {
+    [self setupSettingsWithConfiguration:configuration visitorID:[self.dataSources visitorID] completion:^(BOOL success, NSError *error) {
         
         
         if (success) {
@@ -446,7 +440,6 @@ __strong static Tealium *_sharedObject = nil;
     };
 }
 
-
 #pragma mark - PUBLIC CLASS METHODS
 
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
@@ -471,6 +464,9 @@ __strong static Tealium *_sharedObject = nil;
 
 }
 
+- (instancetype) instanceWithConfiguration:(TEALConfiguration *) configuration {
+    return [Tealium instanceWithConfiguration:configuration completion:nil];
+}
 
 #pragma mark - PUBLIC INSTANCE METHODS
 
@@ -507,7 +503,7 @@ __strong static Tealium *_sharedObject = nil;
     
     // capture time datasources
     NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
-                                                                         [self.datasourceStore captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
                                                                          clientDataSources
                                                                          ]];
     
@@ -524,7 +520,7 @@ __strong static Tealium *_sharedObject = nil;
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
-                                                                         [self.datasourceStore captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
                                                                          clientDataSources
                                                                          ]];
     __weak Tealium *weakSelf = self;
@@ -603,7 +599,7 @@ __strong static Tealium *_sharedObject = nil;
 - (NSString *) visitorIDCopy {
     
     @synchronized(self) {
-        return [self.datasourceStore visitorID];
+        return [self.dataSources visitorID];
     }
 }
 
@@ -648,12 +644,12 @@ __strong static Tealium *_sharedObject = nil;
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {
-    return [self.datasourceStore dataSourcesCopy];
+    return [self.dataSources dataSourcesCopy];
 }
 
 - (void) setPersistentDataSources:(NSDictionary *) newDataSources {
     
-    [self.datasourceStore setDataSources:newDataSources];
+    [self.dataSources setDataSources:newDataSources];
 }
 
 #pragma mark - TEALDispatchManagerDelegate methods
@@ -694,7 +690,7 @@ __strong static Tealium *_sharedObject = nil;
 
     // Send Time (static) datasources
     
-    NSDictionary *datasources = [self.datasourceStore transmissionTimeDatasourcesForEventType:dispatch.dispatchType];
+    NSDictionary *datasources = [self.dataSources transmissionTimeDatasourcesForEventType:dispatch.dispatchType];
 
     
     [self addDatasources:datasources
@@ -787,7 +783,7 @@ __strong static Tealium *_sharedObject = nil;
 #pragma mark - TEALVisitorProfileStoreConfiguration
 
 - (NSString *) visitorID {
-    return [self.datasourceStore visitorID];
+    return [self.dataSources visitorID];
 }
 
 - (NSURL *) profileURL {

@@ -7,7 +7,7 @@
 //
 
 #import "TEALAutotrackDataSources.h"
-#import "TEALDatasources.h"
+#import "TEALDatasourceConstants.h"
 
 @implementation TEALAutotrackDataSources
 
