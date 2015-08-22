@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import <Tealium/Tealium.h>
+#import <Tealium/ObjC.h>
 
 @interface AppDelegate () <TealiumDelegate>
 
@@ -30,7 +30,7 @@
     
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.lifecycleEnabled = YES;
+    configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = YES;
     configuration.autotrackingViewsEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";

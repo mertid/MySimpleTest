@@ -78,7 +78,8 @@
         eventName = TEALDatasourceValue_LifecycleTerminate;
     }
 
-    NSDictionary *lifecycleData = @{TEALDatasourceKey_LifecycleType: eventName};
+    NSDictionary *lifecycleData = @{TEALDatasourceKey_Autotracked : TEALDatasourceValue_True,
+                                    TEALDatasourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {
         // TODO: Add error handling?

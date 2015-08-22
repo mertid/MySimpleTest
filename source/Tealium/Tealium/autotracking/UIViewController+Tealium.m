@@ -11,7 +11,7 @@
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasourceConstants.h"
-#import "TEALAutotrackDataSources.h"
+#import "TEALDataSources+Autotracking.h"
 
 @implementation UIViewController (Tealium)
 
@@ -35,8 +35,7 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
     if ([self teal_autotrackingEnabled]) {
 
         // Auto captures title
-        NSDictionary *autoDataSources = [TEALAutotrackDataSources datasourcesForDispatchType:TEALDispatchTypeView
-                                                            withObject:self];
+        NSDictionary *autoDataSources = [TEALDatasources autotrackDataSourcesForDispatchType:TEALDispatchTypeView withObject:self];
         
         NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
         

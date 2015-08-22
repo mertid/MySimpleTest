@@ -11,28 +11,21 @@
 // Configuration
 
 #import "TEALConfiguration.h"
+#import "TEALDatasources.h"
+#import "TEALLogger.h"
+#import "TEALOperationManager.h"
+#import "TEALSettings.h"
+#import "TEALURLSessionManager.h"
 
-// Profile
+#warning Move to Audiencestream
 
 #import "TEALVisitorProfile.h"
 #import "TEALVisitorProfileCurrentVisit.h"
 
-// Attributes:
-
-#import "TEALVisitorProfileBaseAttribute.h"
-#import "TEALVisitorProfileAudienceAttribute.h"
-#import "TEALVisitorProfileBadgeAttribute.h"
-#import "TEALVisitorProfileDateAttribute.h"
-#import "TEALVisitorProfileFlagAttribute.h"
-#import "TEALVisitorProfileMetricAttribute.h"
-#import "TEALVisitorProfilePropertyAttribute.h"
-
 // Dispatch
 #import "TEALDispatch.h"
-
 #import "TEALBlocks.h"
 #import "TealiumDelegate.h"
-
 #import "NSObject+Tealium.h"
 
 /**
@@ -45,6 +38,16 @@
  *
  */
 @interface Tealium : NSObject
+
+#warning Make readonly if possible - check categories
+
+@property (strong, nonatomic) TEALDatasources *dataSources;
+@property (strong, nonatomic) NSArray *dispatchNetworkServices;
+@property (strong, nonatomic) TEALLogger *logger;
+@property (strong, nonatomic) TEALOperationManager *operationManager;
+@property (strong, nonatomic) TEALSettings *settings;
+@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+
 
 # pragma mark - Setup / Configuration
 
@@ -77,6 +80,10 @@
  */
 - (void) disable;
 
+- (void) enable;
+
+- (BOOL) isEnabled;
+
 // TODO: comments
 @property (weak, nonatomic) id<TealiumDelegate> delegate;
 
@@ -99,49 +106,9 @@
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
 
-# pragma mark - AudienceStream
+//- (void) enableModules;
 
-/**
- *  Retrieves the current visitor profile from AudienceStream.
- *
- *  @param completion Completion block with retrieved TEALVisitorProfile instance and an error should any problems occur.
- */
-- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion;
-
-/**
- *  Last retrieved profile instance.  This is updated every time the profile is queried.  Depending on the settings the library was enabled with, this could be after every sendEvent:customData: call or only on explicit request.
- *
- *  @return Returns valid TEALVisitorProfile object.  Its properties might be nil of nothing is loaded into them yet.
- */
-- (TEALVisitorProfile *) cachedVisitorProfileCopy;
-
-/**
- *  Copy of the Unique visitor ID per Account / Device combination.
- *
- *  @return String value of the visitorID for the Account the library was enabled with.
- */
-- (NSString *) visitorIDCopy;
-
-/**
- *  Joins a trace initiated from the AudienceStream web app with a valid string token provide from the TraceUI
- *
- *  @param token String value should match the code provided via the AudienceStream web UI.
- */
-- (void) joinTraceWithToken:(NSString *)token;
-
-/**
- *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
- */
-- (void) leaveTrace;
-
-#pragma mark - Tag Management
-
-/**
- *  The UIWebView instance used by the internal tag management system.
- *
- *  @return UIWebView if the remote publish settings tag management toggle is TRUE, otherwise will return nil.
- */
-- (UIWebView *) webView;
+#pragma mark - Data Management
 
 /*
  */

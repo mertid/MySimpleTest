@@ -9,6 +9,12 @@
 #import "TEALConfiguration.h"
 #import "NSString+Tealium.h"
 
+@interface TEALConfiguration()
+
+@property (nonatomic, strong) NSDictionary *descriptionData;
+
+@end
+
 @implementation TEALConfiguration
 
 #pragma mark - PUBLIC CLASS
@@ -30,7 +36,7 @@
     configuration.useHTTP           = NO;
     configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
     configuration.logLevel          = TEALLogLevelNone;
-    configuration.lifecycleEnabled  = YES;
+    configuration.autotrackingLifecycleEnabled  = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
     configuration.overridePublishSettingsURL = nil;
@@ -67,23 +73,36 @@
 
 #pragma mark - PRIVATE INSTANCE
 
+- (void) addToDescriptionData:(NSDictionary *)dictionary {
+    
+    NSMutableDictionary *mDictionary = [NSMutableDictionary dictionaryWithDictionary:[self.descriptionData copy]];
+    [mDictionary addEntriesFromDictionary:[dictionary copy]];
+    
+    @synchronized(self){
+        self.descriptionData = [NSDictionary dictionaryWithDictionary:mDictionary];
+    }
+    
+}
+
 - (NSString *) description {
     
-    NSDictionary *descriptionDict = @{
-                                      @"account":[NSString teal_dictionarySafeString:self.accountName],
-                                      @"tiq profile":[NSString teal_dictionarySafeString:self.profileName],
-                                      @"audiencestream profile":[NSString teal_dictionarySafeString:self.audienceStreamProfile],
-                                      @"use http":[NSString teal_stringFromBool:self.useHTTP],
-                                      @"polling frequency":[NSNumber numberWithUnsignedLong:self.pollingFrequency],
-                                      @"log level":[NSNumber numberWithUnsignedInt:self.logLevel],
-                                      @"lifecycle enabled":[NSString teal_stringFromBool:self.lifecycleEnabled],
-                                      @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
-                                      @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-                                      @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
-                                      @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
-                                      @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
-                                      };
+    if (!self.descriptionData) {
+        self.descriptionData = @{
+                                          @"account - name":[NSString teal_dictionarySafeString:self.accountName],
+                                          @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
+                                          @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
+                                          @"use http":[NSString teal_stringFromBool:self.useHTTP],
+//                                          @"polling frequency":[NSNumber numberWithUnsignedLong:self.pollingFrequency],
+                                          @"log level":[NSNumber numberWithUnsignedInt:self.logLevel],
+                                          @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
+                                          @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
+                                          @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
+                                          @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
+                                          @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
+                                          @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
+                                          };
+    }
     
-    return [NSString teal_descriptionForObject:self fromDictionary:descriptionDict];
+    return [NSString teal_descriptionForObject:self description:@"Compile time options" fromDictionary:self.descriptionData];
 }
 @end

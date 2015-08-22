@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, TEALDispatchNetworkServiceStatus){
     TEALDispatchNetworkServiceStatusReady
 };
 
-@protocol TEALDispatchNetworkService <NSObject>
+@protocol TEALDispatchService <NSObject>
 
 - (TEALDispatchNetworkServiceStatus) status;
 - (void) setup;

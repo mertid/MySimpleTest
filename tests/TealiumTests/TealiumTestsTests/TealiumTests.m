@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import <Tealium/Tealium.h>
+#import <Tealium/Tealium+TagManagement.h>
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings+PrivateHeader.h"
 
@@ -41,12 +42,16 @@
         config = self.configuration;
     }
     
-    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
+    __weak XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
     
     
     [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
-        [finishedLoading fulfill];
+        
+        if ([[Tealium sharedInstance] enabled]){
+            [finishedLoading fulfill];
+        }
     }];
+    
     
     [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);
@@ -144,11 +149,11 @@
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
+    
     NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
     config.logLevel = TEALLogLevelVerbose;
     [self enableSharedInstanceWithConfiguration:config];
-    
     
     XCTAssertTrue(![[Tealium sharedInstance] webView], @"SharedInstance webview was not initialized when it should have been.");
     
@@ -157,7 +162,6 @@
 - (void) testSharedInstanceDisableTagManagmentWebView {
     
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tagmanagement_OFF" ofType:@"html"];
-    
     
     // Default is no tag management so webview should not be initialized
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"

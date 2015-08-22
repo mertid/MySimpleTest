@@ -23,4 +23,13 @@
     return result;
 }
 
+- (BOOL) teal_containsObjectOfClass:(Class)klass {
+    for (id obj in self) {
+        if ([obj isKindOfClass:klass]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end

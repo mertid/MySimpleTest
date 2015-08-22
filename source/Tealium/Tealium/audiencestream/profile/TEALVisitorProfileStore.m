@@ -19,39 +19,60 @@
 @interface TEALVisitorProfileStore ()
 
 @property (strong, nonatomic) TEALVisitorProfile *currentProfile;
+@property (weak, nonatomic) NSString *visitorID;
+@property (weak, nonatomic) NSURL *profileURL;
+@property (weak, nonatomic) NSURL *profileDefinitionURL;
+@property (weak, nonatomic) TEALURLSessionManager *sessionManager;
 
 @end
 
 @implementation TEALVisitorProfileStore
 
-- (instancetype) initWithConfiguration:(id<TEALVisitorProfileStoreConfiguration>)configuration {
-    
-    self = [self init];
-    
-    if (!self) {
-        return nil;
-    }
-    
-    if (!configuration) {
-        return nil;
-    }
+//- (instancetype) initWithConfiguration:(id<TEALVisitorProfileStoreConfiguration>)configuration {
+//    
+//    self = [self init];
+//    
+//    if (!self) {
+//        return nil;
+//    }
+//    
+//    if (!configuration) {
+//        return nil;
+//    }
+//
+//    NSString *visitorID = [configuration visitorID];
+//    
+//    if (!visitorID) {
+//        return nil;
+//    }
+//
+//    _configuration = configuration;
+//    
+//    _currentProfile = [[TEALVisitorProfile alloc] initWithVisitorID:visitorID];
+//    
+//    return self;
+//}
 
-    NSString *visitorID = [configuration visitorID];
-    
-    if (!visitorID) {
-        return nil;
-    }
 
-    _configuration = configuration;
+- (instancetype) initWithVisitorID:(NSString *)visitorID profileURL:(NSURL *)profileURL profileDefinitionURL:(NSURL *)profileDefinitionURL urlSessionManager:(TEALURLSessionManager *)sessionManager {
     
-    _currentProfile = [[TEALVisitorProfile alloc] initWithVisitorID:visitorID];
-    
+    self = [super init];
+    if (self){
+        if (!visitorID) {
+            return nil;
+        }
+        _visitorID = visitorID;
+        _profileURL = profileURL;
+        _profileDefinitionURL = profileDefinitionURL;
+        _currentProfile = [[TEALVisitorProfile alloc]initWithVisitorID:visitorID];
+        
+    }
     return self;
 }
 
 - (void) fetchProfileWithCompletion:(TEALVisitorProfileCompletionBlock)completion {
 
-    if (![self.configuration urlSessionManager] || ![self.configuration profileURL]) {
+    if (!self.sessionManager || !self.profileURL) {
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
                                       description:@"Profile request unsuccessful"
                                            reason:@"properties urlSessionManager: TEALURLSessionManager and/or profileURL: NSURL are missing"
@@ -62,7 +83,7 @@
         return;
     }
     
-    NSURL *profileURL = [self.configuration profileURL];
+    NSURL *profileURL = self.profileURL;
     NSURLRequest *request = [TEALNetworkHelpers requestWithURL:profileURL];
     
     if (!request) {
@@ -75,7 +96,7 @@
         return;
     }
     
-    if (![[self.configuration urlSessionManager].reachability isReachable]) {
+    if (![self.sessionManager.reachability isReachable]) {
         
         TEAL_LogVerbose(@"offline: %@", request);
         NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
@@ -104,14 +125,14 @@
         completion( weakSelf.currentProfile, connectionError);
     };
     
-    [[self.configuration urlSessionManager] performRequest:request
-                                        withJSONCompletion:urlCompletion];
+    [self.sessionManager performRequest:request
+                     withJSONCompletion:urlCompletion];
 }
 
 
 - (void) fetchProfileDefinitionsWithCompletion:(TEALDictionaryCompletionBlock)completion {
 
-    if (![self.configuration urlSessionManager] || ![self.configuration profileDefinitionURL]) {
+    if (!self.sessionManager || !self.profileDefinitionURL) {
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
                                       description:@"Profile request unsuccessful"
                                            reason:@"properties urlSessionManager: TEALURLSessionManager and/or profileDefinitionURL: NSURL are missing"
@@ -122,7 +143,7 @@
         return;
     }
     
-    NSURL *profileDefinitionURL = [self.configuration profileDefinitionURL];
+    NSURL *profileDefinitionURL = self.profileDefinitionURL;
 
     NSURLRequest *request = [TEALNetworkHelpers requestWithURL:profileDefinitionURL];
     
@@ -146,8 +167,8 @@
         completion( data, connectionError);
     };
     
-    [[self.configuration urlSessionManager] performRequest:request
-                                        withJSONCompletion:urlCompletion];
+    [self.sessionManager performRequest:request
+                     withJSONCompletion:urlCompletion];
 }
 
 

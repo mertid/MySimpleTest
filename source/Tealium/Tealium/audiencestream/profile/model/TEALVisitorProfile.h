@@ -19,6 +19,13 @@
 @interface TEALVisitorProfile : NSObject <NSCoding, NSCopying>
 
 /**
+ * Create instance with vistorID
+ *
+ * @return Instance of TEALVisitorProfile
+ */
+- (instancetype) initWithVisitorID:(NSString *)visitorID;
+
+/**
  *  Valid flag for Profile instance
  *
  *  @return YES if visitorID is valid, otherwise NO

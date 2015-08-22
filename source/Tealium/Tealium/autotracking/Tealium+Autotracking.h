@@ -6,8 +6,12 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#ifndef TEALAutotracking
-#define TEALAutotracking
-
-
+#ifndef TEAL_MODULE_AUTOTRACKING
+#define TEAL_MODULE_AUTOTRACKING
 #endif
+
+#import "Tealium.h"
+
+@interface Tealium (AutoTracking)
+
+@end

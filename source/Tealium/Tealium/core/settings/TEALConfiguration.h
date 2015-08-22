@@ -10,6 +10,7 @@
 
 #pragma mark - Configuration Types
 
+#warning Move to Collect
 /**
  *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested from AudienceStream
  */
@@ -69,6 +70,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @property (copy, nonatomic) NSString *environmentName;
 
+#warning Move to TAGM
 /**
  *  Flag when on will send all data for HTTP.  Suggested to be used in development only!
  *
@@ -76,6 +78,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @property (nonatomic) BOOL useHTTP;
 
+#warning Move to Collect
 /**
  *  Frequency at which visitor profile should be polled.  
  *  By default after each sendEventWithData: and sendViewWithData: call an updated visitor profile will be requested.
@@ -94,6 +97,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @property (nonatomic) TEALLogLevel logLevel;
 
+#warning Move to Collect
 /**
  *  Profile name Collect should use to query AudienceStream with.  Usually this is the account's main profile, however if a different profile is desired that profile's name goes here.
  *
@@ -108,7 +112,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 @property (nonatomic) BOOL autotrackingViewsEnabled;
 
 // TODO: comments
-@property (nonatomic) BOOL lifecycleEnabled;
+@property (nonatomic) BOOL autotrackingLifecycleEnabled;
 
 // TODO: comments
 @property (nonatomic) NSString *overridePublishSettingsURL;

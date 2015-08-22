@@ -1,38 +1,36 @@
 //
-//  TEALAutotrackDataSources.m
+//  TEALDatasources.m
 //  Tealium
 //
 //  Created by Jason Koo on 8/5/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALAutotrackDataSources.h"
+#import "TEALDataSources+Autotracking.h"
 #import "TEALDatasourceConstants.h"
 
-@implementation TEALAutotrackDataSources
-
+@implementation TEALDatasources (Autotracking)
 
 #pragma mark - PUBLIC CLASS METHODS
 
-+ (NSDictionary *) datasourcesForDispatchType:(TEALDispatchType)dispatchType
-                            withObject:(NSObject *)obj {
++ (NSDictionary *) autotrackDataSourcesForDispatchType:(TEALDispatchType)dispatchType
+                                   withObject:(NSObject *)obj {
     
     NSMutableDictionary *datasources = [NSMutableDictionary dictionary];
     
     datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_True;
     
-    
     if (dispatchType == TEALDispatchTypeEvent) {
-        [datasources addEntriesFromDictionary:[TEALAutotrackDataSources dataForEventCalls:obj]];
+        [datasources addEntriesFromDictionary:[self dataForEventCalls:obj]];
     }
     
     if (dispatchType == TEALDispatchTypeView) {
-        [datasources addEntriesFromDictionary:[TEALAutotrackDataSources dataForViewCalls:obj]];
+        [datasources addEntriesFromDictionary:[self dataForViewCalls:obj]];
     }
     
-    [datasources addEntriesFromDictionary:[TEALAutotrackDataSources dynamicUIDeviceData]];
+    [datasources addEntriesFromDictionary:[self dynamicUIDeviceData]];
     
-    [datasources addEntriesFromDictionary:[TEALAutotrackDataSources objectClassDataFor:obj]];
+    [datasources addEntriesFromDictionary:[self objectClassDataFor:obj]];
     
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
@@ -46,11 +44,11 @@
     
     switch (eventType) {
         case TEALDispatchTypeEvent:
-            title = [TEALAutotrackDataSources titleForTouchEventWithObject:obj];
+            title = [TEALDatasources titleForTouchEventWithObject:obj];
             break;
             
         case TEALDispatchTypeView:
-            title = [TEALAutotrackDataSources titleForViewEventWithObject:obj];
+            title = [TEALDatasources titleForViewEventWithObject:obj];
             break;
     }
     
@@ -125,7 +123,7 @@
 + (NSDictionary*) dataForEventCalls:(id)sender{
     
     NSString    *linkId = nil;
-    NSString    *title = [TEALAutotrackDataSources titleForEvent:sender];
+    NSString    *title = [TEALDatasources titleForEvent:sender];
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
     if (title) {
@@ -143,7 +141,7 @@
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
-    NSString    *title = [TEALAutotrackDataSources titleForView:sender];
+    NSString    *title = [TEALDatasources titleForView:sender];
     
     if (title) data[TEALDatasourceKey_ViewTitle] = title;
     
@@ -169,10 +167,10 @@
 + (NSDictionary*) dynamicUIDeviceData {
     
     // get runtime changable default data
-    NSString *batteryLevel = [TEALAutotrackDataSources batteryLevelAsPercentString];
-    NSString *batteryIsCharging = [TEALAutotrackDataSources batteryIsChargingAsString];
+    NSString *batteryLevel = [TEALDatasources batteryLevelAsPercentString];
+    NSString *batteryIsCharging = [TEALDatasources batteryIsChargingAsString];
     NSString *device = [[UIDevice currentDevice] model];
-    NSString *orientation = [TEALAutotrackDataSources getOrientation];
+    NSString *orientation = [TEALDatasources getOrientation];
     
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
     
@@ -196,11 +194,11 @@
     }
     
     // standardized return values
-    NSString    *objectClass = [TEALAutotrackDataSources objectClassFor:sender];
-    NSString    *subTitle = [TEALAutotrackDataSources subTitleFor:sender];
+    NSString    *objectClass = [TEALDatasources objectClassFor:sender];
+    NSString    *subTitle = [TEALDatasources subTitleFor:sender];
     NSString    *selectedRow = nil;
     NSString    *selectedSection = nil;
-    NSString    *selectedValue = [TEALAutotrackDataSources selectedValueFor:sender];
+    NSString    *selectedValue = [TEALDatasources selectedValueFor:sender];
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     
@@ -211,23 +209,23 @@
     
     if ([sender isKindOfClass:[UIViewController class]]){
         UIViewController *vc = sender;
-        [mDict addEntriesFromDictionary:[TEALAutotrackDataSources dataForView:vc.view]];
+        [mDict addEntriesFromDictionary:[TEALDatasources dataForView:vc.view]];
         
     } else if ([sender isKindOfClass:[UIWebView class]]){
         UIWebView *webView = sender;
-        [mDict addEntriesFromDictionary:[TEALAutotrackDataSources dataForWebView:webView]];
-        [mDict addEntriesFromDictionary:[TEALAutotrackDataSources dataForView:webView]];
+        [mDict addEntriesFromDictionary:[TEALDatasources dataForWebView:webView]];
+        [mDict addEntriesFromDictionary:[TEALDatasources dataForView:webView]];
         
     } else if ([sender isKindOfClass:[UIImagePickerController class]]){
         UIImagePickerController *picker = sender;
-        [mDict addEntriesFromDictionary:[TEALAutotrackDataSources imagePickerData:picker]];
+        [mDict addEntriesFromDictionary:[TEALDatasources imagePickerData:picker]];
         
     } else if ([sender isKindOfClass:[NSException class]]){
         NSException *exception = sender;
         NSString *name = exception.name;
         NSString *reason = exception.reason;
         NSArray *traceArray = exception.callStackSymbols;
-        NSString *trace = [TEALAutotrackDataSources stringifyExceptionTrace:traceArray];
+        NSString *trace = [TEALDatasources stringifyExceptionTrace:traceArray];
         NSMutableDictionary *eventDict = [NSMutableDictionary dictionary];
         eventDict[TEALDatasourceKey_ExceptionType] = TEALDatasourceValue_ExceptionCaught;
         
@@ -608,7 +606,7 @@
         title = [obj nibName];
     }
     if (!title) {
-        NSString *objClass = [TEALAutotrackDataSources objectClassFor:obj];
+        NSString *objClass = [TEALDatasources objectClassFor:obj];
         if (objClass) title = objClass;
     }
     

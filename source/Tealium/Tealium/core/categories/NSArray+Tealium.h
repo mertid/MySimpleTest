@@ -12,4 +12,6 @@
 
 - (NSArray *) teal_stringifiedArray;
 
+- (BOOL) teal_containsObjectOfClass:(Class)klass;
+
 @end

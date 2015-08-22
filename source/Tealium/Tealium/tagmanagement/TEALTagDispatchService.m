@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALTagNetworkService.h"
+#import "TEALTagDispatchService.h"
 #import <UIKit/UIKit.h>
 #import "TEALNetworkHelpers.h"
 #import "TEALDatasourceConstants.h"
@@ -15,15 +15,29 @@
 #import "TEALOperationManager.h"
 #import "NSDictionary+Tealium.h"
 
-@interface TEALTagNetworkService() <UIWebViewDelegate>
+@interface TEALTagDispatchService() <UIWebViewDelegate>
 
-@property (weak, nonatomic) id<TEALTagNetworkServiceConfiguration> configuration;
+@property (weak, nonatomic) NSString *publishURLString;
+@property (weak, nonatomic) TEALOperationManager *operationManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
 
 @end
 
-@implementation TEALTagNetworkService
+@implementation TEALTagDispatchService
 
+- (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager {
+    
+    self = [super init];
+    if (self) {
+        
+        _publishURLString = urlString;
+        _operationManager = operationManager;
+        
+    }
+    
+    return self;
+    
+}
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
 
@@ -31,21 +45,10 @@
     return self.status;
 }
 
-- (instancetype) initWithConfiguration:(id<TEALTagNetworkServiceConfiguration>)configuration{
-    
-    self = [super init];
-    
-    if (self){
-        _configuration = configuration;
-    }
-    
-    return self;
-}
-
 - (void) setup{
     
-    __weak TEALTagNetworkService *weakSelf = self;
-    NSString *urlString = [self.configuration tagTargetURLString];
+    __weak TEALTagDispatchService *weakSelf = self;
+    NSString *urlString = self.publishURLString;
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:urlString];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -58,20 +61,18 @@
 
 - (void) sendDispatch:(TEALDispatch *)dispatch completion:(TEALDispatchBlock)completion{
     
-    
     NSString *utagString = [self utagCommandFrom:dispatch.payload];
     
     __block __weak UIWebView *weakWebView = self.webView;
     __block NSString *result = nil;
     
-    
-    __weak TEALTagNetworkService *weakSelf = self;
+    __weak TEALTagDispatchService *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         result = [weakWebView stringByEvaluatingJavaScriptFromString:utagString];
         
         
-        [[weakSelf.configuration operationManager] addOperationWithBlock:^{
+        [weakSelf.operationManager addOperationWithBlock:^{
             
             if (result.length == 0 || [[result lowercaseString] isEqualToString:@"true"]){
                 
@@ -119,7 +120,7 @@
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     
-    [[self.configuration operationManager] addOperationWithBlock:^{
+    [self.operationManager addOperationWithBlock:^{
         self.status = TEALDispatchNetworkServiceStatusReady;
 
     }];
@@ -129,7 +130,7 @@
     
     // TODO: retry later?
     
-    [[self.configuration operationManager] addOperationWithBlock:^{
+    [self.operationManager addOperationWithBlock:^{
         
     }];
 }

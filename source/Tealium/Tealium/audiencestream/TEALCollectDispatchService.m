@@ -6,42 +6,59 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALCollectNetworkService.h"
-
+#import "TEALCollectDispatchService.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALURLSessionManager.h"
-
 #import "TEALDispatchConstants.h"
 #import "TEALDispatch.h"
-
 #import "TEALBlocks.h"
-
 #import "TEALLogger.h"
 
 
-@interface TEALCollectNetworkService ()
+@interface TEALCollectDispatchService ()
 
-@property (weak, nonatomic) id<TEALCollectNetworkServiceConfiguration> configuration;
+//@property (weak, nonatomic) id<TEALCollectNetworkServiceConfiguration> configuration;
+@property (nonatomic, weak) NSString *dispatchURLString;
+@property (nonatomic, weak) TEALURLSessionManager *sessionManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
 
 @end
 
-@implementation TEALCollectNetworkService
+@implementation TEALCollectDispatchService
 
-+ (instancetype) networkServiceWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
-    return [[[self class] alloc] initWithConfiguration:configuration];
+//+ (instancetype) networkServiceWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
+//    return [[[self class] alloc] initWithConfiguration:configuration];
+//}
+
+
+- (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString sessionManager:(TEALURLSessionManager *)sessionManager {
+    self = [super init];
+    if (self) {
+        _dispatchURLString = dispatchURLString;
+        _sessionManager = sessionManager;
+    }
+    return self;
 }
 
 
-- (instancetype) initWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
+//- (instancetype) initWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
+//    
+//    self = [self init];
+//    
+//    if (self) {
+//        _configuration = configuration;
+//    }
+//    
+//    return self;
+//}
+
+- (BOOL) isReady {
     
-    self = [self init];
-    
-    if (self) {
-        _configuration = configuration;
+    if (!self.dispatchURLString || !self.sessionManager) {
+        return NO;
     }
     
-    return self;
+    return YES;
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
@@ -58,7 +75,7 @@
            completion:(TEALDispatchBlock)completion {
     
     
-    if (!self.configuration) {
+    if (![self isReady]) {
         NSError *error = nil; // TODO: make error helper
         if (completion) {
             completion( TEALDispatchStatusFailed, dispatch, error);
@@ -66,7 +83,7 @@
         return;
     }
     
-    NSString *baseURLString = [self.configuration collectDispatchURLString];
+    NSString *baseURLString = self.dispatchURLString;
     
     NSError *error = nil;
     
@@ -97,8 +114,8 @@
         }
     };
     
-    [[self.configuration urlSessionManager] performRequest:request
-                                            withCompletion:requestCompletion];
+    [self.sessionManager performRequest:request
+                         withCompletion:requestCompletion];
 
 }
 

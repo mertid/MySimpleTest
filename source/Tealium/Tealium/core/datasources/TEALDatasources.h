@@ -28,6 +28,7 @@
 
 - (NSString *) applicationUUID;
 
+#warning Move to TEALCollect?
 - (NSString *) visitorID;
 
 - (NSDictionary *) dataSourcesCopy;

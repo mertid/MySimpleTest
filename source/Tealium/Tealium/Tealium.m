@@ -11,63 +11,29 @@
 #import "TEALDispatchManager.h"
 #import "TEALDelegateManager.h"
 #import "TEALVisitorProfileStore.h"
-#import "TEALSettings.h"
 
 // Queue / Operation Managers
-
 #import "TEALOperationManager.h"
 
 // Networking
 
-#import "TEALURLSessionManager.h"
 #import "TEALNetworkHelpers.h"
-#import "TEALDispatchNetworkService.h"
-#import "TEALCollectNetworkService.h"
-#import "TEALTagNetworkService.h"
-
-// Autotracking
-#import "TEALAutotrackingManager.h"
+#import "TEALDispatchService.h"
 
 // Events
 #import "TEALApplicationLifecycle.h"
 
-// Logging
-
-#import "TEALLogger.h"
-
 // Datasources
-
 #import "TEALDatasourceConstants.h"
 #import "TEALDataSources.h"
 
-// Profile
-
-#import "TEALVisitorProfileHelpers.h"
-
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
-                        TEALDispatchManagerConfiguration,
-                        TEALVisitorProfileStoreConfiguration,
-                        TEALCollectNetworkServiceConfiguration,
-                        TEALTagNetworkServiceConfiguration>
-
-@property (strong, nonatomic) TEALLogger *logger;
-@property (strong, nonatomic) TEALSettings *settings;
-@property (strong, nonatomic) TEALDispatchManager *dispatchManager;
-@property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
-@property (strong, nonatomic) TEALDatasources *dataSources;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
-
-@property (strong, nonatomic) NSArray *dispatchNetworkServices;
+                        TEALDispatchManagerConfiguration>
 
 @property (strong, nonatomic) TEALApplicationLifecycle *lifecycle;
-@property (strong, nonatomic) TEALAutotrackingManager *autotrackingManager;
 @property (strong, nonatomic) TEALDelegateManager *delegateManager;
-
-@property (copy, readwrite) TEALVisitorProfile *cachedProfile;
-
-@property (weak, nonatomic) UIWebView *tagManagementWebView;
+@property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 
 @property (readwrite) BOOL enabled;
 
@@ -122,7 +88,6 @@ __strong static Tealium *_sharedObject = nil;
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
         _delegateManager    = [[TEALDelegateManager alloc] init];
-        
     }
     
     return self;
@@ -151,30 +116,18 @@ __strong static Tealium *_sharedObject = nil;
     
     self.enabled = YES;
     
-    // AudienceStream
-    self.dataSources = [[TEALDatasources alloc]initWithInstanceID:configuration.instanceID];
-    
-    // TODO: Move later
-    self.profileStore = [[TEALVisitorProfileStore alloc] initWithConfiguration:self];  // needs valid visitorID
-    
+    __block typeof(self) __weak weakSelf = self;
+
     [self setupSettingsWithConfiguration:configuration visitorID:[self.dataSources visitorID] completion:^(BOOL success, NSError *error) {
         
-        
         if (success) {
-            self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
-                                                                                delegate:self];
-            
-            [self setupNetworkServicesForSettings:self.settings];
-            
-            [self setupLifecycleForSettings:self.settings];
-            
-            [self setupAutotrackingForSettings:self.settings];
-            
-            [self setupSettingsReachabilityCallbacks];
+
+            [weakSelf setupCore];
+            [weakSelf setupModules];
             
         } else {
             
-            [self disable];
+            [weakSelf disable];
             
         }
         
@@ -182,6 +135,43 @@ __strong static Tealium *_sharedObject = nil;
 
     }];
     
+}
+
+- (void) setupCore {
+    self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
+                                                                        delegate:self];
+    
+    self.dataSources = [[TEALDatasources alloc]initWithInstanceID:self.settings.instanceID];
+
+    [self setupSettingsReachabilityCallbacks];
+}
+
+- (void) setupModules {
+    
+    if ([self.settings autotrackingLifecycleEnabled]){
+        [self setupLifecycleForSettings:self.settings];
+    }
+    
+    if (!self.dispatchNetworkServices) {
+        self.dispatchNetworkServices = [NSMutableArray array];
+    }
+    
+    if ([self.settings tagManagementEnabled]){
+        [self enableTagManagement];
+    }
+    
+    if ([self.settings audienceStreamEnabled]){
+        [self enableAudienceStream];
+    }
+    
+    if ([self.settings autotrackingUIEventsEnabled]) {
+        
+        [self enableAutotrackingUIEvents];
+    }
+    if ([self.settings autotrackingViewsEnabled]) {
+
+        [self enableAutotrackingViews];
+    }
     
 }
 
@@ -225,6 +215,8 @@ __strong static Tealium *_sharedObject = nil;
 - (void) dispatchManager:(TEALDispatchManager *)dispatchManager didProcessDispatch:(TEALDispatch *)dispatch status:(TEALDispatchStatus)status {
     // Log + Fetch Profile
 
+#warning UPDATE To use NSNotifications
+    
     [self logDispatch:dispatch status:status];
     [self notifyDispatch:dispatch status:status];
     
@@ -232,11 +224,10 @@ __strong static Tealium *_sharedObject = nil;
         return;
     }
     
-    
-    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
-        
-        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
-    }];
+//    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+//        
+//        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
+//    }];
 }
 
 // Delegate Callback
@@ -322,29 +313,9 @@ __strong static Tealium *_sharedObject = nil;
     }];
 }
 
-- (void) setupAutotrackingForSettings:(TEALSettings *) settings {
-    
-    if ([settings autotrackingViewsEnabled] || [settings autotrackingUIEventsEnabled]) {
-        self.autotrackingManager = [[TEALAutotrackingManager alloc] init];
-    }
-    if ([settings autotrackingUIEventsEnabled]) {
-        [self.autotrackingManager enableEventTracking];
-    }
-    if ([settings autotrackingViewsEnabled]) {
-        [self.autotrackingManager enableViewTracking];
-    }
-    
-    //    else if (self.autotrackingManager) {
-    // TODO: disable
-    //        [self.autotrackingManager disable];
-    //        self.autotrackingManager = nil;
-    //    }
-    
-}
-
 - (void) setupLifecycleForSettings:(TEALSettings *) settings {
     
-    if ([settings lifecycleEnabled]){
+    if ([settings autotrackingLifecycleEnabled]){
         self.lifecycle = [[TEALApplicationLifecycle alloc] init];
         
         __weak Tealium *weakSelf = self;
@@ -361,68 +332,6 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-- (void) setupNetworkServicesForSettings:(TEALSettings *)settings {
-    
-    NSMutableArray *possibleNetworkServices = [NSMutableArray array];
-    
-    if ([settings tagManagementEnabled]){
-        TEALTagNetworkService *tagService = [[TEALTagNetworkService alloc] initWithConfiguration:self];
-        self.tagManagementWebView = tagService.webView;
-        [possibleNetworkServices addObject:tagService];
-    }
-    
-    if ([settings audienceStreamEnabled]){
-        TEALCollectNetworkService *collectService = [TEALCollectNetworkService networkServiceWithConfiguration:self];
-        [possibleNetworkServices addObject:collectService];
-    }
-    
-    // TODO: Use NSOperations
-    
-    self.dispatchNetworkServices = [NSArray arrayWithArray:possibleNetworkServices];
-    
-    for (id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
-        [service setup];
-    }
-    
-}
-
-- (void) fetchSettings:(TEALSettings *)settings
-            completion:(TEALBooleanCompletionBlock)fetchCompletion {
-    //    __weak Tealium *weakSelf = self;
-    //
-    //    [self.settingsStore fetchRemoteSettingsWithSetting:settings
-    //                                            completion:^(TEALRemoteSettings *settings, NSError *error) {
-    //
-    //                                                BOOL settingsSuccess = NO;
-    //
-    //                                                if (settings) {
-    //                                                    TEAL_LogVerbose(@"Retrieved settings: %@", settings);
-    //
-    //                                                    if (settings.status == TEALSettingsStatusLoadedRemote) {
-    //                                                        settingsSuccess = YES;
-    //                                                    }
-    //
-    //                                                    [weakSelf updateStateForSettingsStatus:settings.status];
-    //                                                }
-    //
-    //                                                if (error) {
-    //                                                    TEAL_LogVerbose(@"Problems while fetching settings: %@ \r error:%@", settings, [error localizedDescription]);
-    //                                                    settingsSuccess = NO;
-    //                                                }
-    //
-    //                                                [weakSelf.operationManager addOperationWithBlock:^{
-    //
-    //                                                    [weakSelf.settingsStore archiveCurrentSettings];
-    //                                                }];
-    //
-    //                                                if (fetchCompletion) {
-    //                                                    fetchCompletion(settingsSuccess, error);
-    //                                                }
-    //                                            }];
-    //
-    //
-    //    [self.dispatchManager unarchiveDispatchQueue];
-}
 
 - (void) setupSettingsReachabilityCallbacks {
     
@@ -438,6 +347,24 @@ __strong static Tealium *_sharedObject = nil;
         
         [weakSettings fetchPublishSettingsWithCompletion:nil];
     };
+}
+
+#pragma mark - RESERVED MODULE METHODS
+
+- (void) enableTagManagement {
+    // Replaced by module category
+}
+
+- (void) enableAudienceStream {
+    // Replaced by module category
+}
+
+- (void) enableAutotrackingUIEvents {
+    // Replaced by module category
+}
+
+- (void) enableAutotrackingViews {
+    // Replaced by module category
 }
 
 #pragma mark - PUBLIC CLASS METHODS
@@ -499,6 +426,11 @@ __strong static Tealium *_sharedObject = nil;
     }
 }
 
+- (BOOL) isEnabled {
+    return self.enabled? YES: NO;
+}
+
+
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     // capture time datasources
@@ -544,103 +476,6 @@ __strong static Tealium *_sharedObject = nil;
     
     return [NSDictionary dictionaryWithDictionary:compositeDictionary];
     
-}
-
-// AudienceStream
-
-- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        
-        if (!self.enabled) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-            return; // No fail log because these they should be logged once for each public method
-        }
-        
-        if (![self.settings audienceStreamEnabled]) {
-            
-            TEAL_LogVerbose(@"Audience Stream disabled, Ignoring: %s", __func__);
-            if (completion) {
-                
-                completion(nil, nil);
-            }
-            
-            return;
-        }
-        
-        TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
-            
-            if (profile) {
-                TEAL_LogVerbose(@"got profile!!! : %@", profile);
-                
-                weakSelf.cachedProfile = profile;
-                
-                completion(weakSelf.cachedProfile, nil);
-                
-            } else {
-                TEAL_LogVerbose(@"problem fetching profile: %@", [error localizedDescription]);
-            }
-        };
-        [weakSelf.profileStore fetchProfileWithCompletion:storeCompletion];
-        
-    }];
-}
-
-- (TEALVisitorProfile *) cachedVisitorProfileCopy {
-    
-    @synchronized(self) {
-        
-        return [self.cachedProfile copy];
-    }
-}
-
-- (NSString *) visitorIDCopy {
-    
-    @synchronized(self) {
-        return [self.dataSources visitorID];
-    }
-}
-
-- (void) joinTraceWithToken:(NSString *)token {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        if (!weakSelf.enabled) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-            return;
-        }
-        
-        if (!token || ![token length]) {
-            return;
-        }
-        
-        weakSelf.settings.traceID = token;
-    }];
-    
-}
-
-- (void) leaveTrace {
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        if (!weakSelf.enabled) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
-            return;
-        }
-        
-        weakSelf.settings.traceID = nil;
-    }];
-    
-}
-
-// Tag Managment
-
-- (UIWebView *) webView {
-    return self.tagManagementWebView;
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {
@@ -704,7 +539,7 @@ __strong static Tealium *_sharedObject = nil;
         if  ([self.delegateManager tealium:self shouldSendDispatch:dispatch]) {
             completionBlock(TEALDispatchStatusSent, dispatch, nil);
             
-            for ( id<TEALDispatchNetworkService> service in self.dispatchNetworkServices) {
+            for ( id<TEALDispatchService> service in self.dispatchNetworkServices) {
                 
                 [service sendDispatch:dispatch
                            completion:nil];
@@ -763,38 +598,5 @@ __strong static Tealium *_sharedObject = nil;
         
     return [self.settings offlineDispatchQueueSize];
 }
-
-#pragma mark - TEALCollectNetworkServiceConfiguration
-
-- (NSString *) collectDispatchURLString {
-    
-    return [self.settings dispatchURLString];
-}
-
-#pragma mark - TEALTagNetworkServiceConfiguration
-
-- (NSString*) tagTargetURLString {
-    
-    return [self.settings publishURLString];
-    
-}
-
-
-#pragma mark - TEALVisitorProfileStoreConfiguration
-
-- (NSString *) visitorID {
-    return [self.dataSources visitorID];
-}
-
-- (NSURL *) profileURL {
-    
-    return [self.settings profileURL];
-}
-
-- (NSURL *) profileDefinitionURL {
-    
-    return [self.settings profileDefinitionsURL];
-}
-
 
 @end

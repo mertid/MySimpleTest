@@ -8,12 +8,11 @@
 //  !!! CONVERT TO TEALDatasources+TEALAutotracking
 
 #import <UIKit/UIKit.h>
+#import "TEALDatasources.h"
 #import "TEALDispatch.h"
 
-@interface TEALAutotrackDataSources : NSObject
+@interface TEALDatasources (Autotracking)
 
-+ (NSDictionary *) datasourcesForDispatchType:(TEALDispatchType)dispatchType
-                            withObject:(NSObject *)obj;
-
++ (NSDictionary *) autotrackDataSourcesForDispatchType:(TEALDispatchType)dispatchType withObject:(NSObject *)obj;
 
 @end

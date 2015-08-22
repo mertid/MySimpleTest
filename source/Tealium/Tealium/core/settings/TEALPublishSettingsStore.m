@@ -50,10 +50,15 @@
     
     NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:self.instanceId];
     
-    id settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
+    id settings = nil;
+    
+    if (!settingsData){
+        return nil;
+    }
+    
+    settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
     
     if (![settings isKindOfClass:([TEALPublishSettings class])]){
-        
         
         return nil;
     }

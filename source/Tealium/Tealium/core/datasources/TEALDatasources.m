@@ -74,6 +74,8 @@ const char * kTEALDatasourcesQueueName = "com.tealium.datasources.queue";
     return datasources;
 }
 
+#warning Rename to mainThread something...
+
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];

@@ -22,10 +22,10 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
 - (BOOL) audienceStreamEnabled;
+- (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) isValid;
-- (BOOL) lifecycleEnabled;
 - (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
 
@@ -33,22 +33,31 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSString *) asProfile;
 - (NSString *) tiqProfile;
 - (NSString *) environment;
-- (NSString *) dispatchURLString;
-- (NSString *) publishSettingsDescription;
-- (NSString *) publishSettingsURLString;
-- (NSString *) publishURLString;
-- (NSString *) visitorIDCopy;
+- (NSString *) instanceID;
 
 - (NSUInteger) dispatchSize;
 - (NSUInteger) logLevel;
 - (NSUInteger) offlineDispatchQueueSize;
-- (NSUInteger) pollingFrequency;
 
+
+#warning Move to TagM
+- (NSString *) publishSettingsDescription;
+- (NSString *) publishSettingsURLString;
+- (NSString *) publishURLString;
+
+#warning Move to Collect
+- (NSString *) dispatchURLString;
+- (NSString *) visitorIDCopy;
+- (NSUInteger) pollingFrequency;
 - (NSURL *) profileURL;
 - (NSURL *) profileDefinitionsURL;
-
 - (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
 - (void) loadArchivedSettings;
 - (void) setVisitorIDCopy:(NSString *)visitorID;
+
+
+
+
+
 
 @end

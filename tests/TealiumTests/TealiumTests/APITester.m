@@ -8,6 +8,7 @@
 
 #import "APITester.h"
 #import <Tealium/Tealium.h>
+#import <Tealium/Tealium+Collect.h>
 #import "ShowViewTableViewCell.h"
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
@@ -170,6 +171,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 - (void) joinTraceWithToken:(NSString *)token {
     
     [[Tealium sharedInstance] joinTraceWithToken:token];
+//    [[Tealium sharedInstance] joinTraceWithToken:token];
 }
 
 - (void) leaveTrace {

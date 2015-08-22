@@ -182,7 +182,7 @@
                                             @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement]
                                             };
     
-    return [NSString teal_descriptionForObject:self fromDictionary:descriptionDictionary];
+    return [NSString teal_descriptionForObject:self description:@"Remote settings from TIQ" fromDictionary:descriptionDictionary];
 }
 #pragma mark - PUBLIC
 

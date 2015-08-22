@@ -149,6 +149,10 @@
     return self.publishSettings.enableAudienceStream;
 }
 
+- (BOOL) autotrackingLifecycleEnabled {
+    return self.configuration.autotrackingLifecycleEnabled;
+}
+
 - (BOOL) autotrackingUIEventsEnabled {
     return self.configuration.autotrackingUIEventsEnabled;
 }
@@ -159,10 +163,6 @@
 
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
-}
-    
-- (BOOL) lifecycleEnabled {
-    return self.configuration.lifecycleEnabled;
 }
 
 - (BOOL) tagManagementEnabled {
@@ -187,6 +187,10 @@
 
 - (NSString *) environment {
     return self.configuration.environmentName;
+}
+
+- (NSString *) instanceID {
+    return self.configuration.instanceID;
 }
 
 - (NSString *) dispatchURLString {

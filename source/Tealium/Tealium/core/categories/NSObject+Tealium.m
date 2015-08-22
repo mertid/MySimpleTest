@@ -11,6 +11,7 @@
 #import "NSDictionary+Tealium.h"
 
 static CFStringRef  const TealiumCM_KVOUniqueIdentifier = CFSTR("TealiumAutotracking_KVOUniqueIdentifier");
+
 char const * const TealiumKVO_CustomData =                      "com.tealium.customdata";
 
 @implementation NSObject (Tealium)

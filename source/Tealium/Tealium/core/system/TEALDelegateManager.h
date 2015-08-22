@@ -5,7 +5,6 @@
 //  Created by Jason Koo on 7/22/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
-//  ??? STILL NEEDED
 
 #import <Foundation/Foundation.h>
 #import "TealiumDelegate.h"

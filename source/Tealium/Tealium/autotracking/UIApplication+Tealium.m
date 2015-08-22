@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 #import "Tealium.h"
 #import "TEALDatasourceConstants.h"
-#import "TEALAutotrackDataSources.h"
+#import "TEALDataSources+Autotracking.h"
 #import "NSObject+Tealium.h"
 
 @implementation UIApplication (Tealium)
@@ -77,8 +77,7 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     
     
     // Includes eventTitle
-    NSDictionary *autoDataSources = [TEALAutotrackDataSources datasourcesForDispatchType:TEALDispatchTypeEvent
-                                                        withObject:target];
+    NSDictionary *autoDataSources = [TEALDatasources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:target];
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
     
