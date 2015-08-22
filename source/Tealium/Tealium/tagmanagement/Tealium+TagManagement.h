@@ -6,10 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-
 #import "Tealium.h"
-
-extern BOOL const TEAL_MODULE_TAGMANAGEMENT_ENABLED;
 
 @interface Tealium (TagManagement)
 

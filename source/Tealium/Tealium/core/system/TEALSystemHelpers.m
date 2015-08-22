@@ -27,6 +27,20 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
     return [@"collect-" stringByAppendingString:kTEALCollectLibraryVersion];
 }
 
++ (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries {
+    
+    NSMutableDictionary *compositeDictionary = [NSMutableDictionary dictionary];
+    
+    for (NSDictionary *dictionary in dictionaries) {
+        if ([dictionary isKindOfClass:([NSDictionary class])]){
+            [compositeDictionary addEntriesFromDictionary:dictionary];
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
+    
+}
+
 + (NSString *) mpsVersionNumber {
     // Version number with .x and .x.x versions stripped
     

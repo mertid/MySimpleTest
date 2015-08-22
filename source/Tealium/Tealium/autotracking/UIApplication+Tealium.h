@@ -9,10 +9,11 @@
 //  TODO: Rename to UIApplication+TEALAutotracking
 
 #import <UIKit/UIKit.h>
+#import "TEALBlocks.h"
 
 @interface UIApplication (Tealium)
 
-+ (void) swizzle;
++ (void) swizzleWithCompletion:(TEALBooleanCompletionBlock)completion;
 
 
 @end

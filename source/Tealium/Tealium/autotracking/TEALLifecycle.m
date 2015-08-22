@@ -6,21 +6,33 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALApplicationLifecycle.h"
-#import <UIKit/UIKit.h>
+#import "TEALLifecycle.h"
+#import "TEALLifecycleStore.h"
 #import "Tealium.h"
 #import "TEALLogger.h"
-
 #import "TEALDatasourceConstants.h"
 
-@interface TEALApplicationLifecycle ()
+@interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
-@property (copy, nonatomic) TEALDictionaryCompletionBlock eventProcessingBlock;
+@property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
+@property (nonatomic, strong) NSString *instanceID;
 
 @end
 
-@implementation TEALApplicationLifecycle
+@implementation TEALLifecycle
+
+#warning ADD milestone date tracking system
+
+- (instancetype) initWithInstanceID:(NSString *)instanceID {
+    self = [super init];
+    if (self) {
+        
+        _instanceID = instanceID;
+        
+    }
+    return self;
+}
 
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block {
     
@@ -31,8 +43,6 @@
     self.eventProcessingBlock = block;
     
     NSArray *events = @[
-//                        UIApplicationDidFinishLaunchingNotification,
-//                        UIApplicationWillEnterForegroundNotification,
                         UIApplicationDidBecomeActiveNotification,
                         UIApplicationDidEnterBackgroundNotification,
                         UIApplicationWillTerminateNotification
@@ -54,6 +64,16 @@
         self.enabled = NO;
     }
 }
+
+- (BOOL) isEnabled {
+    return self.enabled;
+}
+
+- (NSString *) instanceIDCopy {
+    return [self.instanceID copy];
+}
+
+#pragma mark - PRIVATE INSTANCE
 
 - (void) processLifecycleEvent:(NSNotification*) notification {
     
@@ -78,14 +98,17 @@
         eventName = TEALDatasourceValue_LifecycleTerminate;
     }
 
-    NSDictionary *lifecycleData = @{TEALDatasourceKey_Autotracked : TEALDatasourceValue_True,
-                                    TEALDatasourceKey_LifecycleType: eventName};
+    NSDictionary *lifecycleData = @{TEALDatasourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {
         // TODO: Add error handling?
         
         self.eventProcessingBlock(lifecycleData, nil);
     }
+}
+
+- (NSString *) description {
+    return [NSString stringWithFormat:@"TEALLifecycle with instanceID: %@", self.instanceID];
 }
 
 @end

@@ -19,8 +19,8 @@
 
 #warning Move to Audiencestream
 
-#import "TEALVisitorProfile.h"
-#import "TEALVisitorProfileCurrentVisit.h"
+//#import "TEALVisitorProfile.h"
+//#import "TEALVisitorProfileCurrentVisit.h"
 
 // Dispatch
 #import "TEALDispatch.h"
@@ -41,11 +41,11 @@
 
 #warning Make readonly if possible - check categories
 
-@property (strong, nonatomic) TEALDatasources *dataSources;
+@property (readonly, nonatomic) TEALDatasources *dataSources;
 @property (strong, nonatomic) NSArray *dispatchNetworkServices;
 @property (strong, nonatomic) TEALLogger *logger;
 @property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALSettings *settings;
+@property (readonly, nonatomic) TEALSettings *settings;
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
 
 

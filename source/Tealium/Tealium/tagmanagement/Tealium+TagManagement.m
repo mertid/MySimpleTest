@@ -9,17 +9,37 @@
 #import "Tealium+TagManagement.h"
 #import "TEALTagDispatchService.h"
 #import "NSArray+Tealium.h"
+#import "NSString+Tealium.h"
 #import <objc/runtime.h>
-
-BOOL const TEAL_MODULE_TAGMANAGEMENT_ENABLED = 1;
 
 char const * const TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW = "com.tealium.kvo.tagmanagement.webview";
 
 @implementation Tealium (TagManagement)
 
 - (void) enableTagManagement {
-        NSLog(@"%s ", __FUNCTION__);
-    [self tagManagement_enable];
+    
+    if ([[self.dispatchNetworkServices copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
+        return;
+    }
+    
+    NSMutableArray *newServices = [NSMutableArray arrayWithArray:self.dispatchNetworkServices];
+    
+    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
+    
+    [tagService setup];
+    
+    [newServices addObject:tagService];
+    
+    self.dispatchNetworkServices = [NSArray arrayWithArray:newServices];
+    
+    [self.logger logVerbose:@"TagManagement active."];
+
+}
+
+- (void) disableTagManagement {
+
+#warning COMPLETE
+    
 }
 
 - (UIWebView *) webView {
@@ -45,22 +65,5 @@ char const * const TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW = "com.tealium.kvo.tagmanag
     return webView;
 }
 
-- (void) tagManagement_enable {
-    
-    if ([[self.dispatchNetworkServices copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
-        return;
-    }
-    
-    NSMutableArray *newServices = [NSMutableArray arrayWithArray:self.dispatchNetworkServices];
-    
-    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
-    
-    [tagService setup];
-
-    [newServices addObject:tagService];
-    
-    self.dispatchNetworkServices = [NSArray arrayWithArray:newServices];
-    
-}
 
 @end

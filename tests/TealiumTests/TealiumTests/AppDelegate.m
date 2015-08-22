@@ -43,9 +43,23 @@
     [[Tealium sharedInstance] setDelegate:self];
     
     
-    if (configuration.autotrackingUIEventsEnabled == NO){
-        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
-    }
+    
+    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                           profile:@"demo"
+                                                                       environment:@"dev"];
+    
+    instanceConfig.logLevel = TEALLogLevelVerbose;
+    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    instanceConfig.autotrackingLifecycleEnabled = YES;
+    instanceConfig.autotrackingUIEventsEnabled = NO;
+    instanceConfig.autotrackingViewsEnabled = NO;
+    
+    self.tealiumInstance = [Tealium instanceWithConfiguration:instanceConfig];
+    [self.tealiumInstance setDelegate:self];
+    
+//    if (configuration.autotrackingUIEventsEnabled == NO){
+//        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
+//    }
     
 #endif
     
@@ -94,10 +108,10 @@
 }
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
-    NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+    NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
-        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+        NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
 }
 @end

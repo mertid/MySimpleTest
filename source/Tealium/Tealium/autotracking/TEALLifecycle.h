@@ -6,12 +6,16 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "TEALBlocks.h"
 
-@interface TEALApplicationLifecycle : NSObject
+@interface TEALLifecycle : NSObject
 
+- (instancetype) initWithInstanceID:(NSString *)instanceID;
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block;
 - (void) disable;
+- (BOOL) isEnabled;
+
+- (NSString *) instanceIDCopy;
 
 @end

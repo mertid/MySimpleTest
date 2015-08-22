@@ -15,8 +15,8 @@
 
 @implementation UIViewController (Tealium)
 
-+ (void) swizzle {
-    
++ (void) swizzleWithCompletion:(TEALBooleanCompletionBlock)completion{
+
     Method origMethod = class_getInstanceMethod(self, @selector(viewDidAppear:));
     oViewDidAppear = (void *)method_getImplementation(origMethod);
     
@@ -26,6 +26,8 @@
                         method_getTypeEncoding(origMethod))) {
         method_setImplementation(origMethod, (IMP)teal_viewDidAppear);
     }
+    
+    if (completion) completion(YES, nil);
 }
 
 void (*oViewDidAppear)(id, SEL, bool a);

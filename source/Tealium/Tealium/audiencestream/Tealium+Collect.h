@@ -12,6 +12,9 @@
 
 #import "Tealium.h"
 
+#import "TEALVisitorProfile.h"
+#import "TEALVisitorProfileCurrentVisit.h"
+
 #import "TEALVisitorProfileBaseAttribute.h"
 #import "TEALVisitorProfileAudienceAttribute.h"
 #import "TEALVisitorProfileBadgeAttribute.h"

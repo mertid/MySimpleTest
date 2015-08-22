@@ -17,11 +17,13 @@
 
 void (*oSendEvent)(id, SEL, UIEvent *e);
 
-+ (void) swizzle {
++ (void) swizzleWithCompletion:(TEALBooleanCompletionBlock)completion {
     
     Method origMethod1 = class_getInstanceMethod(self, @selector(sendEvent:));
     oSendEvent = (void *)method_getImplementation(origMethod1);
     if(!class_addMethod(self, @selector(sendEvent:), (IMP)teal_sendEvent, method_getTypeEncoding(origMethod1))) method_setImplementation(origMethod1, (IMP)teal_sendEvent);
+    
+    if (completion) completion(YES, nil);
 }
 
 // duplicate suppression

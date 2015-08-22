@@ -38,6 +38,9 @@ char const * const TEALIUM_KVO_COLLECT_PROFILESTORE = "com.tealium.kvo.collect.p
     [newServices addObject:dispatchService];
     
     self.dispatchNetworkServices = [NSArray arrayWithArray:newServices];
+    
+    [self.logger logVerbose:@"Audiencestream active."];
+
 }
 
 - (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {

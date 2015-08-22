@@ -22,6 +22,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
 - (BOOL) audienceStreamEnabled;
+- (BOOL) autotrackingIvarsEnabled;
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
@@ -40,7 +41,6 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSUInteger) offlineDispatchQueueSize;
 
 
-#warning Move to TagM
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;
 - (NSString *) publishURLString;

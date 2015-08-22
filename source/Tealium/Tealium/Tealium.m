@@ -10,30 +10,25 @@
 
 #import "TEALDispatchManager.h"
 #import "TEALDelegateManager.h"
-#import "TEALVisitorProfileStore.h"
+//#import "TEALVisitorProfileStore.h"
 
-// Queue / Operation Managers
 #import "TEALOperationManager.h"
-
-// Networking
 
 #import "TEALNetworkHelpers.h"
 #import "TEALDispatchService.h"
 
-// Events
-#import "TEALApplicationLifecycle.h"
-
-// Datasources
 #import "TEALDatasourceConstants.h"
 #import "TEALDataSources.h"
+#import "TEALSystemHelpers.h"
 
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
                         TEALDispatchManagerConfiguration>
 
-@property (strong, nonatomic) TEALApplicationLifecycle *lifecycle;
+@property (strong, nonatomic) TEALDatasources *dataSources;
 @property (strong, nonatomic) TEALDelegateManager *delegateManager;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
+@property (strong, nonatomic) TEALSettings *settings;
 
 @property (readwrite) BOOL enabled;
 
@@ -149,11 +144,7 @@ __strong static Tealium *_sharedObject = nil;
 - (void) setupModules {
     
     if ([self.settings autotrackingLifecycleEnabled]){
-        [self setupLifecycleForSettings:self.settings];
-    }
-    
-    if (!self.dispatchNetworkServices) {
-        self.dispatchNetworkServices = [NSMutableArray array];
+        [self enableAutotrackingLifecycle];
     }
     
     if ([self.settings tagManagementEnabled]){
@@ -313,26 +304,6 @@ __strong static Tealium *_sharedObject = nil;
     }];
 }
 
-- (void) setupLifecycleForSettings:(TEALSettings *) settings {
-    
-    if ([settings autotrackingLifecycleEnabled]){
-        self.lifecycle = [[TEALApplicationLifecycle alloc] init];
-        
-        __weak Tealium *weakSelf = self;
-        
-        [weakSelf.lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
-            
-            [weakSelf trackEventWithTitle:nil dataSources:dataDictionary];
-        }];
-        
-    } else if (self.lifecycle){
-        [self.lifecycle disable];
-        self.lifecycle = nil;
-    }
-    
-}
-
-
 - (void) setupSettingsReachabilityCallbacks {
     
     if (self.urlSessionManager.reachability.reachableBlock) {
@@ -349,6 +320,14 @@ __strong static Tealium *_sharedObject = nil;
     };
 }
 
+- (NSString *) description {
+    
+    NSString *version = [TEALSystemHelpers tealiumIQlibraryVersion];
+    NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", self.settings.account, self.settings.tiqProfile, self.settings.environment];
+    
+    return [NSString stringWithFormat:@"TEALIUM %@: instance:%@: ", version, accountProfileEnvironment];
+}
+
 #pragma mark - RESERVED MODULE METHODS
 
 - (void) enableTagManagement {
@@ -357,6 +336,11 @@ __strong static Tealium *_sharedObject = nil;
 
 - (void) enableAudienceStream {
     // Replaced by module category
+}
+
+- (void) enableAutotrackingLifecycle {
+    
+    // Replaced by category method
 }
 
 - (void) enableAutotrackingUIEvents {
@@ -430,11 +414,10 @@ __strong static Tealium *_sharedObject = nil;
     return self.enabled? YES: NO;
 }
 
-
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     // capture time datasources
-    NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
+    NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                          [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
                                                                          clientDataSources
                                                                          ]];
@@ -451,7 +434,7 @@ __strong static Tealium *_sharedObject = nil;
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    NSDictionary *captureTimeDataSources = [self compositeDictionaries:@[
+    NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                          [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
                                                                          clientDataSources
                                                                          ]];
@@ -462,20 +445,6 @@ __strong static Tealium *_sharedObject = nil;
         [weakSelf sendEvent:TEALDispatchTypeView withData:captureTimeDataSources title:title];
         
     }];
-}
-
-- (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries {
-    
-    NSMutableDictionary *compositeDictionary = [NSMutableDictionary dictionary];
-    
-    for (NSDictionary *dictionary in dictionaries) {
-        if ([dictionary isKindOfClass:([NSDictionary class])]){
-            [compositeDictionary addEntriesFromDictionary:dictionary];
-        }
-    }
-    
-    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
-    
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {

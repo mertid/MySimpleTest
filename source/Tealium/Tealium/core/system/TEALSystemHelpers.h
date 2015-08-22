@@ -14,6 +14,8 @@
 
 + (NSString *) collectLibraryVersion;
 
++ (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries;
+
 + (NSString *) mpsVersionNumber;
 
 + (NSString *) architecture;

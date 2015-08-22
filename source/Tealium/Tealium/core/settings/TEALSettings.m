@@ -149,6 +149,10 @@
     return self.publishSettings.enableAudienceStream;
 }
 
+- (BOOL) autotrackingIvarsEnabled {
+    return self.configuration.autotrackingIvarsEnabled;
+}
+
 - (BOOL) autotrackingLifecycleEnabled {
     return self.configuration.autotrackingLifecycleEnabled;
 }

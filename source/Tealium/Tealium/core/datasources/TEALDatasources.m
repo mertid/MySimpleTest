@@ -57,19 +57,19 @@ const char * kTEALDatasourcesQueueName = "com.tealium.datasources.queue";
     //
     //    [datasources addEntriesFromDictionary:systemInfo];
     //
-    //    datasources[TEALDatasourceKey_CallType]         = [TEALDispatch stringFromDispatchType:eventType];
+        datasources[TEALDatasourceKey_CallType]         = [TEALDispatch stringFromDispatchType:eventType];
     //    datasources[TEALDatasourceKey_ApplicationName]  = self[TEALDatasourceKey_ApplicationName];
     //
-    //    switch (eventType) {
-    //        case TEALDispatchTypeEvent:
-    //            datasources[TEALDatasourceKey_EventName] = self[TEALDatasourceKey_EventName];
-    //            break;
-    //        case TEALDispatchTypeView:
-    //            datasources[TEALDatasourceKey_Pagetype] = self[TEALDatasourceKey_Pagetype];
-    //            break;
-    //        default:
-    //            break;
-    //    }
+//        switch (eventType) {
+//            case TEALDispatchTypeEvent:
+//                datasources[TEALDatasourceKey_EventName] = self[TEALDatasourceKey_EventName];
+//                break;
+//            case TEALDispatchTypeView:
+//                datasources[TEALDatasourceKey_Pagetype] = self[TEALDatasourceKey_Pagetype];
+//                break;
+//            default:
+//                break;
+//        }
     
     return datasources;
 }

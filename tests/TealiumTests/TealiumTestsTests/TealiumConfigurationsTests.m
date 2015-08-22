@@ -86,6 +86,20 @@
     
 }
 
+- (void) testUpperCaseAccount {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"ACCOUNT"
+                                                             profile:@"demo"
+                                                         environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    XCTAssertTrue(self.library.enabled, @"Library should have been disabled.");
+    
+    NSString *accountOutput = self.library.settings.account;
+    
+    XCTAssertTrue([accountOutput isEqualToString:@"account"], @"Account name did not lowercase");
+}
+
 - (void) testNilTIQProfile {
     
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
@@ -107,6 +121,20 @@
     
     XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
     
+}
+
+- (void) testUpperCaseTIQProfile {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"account"
+                                                             profile:@"DeMo"
+                                                         environment:@"dev"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    XCTAssertTrue(self.library.enabled, @"Library should have been disabled.");
+    
+    NSString *output = self.library.settings.tiqProfile;
+    
+    XCTAssertTrue([output isEqualToString:@"demo"], @"TIQ Profile name did not lowercase");
 }
 
 - (void) testNilEnvironment {
@@ -131,6 +159,21 @@
     XCTAssertTrue(!self.library.enabled, @"Library should have been disabled.");
     
 }
+
+- (void) testUpperCaseEnvironment {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"account"
+                                                             profile:@"demo"
+                                                         environment:@"DeV"];
+    [self enableLibraryWithConfiguration:self.configuration];
+    
+    XCTAssertTrue(self.library.enabled, @"Library should have been disabled.");
+    
+    NSString *output = self.library.settings.environment;
+    
+    XCTAssertTrue([output isEqualToString:@"dev"], @"Environment name did not lowercase");
+}
+
 
 #pragma mark - AUTOTRACKING ENABLEMENT TESTS
 
