@@ -19,10 +19,10 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 @implementation Tealium (Autotracking)
 
-- (void) enableAutotrackingIvars {
-#warning IMPLMENT
-    
-}
+//- (void) enableAutotrackingIvars {
+//#warning IMPLMENT
+//    
+//}
 
 - (void) enableAutotrackingLifecycle {
     

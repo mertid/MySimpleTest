@@ -72,6 +72,7 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
     dispatch_barrier_async(self.queue, ^{
         
         self.dataSources[aKey] = object;
+        
     });
 }
 
@@ -132,17 +133,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
     }
 }
 
-- (NSDictionary *) systemInfoDatasources {
-    
-    NSMutableDictionary *dataSources = [self dataSourcesForKeys:@[TEALDataSourceKey_Platform,
-                                                                  TEALDataSourceKey_SystemVersion,
-                                                                  TEALDataSourceKey_LibraryVersion]];
-    
-    dataSources[TEALDataSourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
-    
-    return dataSources;
-}
-
 - (NSMutableDictionary *) dataSourcesForKeys:(NSArray *)keys {
     
     NSMutableDictionary *dataSources = [NSMutableDictionary new];
@@ -166,20 +156,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
                 format:@"Please use initWithInstanceID method."];
     return nil;
 }
-
-//- (void) addStaticDatasource {
-//    
-//    self[TEALDataSourceKey_EventName]   = TEALDataSourceValue_EventName;
-//    self[TEALDataSourceKey_Pagetype]    = TEALDataSourceValue_Pagetype;
-//    self[TEALDataSourceKey_Platform]    = TEALDataSourceValue_Platform;
-//}
-
-//- (void) addSystemDataSources {
-//    
-//    self[TEALDataSourceKey_SystemVersion]      = [[UIDevice currentDevice] systemVersion];
-//    self[TEALDataSourceKey_LibraryVersion]     = TEALLibraryVersion;
-//    self[TEALDataSourceKey_ApplicationName]    = [TEALSystemHelpers applicationName];
-//}
 
 - (NSDictionary *) queuedFlagWithValue:(BOOL)value {
     

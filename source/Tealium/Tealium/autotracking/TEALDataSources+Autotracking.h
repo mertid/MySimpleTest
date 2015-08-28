@@ -11,10 +11,9 @@
 
 @interface TEALDataSources (Autotracking)
 
-#warning ADD ivar tracking system
-
 + (NSDictionary *) autotrackDataSourcesForDispatchType:(TEALDispatchType)dispatchType withObject:(NSObject *)obj;
 
++ (NSDictionary *) ivarDataForObject:(NSObject *)object;
 
 
 @end

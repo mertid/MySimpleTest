@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, TEALDispatchType) {
+    TEALDispatchTypeNone,
     TEALDispatchTypeEvent,
     TEALDispatchTypeView
 };

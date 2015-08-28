@@ -39,7 +39,7 @@
     [Tealium sharedInstanceWithConfiguration:configuration];
     [[Tealium sharedInstance] setDelegate:self];
     
-
+//    [[Tealium sharedInstance] setPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
     
 //    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
 //                                                                           profile:@"non-exsist"

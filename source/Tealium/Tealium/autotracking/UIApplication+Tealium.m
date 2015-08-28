@@ -84,12 +84,15 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     }
     
     // Includes eventTitle
-    NSDictionary *autoDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:target];
+    NSDictionary *autoDataSources = [target teal_autotrackDataSources];
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
     
-    NSDictionary *ivars = [target teal_autotrackIvarDataSources];
-    [dataSources addEntriesFromDictionary:ivars];
+    if ([Tealium sharedInstance].settings.autotrackingIvarsEnabled){
+        NSDictionary *ivars = [target teal_autotrackIvarDataSources];
+        [dataSources addEntriesFromDictionary:ivars];
+    }
+
     
     NSDictionary *customDataSources = [target teal_dataSources];
     [dataSources addEntriesFromDictionary:customDataSources];

@@ -28,6 +28,8 @@
 
 @implementation TEALVisitorProfileStore
 
+#warning Where's the account-profile change check?
+
 - (instancetype) initWithVisitorID:(NSString *)visitorID profileURL:(NSURL *)profileURL profileDefinitionURL:(NSURL *)profileDefinitionURL urlSessionManager:(TEALURLSessionManager *)sessionManager {
     
     self = [super init];

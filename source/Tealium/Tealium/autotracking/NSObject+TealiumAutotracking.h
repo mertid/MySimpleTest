@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface NSObject (TealiumAutotracking)
 

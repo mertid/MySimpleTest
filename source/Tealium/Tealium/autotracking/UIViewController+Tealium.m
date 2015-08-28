@@ -39,12 +39,14 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
         [Tealium sharedInstance].settings.autotrackingViewsEnabled) {
 
         // Auto captures title
-        NSDictionary *autoDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeView withObject:self];
+        NSDictionary *autoDataSources = [self teal_autotrackDataSources];//[TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeView withObject:self];
         
         NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
         
-        NSDictionary *ivars = [self teal_autotrackIvarDataSources];
-        [dataSources addEntriesFromDictionary:ivars];
+        if ([Tealium sharedInstance].settings.autotrackingIvarsEnabled){
+            NSDictionary *ivars = [self teal_autotrackIvarDataSources];
+            [dataSources addEntriesFromDictionary:ivars];
+        }
         
         NSDictionary *customDataSources = [self teal_dataSources];
         [dataSources addEntriesFromDictionary:customDataSources];

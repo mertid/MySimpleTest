@@ -153,11 +153,11 @@ __strong static Tealium *_sharedObject = nil;
     
     self.modulesDelegate = self;
     
-    if ([self.settings autotrackingIvarsEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingIvars)]){
-            [self.modulesDelegate enableAutotrackingIvars];
-        }
-    }
+//    if ([self.settings autotrackingIvarsEnabled]){
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingIvars)]){
+//            [self.modulesDelegate enableAutotrackingIvars];
+//        }
+//    }
     
     if ([self.settings autotrackingLifecycleEnabled]){
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]){
@@ -455,6 +455,7 @@ __strong static Tealium *_sharedObject = nil;
     // capture time datasources
     NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                          [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         [self.dataSources persistentDataSources],
                                                                          clientDataSources
                                                                          ]];
     
@@ -472,6 +473,7 @@ __strong static Tealium *_sharedObject = nil;
     
     NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                          [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
+                                                                         [self.dataSources persistentDataSources],
                                                                          clientDataSources
                                                                          ]];
     __weak Tealium *weakSelf = self;
@@ -483,13 +485,27 @@ __strong static Tealium *_sharedObject = nil;
     }];
 }
 
-- (NSDictionary *) persistentDataSourcesCopy {
-    return [self.dataSources dataSourcesCopy];
+- (NSDictionary *) baselineDataSources {
+    
+    NSDictionary *captureTime = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeNone title:nil];
+    NSDictionary *transmissionTime = [self.dataSources transmissionTimeDatasourcesForEventType:TEALDispatchTypeNone];
+    NSDictionary *composite = [TEALSystemHelpers compositeDictionaries:@[captureTime, transmissionTime]];
+    
+    return composite;
+    
+}
+
+- (NSDictionary *) persistentDataSources {
+    return [[self.dataSources persistentDataSources] copy];
 }
 
 - (void) setPersistentDataSources:(NSDictionary *) newDataSources {
     
-    [self.dataSources setDataSources:newDataSources];
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+       [weakSelf.dataSources setPersistentDataSources:newDataSources];
+    }];
 }
 
 #pragma mark - TEALDispatchManagerDelegate methods

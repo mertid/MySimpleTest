@@ -90,7 +90,11 @@
 
 /*
  */
-- (NSDictionary *) persistentDataSourcesCopy;
+- (NSDictionary *) baselineDataSources;
+
+/*
+ */
+- (NSDictionary *) persistentDataSources;
 
 /*
  */

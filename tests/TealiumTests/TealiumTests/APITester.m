@@ -35,6 +35,11 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
                                                
                                                NSLog(@"%s Response Received: %@", __FUNCTION__, response);
                                            }];
+    
+    NSLog(@"%s BaselineData:%@", __FUNCTION__, [[Tealium sharedInstance] baselineDataSources]);
+    
+    NSLog(@"%s PersistentData:%@", __FUNCTION__, [[Tealium sharedInstance] persistentDataSources]);
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {

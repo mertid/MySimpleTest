@@ -15,6 +15,7 @@
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
 #warning BASELINE datasources (combine relevant transmission and capture time data)
+
 /*
  Data Sources that can be processed in the background
  */
@@ -25,15 +26,23 @@
  */
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 
+/*
+ // TODO Comments
+ */
+- (NSDictionary *) persistentDataSources;
+
+/*
+ // TODO Comments
+ */
+- (void) setPersistentDataSources:(NSDictionary *)newDataSources;
+
+
 // HELPERS
 
 - (NSString *) applicationUUID;
 
 - (NSString *) visitorIDCopy;
 
-- (NSDictionary *) dataSourcesCopy;
-
-- (void) setDataSources:(NSDictionary *)newDataSources;
 
 
 @end

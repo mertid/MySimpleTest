@@ -21,6 +21,7 @@
     
     self.title = @"Second View Controller";
     [self teal_setDataSources:@{@"test":@"executeTestCommand"}];
+    self.iVarTestProperty = @"iVarTestValue";
 }
 
 - (void)viewWillAppear:(BOOL)animated{

@@ -8,6 +8,7 @@
 
 #import "TEALDataSources+Autotracking.h"
 #import "TEALDataSourceConstants.h"
+#import <objc/runtime.h>
 
 @implementation TEALDataSources (Autotracking)
 
@@ -33,7 +34,102 @@
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
 
+//+ (NSDictionary *) ivarDataForObject:(NSObject *)obj {
+//    
+//    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+//    
+//    __block NSDictionary *ivars = [TEALDataSources ivarDataForClass:[obj class]];
+//    
+//    NSArray *allKeys = [ivars allKeys];
+//    for (id key in allKeys){
+//        if (![key isKindOfClass:[NSObject class]]) continue;
+//        id aObject = [ivars objectForKey:key];
+//        
+//        if (![aObject isKindOfClass:[NSString class]] &&
+//            ![aObject isKindOfClass:[NSNumber class]] &&
+//            [aObject isKindOfClass:[NSObject class]]) aObject = NSStringFromClass([aObject class]);
+//        
+//        NSString * modKey = [NSString stringWithFormat:@"ivar_%@", key];
+//        if (aObject){
+//            mDict[modKey] = aObject;
+//            NSString *value = [NSString stringWithFormat:@"%@", aObject];
+//            if (value){
+//                mDict[modKey] = value;
+//            }
+//        }
+//    }
+//    
+//    NSDictionary *dict = [NSDictionary dictionaryWithDictionary:mDict];
+//    return dict;
+//    
+//}
+
++ (NSDictionary *) ivarDataForObject:(NSObject *)object {
+    // requires <objc/runtime.h>
+    
+    __block NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    unsigned count;
+    objc_property_t *properties = class_copyPropertyList([object class], &count);
+    
+    for (unsigned int i = 0; i < count; i++) {
+        if (!properties[i]) continue;
+        NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
+        if (!key) continue;
+        
+        SEL aSelector = NSSelectorFromString(key);
+        if ([object respondsToSelector:aSelector]){
+            id aObject;
+            @try                            {
+                aObject = [object valueForKey:key];
+            }
+            @catch (NSException *exception) {                                       }
+            @finally                        {                                       }
+            
+            if (![aObject isKindOfClass:[NSString class]] &&
+                ![aObject isKindOfClass:[NSNumber class]] &&
+                [aObject isKindOfClass:[NSObject class]]) aObject = NSStringFromClass([aObject class]);
+            
+            NSString * modKey = [NSString stringWithFormat:@"ivar_%@", key];
+            if (aObject) mDict[modKey] = aObject;
+        }
+    }
+    
+    free(properties);
+    
+    NSDictionary *propertyDict = [NSDictionary dictionaryWithDictionary:mDict];
+    return propertyDict;
+}
+
+
 #pragma mark - PRIVATE CLASS METHODS
+
++ (NSDictionary*) ivarDataForClass:(id)klass{
+    // Requires <objc/runtime.h>
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    unsigned int count;
+    Ivar* ivars = class_copyIvarList([klass class], &count);
+    for(unsigned int i = 0; i < count; ++i)
+    {
+        const char * ivarChar = ivar_getName(ivars[i]);
+        NSString *ivarKey = [NSString stringWithUTF8String:ivarChar];
+        SEL aSelector = NSSelectorFromString(ivarKey);
+        if ([klass respondsToSelector:aSelector]) {
+            id value;
+            @try                            { value = [klass valueForKey:ivarKey];  }
+            @catch (NSException *exception) {                                       }
+            @finally                        {                                       }
+            if (ivarKey && value){
+                NSString *modKey = [NSString stringWithFormat:@"ivar_%@", ivarKey];
+                mDict[modKey] = value;
+            }
+        }
+    }
+    free(ivars);
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+}
 
 + (NSString *) titleForEvent:(TEALDispatchType)eventType
                   withObject:(NSObject *)obj {
@@ -47,6 +143,8 @@
             
         case TEALDispatchTypeView:
             title = [TEALDataSources titleForViewEventWithObject:obj];
+            break;
+        default:
             break;
     }
     
@@ -397,6 +495,7 @@
     return string;
 }
 
+#warning MOVE THIS
 + (NSString*) stringifyExceptionTrace:(NSArray*)callStack{
     NSMutableString *mString = [NSMutableString string];
     for (NSString *string in callStack){

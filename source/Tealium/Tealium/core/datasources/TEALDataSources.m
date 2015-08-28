@@ -37,7 +37,6 @@
     self = [super init];
     
     if (self) {
-//        _queue = dispatch_queue_create(kTEALDatasourcesQueueName, DISPATCH_QUEUE_CONCURRENT);
         _instanceID = instanceID;
         _store = [[TEALDataSourceStore alloc] initWithInstanceID:instanceID];
     }
@@ -48,8 +47,8 @@
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
     
-    [datasources addEntriesFromDictionary:[self staticData]];
-    [datasources addEntriesFromDictionary:[self compileTimeData]];
+    [datasources addEntriesFromDictionary:[self staticDatasources]];
+    [datasources addEntriesFromDictionary:[self compileTimeDataSources]];
 
     switch (eventType) {
         case TEALDispatchTypeEvent:
@@ -63,12 +62,8 @@
     }
     
     NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
-    NSString *uuid = [self applicationUUID];
-    NSString *vId = [self visitorIDCopy];
     
     if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
-    if (uuid)   datasources[TEALDataSourceKey_UUID] = uuid;
-    if (vId)    datasources[TEALDataSourceKey_VisitorID] = vId;
     
     return datasources;
 }
@@ -115,7 +110,7 @@
 
 - (NSString *) visitorIDCopy {
     
-    NSString *visitorID = self.dataSourcesCopy[TEALDataSourceKey_VisitorID];
+    NSString *visitorID = [self persistentDataSources][TEALDataSourceKey_VisitorID];
     
     if (!visitorID) {
 
@@ -132,11 +127,11 @@
     return visitorID;
 }
 
-- (NSDictionary *) dataSourcesCopy {
+- (NSDictionary *) persistentDataSources {
     return [self.store dataSourcesCopy];
 }
 
-- (void) setDataSources:(NSDictionary *)newDataSources {
+- (void) setPersistentDataSources:(NSDictionary *)newDataSources {
     [self.store setNewDataSources:newDataSources];
 }
 
@@ -168,7 +163,7 @@
     return self.compileTimeData;
 }
 
-- (NSDictionary *) staticDatasource {
+- (NSDictionary *) staticDatasources {
     
     if (!self.staticData){
         self.staticData = @{

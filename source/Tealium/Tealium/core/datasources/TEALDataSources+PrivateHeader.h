@@ -13,7 +13,6 @@
 @interface TEALDataSources_Private : NSObject
 
 @property (nonatomic, strong) NSMutableDictionary *datasources;
-//@property (nonatomic, strong) TEALDataSourceStore *store;
 
 - (id) instanceStore;
 
