@@ -6,26 +6,26 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALSharedDatasources.h"
+#import "TEALSharedDataSources.h"
 
-const char * kTEALDatasourceStoreQueueName = "com.tealium.shareddatasources.queue";
+const char * kTEALDatasourceSharedStoreQueueName = "com.tealium.shareddatasources.queue";
 
-@interface TEALSharedDatasources()
+@interface TEALSharedDataSources()
 
 @property (nonatomic, strong) dispatch_queue_t queue;
 @property (nonatomic, strong) NSMutableDictionary *datasources;
 
 @end
 
-@implementation TEALSharedDatasources
+@implementation TEALSharedDataSources
 
 + (instancetype) sharedStore {
 
     static dispatch_once_t onceToken = 0;
-    __strong static TEALSharedDatasources *_sharedStore = nil;
+    __strong static TEALSharedDataSources *_sharedStore = nil;
 
     dispatch_once(&onceToken, ^{
-        _sharedStore = [[TEALSharedDatasources alloc] initPrivate];
+        _sharedStore = [[TEALSharedDataSources alloc] initPrivate];
     });
 
     return _sharedStore;
@@ -36,7 +36,7 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.shareddatasources.queu
     self = [super init];
 
     if (self) {
-        _queue = dispatch_queue_create(kTEALDatasourceStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
+        _queue = dispatch_queue_create(kTEALDatasourceSharedStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
         _datasources = [NSMutableDictionary new];
     }
     return self;

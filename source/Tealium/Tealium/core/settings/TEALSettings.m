@@ -14,7 +14,7 @@
 #import "TEALLogger.h"
 #import "TEALConfiguration.h"
 #import "TEALURLSessionManager.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
 
 @interface TEALSettings()
 
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSString *audienceStreamDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
-@property (nonatomic, strong) NSString *visitorID;
+@property (nonatomic, weak) NSString *visitorID;
 @property (nonatomic, strong) NSURL *audienceStreamProfileURL;
 @property (nonatomic, strong) NSURL *audienceStreamProfileDefinitionsURL;
 
@@ -165,6 +165,11 @@
     return self.configuration.autotrackingViewsEnabled;
 }
 
+- (BOOL) remoteCommandsEnabled {
+    return self.configuration.remoteCommandsEnabled;
+}
+
+
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
 }
@@ -222,12 +227,12 @@
     return self.tiqPublishURLString;
 }
 
-- (NSString *) visitorIDCopy {
-    if (!self.visitorID) {
-        return @"";
-    }
-    return [self.visitorID copy];
-}
+//- (NSString *) visitorIDCopy {
+//    if (!self.visitorID) {
+//        return @"";
+//    }
+//    return [self.visitorID copy];
+//}
 
 - (NSUInteger) dispatchSize {
     return self.publishSettings.dispatchSize;
@@ -325,9 +330,9 @@
     [self.publishSettings loadArchived];
 }
 
-- (void) setVisitorIDCopy:(NSString *)visitorID {
-    
-    self.visitorID = visitorID;
-}
+//- (void) setVisitorIDCopy:(NSString *)visitorID {
+//    
+//    self.visitorID = visitorID;
+//}
 
 @end

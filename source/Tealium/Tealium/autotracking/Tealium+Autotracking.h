@@ -11,7 +11,9 @@
 #endif
 
 #import "Tealium.h"
+#import "TEALModulesDelegate.h"
+#import "NSObject+TealiumAutotracking.h"
 
-@interface Tealium (AutoTracking)
+@interface Tealium (AutoTracking) <TEALModulesDelegate>
 
 @end

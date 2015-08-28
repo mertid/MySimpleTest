@@ -8,25 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-// Configuration
-
 #import "TEALConfiguration.h"
-#import "TEALDatasources.h"
-#import "TEALLogger.h"
-#import "TEALOperationManager.h"
-#import "TEALSettings.h"
-#import "TEALURLSessionManager.h"
-
-#warning Move to Audiencestream
-
-//#import "TEALVisitorProfile.h"
-//#import "TEALVisitorProfileCurrentVisit.h"
-
-// Dispatch
 #import "TEALDispatch.h"
-#import "TEALBlocks.h"
 #import "TealiumDelegate.h"
 #import "NSObject+Tealium.h"
+#import "TEALSettings.h"
 
 /**
  *  Tealium is the main class for the Tealium Library.
@@ -39,15 +25,7 @@
  */
 @interface Tealium : NSObject
 
-#warning Make readonly if possible - check categories
-
-@property (readonly, nonatomic) TEALDatasources *dataSources;
-@property (strong, nonatomic) NSArray *dispatchNetworkServices;
-@property (strong, nonatomic) TEALLogger *logger;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
 @property (readonly, nonatomic) TEALSettings *settings;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
-
 
 # pragma mark - Setup / Configuration
 

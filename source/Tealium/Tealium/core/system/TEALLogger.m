@@ -7,7 +7,7 @@
 //
 
 #import "TEALLogger.h"
-#import "TEALSystemHelpers.h"
+#import "TEALDataSourceConstants.h"
 
 static TEALLogLevel _audienceStreamLogLevel;
 
@@ -20,7 +20,7 @@ static TEALLogLevel _audienceStreamLogLevel;
 @implementation TEALLogger
 
 + (NSString *) messageHeaderFromConfiguration:(TEALConfiguration *) configuration {
-    NSString *version = [TEALSystemHelpers tealiumIQlibraryVersion];
+    NSString *version = TEALLibraryVersion;
     NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", configuration.accountName, configuration.profileName, configuration.environmentName];
     
     return [NSString stringWithFormat:@"TEALIUM %@: instance:%@: ", version, accountProfileEnvironment];
@@ -49,10 +49,11 @@ static TEALLogLevel _audienceStreamLogLevel;
 }
 
 - (void) logVerbose:(NSString *) format, ...{
-    
+        
     NSString *message = nil;
     va_list args;
     va_start(args, format);
+    
     message = [[NSString alloc] initWithFormat:format
                                      arguments:args];
     va_end(args);
@@ -110,7 +111,7 @@ static TEALLogLevel _audienceStreamLogLevel;
                                          arguments:args];
         va_end(args);
 
-        NSString *version = [TEALSystemHelpers tealiumIQlibraryVersion];
+        NSString *version = TEALLibraryVersion; //[TEALSystemHelpers tealiumIQlibraryVersion];
         
         NSLog(@"TEALIUM %@: %@", version, message);
     }

@@ -9,9 +9,10 @@
 #import "UIApplication+Tealium.h"
 #import <objc/runtime.h>
 #import "Tealium.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
 #import "TEALDataSources+Autotracking.h"
 #import "NSObject+Tealium.h"
+#import "NSObject+TealiumAutotracking.h"
 
 @implementation UIApplication (Tealium)
 
@@ -47,6 +48,7 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     
     if (touch.phase == UITouchPhaseEnded && view){
         NSDate *now = [NSDate date];
+            NSLog(@"%s now:%@", __FUNCTION__, now);
         if ([now compare:_lastEventTS] == NSOrderedAscending && _lastEvent == view) {
             isViable = NO;
         }
@@ -77,14 +79,21 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         return;
     }
     
+    if (![Tealium sharedInstance].settings.autotrackingUIEventsEnabled){
+        return;
+    }
     
     // Includes eventTitle
-    NSDictionary *autoDataSources = [TEALDatasources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:target];
+    NSDictionary *autoDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:target];
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
     
+    NSDictionary *ivars = [target teal_autotrackIvarDataSources];
+    [dataSources addEntriesFromDictionary:ivars];
+    
     NSDictionary *customDataSources = [target teal_dataSources];
     [dataSources addEntriesFromDictionary:customDataSources];
+
     
     [[Tealium sharedInstance] trackEventWithTitle:nil
                                       dataSources:dataSources];

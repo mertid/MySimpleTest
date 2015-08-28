@@ -12,7 +12,7 @@
 
 @interface TEALDatasourceStoreTests : XCTestCase
 
-@property (nonatomic, strong) TEALDatasourceStore *store;
+@property (nonatomic, strong) TEALDataSourceStore *store;
 
 @end
 

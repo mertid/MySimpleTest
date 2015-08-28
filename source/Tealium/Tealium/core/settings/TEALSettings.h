@@ -18,6 +18,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 
 @property (nonatomic, weak) TEALURLSessionManager *urlSessionManager;
 @property (nonatomic, weak) NSString *traceID;
+@property (nonatomic, weak) NSString *visitorIDCopy;
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
@@ -26,6 +27,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
+- (BOOL) remoteCommandsEnabled;
 - (BOOL) isValid;
 - (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
@@ -44,16 +46,12 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;
 - (NSString *) publishURLString;
-
-#warning Move to Collect
 - (NSString *) dispatchURLString;
-- (NSString *) visitorIDCopy;
 - (NSUInteger) pollingFrequency;
 - (NSURL *) profileURL;
 - (NSURL *) profileDefinitionsURL;
 - (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
 - (void) loadArchivedSettings;
-- (void) setVisitorIDCopy:(NSString *)visitorID;
 
 
 

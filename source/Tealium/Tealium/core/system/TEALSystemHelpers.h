@@ -10,10 +10,6 @@
 
 @interface TEALSystemHelpers : NSObject
 
-+ (NSString *) tealiumIQlibraryVersion;
-
-+ (NSString *) collectLibraryVersion;
-
 + (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries;
 
 + (NSString *) mpsVersionNumber;

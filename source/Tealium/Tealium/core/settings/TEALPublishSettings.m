@@ -159,12 +159,16 @@
 }
 
 - (void) storeTagManagmentSettingFromSettings:(NSDictionary *)settings {
+
     
-    NSString *tagmanagement = settings[@"tag_management"];
+#warning RESET when done building
+    self.enableTagManagement =  YES;
     
-    if (tagmanagement) {
-        self.enableTagManagement = [tagmanagement boolValue];
-    }
+//    NSString *tagmanagement = settings[@"tag_management"];
+//
+//    if (tagmanagement) {
+//        self.enableTagManagement = [tagmanagement boolValue];
+//    }
 }
 
 - (NSString *) description {
@@ -201,7 +205,8 @@
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
         _enableAudienceStream           = YES;
-        _enableTagManagement            = NO;
+#warning FLIP enableTagManagment TO NO FOR RELEASE
+        _enableTagManagement            = YES;
         _store = [[TEALPublishSettingsStore alloc] initWithInstanceID:url];
     }
     return self;

@@ -7,9 +7,9 @@
 //
 
 #import "TEALDataSources+Autotracking.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
 
-@implementation TEALDatasources (Autotracking)
+@implementation TEALDataSources (Autotracking)
 
 #pragma mark - PUBLIC CLASS METHODS
 
@@ -18,7 +18,7 @@
     
     NSMutableDictionary *datasources = [NSMutableDictionary dictionary];
     
-    datasources[TEALDatasourceKey_Autotracked] = TEALDatasourceValue_True;
+    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_True;
     
     if (dispatchType == TEALDispatchTypeEvent) {
         [datasources addEntriesFromDictionary:[self dataForEventCalls:obj]];
@@ -28,10 +28,8 @@
         [datasources addEntriesFromDictionary:[self dataForViewCalls:obj]];
     }
     
-    [datasources addEntriesFromDictionary:[self dynamicUIDeviceData]];
-    
     [datasources addEntriesFromDictionary:[self objectClassDataFor:obj]];
-    
+        
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
 
@@ -44,11 +42,11 @@
     
     switch (eventType) {
         case TEALDispatchTypeEvent:
-            title = [TEALDatasources titleForTouchEventWithObject:obj];
+            title = [TEALDataSources titleForTouchEventWithObject:obj];
             break;
             
         case TEALDispatchTypeView:
-            title = [TEALDatasources titleForViewEventWithObject:obj];
+            title = [TEALDataSources titleForViewEventWithObject:obj];
             break;
     }
     
@@ -123,16 +121,16 @@
 + (NSDictionary*) dataForEventCalls:(id)sender{
     
     NSString    *linkId = nil;
-    NSString    *title = [TEALDatasources titleForEvent:sender];
+    NSString    *title = [TEALDataSources titleForEvent:sender];
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
     if (title) {
-        data[TEALDatasourceKey_SelectedTitle] = title;
+        data[TEALDataSourceKey_SelectedTitle] = title;
         linkId = [linkId stringByAppendingFormat:@": %@", title];
     }
-    if (linkId) data[TEALDatasourceKey_EventTitle] = linkId;
+    if (linkId) data[TEALDataSourceKey_EventTitle] = linkId;
     
-    data[TEALDatasourceKey_CallType] = [TEALDispatch stringFromDispatchType:TEALDispatchTypeEvent];
+    data[TEALDataSourceKey_CallType] = [TEALDispatch stringFromDispatchType:TEALDispatchTypeEvent];
     
     return [NSDictionary dictionaryWithDictionary:data];
 }
@@ -141,11 +139,11 @@
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
-    NSString    *title = [TEALDatasources titleForView:sender];
+    NSString    *title = [TEALDataSources titleForView:sender];
     
-    if (title) data[TEALDatasourceKey_ViewTitle] = title;
+    if (title) data[TEALDataSourceKey_ViewTitle] = title;
     
-    data[TEALDatasourceKey_CallType] = [TEALDispatch stringFromDispatchType:TEALDispatchTypeView];
+    data[TEALDataSourceKey_CallType] = [TEALDispatch stringFromDispatchType:TEALDispatchTypeView];
     
     return [NSDictionary dictionaryWithDictionary:data];
 }
@@ -157,30 +155,11 @@
     NSNumber *w = [NSNumber numberWithFloat:width];
     NSNumber *h = [NSNumber numberWithFloat:height];
     if (w && h) {
-        mDict[TEALDatasourceKey_ViewHeight] = h;
-        mDict[TEALDatasourceKey_ViewWidth] = w;
+        mDict[TEALDataSourceKey_ViewHeight] = h;
+        mDict[TEALDataSourceKey_ViewWidth] = w;
     }
     if (mDict) return mDict;
     return nil;
-}
-
-+ (NSDictionary*) dynamicUIDeviceData {
-    
-    // get runtime changable default data
-    NSString *batteryLevel = [TEALDatasources batteryLevelAsPercentString];
-    NSString *batteryIsCharging = [TEALDatasources batteryIsChargingAsString];
-    NSString *device = [[UIDevice currentDevice] model];
-    NSString *orientation = [TEALDatasources getOrientation];
-    
-    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
-    
-    // if particular data is not available, skip
-    if (batteryLevel)                       mDict[TEALDatasourceKey_DeviceBatteryLevel] = batteryLevel;
-    if (batteryIsCharging)                  mDict[TEALDatasourceKey_DeviceIsCharging] = batteryIsCharging;
-    if (device)                             mDict[TEALDatasourceKey_Device] = device;
-    if (orientation)                        mDict[TEALDatasourceKey_Orientation] = orientation;
-    
-    return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
 + (NSDictionary*) objectClassDataFor:(id)sender{
@@ -194,11 +173,11 @@
     }
     
     // standardized return values
-    NSString    *objectClass = [TEALDatasources objectClassFor:sender];
-    NSString    *subTitle = [TEALDatasources subTitleFor:sender];
+    NSString    *objectClass = [TEALDataSources objectClassFor:sender];
+    NSString    *subTitle = [TEALDataSources subTitleFor:sender];
     NSString    *selectedRow = nil;
     NSString    *selectedSection = nil;
-    NSString    *selectedValue = [TEALDatasources selectedValueFor:sender];
+    NSString    *selectedValue = [TEALDataSources selectedValueFor:sender];
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     
@@ -209,36 +188,36 @@
     
     if ([sender isKindOfClass:[UIViewController class]]){
         UIViewController *vc = sender;
-        [mDict addEntriesFromDictionary:[TEALDatasources dataForView:vc.view]];
+        [mDict addEntriesFromDictionary:[TEALDataSources dataForView:vc.view]];
         
     } else if ([sender isKindOfClass:[UIWebView class]]){
         UIWebView *webView = sender;
-        [mDict addEntriesFromDictionary:[TEALDatasources dataForWebView:webView]];
-        [mDict addEntriesFromDictionary:[TEALDatasources dataForView:webView]];
+        [mDict addEntriesFromDictionary:[TEALDataSources dataForWebView:webView]];
+        [mDict addEntriesFromDictionary:[TEALDataSources dataForView:webView]];
         
     } else if ([sender isKindOfClass:[UIImagePickerController class]]){
         UIImagePickerController *picker = sender;
-        [mDict addEntriesFromDictionary:[TEALDatasources imagePickerData:picker]];
+        [mDict addEntriesFromDictionary:[TEALDataSources imagePickerData:picker]];
         
     } else if ([sender isKindOfClass:[NSException class]]){
         NSException *exception = sender;
         NSString *name = exception.name;
         NSString *reason = exception.reason;
         NSArray *traceArray = exception.callStackSymbols;
-        NSString *trace = [TEALDatasources stringifyExceptionTrace:traceArray];
+        NSString *trace = [TEALDataSources stringifyExceptionTrace:traceArray];
         NSMutableDictionary *eventDict = [NSMutableDictionary dictionary];
-        eventDict[TEALDatasourceKey_ExceptionType] = TEALDatasourceValue_ExceptionCaught;
+        eventDict[TEALDataSourceKey_ExceptionType] = TEALDataSourceValue_ExceptionCaught;
         
-        if (name) eventDict[TEALDatasourceKey_ExceptionName] = name;
-        if (reason) eventDict[TEALDatasourceKey_ExceptionReason] = reason;
-        if (trace) eventDict[TEALDatasourceKey_ExceptionTrace] = trace;
+        if (name) eventDict[TEALDataSourceKey_ExceptionName] = name;
+        if (reason) eventDict[TEALDataSourceKey_ExceptionReason] = reason;
+        if (trace) eventDict[TEALDataSourceKey_ExceptionTrace] = trace;
     }
     
-    if (objectClass)    mDict[TEALDatasourceKey_ObjectClass] = objectClass;
+    if (objectClass)    mDict[TEALDataSourceKey_ObjectClass] = objectClass;
     if (subTitle)       [mDict setObject:subTitle forKey:@"subtitle"];
-    if (selectedRow)     mDict[TEALDatasourceKey_SelectedRow] = selectedRow;
-    if (selectedSection) mDict[TEALDatasourceKey_SelectedSection] = selectedSection;
-    if (selectedValue)  mDict[TEALDatasourceKey_SelectedValue] = selectedValue;
+    if (selectedRow)     mDict[TEALDataSourceKey_SelectedRow] = selectedRow;
+    if (selectedSection) mDict[TEALDataSourceKey_SelectedSection] = selectedSection;
+    if (selectedValue)  mDict[TEALDataSourceKey_SelectedValue] = selectedValue;
     
     NSDictionary *dict = [[NSDictionary alloc]initWithDictionary:mDict];
     
@@ -257,51 +236,8 @@
     return NO;
 }
 
-//+ (NSString*) accessibilityLabelFor:(id) obj{
-//    NSString *string = nil;
-//    
-//    if ([obj respondsToSelector:@selector(accessibilityLabel)])
-//        string = [obj accessibilityLabel];
-//    return string;
-//}
-
-+ (NSString *) batteryLevelAsPercentString {
-    
-    float ddFloat = 0.0;
-    
-    if(![UIDevice currentDevice].isBatteryMonitoringEnabled){
-        [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-    }
-    ddFloat = [UIDevice currentDevice].batteryLevel * 100;
-    
-    NSString *percentString = [NSString stringWithFormat:@"%.0f", ddFloat];
-    
-    if (percentString) {
-        return percentString;
-    } else {
-        return TEALDatasourceValue_Unknown;
-    }
-}
-
-+ (NSString *) batteryIsChargingAsString {
-    
-    NSString *string = @"false";
-    
-    if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
-        string = @"true";
-    }
-    
-    return string;
-}
-
-+ (NSString*) currentLanguage{
-    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    if(language) return language;
-    return nil;
-}
-
 + (NSDictionary*) dataForWebView:(UIWebView*)webView{
-    NSString *serviceType = TEALDatasourceValue_Unknown;
+    NSString *serviceType = TEALDataSourceValue_Unknown;
     NSURLRequest *request = webView.request;
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     switch (request.networkServiceType) {
@@ -321,49 +257,16 @@
             serviceType = @"voice";
             break;
         default:
-            serviceType = TEALDatasourceValue_Unknown;
+            serviceType = TEALDataSourceValue_Unknown;
             break;
     }
     
     NSString *url = request.URL.absoluteString;
     
-    if (serviceType)  mDict[TEALDatasourceKey_WebViewServiceType] = serviceType;
-    if (url)          mDict[TEALDatasourceKey_WebViewURL] = url;
+    if (serviceType)  mDict[TEALDataSourceKey_WebViewServiceType] = serviceType;
+    if (url)          mDict[TEALDataSourceKey_WebViewURL] = url;
     
     return mDict;
-}
-
-+ (NSString*) getOrientation {
-    
-    NSString *string = nil;
-    
-    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (interfaceOrientation == UIInterfaceOrientationPortrait) string = @"Portrait";
-    else if (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) string = @"Portrait UpsideDown";
-    
-    // Interface orientation landscape left and right are opposite of device orientation landscape left and right
-    else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) string = @"Landscape Right";
-    else if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) string = @"Landscape Left";
-    
-    if (string) {
-        return string;
-    }
-    
-    // Fallback
-    
-    UIDevice *device = [UIDevice currentDevice];
-    if (device.orientation == UIDeviceOrientationPortrait) string = @"Portrait";
-    else if (device.orientation == UIDeviceOrientationLandscapeLeft) string = @"Landscape Left";
-    else if (device.orientation == UIDeviceOrientationLandscapeRight)string = @"Landscape Right";
-    else if (device.orientation == UIDeviceOrientationPortraitUpsideDown) string = @"Portrait UpsideDown";
-    else if (device.orientation == UIDeviceOrientationFaceUp) string = @"Face up";
-    else if (device.orientation == UIDeviceOrientationFaceDown) string = @"Face Down";
-    
-    if (!string) {
-        string = TEALDatasourceValue_Unknown;
-    }
-    
-    return string;
 }
 
 + (NSDictionary*) imagePickerData:(UIImagePickerController*)picker{
@@ -518,39 +421,6 @@
     return string;
 }
 
-+ (NSString*) timestampAsISOFrom:(NSDate*)date{
-    // modified from original by Radu Poenaru
-    NSDateFormatter *_sISO8601 = nil;
-    
-    if (!_sISO8601) {
-        _sISO8601 = [[NSDateFormatter alloc] init];
-        
-        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-        [_sISO8601 setTimeZone:timeZone];
-        
-        NSMutableString *strFormat = [NSMutableString stringWithString:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        
-        [_sISO8601 setTimeStyle:NSDateFormatterFullStyle];
-        [_sISO8601 setDateFormat:strFormat];
-    }
-    if (date) return[_sISO8601 stringFromDate:date];
-    return nil;
-}
-
-+ (NSString*) timestampAsISOLocalFrom:(NSDate*) date{
-    // modified from original by Radu Poenaru
-    NSDateFormatter *_sISO8601Local = nil;
-    if (!_sISO8601Local) {
-        _sISO8601Local = [[NSDateFormatter alloc] init];
-        
-        NSMutableString *strFormat = [NSMutableString stringWithString:@"yyyy-MM-dd'T'HH:mm:ss"];
-        [_sISO8601Local setTimeStyle:NSDateFormatterFullStyle];
-        [_sISO8601Local setDateFormat:strFormat];
-    }
-    if (date) return[_sISO8601Local stringFromDate:date];
-    return nil;
-}
-
 + (NSString*) titleForEvent:(id)obj{
     NSString *title = nil;
     
@@ -606,17 +476,11 @@
         title = [obj nibName];
     }
     if (!title) {
-        NSString *objClass = [TEALDatasources objectClassFor:obj];
+        NSString *objClass = [TEALDataSources objectClassFor:obj];
         if (objClass) title = objClass;
     }
     
     return title;
-}
-
-+ (NSString*) localGMTOffset{
-    // return hours offset
-    int offset = (int)([[NSTimeZone localTimeZone] secondsFromGMT] / 3600);
-    return [NSString stringWithFormat:@"%i", offset];
 }
 
 @end

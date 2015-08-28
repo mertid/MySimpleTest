@@ -28,32 +28,6 @@
 
 @implementation TEALVisitorProfileStore
 
-//- (instancetype) initWithConfiguration:(id<TEALVisitorProfileStoreConfiguration>)configuration {
-//    
-//    self = [self init];
-//    
-//    if (!self) {
-//        return nil;
-//    }
-//    
-//    if (!configuration) {
-//        return nil;
-//    }
-//
-//    NSString *visitorID = [configuration visitorID];
-//    
-//    if (!visitorID) {
-//        return nil;
-//    }
-//
-//    _configuration = configuration;
-//    
-//    _currentProfile = [[TEALVisitorProfile alloc] initWithVisitorID:visitorID];
-//    
-//    return self;
-//}
-
-
 - (instancetype) initWithVisitorID:(NSString *)visitorID profileURL:(NSURL *)profileURL profileDefinitionURL:(NSURL *)profileDefinitionURL urlSessionManager:(TEALURLSessionManager *)sessionManager {
     
     self = [super init];
@@ -65,6 +39,7 @@
         _profileURL = profileURL;
         _profileDefinitionURL = profileDefinitionURL;
         _currentProfile = [[TEALVisitorProfile alloc]initWithVisitorID:visitorID];
+        _sessionManager = sessionManager;
         
     }
     return self;

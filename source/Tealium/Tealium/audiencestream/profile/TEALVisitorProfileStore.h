@@ -26,15 +26,11 @@
 @interface TEALVisitorProfileStore : NSObject
 
 @property (readonly, nonatomic) TEALVisitorProfile *currentProfile;
-//@property (weak, nonatomic) id<TEALVisitorProfileStoreConfiguration> configuration;
 
 @property (weak, nonatomic) id<TEALVisitorProfileDelegate> profileDelegate;
 
 
 - (instancetype) initWithVisitorID:(NSString *)visitorID profileURL:(NSURL *)profileURL profileDefinitionURL:(NSURL *)profileDefinitionURL urlSessionManager:(TEALURLSessionManager *)sessionManager;
-
-    
-//- (instancetype) initWithConfiguration:(id<TEALVisitorProfileStoreConfiguration>)configuration;
 
 - (void) fetchProfileWithCompletion:(TEALVisitorProfileCompletionBlock)completion;
 

@@ -7,6 +7,7 @@
 //
 
 #import "Tealium+Autotracking.h"
+#import "Tealium+PrivateHeader.h"
 #import "UIApplication+Tealium.h"
 #import "UIViewController+Tealium.h"
 #import "TEALDataSources+Autotracking.h"
@@ -14,26 +15,37 @@
 #import "TEALSystemHelpers.h"
 #import <objc/runtime.h>
 
-char const * const TEALIUM_KVO_AUTOTRACKING_LIFECYCLE = "com.tealium.kvo.autotracking.lifecycle";
+char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lifecycle";
 
 @implementation Tealium (Autotracking)
+
+- (void) enableAutotrackingIvars {
+#warning IMPLMENT
+    
+}
 
 - (void) enableAutotrackingLifecycle {
     
     __block typeof(self) __weak weakSelf = self;
-    TEALLifecycle *lifecycle = [self lifecycle];
+    __block TEALLifecycle *lifecycle = [[TEALLifecycle alloc] initWithInstanceID:self.settings.instanceID];
     
     [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
         
-        NSDictionary *autotrackedDataSources = [TEALDatasources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:[weakSelf lifecycle]];
-        NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary,
-                                                                                autotrackedDataSources]];
-        [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
+            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary,
+                                                                                    autotrackedDataSources]];
+            [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
+        });
+
     }];
 
     if ([lifecycle isEnabled]){
         [self.logger logVerbose:@"Autotracking Lifecycle active."];
     }
+    
+    [self addLifecycleInstance:lifecycle];
+
 }
 
 - (void) enableAutotrackingUIEvents {
@@ -71,7 +83,7 @@ char const * const TEALIUM_KVO_AUTOTRACKING_LIFECYCLE = "com.tealium.kvo.autotra
 #pragma mark - PRIVATE INSTANCE
 
 - (NSSet *) lifecycleSet {
-    id raw = objc_getAssociatedObject(self, TEALIUM_KVO_AUTOTRACKING_LIFECYCLE);
+    id raw = objc_getAssociatedObject(self, TEALKVOAutotrackLifecycle);
     
     if (![raw isKindOfClass:([NSSet class])]){
         raw = [[NSSet alloc] init];
@@ -87,7 +99,7 @@ char const * const TEALIUM_KVO_AUTOTRACKING_LIFECYCLE = "com.tealium.kvo.autotra
     NSSet *newSet = [NSSet setWithSet:mSet];
 
     [self.operationManager addOperationWithBlock:^{
-        objc_setAssociatedObject(self, TEALIUM_KVO_AUTOTRACKING_LIFECYCLE, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }];
 }
 
@@ -122,24 +134,8 @@ char const * const TEALIUM_KVO_AUTOTRACKING_LIFECYCLE = "com.tealium.kvo.autotra
     NSSet *newSet = [NSSet setWithSet:mSet];
     
     [self.operationManager addOperationWithBlock:^{
-        objc_setAssociatedObject(self, TEALIUM_KVO_AUTOTRACKING_LIFECYCLE, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }];
-}
-
-- (TEALLifecycle *) lifecycle {
-    
-    // Returns the correct instance for instance type
-    
-    TEALLifecycle *lifecycle = [self lifecycleInstanceFromSet:[self lifecycleSet]];
-    
-    if (!lifecycle){
-        lifecycle = [[TEALLifecycle alloc] initWithInstanceID:self.settings.instanceID];
-        [self addLifecycleInstance:lifecycle];
-    }
-    
-        NSLog(@"%s lifecycle returning: %@", __FUNCTION__, lifecycle);
-    
-    return lifecycle;
 }
 
 @end

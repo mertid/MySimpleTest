@@ -11,21 +11,11 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 #import <mach/machine.h>
+#import "TEALDataSourceConstants.h"
 
 NSString * const kTEALApplicationUUIDKey = @"com.tealium.applicationUUID";
 
-NSString * const kTEALCollectLibraryVersion = @"1.0";
-
-
 @implementation TEALSystemHelpers
-
-+ (NSString *) tealiumIQlibraryVersion {
-    return @"5.0";
-}
-
-+ (NSString *) collectLibraryVersion {
-    return [@"collect-" stringByAppendingString:kTEALCollectLibraryVersion];
-}
 
 + (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries {
     
@@ -43,8 +33,8 @@ NSString * const kTEALCollectLibraryVersion = @"1.0";
 
 + (NSString *) mpsVersionNumber {
     // Version number with .x and .x.x versions stripped
-    
-    return [NSString stringWithFormat:@"%i", [[TEALSystemHelpers tealiumIQlibraryVersion] intValue]];
+    NSString *version = TEALLibraryVersion;
+    return [NSString stringWithFormat:@"%i", [version intValue]];
 }
 
 + (NSString *) architecture {

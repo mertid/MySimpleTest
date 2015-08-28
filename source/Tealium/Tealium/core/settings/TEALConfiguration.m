@@ -34,6 +34,7 @@
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
     configuration.autotrackingIvarsEnabled = NO;
+    configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
     configuration.overrideDispatchURL = nil;
@@ -81,6 +82,7 @@
                                           @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
                                           @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
                                           @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
+                                          @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
                                           @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]

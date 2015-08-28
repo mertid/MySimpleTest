@@ -22,8 +22,9 @@
 #import "TEALVisitorProfileFlagAttribute.h"
 #import "TEALVisitorProfileMetricAttribute.h"
 #import "TEALVisitorProfilePropertyAttribute.h"
+#import "TEALModulesDelegate.h"
 
-@interface Tealium (Collect)
+@interface Tealium (Collect) <TEALModulesDelegate>
 
 - (NSURL *) profileURL;
 

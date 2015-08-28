@@ -12,7 +12,7 @@
 
 @interface TEALDatasourcesTests : XCTestCase
 
-@property (nonatomic, strong) TEALDatasources *dataSources;
+@property (nonatomic, strong) TEALDataSources *dataSources;
 
 @end
 
@@ -20,7 +20,7 @@
 
 - (void)setUp {
     [super setUp];
-    self.dataSources = [[TEALDatasources alloc] initWithInstanceID:@"testInstance"];
+    self.dataSources = [[TEALDataSources alloc] initWithInstanceID:@"testInstance"];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 

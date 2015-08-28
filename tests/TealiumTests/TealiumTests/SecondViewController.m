@@ -7,7 +7,7 @@
 //
 
 #import "SecondViewController.h"
-#import <Tealium/Tealium.h>
+#import <Tealium/ObjC.h>
 
 @interface SecondViewController ()
 
@@ -20,18 +20,20 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Second View Controller";
-    [self teal_setDataSources:@{@"SayWhat?":@"Hello?"}];
+    [self teal_setDataSources:@{@"test":@"executeTestCommand"}];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
     [[self autotrackingEnableSwitch] setOn:self.teal_autotrackingEnabled];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+        
 }
 
 - (void)didReceiveMemoryWarning {

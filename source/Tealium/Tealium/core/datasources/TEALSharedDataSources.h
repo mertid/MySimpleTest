@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TEALSharedDatasources : NSObject
+@interface TEALSharedDataSources : NSObject
 
 + (instancetype) sharedStore;
 

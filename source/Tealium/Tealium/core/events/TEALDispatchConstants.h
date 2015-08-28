@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#warning Check to see if we should include these with TEALDispatch
-
 @class TEALDispatch;
 
 typedef NS_ENUM(NSUInteger, TEALDispatchStatus) {

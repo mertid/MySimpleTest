@@ -6,14 +6,15 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "TEALDispatch.h"
 
-@interface TEALDatasources : NSObject
+@interface TEALDataSources : NSObject
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
+#warning BASELINE datasources (combine relevant transmission and capture time data)
 /*
  Data Sources that can be processed in the background
  */
@@ -28,11 +29,11 @@
 
 - (NSString *) applicationUUID;
 
-#warning Move to TEALCollect?
-- (NSString *) visitorID;
+- (NSString *) visitorIDCopy;
 
 - (NSDictionary *) dataSourcesCopy;
 
 - (void) setDataSources:(NSDictionary *)newDataSources;
+
 
 @end

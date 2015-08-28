@@ -10,9 +10,7 @@
 #import <objc/runtime.h>
 #import "NSDictionary+Tealium.h"
 
-static CFStringRef  const TealiumCM_KVOUniqueIdentifier = CFSTR("TealiumAutotracking_KVOUniqueIdentifier");
-
-char const * const TealiumKVO_CustomData =                      "com.tealium.customdata";
+char const * const TEALKVOObjectCustomData =  "com.tealium.kvo.customdata";
 
 @implementation NSObject (Tealium)
 
@@ -20,7 +18,7 @@ char const * const TealiumKVO_CustomData =                      "com.tealium.cus
     
     NSDictionary *associatedDictionary = nil;
     
-    associatedDictionary = objc_getAssociatedObject(self, TealiumKVO_CustomData);
+    associatedDictionary = objc_getAssociatedObject(self, TEALKVOObjectCustomData);
 
     if (!associatedDictionary || ![associatedDictionary isKindOfClass:([NSDictionary class])]) {
         associatedDictionary = nil;
@@ -40,23 +38,8 @@ char const * const TealiumKVO_CustomData =                      "com.tealium.cus
         dataSourcesCopy = [dataSources teal_stringifiedDictionary];
     }
     
-    objc_setAssociatedObject(self, TealiumKVO_CustomData, dataSourcesCopy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, TEALKVOObjectCustomData, dataSourcesCopy, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
-}
-
-- (void) teal_setAutotrackingEnabled:(BOOL)enabled
-{
-    NSNumber *enableOnNumber = [NSNumber numberWithBool:enabled];
-    objc_setAssociatedObject(self, &TealiumCM_KVOUniqueIdentifier, enableOnNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (BOOL) teal_autotrackingEnabled
-{
-    NSNumber *enableOnNumber = objc_getAssociatedObject(self, &TealiumCM_KVOUniqueIdentifier);
-    if (enableOnNumber){
-        return [enableOnNumber boolValue];
-    }
-    return YES;
 }
 
 

@@ -114,6 +114,9 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 @property (nonatomic) BOOL autotrackingIvarsEnabled;
 
 // TODO: comments
+@property (nonatomic) BOOL remoteCommandsEnabled;
+
+// TODO: comments
 @property (nonatomic) NSString *overridePublishSettingsURL;
 
 // TODO: comments

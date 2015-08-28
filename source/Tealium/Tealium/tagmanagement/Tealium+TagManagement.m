@@ -6,34 +6,79 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "Tealium+TagManagement.h"
-#import "TEALTagDispatchService.h"
+
 #import "NSArray+Tealium.h"
 #import "NSString+Tealium.h"
 #import <objc/runtime.h>
+#import "Tealium+TagManagement.h"
+#import "Tealium+PrivateHeader.h"
+#import "TEALModulesDelegate.h"
+#import "TEALNetworkHelpers.h"
+#import "TEALTagDispatchService.h"
+#import "TEALRemoteCommandConstants.h"
+#import "TEALRemoteCommandManager.h"
 
-char const * const TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW = "com.tealium.kvo.tagmanagement.webview";
+
+@interface Tealium() <TEALModulesDelegate>
+
+@end
 
 @implementation Tealium (TagManagement)
 
+
+#pragma mark - PUBLIC INSTANCE
+
+- (UIWebView *) webView {
+    
+    TEALTagDispatchService *currentService = [self currentTagDispatchService];
+    
+    return currentService.webView;
+    
+}
+
+- (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
+ 
+    [self.operationManager addOperationWithBlock:^{
+       
+        TEALTagDispatchService *service = [self currentTagDispatchService];
+                
+        [[service remoteCommandManager] addRemoteCommandId:name
+                                               description:description
+                                               targetQueue:queue
+                                                     block:responseBlock];
+    }];
+
+    
+}
+
+
+#pragma mark - PRIVATE INSTANCE
+
 - (void) enableTagManagement {
     
-    if ([[self.dispatchNetworkServices copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
+    if ([[[self currentDispatchNetworkServices] copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
         return;
     }
-    
-    NSMutableArray *newServices = [NSMutableArray arrayWithArray:self.dispatchNetworkServices];
-    
-    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
-    
-    [tagService setup];
-    
-    [newServices addObject:tagService];
-    
-    self.dispatchNetworkServices = [NSArray arrayWithArray:newServices];
-    
-    [self.logger logVerbose:@"TagManagement active."];
 
+    TEALTagDispatchService *tagService = [self currentTagDispatchService];
+    
+    if (tagService) {
+        [self.logger logVerbose:@"TagManagement active."];
+    }
+
+}
+
+- (void) enableRemoteCommands {
+    
+    
+    TEALTagDispatchService *service = [self currentTagDispatchService];
+    
+    [service setRemoteCommandsEnabled:YES];
+    
+    [service.remoteCommandManager addReservedCommands];
+    
+    [self.logger logVerbose:@"Remote Commands Enabled."];
+    
 }
 
 - (void) disableTagManagement {
@@ -42,28 +87,53 @@ char const * const TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW = "com.tealium.kvo.tagmanag
     
 }
 
-- (UIWebView *) webView {
+#pragma mark - HELPERS
+
+- (TEALTagDispatchService *) currentTagDispatchService {
     
-    if (![self.settings tagManagementEnabled]) {
-        return nil;
+    __block TEALTagDispatchService *targetService = nil;
+    
+    NSArray *dispatchServices = [[self currentDispatchNetworkServices] copy];
+    
+    if (dispatchServices) {
+        
+        [dispatchServices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if (![obj isKindOfClass:([TEALTagDispatchService class])]){
+                return;
+            }
+            
+            TEALTagDispatchService *aService = obj;
+            if ([aService.publishURLStringCopy isEqualToString:self.settings.publishURLString]){
+                targetService = aService;
+                *stop = YES;
+            }
+            
+        }];
     }
     
-    __block UIWebView *webView = nil;
-
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        id raw = objc_getAssociatedObject(self, TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW)
-        ;
-        if ([raw isKindOfClass:([UIWebView class])]){
-            webView = raw;
-        }
-        else {
-            webView = [[UIWebView alloc] init];
-            objc_setAssociatedObject(self, TEALIUM_KVO_TAGMANAGEMENT_WEBVIEW, webView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        }
-    });
+    if (!targetService) {
+        
+        targetService = [self newTagDispatchService];
+        
+        NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
+        
+        [newServices addObject:targetService];
+        
+        [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
+    }
     
-    return webView;
+    return targetService;
 }
 
+- (TEALTagDispatchService *) newTagDispatchService {
+    
+    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
+    
+    [tagService setup];
+    
+    return tagService;
+
+}
 
 @end

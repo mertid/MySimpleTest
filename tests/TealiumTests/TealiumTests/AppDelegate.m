@@ -25,37 +25,34 @@
     
 #ifndef TEST
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"non-exists"
+                                                                           profile:@"demo"
                                                                        environment:@"dev"];
     
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    configuration.autotrackingIvarsEnabled = YES;
     configuration.autotrackingLifecycleEnabled = YES;
-    configuration.autotrackingUIEventsEnabled = YES;
+    configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
-    
-//    self.tealiumInstance = [Tealium instanceWithConfiguration:configuration];
-//    
-//    [self.tealiumInstance trackEventWithTitle:@"testInstanceLaunch" dataSources:nil];
     
     [Tealium sharedInstanceWithConfiguration:configuration];
     [[Tealium sharedInstance] setDelegate:self];
     
+
     
-    
-    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
-                                                                       environment:@"dev"];
-    
-    instanceConfig.logLevel = TEALLogLevelVerbose;
-    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    instanceConfig.autotrackingLifecycleEnabled = YES;
-    instanceConfig.autotrackingUIEventsEnabled = NO;
-    instanceConfig.autotrackingViewsEnabled = NO;
-    
-    self.tealiumInstance = [Tealium instanceWithConfiguration:instanceConfig];
-    [self.tealiumInstance setDelegate:self];
+//    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                           profile:@"non-exsist"
+//                                                                       environment:@"dev"];
+//    
+//    instanceConfig.logLevel = TEALLogLevelVerbose;
+//    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//    instanceConfig.autotrackingLifecycleEnabled = YES;
+//    instanceConfig.autotrackingUIEventsEnabled = NO;
+//    instanceConfig.autotrackingViewsEnabled = NO;
+//    
+//    self.tealiumInstance = [Tealium instanceWithConfiguration:instanceConfig];
+//    [self.tealiumInstance setDelegate:self];
     
 //    if (configuration.autotrackingUIEventsEnabled == NO){
 //        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
@@ -108,10 +105,10 @@
 }
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
-    NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
+//    NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
-        NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
+//        NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
 }
 @end

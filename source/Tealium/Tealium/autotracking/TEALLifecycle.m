@@ -10,7 +10,7 @@
 #import "TEALLifecycleStore.h"
 #import "Tealium.h"
 #import "TEALLogger.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
 
 @interface TEALLifecycle ()
 
@@ -22,7 +22,7 @@
 
 @implementation TEALLifecycle
 
-#warning ADD milestone date tracking system
+#warning ADD milestone dates tracking system
 
 - (instancetype) initWithInstanceID:(NSString *)instanceID {
     self = [super init];
@@ -30,8 +30,27 @@
         
         _instanceID = instanceID;
         
+        [self enableListeners];
     }
     return self;
+}
+
+- (void) enableListeners {
+    
+    NSArray *events = @[
+                        UIApplicationDidBecomeActiveNotification,
+                        UIApplicationDidEnterBackgroundNotification,
+                        UIApplicationWillTerminateNotification
+                        ];
+    
+    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(processLifecycleEvent:)
+                                                     name:obj
+                                                   object:nil];
+    }];
+
 }
 
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block {
@@ -42,19 +61,6 @@
     
     self.eventProcessingBlock = block;
     
-    NSArray *events = @[
-                        UIApplicationDidBecomeActiveNotification,
-                        UIApplicationDidEnterBackgroundNotification,
-                        UIApplicationWillTerminateNotification
-                        ];
-
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-       [[NSNotificationCenter defaultCenter] addObserver:self
-                                                selector:@selector(processLifecycleEvent:)
-                                                    name:obj
-                                                  object:nil];
-    }];
 }
 
 - (void) disable {
@@ -79,26 +85,24 @@
     
     NSString *name = notification.name;
     NSString *eventName = nil;
-    
-    TEAL_LogNormal(@"Lifecycle event detected: %@", name);
-    
+        
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
-        eventName = TEALDatasourceValue_LifecycleLaunch;
+        eventName = TEALDataSourceValue_LifecycleLaunch;
     }
-    else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
-        eventName = TEALDatasourceValue_LifecycleSleep;
+    if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
+        eventName = TEALDataSourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
-        eventName = TEALDatasourceValue_LifecycleWake;
+        eventName = TEALDataSourceValue_LifecycleWake;
     }
     else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
-        eventName = TEALDatasourceValue_LifecycleSleep;
+        eventName = TEALDataSourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
-        eventName = TEALDatasourceValue_LifecycleTerminate;
+        eventName = TEALDataSourceValue_LifecycleTerminate;
     }
 
-    NSDictionary *lifecycleData = @{TEALDatasourceKey_LifecycleType: eventName};
+    NSDictionary *lifecycleData = @{TEALDataSourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {
         // TODO: Add error handling?
@@ -109,6 +113,10 @@
 
 - (NSString *) description {
     return [NSString stringWithFormat:@"TEALLifecycle with instanceID: %@", self.instanceID];
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

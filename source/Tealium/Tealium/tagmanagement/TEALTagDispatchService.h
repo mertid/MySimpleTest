@@ -10,10 +10,26 @@
 #import "TEALDispatchService.h"
 #import "TEALSystemProtocols.h"
 
+@class TEALLogger;
+@class TEALRemoteCommandManager;
+
 @interface TEALTagDispatchService : NSObject <TEALDispatchService>
 
 @property (strong, nonatomic) UIWebView *webView;
 
 - (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager;
+
+- (NSString *) publishURLStringCopy;
+
+- (TEALDispatchNetworkServiceStatus) currentStatus;
+
+- (void) setCurrentStatus:(TEALDispatchNetworkServiceStatus) status;
+
+- (void) setRemoteCommandsEnabled:(BOOL)enable;
+
+- (void) setLogger:(TEALLogger *)logger;
+
+- (TEALRemoteCommandManager *) remoteCommandManager;
+
 
 @end

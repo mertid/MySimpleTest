@@ -9,21 +9,30 @@
 #import "TEALTagDispatchService.h"
 #import <UIKit/UIKit.h>
 #import "TEALNetworkHelpers.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
+#import "TEALError.h"
 #import "TEALLogger.h"
 #import "TEALDispatch.h"
 #import "TEALOperationManager.h"
+#import "TEALRemoteCommandManager.h"
 #import "NSDictionary+Tealium.h"
+#import "UIWebView+Tealium.h"
 
-@interface TEALTagDispatchService() <UIWebViewDelegate>
+@interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandDelegate>
 
+@property (strong, nonatomic) TEALRemoteCommandManager *currentRemoteCommandManager;
 @property (weak, nonatomic) NSString *publishURLString;
 @property (weak, nonatomic) TEALOperationManager *operationManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
+@property (nonatomic) BOOL areRemoteCommandsEnabled;
+@property (nonatomic, weak) TEALLogger *logger;
 
 @end
 
 @implementation TEALTagDispatchService
+
+
+#pragma mark - PUBLIC INSTANCE
 
 - (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager {
     
@@ -32,11 +41,39 @@
         
         _publishURLString = urlString;
         _operationManager = operationManager;
+        _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
         
     }
     
     return self;
     
+}
+
+- (NSString *) publishURLStringCopy {
+    return [self.publishURLString copy];
+}
+
+- (TEALDispatchNetworkServiceStatus) currentStatus {
+    return self.status;
+}
+
+- (void) setCurrentStatus:(TEALDispatchNetworkServiceStatus) status {
+    self.status = status;
+}
+
+- (TEALRemoteCommandManager *) remoteCommandManager {
+    return self.currentRemoteCommandManager;
+}
+
+
+#pragma mark - PRIVATE INSTANCE
+
+- (void) setRemoteCommandsEnabled:(BOOL)enable {
+    self.areRemoteCommandsEnabled = enable;
+}
+
+- (void) setLogger:(TEALLogger *)logger {
+#warning DO WE NEED THIS?
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
@@ -79,24 +116,18 @@
                 NSString *packagedDataString = [NSString stringWithFormat:@"%s Packaged Dispatch Data Sources: %@", __FUNCTION__,
                                                 [dispatch.payload teal_arrayForDebugDisplay]];
                 
-                // TODO: should be available elsewhere
-                
-                TEAL_LogNormal(@"%@", packagedDataString);
+                [self.logger logNormal:@"%@", packagedDataString];
                 
                 if (completion) {
                     completion(TEALDispatchStatusSent, dispatch, nil);
                 }
                 return;
             } else {
-                NSDictionary *userInfo = @{
-                                           NSLocalizedDescriptionKey:  NSLocalizedString(@"Dispatch was unsuccessful.", nil),
-                                           NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload],
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check TIQ settings and that mobile.html has published correctly.", nil)
-                                           };
-                // TODO: error codes?
-                NSError *error = [NSError errorWithDomain:@"Tealium"
-                                                     code:400
-                                                 userInfo:userInfo];
+                
+                NSError *error = [TEALError errorWithCode:TEALRemoteResponseErrorMalformedURL
+                                              description:@"Dispatch was unsuccessful"
+                                                   reason:[NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload]
+                                               suggestion:@"Check TIQ settings and that mobile.html has published correctly."];
                 if (completion) {
                     completion(TEALDispatchStatusFailed, dispatch, error);
                 }
@@ -111,6 +142,23 @@
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     
+    if ([webView teal_areRemoteCommandsEnabled]){
+    
+        __weak __block TEALLogger *weakLogger = self.logger;
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self.remoteCommandManager processRequest:request
+                                    completionHandler:^(TEALRemoteCommandResponse *response) {
+                                        
+                                        [weakLogger logVerbose:@"Remote command processed:%@", response];
+                                        
+                                    }];
+            
+        });
+
+    }
+    
     return YES;
 }
 
@@ -120,19 +168,30 @@
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     
-    [self.operationManager addOperationWithBlock:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         self.status = TEALDispatchNetworkServiceStatusReady;
 
-    }];
+    });
 }
 
 - (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     
     // TODO: retry later?
+
+}
+
+#pragma mark - TEAL REMOTE COMMAND DELEGATE 
+
+- (void) tagRemoteCommandRequestsCommandToWebView:(NSString *)command {
     
-    [self.operationManager addOperationWithBlock:^{
-        
-    }];
+    __block typeof(self) __weak weakSelf = self;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
+        if ([init isEqualToString:@"false"]){
+            [weakSelf.logger logVerbose:@"Webkit was unable to process callback command: %@", command];
+        }
+    });
 }
 
 #pragma mark - UTAG
@@ -144,10 +203,10 @@
     
     if ([NSJSONSerialization isValidJSONObject:dispatchData]) {
         
-        NSString *trackType = dispatchData[TEALDatasourceKey_CallType];
+        NSString *trackType = dispatchData[TEALDataSourceKey_CallType];
         
         if(!trackType || trackType == (NSString*)[NSNull null]) {
-            trackType = TEALDatasourceValue_Link; //default option
+            trackType = TEALDataSourceValue_Link; //default option
         }
         
         NSString *utagCommand = nil;

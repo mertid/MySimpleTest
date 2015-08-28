@@ -8,27 +8,34 @@
 
 #import "Tealium.h"
 
+#import "TEALDataSources.h"
 #import "TEALDispatchManager.h"
 #import "TEALDelegateManager.h"
-//#import "TEALVisitorProfileStore.h"
-
-#import "TEALOperationManager.h"
-
-#import "TEALNetworkHelpers.h"
 #import "TEALDispatchService.h"
-
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
+#import "TEALOperationManager.h"
+#import "TEALLogger.h"
+#import "TEALModulesDelegate.h"
+#import "TEALNetworkHelpers.h"
+#import "TEALOperationManager.h"
 #import "TEALSystemHelpers.h"
+#import "TEALURLSessionManager.h"
 
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
-                        TEALDispatchManagerConfiguration>
+                        TEALDispatchManagerConfiguration,
+                        TEALModulesDelegate>
 
-@property (strong, nonatomic) TEALDatasources *dataSources;
+@property (strong, nonatomic) NSArray *dispatchNetworkServices;
+@property (strong, nonatomic) TEALLogger *logger;
+@property (strong, nonatomic) TEALOperationManager *operationManager;
+@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+@property (strong, nonatomic) TEALDataSources *dataSources;
 @property (strong, nonatomic) TEALDelegateManager *delegateManager;
 @property (strong, nonatomic) TEALDispatchManager *dispatchManager;
 @property (strong, nonatomic) TEALSettings *settings;
+@property (weak, nonatomic)   id<TEALModulesDelegate> modulesDelegate;
 
 @property (readwrite) BOOL enabled;
 
@@ -50,7 +57,7 @@ __strong static Tealium *_sharedObject = nil;
         [weakInstance instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
             if (success) {
                 [weakInstance.dispatchManager runQueuedDispatches];
-                TEAL_LogNormal(@"Library instance ready.");
+                [weakInstance.logger logNormal:@"Instance ready."];
             } else {
                 [weakInstance disable];
                 TEAL_LogNormal(@"Library failed to start: %@", error);
@@ -63,8 +70,10 @@ __strong static Tealium *_sharedObject = nil;
 }
 
 + (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion {
+    
     Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
     [Tealium setSharedInstance:instance];
+    
     return instance;
 }
 
@@ -100,7 +109,7 @@ __strong static Tealium *_sharedObject = nil;
     self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
     
     if (![TEALConfiguration isValidConfiguration:configuration]) {
-        TEAL_LogNormal(@"Invalid Configuration, check your account, profile and enviornment options.");
+        [self.logger logNormal:(@"Invalid Configuration, check your account, profile and enviornment options.")];
         if (setupCompletion) {
             setupCompletion(NO, nil);
         }
@@ -110,10 +119,11 @@ __strong static Tealium *_sharedObject = nil;
     [self.logger logNormal:@"%@", configuration];
     
     self.enabled = YES;
+    self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
     
     __block typeof(self) __weak weakSelf = self;
 
-    [self setupSettingsWithConfiguration:configuration visitorID:[self.dataSources visitorID] completion:^(BOOL success, NSError *error) {
+    [self setupSettingsWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
         
         if (success) {
 
@@ -122,6 +132,7 @@ __strong static Tealium *_sharedObject = nil;
             
         } else {
             
+            [weakSelf.logger logNormal:@"Problem creating instance: %@", [error localizedDescription]];
             [weakSelf disable];
             
         }
@@ -135,39 +146,83 @@ __strong static Tealium *_sharedObject = nil;
 - (void) setupCore {
     self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
                                                                         delegate:self];
-    
-    self.dataSources = [[TEALDatasources alloc]initWithInstanceID:self.settings.instanceID];
-
     [self setupSettingsReachabilityCallbacks];
 }
 
 - (void) setupModules {
     
+    self.modulesDelegate = self;
+    
+    if ([self.settings autotrackingIvarsEnabled]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingIvars)]){
+            [self.modulesDelegate enableAutotrackingIvars];
+        }
+    }
+    
     if ([self.settings autotrackingLifecycleEnabled]){
-        [self enableAutotrackingLifecycle];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]){
+            [self.modulesDelegate enableAutotrackingLifecycle];
+        }
     }
     
     if ([self.settings tagManagementEnabled]){
-        [self enableTagManagement];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]){
+            [self.modulesDelegate enableTagManagement];
+        }
+        
+        if ([self.settings remoteCommandsEnabled]){
+            if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]){
+                [self.modulesDelegate enableRemoteCommands];
+            }
+        }
     }
     
+    
     if ([self.settings audienceStreamEnabled]){
-        [self enableAudienceStream];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAudienceStream)]){
+            [self.modulesDelegate enableAudienceStream];
+        }
     }
     
     if ([self.settings autotrackingUIEventsEnabled]) {
-        
-        [self enableAutotrackingUIEvents];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]){
+            [self.modulesDelegate enableAutotrackingUIEvents];
+        }
     }
     if ([self.settings autotrackingViewsEnabled]) {
-
-        [self enableAutotrackingViews];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]){
+            [self.modulesDelegate enableAutotrackingViews];
+        }
     }
+    
+}
+
+- (NSArray *) currentDispatchNetworkServices {
+    
+    NSArray *array = nil;
+    
+    if (!self.dispatchNetworkServices) {
+        
+        array = [[NSArray alloc] init];
+        
+    }
+    else {
+        array = self.dispatchNetworkServices;
+    }
+    
+    return array;
+}
+
+- (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
+    
+    self.dispatchNetworkServices = nil;
+    self.dispatchNetworkServices = newServices;
     
 }
 
 - (void) sendEvent:(TEALDispatchType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
     
+        NSLog(@"%s ", __FUNCTION__);
     if (!self.enabled) {
         [self.logger logNormal:@"Library Disabled, Ignoring dispatch.",nil];
         [self.logger logVerbose:@"Dispatch title:%@, DataSources:%@", title, customData];
@@ -197,6 +252,7 @@ __strong static Tealium *_sharedObject = nil;
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:eventType withPayload:customData];
     
+        NSLog(@"%s about to add dispatch", __FUNCTION__);
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:completion];
     
@@ -210,6 +266,8 @@ __strong static Tealium *_sharedObject = nil;
     
     [self logDispatch:dispatch status:status];
     [self notifyDispatch:dispatch status:status];
+    
+#warning Move to Collect module
     
     if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
         return;
@@ -263,10 +321,11 @@ __strong static Tealium *_sharedObject = nil;
     
 }
 
-- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration visitorID:(NSString *)visitorID completion:(TEALBooleanCompletionBlock)setupCompletion{
+- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-    [self.settings setVisitorIDCopy:visitorID];
+    self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
+//    [self.settings setVisitorIDCopy:self.dataSources.visitorIDCopy];
     self.settings.urlSessionManager = self.urlSessionManager;
     
     __weak TEALSettings *weakSettings = self.settings;
@@ -322,33 +381,10 @@ __strong static Tealium *_sharedObject = nil;
 
 - (NSString *) description {
     
-    NSString *version = [TEALSystemHelpers tealiumIQlibraryVersion];
+    NSString *version = TEALLibraryVersion;
     NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", self.settings.account, self.settings.tiqProfile, self.settings.environment];
     
     return [NSString stringWithFormat:@"TEALIUM %@: instance:%@: ", version, accountProfileEnvironment];
-}
-
-#pragma mark - RESERVED MODULE METHODS
-
-- (void) enableTagManagement {
-    // Replaced by module category
-}
-
-- (void) enableAudienceStream {
-    // Replaced by module category
-}
-
-- (void) enableAutotrackingLifecycle {
-    
-    // Replaced by category method
-}
-
-- (void) enableAutotrackingUIEvents {
-    // Replaced by module category
-}
-
-- (void) enableAutotrackingViews {
-    // Replaced by module category
 }
 
 #pragma mark - PUBLIC CLASS METHODS
@@ -502,17 +538,25 @@ __strong static Tealium *_sharedObject = nil;
     
     // for now fire and forget
     
+    __block __weak TEALLogger *weakLogger = self.logger;
+    
     // one more check for network and settings
     if ([self shouldAttemptDispatch]) {
         
         if  ([self.delegateManager tealium:self shouldSendDispatch:dispatch]) {
-            completionBlock(TEALDispatchStatusSent, dispatch, nil);
             
-            for ( id<TEALDispatchService> service in self.dispatchNetworkServices) {
+            for ( id<TEALDispatchService> service in [self currentDispatchNetworkServices]) {
                 
                 [service sendDispatch:dispatch
-                           completion:nil];
+                           completion:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+                               
+                               [weakLogger logVerbose:[NSString stringWithFormat:@"\n %@ \n status: %lu \n errors:%@", dispatch, (unsigned long)status, error? [error localizedDescription]:@""]];
+                               
+                           }];
             }
+            
+            completionBlock(TEALDispatchStatusSent, dispatch, nil);
+
         } else if (completionBlock) {
             completionBlock(TEALDispatchStatusShouldDestory, dispatch, nil);
         }

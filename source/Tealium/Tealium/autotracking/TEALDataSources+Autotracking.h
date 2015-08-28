@@ -7,14 +7,14 @@
 //
 //  !!! CONVERT TO TEALDatasources+TEALAutotracking
 
-#import <UIKit/UIKit.h>
-#import "TEALDatasources.h"
-#import "TEALDispatch.h"
+#import "TEALDataSources.h"
 
-@interface TEALDatasources (Autotracking)
+@interface TEALDataSources (Autotracking)
 
 #warning ADD ivar tracking system
 
 + (NSDictionary *) autotrackDataSourcesForDispatchType:(TEALDispatchType)dispatchType withObject:(NSObject *)obj;
+
+
 
 @end

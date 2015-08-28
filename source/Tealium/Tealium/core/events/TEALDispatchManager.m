@@ -7,11 +7,8 @@
 //
 
 #import "TEALDispatchManager.h"
-
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
-//#import "TEALNetworkHelpers.h"
-
 #import "TEALLogger.h"
 
 static NSString * const Tealium_DispatchQueueKey = @"com.tealium.dispatch_queue";
@@ -86,6 +83,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 - (void) addDispatch:(TEALDispatch *)aDispatch completionBlock:(TEALDispatchBlock)completionBlock {
 
+        NSLog(@"%s ", __FUNCTION__);
     [self purgeStaleDispatches];
     
     NSUInteger batchSize    = [self.configuration dispatchBatchSize];
@@ -97,7 +95,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
         __block typeof(self) __weak weakSelf = self;
 
-        [self attemptDispatch:aDispatch
+        [weakSelf attemptDispatch:aDispatch
               completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
 
                   if (status == TEALDispatchStatusFailed) {

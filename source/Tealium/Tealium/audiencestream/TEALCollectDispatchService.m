@@ -9,7 +9,6 @@
 #import "TEALCollectDispatchService.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALURLSessionManager.h"
-#import "TEALDispatchConstants.h"
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
 #import "TEALLogger.h"
@@ -17,7 +16,6 @@
 
 @interface TEALCollectDispatchService ()
 
-//@property (weak, nonatomic) id<TEALCollectNetworkServiceConfiguration> configuration;
 @property (nonatomic, weak) NSString *dispatchURLString;
 @property (nonatomic, weak) TEALURLSessionManager *sessionManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
@@ -25,11 +23,6 @@
 @end
 
 @implementation TEALCollectDispatchService
-
-//+ (instancetype) networkServiceWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
-//    return [[[self class] alloc] initWithConfiguration:configuration];
-//}
-
 
 - (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString sessionManager:(TEALURLSessionManager *)sessionManager {
     self = [super init];
@@ -39,18 +32,6 @@
     }
     return self;
 }
-
-
-//- (instancetype) initWithConfiguration:(id<TEALCollectNetworkServiceConfiguration>)configuration {
-//    
-//    self = [self init];
-//    
-//    if (self) {
-//        _configuration = configuration;
-//    }
-//    
-//    return self;
-//}
 
 - (BOOL) isReady {
     

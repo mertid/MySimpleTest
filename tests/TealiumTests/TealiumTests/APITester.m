@@ -7,8 +7,7 @@
 //
 
 #import "APITester.h"
-#import <Tealium/Tealium.h>
-#import <Tealium/Tealium+Collect.h>
+#import <Tealium/ObjC.h>
 #import "ShowViewTableViewCell.h"
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
@@ -28,8 +27,19 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     self.title = @"API Sampler";
     self.autotrackingViewEnabled = YES;
+    
+    [[Tealium sharedInstance] addRemoteCommandId:@"testCommand"
+                                     description:nil
+                                     targetQueue:dispatch_get_main_queue()
+                                           block:^(TEALRemoteCommandResponse *response) {
+                                               
+                                               NSLog(@"%s Response Received: %@", __FUNCTION__, response);
+                                           }];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -183,7 +193,9 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showView"]) {
-        [segue.destinationViewController teal_setAutotrackingEnabled:self.autotrackingViewEnabled];
+        if ([segue.destinationViewController respondsToSelector:@selector(teal_setAutotrackingEnabled:)]){
+            [segue.destinationViewController teal_setAutotrackingEnabled:self.autotrackingViewEnabled];
+        }
     }
     
 }

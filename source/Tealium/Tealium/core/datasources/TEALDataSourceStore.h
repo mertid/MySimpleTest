@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TEALDatasourceStore : NSObject
+@interface TEALDataSourceStore : NSObject
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
@@ -30,6 +30,8 @@
 
 - (NSDictionary *) dataSourcesCopy;
 
-- (void) setDataSources:(NSDictionary *)newDataSources;
+- (void) setNewDataSources:(NSDictionary *)newDataSources;
+
+- (void) addDataSources:(NSDictionary *)additionalDataSources;
 
 @end

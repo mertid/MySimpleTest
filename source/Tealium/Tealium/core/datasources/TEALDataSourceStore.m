@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIDevice.h>
-#import "TEALDatasourceStore.h"
-#import "TEALDatasourceConstants.h"
+#import "TEALDataSourceStore.h"
+#import "TEALDataSourceConstants.h"
 #import "TEALDispatch.h"
 #import "TEALSystemHelpers.h"
 #import "NSDate+Tealium.h"
@@ -17,18 +17,19 @@
 
 
 static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
+const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue";
 
-@interface TEALDatasourceStore ()
+@interface TEALDataSourceStore ()
 
 @property (nonatomic, strong) dispatch_queue_t queue;
 
-@property (nonatomic, strong) NSMutableDictionary *datasources;
+@property (nonatomic, strong) NSMutableDictionary *dataSources;
 
 @property (nonatomic, strong) NSString *instanceID;
 
 @end
 
-@implementation TEALDatasourceStore
+@implementation TEALDataSourceStore
 
 #pragma mark - PUBLIC INSTANCE
 
@@ -42,7 +43,8 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     self = [super init];
     
     if (self) {
-        _datasources = [NSMutableDictionary new];
+        _queue = dispatch_queue_create(kTEALDatasourceStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
+        _dataSources = [NSMutableDictionary new];
         _instanceID = instanceID;
         [self unarchiveWithStorageKey:instanceID];
     }
@@ -54,7 +56,7 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     __block id obj = nil;
     
     dispatch_sync(self.queue, ^{
-        obj = self.datasources[key];
+        obj = self.dataSources[key];
     });
     
     return obj;
@@ -69,7 +71,7 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     
     dispatch_barrier_async(self.queue, ^{
         
-        self.datasources[aKey] = object;
+        self.dataSources[aKey] = object;
     });
 }
 
@@ -79,15 +81,23 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
 }
 
 - (NSDictionary *) dataSourcesCopy {
-    return [self.datasources copy];
+    return [self.dataSources copy];
 }
 
-- (void) setDataSources:(NSDictionary *)newDataSources {
-    dispatch_barrier_sync(self.queue, ^{
-        [self.datasources removeAllObjects];
-        [self.datasources addEntriesFromDictionary:newDataSources];
+- (void) setNewDataSources:(NSDictionary *)newDataSources {
+//    dispatch_barrier_sync(self.queue, ^{
+        [self.dataSources removeAllObjects];
+        [self.dataSources addEntriesFromDictionary:newDataSources];
         [self archiveWithStorageKey:self.instanceID];
-    });
+//    });
+}
+
+- (void) addDataSources:(NSDictionary *)additionalDataSources {
+//    dispatch_barrier_sync(self.queue, ^{
+        [self.dataSources addEntriesFromDictionary:additionalDataSources];
+        [self archiveWithStorageKey:self.instanceID];
+//    });
+    
 }
 
 #pragma mark - I/O
@@ -100,7 +110,7 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     
     if (obj && [obj isKindOfClass:[NSDictionary class]]) {
         dispatch_barrier_sync(self.queue, ^{
-            [self.datasources addEntriesFromDictionary:obj];
+            [self.dataSources addEntriesFromDictionary:obj];
             unarchived = YES;
         });
     }
@@ -112,7 +122,7 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     __block NSDictionary *dataCopy = nil;
     
     dispatch_barrier_sync(self.queue, ^{
-        dataCopy = [self.datasources copy];
+        dataCopy = [self.dataSources copy];
     });
     
     if (dataCopy) {
@@ -124,28 +134,28 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
 
 - (NSDictionary *) systemInfoDatasources {
     
-    NSMutableDictionary *datasources = [self datasourcesForKeys:@[TEALDatasourceKey_Platform,
-                                                                  TEALDatasourceKey_SystemVersion,
-                                                                  TEALDatasourceKey_LibraryVersion]];
+    NSMutableDictionary *dataSources = [self dataSourcesForKeys:@[TEALDataSourceKey_Platform,
+                                                                  TEALDataSourceKey_SystemVersion,
+                                                                  TEALDataSourceKey_LibraryVersion]];
     
-    datasources[TEALDatasourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
+    dataSources[TEALDataSourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
     
-    return datasources;
+    return dataSources;
 }
 
-- (NSMutableDictionary *) datasourcesForKeys:(NSArray *)keys {
+- (NSMutableDictionary *) dataSourcesForKeys:(NSArray *)keys {
     
-    NSMutableDictionary *datasources = [NSMutableDictionary new];
+    NSMutableDictionary *dataSources = [NSMutableDictionary new];
     
     for (id key in keys) {
         
         id obj = self[key];
         
         if (obj) {
-            datasources[key] = obj;
+            dataSources[key] = obj;
         }
     }
-    return datasources;
+    return dataSources;
 }
 
 
@@ -157,19 +167,19 @@ static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasour
     return nil;
 }
 
-- (void) addStaticDatasource {
-    
-    self[TEALDatasourceKey_EventName]   = TEALDatasourceValue_EventName;
-    self[TEALDatasourceKey_Pagetype]    = TEALDatasourceValue_Pagetype;
-    self[TEALDatasourceKey_Platform]    = TEALDatasourceValue_Platform;
-}
+//- (void) addStaticDatasource {
+//    
+//    self[TEALDataSourceKey_EventName]   = TEALDataSourceValue_EventName;
+//    self[TEALDataSourceKey_Pagetype]    = TEALDataSourceValue_Pagetype;
+//    self[TEALDataSourceKey_Platform]    = TEALDataSourceValue_Platform;
+//}
 
-- (void) addSystemDatasources {
-    
-    self[TEALDatasourceKey_SystemVersion]      = [[UIDevice currentDevice] systemVersion];
-    self[TEALDatasourceKey_LibraryVersion]     = [TEALSystemHelpers collectLibraryVersion];
-    self[TEALDatasourceKey_ApplicationName]    = [TEALSystemHelpers applicationName];
-}
+//- (void) addSystemDataSources {
+//    
+//    self[TEALDataSourceKey_SystemVersion]      = [[UIDevice currentDevice] systemVersion];
+//    self[TEALDataSourceKey_LibraryVersion]     = TEALLibraryVersion;
+//    self[TEALDataSourceKey_ApplicationName]    = [TEALSystemHelpers applicationName];
+//}
 
 - (NSDictionary *) queuedFlagWithValue:(BOOL)value {
     

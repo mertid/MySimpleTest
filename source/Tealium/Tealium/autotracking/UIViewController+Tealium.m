@@ -8,9 +8,10 @@
 
 #import "UIViewController+Tealium.h"
 #import "NSObject+Tealium.h"
+#import "NSObject+TealiumAutotracking.h"
 #import <objc/runtime.h>
 #import "Tealium.h"
-#import "TEALDatasourceConstants.h"
+//#import "TEALDataSourceConstants.h"
 #import "TEALDataSources+Autotracking.h"
 
 @implementation UIViewController (Tealium)
@@ -34,21 +35,24 @@ void (*oViewDidAppear)(id, SEL, bool a);
 
 static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
     
-    if ([self teal_autotrackingEnabled]) {
+    if ([self teal_autotrackingEnabled] &&
+        [Tealium sharedInstance].settings.autotrackingViewsEnabled) {
 
         // Auto captures title
-        NSDictionary *autoDataSources = [TEALDatasources autotrackDataSourcesForDispatchType:TEALDispatchTypeView withObject:self];
+        NSDictionary *autoDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeView withObject:self];
         
         NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
+        
+        NSDictionary *ivars = [self teal_autotrackIvarDataSources];
+        [dataSources addEntriesFromDictionary:ivars];
         
         NSDictionary *customDataSources = [self teal_dataSources];
         [dataSources addEntriesFromDictionary:customDataSources];
         
         [[Tealium sharedInstance] trackViewWithTitle:nil
                                          dataSources:dataSources];
-        
-        oViewDidAppear(self, _cmd, a);
     }
+        oViewDidAppear(self, _cmd, a);
 }
 
 @end
