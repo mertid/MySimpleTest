@@ -17,17 +17,20 @@
 
 @interface Tealium (Private)
 
-@property (strong, nonatomic) TEALDataSources *dataSources;
-@property (strong, nonatomic) TEALLogger *logger;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALSettings *settings;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, strong) TEALDataSources *dataSources;
+@property (nonatomic, strong) TEALLogger *logger;
+@property (nonatomic, strong) TEALOperationManager *operationManager;
+@property (nonatomic, strong) TEALSettings *settings;
+@property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
+
++ (NSDictionary *) allInstances;
 
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices;
 - (void) addModuleData:(NSDictionary *) dictionary;
 - (void) removeModuleDataForKey:(NSString *)key;
-- (NSDictionary *) moduleDataCopy;
+
 - (NSArray *) currentDispatchNetworkServices;
+- (NSDictionary *) moduleDataCopy;
 
 @end
 

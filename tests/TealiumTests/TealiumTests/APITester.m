@@ -28,17 +28,13 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     self.title = @"API Sampler";
     self.autotrackingViewEnabled = YES;
     
-    [[Tealium sharedInstance] addRemoteCommandId:@"testCommand"
+    [[Tealium instanceForKey:@"1"] addRemoteCommandId:@"testCommand"
                                      description:nil
                                      targetQueue:dispatch_get_main_queue()
                                            block:^(TEALRemoteCommandResponse *response) {
                                                
                                                NSLog(@"%s Response Received: %@", __FUNCTION__, response);
                                            }];
-    
-    NSLog(@"%s BaselineData:%@", __FUNCTION__, [[Tealium sharedInstance] baselineDataSources]);
-    
-    NSLog(@"%s PersistentData:%@", __FUNCTION__, [[Tealium sharedInstance] persistentDataSources]);
 
 }
 
@@ -143,7 +139,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     NSDictionary *data = @{ @"custom_key" : @"custom_value_view"};
     
-    [[Tealium sharedInstance] trackViewWithTitle:@"APITester" dataSources:data];
+    [[Tealium instanceForKey:@"1"] trackViewWithTitle:@"APITester" dataSources:data];
     
 }
 
@@ -151,13 +147,13 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     NSDictionary *data = @{ @"custom_key" : @"custom_value_event"};
     
-    [[Tealium sharedInstance] trackEventWithTitle:@"APITester" dataSources:data];
+    [[Tealium instanceForKey:@"1"] trackEventWithTitle:@"APITester" dataSources:data];
 
 }
 
 - (void) fetchVisitorProfile {
     
-    [[Tealium sharedInstance] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
         
         if (error) {
             NSLog(@"test app failed to receive profile with error: %@", [error localizedDescription]);
@@ -170,7 +166,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) accessLastLoadedVisitorProfile {
     
-    TEALVisitorProfile *profile = [[Tealium sharedInstance] cachedVisitorProfileCopy];
+    TEALVisitorProfile *profile = [[Tealium instanceForKey:@"1"] cachedVisitorProfileCopy];
     
     if (profile) {
         NSLog(@"last loaded profile: %@", profile);
@@ -185,12 +181,12 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) joinTraceWithToken:(NSString *)token {
     
-    [[Tealium sharedInstance] joinTraceWithToken:token];
-//    [[Tealium sharedInstance] joinTraceWithToken:token];
+    [[Tealium instanceForKey:@"1"] joinTraceWithToken:token];
+//    [[Tealium instanceForKey:@"1"] joinTraceWithToken:token];
 }
 
 - (void) leaveTrace {
-    [[Tealium sharedInstance] leaveTrace];
+    [[Tealium instanceForKey:@"1"] leaveTrace];
 }
 
 

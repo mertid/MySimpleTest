@@ -35,7 +35,7 @@
 
 - (void)tearDown {
     
-    [[Tealium sharedInstance] disable];
+    [[Tealium instanceForKey:@"1"] disable];
     self.library = nil;
     [super tearDown];
 }
@@ -58,7 +58,7 @@
 
     XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
     
-    self.library = [Tealium instanceWithConfiguration:config];
+    self.library = [Tealium instanceForKey:@"test" configuration:config];
     [self.library instanceWithConfiguration:config
                           completion:^(BOOL success, NSError *error) {
                               [finishedLoadingExpectation fulfill];

@@ -30,28 +30,30 @@
 # pragma mark - Setup / Configuration
 
 /**
- *  Starts the Tealium Mobile Library with the given configuration object.
+ *  Starts an instance of the Tealium Mobile Library for a given key with the given configuration object.
+ *
+ *  @param key NSString identifier for the library instance
  *
  *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
  */
-+ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration;
++ (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration;
 
-/**
- *  Starts the singleton shared instance of the Tealium Mobile Library with the given configuration object.
+
+#pragma mark - Instance Management
+/*
+ *  Returns an instance of the library for the given key, or NIL is such an instance has not been previously initialized.
  *
- *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
+ *  @param key NSString identifier for the library instance.
  */
-+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration;
++ (instancetype) instanceForKey:(NSString *)key;
 
-/**
- 
+/*
+ *  Removes and nils out an instance of the library with the given key.
+ *
+ *  @param key NSString identifier for the library instance to remove.
  */
-+ (instancetype) sharedInstance;
++ (void) destroyInstanceForKey:(NSString *)key;
 
-/**
- 
- */
-+ (void) destroySharedInstance;
 
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.

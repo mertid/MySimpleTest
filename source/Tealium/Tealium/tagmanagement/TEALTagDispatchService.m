@@ -20,7 +20,7 @@
 
 @interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandDelegate>
 
-@property (strong, nonatomic) TEALRemoteCommandManager *currentRemoteCommandManager;
+@property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
 @property (weak, nonatomic) NSString *publishURLString;
 @property (weak, nonatomic) TEALOperationManager *operationManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;

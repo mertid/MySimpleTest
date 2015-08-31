@@ -16,14 +16,14 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 @interface TEALDispatchManager ()
 
-@property (strong, nonatomic) TEALDataQueue *sentDispatches;
-@property (strong, nonatomic) TEALDataQueue *queuedDispatches;
-@property (strong, nonatomic) TEALDataQueue *processingQueue;
+@property (nonatomic, strong) TEALDataQueue *sentDispatches;
+@property (nonatomic, strong) TEALDataQueue *queuedDispatches;
+@property (nonatomic, strong) TEALDataQueue *processingQueue;
 
 @property (weak, nonatomic) id<TEALDispatchManagerDelegate> delegate;
 @property (weak, nonatomic) id<TEALDispatchManagerConfiguration> configuration;
 
-@property (strong, nonatomic) dispatch_queue_t ioQueue;
+@property (nonatomic, strong) dispatch_queue_t ioQueue;
 
 @end
 

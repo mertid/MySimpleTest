@@ -19,6 +19,79 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 @implementation Tealium (Autotracking)
 
+
+#pragma mark - PRIVATE PUBLIC
+
++ (NSArray *) allAutotrackingViewInstances {
+    
+    NSDictionary *allInstances = [[Tealium allInstances] copy];
+    NSMutableArray *targetInstances = [NSMutableArray array];
+    
+    [allInstances enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        id raw = obj;
+        if (![raw isKindOfClass:([Tealium class])]){
+            return;
+        }
+        
+        Tealium *instance = raw;
+        if (instance.settings.autotrackingViewsEnabled){
+            [targetInstances addObject:instance];
+        }
+        
+    }];
+    
+    return [NSArray arrayWithArray:targetInstances];
+    
+}
+
++ (NSArray *) allAutotrackingIvarInstances {
+    
+    NSDictionary *allInstances = [[Tealium allInstances] copy];
+    NSMutableArray *targetInstances = [NSMutableArray array];
+    
+    [allInstances enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        id raw = obj;
+        if (![raw isKindOfClass:([Tealium class])]){
+            return;
+        }
+        
+        Tealium *instance = raw;
+        if (instance.settings.autotrackingIvarsEnabled){
+            [targetInstances addObject:instance];
+        }
+        
+    }];
+    
+    return [NSArray arrayWithArray:targetInstances];
+    
+}
+
++ (NSArray *) allAutotrackingUIEventInstances {
+    
+    NSDictionary *allInstances = [[Tealium allInstances] copy];
+    NSMutableArray *targetInstances = [NSMutableArray array];
+    
+    [allInstances enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        id raw = obj;
+        if (![raw isKindOfClass:([Tealium class])]){
+            return;
+        }
+        
+        Tealium *instance = raw;
+        if (instance.settings.autotrackingUIEventsEnabled){
+            [targetInstances addObject:instance];
+        }
+        
+    }];
+    
+    return [NSArray arrayWithArray:targetInstances];
+}
+
+#pragma mark - PRIVATE INSTANCE
+
 - (void) enableAutotrackingLifecycle {
     
     __block typeof(self) __weak weakSelf = self;
@@ -28,8 +101,8 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
         
         dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
-            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary,
-                                                                                    autotrackedDataSources]];
+            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary? dataDictionary:@{},
+                                                                                    autotrackedDataSources? autotrackedDataSources:@{}]];
             [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
         });
 
@@ -74,8 +147,6 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     [self removeLifecycleInstance:lifecycle];
     
 }
-
-#pragma mark - PRIVATE INSTANCE
 
 - (NSSet *) lifecycleSet {
     id raw = objc_getAssociatedObject(self, TEALKVOAutotrackLifecycle);

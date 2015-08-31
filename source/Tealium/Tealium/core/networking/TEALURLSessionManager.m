@@ -12,8 +12,8 @@
 
 @interface TEALURLSessionManager () <NSURLSessionDelegate>
 
-@property (strong, nonatomic) NSURLSession *urlSession;
-@property (strong, nonatomic) NSOperationQueue *sessionQueue;
+@property (nonatomic, strong) NSURLSession *urlSession;
+@property (nonatomic, strong) NSOperationQueue *sessionQueue;
 
 @end
 

@@ -63,15 +63,16 @@
 
 #pragma mark - PUBLIC INSTANCE
 
-- (NSString *) instanceID {
-    return [NSString stringWithFormat:@"%@_%@_%@", self.accountName, self.profileName, self.environmentName];
-}
+//- (NSString *) instanceID {
+//    return [NSString stringWithFormat:@"%@_%@_%@", self.accountName, self.profileName, self.environmentName];
+//}
 
 #pragma mark - PRIVATE INSTANCE
 
 - (NSString *) description {
     
     NSDictionary *descriptionData = @{
+                                          @"instance id":[NSString teal_dictionarySafeString:self.instanceID],
                                           @"account - name":[NSString teal_dictionarySafeString:self.accountName],
                                           @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
                                           @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],

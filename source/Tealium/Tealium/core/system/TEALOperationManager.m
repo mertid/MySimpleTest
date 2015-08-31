@@ -11,10 +11,10 @@
 
 @interface TEALOperationManager ()
 
-@property (strong, nonatomic) dispatch_queue_t serialQueue;
-@property (strong, nonatomic) dispatch_queue_t ioQueue;
+@property (nonatomic, strong) dispatch_queue_t serialQueue;
+@property (nonatomic, strong) dispatch_queue_t ioQueue;
 
-@property (strong, nonatomic) NSOperationQueue *operationQueue;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 

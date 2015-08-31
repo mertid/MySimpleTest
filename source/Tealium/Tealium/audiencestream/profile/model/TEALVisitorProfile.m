@@ -15,16 +15,16 @@
 
 @property (copy, readwrite) NSString *visitorID;
 
-@property (strong, nonatomic) NSDictionary *rawProfile;
+@property (nonatomic, strong) NSDictionary *rawProfile;
 
-@property (strong, nonatomic) NSArray *audiences;
-@property (strong, nonatomic) NSArray *badges;
-@property (strong, nonatomic) NSArray *dates;
-@property (strong, nonatomic) NSArray *flags;
-@property (strong, nonatomic) NSArray *metrics;
-@property (strong, nonatomic) NSArray *properties;
+@property (nonatomic, strong) NSArray *audiences;
+@property (nonatomic, strong) NSArray *badges;
+@property (nonatomic, strong) NSArray *dates;
+@property (nonatomic, strong) NSArray *flags;
+@property (nonatomic, strong) NSArray *metrics;
+@property (nonatomic, strong) NSArray *properties;
 
-@property (strong, nonatomic) TEALVisitorProfileCurrentVisit *currentVisit;
+@property (nonatomic, strong) TEALVisitorProfileCurrentVisit *currentVisit;
 
 @end
 

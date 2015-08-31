@@ -14,15 +14,17 @@
 
 @interface Tealium (Private)
 
-@property (strong, nonatomic) TEALSettings *settings;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALVisitorProfileStore *profileStore;
-@property (strong, nonatomic) TEALDispatchManager *dispatchManager;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, strong) TEALSettings *settings;
+@property (nonatomic, strong) TEALOperationManager *operationManager;
+@property (nonatomic, strong) TEALVisitorProfileStore *profileStore;
+@property (nonatomic, strong) TEALDispatchManager *dispatchManager;
+@property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
 
 @property (nonatomic) BOOL enabled;
 
-+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion;
+//+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion;
+
++ (instancetype) instanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock)completion;
 
 - (instancetype) initPrivate;
 

@@ -9,6 +9,7 @@
 #import "TEALLogger.h"
 #import "TEALDataSourceConstants.h"
 
+#warning STILL NEED THIS?
 static TEALLogLevel _audienceStreamLogLevel;
 
 @interface TEALLogger()
@@ -21,9 +22,10 @@ static TEALLogLevel _audienceStreamLogLevel;
 
 + (NSString *) messageHeaderFromConfiguration:(TEALConfiguration *) configuration {
     NSString *version = TEALLibraryVersion;
-    NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", configuration.accountName, configuration.profileName, configuration.environmentName];
+    NSString *instanceID = configuration.instanceID;
+    //    NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", configuration.accountName, configuration.profileName, configuration.environmentName];
     
-    return [NSString stringWithFormat:@"TEALIUM %@: instance:%@: ", version, accountProfileEnvironment];
+    return [NSString stringWithFormat:@"TEALIUM %@: instance %@: ", version, instanceID];
 }
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration{

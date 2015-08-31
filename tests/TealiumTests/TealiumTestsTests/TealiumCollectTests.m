@@ -36,84 +36,83 @@
 
 #pragma mark - Helpers
 
-- (void) enableSharedInstanceWithConfiguration:(TEALConfiguration *) config {
-    
-    if (!config) {
-        config = self.configuration;
-    }
-    
-    __weak XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
-    
-
-    [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
-        
-        if ([[Tealium sharedInstance] isEnabled]){
-            [finishedLoading fulfill];
-        }
-    }];
-    
-    
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-        NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
-}
-
-- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
-    
-    
-    if (!config) {
-        config = self.configuration;
-    }
-    
-    
-    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingInstance"];
-    
-    self.library = [Tealium instanceWithConfiguration:config];
-    [self.library instanceWithConfiguration:config
-                                 completion:^(BOOL success, NSError *error) {
-                                     [finishedLoading fulfill];
-                                 }];
-    
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-        NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
-    
-}
-
-- (void) testSharedInstanceEnableTagManagmentWebView {
-    
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_ON" ofType:@"html"];
-    
-    
-    // Default is no tag management so webview should not be initialized
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-    config.logLevel = TEALLogLevelVerbose;
-    [self enableSharedInstanceWithConfiguration:config];
-    
-    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was not initialized when it should have been.");
-    
-}
-
-- (void) testSharedInstanceDisableTagManagmentWebView {
-    
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_OFF" ofType:@"html"];
-    
-    // Default is no tag management so webview should not be initialized
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-    config.logLevel = TEALLogLevelVerbose;
-    [self enableSharedInstanceWithConfiguration:config];
-    
-    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was initialized when it should not have been.");
-    
-}
+//- (void) enableSharedInstanceWithConfiguration:(TEALConfiguration *) config {
+//    
+//    if (!config) {
+//        config = self.configuration;
+//    }
+//    
+//    __weak XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
+//    
+//
+//    [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
+//        
+//        if ([[Tealium sharedInstance] isEnabled]){
+//            [finishedLoading fulfill];
+//        }
+//    }];
+//    
+//    
+//    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
+//        NSLog(@"%s error:%@", __FUNCTION__, error);
+//    }];
+//}
+//- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
+//    
+//    
+//    if (!config) {
+//        config = self.configuration;
+//    }
+//    
+//    
+//    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingInstance"];
+//    
+//    self.library = [Tealium instanceWithConfiguration:config];
+//    [self.library instanceWithConfiguration:config
+//                                 completion:^(BOOL success, NSError *error) {
+//                                     [finishedLoading fulfill];
+//                                 }];
+//    
+//    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
+//        NSLog(@"%s error:%@", __FUNCTION__, error);
+//    }];
+//    
+//}
+//
+//- (void) testSharedInstanceEnableTagManagmentWebView {
+//    
+//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_ON" ofType:@"html"];
+//    
+//    
+//    // Default is no tag management so webview should not be initialized
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"demo"
+//                                                                environment:@"dev"];
+//    
+//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+//    config.logLevel = TEALLogLevelVerbose;
+//    [self enableSharedInstanceWithConfiguration:config];
+//    
+//    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was not initialized when it should have been.");
+//    
+//}
+//
+//- (void) testSharedInstanceDisableTagManagmentWebView {
+//    
+//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_OFF" ofType:@"html"];
+//    
+//    // Default is no tag management so webview should not be initialized
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"demo"
+//                                                                environment:@"dev"];
+//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+//    config.logLevel = TEALLogLevelVerbose;
+//    [self enableSharedInstanceWithConfiguration:config];
+//    
+//    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was initialized when it should not have been.");
+//    
+//}
 
 @end

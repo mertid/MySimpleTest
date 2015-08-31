@@ -128,7 +128,12 @@
 }
 
 - (NSDictionary *) persistentDataSources {
-    return [self.store dataSourcesCopy];
+    
+    NSDictionary *copy = [self.store dataSourcesCopy];
+    if (!copy){
+        copy = @{};
+    }
+    return copy;
 }
 
 - (void) setPersistentDataSources:(NSDictionary *)newDataSources {

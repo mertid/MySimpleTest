@@ -12,7 +12,7 @@
 
 @interface TEALActionQueueManager ()
 
-@property (strong, nonatomic) TEALDataQueue *queuedActions;
+@property (nonatomic, strong) TEALDataQueue *queuedActions;
 
 @end
 

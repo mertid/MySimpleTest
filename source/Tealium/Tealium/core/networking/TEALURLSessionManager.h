@@ -14,8 +14,8 @@
 
 @interface TEALURLSessionManager : NSObject
 
-@property (strong, nonatomic) TEALReachabilityManager *reachability;
-@property (strong, nonatomic) dispatch_queue_t completionQueue;
+@property (nonatomic, strong) TEALReachabilityManager *reachability;
+@property (nonatomic, strong) dispatch_queue_t completionQueue;
 
 
 - (instancetype) initWithConfiguration:(NSURLSessionConfiguration *)configuration;

@@ -27,53 +27,62 @@
                         TEALDispatchManagerConfiguration,
                         TEALModulesDelegate>
 
-@property (strong, nonatomic) NSArray *dispatchNetworkServices;
-@property (strong, nonatomic) TEALLogger *logger;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
-@property (strong, nonatomic) TEALDataSources *dataSources;
-@property (strong, nonatomic) TEALDelegateManager *delegateManager;
-@property (strong, nonatomic) TEALDispatchManager *dispatchManager;
-@property (strong, nonatomic) TEALSettings *settings;
+@property (nonatomic, strong) NSArray *dispatchNetworkServices;
+@property (nonatomic, strong) TEALLogger *logger;
+@property (nonatomic, strong) TEALOperationManager *operationManager;
+@property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, strong) TEALDataSources *dataSources;
+@property (nonatomic, strong) TEALDelegateManager *delegateManager;
+@property (nonatomic, strong) TEALDispatchManager *dispatchManager;
+@property (nonatomic, strong) TEALSettings *settings;
 @property (weak, nonatomic)   id<TEALModulesDelegate> modulesDelegate;
 
-@property (strong, nonatomic) NSDictionary *moduleData;
+@property (nonatomic, strong) NSDictionary *moduleData;
 
 @property (readwrite) BOOL enabled;
 
 @end
 
-__strong static Tealium *_sharedObject = nil;
+__strong static NSDictionary *_allInstances = nil;
 
 @implementation Tealium
 
 #pragma mark - PUBLIC CLASS METHODS
 
-+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration {
+
++ (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration {
     
-    return [Tealium sharedInstanceWithConfiguration:configuration completion:nil];
+    return [Tealium instanceForKey:key configuration:configuration completion:nil];
+
+}
+
+
++ (instancetype) instanceForKey:(NSString *)key {
+    
+    if (!key) {
+        return nil;
+    }
+    
+    Tealium *instance = _allInstances[key];
+    
+    return instance;
     
 }
 
-+ (instancetype) sharedInstance {
+
++ (void) destroyInstanceForKey:(NSString *)key {
     
-    return _sharedObject;
-}
-
-+ (void) destroySharedInstance {
-    [[Tealium sharedInstance] disable];
-    _sharedObject = nil;
-}
-
-+ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration {
+    if (!key) {
+        return;
+    }
     
-    return [Tealium instanceWithConfiguration:configuration completion:nil];
-
+    Tealium *instance = [Tealium instanceForKey:key];
+    instance = nil;
+    
+    [Tealium removeInstanceWithKey:key];
+    
 }
 
-- (instancetype) instanceWithConfiguration:(TEALConfiguration *) configuration {
-    return [Tealium instanceWithConfiguration:configuration completion:nil];
-}
 
 #pragma mark - PUBLIC INSTANCE METHODS
 
@@ -116,7 +125,7 @@ __strong static Tealium *_sharedObject = nil;
     NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                          [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
                                                                          [self.dataSources persistentDataSources],
-                                                                         clientDataSources
+                                                                         clientDataSources? clientDataSources:@{}
                                                                          ]];
     
     __weak Tealium *weakSelf = self;
@@ -131,16 +140,22 @@ __strong static Tealium *_sharedObject = nil;
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-                                                                         [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
-                                                                         [self.dataSources persistentDataSources],
-                                                                         clientDataSources
-                                                                         ]];
+    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
+    NSDictionary *persistentDataSources = [self.dataSources persistentDataSources];
+
+    NSMutableArray *dataToComposite = [NSMutableArray array];
+    
+    if (captureTimeDataSources) [dataToComposite addObject:captureTimeDataSources];
+    if (persistentDataSources)  [dataToComposite addObject:persistentDataSources];
+    if (clientDataSources)      [dataToComposite addObject:clientDataSources];
+        
+    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:dataToComposite];
+    
     __weak Tealium *weakSelf = self;
 
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        [weakSelf sendEvent:TEALDispatchTypeView withData:captureTimeDataSources title:title];
+        [weakSelf sendEvent:TEALDispatchTypeView withData:compositeDataSources title:title];
         
     }];
 }
@@ -170,6 +185,24 @@ __strong static Tealium *_sharedObject = nil;
 
 #pragma mark - PRIVATE CLASS METHODS
 
++ (instancetype) instanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock)completion {
+
+    if (!key){
+        return nil;
+    }
+    
+    configuration.instanceID = key;
+    
+        NSLog(@"%s configuration: %@", __FUNCTION__, configuration);
+
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
+    
+    [Tealium addInstance:instance key:key];
+    
+    return instance;
+    
+}
+
 + (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion{
     
     Tealium *instance = [[Tealium alloc] initPrivate];
@@ -192,17 +225,52 @@ __strong static Tealium *_sharedObject = nil;
     return instance;
 }
 
-+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion {
-    
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
-    [Tealium setSharedInstance:instance];
-    
-    return instance;
++ (NSDictionary *) allInstances {
+    return _allInstances;
 }
 
-+ (void) setSharedInstance:(Tealium *)instance {
-    _sharedObject = instance;
++ (void) addInstance:(Tealium *)instance key:(NSString *)key {
+    
+    if (!instance ||
+        !key) {
+        return;
+    }
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[_allInstances copy]];
+    mDict[key] = instance;
+    
+    NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
+
+    _allInstances = newInstances;
 }
+
++ (void) removeInstanceWithKey:(NSString *)key {
+    
+    if (!key) {
+        return;
+    }
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[_allInstances copy]];
+    [mDict removeObjectForKey:key];
+    
+    NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    _allInstances = newInstances;
+    
+}
+
+
+//+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion {
+//    
+//    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
+//    [Tealium setSharedInstance:instance];
+//    
+//    return instance;
+//}
+//
+//+ (void) setSharedInstance:(Tealium *)instance {
+//    _sharedObject = instance;
+//}
 
 #pragma mark - PRIVATE INSTANCE METHODS
 

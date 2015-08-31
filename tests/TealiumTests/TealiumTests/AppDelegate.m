@@ -13,7 +13,7 @@
 @interface AppDelegate () <TealiumDelegate>
 
 
-@property (strong, nonatomic) Tealium *tealiumInstance;
+@property (nonatomic, strong) Tealium *tealiumInstance;
 
 @end
 
@@ -35,24 +35,26 @@
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
-    
-    [Tealium sharedInstanceWithConfiguration:configuration];
-    [[Tealium sharedInstance] setDelegate:self];
+
+    [Tealium instanceForKey:@"1" configuration:configuration];
+    [[Tealium instanceForKey:@"1"] setDelegate:self];
+//    [Tealium sharedInstanceWithConfiguration:configuration];
+//    [[Tealium sharedInstance] setDelegate:self];
     
 //    [[Tealium sharedInstance] setPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
     
-//    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                           profile:@"non-exsist"
-//                                                                       environment:@"dev"];
-//    
-//    instanceConfig.logLevel = TEALLogLevelVerbose;
-//    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-//    instanceConfig.autotrackingLifecycleEnabled = YES;
-//    instanceConfig.autotrackingUIEventsEnabled = NO;
-//    instanceConfig.autotrackingViewsEnabled = NO;
-//    
-//    self.tealiumInstance = [Tealium instanceWithConfiguration:instanceConfig];
-//    [self.tealiumInstance setDelegate:self];
+    
+    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                           profile:@"non-exsist"
+                                                                       environment:@"dev"];
+    instanceConfig.logLevel = TEALLogLevelVerbose;
+    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    instanceConfig.autotrackingLifecycleEnabled = YES;
+    instanceConfig.autotrackingUIEventsEnabled = NO;
+    instanceConfig.autotrackingViewsEnabled = NO;
+    
+    [Tealium instanceForKey:@"2" configuration:instanceConfig];
+    [[Tealium instanceForKey:@"2"] setDelegate:self];
     
 //    if (configuration.autotrackingUIEventsEnabled == NO){
 //        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];

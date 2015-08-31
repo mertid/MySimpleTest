@@ -49,6 +49,13 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @interface TEALConfiguration : NSObject
 
+/*
+ *  The instance id assigned to the library instance associated with this configuration
+ *
+ *  @param instanceKey NSString identifier
+ */
+@property (nonatomic, strong) NSString *instanceID;
+
 /**
  *  Tealium iQ account name
  */
@@ -140,6 +147,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 
 + (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
 
-- (NSString *) instanceID;
+//- (NSString *) instanceID;
 
 @end

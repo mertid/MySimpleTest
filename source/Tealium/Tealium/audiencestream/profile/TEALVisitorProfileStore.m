@@ -18,7 +18,7 @@
 
 @interface TEALVisitorProfileStore ()
 
-@property (strong, nonatomic) TEALVisitorProfile *currentProfile;
+@property (nonatomic, strong) TEALVisitorProfile *currentProfile;
 @property (weak, nonatomic) NSString *visitorID;
 @property (weak, nonatomic) NSURL *profileURL;
 @property (weak, nonatomic) NSURL *profileDefinitionURL;

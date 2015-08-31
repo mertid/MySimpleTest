@@ -17,11 +17,11 @@
 
 @interface TEALPublishSettingsStoreTests : XCTestCase
 
-@property (strong, nonatomic) TEALPublishSettingsStore *store;
-@property (strong, nonatomic) TEALOperationManager *operationManager;
-@property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, strong) TEALPublishSettingsStore *store;
+@property (nonatomic, strong) TEALOperationManager *operationManager;
+@property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
 
-@property (strong, nonatomic) TEALConfiguration *configuration;
+@property (nonatomic, strong) TEALConfiguration *configuration;
 
 @end
 

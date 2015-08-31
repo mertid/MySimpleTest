@@ -89,7 +89,7 @@
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
         eventName = TEALDataSourceValue_LifecycleLaunch;
     }
-    if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
+    else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
         eventName = TEALDataSourceValue_LifecycleSleep;
     }
     else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
@@ -101,7 +101,12 @@
     else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
         eventName = TEALDataSourceValue_LifecycleTerminate;
     }
+    else {
+        eventName = TEALDataSourceValue_Unknown;
+    }
 
+#warning COMPLETE with additional lifeycycle data
+    
     NSDictionary *lifecycleData = @{TEALDataSourceKey_LifecycleType: eventName};
     
     if (self.eventProcessingBlock) {

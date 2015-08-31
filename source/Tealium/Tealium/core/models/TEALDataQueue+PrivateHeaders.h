@@ -10,7 +10,7 @@
 
 @interface TEALDataQueue (PrivateHeaders)
 
-@property (strong, nonatomic) NSMutableArray *dataQueue;
+@property (nonatomic, strong) NSMutableArray *dataQueue;
 
 @property (nonatomic) NSUInteger capacity;
 

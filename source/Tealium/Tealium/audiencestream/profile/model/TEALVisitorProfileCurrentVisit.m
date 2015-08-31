@@ -16,10 +16,10 @@
 
 @property (readwrite) NSTimeInterval creationTimestamp;
 
-@property (strong, nonatomic) NSArray *dates;
-@property (strong, nonatomic) NSArray *flags;
-@property (strong, nonatomic) NSArray *metrics;
-@property (strong, nonatomic) NSArray *properties;
+@property (nonatomic, strong) NSArray *dates;
+@property (nonatomic, strong) NSArray *flags;
+@property (nonatomic, strong) NSArray *metrics;
+@property (nonatomic, strong) NSArray *properties;
 
 @property (readwrite) NSUInteger totalEventCount;
 

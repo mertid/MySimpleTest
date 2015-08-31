@@ -16,4 +16,10 @@
 
 @interface Tealium (AutoTracking) <TEALModulesDelegate>
 
++ (NSArray *) allAutotrackingViewInstances;
+
++ (NSArray *) allAutotrackingIvarInstances;
+
++ (NSArray *) allAutotrackingUIEventInstances;
+
 @end
