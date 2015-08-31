@@ -37,6 +37,7 @@
  */
 - (NSString *) visitorIDCopy;
 
+
 /**
  *  Last retrieved profile instance.  This is updated every time the profile is queried.  Depending on the settings the library was enabled with, this could be after every sendEvent:customData: call or only on explicit request.
  *
@@ -51,7 +52,6 @@
  *  @param completion Completion block with retrieved TEALVisitorProfile instance and an error should any problems occur.
  */
 - (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion;
-
 
 
 /**

@@ -42,6 +42,7 @@ NSString * const TEALDataSourceKey_SelectedTitle        = @"selected_title";
 NSString * const TEALDataSourceKey_SelectedValue        = @"selected_value";
 NSString * const TEALDataSourceKey_SystemVersion        = @"os_version";
 NSString * const TEALDataSourceKey_Timestamp            = @"timestamp";
+NSString * const TEALDataSourceKey_TealiumID            = @"tealium_id";
 NSString * const TEALDataSourceKey_UUID                 = @"uuid";
 NSString * const TEALDataSourceKey_ViewTitle            = @"screen_title";
 NSString * const TEALDataSourceKey_ViewHeight           = @"view_height";

@@ -23,8 +23,11 @@
 @property (strong, nonatomic) TEALSettings *settings;
 @property (strong, nonatomic) TEALURLSessionManager *urlSessionManager;
 
-- (NSArray *) currentDispatchNetworkServices;
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices;
+- (void) addModuleData:(NSDictionary *) dictionary;
+- (void) removeModuleDataForKey:(NSString *)key;
+- (NSDictionary *) moduleDataCopy;
+- (NSArray *) currentDispatchNetworkServices;
 
 @end
 

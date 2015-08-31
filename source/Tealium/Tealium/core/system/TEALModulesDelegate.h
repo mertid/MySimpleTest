@@ -16,12 +16,14 @@
 - (void) enableAudienceStream;
 - (void) enableTagManagement;
 
-- (void) enableAutotrackingIvars;
 - (void) enableAutotrackingLifecycle;
 - (void) enableAutotrackingUIEvents;
 - (void) enableAutotrackingViews;
 
 - (void) enableRemoteCommands;
+
+- (void) unlockMobileCompanion;
+
 
 @end
 

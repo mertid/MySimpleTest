@@ -43,6 +43,7 @@ extern NSString * const TEALDataSourceKey_SelectedTitle;
 extern NSString * const TEALDataSourceKey_SelectedValue;
 extern NSString * const TEALDataSourceKey_SystemVersion;
 extern NSString * const TEALDataSourceKey_Timestamp;
+extern NSString * const TEALDataSourceKey_TealiumID;
 extern NSString * const TEALDataSourceKey_UUID;
 extern NSString * const TEALDataSourceKey_ViewTitle;
 extern NSString * const TEALDataSourceKey_ViewHeight;

@@ -81,7 +81,12 @@
 
 - (void) dequeueAllData;
 
-- (NSUInteger) queuedDispatchCount;
-- (NSUInteger) sentDispatchCount;
+- (NSArray *) queuedDispatchesCopy;
+
+- (NSArray *) sentDispatchesCopy;
+
+//- (NSUInteger) queuedDispatchCount;
+//
+//- (NSUInteger) sentDispatchCount;
 
 @end

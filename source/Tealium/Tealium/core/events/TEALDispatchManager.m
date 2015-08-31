@@ -29,12 +29,17 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 @implementation TEALDispatchManager
 
+
+#pragma mark - PUBLIC CLASS
+
 + (instancetype) dispatchManagerWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
                                          delegate:(id<TEALDispatchManagerDelegate>)delegate {
 
     return [[[self class] alloc] initWithConfiguration:configuration
                                               delegate:delegate];
 }
+
+#pragma mark - PUBLIC INSTANCE
 
 - (instancetype) initWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
                               delegate:(id<TEALDispatchManagerDelegate>)delegate {
@@ -77,6 +82,14 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     [self.queuedDispatches dequeueAllObjects];
     [self.sentDispatches dequeueAllObjects];
     
+}
+
+- (NSArray *) queuedDispatchesCopy {
+    return [self.queuedDispatches copy];
+}
+
+- (NSArray *) sentDispatchesCopy {
+    return [self.sentDispatches copy];
 }
 
 #pragma mark - enqueue / dequeue dispatches

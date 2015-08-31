@@ -30,7 +30,7 @@
     
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.autotrackingIvarsEnabled = YES;
+    configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;

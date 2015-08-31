@@ -8,6 +8,7 @@
 
 #import "TEALDataSources+Autotracking.h"
 #import "TEALDataSourceConstants.h"
+#import "TEALIDGenerator.h"
 #import <objc/runtime.h>
 
 @implementation TEALDataSources (Autotracking)
@@ -30,6 +31,9 @@
     }
     
     [datasources addEntriesFromDictionary:[self objectClassDataFor:obj]];
+    
+    NSString *tealiumID = [TEALIDGenerator tealiumIdForObject:obj];
+    if (tealiumID) datasources[TEALDataSourceKey_TealiumID] = tealiumID;
         
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
