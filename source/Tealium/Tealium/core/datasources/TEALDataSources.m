@@ -93,6 +93,20 @@
     return datasources;
 }
 
+- (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
+    
+    [self.store addDataSources:additionalDataSources];
+    
+}
+
+- (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys {
+    
+    NSArray *copy = [dataSourceKeys copy];
+    [copy enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.store removeDataSourceForKey:obj];
+    }];
+}
+
 #pragma mark - PUBLIC HELPERS
 
 - (NSString *) applicationUUID {
@@ -134,10 +148,6 @@
         copy = @{};
     }
     return copy;
-}
-
-- (void) setPersistentDataSources:(NSDictionary *)newDataSources {
-    [self.store setNewDataSources:newDataSources];
 }
 
 #pragma mark - PRIVATE METHODS

@@ -30,8 +30,8 @@
 
 - (NSDictionary *) dataSourcesCopy;
 
-- (void) setNewDataSources:(NSDictionary *)newDataSources;
-
 - (void) addDataSources:(NSDictionary *)additionalDataSources;
+
+- (void) removeDataSourceForKey:(NSString *)dataSourceKey;
 
 @end

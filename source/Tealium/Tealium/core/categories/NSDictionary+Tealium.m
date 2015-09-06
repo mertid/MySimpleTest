@@ -13,6 +13,8 @@
 @implementation NSDictionary (Tealium)
 
 - (NSDictionary *) teal_stringifiedDictionary {
+ 
+#warning This method unsafe, causing crashes
     
     NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
     

@@ -12,17 +12,22 @@
 @protocol TEALMobileCompanionViewDelegate <NSObject>
 
 - (void) tealiumMobileCompanionViewDismissed;
+- (void) tealiumMobileCompanionViewRequestsDataForTabTitle:(NSString *)title;
 
 @end
 
 @interface TEALMobileCompanionView : UIView
 
 @property (nonatomic, weak) id<TEALMobileCompanionViewDelegate> delegate;
+@property (nonatomic, weak) id<UITableViewDelegate> tableViewDelegate;
+@property (nonatomic, weak) id<UITableViewDataSource> tableViewDataSourceDelegate;
 
 - (void) expand;
 
 - (void) minimize;
 
 - (void) dismiss;
+
+- (void) redrawExpanded;
 
 @end

@@ -10,10 +10,9 @@
 
 @interface UIColor (Tealium)
 
+#warning THIS USED ANYWHERE?
+
 + (UIColor *) teal_colorWithHexString:(NSString *)hexString;
-
-+ (UIColor *) teal_randomColor;
-
 
 CGFloat TEALColorComponent(NSString *string, NSUInteger start, NSUInteger length);
 

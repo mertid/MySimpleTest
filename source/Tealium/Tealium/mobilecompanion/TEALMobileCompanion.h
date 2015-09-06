@@ -9,12 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "TEALMobileCompanionDelegate.h"
 
+@class TEALMobileCompanionContent;
+
 @interface TEALMobileCompanion : UIViewController
 
 @property (nonatomic, weak) id<TEALMobileCompanionDelegate> delegate;
 
 - (instancetype) initWithInstanceID:(NSString *)instanceID;
 
+- (void) addContent:(TEALMobileCompanionContent * )content forTitle:(NSString *)title;
+
+- (void) refresh;
+
 - (void) reveal;
+
+- (void) forceDismiss;
 
 @end

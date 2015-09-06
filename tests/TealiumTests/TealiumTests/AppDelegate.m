@@ -24,6 +24,8 @@
     // Override point for customization after application launch.
     
 #ifndef TEST
+    
+    // Instance 1
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
@@ -36,24 +38,27 @@
     configuration.autotrackingViewsEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
 
-    [Tealium instanceForKey:@"1" configuration:configuration];
+    [Tealium newInstanceForKey:@"1" configuration:configuration];
     [[Tealium instanceForKey:@"1"] setDelegate:self];
 //    [Tealium sharedInstanceWithConfiguration:configuration];
 //    [[Tealium sharedInstance] setDelegate:self];
     
-//    [[Tealium sharedInstance] setPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
+//    [[Tealium instanceForKey:@"1"] addPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
+    [[Tealium instanceForKey:@"1"] removePersistentDataSourceForKeys:@[@"somePersistKey"]];
     
     
+    
+    // Instance 2
     TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                            profile:@"non-exsist"
                                                                        environment:@"dev"];
-    instanceConfig.logLevel = TEALLogLevelVerbose;
+    instanceConfig.logLevel = TEALLogLevelNone;
     instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     instanceConfig.autotrackingLifecycleEnabled = YES;
     instanceConfig.autotrackingUIEventsEnabled = NO;
     instanceConfig.autotrackingViewsEnabled = NO;
     
-    [Tealium instanceForKey:@"2" configuration:instanceConfig];
+    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
     [[Tealium instanceForKey:@"2"] setDelegate:self];
     
 //    if (configuration.autotrackingUIEventsEnabled == NO){

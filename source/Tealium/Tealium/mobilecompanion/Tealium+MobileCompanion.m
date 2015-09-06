@@ -10,6 +10,9 @@
 #import "Tealium+PrivateHeader.h"
 #import "TEALMobileCompanion.h"
 #import "TEALMobileCompanionDelegate.h"
+#import "TEALMobileCompanionContent.h"
+#import "TEALMobileCompanionConstants.h"
+#import "NSString+Tealium.h"
 #import <objc/runtime.h>
 
 char const * const TEALKVO_MobileCompanion = "com.tealium.kvo.mobilecompanion";
@@ -71,6 +74,24 @@ NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
 }
 
 - (void) tealiumMobileCompanionRequestsSettings:(TEALMobileCompanion *)mobileCompanion {
+    
+    TEALMobileCompanionContent *newContent = [[TEALMobileCompanionContent alloc] init];
+    
+    [newContent addSectionAndRowDataFromDictionary:@{
+                                                     @"Configuration":@[
+                                                             @{@"account":self.settings.account},
+                                                             @{@"profile":self.settings.tiqProfile},
+                                                             @{@"target":self.settings.environment},
+                                                             @{@"autotracking UIEvents":[NSString teal_stringFromBool:self.settings.autotrackingUIEventsEnabled]}
+                                                                            ],
+                                                     @"Mobile Publish Settings":@[
+                                                             @{@"Published At":@"Not yet implemented"},
+                                                                                ]
+                                                     }];
+    
+    
+    [mobileCompanion addContent:newContent forTitle:TEALMobileCompanionTabTitleOverview];
+    
     
 }
 

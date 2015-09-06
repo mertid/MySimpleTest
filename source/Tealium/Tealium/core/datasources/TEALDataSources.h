@@ -34,7 +34,13 @@
 /*
  // TODO Comments
  */
-- (void) setPersistentDataSources:(NSDictionary *)newDataSources;
+- (void) addPersistentDataSources:(NSDictionary *)additionalDataSources;
+
+
+/*
+ 
+ */
+- (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys;
 
 
 // HELPERS

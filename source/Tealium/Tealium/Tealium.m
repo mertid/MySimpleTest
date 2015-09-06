@@ -174,12 +174,24 @@ __strong static NSDictionary *_allInstances = nil;
     return [[self.dataSources persistentDataSources] copy];
 }
 
-- (void) setPersistentDataSources:(NSDictionary *) newDataSources {
+- (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
+
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+        [weakSelf.dataSources addPersistentDataSources:additionalDataSources];
+
+    }];
+    
+}
+
+- (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys {
     
     __block typeof(self) __weak weakSelf = self;
 
     [self.operationManager addOperationWithBlock:^{
-       [weakSelf.dataSources setPersistentDataSources:newDataSources];
+        [weakSelf.dataSources removePersistentDataSourceForKeys:dataSourceKeys];
+
     }];
 }
 

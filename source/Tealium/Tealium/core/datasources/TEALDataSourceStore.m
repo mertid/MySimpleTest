@@ -85,20 +85,17 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
     return [self.dataSources copy];
 }
 
-- (void) setNewDataSources:(NSDictionary *)newDataSources {
-//    dispatch_barrier_sync(self.queue, ^{
-        [self.dataSources removeAllObjects];
-        [self.dataSources addEntriesFromDictionary:newDataSources];
-        [self archiveWithStorageKey:self.instanceID];
-//    });
-}
-
 - (void) addDataSources:(NSDictionary *)additionalDataSources {
-//    dispatch_barrier_sync(self.queue, ^{
+
         [self.dataSources addEntriesFromDictionary:additionalDataSources];
         [self archiveWithStorageKey:self.instanceID];
-//    });
     
+}
+
+- (void) removeDataSourceForKey:(NSString *)dataSourceKey {
+    
+    [self.dataSources removeObjectForKey:dataSourceKey];
+    [self archiveWithStorageKey:self.instanceID];
 }
 
 #pragma mark - I/O
