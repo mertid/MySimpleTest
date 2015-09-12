@@ -11,12 +11,15 @@
 #import "TEALMobileCompanionConstants.h"
 #import "TEALMobileCompanionTableViewController.h"
 #import "TEALMobileCompanionContent.h"
+#import "TEALMobileCompanionOverlays.h"
 
-@interface TEALMobileCompanion() <TEALMobileCompanionViewDelegate>
+@interface TEALMobileCompanion() <TEALMobileCompanionViewDelegate, TEALMobileCompanionOverlaysDelegate>
 
 @property (nonatomic, strong) NSString *instanceID;
 @property (nonatomic, strong) TEALMobileCompanionView *customView;
 @property (nonatomic, strong) TEALMobileCompanionTableViewController *tableViewController;
+@property (nonatomic, strong) TEALMobileCompanionOverlays *overlays;
+@property (nonatomic)   BOOL ivarIsEnabled;
 
 @end
 
@@ -30,6 +33,8 @@
         
         _instanceID = instanceID;
         _tableViewController = [[TEALMobileCompanionTableViewController alloc] init];
+        _overlays = [[TEALMobileCompanionOverlays alloc] init];
+        _ivarIsEnabled = NO;
         
     }
     return self;
@@ -41,14 +46,41 @@
     [self refresh];
 }
 
+- (void) enable {
+    
+    self.ivarIsEnabled = YES;
+    [self addGestureUnlockRecognizer];
+}
+
+- (void) disable {
+
+    self.ivarIsEnabled = NO;
+    [self removeGestureUnlockRecognizer];
+    [self forceDismiss];
+    
+}
+
+- (BOOL) isEnabled {
+    
+    return self.ivarIsEnabled;
+    
+}
+
 - (void) refresh {
+    
+    if (!self.ivarIsEnabled) return;
     
     [self.customView redrawExpanded];
 }
 
 - (void) reveal {
     
+    if (!self.ivarIsEnabled) return;
+    if ([self rootWindowControllerViewContainsSelf]) return;
+    
     self.view.alpha = 0.0;
+    
+    [self.overlays addOverlays];
     
     [[self rootWindowController].view addSubview:self.view];
     
@@ -60,13 +92,26 @@
                      }];
 }
 
+- (BOOL) rootWindowControllerViewContainsSelf {
+    
+    return [[[self rootWindowController].view subviews] containsObject:self];
+    
+}
+
 - (void) forceDismiss {
     
+    // This triggers the same method the popup close button executes when tapped.
     [self.customView dismiss];
     
 }
 
 #pragma mark - PRIVATE INSTANCE
+
+- (instancetype) init {
+    [NSException raise:@"Should not be initialized directly"
+                format:@"Please use initWithInstanceID method."];
+    return nil;
+}
 
 - (UIView *) view {
     
@@ -82,6 +127,18 @@
     }
     
     return self.customView;
+}
+
+- (void) addGestureUnlockRecognizer {
+ 
+#warning IMPLEMENT gesture enablement
+
+}
+
+- (void) removeGestureUnlockRecognizer {
+    
+#warning IMPLEMENT gesture disablement
+
 }
 
 #pragma mark - HELPERS
@@ -146,6 +203,8 @@
 
 - (void) tealiumMobileCompanionViewDismissed {
     
+    [self.overlays removeOverlays];
+    
     if (self.delegate) {
         [self.delegate tealiumMobileCompanionDidDismiss];
     }
@@ -161,27 +220,39 @@
     }
     if ([title isEqualToString:TEALMobileCompanionTabTitleView]) {
         if (self.delegate){
-            [self.delegate tealiumMobileCompanionRequestsDataSources:self forObject:nil];
+            [self.delegate tealiumMobileCompanionRequestsViewDataSources:self forObject:nil];
         }
     }
+    
+#warning REMOVE?
     if ([title isEqualToString:TEALMobileCompanionTabTitleElement]) {
         if (self.delegate){
-            [self.delegate tealiumMobileCompanionRequestsDataSources:self forObject:nil];
+            [self.delegate tealiumMobileCompanionRequestsEventDataSources:self forObject:nil];
         }
     }
+    
     if ([title isEqualToString:TEALMobileCompanionTabTitleLogs]) {
         if (self.delegate){
             [self.delegate tealiumMobileCompanionRequestsDispatchLogs:self];
         }
     }
     
+    if ([title isEqualToString:TEALMobileCompanionTabTitleTools]) {
+        if (self.delegate){
+            [self.delegate tealiumMobileCompanionRequestsTools:self];
+        }
+    }
 }
 
-#pragma mark - DATA HELPERS
+#pragma mark - TEAL MOBILE COMPANION OVERLAY DELEGATE
 
-//- (TEALMobileCompanionContent *) contentForTitle:(NSString *)title {
-//    
-//    return self.tableViewController.contentData[title];
-//}
+- (void) tealiumMobileCompanionOverlayTriggeredInspectionForObject:(NSObject *)object {
+    
+    if (self.delegate){
+        [self.delegate tealiumMobileCompanionRequestsEventDataSources:self forObject:object];
+    }
+    
+}
+
 
 @end

@@ -24,10 +24,7 @@ static BOOL alreadySwizzled;
     }
 
     alreadySwizzled = true;
-    
-#warning REMOVE after dev
-        NSLog(@"%s ", __FUNCTION__);
-    
+        
     Method origMethod = class_getInstanceMethod(self, @selector(viewDidAppear:));
     oViewDidAppear = (void *)method_getImplementation(origMethod);
     

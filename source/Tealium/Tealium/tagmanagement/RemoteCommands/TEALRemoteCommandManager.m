@@ -55,33 +55,40 @@
 
 #pragma mark - PRIVATE INSTANCE
 
-- (void) addReservedCommands {
+- (void) addReservedCommands:(TEALBooleanBlock)successBlock {
     
     __block typeof(self) __weak weakSelf = self;
-//    __block __weak TEALOperationManager *weakOperationManager = self.operationManager;
+    __block __weak TEALOperationManager *weakOperationManager = self.operationManager;
     
-//    [weakOperationManager addOperationWithBlock:^{
-    
-        [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
+    [weakOperationManager addOperationWithBlock:^{
+        
+        BOOL loadedHTTPCommand =
+        [weakSelf addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
                          description:@"Processes tag created HTTP calls"
-                         targetQueue:self.operationManager.underlyingQueue
+                         targetQueue:weakOperationManager.underlyingQueue
                                block:^(TEALRemoteCommandResponse*response) {
+                                   
                                    if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
                                        [responseB send];
                                    }];
+                                   
                                }];
+        
+        BOOL loadedMobileCompanionCommand =
+        [weakSelf addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
+                         description:@"Remote unlock Mobile Companion"
+                         targetQueue:weakOperationManager.underlyingQueue
+                               block:^(TEALRemoteCommandResponse*response) {
+                                 
+#warning THIS only works if the call comes in at least twice
+                                   
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:weakOperationManager];
+                               }];
+        
+        if (successBlock) successBlock(loadedHTTPCommand && loadedMobileCompanionCommand);
+        
+    }];
 
-#warning Reenable for Mobile companion
-        
-//        [weakSelf addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
-//                         description:@"Remote unlock Mobile Companion"
-//                         targetQueue:weakOperationManager.underlyingQueue
-//                               block:^(TEALRemoteCommandResponse*response) {
-//                                   if (weakSelf.delegate) {[weakSelf.delegate tealiumRemoteRequestsMobileCompanionUnlock:response];}
-//                               }];
-        
-//    }];
-    
 
     
 }
@@ -98,7 +105,7 @@
     }];
 }
 
-- (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
+- (BOOL) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
     
     // 
     // name - (command id) required
@@ -108,11 +115,11 @@
     
     if (!name || name == nil){
         [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommandId response:nil identifier:nil responseBlock:responseBlock];
-        return;
+        return NO;
     }
     if (!responseBlock || responseBlock == nil){
         [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommandBlock response:nil identifier:name responseBlock:nil];
-        return;
+        return NO;
     }
     
     TEALRemoteCommand *command = self.commands[name];
@@ -127,6 +134,7 @@
     command.queue = queue;
     
     [self addNewCommands:@{name:command}];
+    return YES;
 }
 
 #pragma mark - TAG REMOTE COMMAND RESPONSE DELEGATE
@@ -141,7 +149,7 @@
                                  ", response.commandId, response.responseId, (long)response.status, response.body];
     
     if (self.delegate) {
-        [self.delegate tagRemoteCommandRequestsCommandToWebView:callBackCommand];
+        [self.delegate tagRemoteCommandManagerRequestsCommandToWebView:callBackCommand];
     }
     
 }

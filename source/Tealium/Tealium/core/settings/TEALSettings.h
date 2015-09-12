@@ -27,6 +27,8 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
+- (BOOL) crashTrackingEnabled;
+- (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
 - (BOOL) isValid;
 - (BOOL) tagManagementEnabled;
@@ -41,7 +43,6 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSUInteger) dispatchSize;
 - (NSUInteger) logLevel;
 - (NSUInteger) offlineDispatchQueueSize;
-
 
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;

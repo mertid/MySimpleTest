@@ -75,7 +75,7 @@
     
     if (![self.sessionManager.reachability isReachable]) {
         
-        TEAL_LogVerbose(@"offline: %@", request);
+//        TEAL_LogVerbose(@"offline: %@", request);
         NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
                                       description:@"Profile Request Failed"
                                            reason:@"Network Connection Unavailable"
@@ -91,7 +91,7 @@
         
         if (connectionError) {
             
-            TEAL_LogVerbose(@"Profile Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
+//            TEAL_LogVerbose(@"Profile Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
         }
         
         TEALVisitorProfile *profile = weakSelf.currentProfile;
@@ -139,7 +139,8 @@
         
         if (connectionError) {
             
-            TEAL_LogVerbose(@"Profile Definitions Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
+//            TEAL_LogVerbose(@"Profile Definitions Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
+            
         }
         completion( data, connectionError);
     };

@@ -34,6 +34,8 @@
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
     configuration.autotrackingIvarsEnabled = NO;
+    configuration.crashTrackingEnabled = YES;
+    configuration.mobileCompanionEnabled = YES;
     configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
@@ -61,12 +63,6 @@
     return YES;
 }
 
-#pragma mark - PUBLIC INSTANCE
-
-//- (NSString *) instanceID {
-//    return [NSString stringWithFormat:@"%@_%@_%@", self.accountName, self.profileName, self.environmentName];
-//}
-
 #pragma mark - PRIVATE INSTANCE
 
 - (NSString *) description {
@@ -77,12 +73,14 @@
                                           @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
                                           @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
                                           @"use http":[NSString teal_stringFromBool:self.useHTTP],
-                                          @"polling frequency":[NSNumber numberWithUnsignedLong:self.pollingFrequency],
-                                          @"log level":[NSNumber numberWithUnsignedInt:self.logLevel],
+                                          @"polling frequency":@(self.pollingFrequency),
+                                          @"log level":@(self.logLevel),
                                           @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
                                           @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
                                           @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
                                           @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
+                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.crashTrackingEnabled],
+                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
                                           @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],

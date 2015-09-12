@@ -35,7 +35,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [[Tealium instanceForKey:@"1"] unlockMobileCompanion];
+    [[Tealium instanceForKey:@"1"] revealMobileCompanion];
     [[Tealium instanceForKey:@"2"] trackViewWithTitle:@"2ndView" dataSources:nil];
         
 }

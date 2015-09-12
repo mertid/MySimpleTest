@@ -15,14 +15,21 @@
 
 - (void) enableAudienceStream;
 - (void) enableTagManagement;
-
 - (void) enableAutotrackingLifecycle;
 - (void) enableAutotrackingUIEvents;
 - (void) enableAutotrackingViews;
-
+- (void) enableMobileCompanion;
 - (void) enableRemoteCommands;
 
-- (void) unlockMobileCompanion;
+- (void) disableAutotrackingLifecycle;
+
+#warning IMPLEMENT remaining in respective modules
+- (void) disableAutotrackingUIEvents;
+- (void) disableAutotrackingViews;
+- (void) disableMobileCompanion;
+- (void) disableRemoteCommands;
+
+- (void) revealMobileCompanion;
 
 
 @end

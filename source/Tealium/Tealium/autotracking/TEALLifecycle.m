@@ -9,14 +9,12 @@
 #import "TEALLifecycle.h"
 #import "TEALLifecycleStore.h"
 #import "Tealium.h"
-#import "TEALLogger.h"
 #import "TEALDataSourceConstants.h"
 
 @interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
-@property (nonatomic, strong) NSString *instanceID;
 
 @end
 
@@ -24,34 +22,7 @@
 
 #warning ADD milestone dates tracking system
 
-- (instancetype) initWithInstanceID:(NSString *)instanceID {
-    self = [super init];
-    if (self) {
-        
-        _instanceID = instanceID;
-        
-        [self enableListeners];
-    }
-    return self;
-}
-
-- (void) enableListeners {
-    
-    NSArray *events = @[
-                        UIApplicationDidBecomeActiveNotification,
-                        UIApplicationDidEnterBackgroundNotification,
-                        UIApplicationWillTerminateNotification
-                        ];
-    
-    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(processLifecycleEvent:)
-                                                     name:obj
-                                                   object:nil];
-    }];
-
-}
+#pragma mark - PUBLIC
 
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block {
     
@@ -71,15 +42,60 @@
     }
 }
 
+- (void) reEnable {
+    if (!self.enabled) {
+        self.enabled = YES;
+        [self enableListeners];
+    }
+}
+
 - (BOOL) isEnabled {
     return self.enabled;
 }
 
-- (NSString *) instanceIDCopy {
-    return [self.instanceID copy];
+- (NSDictionary *)currentLifecycleData {
+    
+#warning IMPLEMENT
+    return nil;
+    
 }
 
 #pragma mark - PRIVATE INSTANCE
+- (instancetype) init {
+    self = [super init];
+    if (self) {
+        
+        [self loadData];
+        [self enableListeners];
+        
+    }
+    return self;
+}
+
+- (void) loadData {
+    
+#warning IMPLEMENT
+    
+}
+
+- (void) enableListeners {
+    
+    NSArray *events = @[
+                        UIApplicationDidBecomeActiveNotification,
+                        UIApplicationDidEnterBackgroundNotification,
+                        UIApplicationWillTerminateNotification
+                        ];
+    
+    [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(processLifecycleEvent:)
+                                                     name:obj
+                                                   object:nil];
+    }];
+    
+}
+
 
 - (void) processLifecycleEvent:(NSNotification*) notification {
     
@@ -116,9 +132,9 @@
     }
 }
 
-- (NSString *) description {
-    return [NSString stringWithFormat:@"TEALLifecycle with instanceID: %@", self.instanceID];
-}
+//- (NSString *) description {
+//    return [NSString stringWithFormat:@"TEALLifecycle with instanceID: %@", self.instanceID];
+//}
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

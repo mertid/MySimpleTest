@@ -13,14 +13,12 @@
 
 @interface TEALMobileCompanionContent : NSObject
 
-- (void) addSectionAndRowDataFromDictionary:(NSDictionary *)dictionary;
++ (TEALMobileCompanionContent *) contentFromArray:(NSArray *)array;
+
+- (void) addSectionData:(TEALMobileCompanionContentSection *)section;
 
 - (NSArray *) headerTitles;
 
 - (NSArray *) rowDataForSectionIndex:(NSInteger)index;
-
-- (NSString *) keyForIndex:(NSIndexPath *)indexPath;
-
-- (NSString *) valueForIndex:(NSIndexPath *)indexPath;
 
 @end

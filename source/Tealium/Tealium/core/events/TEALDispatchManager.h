@@ -69,11 +69,7 @@
 - (void) unarchiveDispatchQueue;
 - (void) archiveDispatchQueue;
 
-// RECOMMEND: renaming to runDispatchQueue - to match with disableDispatchQueue
 - (void) runQueuedDispatches;
-
-// private ?
-//- (void) addDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock;
 
 - (void) purgeStaleDispatches;
 
@@ -84,9 +80,5 @@
 - (NSArray *) queuedDispatchesCopy;
 
 - (NSArray *) sentDispatchesCopy;
-
-//- (NSUInteger) queuedDispatchCount;
-//
-//- (NSUInteger) sentDispatchCount;
 
 @end

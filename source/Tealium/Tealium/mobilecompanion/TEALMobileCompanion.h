@@ -19,6 +19,12 @@
 
 - (void) addContent:(TEALMobileCompanionContent * )content forTitle:(NSString *)title;
 
+- (void) enable;
+
+- (void) disable;
+
+- (BOOL) isEnabled;
+
 - (void) refresh;
 
 - (void) reveal;

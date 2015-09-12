@@ -10,7 +10,6 @@
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
 #import "TEALDataSourceStore.h"
-#import "TEALLogger.h"
 #import "TEALSharedDataSources.h"
 #import "TEALSystemHelpers.h"
 
@@ -30,7 +29,7 @@
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
     
     if (!instanceID) {
-        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
+//        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
         return nil;
     }
     

@@ -13,11 +13,13 @@
 #import "TEALLogger.h"
 #import "TEALOperationManager.h"
 #import "TEALSettings.h"
+#import "TEALDispatchManager.h"
 #import "TEALURLSessionManager.h"
 
 @interface Tealium (Private)
 
 @property (nonatomic, strong) TEALDataSources *dataSources;
+@property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALLogger *logger;
 @property (nonatomic, strong) TEALOperationManager *operationManager;
 @property (nonatomic, strong) TEALSettings *settings;

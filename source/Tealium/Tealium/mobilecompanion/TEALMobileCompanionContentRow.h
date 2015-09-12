@@ -6,11 +6,21 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+typedef NS_ENUM(NSUInteger, TEALMobileCompanionContentRowType){
+    TEALMobileCompanionContentRowTypeData,
+    TEALMobileCompanionContentRowTypeTool
+};
 
 @interface TEALMobileCompanionContentRow : NSObject
 
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, strong) NSString *value;
+- (instancetype) initWithKey:(NSString *)key value:(NSString *)value;
+- (instancetype) initWithValueOnly:(NSString *)valueOnly;
+
+- (NSString *) keyValue;
+
+- (void) setType:(TEALMobileCompanionContentRowType)type;
+- (void) addButton:(UIButton*)button;
 
 @end

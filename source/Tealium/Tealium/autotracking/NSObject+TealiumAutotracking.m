@@ -19,7 +19,7 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
 
 - (void) teal_setAutotrackingEnabled:(BOOL)enabled
 {
-    NSNumber *enableOnNumber = [NSNumber numberWithBool:enabled];
+    NSNumber *enableOnNumber = @(enabled);
     objc_setAssociatedObject(self, &TEALKVOAutotrackDatasources, enableOnNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
@@ -33,7 +33,7 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
 }
 
 - (void) teal_setAutotrackIvarsEnabled:(BOOL)enabled {
-    NSNumber *enableOnNumber = [NSNumber numberWithBool:enabled];
+    NSNumber *enableOnNumber = @(enabled);
     objc_setAssociatedObject(self, &TEALKVOAutotrackIvars, enableOnNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 

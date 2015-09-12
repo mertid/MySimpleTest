@@ -16,8 +16,10 @@
 
 - (void) tealiumMobileCompanionDidDismiss;
 - (void) tealiumMobileCompanionRequestsSettings:(TEALMobileCompanion *)mobileCompanion;
-- (void) tealiumMobileCompanionRequestsDataSources:(TEALMobileCompanion *)mobileCompanion forObject:(NSObject *)object;
+- (void) tealiumMobileCompanionRequestsViewDataSources:(TEALMobileCompanion *)mobileCompanion forObject:(NSObject *)object;
+- (void) tealiumMobileCompanionRequestsEventDataSources:(TEALMobileCompanion *)mobileCompanion forObject:(NSObject *)object;
 - (void) tealiumMobileCompanionRequestsDispatchLogs:(TEALMobileCompanion *)mobileCompanion;
+- (void) tealiumMobileCompanionRequestsTools:(TEALMobileCompanion *)mobileCompanion;
 - (void) tealiumMobileCompanionEnabledTrace:(TEALMobileCompanion *)mobileCompanion withID:(NSString *)traceID;
 - (void) tealiumMobileCompanionDisabledTrace:(TEALMobileCompanion *)mobileCompanion;
 

@@ -18,7 +18,7 @@
 #import "NSDictionary+Tealium.h"
 #import "UIWebView+Tealium.h"
 
-@interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandDelegate>
+@interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandManagerDelegate>
 
 @property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
 @property (weak, nonatomic) NSString *publishURLString;
@@ -31,6 +31,7 @@
 
 @implementation TEALTagDispatchService
 
+#warning REFACTOR to remove need of logger in this class
 
 #pragma mark - PUBLIC INSTANCE
 
@@ -42,6 +43,7 @@
         _publishURLString = urlString;
         _operationManager = operationManager;
         _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
+        [_currentRemoteCommandManager setDelegate:self];
         
     }
     
@@ -64,7 +66,6 @@
 - (TEALRemoteCommandManager *) remoteCommandManager {
     return self.currentRemoteCommandManager;
 }
-
 
 #pragma mark - PRIVATE INSTANCE
 
@@ -113,10 +114,8 @@
             
             if (result.length == 0 || [[result lowercaseString] isEqualToString:@"true"]){
                 
-                NSString *packagedDataString = [NSString stringWithFormat:@"%s Packaged Dispatch Data Sources: %@", __FUNCTION__,
-                                                [dispatch.payload teal_arrayForDebugDisplay]];
-                
-                [self.logger logNormal:@"%@", packagedDataString];
+//                NSString *packagedDataString = [NSString stringWithFormat:@"%s Packaged Dispatch Data Sources: %@", __FUNCTION__,
+//                                                [dispatch.payload teal_arrayForDebugDisplay]];
                 
                 if (completion) {
                     completion(TEALDispatchStatusSent, dispatch, nil);
@@ -182,7 +181,7 @@
 
 #pragma mark - TEAL REMOTE COMMAND DELEGATE 
 
-- (void) tagRemoteCommandRequestsCommandToWebView:(NSString *)command {
+- (void) tagRemoteCommandManagerRequestsCommandToWebView:(NSString *)command {
     
     __block typeof(self) __weak weakSelf = self;
 
@@ -234,7 +233,7 @@
     }
     
     if (error) {
-        TEAL_LogNormal(@"%@", [error localizedDescription]);
+//        TEAL_LogNormal(@"%@", [error localizedDescription]);
     }
     
     return nil;

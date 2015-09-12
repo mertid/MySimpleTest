@@ -12,7 +12,6 @@
 
 @interface TEALMobileCompanionContentSection : NSObject
 
-
 - (instancetype) initWithTitle:(NSString *)title rows:(NSArray *)rowData;
 
 - (NSString *) title;

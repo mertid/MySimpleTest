@@ -254,8 +254,8 @@
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     float width = view.frame.size.width;
     float height = view.frame.size.height;
-    NSNumber *w = [NSNumber numberWithFloat:width];
-    NSNumber *h = [NSNumber numberWithFloat:height];
+    NSNumber *w = @(width);
+    NSNumber *h = @(height);
     if (w && h) {
         mDict[TEALDataSourceKey_ViewHeight] = h;
         mDict[TEALDataSourceKey_ViewWidth] = w;

@@ -9,7 +9,6 @@
 #import "TEALDispatchManager.h"
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
-#import "TEALLogger.h"
 
 static NSString * const Tealium_DispatchQueueKey = @"com.tealium.dispatch_queue";
 static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
@@ -85,18 +84,17 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 }
 
 - (NSArray *) queuedDispatchesCopy {
-    return [self.queuedDispatches copy];
+    return [self.queuedDispatches.allQueuedObjects copy];
 }
 
 - (NSArray *) sentDispatchesCopy {
-    return [self.sentDispatches copy];
+    return [self.sentDispatches.allQueuedObjects copy];
 }
 
 #pragma mark - enqueue / dequeue dispatches
 
 - (void) addDispatch:(TEALDispatch *)aDispatch completionBlock:(TEALDispatchBlock)completionBlock {
 
-        NSLog(@"%s ", __FUNCTION__);
     [self purgeStaleDispatches];
     
     NSUInteger batchSize    = [self.configuration dispatchBatchSize];
@@ -350,7 +348,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     NSUInteger dispatchCount = [self queuedDispatchCount];
     
     if (dispatchCount) {
-        TEAL_LogNormal(@"%lu archived dispatches have been enqueued.", (unsigned long)dispatchCount);
+//        TEAL_LogNormal(@"%lu archived dispatches have been enqueued.", (unsigned long)dispatchCount);
     }
 }
 
@@ -375,7 +373,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     NSUInteger count = [dataObjects count];
     
     if (count) {
-        TEAL_LogNormal(@"%lu dispatches archived", count);
+//        TEAL_LogNormal(@"%lu dispatches archived", count);
     }
 }
 

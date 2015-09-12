@@ -42,7 +42,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
     
-    [self.logger logVerbose:@"Audiencestream active."];
+    [self.logger logVerbose:@"Audiencestream enabled."];
 
 }
 
@@ -207,7 +207,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         if (![weakSelf isEnabled]) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            [self.logger logVerbose:@"Library Disabled, Ignoring: %s", __func__ ];
             return;
         }
         
@@ -230,7 +230,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         if (![weakSelf isEnabled]) {
-            TEAL_LogVerbose(@"Library Disabled, Ignoring: %s", __func__);
+            [self.logger logVerbose:@"Library Disabled, Ignoring: %s", __func__];
             return;
         }
         

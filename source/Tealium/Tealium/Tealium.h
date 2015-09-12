@@ -38,7 +38,6 @@
  */
 + (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration;
 
-
 #pragma mark - Instance Management
 /*
  *  Returns an instance of the library for the given key, or NIL is such an instance has not been previously initialized.
@@ -53,7 +52,6 @@
  *  @param key NSString identifier for the library instance to remove.
  */
 + (void) destroyInstanceForKey:(NSString *)key;
-
 
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.

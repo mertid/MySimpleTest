@@ -103,6 +103,8 @@ __strong static NSDictionary *_allInstances = nil;
 
 - (void) disable {
     @synchronized(self) {
+#warning remove all observers in all objects here
+        
         self.enabled = NO;
     }
 }
@@ -205,8 +207,6 @@ __strong static NSDictionary *_allInstances = nil;
     
     configuration.instanceID = key;
     
-        NSLog(@"%s configuration: %@", __FUNCTION__, configuration);
-
     Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
     
     [Tealium addInstance:instance key:key];
@@ -225,10 +225,9 @@ __strong static NSDictionary *_allInstances = nil;
         [weakInstance instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
             if (success) {
                 [weakInstance.dispatchManager runQueuedDispatches];
-                [weakInstance.logger logNormal:@"Instance ready."];
             } else {
                 [weakInstance disable];
-                TEAL_LogNormal(@"Library failed to start: %@", error);
+                [weakInstance.logger logNormal:@"Failed to start: %@", error ];
             }
             if (completion) completion(success, error);
         }];
@@ -357,37 +356,44 @@ __strong static NSDictionary *_allInstances = nil;
     self.modulesDelegate = self;
     
     if ([self.settings autotrackingLifecycleEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]) {
             [self.modulesDelegate enableAutotrackingLifecycle];
         }
     }
     
     if ([self.settings tagManagementEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]) {
             [self.modulesDelegate enableTagManagement];
         }
         
         if ([self.settings remoteCommandsEnabled]){
-            if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]){
+            if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]) {
                 [self.modulesDelegate enableRemoteCommands];
             }
         }
     }
     
     if ([self.settings audienceStreamEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAudienceStream)]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAudienceStream)]) {
             [self.modulesDelegate enableAudienceStream];
         }
     }
     
     if ([self.settings autotrackingUIEventsEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]) {
             [self.modulesDelegate enableAutotrackingUIEvents];
         }
     }
+    
     if ([self.settings autotrackingViewsEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]) {
             [self.modulesDelegate enableAutotrackingViews];
+        }
+    }
+    
+    if ([self.settings mobileCompanionEnabled]) {
+        if ([self.modulesDelegate respondsToSelector:@selector(enableMobileCompanion)]) {
+            [self.modulesDelegate enableMobileCompanion];
         }
     }
     
@@ -402,7 +408,6 @@ __strong static NSDictionary *_allInstances = nil;
 
 - (void) sendEvent:(TEALDispatchType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
     
-    NSLog(@"%s ", __FUNCTION__);
     if (!self.enabled) {
         [self.logger logNormal:@"Library Disabled, Ignoring dispatch.",nil];
         [self.logger logVerbose:@"Dispatch title:%@, DataSources:%@", title, customData];
@@ -425,14 +430,13 @@ __strong static NSDictionary *_allInstances = nil;
             case TEALDispatchStatusFailed:
             case TEALDispatchStatusUnknown:
                 
-                TEAL_LogVerbose(@"error: %@", [error localizedDescription]);
+                [self.logger logVerbose:@"error: %@", [error localizedDescription] ];
                 break;
         }
     };
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:eventType withPayload:customData];
     
-    NSLog(@"%s about to add dispatch", __FUNCTION__);
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:completion];
     
@@ -474,11 +478,12 @@ __strong static NSDictionary *_allInstances = nil;
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
             NSDictionary *datalayerDump = [TEALNetworkHelpers dictionaryFromUrlParamString:(NSString *)dispatch.payload];
             
-            TEAL_LogVerbose(@"Successfully %@ dispatch with payload %@", statusString, datalayerDump);
+            [self.logger logVerbose:@"Successfully %@ dispatch with payload %@", statusString, datalayerDump];
             
         } else {
             
-            TEAL_LogVerbose(@"Successfully %@ dispatch.", statusString)
+            [self.logger logVerbose:@"Successfully %@ dispatch.", statusString];
+            
         }
     }
 }
@@ -547,13 +552,22 @@ __strong static NSDictionary *_allInstances = nil;
         return;
     }
     
+    [self.urlSessionManager.reachability startNotifier];
+    
     __weak Tealium *weakSelf = self;
     __weak TEALSettings *weakSettings = weakSelf.settings;
     
     weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
-        
+        [self.logger logVerbose:@"Network found."];
+#warning IMPLMENT minutes to refresh system here
         [weakSettings fetchPublishSettingsWithCompletion:nil];
+    };
+    
+    weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
+        
+        [self.logger logVerbose:@"Network unreachable."];
+
     };
 }
 
@@ -605,6 +619,10 @@ __strong static NSDictionary *_allInstances = nil;
 - (void) removeModuleDataForKey:(NSString *)key {
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[self.moduleData copy]];
+    
+    if (![[mDict allKeys] containsObject:key]){
+        return;
+    }
     
     [mDict removeObjectForKey:key];
     

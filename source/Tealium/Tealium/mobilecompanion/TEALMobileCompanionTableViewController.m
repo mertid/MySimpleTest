@@ -41,11 +41,47 @@
     
     TEALMobileCompanionContentRow *row = [self.currentContent rowDataForSectionIndex:indexPath.section][indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ : %@", row.key, row.value];
+    cell.textLabel.text = row? [row keyValue]:nil;
     
     return cell;
 }
 
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+
+    NSArray *titles = [self.currentContent headerTitles];
+    return titles? titles[section]:nil;
+
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
+    static UILabel* sectionLabel;
+    if (!sectionLabel) {
+        sectionLabel = [[UILabel alloc]
+                 initWithFrame:CGRectMake(0, 0, FLT_MAX, FLT_MAX)];
+        sectionLabel.text = @"test";
+    }
+    
+    sectionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    [sectionLabel sizeToFit];
+    
+    return sectionLabel.frame.size.height * 1.7;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    static UILabel* label;
+    if (!label) {
+        label = [[UILabel alloc]
+                 initWithFrame:CGRectMake(0, 0, FLT_MAX, FLT_MAX)];
+        label.text = @"test";
+    }
+    
+    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    [label sizeToFit];
+    
+    return label.frame.size.height * 1.7;
+}
 
 /*
 // Override to support conditional editing of the table view.

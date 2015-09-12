@@ -24,7 +24,7 @@ char const * const TEALKVOAutotrackWebViewRemoteCommand = "com.tealium.kvo.webvi
 
 - (void) teal_setAreRemoteCommandsEnabled:(BOOL) enable {
     
-    NSNumber *enableOnNumber = [NSNumber numberWithBool:enable];
+    NSNumber *enableOnNumber = @(enable);
     objc_setAssociatedObject(self, &TEALKVOAutotrackWebViewRemoteCommand, enableOnNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
 }

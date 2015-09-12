@@ -19,7 +19,6 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 @implementation Tealium (Autotracking)
 
-
 #pragma mark - PRIVATE PUBLIC
 
 + (NSArray *) allAutotrackingViewInstances {
@@ -94,33 +93,24 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 - (void) enableAutotrackingLifecycle {
     
-    __block typeof(self) __weak weakSelf = self;
-    __block TEALLifecycle *lifecycle = [[TEALLifecycle alloc] initWithInstanceID:self.settings.instanceID];
-    
-    [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
-            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary? dataDictionary:@{},
-                                                                                    autotrackedDataSources? autotrackedDataSources:@{}]];
-            [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
-        });
+    TEALLifecycle *lifecycle = [self lifecycleInstance];
 
-    }];
-
-    if ([lifecycle isEnabled]){
-        [self.logger logVerbose:@"Autotracking Lifecycle active."];
+    // If was disabled prior
+    if (![lifecycle isEnabled]){
+        [lifecycle reEnable];
     }
     
-    [self addLifecycleInstance:lifecycle];
-
+    if ([lifecycle isEnabled]){
+        [self.logger logVerbose:@"Autotracking Lifecycle enabled."];
+    }
+    
 }
 
 - (void) enableAutotrackingUIEvents {
     
     [UIApplication swizzleWithCompletion:^(BOOL success, NSError *error) {
         if (success){
-            [self.logger logVerbose:@"Autotracking UIEvents active."];
+            [self.logger logVerbose:@"Autotracking UIEvents enabled."];
         }
     }];
 
@@ -130,7 +120,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     [UIViewController swizzleWithCompletion:^(BOOL success, NSError *error) {
         if (success){
-            [self.logger logVerbose:@"Autotracking Views active."];
+            [self.logger logVerbose:@"Autotracking Views enabled."];
         }
     }];
     
@@ -138,70 +128,114 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 - (void) disableAutotrackingLifecycle {
     
-    TEALLifecycle *lifecycle = [self lifecycleInstanceFromSet:[self lifecycleSet]];
+    TEALLifecycle *lifecycle = [self lifecycleInstance];
     
-    if (!lifecycle){
-        return;
+    if ([lifecycle isEnabled]){
+        [lifecycle disable];
+        [self.logger logVerbose:@"Autotracking Lifecycle disabled."];
     }
     
-    [self removeLifecycleInstance:lifecycle];
+    
     
 }
 
-- (NSSet *) lifecycleSet {
-    id raw = objc_getAssociatedObject(self, TEALKVOAutotrackLifecycle);
+#pragma mark - PRIVATE LIFECYCLE HANLDING
+
+- (NSString *) lifecycleInstanceID {
     
-    if (![raw isKindOfClass:([NSSet class])]){
-        raw = [[NSSet alloc] init];
+    return [NSString stringWithFormat:@"com.tealium.lifecycle.%@", self.settings.instanceID];
+}
+
+- (TEALLifecycle *) lifecycleInstance {
+    
+    id raw = [self moduleDataCopy][[self lifecycleInstanceID]];
+    if (!raw ||
+        ![raw isKindOfClass:([TEALLifecycle class])]){
+        return [self newLifecycleInstance];
     }
-    return raw;
+    
+    TEALLifecycle *lifecycle = (TEALLifecycle*)raw;
+    return lifecycle;
+    
 }
 
-- (void) addLifecycleInstance:(TEALLifecycle *)instance {
-    NSSet *lifecycles = [[self lifecycleSet] copy];
-    NSMutableSet *mSet = [NSMutableSet setWithSet:lifecycles];
-    [mSet addObject:instance];
+- (TEALLifecycle *) newLifecycleInstance {
     
-    NSSet *newSet = [NSSet setWithSet:mSet];
+    __block typeof(self) __weak weakSelf = self;
 
-    [self.operationManager addOperationWithBlock:^{
-        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }];
-}
-
-- (TEALLifecycle *) lifecycleInstanceFromSet:(NSSet *)set {
+    TEALLifecycle *lifecycle = [[TEALLifecycle alloc] init];
     
-    __block TEALLifecycle *targetLifecycle = nil;
-    [set enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
         
-        if ([obj isKindOfClass:([TEALLifecycle class])]){
-            TEALLifecycle *lifecycle = obj;
-            if ([lifecycle.instanceIDCopy isEqualToString:self.settings.instanceID]){
-                targetLifecycle = lifecycle;
-                *stop = YES;
-            }
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
+            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary? dataDictionary:@{},
+                                                                                    autotrackedDataSources? autotrackedDataSources:@{}]];
+            [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
+        });
+        
     }];
     
-    return targetLifecycle;
+    [self addModuleData:@{[self lifecycleInstanceID ]:lifecycle}];
+    
+    return lifecycle;
+    
 }
 
-- (void) removeLifecycleInstance:(TEALLifecycle*)lifecycle{
-    
-    NSSet *set = [[self lifecycleSet] copy];
-    
-    TEALLifecycle *targetInstance = [self lifecycleInstanceFromSet:set];
-    if (!targetInstance){
-        return;
-    }
-    
-    NSMutableSet *mSet = [NSMutableSet setWithSet:set];
-    [mSet removeObject:targetInstance];
-    NSSet *newSet = [NSSet setWithSet:mSet];
-    
-    [self.operationManager addOperationWithBlock:^{
-        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }];
-}
+//- (NSSet *) lifecycleSet {
+//    id raw = objc_getAssociatedObject(self, TEALKVOAutotrackLifecycle);
+//    
+//    if (![raw isKindOfClass:([NSSet class])]){
+//        raw = [[NSSet alloc] init];
+//    }
+//    return raw;
+//}
+//
+//- (void) addLifecycleInstance:(TEALLifecycle *)instance {
+//    NSSet *lifecycles = [[self lifecycleSet] copy];
+//    NSMutableSet *mSet = [NSMutableSet setWithSet:lifecycles];
+//    [mSet addObject:instance];
+//    
+//    NSSet *newSet = [NSSet setWithSet:mSet];
+//
+//    [self.operationManager addOperationWithBlock:^{
+//        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    }];
+//}
+//
+//- (TEALLifecycle *) lifecycleInstanceFromSet:(NSSet *)set {
+//    
+//    __block TEALLifecycle *targetLifecycle = nil;
+//    [set enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+//        
+//        if ([obj isKindOfClass:([TEALLifecycle class])]){
+//            TEALLifecycle *lifecycle = obj;
+//            if ([lifecycle.instanceIDCopy isEqualToString:self.settings.instanceID]){
+//                targetLifecycle = lifecycle;
+//                *stop = YES;
+//            }
+//        }
+//    }];
+//    
+//    return targetLifecycle;
+//}
+//
+//- (void) removeLifecycleInstance:(TEALLifecycle*)lifecycle{
+//    
+//    NSSet *set = [[self lifecycleSet] copy];
+//    
+//    TEALLifecycle *targetInstance = [self lifecycleInstanceFromSet:set];
+//    if (!targetInstance){
+//        return;
+//    }
+//    
+//    NSMutableSet *mSet = [NSMutableSet setWithSet:set];
+//    [mSet removeObject:targetInstance];
+//    NSSet *newSet = [NSSet setWithSet:mSet];
+//    
+//    [self.operationManager addOperationWithBlock:^{
+//        objc_setAssociatedObject(self, TEALKVOAutotrackLifecycle, newSet, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    }];
+//}
 
 @end

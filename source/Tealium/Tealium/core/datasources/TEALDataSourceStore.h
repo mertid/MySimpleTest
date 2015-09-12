@@ -26,8 +26,6 @@
 //
 //- (void) archiveWithStorageKey:(NSString *)key;
 
-- (NSDictionary *) systemInfoDatasources;
-
 - (NSDictionary *) dataSourcesCopy;
 
 - (void) addDataSources:(NSDictionary *)additionalDataSources;

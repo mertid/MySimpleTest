@@ -121,6 +121,12 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 @property (nonatomic) BOOL autotrackingIvarsEnabled;
 
 // TODO: comments
+@property (nonatomic) BOOL crashTrackingEnabled;
+
+// TODO: comments
+@property (nonatomic) BOOL mobileCompanionEnabled;
+
+// TODO: comments
 @property (nonatomic) BOOL remoteCommandsEnabled;
 
 // TODO: comments

@@ -20,18 +20,17 @@
 
 @interface TEALMobileCompanionView()
 
-@property (nonatomic, strong) UIButton  *instanceCloseButton;
-@property (nonatomic, strong) UIImageView *instanceMinimizedBackground;
-@property (nonatomic, strong) UIButton *instanceMinimizeButton;
-@property (nonatomic, strong) UIImageView *instanceContentArea;
-@property (nonatomic, strong) UILabel *instanceTitleLabel;
-@property (nonatomic, strong) UITableView *instanceContentTableView;
-@property (nonatomic, strong) NSArray *instanceTabButtons;
-@property (nonatomic, weak) UIButton *activeTabButton;
+@property (nonatomic, strong) UIButton  *ivar_closeButton;
+@property (nonatomic, strong) UIImageView *ivar_minimizeBackground;
+@property (nonatomic, strong) UIButton *ivar_minimizeButton;
+@property (nonatomic, strong) UIImageView *ivar_contentArea;
+@property (nonatomic, strong) UILabel *ivar_titleArea;
+@property (nonatomic, strong) UITableView *ivar_contentTableView;
+@property (nonatomic, strong) NSArray *ivar_tabButtons;
 
 @property (nonatomic) BOOL isUILoaded;
 
-@property (nonatomic, strong) TEALMobileCompanionTriangle *instanceResizeButton;
+@property (nonatomic, strong) TEALMobileCompanionTriangle *ivar_resizeButton;
 
 
 @end
@@ -169,49 +168,49 @@
 
 - (UIImageView*) minimizedBackground{
     
-    if (!self.instanceMinimizedBackground){
+    if (!self.ivar_minimizeBackground){
         UIImage *image = [TEALImages tealiummobilecompanion_icon_png];
         UIImageView *imageview = [[UIImageView alloc]initWithImage:image];
         [self disableAutotrackingOf:imageview];
-        self.instanceMinimizedBackground = imageview;
+        self.ivar_minimizeBackground = imageview;
     }
     
-    return self.instanceMinimizedBackground;
+    return self.ivar_minimizeBackground;
 
 }
 
 - (UIButton*) minimizeButton {
     
-    if (!self.instanceMinimizeButton){
+    if (!self.ivar_minimizeButton){
         
         UIButton *button = [[UIButton alloc] init];
         [button setTitle:@"_" forState:UIControlStateNormal];
         [button addTarget:self action:@selector(minimize) forControlEvents:UIControlEventTouchUpInside];
 
-        self.instanceMinimizeButton = button;
+        self.ivar_minimizeButton = button;
     }
     
-    [self.instanceMinimizeButton setFrame:[self minimizeButtonRectInView:self]];
+    [self.ivar_minimizeButton setFrame:[self minimizeButtonRectInView:self]];
     
-    return self.instanceMinimizeButton;
+    return self.ivar_minimizeButton;
 }
 
 
 
 - (UIButton*) closeButton{
     
-    if (!self.instanceCloseButton){
+    if (!self.ivar_closeButton){
         
-        self.instanceCloseButton = [[UIButton alloc] init];
-        [self.instanceCloseButton setTitle:@"X" forState:UIControlStateNormal];
-        [self.instanceCloseButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+        self.ivar_closeButton = [[UIButton alloc] init];
+        [self.ivar_closeButton setTitle:@"X" forState:UIControlStateNormal];
+        [self.ivar_closeButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 
-        [self disableAutotrackingOf:self.instanceCloseButton];
+        [self disableAutotrackingOf:self.ivar_closeButton];
     }
     
-    [self.instanceCloseButton setFrame:[self closeButtonRectInView:self]];
+    [self.ivar_closeButton setFrame:[self closeButtonRectInView:self]];
     
-    return self.instanceCloseButton;
+    return self.ivar_closeButton;
     
 }
 
@@ -220,55 +219,55 @@
 }
 
 - (UIView *) contentArea {
-    if (!self.instanceContentArea) {
-        self.instanceContentArea = [[UIImageView alloc] init];
-        [self.instanceContentArea setBackgroundColor:[UIColor teal_blue]];
-        [self disableAutotrackingOf:self.instanceContentArea];
+    if (!self.ivar_contentArea) {
+        self.ivar_contentArea = [[UIImageView alloc] init];
+        [self.ivar_contentArea setBackgroundColor:[UIColor teal_blue]];
+        [self disableAutotrackingOf:self.ivar_contentArea];
     }
     
-    [self.instanceContentArea setFrame:[self contentAreaRectInView:self]];
+    [self.ivar_contentArea setFrame:[self contentAreaRectInView:self]];
     
-    return self.instanceContentArea;
+    return self.ivar_contentArea;
 }
 
 - (UITableView *) contentTableView {
     
-    if (!self.instanceContentTableView){
-        self.instanceContentTableView = [[UITableView alloc] init];
-        [self.instanceContentTableView setBackgroundColor:[UIColor whiteColor]];
-        [self.instanceContentTableView setDelegate:self.tableViewDelegate];
-        [self.instanceContentTableView setDataSource:self.tableViewDataSourceDelegate];
-        self.instanceContentTableView.layer.cornerRadius = 8;
-        self.instanceContentTableView.layer.masksToBounds = YES;
-        [self.instanceContentTableView setSeparatorColor:[UIColor clearColor]];
-        [self.instanceContentTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        [self.instanceContentTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TEALMobileCompanionCellID];
+    if (!self.ivar_contentTableView){
+        self.ivar_contentTableView = [[UITableView alloc] init];
+        [self.ivar_contentTableView setBackgroundColor:[UIColor whiteColor]];
+        [self.ivar_contentTableView setDelegate:self.tableViewDelegate];
+        [self.ivar_contentTableView setDataSource:self.tableViewDataSourceDelegate];
+        self.ivar_contentTableView.layer.cornerRadius = 8;
+        self.ivar_contentTableView.layer.masksToBounds = YES;
+        [self.ivar_contentTableView setSeparatorColor:[UIColor clearColor]];
+        [self.ivar_contentTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        [self.ivar_contentTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TEALMobileCompanionCellID];
         
-        [self disableAutotrackingOf:self.instanceContentTableView];
+        [self disableAutotrackingOf:self.ivar_contentTableView];
     }
     
-    [self.instanceContentTableView setFrame:[self contentViewRectInView:self]];
+    [self.ivar_contentTableView setFrame:[self contentViewRectInView:self]];
     
-    return self.instanceContentTableView;
+    return self.ivar_contentTableView;
 }
 
 - (UILabel *) titleLabel {
     
-    if (!self.instanceTitleLabel) {
-        self.instanceTitleLabel = [[UILabel alloc] init];
+    if (!self.ivar_titleArea) {
+        self.ivar_titleArea = [[UILabel alloc] init];
         UIFont *font = [UIFont systemFontOfSize:kMinFontSize];
-        [self.instanceTitleLabel setFont:font];
-        [self.instanceTitleLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.instanceTitleLabel setBackgroundColor:[UIColor teal_darkGrey]];
-        [self.instanceTitleLabel setTextColor:[UIColor whiteColor]];
-        [self.instanceTitleLabel setText:NSLocalizedString(@"Tealium Mobile Companion", @"")];
+        [self.ivar_titleArea setFont:font];
+        [self.ivar_titleArea setTextAlignment:NSTextAlignmentCenter];
+        [self.ivar_titleArea setBackgroundColor:[UIColor teal_darkGrey]];
+        [self.ivar_titleArea setTextColor:[UIColor whiteColor]];
+        [self.ivar_titleArea setText:NSLocalizedString(@"Tealium Mobile Companion", @"")];
         
-        [self disableAutotrackingOf:self.instanceTitleLabel];
+        [self disableAutotrackingOf:self.ivar_titleArea];
     }
     
-    [self.instanceTitleLabel setFrame:[self titleLabelRectInView:self]];
+    [self.ivar_titleArea setFrame:[self titleLabelRectInView:self]];
     
-    return self.instanceTitleLabel;
+    return self.ivar_titleArea;
 }
 
 - (void) addTabButtonsToView:(UIView *)view {
@@ -318,7 +317,7 @@
 
 - (NSArray *) tabButtons {
     
-    if (!self.instanceTabButtons) {
+    if (!self.ivar_tabButtons) {
         
         UIButton *overView = [self tabButtonWithTitle:[self overViewTitle]];
         UIButton *view = [self tabButtonWithTitle:[self viewTitle]];
@@ -326,15 +325,14 @@
         UIButton *log = [self tabButtonWithTitle:[self logTitle]];
         UIButton *tools = [self tabButtonWithTitle:[self toolsTitle]];
         
-        self.instanceTabButtons = @[overView, view, element, log, tools];
+        self.ivar_tabButtons = @[overView, view, element, log, tools];
     }
     
-    return self.instanceTabButtons;
+    return self.ivar_tabButtons;
 }
 
 - (void) selectTab:(UIButton *)button {
     
-        NSLog(@"%s ", __FUNCTION__);
     for (UIButton *tab in [self tabButtons]) {
         if (tab != button) {
             [tab setBackgroundColor:[UIColor teal_liteGrey]];
@@ -354,14 +352,14 @@
 
 
 - (TEALMobileCompanionTriangle *) resizeButton {
-    if (!self.instanceResizeButton){
-        self.instanceResizeButton = [[TEALMobileCompanionTriangle alloc] init];
-        [self disableAutotrackingOf:self.instanceResizeButton];
+    if (!self.ivar_resizeButton){
+        self.ivar_resizeButton = [[TEALMobileCompanionTriangle alloc] init];
+        [self disableAutotrackingOf:self.ivar_resizeButton];
     }
     
-    [self.instanceResizeButton setFrame:[self resizeButtonRectInView:self]];
+    [self.ivar_resizeButton setFrame:[self resizeButtonRectInView:self]];
     
-    return self.instanceResizeButton;
+    return self.ivar_resizeButton;
 }
 
 #pragma mark - VIEW RECTS
@@ -411,23 +409,23 @@
 }
 
 - (NSString *) overViewTitle {
-    return [self tabTitle:@"Overview"];
+    return [self tabTitle:TEALMobileCompanionTabTitleOverview];
 }
 
 - (NSString *) viewTitle {
-    return [self tabTitle:@"View"];
+    return [self tabTitle:TEALMobileCompanionTabTitleView];
 }
 
 - (NSString *) elementTitle {
-    return [self tabTitle:@"Element"];
+    return [self tabTitle:TEALMobileCompanionTabTitleElement];
 }
 
 - (NSString *) logTitle {
-    return [self tabTitle:@"Log"];
+    return [self tabTitle:TEALMobileCompanionTabTitleLogs];
 }
 
 - (NSString *) toolsTitle {
-    return [self tabTitle:@"Tools"];
+    return [self tabTitle:TEALMobileCompanionTabTitleTools];
 }
 
 - (NSString *) tabTitle:(NSString *)title {

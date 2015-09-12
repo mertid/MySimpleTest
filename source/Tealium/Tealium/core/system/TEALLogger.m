@@ -9,9 +9,6 @@
 #import "TEALLogger.h"
 #import "TEALDataSourceConstants.h"
 
-#warning STILL NEED THIS?
-static TEALLogLevel _audienceStreamLogLevel;
-
 @interface TEALLogger()
 
 @property (nonatomic) TEALLogLevel logLevel;
@@ -23,7 +20,6 @@ static TEALLogLevel _audienceStreamLogLevel;
 + (NSString *) messageHeaderFromConfiguration:(TEALConfiguration *) configuration {
     NSString *version = TEALLibraryVersion;
     NSString *instanceID = configuration.instanceID;
-    //    NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", configuration.accountName, configuration.profileName, configuration.environmentName];
     
     return [NSString stringWithFormat:@"TEALIUM %@: instance %@: ", version, instanceID];
 }
@@ -73,49 +69,13 @@ static TEALLogLevel _audienceStreamLogLevel;
         case TEALLogLevelVerbose:
             shouldLog = (self.logLevel >= TEALLogLevelVerbose);
             break;
-        case TEALLogLevelNone:
-            shouldLog = NO;
+        default:
             break;
     }
     
     if (shouldLog && message) {
     
         NSLog(@"%@%@", self.messageHeader, message);
-    }
-}
-
-+ (void) setLogLevel:(TEALLogLevel)logLevel {
-
-    _audienceStreamLogLevel = logLevel;
-}
-
-+ (void) logTargetLevel:(TEALLogLevel)targetLevel message:(NSString *)format, ... {
-
-    BOOL shouldLog = NO;
-    switch (targetLevel) {
-        case TEALLogLevelNormal:
-            shouldLog = (_audienceStreamLogLevel >= TEALLogLevelNormal);
-            break;
-        case TEALLogLevelVerbose:
-            shouldLog = (_audienceStreamLogLevel >= TEALLogLevelVerbose);
-            break;
-        case TEALLogLevelNone:
-            shouldLog = NO;
-            break;
-    }
-    
-    if (shouldLog && format) {
-
-        NSString *message = nil;
-        va_list args;
-        va_start(args, format);
-        message = [[NSString alloc] initWithFormat:format
-                                         arguments:args];
-        va_end(args);
-
-        NSString *version = TEALLibraryVersion; //[TEALSystemHelpers tealiumIQlibraryVersion];
-        
-        NSLog(@"TEALIUM %@: %@", version, message);
     }
 }
 

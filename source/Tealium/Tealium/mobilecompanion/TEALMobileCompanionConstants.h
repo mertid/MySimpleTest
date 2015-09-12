@@ -38,7 +38,6 @@ extern const int kSetTabButtonW;
 
 extern const int kMinFontSize;
 
-
 extern NSString * const TEALMobileCompanionCellID;
 
 // TAB TITLES

@@ -8,8 +8,6 @@
 
 #import "TEALURLSessionManager.h"
 
-#import "TEALLogger.h"
-
 @interface TEALURLSessionManager () <NSURLSessionDelegate>
 
 @property (nonatomic, strong) NSURLSession *urlSession;
@@ -42,8 +40,6 @@
 }
 
 - (void) performRequest:(NSURLRequest *)request withCompletion:(TEALHTTPResponseBlock)completion {
-
-    TEAL_LogVerbose(@"URL Session Manager sending request: %@", request);
     
     TEALURLTaskResponseBlock taskCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 
@@ -55,8 +51,6 @@
         
         dispatch_async(targetQueue, ^{
             
-            TEAL_LogVerbose(@"URL Session Manager received response: %@", response);
-
             completion( (NSHTTPURLResponse *)response, data, error );
         });
     };

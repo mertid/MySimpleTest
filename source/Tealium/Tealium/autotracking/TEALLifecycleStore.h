@@ -10,4 +10,6 @@
 
 @interface TEALLifecycleStore : NSObject
 
+#warning IMPLEMENT
+
 @end

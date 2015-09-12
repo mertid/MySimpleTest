@@ -6,14 +6,17 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "Tealium.h"
+#ifndef TEAL_MODULE_MOBILECOMPANION
+#define TEAL_MODULE_MOBILECOMPANION
+#endif
 
+#import "Tealium.h"
 
 @interface Tealium (MobileCompanion)
 
 /*
  
  */
-- (void) unlockMobileCompanion;
+- (void) revealMobileCompanion;
 
 @end

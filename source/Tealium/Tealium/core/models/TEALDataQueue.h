@@ -23,6 +23,7 @@
 - (NSUInteger) count;
 
 - (NSArray *) allQueuedObjects;
+
 - (NSArray *) queuedObjectsOrderedWithLimit:(NSUInteger)numberOfItems;
 
 - (void) updateCapacity:(NSUInteger)capacity;

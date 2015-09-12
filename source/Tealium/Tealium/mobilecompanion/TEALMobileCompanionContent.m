@@ -18,48 +18,69 @@
 
 @implementation TEALMobileCompanionContent
 
++ (TEALMobileCompanionContent *) contentFromArray:(NSArray *)array {
 
-- (void) addSectionAndRowDataFromDictionary:(NSDictionary *)dictionary {
+    TEALMobileCompanionContent *newContent = [[TEALMobileCompanionContent alloc] init];
+    
+    [newContent addSectionAndRowDataFromArray:array];
+    
+    return newContent;
+}
+
+- (void) addSectionAndRowDataFromArray:(NSArray *)array {
     
     // Take all keys as section titles
     // Take all values (array of dicts where keys are row keys and values are row values
     
-    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-       
+    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
-        if (![key isKindOfClass:([NSString class])]){
+        if (![obj isKindOfClass:([NSDictionary class])]) {
             return;
         }
         
-        NSString *sectionKey = key;
-        NSMutableArray *rowData = [NSMutableArray array];
+        NSDictionary *dict = (NSDictionary *)obj;
         
-        NSArray *rawRowData = (NSArray*)obj;
-        
-            NSLog(@"%s obj:%@", __FUNCTION__, obj);
-        
-        for (NSDictionary *rowDict in rawRowData) {
+        [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             
-            if (![rowDict isKindOfClass:([NSDictionary class])]){
-                break;
+            NSString *sectionKey = key;
+            NSMutableArray *rowData = [NSMutableArray array];
+            
+            NSArray *rawRowData = (NSArray*)obj;
+            
+            if ([rawRowData respondsToSelector:@selector(enumerateObjectsUsingBlock:)]){
+                        
+                for (id rawRow in rawRowData) {
+                    
+                    __block TEALMobileCompanionContentRow *newRow = nil;
+                    
+                    if ([rawRow isKindOfClass:([NSDictionary class])]){
+                        
+                        NSDictionary *rowDict = (NSDictionary *)rawRow;
+                        
+                        [rowDict enumerateKeysAndObjectsUsingBlock:^(id rowKey, id rowValue, BOOL *rowStop) {
+                            
+                            // Should be data for only 1 row, but will add additional keys if needed
+                            
+                            newRow = [[TEALMobileCompanionContentRow alloc] initWithKey:rowKey value:rowValue];
+                            [rowData addObject:newRow];
+                            
+                        }];
+                    }
+                    
+                    if ([rawRow isKindOfClass:([NSString class])]) {
+                        
+                        NSString *rowValue = (NSString *)rawRow;
+                        newRow = [[TEALMobileCompanionContentRow alloc] initWithValueOnly:rowValue];
+                        [rowData addObject:newRow];
+                        
+                    }
+                }
             }
             
-            [rowDict enumerateKeysAndObjectsUsingBlock:^(id rowKey, id rowValue, BOOL *rowStop) {
-
-                // Should only be one, but will add additional keys if needed
-                
-                TEALMobileCompanionContentRow *newRow = [[TEALMobileCompanionContentRow alloc] init];
-                newRow.key = [rowKey isKindOfClass:([NSString class])]? rowKey : nil;
-                newRow.value = [rowValue isKindOfClass:([NSString class])]? rowValue : nil;
-                [rowData addObject:newRow];
-                
-            }];
+            TEALMobileCompanionContentSection *newSection = [[TEALMobileCompanionContentSection alloc] initWithTitle:sectionKey rows:[NSArray arrayWithArray:rowData]];
             
-        }
-        
-        TEALMobileCompanionContentSection *newSection = [[TEALMobileCompanionContentSection alloc] initWithTitle:sectionKey rows:[NSArray arrayWithArray:rowData]];
-
-        [self addSectionData:newSection];
+            [self addSectionData:newSection];
+        }];
         
     }];
     
@@ -101,24 +122,6 @@
     TEALMobileCompanionContentSection *targetSection = [self.instanceSectionData copy][index];
     
     return [targetSection rowData];
-}
-
-- (NSString *) keyForIndex:(NSIndexPath *)indexPath {
-    
-    NSArray *rowData = [self rowDataForSectionIndex:indexPath.section];
-    
-    TEALMobileCompanionContentRow *row = rowData[indexPath.row];
-    
-    return row.key;
-}
-
-- (NSString *) valueForIndex:(NSIndexPath *)indexPath {
-    
-    NSArray *rowData = [self rowDataForSectionIndex:indexPath.section];
-    
-    TEALMobileCompanionContentRow *row = rowData[indexPath.row];
-    
-    return row.value;
 }
 
 @end

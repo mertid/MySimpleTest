@@ -28,9 +28,6 @@ void (*oSendEvent)(id, SEL, UIEvent *e);
     
     alreadySwizzled = true;
     
-#warning REMOVE after dev
-    NSLog(@"%s ", __FUNCTION__);
-    
     Method origMethod1 = class_getInstanceMethod(self, @selector(sendEvent:));
     oSendEvent = (void *)method_getImplementation(origMethod1);
     if(!class_addMethod(self, @selector(sendEvent:), (IMP)teal_sendEvent, method_getTypeEncoding(origMethod1))) method_setImplementation(origMethod1, (IMP)teal_sendEvent);
@@ -44,6 +41,8 @@ static NSDate *_lastEventTS;
 static int _maxScans = 6;
 
 static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
+    
+#warning OPTIMIZE
     
     // Extract target touch object
     NSSet *touches = e.allTouches;
@@ -73,7 +72,6 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
             
             if (weakTargetView) {
                 
-                
                 [self teal_autotrackEvent:weakTargetView];
             }
         }
@@ -88,11 +86,9 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 
 - (void) teal_autotrackEvent:(UIView *)target {
     
-    if (![target teal_autotrackingEnabled]){
-        return;
-    }
-    
     NSArray *validInstances = [Tealium allAutotrackingUIEventInstances];
+ 
+#warning OPTIMIZE
     
     [validInstances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
@@ -120,28 +116,6 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         
     }];
     
-//    if (![Tealium sharedInstance].settings.autotrackingUIEventsEnabled){
-//        return;
-//    }
-//    
-//    // Includes eventTitle
-//    NSDictionary *autoDataSources = [target teal_autotrackDataSources];
-//    
-//    NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
-//    
-//    if ([Tealium sharedInstance].settings.autotrackingIvarsEnabled){
-//        NSDictionary *ivars = [target teal_autotrackIvarDataSources];
-//        [dataSources addEntriesFromDictionary:ivars];
-//    }
-//
-//    
-//    NSDictionary *customDataSources = [target teal_dataSources];
-//    [dataSources addEntriesFromDictionary:customDataSources];
-//
-//    
-//    [[Tealium sharedInstance] trackEventWithTitle:nil
-//                                      dataSources:dataSources];
-    
 }
 
 
@@ -149,10 +123,17 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 
     NSString *vClass = NSStringFromClass([view class]);
 
+    NSLog(@"%s view:%@ vClass:%@", __FUNCTION__, view, vClass);
+    
+    if (![view teal_autotrackingEnabled]){
+        return nil;
+    }
+    
     // if private skip and move up the chain
     if (![vClass hasPrefix:@"_"]) {
-        if ([view isKindOfClass:[UIControl class]]) return view;
+        if ([view isKindOfClass:[UIResponder class]]) return view;
         if ([[view gestureRecognizers] count]) return view;
+        if ([view respondsToSelector:@selector(action)]) return view;
     }
     
     UIView *parent = view.superview;

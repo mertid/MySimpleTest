@@ -8,11 +8,28 @@
 //  BRIEF: Native represenatation of the Mobile Publish Settings
 
 #import "TEALPublishSettings.h"
-#import "TEALLogger.h"
 #import "NSString+Tealium.h"
 #import "TEALPublishSettingsStore.h"
 #import "TEALSystemHelpers.h"
 #import "TEALError.h"
+
+NSString * const TEALPublishSettingKeyUrl = @"url";
+NSString * const TEALPublishSettingKeyMinutesBetweenRefresh = @"minutesBetweenRefresh";
+NSString * const TEALPublishSettingKeyDispatchExpiration = @"numberOfDaysDispatchesAreValid";
+NSString * const TEALPublishSettingKeyDispatchSize = @"dispatchBatchSize";
+NSString * const TEALPublishSettingKeyOfflineDispatchSize = @"offlineDispatchQueueSize";
+NSString * const TEALPublishSettingKeyLowBatteryMode = @"shouldSuppressIfLowBattery";
+NSString * const TEALPublishSettingKeyWifiOnlyMode = @"shouldSendWifiOnly";
+NSString * const TEALPublishSettingKeyCollectEnable = @"shouldEnableCollect";
+NSString * const TEALPublishSettingKeyTagManagmentEnable = @"shouldEnableTagManagment";
+NSString * const TEALPublishSettingKeyStatus = @"status";
+
+NSString * const TEALPublishSettingKeyDisableUIEventAutotracking = @"disableUIEventAutotracking";
+NSString * const TEALPublishSettingKeyDisableViewAutotracking = @"disableViewAutotracking";
+NSString * const TEALPublishSettingKeyDisableiVarAutotracking = @"disableiVarAutotracking";
+NSString * const TEALPublishSettingKeyDisableLifecycleAutotracking = @"disableLifecycleAutotracking";
+NSString * const TEALPublishSettingKeyDisableCrashTracking = @"disableLifecycleTracking";
+NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCompanion";
 
 @interface TEALPublishSettings()
 
@@ -21,173 +38,9 @@
 
 @end
 
+
 @implementation TEALPublishSettings
 
-#pragma mark - PRIVATE
-
-+ (BOOL) supportsSecureCoding {
-    return YES;
-}
-
-- (instancetype) initWithCoder:(NSCoder *)aDecoder {
-    
-    self = [self init];
-    
-    if (self) {
-        
-        _url                            = [aDecoder decodeObjectForKey:@"url"];
-//        _mpsVersion                     = [aDecoder decodeObjectForKey:@"mpsVersion"];
-        _numberOfDaysDispatchesAreValid = [aDecoder decodeIntegerForKey:@"numberOfDaysDispatchesAreValid"];
-        _dispatchSize                   = [aDecoder decodeIntegerForKey:@"dispatchSize"];
-        _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
-        _enableLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
-        _enableSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
-        
-        _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
-        _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
-        _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceID:_url];
-        
-        TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
-        if (status == TEALPublishSettingsStatusLoadedRemote) {
-            status = TEALPublishSettingsStatusLoadedArchive;
-        }
-        _status = status;
-    }
-    
-    return self;
-}
-
-- (void) encodeWithCoder:(NSCoder *)aCoder {
-    
-    [aCoder encodeObject:self.url forKey:@"url"];
-    [aCoder encodeInteger:self.status forKey:@"status"];
-//    [aCoder encodeObject:self.mpsVersion forKey:@"mpsVersion"];
-    [aCoder encodeInteger:self.numberOfDaysDispatchesAreValid forKey:@"numberOfDaysDispatchesAreValid"];
-    [aCoder encodeInteger:self.dispatchSize forKey:@"dispatchSize"];
-    [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@"offlineDispatchQueueSize"];
-    [aCoder encodeBool:self.enableLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
-    [aCoder encodeBool:self.enableSendWifiOnly forKey:@"shouldSendWifiOnly"];
-    [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
-    [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
-//    [aCoder encodeBool:self.shouldAutotrackUIEvents forKey:@"autotrackUIEvents"];
-//    [aCoder encodeBool:self.shouldAutotrackViews forKey:@"autotrackViews"];
-    
-}
-
-- (BOOL) isEqual:(id)object {
-    
-    if (![object isKindOfClass:([TEALPublishSettings class])]) {
-        return NO;
-    }
-    
-    TEALPublishSettings *otherSettings = object;
-    
-    if (![otherSettings.url isEqualToString:self.url]) return  NO;
-//    if (![otherSettings.mpsVersion isEqualToString:self.mpsVersion]) return  NO;
-    if (otherSettings.dispatchSize != self.dispatchSize) return  NO;
-    if (otherSettings.offlineDispatchQueueSize != self.offlineDispatchQueueSize) return  NO;
-    if (otherSettings.numberOfDaysDispatchesAreValid != self.numberOfDaysDispatchesAreValid) return  NO;
-    if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
-    if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
-
-    
-    return YES;
-}
-
-- (void) storeDispatchSizeFromSettings:(NSDictionary *)settings {
-    
-    NSString *batchSize = settings[@"event_batch_size"];
-    
-    if (batchSize) {
-        self.dispatchSize = [batchSize integerValue];
-    }
-}
-
-- (void) storeOfflineDispatchQueueSizeFromSettings:(NSDictionary *)settings {
-    
-    NSString *offlineSize = settings[@"offline_dispatch_limit"];
-    
-    if (offlineSize) {
-        self.offlineDispatchQueueSize = [offlineSize integerValue];
-    }
-}
-
-- (void) storeDispatchExpirationFromSettings:(NSDictionary *)settings {
-    
-    NSString *dispatchExpiration = settings[@"dispatch_expiration"];
-    
-    if (dispatchExpiration) {
-        self.numberOfDaysDispatchesAreValid = [dispatchExpiration integerValue];
-    }
-}
-
-- (void) storeLowBatterySuppressionFromSettings:(NSDictionary *)settings {
-    
-    NSString *lowBattery = settings[@"battery_saver"];
-    
-    if (lowBattery) {
-        self.enableLowBatterySuppress = [lowBattery boolValue];
-    }
-}
-
-- (void) storeWifiOnlySettingFromSettings:(NSDictionary *)settings {
-    
-    NSString *wifiOnly = settings[@"wifi_only_sending"];
-    
-    if (wifiOnly) {
-        self.enableSendWifiOnly = [wifiOnly boolValue];
-    }
-}
-
-// From MPS 4.0 - enable all autotracking
-- (void) storeUIAutotrackingEnabledFromSettings:(NSDictionary *)settings {
-    
-    NSString *uiAutotrackingEnabled = settings[@"ui_auto_tracking"];
-    
-    if (uiAutotrackingEnabled) {
-        // No longer a TIQ option
-    }
-}
-
-- (void) storeAudienceStreamSettingFromSettings:(NSDictionary *)settings {
-    
-    NSString *audiencestream = settings[@"audiencestream"];
-    
-    if (audiencestream) {
-        self.enableAudienceStream = [audiencestream boolValue];
-    }
-}
-
-- (void) storeTagManagmentSettingFromSettings:(NSDictionary *)settings {
-
-    
-#warning RESET when done building
-    self.enableTagManagement =  YES;
-    
-//    NSString *tagmanagement = settings[@"tag_management"];
-//
-//    if (tagmanagement) {
-//        self.enableTagManagement = [tagmanagement boolValue];
-//    }
-}
-
-- (NSString *) description {
-    
-    NSDictionary *descriptionDictionary = @{
-                                            @"status":[NSString stringWithFormat:@"%lu", (unsigned long)self.status],
-                                            @"url":[NSString teal_dictionarySafeString:self.url],
-                                            @"mps version":[NSString teal_dictionarySafeString:self.mpsVersion],
-                                            @"dispatch size":[NSString stringWithFormat:@"%i", (int)self.dispatchSize],
-                                            @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)self.offlineDispatchQueueSize],
-                                            @"number of day dispatches valid":[NSString stringWithFormat:@"%i",(int)self.numberOfDaysDispatchesAreValid],
-                                            @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
-                                            @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
-                                            @"enable AudienceStream":[NSString teal_stringFromBool:self.enableAudienceStream],
-                                            @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement]
-                                            };
-    
-    return [NSString teal_descriptionForObject:self description:@"Remote settings from TIQ" fromDictionary:descriptionDictionary];
-}
 #pragma mark - PUBLIC
 
 - (instancetype) initWithURLString:(NSString *)url {
@@ -198,7 +51,6 @@
         // Default Remote Settings
         _url                            = url;
         _status                         = TEALPublishSettingsStatusDefault;
-//        _mpsVersion                     = [TEALSystemHelpers tealiumIQlibraryVersion];
         _numberOfDaysDispatchesAreValid = -1;
         _dispatchSize                   = 1;
         _offlineDispatchQueueSize       = 1000; // -1 is supposed to be inf. but yeah thats alot
@@ -231,19 +83,10 @@
         return;
     }
     
-    TEAL_LogVerbose(@"Updating publish settings: %@", settings);
-
-    [self storeDispatchSizeFromSettings:settings];
-    [self storeOfflineDispatchQueueSizeFromSettings:settings];
-    [self storeDispatchExpirationFromSettings:settings];
-    [self storeLowBatterySuppressionFromSettings:settings];
-    [self storeWifiOnlySettingFromSettings:settings];
-    [self storeUIAutotrackingEnabledFromSettings:settings];
-    [self storeAudienceStreamSettingFromSettings:settings];
-    [self storeTagManagmentSettingFromSettings:settings];
+    [self storeLocalSettingsFromRawSettings:settings];
     
     self.status = TEALPublishSettingsStatusLoadedRemote;
-
+    
     [self.store archivePublishSettings:self];
 }
 
@@ -296,14 +139,14 @@
                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                              
                              if (result) {
-                                 TEAL_LogVerbose(@"text checking result: %@", result);
+                                 //                                 TEAL_LogVerbose(@"text checking result: %@", result);
                              }
                              
                              if (result.range.location != NSNotFound) {
                                  scriptContents = [dataString substringWithRange:result.range];
                                  
                                  if (scriptContents) {
-                                     TEAL_LogVerbose(@"scriptContents: %@", scriptContents);
+                                     //                                     TEAL_LogVerbose(@"scriptContents: %@", scriptContents);
                                  }
                                  
                                  *stop = YES;
@@ -321,7 +164,7 @@
     
     if (mpsRangeStart.location == NSNotFound) {
         
-        TEAL_LogVerbose(@"mobile publish settings not found! old mobile library extension is not supported.  ");
+        //        TEAL_LogVerbose(@"mobile publish settings not found! old mobile library extension is not supported.  ");
         
         *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                               description:@"Mobile publish settings not found."
@@ -345,7 +188,7 @@
     
     NSString *mpsDataString = [scriptContents substringWithRange:mpsRange];
     
-    TEAL_LogVerbose(@"mpsDataString: %@", mpsDataString);
+    //    TEAL_LogVerbose(@"mpsDataString: %@", mpsDataString);
     
     // TODO: check for missing utag and / or tags
     
@@ -363,6 +206,190 @@
     }
     
     return resultDictionary;
+}
+
+#pragma mark - PRIVATE
+
++ (BOOL) supportsSecureCoding {
+    return YES;
+}
+
+- (instancetype) initWithCoder:(NSCoder *)aDecoder {
+    
+    self = [self init];
+    
+    if (self) {
+        
+        _url                            = [aDecoder decodeObjectForKey:TEALPublishSettingKeyUrl];
+        _minutesBetweenRefresh          = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyMinutesBetweenRefresh];
+        _numberOfDaysDispatchesAreValid = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyDispatchExpiration];
+        _dispatchSize                   = [aDecoder decodeIntegerForKey:@"dispatchSize"];
+        _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
+        _enableLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
+        _enableSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
+        _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
+        _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
+        
+        _overrideDisableUIEventAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableUIEventAutotracking];
+        _overrideDisableViewAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableViewAutotracking];
+        _overrideDisableiVarAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableiVarAutotracking];
+        _overrideDisableLifecycleAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
+        _overrideDisableCrashTracking   = [aDecoder decodeBoolForKey:@"overrideDisableCrashTracking"];
+        _overrideDisableMobileCompanion = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableMobileCompanion];
+        _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceID:_url];
+        
+        TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
+        if (status == TEALPublishSettingsStatusLoadedRemote) {
+            status = TEALPublishSettingsStatusLoadedArchive;
+        }
+        _status = status;
+    }
+    
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+    
+    [aCoder encodeObject:self.url forKey:TEALPublishSettingKeyUrl];
+    [aCoder encodeInteger:self.status forKey:@"status"];
+    [aCoder encodeDouble:self.minutesBetweenRefresh forKey:TEALPublishSettingKeyMinutesBetweenRefresh];
+    [aCoder encodeDouble:self.numberOfDaysDispatchesAreValid forKey:TEALPublishSettingKeyDispatchExpiration];
+    [aCoder encodeInteger:self.dispatchSize forKey:@"dispatchSize"];
+    [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@"offlineDispatchQueueSize"];
+    [aCoder encodeBool:self.enableLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
+    [aCoder encodeBool:self.enableSendWifiOnly forKey:@"shouldSendWifiOnly"];
+    [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
+    [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
+    
+    [aCoder encodeBool:self.overrideDisableUIEventAutotracking forKey:TEALPublishSettingKeyDisableUIEventAutotracking];
+    [aCoder encodeBool:self.overrideDisableViewAutotracking forKey:TEALPublishSettingKeyDisableViewAutotracking];
+    [aCoder encodeBool:self.overrideDisableiVarAutotracking forKey:TEALPublishSettingKeyDisableiVarAutotracking];
+    [aCoder encodeBool:self.overrideDisableLifecycleAutotracking forKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
+    [aCoder encodeBool:self.overrideDisableCrashTracking forKey:TEALPublishSettingKeyDisableCrashTracking];
+    [aCoder encodeBool:self.overrideDisableMobileCompanion forKey:TEALPublishSettingKeyDisableMobileCompanion];
+    
+}
+
+- (BOOL) isEqual:(id)object {
+    
+    if (![object isKindOfClass:([TEALPublishSettings class])]) {
+        return NO;
+    }
+    
+    TEALPublishSettings *otherSettings = object;
+    
+    if (![otherSettings.url isEqualToString:self.url]) return  NO;
+    if (otherSettings.dispatchSize != self.dispatchSize) return  NO;
+    if (otherSettings.offlineDispatchQueueSize != self.offlineDispatchQueueSize) return  NO;
+    if (otherSettings.minutesBetweenRefresh != self.minutesBetweenRefresh) return NO;
+    if (otherSettings.numberOfDaysDispatchesAreValid != self.numberOfDaysDispatchesAreValid) return  NO;
+    if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
+    if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
+    if (otherSettings.overrideDisableUIEventAutotracking != self.overrideDisableUIEventAutotracking) return NO;
+    if (otherSettings.overrideDisableViewAutotracking != self.overrideDisableViewAutotracking) return NO;
+    if (otherSettings.overrideDisableiVarAutotracking != self.overrideDisableiVarAutotracking) return NO;
+    if (otherSettings.overrideDisableLifecycleAutotracking != self.overrideDisableLifecycleAutotracking) return NO;
+    if (otherSettings.overrideDisableCrashTracking != self.overrideDisableCrashTracking) return NO;
+    if (otherSettings.overrideDisableMobileCompanion != self.overrideDisableMobileCompanion) return NO;
+    
+    return YES;
+}
+
+- (void) storeLocalSettingsFromRawSettings:(NSDictionary *)settings {
+    
+    // Referencing keys from MPS Json object - keep keys separate from encoder keys for clarity
+    
+    NSString *batchSize = settings[@"event_batch_size"];
+    NSString *offlineSize = settings[@"offline_dispatch_limit"];
+    NSString *minutesBetweenRefresh = settings[@"minutes_between_refresh"];
+    NSString *dispatchExpiration = settings[@"dispatch_expiration"];
+    NSString *lowBattery = settings[@"battery_saver"];
+    NSString *wifiOnly = settings[@"wifi_only_sending"];
+    NSString *audiencestream = settings[@"audiencestream"];
+    NSString *tagmanagement = settings[@"tag_management"];
+    
+    NSString *disableUIEventAutotracking = settings[@"disable_uievent_autotracking"];
+    NSString *disableViewAutotracking = settings[@"disable_view_autotracking"];
+    NSString *disableiVarAutotracking = settings[@"disable_ivar_autotracking"];
+    NSString *disableLifecycleAutotracking = settings[@"disable_lifecycle_autotracking"];
+    NSString *disableCrashTracking = settings[@"disable_crash_tracking"];
+    NSString *disableMobileCompanion = settings[@"disable_mobilecompanion"];
+    
+    if (batchSize) {
+        self.dispatchSize = [batchSize integerValue];
+    }
+    
+    if (offlineSize) {
+        self.offlineDispatchQueueSize = [offlineSize integerValue];
+    }
+    
+    if (minutesBetweenRefresh) {
+        self.minutesBetweenRefresh = [minutesBetweenRefresh doubleValue];
+    }
+    
+    if (dispatchExpiration) {
+        self.numberOfDaysDispatchesAreValid = [dispatchExpiration doubleValue];
+    }
+    
+    if (lowBattery) {
+        self.enableLowBatterySuppress = [lowBattery boolValue];
+    }
+    
+    if (wifiOnly) {
+        self.enableSendWifiOnly = [wifiOnly boolValue];
+    }
+    
+    if (audiencestream) {
+        self.enableAudienceStream = [audiencestream boolValue];
+    }
+    
+    if (tagmanagement) {
+#warning Remove auto set yes after dev
+        self.enableTagManagement = YES; //[tagmanagement boolValue];
+    }
+    
+    if (disableUIEventAutotracking) {
+        self.overrideDisableUIEventAutotracking = [disableUIEventAutotracking boolValue];
+    }
+    
+    if (disableViewAutotracking) {
+        self.overrideDisableViewAutotracking = [disableViewAutotracking boolValue];
+    }
+    
+    if (disableiVarAutotracking) {
+        self.overrideDisableiVarAutotracking = [disableiVarAutotracking boolValue];
+    }
+    
+    if (disableLifecycleAutotracking) {
+        self.overrideDisableLifecycleAutotracking = [disableLifecycleAutotracking boolValue];
+    }
+    
+    if (disableCrashTracking) {
+        self.overrideDisableCrashTracking = [disableCrashTracking boolValue];
+    }
+    
+    if (disableMobileCompanion) {
+        self.overrideDisableMobileCompanion = [disableMobileCompanion boolValue];
+    }
+}
+
+- (NSString *) description {
+    
+    NSDictionary *descriptionDictionary = @{
+                                            @"status":[NSString stringWithFormat:@"%lu", (unsigned long)self.status],
+                                            @"url":[NSString teal_dictionarySafeString:self.url],
+                                            @"mps version":[NSString teal_dictionarySafeString:self.mpsVersion],
+                                            @"dispatch size":[NSString stringWithFormat:@"%i", (int)self.dispatchSize],
+                                            @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)self.offlineDispatchQueueSize],
+                                            @"minutes between refresh":[NSString stringWithFormat:@"%f", (double)self.minutesBetweenRefresh],
+                                            @"number of day dispatches valid":[NSString stringWithFormat:@"%f",(double)self.numberOfDaysDispatchesAreValid],
+                                            @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
+                                            @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
+                                            @"enable AudienceStream":[NSString teal_stringFromBool:self.enableAudienceStream],
+                                            @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement]
+                                            };
+    
+    return [NSString teal_descriptionForObject:self description:@"Remote settings from TIQ" fromDictionary:descriptionDictionary];
 }
 
 

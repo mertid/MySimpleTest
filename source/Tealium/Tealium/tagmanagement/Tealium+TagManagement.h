@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
+#ifndef TEAL_MODULE_TAGMANAGEMENT
+#define TEAL_MODULE_TAGMANAGEMENT
+#endif
+
 #import "Tealium.h"
 
 #import "TEALRemoteCommandResponse.h"

@@ -13,8 +13,6 @@
 #import "TEALSystemHelpers.h"
 #import "NSDate+Tealium.h"
 #import "NSString+Tealium.h"
-#import "TEALLogger.h"
-
 
 static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
 const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue";
@@ -36,7 +34,7 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
     
     if (!instanceID) {
-        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
+//        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
         return nil;
     }
     

@@ -11,7 +11,6 @@
 #import "TEALNetworkHelpers.h"
 #import "TEALError.h"
 #import "TEALBlocks.h"
-#import "TEALLogger.h"
 #import "TEALConfiguration.h"
 #import "TEALURLSessionManager.h"
 #import "TEALDataSourceConstants.h"
@@ -141,7 +140,6 @@
         _publishSettings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     }
     
-    
     return self;
 }
 
@@ -150,25 +148,38 @@
 }
 
 - (BOOL) autotrackingIvarsEnabled {
+    if (self.publishSettings.overrideDisableiVarAutotracking) return NO;
     return self.configuration.autotrackingIvarsEnabled;
 }
 
 - (BOOL) autotrackingLifecycleEnabled {
+    if (self.publishSettings.overrideDisableLifecycleAutotracking) return NO;
     return self.configuration.autotrackingLifecycleEnabled;
 }
 
 - (BOOL) autotrackingUIEventsEnabled {
+    if (self.publishSettings.overrideDisableUIEventAutotracking) return NO;
     return self.configuration.autotrackingUIEventsEnabled;
 }
 
 - (BOOL) autotrackingViewsEnabled {
+    if (self.publishSettings.overrideDisableViewAutotracking) return NO;
     return self.configuration.autotrackingViewsEnabled;
+}
+
+- (BOOL) crashTrackingEnabled {
+    if (self.publishSettings.overrideDisableCrashTracking) return NO;
+    return self.configuration.crashTrackingEnabled;
+}
+
+- (BOOL) mobileCompanionEnabled {
+    if (self.publishSettings.overrideDisableMobileCompanion) return NO;
+    return self.configuration.mobileCompanionEnabled;
 }
 
 - (BOOL) remoteCommandsEnabled {
     return self.configuration.remoteCommandsEnabled;
 }
-
 
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);

@@ -48,7 +48,7 @@
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
     
-    NSNumber *eventCount = [NSNumber numberWithUnsignedInteger:self.totalEventCount];
+    NSNumber *eventCount = @(self.totalEventCount);
     [aCoder encodeObject:eventCount forKey:@"totalEventCount"];
     [aCoder encodeDouble:self.creationTimestamp forKey:@"creationTimestamp"];
     [aCoder encodeObject:self.dates forKey:@"dates"];

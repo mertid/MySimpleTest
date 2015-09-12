@@ -11,8 +11,6 @@
 #import "TEALURLSessionManager.h"
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
-#import "TEALLogger.h"
-
 
 @interface TEALCollectDispatchService ()
 

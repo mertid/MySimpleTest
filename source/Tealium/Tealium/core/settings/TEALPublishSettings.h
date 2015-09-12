@@ -21,11 +21,19 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
-@property (nonatomic) NSInteger numberOfDaysDispatchesAreValid;
+@property (nonatomic) double minutesBetweenRefresh;
+@property (nonatomic) double numberOfDaysDispatchesAreValid;
 @property (nonatomic) BOOL enableLowBatterySuppress;
 @property (nonatomic) BOOL enableSendWifiOnly;
 @property (nonatomic) BOOL enableAudienceStream;
 @property (nonatomic) BOOL enableTagManagement;
+
+@property (nonatomic) BOOL overrideDisableUIEventAutotracking;
+@property (nonatomic) BOOL overrideDisableViewAutotracking;
+@property (nonatomic) BOOL overrideDisableiVarAutotracking;
+@property (nonatomic) BOOL overrideDisableLifecycleAutotracking;
+@property (nonatomic) BOOL overrideDisableCrashTracking;
+@property (nonatomic) BOOL overrideDisableMobileCompanion;
 
 - (instancetype) initWithURLString:(NSString *)url;
 

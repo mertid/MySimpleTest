@@ -9,25 +9,26 @@
 #import <Foundation/Foundation.h>
 #import "TEALRemoteCommandResponse.h"
 #import "TEALRemoteCommandConstants.h"
+#import "TEALBlocks.h"
 
 @class TEALOperationManager;
 
-@protocol TEALRemoteCommandDelegate <NSObject>
+@protocol TEALRemoteCommandManagerDelegate <NSObject>
 
-- (void) tagRemoteCommandRequestsCommandToWebView:(NSString *)command;
+- (void) tagRemoteCommandManagerRequestsCommandToWebView:(NSString *)command;
 
 @end
 
 @interface TEALRemoteCommandManager : NSObject <TEALRemoteCommandResponseDelegate>
 
-@property (nonatomic, weak) id<TEALRemoteCommandDelegate> delegate;
+@property (nonatomic, weak) id<TEALRemoteCommandManagerDelegate> delegate;
 
 - (instancetype) initWithOperationManager:(TEALOperationManager*)manager;
 
-- (void) addReservedCommands;
+- (void) addReservedCommands:(TEALBooleanBlock)successBlock;
 
 - (void) processRequest:(NSURLRequest*)request completionHandler:(TEALRemoteCommandResponseBlock)responseBlock;
 
-- (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock;
+- (BOOL) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock;
 
 @end

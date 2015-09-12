@@ -33,9 +33,10 @@
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingIvarsEnabled = NO;
-    configuration.autotrackingLifecycleEnabled = YES;
-    configuration.autotrackingUIEventsEnabled = NO;
-    configuration.autotrackingViewsEnabled = YES;
+    configuration.autotrackingLifecycleEnabled = NO;
+    configuration.autotrackingUIEventsEnabled = YES;
+    configuration.autotrackingViewsEnabled = NO;
+    configuration.mobileCompanionEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
 
     [Tealium newInstanceForKey:@"1" configuration:configuration];
@@ -49,19 +50,19 @@
     
     
     // Instance 2
-    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"non-exsist"
-                                                                       environment:@"dev"];
-    instanceConfig.logLevel = TEALLogLevelNone;
-    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    instanceConfig.autotrackingLifecycleEnabled = YES;
-    instanceConfig.autotrackingUIEventsEnabled = NO;
-    instanceConfig.autotrackingViewsEnabled = NO;
+//    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                           profile:@"non-exsist"
+//                                                                       environment:@"dev"];
+//    instanceConfig.logLevel = TEALLogLevelNone;
+//    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//    instanceConfig.autotrackingLifecycleEnabled = YES;
+//    instanceConfig.autotrackingUIEventsEnabled = NO;
+//    instanceConfig.autotrackingViewsEnabled = NO;
+//    
+//    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
+//    [[Tealium instanceForKey:@"2"] setDelegate:self];
     
-    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
-    [[Tealium instanceForKey:@"2"] setDelegate:self];
-    
-//    if (configuration.autotrackingUIEventsEnabled == NO){
+//    if (!configuration.autotrackingUIEventsEnabled){
 //        [[Tealium sharedInstance] trackEventWithTitle:@"testSharedInstanceLaunch" dataSources:nil];
 //    }
     

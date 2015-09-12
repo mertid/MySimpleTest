@@ -18,13 +18,11 @@
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandManager.h"
 
-
 @interface Tealium() <TEALModulesDelegate>
 
 @end
 
 @implementation Tealium (TagManagement)
-
 
 #pragma mark - PUBLIC INSTANCE
 
@@ -63,7 +61,7 @@
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
     
     if (tagService) {
-        [self.logger logVerbose:@"TagManagement active."];
+        [self.logger logVerbose:@"TagManagement enabled."];
     }
 
 }
@@ -75,9 +73,14 @@
     
     [service setRemoteCommandsEnabled:YES];
     
-    [service.remoteCommandManager addReservedCommands];
+    [self.logger logVerbose:@"Remote Commands enabled."];
+
+    [service.remoteCommandManager addReservedCommands:^(BOOL successful) {
+        if (successful) {
+            [self.logger logVerbose:@"Reserved Remote Commands enabled."];
+        }
+    }];
     
-    [self.logger logVerbose:@"Remote Commands Enabled."];
     
 }
 
@@ -132,8 +135,12 @@
     
     [tagService setup];
     
+    
     return tagService;
 
 }
+
+#pragma mark - TEAL TAG DISPATCH SERVICE DELEGATE
+
 
 @end
