@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     self.title = @"API Sampler";
     self.autotrackingViewEnabled = YES;
+//    [self.tableView registerClass:[ShowViewTableViewCell class] forCellReuseIdentifier:@"autotrackingSwitchCell"];
     
     [[Tealium instanceForKey:@"1"] addRemoteCommandId:@"testCommand"
                                      description:nil
@@ -101,6 +102,13 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView
+  willDisplayCell:(UITableViewCell *)cell
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 #pragma mark - UITableViewDelegate
