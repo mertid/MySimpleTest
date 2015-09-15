@@ -49,6 +49,11 @@
     }
 }
 
+- (void) recordLaunch {
+    NSNotification *notification = [NSNotification notificationWithName:UIApplicationDidFinishLaunchingNotification object:self];
+    [self processLifecycleEvent:notification];
+}
+
 - (BOOL) isEnabled {
     return self.enabled;
 }
@@ -98,6 +103,10 @@
 
 
 - (void) processLifecycleEvent:(NSNotification*) notification {
+    
+    if (!self.isEnabled){
+        return;
+    }
     
     NSString *name = notification.name;
     NSString *eventName = nil;

@@ -33,9 +33,9 @@
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingIvarsEnabled = NO;
-    configuration.autotrackingLifecycleEnabled = NO;
+    configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = YES;
-    configuration.autotrackingViewsEnabled = NO;
+    configuration.autotrackingViewsEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
 
@@ -96,20 +96,24 @@
 #pragma mark - TEALIUM DELEGATE
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
-//        NSLog(@"%s dispatch: %@", __FUNCTION__, dispatch);
+
+    /*
+     *  Uncomment to test delegate suppression of dispatches
+     */
     
-    NSDictionary *payload = dispatch.payload;
-    
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:dispatch.payload];
-    mDict[@"ClientAddedKey"] = @"clientAddedValue";
-    
-    dispatch.payload = [NSDictionary dictionaryWithDictionary:mDict];
-    
-    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
-        return NO;
-    }
+//    NSDictionary *payload = dispatch.payload;
+//    
+//    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:dispatch.payload];
+//    mDict[@"ClientAddedKey"] = @"clientAddedValue";
+//    
+//    dispatch.payload = [NSDictionary dictionaryWithDictionary:mDict];
+//    
+//    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
+//        return NO;
+//    }
     
     return YES;
+     
 }
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {

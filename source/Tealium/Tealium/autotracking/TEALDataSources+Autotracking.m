@@ -38,36 +38,6 @@
     return [NSDictionary dictionaryWithDictionary:datasources];
 }
 
-//+ (NSDictionary *) ivarDataForObject:(NSObject *)obj {
-//    
-//    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
-//    
-//    __block NSDictionary *ivars = [TEALDataSources ivarDataForClass:[obj class]];
-//    
-//    NSArray *allKeys = [ivars allKeys];
-//    for (id key in allKeys){
-//        if (![key isKindOfClass:[NSObject class]]) continue;
-//        id aObject = [ivars objectForKey:key];
-//        
-//        if (![aObject isKindOfClass:[NSString class]] &&
-//            ![aObject isKindOfClass:[NSNumber class]] &&
-//            [aObject isKindOfClass:[NSObject class]]) aObject = NSStringFromClass([aObject class]);
-//        
-//        NSString * modKey = [NSString stringWithFormat:@"ivar_%@", key];
-//        if (aObject){
-//            mDict[modKey] = aObject;
-//            NSString *value = [NSString stringWithFormat:@"%@", aObject];
-//            if (value){
-//                mDict[modKey] = value;
-//            }
-//        }
-//    }
-//    
-//    NSDictionary *dict = [NSDictionary dictionaryWithDictionary:mDict];
-//    return dict;
-//    
-//}
-
 + (NSDictionary *) ivarDataForObject:(NSObject *)object {
     // requires <objc/runtime.h>
     
@@ -107,33 +77,6 @@
 
 
 #pragma mark - PRIVATE CLASS METHODS
-
-+ (NSDictionary*) ivarDataForClass:(id)klass{
-    // Requires <objc/runtime.h>
-    
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
-    unsigned int count;
-    Ivar* ivars = class_copyIvarList([klass class], &count);
-    for(unsigned int i = 0; i < count; ++i)
-    {
-        const char * ivarChar = ivar_getName(ivars[i]);
-        NSString *ivarKey = [NSString stringWithUTF8String:ivarChar];
-        SEL aSelector = NSSelectorFromString(ivarKey);
-        if ([klass respondsToSelector:aSelector]) {
-            id value;
-            @try                            { value = [klass valueForKey:ivarKey];  }
-            @catch (NSException *exception) {                                       }
-            @finally                        {                                       }
-            if (ivarKey && value){
-                NSString *modKey = [NSString stringWithFormat:@"ivar_%@", ivarKey];
-                mDict[modKey] = value;
-            }
-        }
-    }
-    free(ivars);
-    
-    return [NSDictionary dictionaryWithDictionary:mDict];
-}
 
 + (NSString *) titleForEvent:(TEALDispatchType)eventType
                   withObject:(NSObject *)obj {
@@ -185,38 +128,6 @@
         UILabel *label =  [obj performSelector:@selector(titleLabel)];
         title = [label text];
     }
-    return title;
-}
-
-+ (NSString *) titleForViewEventWithObject:(NSObject *)obj {
-    
-    NSString *title = nil;
-    
-    if ([obj isKindOfClass:[UIWebView class]]) {
-        title = @"webview";
-        
-    } else if ([obj respondsToSelector:@selector(title)]) {
-        
-        title = [obj performSelector:@selector(title)];
-        
-    } else if ([obj respondsToSelector:@selector(currentTitle)]) {
-        
-        title = [obj performSelector:@selector(currentTitle)];
-        
-    } else if ([obj respondsToSelector:@selector(possibleTitles)]) {
-        
-        NSSet *titles = [obj performSelector:@selector(possibleTitles)];
-        title = [titles anyObject];
-        
-    } else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
-        
-        title = [obj performSelector:@selector(restorationIdentifier)];
-        
-    } else if ([obj respondsToSelector:@selector(nibName)]) {
-        
-        title = [obj performSelector:@selector(nibName)];
-    }
-    
     return title;
 }
 
@@ -554,29 +465,29 @@
     return title;
 }
 
-+ (NSString*) titleForView:(id)obj{
++ (NSString*) titleForView:(NSObject *)obj{
     NSString *title = @"";
     
-    if ([obj isKindOfClass:[UIWebView class]]){
+    if ([obj respondsToSelector:@selector(canGoBack)]){
         title = @"webview";
     }
     if ([obj respondsToSelector:@selector(title)]){
-        title = [obj title];
+        title = [obj performSelector:@selector(title)];
     }
     if (!title &&
         [obj respondsToSelector:@selector(currentTitle)]){
-        title = [obj currentTitle];
+        title = [obj performSelector:@selector(currentTitle)];
     }
     if (!title && [obj respondsToSelector:@selector(restorationIdentifier)]){
-        title = [obj restorationIdentifier];
+        title = [obj performSelector:@selector(restorationIdentifier)];
     }
     if (!title &&
         [obj respondsToSelector:@selector(possibleTitles)]){
-        NSSet *titles = [obj possibleTitles];
+        NSSet *titles = [obj performSelector:@selector(possibleTitles)];
         title = [titles anyObject];
     }
     if (!title && [obj respondsToSelector:@selector(nibName)]) {
-        title = [obj nibName];
+        title = [obj performSelector:@selector(nibName)];
     }
     if (!title) {
         NSString *objClass = [TEALDataSources objectClassFor:obj];

@@ -20,6 +20,7 @@ extern NSString * const TEALDispatchTypeViewStringValue;
 @interface TEALDispatch : NSObject <NSCoding>
 
 @property (nonatomic) TEALDispatchType dispatchType;
+@property (nonatomic, strong) NSString *dispatchServiceName;
 @property (nonatomic, strong) NSDictionary *payload;
 @property (nonatomic) NSTimeInterval timestamp;
 @property (nonatomic) BOOL queued;

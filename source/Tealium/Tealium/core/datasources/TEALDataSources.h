@@ -12,6 +12,11 @@
 
 @interface TEALDataSources : NSObject
 
+/*
+ // TODO Comments
+ */
++ (NSString *) titleForViewEventWithObject:(NSObject *)obj;
+
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
 #warning BASELINE datasources (combine relevant transmission and capture time data)

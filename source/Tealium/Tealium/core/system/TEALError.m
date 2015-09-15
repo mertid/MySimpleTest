@@ -8,7 +8,7 @@
 
 #import "TEALError.h"
 
-NSString * const TEALAudienceStreamErrorDomain = @"com.tealium.audience-stream";
+NSString * const TEALAudienceStreamErrorDomain = @"com.tealium.errordomain";
 
 @implementation TEALError
 

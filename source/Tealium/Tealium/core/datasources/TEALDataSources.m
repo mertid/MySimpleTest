@@ -24,6 +24,40 @@
 
 @implementation TEALDataSources
 
+#pragma mark - PUBLIC CLASS METHODS
+
++ (NSString *) titleForViewEventWithObject:(NSObject *)obj {
+    
+    NSString *title = nil;
+    
+    if ([obj isKindOfClass:[UIWebView class]]) {
+        title = @"webview";
+        
+    } else if ([obj respondsToSelector:@selector(title)]) {
+        
+        title = [obj performSelector:@selector(title)];
+        
+    } else if ([obj respondsToSelector:@selector(currentTitle)]) {
+        
+        title = [obj performSelector:@selector(currentTitle)];
+        
+    } else if ([obj respondsToSelector:@selector(possibleTitles)]) {
+        
+        NSSet *titles = [obj performSelector:@selector(possibleTitles)];
+        title = [titles anyObject];
+        
+    } else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
+        
+        title = [obj performSelector:@selector(restorationIdentifier)];
+        
+    } else if ([obj respondsToSelector:@selector(nibName)]) {
+        
+        title = [obj performSelector:@selector(nibName)];
+    }
+    
+    return [title copy];
+}
+
 #pragma mark - PUBLIC METHODS
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID {

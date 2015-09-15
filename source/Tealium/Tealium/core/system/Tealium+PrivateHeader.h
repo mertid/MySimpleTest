@@ -34,6 +34,10 @@
 - (NSArray *) currentDispatchNetworkServices;
 - (NSDictionary *) moduleDataCopy;
 
+- (void) setActiveViewController:(UIViewController *)viewController;
+
+- (UIViewController *) activeViewController;
+    
 @end
 
 #endif

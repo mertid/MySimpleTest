@@ -14,6 +14,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     TealiumAPIMenuItemSendEvent = 0,
     TealiumAPIMenuItemSendView,
     TealiumAPIMenuItemShowView,
+    TealiumAPIMenuItemTriggerAutotrackEvent,
     TealiumAPIMenuItemFetchProfle,
     TealiumAPIMenuItemLogLastProfile,
     TealiumAPIMenuItemNumberOfItems
@@ -87,6 +88,9 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
                     self.autotrackingViewEnabled = switchEnabled;
                 };
             }
+                break;
+            case TealiumAPIMenuItemTriggerAutotrackEvent:
+                cell.textLabel.text = @"Trigger Autotrack Event";
                 break;
             case TealiumAPIMenuItemFetchProfle:
                 cell.textLabel.text = @"Fetch Current Profile";
@@ -190,7 +194,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void) joinTraceWithToken:(NSString *)token {
     
     [[Tealium instanceForKey:@"1"] joinTraceWithToken:token];
-//    [[Tealium instanceForKey:@"1"] joinTraceWithToken:token];
+
 }
 
 - (void) leaveTrace {

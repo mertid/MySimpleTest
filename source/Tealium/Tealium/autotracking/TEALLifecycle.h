@@ -14,6 +14,7 @@
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block;
 - (void) disable;
 - (void) reEnable;
+- (void) recordLaunch;
 - (BOOL) isEnabled;
 - (NSDictionary *)currentLifecycleData;
 

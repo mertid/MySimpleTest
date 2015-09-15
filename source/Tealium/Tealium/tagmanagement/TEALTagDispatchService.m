@@ -18,6 +18,8 @@
 #import "NSDictionary+Tealium.h"
 #import "UIWebView+Tealium.h"
 
+@import Security;
+
 @interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandManagerDelegate>
 
 @property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
@@ -67,6 +69,10 @@
     return self.currentRemoteCommandManager;
 }
 
+- (NSString *) name {
+    return NSLocalizedString(@"Tag Management", @"");
+}
+
 #pragma mark - PRIVATE INSTANCE
 
 - (void) setRemoteCommandsEnabled:(BOOL)enable {
@@ -99,7 +105,8 @@
 
 - (void) sendDispatch:(TEALDispatch *)dispatch completion:(TEALDispatchBlock)completion{
     
-    NSString *utagString = [self utagCommandFrom:dispatch.payload];
+    NSString *utagString = [self utagCommandFromDispatch:dispatch completion:completion];
+    if (!utagString) return;
     
     __block __weak UIWebView *weakWebView = self.webView;
     __block NSString *result = nil;
@@ -109,13 +116,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         result = [weakWebView stringByEvaluatingJavaScriptFromString:utagString];
         
-        
         [weakSelf.operationManager addOperationWithBlock:^{
             
             if (result.length == 0 || [[result lowercaseString] isEqualToString:@"true"]){
-                
-//                NSString *packagedDataString = [NSString stringWithFormat:@"%s Packaged Dispatch Data Sources: %@", __FUNCTION__,
-//                                                [dispatch.payload teal_arrayForDebugDisplay]];
                 
                 if (completion) {
                     completion(TEALDispatchStatusSent, dispatch, nil);
@@ -195,12 +198,34 @@
 
 #pragma mark - UTAG
 
-- (NSString *) utagCommandFrom:(NSDictionary *)dispatchData {
+- (NSString *) utagCommandFromDispatch:(TEALDispatch *)dispatch completion:(TEALDispatchBlock)completion{
     // Converts a utag item dictionary into a utag.js ready jsonString object
     
+    NSString *command = nil;
     NSError *error = nil;
+    NSDictionary *dispatchData = dispatch.payload;
     
-    if ([NSJSONSerialization isValidJSONObject:dispatchData]) {
+    if (!dispatchData){
+        if (completion) {
+            error = [TEALError errorWithCode:400
+                                          description:NSLocalizedString(@"Convert Dispatch to utag command unsuccessful.", nil)
+                                               reason:NSLocalizedString(@"Dispatch payload empty.", @"")
+                                           suggestion:NSLocalizedString(@"At least one key-value pair of data most be present in payload to dispatch.", @"")];
+        }
+    }
+    
+    else if (![NSJSONSerialization isValidJSONObject:dispatchData]) {
+        if (completion) {
+
+            error = [TEALError errorWithCode:400
+                                          description:NSLocalizedString(@"Dispatch packaging unsuccessful.", nil)
+                                               reason:NSLocalizedString(@"Dispatch data could not be JSON serialized.", @"")
+                                           suggestion:NSLocalizedString(@"Make sure all custom values passed to library are JSON serializable.", @"")];
+        }
+        
+    }
+    
+    else {
         
         NSString *trackType = dispatchData[TEALDataSourceKey_CallType];
         
@@ -208,35 +233,23 @@
             trackType = TEALDataSourceValue_Link; //default option
         }
         
-        NSString *utagCommand = nil;
         @autoreleasepool {
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dispatchData options:0 error:&error];
             
             if (jsonData != nil) {
                 NSString *jsonDataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                utagCommand = [NSString stringWithFormat:@"utag.track('%@', %@)", trackType, jsonDataString];
+                command = [NSString stringWithFormat:@"utag.track('%@', %@)", trackType, jsonDataString];
             }
         }
-        if (utagCommand) {
-            return utagCommand;
-        }
-    } else {
-        NSDictionary *userInfo = @{
-                                   NSLocalizedDescriptionKey: NSLocalizedString(@"Dispatch packaging unsuccessful.", nil),
-                                   NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Dispatch data could not be serialized into JSON."],
-                                   NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Make sure all custom values being passed into library are JSON serializable.", nil)
-                                   };
-        // TODO: error codes
-        error = [NSError errorWithDomain:@"Tealium"
-                                    code:400
-                                userInfo:userInfo];
+
     }
     
-    if (error) {
-//        TEAL_LogNormal(@"%@", [error localizedDescription]);
+    if (error &&
+        completion) {
+        completion(TEALDispatchStatusFailed, dispatch, error);
     }
     
-    return nil;
+    return command;
     
 }
 

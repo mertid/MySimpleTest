@@ -14,4 +14,6 @@
 
 + (void) swizzleWithCompletion:(TEALBooleanCompletionBlock)completion;
 
+- (void) teal_viewDidAppearCallOnly;
+
 @end

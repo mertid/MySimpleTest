@@ -42,9 +42,6 @@
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
 
-- (TEALDispatchNetworkServiceStatus) status{
-    return self.status;
-}
 
 - (void) setup {
     
@@ -96,6 +93,14 @@
     [self.sessionManager performRequest:request
                          withCompletion:requestCompletion];
 
+}
+
+- (NSString *) name {
+    return NSLocalizedString(@"Collect", @"");
+}
+
+- (TEALDispatchNetworkServiceStatus) status{
+    return self.status;
 }
 
 @end

@@ -39,6 +39,9 @@
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
+    
+#warning THIS check does not actually work
+    
     if (self.hasDidSendDispatch) {
         return [self.delegate tealium:tealium shouldSendDispatch:dispatch];
     }

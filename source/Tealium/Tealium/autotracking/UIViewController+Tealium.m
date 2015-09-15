@@ -11,6 +11,7 @@
 #import "NSObject+TealiumAutotracking.h"
 #import <objc/runtime.h>
 #import "Tealium+Autotracking.h"
+#import "Tealium+PrivateHeader.h"
 #import "TEALDataSources+Autotracking.h"
 
 static BOOL alreadySwizzled;
@@ -38,10 +39,8 @@ static BOOL alreadySwizzled;
     if (completion) completion(YES, nil);
 }
 
-void (*oViewDidAppear)(id, SEL, bool a);
-
-static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
-
+- (void) teal_viewDidAppearCallOnly {
+    
     NSArray *validInstances = [Tealium allAutotrackingViewInstances];
     
     [validInstances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -52,33 +51,54 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
         
         Tealium *instance = obj;
         
-        // Auto captures title
+        NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+
+        // General autotrack object data
         NSDictionary *autoDataSources = [self teal_autotrackDataSources];
+        [dataSources addEntriesFromDictionary:autoDataSources];
         
-        NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
+        // Lifecycle info
+        if (instance.settings.autotrackingLifecycleEnabled) {
+            [dataSources addEntriesFromDictionary:[instance currentLifecycleData]];
+        }
         
+        // iVars
         if (instance.settings.autotrackingIvarsEnabled){
             NSDictionary *ivars = [self teal_autotrackIvarDataSources];
             [dataSources addEntriesFromDictionary:ivars];
         }
         
+        // Client data
         NSDictionary *customDataSources = [self teal_dataSources];
         [dataSources addEntriesFromDictionary:customDataSources];
         
+        [instance setActiveViewController:self];
         [instance trackViewWithTitle:nil
                          dataSources:dataSources];
         
     }];
-    
-//    if ([self teal_autotrackingEnabled] &&
-//        [Tealium sharedInstance].settings.autotrackingViewsEnabled) {
-//
+}
+
+void (*oViewDidAppear)(id, SEL, bool a);
+
+static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
+
+//    NSArray *validInstances = [Tealium allAutotrackingViewInstances];
+//    
+//    [validInstances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        
+//        if (![obj isKindOfClass:([Tealium class])]){
+//            return;
+//        }
+//        
+//        Tealium *instance = obj;
+//        
 //        // Auto captures title
 //        NSDictionary *autoDataSources = [self teal_autotrackDataSources];
 //        
 //        NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
 //        
-//        if ([Tealium sharedInstance].settings.autotrackingIvarsEnabled){
+//        if (instance.settings.autotrackingIvarsEnabled){
 //            NSDictionary *ivars = [self teal_autotrackIvarDataSources];
 //            [dataSources addEntriesFromDictionary:ivars];
 //        }
@@ -86,10 +106,15 @@ static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
 //        NSDictionary *customDataSources = [self teal_dataSources];
 //        [dataSources addEntriesFromDictionary:customDataSources];
 //        
-//        [[Tealium sharedInstance] trackViewWithTitle:nil
-//                                         dataSources:dataSources];
-//    }
-        oViewDidAppear(self, _cmd, a);
+//        [instance setActiveViewController:self];
+//        [instance trackViewWithTitle:nil
+//                         dataSources:dataSources];
+//        
+//    }];
+    
+    [self teal_viewDidAppearCallOnly];
+    
+    oViewDidAppear(self, _cmd, a);
 }
 
 @end

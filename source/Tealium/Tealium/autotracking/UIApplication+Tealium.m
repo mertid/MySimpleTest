@@ -9,6 +9,7 @@
 #import "UIApplication+Tealium.h"
 #import <objc/runtime.h>
 #import "Tealium+Autotracking.h"
+#import "Tealium+PrivateHeader.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources+Autotracking.h"
 #import "NSObject+Tealium.h"
@@ -54,30 +55,30 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     }
     
     // check for tracking viability - duplicate suppression
-    BOOL isViable = YES;
+//    BOOL isViable = YES;
     
     if (touch.phase == UITouchPhaseEnded && view){
-        NSDate *now = [NSDate date];
-            NSLog(@"%s now:%@", __FUNCTION__, now);
-        if ([now compare:_lastEventTS] == NSOrderedAscending && _lastEvent == view) {
-            isViable = NO;
-        }
-        if (isViable &&
-            [view respondsToSelector:@selector(isUserInteractionEnabled)]){
-            isViable = [view isUserInteractionEnabled];
-        }
-        if (isViable){
-            
+        
+//        NSDate *now = [NSDate date];
+//        if ([now compare:_lastEventTS] == NSOrderedAscending && _lastEvent == view) {
+//            isViable = NO;
+//        }
+//        if (isViable &&
+//            [view respondsToSelector:@selector(isUserInteractionEnabled)]){
+//            isViable = [view isUserInteractionEnabled];
+//        }
+//        if (isViable){
+        
             __weak UIView *weakTargetView = [self teal_viewToAutoTrack:view scanCount:0];
             
             if (weakTargetView) {
                 
                 [self teal_autotrackEvent:weakTargetView];
             }
-        }
-        
-        _lastEvent = view;
-        _lastEventTS = [NSDate dateWithTimeInterval:0.1 sinceDate:now];
+//        }
+//        
+//        _lastEvent = view;
+//        _lastEventTS = [NSDate dateWithTimeInterval:0.1 sinceDate:now];
     }
     
     // Forward event to original target object
@@ -98,21 +99,36 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         
         Tealium *instance = obj;
         
-        // Auto captures title
-        NSDictionary *autoDataSources = [self teal_autotrackDataSources];
+        NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+
+        // General object data
+        [dataSources addEntriesFromDictionary:[target teal_autotrackDataSources]];
         
-        NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
+        // Lifecycle info
+        if (instance.settings.autotrackingLifecycleEnabled) {
+            [dataSources addEntriesFromDictionary:[instance currentLifecycleData]];
+        }
         
-        if (instance.settings.autotrackingIvarsEnabled){
-            NSDictionary *ivars = [self teal_autotrackIvarDataSources];
+        // Ivars
+        if (instance.settings.autotrackingIvarsEnabled) {
+            NSDictionary *ivars = [target teal_autotrackIvarDataSources];
             [dataSources addEntriesFromDictionary:ivars];
         }
         
-        NSDictionary *customDataSources = [self teal_dataSources];
+        // Associated View
+        NSString *associatedTitle = [TEALDataSources titleForViewEventWithObject:[instance activeViewController]];
+        if (associatedTitle) {
+            [dataSources addEntriesFromDictionary:@{TEALDataSourceKey_AssociatedViewTitle: associatedTitle}];
+        }
+        
+        // Custom client data
+        NSDictionary *customDataSources = [target teal_dataSources];
         [dataSources addEntriesFromDictionary:customDataSources];
         
-        [instance trackViewWithTitle:nil
-                         dataSources:dataSources];
+
+        
+        [instance trackEventWithTitle:nil
+                          dataSources:dataSources];
         
     }];
     
@@ -123,7 +139,7 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 
     NSString *vClass = NSStringFromClass([view class]);
 
-    NSLog(@"%s view:%@ vClass:%@", __FUNCTION__, view, vClass);
+//    NSLog(@"%s view:%@ vClass:%@", __FUNCTION__, view, vClass);
     
     if (![view teal_autotrackingEnabled]){
         return nil;
@@ -138,10 +154,15 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     
     UIView *parent = view.superview;
     
-    if (parent && ![parent isKindOfClass:[UITableViewCell class]] && scanCount < _maxScans){
+    if (parent &&
+        ![parent isKindOfClass:[UITableViewCell class]] &&
+        scanCount < _maxScans){
+        
         scanCount++;
         return [self teal_viewToAutoTrack:parent scanCount:scanCount];
+        
     }
+    
     return nil;
 }
 

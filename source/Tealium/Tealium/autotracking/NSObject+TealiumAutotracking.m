@@ -62,9 +62,10 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
 }
 
 - (NSDictionary *) teal_autotrackIvarDataSources {
-#warning This not producing data as expected
+
+    NSDictionary *ivars = [TEALDataSources ivarDataForObject:self];
     
-    return [TEALDataSources ivarDataForObject:self];
+    return ivars;
 }
 
 @end

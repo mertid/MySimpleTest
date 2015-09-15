@@ -15,6 +15,7 @@
 #pragma mark - UDO / Datasource Keys
 
 extern NSString * const TEALDataSourceKey_ApplicationName;
+extern NSString * const TEALDataSourceKey_AssociatedViewTitle;
 extern NSString * const TEALDataSourceKey_Autotracked;
 extern NSString * const TEALDataSourceKey_CallType;
 extern NSString * const TEALDataSourceKey_Device;

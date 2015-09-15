@@ -56,7 +56,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _offlineDispatchQueueSize       = 1000; // -1 is supposed to be inf. but yeah thats alot
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
-        _enableAudienceStream           = YES;
+#warning FLIP enableAudienceStream TO YES FOR RELEASE
+        _enableAudienceStream           = NO;
 #warning FLIP enableTagManagment TO NO FOR RELEASE
         _enableTagManagement            = YES;
         _store = [[TEALPublishSettingsStore alloc] initWithInstanceID:url];

@@ -12,6 +12,7 @@
 #import "TEALMobileCompanionTableViewController.h"
 #import "TEALMobileCompanionContent.h"
 #import "TEALMobileCompanionOverlays.h"
+#import "TEALViewScanner.h"
 
 @interface TEALMobileCompanion() <TEALMobileCompanionViewDelegate, TEALMobileCompanionOverlaysDelegate>
 
@@ -82,7 +83,7 @@
     
     [self.overlays addOverlays];
     
-    [[self rootWindowController].view addSubview:self.view];
+    [[TEALViewScanner rootWindowController].view addSubview:self.view];
     
     [UIView animateWithDuration:0.5
                      animations:^{
@@ -94,7 +95,7 @@
 
 - (BOOL) rootWindowControllerViewContainsSelf {
     
-    return [[[self rootWindowController].view subviews] containsObject:self];
+    return [[[TEALViewScanner rootWindowController].view subviews] containsObject:self.view];
     
 }
 
@@ -143,11 +144,11 @@
 
 #pragma mark - HELPERS
 
-- (UIViewController*) rootWindowController{
-    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:0];
-    UIViewController *vc = window.rootViewController;
-    return vc;
-}
+//- (UIViewController*) rootWindowController{
+//    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:0];
+//    UIViewController *vc = window.rootViewController;
+//    return vc;
+//}
 
 - (UIPanGestureRecognizer *) panGestureRecognizers {
     

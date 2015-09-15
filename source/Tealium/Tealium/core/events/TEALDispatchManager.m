@@ -109,7 +109,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         [weakSelf attemptDispatch:aDispatch
               completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
 
-                  if (status == TEALDispatchStatusFailed) {
+                  if (status == TEALDispatchStatusQueued) {
                       [weakSelf enqueueDispatch:dispatch completionBlock:completionBlock];
                   } else if (completionBlock) {
                       completionBlock(status, dispatch, error);
@@ -288,24 +288,21 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 - (void) attemptDispatch:(TEALDispatch *)aDispatch completionBlock:(TEALDispatchBlock)completionBlock {
     
-    if ([self.delegate shouldAttemptDispatch]) {
 
-        __weak TEALDispatchManager *weakSelf = self;
-        
-        [self.delegate dispatchManager:self
-                      requestsDispatch:aDispatch
-                       completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-                           
-                           if (status == TEALDispatchStatusSent) {
-                               [weakSelf enqueueSentDispatch:dispatch];
-                           }
-                           if (completionBlock) {
-                               completionBlock(status, dispatch, error);
-                           }
-                       }];
-    } else if (completionBlock) {
-        completionBlock(TEALDispatchStatusFailed, aDispatch, nil);
-    }
+    __weak TEALDispatchManager *weakSelf = self;
+    
+    [self.delegate dispatchManager:self
+                  requestsDispatch:aDispatch
+                   completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+                       
+                       if (status == TEALDispatchStatusSent) {
+                           [weakSelf enqueueSentDispatch:dispatch];
+                       }
+                       if (completionBlock) {
+                           completionBlock(status, dispatch, error);
+                       }
+                   }];
+
 }
 
 - (NSUInteger) queuedDispatchCount {

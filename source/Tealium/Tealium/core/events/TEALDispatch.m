@@ -68,8 +68,9 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
 
 - (NSString*) description {
     
-    NSString *description = [NSString stringWithFormat:@"Dispatch type: %@ \r datasources payload: %@ \r timestamp unix: %f",
+    NSString *description = [NSString stringWithFormat:@"\r Dispatch type: %@ \r Dispatch service: %@ \r datasources payload: %@ \r timestamp unix: %f",
                              [TEALDispatch stringFromDispatchType:self.dispatchType],
+                             self.dispatchServiceName,
                              self.payload,
                              self.timestamp];
     return description;

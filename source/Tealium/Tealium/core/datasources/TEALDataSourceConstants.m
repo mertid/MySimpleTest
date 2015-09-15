@@ -13,6 +13,7 @@
 #pragma mark - UDO / Datasource Keys
 
 NSString * const TEALDataSourceKey_ApplicationName      = @"app_name";
+NSString * const TEALDataSourceKey_AssociatedViewTitle  = @"associated_screen_title";
 NSString * const TEALDataSourceKey_Autotracked          = @"autotracked";
 NSString * const TEALDataSourceKey_CallType             = @"callType";
 NSString * const TEALDataSourceKey_Device               = @"device";
