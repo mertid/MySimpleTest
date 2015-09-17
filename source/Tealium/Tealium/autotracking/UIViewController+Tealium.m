@@ -82,35 +82,6 @@ static BOOL alreadySwizzled;
 void (*oViewDidAppear)(id, SEL, bool a);
 
 static void teal_viewDidAppear(UIViewController *self, SEL _cmd, bool a) {
-
-//    NSArray *validInstances = [Tealium allAutotrackingViewInstances];
-//    
-//    [validInstances enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        
-//        if (![obj isKindOfClass:([Tealium class])]){
-//            return;
-//        }
-//        
-//        Tealium *instance = obj;
-//        
-//        // Auto captures title
-//        NSDictionary *autoDataSources = [self teal_autotrackDataSources];
-//        
-//        NSMutableDictionary *dataSources = [NSMutableDictionary dictionaryWithDictionary:autoDataSources];
-//        
-//        if (instance.settings.autotrackingIvarsEnabled){
-//            NSDictionary *ivars = [self teal_autotrackIvarDataSources];
-//            [dataSources addEntriesFromDictionary:ivars];
-//        }
-//        
-//        NSDictionary *customDataSources = [self teal_dataSources];
-//        [dataSources addEntriesFromDictionary:customDataSources];
-//        
-//        [instance setActiveViewController:self];
-//        [instance trackViewWithTitle:nil
-//                         dataSources:dataSources];
-//        
-//    }];
     
     [self teal_viewDidAppearCallOnly];
     

@@ -36,7 +36,7 @@
     configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = YES;
     configuration.autotrackingViewsEnabled = YES;
-    configuration.mobileCompanionEnabled = YES;
+    configuration.mobileCompanionEnabled = NO;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
 
     [Tealium newInstanceForKey:@"1" configuration:configuration];

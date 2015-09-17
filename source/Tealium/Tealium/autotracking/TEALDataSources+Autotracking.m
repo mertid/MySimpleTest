@@ -7,9 +7,9 @@
 //
 
 #import "TEALDataSources+Autotracking.h"
+#import <objc/runtime.h>
 #import "TEALDataSourceConstants.h"
 #import "TEALIDGenerator.h"
-#import <objc/runtime.h>
 
 @implementation TEALDataSources (Autotracking)
 
@@ -74,7 +74,6 @@
     NSDictionary *propertyDict = [NSDictionary dictionaryWithDictionary:mDict];
     return propertyDict;
 }
-
 
 #pragma mark - PRIVATE CLASS METHODS
 

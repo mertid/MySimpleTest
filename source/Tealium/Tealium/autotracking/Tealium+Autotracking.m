@@ -197,7 +197,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     __block typeof(self) __weak weakSelf = self;
 
-    TEALLifecycle *lifecycle = [[TEALLifecycle alloc] init];
+    TEALLifecycle *lifecycle = [[TEALLifecycle alloc] initWithInstanceID:[self.settings instanceID]];
     
     [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
         

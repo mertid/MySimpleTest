@@ -9,6 +9,12 @@
 #import "TEALConfiguration.h"
 #import "NSString+Tealium.h"
 
+@interface TEALConfiguration()
+
+@property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
+
+@end
+
 @implementation TEALConfiguration
 
 #pragma mark - PUBLIC CLASS
@@ -30,10 +36,12 @@
     configuration.useHTTP           = NO;
     configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
     configuration.logLevel          = TEALLogLevelNone;
+    configuration.autotrackingCarrierInfoEnabled = YES;
+    configuration.autotrackingDeviceInfoEnabled = YES;
+    configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled  = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
-    configuration.autotrackingIvarsEnabled = NO;
     configuration.crashTrackingEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
     configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
@@ -75,6 +83,7 @@
                                           @"use http":[NSString teal_stringFromBool:self.useHTTP],
                                           @"polling frequency":@(self.pollingFrequency),
                                           @"log level":@(self.logLevel),
+                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
                                           @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
                                           @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
                                           @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],

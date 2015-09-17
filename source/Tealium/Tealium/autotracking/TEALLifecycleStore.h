@@ -10,6 +10,15 @@
 
 @interface TEALLifecycleStore : NSObject
 
-#warning IMPLEMENT
+- (instancetype) initWithInstanceID:(NSString *) instanceID;
+
+- (id) objectForKey:(id<NSCopying, NSSecureCoding>)key;
+
+- (void) setObject:(id<NSCopying, NSSecureCoding>)object
+            forKey:(id<NSCopying, NSSecureCoding>)aKey;
+
+- (id) objectForKeyedSubscript:(id <NSCopying, NSSecureCoding>)key;
+
+- (void) setObject:(id)obj forKeyedSubscript:(id <NSCopying, NSSecureCoding>)key;
 
 @end

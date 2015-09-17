@@ -16,6 +16,12 @@ NSString * const TEALDataSourceKey_ApplicationName      = @"app_name";
 NSString * const TEALDataSourceKey_AssociatedViewTitle  = @"associated_screen_title";
 NSString * const TEALDataSourceKey_Autotracked          = @"autotracked";
 NSString * const TEALDataSourceKey_CallType             = @"callType";
+
+NSString * const TEALDataSourceKey_Carrier              = @"carrier";
+NSString * const TEALDataSourceKey_CarrierISO           = @"carrier_iso";
+NSString * const TEALDataSourceKey_CarrierMCC           = @"carrier_mcc";
+NSString * const TEALDataSourceKey_CarrierMNC           = @"carrier_mnc";
+
 NSString * const TEALDataSourceKey_Device               = @"device";
 NSString * const TEALDataSourceKey_DeviceArchitecture   = @"device_architecture";
 NSString * const TEALDataSourceKey_DeviceBatteryLevel   = @"device_battery_percent";
@@ -33,6 +39,9 @@ NSString * const TEALDataSourceKey_ExceptionTrace       = @"exception_trace";
 NSString * const TEALDataSourceKey_ExcludeClasses       = @"exclude_classes";
 NSString * const TEALDataSourceKey_LibraryVersion       = @"library_version";
 NSString * const TEALDataSourceKey_LifecycleType        = @"lifecycle_type";
+NSString * const TEALDataSourceKey_LifecycleLastLaunchDate = @"lifecycle_lastlaunchdate";
+NSString * const TEALDataSourceKey_LifecycleLastWakeDate = @"lifecycle_lastwakedate";
+NSString * const TEALDataSourceKey_LifecycleLastSleepDate = @"lifecycle_lastsleepdate";
 NSString * const TEALDataSourceKey_ObjectClass          = @"object_class";
 NSString * const TEALDataSourceKey_Orientation          = @"orientation";
 NSString * const TEALDataSourceKey_Pagetype             = @"page_type";

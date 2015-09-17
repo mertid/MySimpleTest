@@ -22,10 +22,6 @@
 
 - (void) setObject:(id)obj forKeyedSubscript:(id <NSCopying, NSSecureCoding>)key;
 
-//- (BOOL) unarchiveWithStorageKey:(NSString *)key;
-//
-//- (void) archiveWithStorageKey:(NSString *)key;
-
 - (NSDictionary *) dataSourcesCopy;
 
 - (void) addDataSources:(NSDictionary *)additionalDataSources;

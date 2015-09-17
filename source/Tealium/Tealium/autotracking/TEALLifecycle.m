@@ -14,7 +14,9 @@
 @interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
+@property (nonatomic, strong) NSString *ivarInstanceID;
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
+@property (nonatomic, strong) TEALLifecycleStore *ivarStore;
 
 @end
 
@@ -24,11 +26,23 @@
 
 #pragma mark - PUBLIC
 
+- (instancetype) initWithInstanceID:(NSString *)instanceID {
+    self = [super init];
+    if (self) {
+        
+        _ivarInstanceID = instanceID;
+        
+    }
+    return self;
+}
+
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block {
     
     // listen to main thread events
     
     self.enabled = YES;
+    
+    [self enableListeners];
     
     self.eventProcessingBlock = block;
     
@@ -66,20 +80,27 @@
 }
 
 #pragma mark - PRIVATE INSTANCE
+
 - (instancetype) init {
-    self = [super init];
-    if (self) {
-        
-        [self loadData];
-        [self enableListeners];
-        
-    }
-    return self;
+    
+    [NSException raise:@"Should not be initialize directly"
+                format:@"Use the initWithInstanceID instead."];
+    
+    return nil;
+
 }
 
-- (void) loadData {
+- (NSString *) instanceID {
+    return self.ivarInstanceID;
+}
+
+- (TEALLifecycleStore *) store {
+
+    if (!self.ivarStore){
+        self.ivarStore = [[TEALLifecycleStore alloc] initWithInstanceID:[self instanceID]];
+    }
     
-#warning IMPLEMENT
+    return self.ivarStore;
     
 }
 
@@ -101,6 +122,11 @@
     
 }
 
+- (void) disableListeners {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 
 - (void) processLifecycleEvent:(NSNotification*) notification {
     
@@ -146,7 +172,13 @@
 //}
 
 - (void) dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [self disableListeners];
+        
 }
+
+#pragma mark - HELPERS
+
+
 
 @end

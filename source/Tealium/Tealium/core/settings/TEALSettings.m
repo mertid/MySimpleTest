@@ -11,7 +11,7 @@
 #import "TEALNetworkHelpers.h"
 #import "TEALError.h"
 #import "TEALBlocks.h"
-#import "TEALConfiguration.h"
+#import "TEALConfiguration+PrivateHeader.h"
 #import "TEALURLSessionManager.h"
 #import "TEALDataSourceConstants.h"
 
@@ -145,6 +145,17 @@
 
 - (BOOL) audienceStreamEnabled {
     return self.publishSettings.enableAudienceStream;
+}
+
+- (BOOL) autotrackingCarrierInfoEnabled {
+    if (self.publishSettings.overrideDisableCarrierInfoAutotracking) return NO;
+//    if (![self.configuration respondsToSelector:@selector(autotrackingCarrierInfoEnabled)]) return NO;
+    return self.configuration.autotrackingCarrierInfoEnabled;
+}
+
+- (BOOL) autotrackingDeviceInfoEnabled {
+    if (self.publishSettings.overrideDisableDeviceInfoAutotracking) return NO;
+    return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {

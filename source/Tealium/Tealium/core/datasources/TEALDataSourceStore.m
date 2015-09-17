@@ -9,9 +9,6 @@
 #import <UIKit/UIDevice.h>
 #import "TEALDataSourceStore.h"
 #import "TEALDataSourceConstants.h"
-#import "TEALDispatch.h"
-#import "TEALSystemHelpers.h"
-#import "NSDate+Tealium.h"
 #import "NSString+Tealium.h"
 
 static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
@@ -34,7 +31,6 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
     
     if (!instanceID) {
-//        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
         return nil;
     }
     
@@ -152,12 +148,12 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
     return nil;
 }
 
-- (NSDictionary *) queuedFlagWithValue:(BOOL)value {
-    
-    NSString *displayString = [NSString teal_stringFromBool:value];
-    
-    return @{ @"was_queued" : displayString };
-}
+//- (NSDictionary *) queuedFlagWithValue:(BOOL)value {
+//    
+//    NSString *displayString = [NSString teal_stringFromBool:value];
+//    
+//    return @{ @"was_queued" : displayString };
+//}
 
 
 @end

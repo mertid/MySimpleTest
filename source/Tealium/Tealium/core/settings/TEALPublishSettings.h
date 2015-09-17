@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) BOOL enableAudienceStream;
 @property (nonatomic) BOOL enableTagManagement;
 
+@property (nonatomic) BOOL overrideDisableCarrierInfoAutotracking;
+@property (nonatomic) BOOL overrideDisableDeviceInfoAutotracking;
 @property (nonatomic) BOOL overrideDisableUIEventAutotracking;
 @property (nonatomic) BOOL overrideDisableViewAutotracking;
 @property (nonatomic) BOOL overrideDisableiVarAutotracking;

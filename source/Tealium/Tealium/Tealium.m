@@ -125,18 +125,25 @@ __strong static NSDictionary *_allInstances = nil;
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
+    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
+    NSDictionary *persistentDataSources = [self.dataSources persistentDataSources];
+    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
+    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
+    
     // capture time datasources
-    NSDictionary *captureTimeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-                                                                         [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title],
-                                                                         [self.dataSources persistentDataSources],
-                                                                         clientDataSources? clientDataSources:@{}
-                                                                         ]];
+    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
+                                                                                    carrierInfo,
+                                                                                    deviceInfo,
+                                                                                    captureTimeDataSources? captureTimeDataSources:@{},
+                                                                                    persistentDataSources? persistentDataSources:@{},
+                                                                                    clientDataSources? clientDataSources:@{}
+                                                                                    ]];
     
     __weak Tealium *weakSelf = self;
     
     [weakSelf.operationManager addOperationWithBlock:^{
        
-        [weakSelf sendEvent:TEALDispatchTypeEvent withData:captureTimeDataSources title:title];
+        [weakSelf sendEvent:TEALDispatchTypeEvent withData:compositeDataSources title:title];
 
     }];
     
@@ -146,13 +153,18 @@ __strong static NSDictionary *_allInstances = nil;
     
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
     NSDictionary *persistentDataSources = [self.dataSources persistentDataSources];
+    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
+    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
 
     NSMutableArray *dataToComposite = [NSMutableArray array];
     
     if (captureTimeDataSources) [dataToComposite addObject:captureTimeDataSources];
     if (persistentDataSources)  [dataToComposite addObject:persistentDataSources];
     if (clientDataSources)      [dataToComposite addObject:clientDataSources];
-        
+
+    [dataToComposite addObject:carrierInfo];
+    [dataToComposite addObject:deviceInfo];
+    
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:dataToComposite];
     
     __weak Tealium *weakSelf = self;
@@ -168,7 +180,13 @@ __strong static NSDictionary *_allInstances = nil;
     
     NSDictionary *captureTime = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeNone title:nil];
     NSDictionary *transmissionTime = [self.dataSources transmissionTimeDatasourcesForEventType:TEALDispatchTypeNone];
-    NSDictionary *composite = [TEALSystemHelpers compositeDictionaries:@[captureTime, transmissionTime]];
+    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
+    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
+    
+    NSDictionary *composite = [TEALSystemHelpers compositeDictionaries:@[captureTime,
+                                                                         carrierInfo,
+                                                                         deviceInfo,
+                                                                         transmissionTime]];
     
     return composite;
     
@@ -272,19 +290,6 @@ __strong static NSDictionary *_allInstances = nil;
     
 }
 
-
-//+ (instancetype) sharedInstanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion {
-//    
-//    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
-//    [Tealium setSharedInstance:instance];
-//    
-//    return instance;
-//}
-//
-//+ (void) setSharedInstance:(Tealium *)instance {
-//    _sharedObject = instance;
-//}
-
 #pragma mark - PRIVATE INSTANCE METHODS
 
 - (instancetype) initPrivate {
@@ -324,6 +329,16 @@ __strong static NSDictionary *_allInstances = nil;
     
     self.enabled = YES;
     self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
+    
+    if (!self.dataSources) {
+        [self.logger logNormal:@"Datasources did not init - Could not instantiate library"];
+        NSError *error =[TEALError errorWithCode:400
+                                     description:@"Could not init library instance."
+                                          reason:@"DataSources failed to init."
+                                      suggestion:@"Check that all configuration data is correct."];
+        if (setupCompletion) setupCompletion(NO, error);
+        return;
+    }
     
     __block typeof(self) __weak weakSelf = self;
     

@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
+#import <sys/types.h>
+#import <sys/sysctl.h>
+#import <mach/machine.h>
+
 #import "NSDate+Tealium.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
@@ -29,30 +33,40 @@
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj {
     
     NSString *title = nil;
+    NSString *classType = NSStringFromClass([obj class]);
     
-    if ([obj isKindOfClass:[UIWebView class]]) {
-        title = @"webview";
-        
-    } else if ([obj respondsToSelector:@selector(title)]) {
+    if ([obj respondsToSelector:@selector(title)]) {
         
         title = [obj performSelector:@selector(title)];
         
-    } else if ([obj respondsToSelector:@selector(currentTitle)]) {
+    }
+    
+    else if ([obj respondsToSelector:@selector(currentTitle)]) {
         
         title = [obj performSelector:@selector(currentTitle)];
         
-    } else if ([obj respondsToSelector:@selector(possibleTitles)]) {
+    }
+    
+    else if ([obj respondsToSelector:@selector(possibleTitles)]) {
         
         NSSet *titles = [obj performSelector:@selector(possibleTitles)];
         title = [titles anyObject];
         
-    } else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
+    }
+    
+    else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
         
         title = [obj performSelector:@selector(restorationIdentifier)];
         
-    } else if ([obj respondsToSelector:@selector(nibName)]) {
+    }
+    
+    else if ([obj respondsToSelector:@selector(nibName)]) {
         
         title = [obj performSelector:@selector(nibName)];
+    }
+    
+    else {
+        title = classType;
     }
     
     return [title copy];
@@ -63,7 +77,6 @@
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
     
     if (!instanceID) {
-//        TEAL_LogNormal(@"DatasourceStore initialization attempted without an instance ID.");
         return nil;
     }
     
@@ -106,6 +119,7 @@
     NSMutableDictionary *datasources = [NSMutableDictionary new];
     
 #warning REPLACE with full timestamps data
+    
     datasources[TEALDataSourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
     
     if (title) {
@@ -124,6 +138,84 @@
     datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
     
     return datasources;
+}
+
++ (NSDictionary *) carrierInfoDataSources {
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    Class telephonyNetwork = NSClassFromString(@"CTTelephonyNetworkInfo");
+    Class carrier = NSClassFromString(@"CTCarrier");
+    if (telephonyNetwork && carrier){
+        id netInfo = [[telephonyNetwork alloc]init];
+        if (netInfo){
+            NSString * carrierName;
+            NSString * carrierIso;
+            NSString * mobileCountryCode;
+            NSString * mobileNetworkCode;
+            
+            SEL selectorSubscriberCellularProvider = NSSelectorFromString(@"subscriberCellularProvider");
+            IMP impSubscriberCellularProvider = [netInfo methodForSelector:selectorSubscriberCellularProvider];
+            id (*func)(id, SEL) = (void *)impSubscriberCellularProvider;
+            carrier = func(netInfo, selectorSubscriberCellularProvider);
+            
+            SEL selectorCarrierName = NSSelectorFromString(@"carrierName");
+            IMP impCarrierName = [carrier methodForSelector:selectorCarrierName];
+            NSString * (*funcCarrierName)(id, SEL) = (void *)impCarrierName; // add arguments after SEL if needed
+            carrierName = funcCarrierName(carrier, selectorCarrierName); // add arguments after selectorCarrierName if needed
+            
+            SEL selectorISO = NSSelectorFromString(@"isoCountryCode");
+            IMP impISO = [carrier methodForSelector:selectorISO];
+            NSString * (*funcISO)(id, SEL) = (void *)impISO;
+            carrierIso = funcISO(carrier, selectorISO);
+            
+            SEL selectorMCC = NSSelectorFromString(@"mobileCountryCode");
+            IMP impMCC = [carrier methodForSelector:selectorMCC];
+            NSString * (*funcMCC)(id, SEL) = (void *)impMCC;
+            mobileCountryCode = funcMCC(carrier, selectorMCC);
+            
+            SEL selectorMNC = NSSelectorFromString(@"mobileCountryCode");
+            IMP impMNC = [carrier methodForSelector:selectorMNC];
+            NSString * (*funcMNC)(id, SEL) = (void *)impMNC;
+            mobileNetworkCode = funcMNC(carrier, selectorMNC);
+            
+            if (carrierName) mDict[TEALDataSourceKey_Carrier] = carrierName;
+            if (carrierIso) mDict[TEALDataSourceKey_CarrierISO] = carrierIso;
+            if (mobileCountryCode) mDict[TEALDataSourceKey_CarrierMCC] = mobileCountryCode;
+            if (mobileNetworkCode) mDict[TEALDataSourceKey_CarrierMNC] = mobileNetworkCode;
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+}
+
++ (NSDictionary *) deviceInfoDataSources{
+    
+    // get runtime changable default data
+    NSString *architecture = [TEALDataSources architecture];
+    NSString *batteryLevel = [TEALDataSources batteryLevelAsPercentString];
+    NSString *batteryIsCharging = [TEALDataSources batteryIsChargingAsString];
+    NSString *cpuType = [TEALDataSources cpuType];
+    NSString *device = [TEALDataSources model];
+//    NSString *hardware = [TEALDataSources hardware];
+    NSString *orientation = [TEALDataSources currentOrientation];
+    NSString *resolution = [TEALDataSources resolution];
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
+    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
+    
+    // if particular data is not available, skip
+    if (architecture)       mDict[TEALDataSourceKey_DeviceArchitecture] = architecture;
+    if (batteryLevel)       mDict[TEALDataSourceKey_DeviceBatteryLevel] = batteryLevel;
+    if (batteryIsCharging)  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
+    if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
+    if (device)             mDict[TEALDataSourceKey_Device] = device;
+//    if (hardware)              mDict[@"device_model"] = hardware;
+    if (orientation)        mDict[TEALDataSourceKey_Orientation] = orientation;
+    if (resolution)         mDict[TEALDataSourceKey_DeviceResolution] = resolution;
+    if (systemVersion)      mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
@@ -198,12 +290,10 @@
 
         NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
         
-        NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-        NSString *appName = [TEALSystemHelpers applicationName];
+        NSString *appName = [TEALDataSources applicationName];
         
         mDict[TEALDataSourceKey_LibraryVersion] = TEALLibraryVersion;
         if (appName)        mDict[TEALDataSourceKey_ApplicationName] = appName;
-        if (systemVersion)  mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
         
         self.compileTimeData = [NSDictionary dictionaryWithDictionary:mDict];
     }
@@ -228,29 +318,104 @@
     return nil;
 }
 
-#pragma mark - PRIVATE CAPTURE TIME METHODS
+#pragma mark - PRIVATE COMPILE TIME HELPERS
 
-- (NSDictionary *) dynamicDeviceDataSources {
++ (NSString *) applicationName {
     
-    // get runtime changable default data
-    NSString *batteryLevel = [TEALDataSources batteryLevelAsPercentString];
-    NSString *batteryIsCharging = [TEALDataSources batteryIsChargingAsString];
-    NSString *device = [[UIDevice currentDevice] model];
-    NSString *orientation = [TEALDataSources currentOrientation];
+    NSDictionary *bundle = [[NSBundle mainBundle] infoDictionary];
     
-    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
-    
-    // if particular data is not available, skip
-    if (batteryLevel)                       mDict[TEALDataSourceKey_DeviceBatteryLevel] = batteryLevel;
-    if (batteryIsCharging)                  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
-    if (device)                             mDict[TEALDataSourceKey_Device] = device;
-    if (orientation)                        mDict[TEALDataSourceKey_Orientation] = orientation;
-    
-    return [NSDictionary dictionaryWithDictionary:mDict];
+    return [bundle objectForKey:@"CFBundleName"];
 }
 
+#pragma mark - PRIVATE DEVICE INFO HELPERS
 
-#pragma mark - PRIVATE CAPTURE TIME HELPERS
+static NSString *deviceCpuType;
+
++ (NSString *) cpuType {
+    if (!deviceCpuType){
+        NSMutableString *cpu = [NSMutableString string];
+        size_t size;
+        cpu_type_t type;
+        cpu_subtype_t subtype;
+        size = sizeof(type);
+        sysctlbyname("hw.cputype", &type, &size, NULL, 0);
+        
+        size = sizeof(subtype);
+        sysctlbyname("hw.cpusubtype", &subtype, &size, NULL, 0);
+        
+        // values for cputype and cpusubtype defined in mach/machine.h
+        if (type == CPU_TYPE_X86) {
+            
+            [cpu appendString:@"x86 "];
+            
+        } else if (type == CPU_TYPE_ARM) { // check for subtype ...
+            
+            [cpu appendString:@"ARM"];
+            switch(subtype)
+            {
+                case CPU_SUBTYPE_ARM_V7:
+                    [cpu appendString:@"V7"];
+                    break;
+                case CPU_SUBTYPE_ARM_V7EM:
+                    [cpu appendString:@"V7em"];
+                    break;
+                case CPU_SUBTYPE_ARM_V7F:
+                    [cpu appendString:@"V7f"];
+                    break;
+                case CPU_SUBTYPE_ARM_V7K:
+                    [cpu appendString:@"V7k"];
+                    break;
+                case CPU_SUBTYPE_ARM_V7M:
+                    [cpu appendString:@"V7m"];
+                    break;
+                case CPU_SUBTYPE_ARM_V7S:
+                    [cpu appendString:@"V7s"];
+                    break;
+                case CPU_SUBTYPE_ARM_V6:
+                    [cpu appendString:@"V6"];
+                    break;
+                case CPU_SUBTYPE_ARM_V6M:
+                    [cpu appendString:@"V6m"];
+                    break;
+                case CPU_SUBTYPE_ARM_V8:
+                    [cpu appendString:@"V8"];
+                    break;
+                case CPU_SUBTYPE_386:
+                    [cpu appendString:@"386"];
+                    break;
+                case CPU_SUBTYPE_486:
+                    [cpu appendString:@"486"];
+                    break;
+                case CPU_SUBTYPE_486SX:
+                    [cpu appendString:@"486sx"];
+                    break;
+                case CPU_SUBTYPE_586:
+                    [cpu appendString:@"586"];
+                    break;
+                    // ...
+            }
+        }
+        deviceCpuType = cpu;
+    }
+    
+    return deviceCpuType;
+}
+
+static NSString *deviceArchitecture;
+
++ (NSString *) architecture {
+    
+    if (!deviceArchitecture){
+        NSString *arch = nil;
+        if(sizeof(int*) == 4) {
+            arch = @"32";
+        } else if(sizeof(int*) == 8) {
+            arch = @"64";
+        }
+        deviceArchitecture = arch;
+    }
+    return deviceArchitecture;
+}
 
 + (NSString *) batteryIsChargingAsString {
     
@@ -314,13 +479,52 @@
     return string;
 }
 
-#pragma mark - PRIVATE TRANSMISSION TIME HELPERS
-
 + (NSString*) currentLanguage{
     NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
     if(language) return language;
     return nil;
 }
+
+static NSString *deviceModel;
++ (NSString *) model {
+    if (!deviceModel) {
+        deviceModel = [[UIDevice currentDevice] model];
+    }
+    return deviceModel;
+}
+
+static NSString *deviceResolution;
++ (NSString *) resolution {
+    if (!deviceResolution){
+        CGFloat scale       = [[UIScreen mainScreen] scale];
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        
+        CGFloat width       = CGRectGetWidth(screenBounds) * scale;
+        CGFloat height      = CGRectGetHeight(screenBounds) * scale;
+        
+        deviceResolution = [NSString stringWithFormat:@"%.0fx%.0f", width, height];
+    }
+    return deviceResolution;
+}
+
+//static NSString *deviceHardware;
+//+ (NSString *) hardware {
+//    if (!deviceHardware){
+//        NSString *hardwareName = nil;
+//        
+//        size_t size;
+//        sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+//        char *machine = malloc(size);
+//        sysctlbyname("hw.machine", machine, &size, NULL, 0);
+//        hardwareName = [NSString stringWithUTF8String:machine];
+//        free(machine);
+//        deviceHardware = hardwareName;
+//    }
+//    
+//    return deviceHardware;
+//}
+
+#pragma mark - PRIVATE TRANSMISSION TIME HELPERS
 
 + (NSString*) localGMTOffset{
     // return hours offset

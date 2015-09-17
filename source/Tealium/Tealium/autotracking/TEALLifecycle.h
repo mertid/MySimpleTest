@@ -11,6 +11,7 @@
 
 @interface TEALLifecycle : NSObject
 
+- (instancetype) initWithInstanceID:(NSString *)instanceID;
 - (void) enableWithEventProcessingBlock:(TEALDictionaryCompletionBlock)block;
 - (void) disable;
 - (void) reEnable;

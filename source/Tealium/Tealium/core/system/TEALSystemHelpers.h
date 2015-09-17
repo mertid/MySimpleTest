@@ -14,17 +14,17 @@
 
 + (NSString *) mpsVersionNumber;
 
-+ (NSString *) architecture;
+//+ (NSString *) architecture;
 
 + (NSString *) bundleId;
 
 + (NSString *) bundleVersion;
 
-+ (NSString *) cpuType;
+//+ (NSString *) cpuType;
 
 //+ (NSString *) applicationUUIDWithKey:(NSString *)key;
 
-+ (NSString *) applicationName;
+//+ (NSString *) applicationName;
 
 + (NSString *) hardwareName;
 

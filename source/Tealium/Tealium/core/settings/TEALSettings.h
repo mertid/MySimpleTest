@@ -23,6 +23,8 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
 - (BOOL) audienceStreamEnabled;
+- (BOOL) autotrackingCarrierInfoEnabled;
+- (BOOL) autotrackingDeviceInfoEnabled;
 - (BOOL) autotrackingIvarsEnabled;
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;

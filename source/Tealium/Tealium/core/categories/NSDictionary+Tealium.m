@@ -14,7 +14,7 @@
 
 - (NSDictionary *) teal_stringifiedDictionary {
  
-#warning This method unsafe, causing crashes
+#warning This method unsafe, causing crashes in 4.1.11
     
     NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
     

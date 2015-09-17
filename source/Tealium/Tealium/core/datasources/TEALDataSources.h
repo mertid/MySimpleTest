@@ -13,7 +13,21 @@
 @interface TEALDataSources : NSObject
 
 /*
- // TODO Comments
+ *  Current carrier info if CoreTelephony framework available
+ */
++ (NSDictionary *) carrierInfoDataSources;
+
+/*
+ *  Device information
+ */
++ (NSDictionary *) deviceInfoDataSources;
+
+/*
+ *  Title for object, intended for view track calls
+ *
+ *  @param obj Any NSObject
+ *
+ *  @return NSString title for given object. Returns the object class if no other title type found.
  */
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj;
 
@@ -30,6 +44,7 @@
  Data Sources that are processed and converted to dictionary data at call time - Main Thread
  */
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
+
 
 /*
  // TODO Comments
