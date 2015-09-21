@@ -13,6 +13,8 @@
 #pragma mark - UDO / Datasource Keys
 
 NSString * const TEALDataSourceKey_ApplicationName      = @"app_name";
+NSString * const TEALDataSourceKey_ApplicationRDNS      = @"app_rdns";
+NSString * const TEALDataSourceKey_ApplicationVersion   = @"app_version";
 NSString * const TEALDataSourceKey_AssociatedViewTitle  = @"associated_screen_title";
 NSString * const TEALDataSourceKey_Autotracked          = @"autotracked";
 NSString * const TEALDataSourceKey_CallType             = @"callType";
@@ -44,6 +46,7 @@ NSString * const TEALDataSourceKey_LifecycleLastWakeDate = @"lifecycle_lastwaked
 NSString * const TEALDataSourceKey_LifecycleLastSleepDate = @"lifecycle_lastsleepdate";
 NSString * const TEALDataSourceKey_ObjectClass          = @"object_class";
 NSString * const TEALDataSourceKey_Orientation          = @"orientation";
+NSString * const TEALDataSourceKey_Origin               = @"mobile";
 NSString * const TEALDataSourceKey_Pagetype             = @"page_type";
 NSString * const TEALDataSourceKey_Platform             = @"platform";
 NSString * const TEALDataSourceKey_SelectedRow          = @"selected_row";
@@ -77,6 +80,7 @@ NSString * const TEALDataSourceValue_LifecycleWake      = @"wake";
 NSString * const TEALDataSourceValue_LifecycleSleep     = @"sleep";
 NSString * const TEALDataSourceValue_LifecycleTerminate = @"terminate";
 NSString * const TEALDataSourceValue_Link               = @"link";
+NSString * const TEALDataSourceValue_Origin             = @"mobile";
 NSString * const TEALDataSourceValue_Pagetype           = @"mobile_view";
 NSString * const TEALDataSourceValue_Platform           = @"ios";
 NSString * const TEALDataSourceValue_True               = @"true";

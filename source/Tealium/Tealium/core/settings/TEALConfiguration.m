@@ -12,8 +12,9 @@
 @interface TEALConfiguration()
 
 // No public API for this settings at this time
-@property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
-@property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
+@property () BOOL autotrackingApplicationInfoEnabled;
+@property () BOOL autotrackingCarrierInfoEnabled;
+@property () BOOL autotrackingTimestampInfoEnabled;
 
 @end
 
@@ -38,6 +39,7 @@
     configuration.useHTTP           = NO;
     configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
     configuration.logLevel          = TEALLogLevelNone;
+    configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;
     configuration.autotrackingIvarsEnabled = NO;

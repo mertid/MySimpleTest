@@ -1,24 +1,24 @@
 //
-//  TEALTimestamps.m
+//  TEALTimestampDataSources.m
 //  Tealium
 //
 //  Created by Jason Koo on 9/21/15.
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALTimestamps.h"
+#import "TEALTimestampDataSources.h"
 #import "TEALDataSourceConstants.h"
 
-@implementation TEALTimestamps
+@implementation TEALTimestampDataSources
 
-+ (NSDictionary *) timestampDataSourcesForDate:(NSDate *)date {
++ (NSDictionary *) dataSourcesForDate:(NSDate *)date {
 
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
     
-    dataSources[TEALDataSourceKey_Timestamp] = [TEALTimestamps stringOfTimestampAsISOFrom:date];
-    dataSources[TEALDataSourceKey_TimestampLocal] = [TEALTimestamps stringOfTimestampAsISOLocalFrom:date];
-    dataSources[TEALDataSourceKey_TimestampOffset] = [TEALTimestamps stringOfLocalGMTOffset];
-    dataSources[TEALDataSourceKey_TimestampUnix] = [TEALTimestamps stringOfTimestampAsUnixFrom:date];
+    dataSources[TEALDataSourceKey_Timestamp] = [TEALTimestampDataSources stringOfTimestampAsISOFrom:date];
+    dataSources[TEALDataSourceKey_TimestampLocal] = [TEALTimestampDataSources stringOfTimestampAsISOLocalFrom:date];
+    dataSources[TEALDataSourceKey_TimestampOffset] = [TEALTimestampDataSources stringOfLocalGMTOffset];
+    dataSources[TEALDataSourceKey_TimestampUnix] = [TEALTimestampDataSources stringOfTimestampAsUnixFrom:date];
  
     return dataSources;
 }

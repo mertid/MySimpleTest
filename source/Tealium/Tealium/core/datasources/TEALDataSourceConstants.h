@@ -15,6 +15,8 @@
 #pragma mark - UDO / Datasource Keys
 
 extern NSString * const TEALDataSourceKey_ApplicationName;
+extern NSString * const TEALDataSourceKey_ApplicationRDNS;
+extern NSString * const TEALDataSourceKey_ApplicationVersion;
 extern NSString * const TEALDataSourceKey_AssociatedViewTitle;
 extern NSString * const TEALDataSourceKey_Autotracked;
 extern NSString * const TEALDataSourceKey_CallType;
@@ -43,6 +45,7 @@ extern NSString * const TEALDataSourceKey_LifecycleLastWakeDate;
 extern NSString * const TEALDataSourceKey_LifecycleLastSleepDate;
 extern NSString * const TEALDataSourceKey_ObjectClass;
 extern NSString * const TEALDataSourceKey_Orientation;
+extern NSString * const TEALDataSourceKey_Origin;
 extern NSString * const TEALDataSourceKey_Pagetype;
 extern NSString * const TEALDataSourceKey_Platform;
 extern NSString * const TEALDataSourceKey_SelectedRow;
@@ -74,6 +77,7 @@ extern NSString * const TEALDataSourceValue_LifecycleWake;
 extern NSString * const TEALDataSourceValue_LifecycleSleep;
 extern NSString * const TEALDataSourceValue_LifecycleTerminate;
 extern NSString * const TEALDataSourceValue_Link;
+extern NSString * const TEALDataSourceValue_Origin;
 extern NSString * const TEALDataSourceValue_Pagetype;
 extern NSString * const TEALDataSourceValue_Platform;
 extern NSString * const TEALDataSourceValue_True;

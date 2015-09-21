@@ -13,6 +13,7 @@
 
 @interface TEALSettings (Private)
 
+- (BOOL) autotrackingApplicationInfoEnabled;
 - (BOOL) autotrackingCarrierInfoEnabled;
 - (BOOL) autotrackingTimestampInfoEnabled;
 

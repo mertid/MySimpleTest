@@ -42,6 +42,9 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    NSLog(@"%s VolatileDataSources:%@", __FUNCTION__, [[Tealium instanceForKey:@"1"] volatileDataSourcesCopy]);
+
 }
 
 - (void)didReceiveMemoryWarning {

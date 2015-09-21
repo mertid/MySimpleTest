@@ -16,9 +16,9 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 
 @interface TEALSettings : NSObject
 
-@property (nonatomic, weak) TEALURLSessionManager *urlSessionManager;
-@property (nonatomic, weak) NSString *traceID;
-@property (nonatomic, weak) NSString *visitorIDCopy;
+@property (weak) TEALURLSessionManager *urlSessionManager;
+@property (weak) NSString *traceID;
+@property (weak) NSString *visitorIDCopy;
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 

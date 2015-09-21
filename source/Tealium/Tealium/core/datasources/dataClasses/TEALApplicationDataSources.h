@@ -1,5 +1,5 @@
 //
-//  TEALTimestamps.h
+//  TEALApplicationDataSources.h
 //  Tealium
 //
 //  Created by Jason Koo on 9/21/15.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TEALTimestamps : NSObject
+@interface TEALApplicationDataSources : NSObject
 
-+ (NSDictionary *) timestampDataSourcesForDate:(NSDate *)date;
++ (NSDictionary *) dataSources;
 
 @end

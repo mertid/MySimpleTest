@@ -59,8 +59,12 @@
  */
 - (void) disable;
 
+/*
+ */
 - (void) enable;
 
+/*
+ */
 - (BOOL) isEnabled;
 
 # pragma mark - Track Data
@@ -86,14 +90,23 @@
 #pragma mark - Data Management
 
 /*
- *  Copy of all non persistent, UI object and dispatch specific data sources captured by a Tealium library instance.
+ *  Copy of all non persistent, UI object and dispatch specific data sources captured by a Tealium library instance at time of call.
  *
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
 - (NSDictionary *) volatileDataSourcesCopy;
 
+/*
+ *  Adds additional data to the temporary data sources dictionary. This command is added to the end of the current Tealium background queue for writing.
+ *
+ *  @param additionalDataSources New or overwrite data sources to add to the volatile data sources store.  These key values can only be superceded by the custom data sources added to track calls.
+ *
+ */
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources;
 
+/*
+ *
+ */
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys;
 
 /*

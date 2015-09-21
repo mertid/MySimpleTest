@@ -147,13 +147,18 @@
     return self.publishSettings.enableAudienceStream;
 }
 
+- (BOOL) autotrackingApplicationInfoEnabled {
+    if (self.publishSettings.disableApplicationInfoAutotracking) return NO;
+    return self.configuration.autotrackingApplicationInfoEnabled;
+}
+
 - (BOOL) autotrackingCarrierInfoEnabled {
     if (self.publishSettings.disableCarrierInfoAutotracking) return NO;
-//    if (![self.configuration respondsToSelector:@selector(autotrackingCarrierInfoEnabled)]) return NO;
     return self.configuration.autotrackingCarrierInfoEnabled;
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
+    
     if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
 }
@@ -168,9 +173,10 @@
     return self.configuration.autotrackingLifecycleEnabled;
 }
 
-//- (BOOL) autotrackingTimestampsEnabled {
-//    if (self.publishSettings.)
-//}
+- (BOOL) autotrackingTimestampInfoEnabled {
+    if (self.publishSettings.disableTimestampAutotracking) return NO;
+    return self.configuration.autotrackingTimestampInfoEnabled;
+}
 
 - (BOOL) autotrackingUIEventsEnabled {
     if (self.publishSettings.disableUIEventAutotracking) return NO;

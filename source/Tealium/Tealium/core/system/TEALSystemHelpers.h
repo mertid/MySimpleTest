@@ -16,9 +16,9 @@
 
 //+ (NSString *) architecture;
 
-+ (NSString *) bundleId;
-
-+ (NSString *) bundleVersion;
+//+ (NSString *) bundleId;
+//
+//+ (NSString *) bundleVersion;
 
 //+ (NSString *) cpuType;
 
@@ -26,8 +26,8 @@
 
 //+ (NSString *) applicationName;
 
-+ (NSString *) hardwareName;
-
-+ (NSString *) timestampAsStringFromDate:(NSDate *)date;
+//+ (NSString *) hardwareName;
+//
+//+ (NSString *) timestampAsStringFromDate:(NSDate *)date;
 
 @end

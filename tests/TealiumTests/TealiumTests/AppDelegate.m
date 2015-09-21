@@ -38,16 +38,16 @@
     configuration.autotrackingViewsEnabled = YES;
     configuration.mobileCompanionEnabled = NO;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
-
-    [Tealium newInstanceForKey:@"1" configuration:configuration];
-    [[Tealium instanceForKey:@"1"] setDelegate:self];
+    
+    Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];
+    [tealiumInstance1 setDelegate:self];
 //    [Tealium sharedInstanceWithConfiguration:configuration];
 //    [[Tealium sharedInstance] setDelegate:self];
     
 //    [[Tealium instanceForKey:@"1"] addPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
-    [[Tealium instanceForKey:@"1"] removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
+    [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
     
-    
+    [tealiumInstance1 addVolatileDataSources:@{@"volatileKey":@"volatileValue"}];
     
     // Instance 2
 //    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"

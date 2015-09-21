@@ -24,6 +24,7 @@ NSString * const TEALPublishSettingKeyCollectEnable = @"shouldEnableCollect";
 NSString * const TEALPublishSettingKeyTagManagmentEnable = @"shouldEnableTagManagment";
 NSString * const TEALPublishSettingKeyStatus = @"status";
 
+NSString * const TEALPublishSettingKeyDisableApplicationInfoAutotracking = @"disableApplicationInfoAutotracking";
 NSString * const TEALPublishSettingKeyDisableCarrierInfoAutotracking = @"disableCarrierAutotracking";
 NSString * const TEALPublishSettingKeyDisableDeviceInfoAutotracking = @"disableDeviceInfoAutotracking";
 NSString * const TEALPublishSettingKeyDisableUIEventAutotracking = @"disableUIEventAutotracking";
@@ -234,6 +235,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
         _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
         
+        _disableApplicationInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableApplicationInfoAutotracking];
         _disableCarrierInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
         _disableDeviceInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
         _disableUIEventAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableUIEventAutotracking];
@@ -268,6 +270,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
     [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
 
+    [aCoder encodeBool:self.disableApplicationInfoAutotracking forKey:TEALPublishSettingKeyDisableApplicationInfoAutotracking];
     [aCoder encodeBool:self.disableCarrierInfoAutotracking forKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
     [aCoder encodeBool:self.disableDeviceInfoAutotracking forKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
     [aCoder encodeBool:self.disableUIEventAutotracking forKey:TEALPublishSettingKeyDisableUIEventAutotracking];
@@ -296,6 +299,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
     if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
     
+    if (otherSettings.disableApplicationInfoAutotracking != self.disableApplicationInfoAutotracking) return NO;
     if (otherSettings.disableCarrierInfoAutotracking != self.disableCarrierInfoAutotracking) return NO;
     if (otherSettings.disableDeviceInfoAutotracking != self.disableDeviceInfoAutotracking) return NO;
     if (otherSettings.disableUIEventAutotracking != self.disableUIEventAutotracking) return NO;
@@ -322,6 +326,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     NSString *audiencestream = settings[@"audiencestream"];
     NSString *tagmanagement = settings[@"tag_management"];
     
+    NSString *disableApplicationInfoAutotracking = settings[@"disable_application_info_autotracking"];
     NSString *disableCarrierInfoAutotracking = settings[@"disable_carrer_info_autotracking"];
     NSString *disableDeviceInfoAutotracking = settings[@"disable_device_info_autotracking"];
     NSString *disableUIEventAutotracking = settings[@"disable_uievent_autotracking"];
@@ -361,8 +366,11 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     }
     
     if (tagmanagement) {
-#warning Remove auto set yes after dev
-        self.enableTagManagement = YES; //[tagmanagement boolValue];
+        self.enableTagManagement = [tagmanagement boolValue];
+    }
+    
+    if (disableApplicationInfoAutotracking){
+        self.disableApplicationInfoAutotracking = [disableApplicationInfoAutotracking boolValue];
     }
     
     if (disableCarrierInfoAutotracking) {

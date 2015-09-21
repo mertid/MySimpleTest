@@ -12,6 +12,10 @@
 
 @interface TEALDataSources : NSObject
 
+- (instancetype) initWithInstanceID:(NSString *) instanceID;
+
++ (NSDictionary *) applicationInfoDataSources;
+
 /*
  *  Current carrier info if CoreTelephony framework available
  */
@@ -22,6 +26,8 @@
  */
 + (NSDictionary *) deviceInfoDataSources;
 
++ (NSDictionary *) tealiumInfoDataSources;
+
 /*
  *  Title for object, intended for view track calls
  *
@@ -30,8 +36,6 @@
  *  @return NSString title for given object. Returns the object class if no other title type found.
  */
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj;
-
-- (instancetype) initWithInstanceID:(NSString *) instanceID;
 
 /*
  Data Sources that can be processed in the background
@@ -46,9 +50,9 @@
 /*
  *
  *
- *  @return NSMutableDictionary of available volatile data sources.  Will come prepopulated with Tealium data sources.
+ *  @return NSMutableDictionary of client volatile data sources.
  */
-- (NSMutableDictionary *) volatileDataSources;
+- (NSMutableDictionary *) clientVolatileDataSources;
 
 /*
  // TODO Comments

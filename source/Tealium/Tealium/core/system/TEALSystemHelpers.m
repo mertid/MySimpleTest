@@ -46,25 +46,25 @@ NSString * const kTEALApplicationUUIDKey = @"com.tealium.applicationUUID";
 //    return nil;
 //}
 
-+ (NSString *) bundleId {
-    NSBundle *bundle = [NSBundle mainBundle];
-    
-    if (bundle) {
-        return [bundle bundleIdentifier];
-    }
-    return nil;
-}
-
-+ (NSString *) bundleVersion {
-    NSDictionary *bundle = [[NSBundle mainBundle] infoDictionary];
-    
-    NSString *version = [bundle objectForKey:@"CFBundleShortVersionString"];
-    
-    if (version == nil) {
-        version = [bundle objectForKey:@"CFBundleVersion"];
-    }
-    return version;
-}
+//+ (NSString *) bundleId {
+//    NSBundle *bundle = [NSBundle mainBundle];
+//    
+//    if (bundle) {
+//        return [bundle bundleIdentifier];
+//    }
+//    return nil;
+//}
+//
+//+ (NSString *) bundleVersion {
+//    NSDictionary *bundle = [[NSBundle mainBundle] infoDictionary];
+//    
+//    NSString *version = [bundle objectForKey:@"CFBundleShortVersionString"];
+//    
+//    if (version == nil) {
+//        version = [bundle objectForKey:@"CFBundleVersion"];
+//    }
+//    return version;
+//}
 
 //+ (NSString *) cpuType {
 //    NSMutableString *cpu = [NSMutableString string];
@@ -157,23 +157,23 @@ NSString * const kTEALApplicationUUIDKey = @"com.tealium.applicationUUID";
 //    return [bundle objectForKey:@"CFBundleName"];
 //}
 
-+ (NSString *) hardwareName {
-    NSString *hardwareName = nil;
-    
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char *machine = malloc(size);
-    sysctlbyname("hw.machine", machine, &size, NULL, 0);
-    hardwareName = [NSString stringWithUTF8String:machine];
-    free(machine);
-
-    return hardwareName;
-}
-
-+ (NSString *) timestampAsStringFromDate:(NSDate *)date {
-    NSTimeInterval ti = [date timeIntervalSince1970];
-    return [@(ti) stringValue];
-}
+//+ (NSString *) hardwareName {
+//    NSString *hardwareName = nil;
+//    
+//    size_t size;
+//    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+//    char *machine = malloc(size);
+//    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+//    hardwareName = [NSString stringWithUTF8String:machine];
+//    free(machine);
+//
+//    return hardwareName;
+//}
+//
+//+ (NSString *) timestampAsStringFromDate:(NSDate *)date {
+//    NSTimeInterval ti = [date timeIntervalSince1970];
+//    return [@(ti) stringValue];
+//}
 
 
 @end
