@@ -68,10 +68,11 @@
 
 - (void) enableRemoteCommands {
     
-    
     TEALTagDispatchService *service = [self currentTagDispatchService];
     
-    [service setRemoteCommandsEnabled:YES];
+        NSLog(@"%s service:%@", __FUNCTION__, service);
+    
+    [service.remoteCommandManager enable];
     
     [self.logger logVerbose:@"Remote Commands enabled."];
 
@@ -90,6 +91,13 @@
     
 }
 
+- (void) disableRemoteCommands {
+    
+    TEALTagDispatchService *service = [self currentTagDispatchService];
+
+    [service.remoteCommandManager disable];
+}
+
 #pragma mark - HELPERS
 
 - (TEALTagDispatchService *) currentTagDispatchService {
@@ -102,7 +110,7 @@
         
         [dispatchServices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             
-            if (![obj isKindOfClass:([TEALTagDispatchService class])]){
+            if (![obj isMemberOfClass:([TEALTagDispatchService class])]){
                 return;
             }
             

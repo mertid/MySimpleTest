@@ -12,7 +12,6 @@
 
 #import "Tealium.h"
 #import "TEALModulesDelegate.h"
-#import "NSObject+TealiumAutotracking.h"
 
 @interface Tealium (AutoTracking) <TEALModulesDelegate>
 
@@ -25,5 +24,9 @@
 + (NSArray *) allAutotrackingUIEventInstances;
 
 - (NSDictionary *) currentLifecycleData;
+
+- (NSDictionary *) getAutotrackedDataSourcesForObject:(NSObject *)object;
+
+- (void) setAutotrackingForObject:(NSObject *)object enable:(BOOL)isEnabled;
 
 @end

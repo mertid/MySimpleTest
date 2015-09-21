@@ -27,6 +27,12 @@
 
 - (void) addReservedCommands:(TEALBooleanBlock)successBlock;
 
+- (void) enable;
+
+- (void) disable;
+
+- (BOOL) isEnabled;
+
 - (void) processRequest:(NSURLRequest*)request completionHandler:(TEALRemoteCommandResponseBlock)responseBlock;
 
 - (BOOL) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock;

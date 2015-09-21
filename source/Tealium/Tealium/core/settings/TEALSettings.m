@@ -148,43 +148,47 @@
 }
 
 - (BOOL) autotrackingCarrierInfoEnabled {
-    if (self.publishSettings.overrideDisableCarrierInfoAutotracking) return NO;
+    if (self.publishSettings.disableCarrierInfoAutotracking) return NO;
 //    if (![self.configuration respondsToSelector:@selector(autotrackingCarrierInfoEnabled)]) return NO;
     return self.configuration.autotrackingCarrierInfoEnabled;
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
-    if (self.publishSettings.overrideDisableDeviceInfoAutotracking) return NO;
+    if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
-    if (self.publishSettings.overrideDisableiVarAutotracking) return NO;
+    if (self.publishSettings.disableiVarAutotracking) return NO;
     return self.configuration.autotrackingIvarsEnabled;
 }
 
 - (BOOL) autotrackingLifecycleEnabled {
-    if (self.publishSettings.overrideDisableLifecycleAutotracking) return NO;
+    if (self.publishSettings.disableLifecycleAutotracking) return NO;
     return self.configuration.autotrackingLifecycleEnabled;
 }
 
+//- (BOOL) autotrackingTimestampsEnabled {
+//    if (self.publishSettings.)
+//}
+
 - (BOOL) autotrackingUIEventsEnabled {
-    if (self.publishSettings.overrideDisableUIEventAutotracking) return NO;
+    if (self.publishSettings.disableUIEventAutotracking) return NO;
     return self.configuration.autotrackingUIEventsEnabled;
 }
 
 - (BOOL) autotrackingViewsEnabled {
-    if (self.publishSettings.overrideDisableViewAutotracking) return NO;
+    if (self.publishSettings.disableViewAutotracking) return NO;
     return self.configuration.autotrackingViewsEnabled;
 }
 
 - (BOOL) crashTrackingEnabled {
-    if (self.publishSettings.overrideDisableCrashTracking) return NO;
+    if (self.publishSettings.disableCrashTracking) return NO;
     return self.configuration.crashTrackingEnabled;
 }
 
 - (BOOL) mobileCompanionEnabled {
-    if (self.publishSettings.overrideDisableMobileCompanion) return NO;
+    if (self.publishSettings.disableMobileCompanion) return NO;
     return self.configuration.mobileCompanionEnabled;
 }
 

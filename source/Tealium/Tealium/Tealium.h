@@ -26,6 +26,7 @@
 @interface Tealium : NSObject
 
 @property (readonly, nonatomic) TEALSettings *settings;
+@property (weak, nonatomic) id<TealiumDelegate> delegate;
 
 # pragma mark - Setup / Configuration
 
@@ -62,9 +63,6 @@
 
 - (BOOL) isEnabled;
 
-// TODO: comments
-@property (weak, nonatomic) id<TealiumDelegate> delegate;
-
 # pragma mark - Track Data
 
 /**
@@ -84,17 +82,26 @@
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
 
-//- (void) enableModules;
 
 #pragma mark - Data Management
 
 /*
+ *  Copy of all non persistent, UI object and dispatch specific data sources captured by a Tealium library instance.
+ *
+ *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
-- (NSDictionary *) baselineDataSources;
+- (NSDictionary *) volatileDataSourcesCopy;
+
+- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources;
+
+- (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys;
 
 /*
+ *  Copy of all long term Tealium data source data written to and read from disk, specific to a given library instance.
+ *  
+ *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
-- (NSDictionary *) persistentDataSources;
+- (NSDictionary *) persistentDataSourcesCopy;
 
 /*
  */
@@ -103,7 +110,7 @@
 /*
  
  */
-- (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys;
+- (void) removePersistentDataSourcesForKeys:(NSArray *)dataSourceKeys;
 
 
 

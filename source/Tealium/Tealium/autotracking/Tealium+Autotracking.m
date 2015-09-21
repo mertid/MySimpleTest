@@ -6,21 +6,22 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
+#import <objc/runtime.h>
+#import "NSObject+TealiumAutotracking.h"
 #import "Tealium+Autotracking.h"
 #import "Tealium+PrivateHeader.h"
-#import "UIApplication+Tealium.h"
-#import "UIViewController+Tealium.h"
 #import "TEALDataSources+Autotracking.h"
 #import "TEALLifecycle.h"
 #import "TEALSystemHelpers.h"
 #import "TEALViewScanner.h"
-#import <objc/runtime.h>
+#import "UIApplication+Tealium.h"
+#import "UIViewController+Tealium.h"
 
 char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lifecycle";
 
 @implementation Tealium (Autotracking)
 
-#pragma mark - PUBLIC CLASS
+#pragma mark - PUBLIC
 
 + (NSArray *) allAutotrackingLifecycleInstances {
     
@@ -112,8 +113,6 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     return [NSArray arrayWithArray:targetInstances];
 }
 
-#pragma mark - PUBLIC INSTANCE
-
 - (NSDictionary *) currentLifecycleData {
     
     NSDictionary *lifecycleData = [[self lifecycleInstance] currentLifecycleData];
@@ -122,6 +121,18 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
 }
 
+- (NSDictionary *) getAutotrackedDataSourcesForObject:(NSObject *)object {
+    if ([object respondsToSelector:@selector(teal_autotrackDataSources)]){
+        return [object teal_autotrackDataSources];
+    }
+    return nil;
+}
+
+- (void) setAutotrackingForObject:(NSObject *)object enable:(BOOL)isEnabled {
+    if ([object respondsToSelector:@selector(teal_setAutotrackingEnabled:)]){
+        [object teal_setAutotrackingEnabled:isEnabled];
+    }
+}
 
 #pragma mark - PRIVATE INSTANCE
 

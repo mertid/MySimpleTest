@@ -21,14 +21,13 @@
     
     self.title = @"Second View Controller";
     [self teal_setDataSources:@{@"test":@"executeTestCommand"}];
-    self.iVarTestProperty = @"iVarTestValue";
+    self.testProperty = @"iVarTestValue";
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [[self autotrackingEnableSwitch] setOn:self.teal_autotrackingEnabled];
-    
+    [[Tealium instanceForKey:@"1"] setAutotrackingForObject:self enable:YES];
     
 }
 

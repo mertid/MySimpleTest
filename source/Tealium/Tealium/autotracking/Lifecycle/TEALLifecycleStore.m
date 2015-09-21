@@ -14,9 +14,9 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 
 @property (nonatomic, strong) dispatch_queue_t queue;
 
-@property (nonatomic, strong) NSMutableDictionary *dataSources;
+@property (nonatomic, strong) NSMutableDictionary *lifecycleEvents;
 
-@property (nonatomic, strong) NSString *instanceID;
+@property (nonatomic, strong) NSString *privateInstanceID;
 
 @end
 
@@ -34,14 +34,14 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     
     if (self) {
         _queue = dispatch_queue_create(kTEALLifecycleStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
-        _dataSources = [NSMutableDictionary new];
-        _instanceID = instanceID;
-        
-#warning update to use a class method that returns a unique lifecycle store instance id rather than just instance id
-        
-        [self unarchiveWithStorageKey:instanceID];
+        _lifecycleEvents = [NSMutableDictionary new];
+        _privateInstanceID = instanceID;
     }
     return self;
+}
+
+- (void) loadArchive {
+    [self unarchiveWithStorageKey:[self storageKey]];
 }
 
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key {
@@ -49,7 +49,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     __block id obj = nil;
     
     dispatch_sync(self.queue, ^{
-        obj = self.dataSources[key];
+        obj = self.lifecycleEvents[key];
     });
     
     return obj;
@@ -64,7 +64,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     
     dispatch_barrier_async(self.queue, ^{
         
-        self.dataSources[aKey] = object;
+        self.lifecycleEvents[aKey] = object;
         
     });
 }
@@ -76,6 +76,11 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 
 #pragma mark - I/O
 
+- (NSString *) storageKey {
+    
+    return [NSString stringWithFormat:@"com.tealium.lifecyclestore.%@", self.privateInstanceID];
+}
+
 - (BOOL) unarchiveWithStorageKey:(NSString *)key {
     
     __block BOOL unarchived = NO;
@@ -84,7 +89,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     
     if (obj && [obj isKindOfClass:[NSDictionary class]]) {
         dispatch_barrier_sync(self.queue, ^{
-            [self.dataSources addEntriesFromDictionary:obj];
+            [self.lifecycleEvents addEntriesFromDictionary:obj];
             unarchived = YES;
         });
     }
@@ -96,7 +101,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     __block NSDictionary *dataCopy = nil;
     
     dispatch_barrier_sync(self.queue, ^{
-        dataCopy = [self.dataSources copy];
+        dataCopy = [self.lifecycleEvents copy];
     });
     
     if (dataCopy) {

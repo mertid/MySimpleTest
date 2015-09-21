@@ -12,6 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *autotrackingEnableSwitch;
 
-@property (nonatomic, strong) NSString *iVarTestProperty;
+@property (nonatomic, strong) NSString *testProperty;
 
 @end

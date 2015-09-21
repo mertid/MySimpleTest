@@ -33,23 +33,27 @@
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
-#warning BASELINE datasources (combine relevant transmission and capture time data)
-
 /*
  Data Sources that can be processed in the background
  */
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
+//- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
 
 /*
  Data Sources that are processed and converted to dictionary data at call time - Main Thread
  */
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 
+/*
+ *
+ *
+ *  @return NSMutableDictionary of available volatile data sources.  Will come prepopulated with Tealium data sources.
+ */
+- (NSMutableDictionary *) volatileDataSources;
 
 /*
  // TODO Comments
  */
-- (NSDictionary *) persistentDataSources;
+- (NSDictionary *) persistentDataSourcesCopy;
 
 /*
  // TODO Comments

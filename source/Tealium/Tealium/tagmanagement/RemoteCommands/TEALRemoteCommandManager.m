@@ -15,6 +15,7 @@
 
 @interface TEALRemoteCommandManager()
 
+@property (nonatomic) BOOL ivarIsEnabled;
 @property (nonatomic, strong) NSDictionary *commands;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
 
@@ -35,25 +36,6 @@
     return self;
     
 }
-
-- (void) processRequest:(NSURLRequest*)request completionHandler:(TEALRemoteCommandResponseBlock)responseBlock {
-    
-    NSString *requestString = request.URL.absoluteString;
-    
-    // Called by CommHandler to process a Tag Bridge
-    TEALRemoteCommandResponse *response = [[TEALRemoteCommandResponse alloc] initWithURLString:requestString completionHandler:responseBlock];
-    
-    [response setDelegate:self];
-    
-    if (response){
-        [self triggerCommandWithResponse:response responseBlock:responseBlock];
-    }
-    else if (responseBlock) {
-        responseBlock(nil);
-    }
-}
-
-#pragma mark - PRIVATE INSTANCE
 
 - (void) addReservedCommands:(TEALBooleanBlock)successBlock {
     
@@ -79,7 +61,7 @@
                          description:@"Remote unlock Mobile Companion"
                          targetQueue:weakOperationManager.underlyingQueue
                                block:^(TEALRemoteCommandResponse*response) {
-                                 
+                                   
 #warning THIS only works if the call comes in at least twice
                                    
                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:weakOperationManager];
@@ -88,26 +70,54 @@
         if (successBlock) successBlock(loadedHTTPCommand && loadedMobileCompanionCommand);
         
     }];
-
-
+    
+    
     
 }
 
-- (void) addNewCommands:(NSDictionary *)newCommand {
+- (void) enable {
+    if (!self.ivarIsEnabled) {
+        self.ivarIsEnabled = YES;
+    }
+}
+
+- (void) disable {
+    if (self.ivarIsEnabled) {
+        self.ivarIsEnabled = NO;
+    }
+}
+
+- (BOOL) isEnabled {
+    return self.ivarIsEnabled;
+}
+
+- (void) processRequest:(NSURLRequest*)request completionHandler:(TEALRemoteCommandResponseBlock)responseBlock {
     
-    NSDictionary *commands = [self.commands copy];
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
-    [mDict addEntriesFromDictionary:newCommand];
-    NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
+    if (!self.ivarIsEnabled) {
+        if (responseBlock) {
+            responseBlock(nil);
+        }
+        return;
+    }
     
-    [self.operationManager addOperationWithBlock:^{
-        self.commands = newCommands;
-    }];
+    NSString *requestString = request.URL.absoluteString;
+    
+    // Called by CommHandler to process a Tag Bridge
+    TEALRemoteCommandResponse *response = [[TEALRemoteCommandResponse alloc] initWithURLString:requestString completionHandler:responseBlock];
+    
+    [response setDelegate:self];
+    
+    if (response){
+        [self triggerCommandWithResponse:response responseBlock:responseBlock];
+    }
+    else if (responseBlock) {
+        responseBlock(nil);
+    }
 }
 
 - (BOOL) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
     
-    // 
+    //
     // name - (command id) required
     // description - optional
     // queue optional - will fall back to main thread
@@ -136,6 +146,21 @@
     [self addNewCommands:@{name:command}];
     return YES;
 }
+
+#pragma mark - PRIVATE INSTANCE
+
+- (void) addNewCommands:(NSDictionary *)newCommand {
+    
+    NSDictionary *commands = [self.commands copy];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
+    [mDict addEntriesFromDictionary:newCommand];
+    NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    [self.operationManager addOperationWithBlock:^{
+        self.commands = newCommands;
+    }];
+}
+
 
 #pragma mark - TAG REMOTE COMMAND RESPONSE DELEGATE
 
@@ -191,20 +216,6 @@
     
     return success;
 }
-
-//- (dispatch_queue_t) dispatchQueueFromCommand:(NSDictionary*)command {
-//    if (!command) return nil;
-//#ifdef FRAMEWORK
-//    //TODO: Use CFBridgingRetain instead?
-//    dispatch_queue_t queue = (__bridge dispatch_queue_t)(command[TEALRemoteCommandQueue]);
-//#else
-//    dispatch_queue_t queue = command[TEALRemoteCommandQueue];
-//#endif
-//    if (!queue){
-//        queue = dispatch_get_main_queue();
-//    }
-//    return queue;
-//}
 
 #pragma mark - RESERVED COMMANDSZ
 

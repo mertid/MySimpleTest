@@ -28,14 +28,15 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) BOOL enableAudienceStream;
 @property (nonatomic) BOOL enableTagManagement;
 
-@property (nonatomic) BOOL overrideDisableCarrierInfoAutotracking;
-@property (nonatomic) BOOL overrideDisableDeviceInfoAutotracking;
-@property (nonatomic) BOOL overrideDisableUIEventAutotracking;
-@property (nonatomic) BOOL overrideDisableViewAutotracking;
-@property (nonatomic) BOOL overrideDisableiVarAutotracking;
-@property (nonatomic) BOOL overrideDisableLifecycleAutotracking;
-@property (nonatomic) BOOL overrideDisableCrashTracking;
-@property (nonatomic) BOOL overrideDisableMobileCompanion;
+@property (nonatomic) BOOL disableCarrierInfoAutotracking;
+@property (nonatomic) BOOL disableDeviceInfoAutotracking;
+@property (nonatomic) BOOL disableUIEventAutotracking;
+@property (nonatomic) BOOL disableViewAutotracking;
+@property (nonatomic) BOOL disableiVarAutotracking;
+@property (nonatomic) BOOL disableLifecycleAutotracking;
+@property (nonatomic) BOOL disableTimestampAutotracking;
+@property (nonatomic) BOOL disableCrashTracking;
+@property (nonatomic) BOOL disableMobileCompanion;
 
 - (instancetype) initWithURLString:(NSString *)url;
 

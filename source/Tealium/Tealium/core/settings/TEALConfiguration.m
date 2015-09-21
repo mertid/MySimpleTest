@@ -11,7 +11,9 @@
 
 @interface TEALConfiguration()
 
+// No public API for this settings at this time
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
+@property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
 
 @end
 
@@ -40,6 +42,7 @@
     configuration.autotrackingDeviceInfoEnabled = YES;
     configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled  = YES;
+    configuration.autotrackingTimestampInfoEnabled = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
     configuration.crashTrackingEnabled = YES;

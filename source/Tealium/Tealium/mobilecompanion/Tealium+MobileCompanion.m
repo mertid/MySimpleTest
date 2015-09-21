@@ -20,8 +20,8 @@
 #import "NSObject+TealiumAutotracking.h"
 #endif
 
-char const * const TEALKVO_MobileCompanion = "com.tealium.kvo.mobilecompanion";
-NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
+//char const * const TEALKVO_MobileCompanion = "com.tealium.kvo.mobilecompanion";
+NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
 
 @interface Tealium() <TEALMobileCompanionDelegate, TEALModulesDelegate>
 
@@ -77,7 +77,7 @@ NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
 
 - (TEALMobileCompanion *) mobileCompanionInstance {
     
-    id raw = [self moduleDataCopy][TEALKEY_MobileCompanion];
+    id raw = [self moduleDataCopy][TEALKeyMobileCompanion];
     if (![raw isKindOfClass:([TEALMobileCompanion class])]){
         return [self newMobileCompanionInstance];
     }
@@ -93,7 +93,7 @@ NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
     
     mobileCompanion.delegate = self;
     
-    [self addModuleData:@{TEALKEY_MobileCompanion:mobileCompanion}];
+    [self addModuleData:@{TEALKeyMobileCompanion:mobileCompanion}];
     
     return mobileCompanion;
 
@@ -106,7 +106,7 @@ NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
 
     [self.operationManager addOperationWithBlock:^{
         
-        [self removeModuleDataForKey:TEALKEY_MobileCompanion];
+        [self removeModuleDataForKey:TEALKeyMobileCompanion];
         
     }];
 
@@ -150,8 +150,8 @@ NSString * const TEALKEY_MobileCompanion = @"com.tealium.mobilecompanion";
         [objectDataSources addEntriesFromDictionary:autotrackedObjectData];
 #endif
         
-        [objectDataSources addEntriesFromDictionary:self.baselineDataSources];
-        [objectDataSources addEntriesFromDictionary:self.persistentDataSources];
+        [objectDataSources addEntriesFromDictionary:[self volatileDataSourcesCopy]];
+        [objectDataSources addEntriesFromDictionary:[self persistentDataSourcesCopy]];
         
         NSDictionary *objectData = [object teal_dataSources];
         [objectDataSources addEntriesFromDictionary:objectData];

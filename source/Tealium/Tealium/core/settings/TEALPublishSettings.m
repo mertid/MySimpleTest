@@ -30,6 +30,7 @@ NSString * const TEALPublishSettingKeyDisableUIEventAutotracking = @"disableUIEv
 NSString * const TEALPublishSettingKeyDisableViewAutotracking = @"disableViewAutotracking";
 NSString * const TEALPublishSettingKeyDisableiVarAutotracking = @"disableiVarAutotracking";
 NSString * const TEALPublishSettingKeyDisableLifecycleAutotracking = @"disableLifecycleAutotracking";
+NSString * const TEALPublishSettingKeyDisableTimestampAutotracking = @"disableTimestampAutotracking";
 NSString * const TEALPublishSettingKeyDisableCrashTracking = @"disableLifecycleTracking";
 NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCompanion";
 
@@ -233,14 +234,15 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
         _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
         
-        _overrideDisableCarrierInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
-        _overrideDisableDeviceInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
-        _overrideDisableUIEventAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableUIEventAutotracking];
-        _overrideDisableViewAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableViewAutotracking];
-        _overrideDisableiVarAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableiVarAutotracking];
-        _overrideDisableLifecycleAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
-        _overrideDisableCrashTracking   = [aDecoder decodeBoolForKey:@"overrideDisableCrashTracking"];
-        _overrideDisableMobileCompanion = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableMobileCompanion];
+        _disableCarrierInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
+        _disableDeviceInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
+        _disableUIEventAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableUIEventAutotracking];
+        _disableViewAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableViewAutotracking];
+        _disableiVarAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableiVarAutotracking];
+        _disableLifecycleAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
+        _disableTimestampAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableTimestampAutotracking];
+        _disableCrashTracking   = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCrashTracking];
+        _disableMobileCompanion = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableMobileCompanion];
         _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceID:_url];
         
         TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
@@ -266,14 +268,15 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
     [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
 
-    [aCoder encodeBool:self.overrideDisableCarrierInfoAutotracking forKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
-    [aCoder encodeBool:self.overrideDisableDeviceInfoAutotracking forKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
-    [aCoder encodeBool:self.overrideDisableUIEventAutotracking forKey:TEALPublishSettingKeyDisableUIEventAutotracking];
-    [aCoder encodeBool:self.overrideDisableViewAutotracking forKey:TEALPublishSettingKeyDisableViewAutotracking];
-    [aCoder encodeBool:self.overrideDisableiVarAutotracking forKey:TEALPublishSettingKeyDisableiVarAutotracking];
-    [aCoder encodeBool:self.overrideDisableLifecycleAutotracking forKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
-    [aCoder encodeBool:self.overrideDisableCrashTracking forKey:TEALPublishSettingKeyDisableCrashTracking];
-    [aCoder encodeBool:self.overrideDisableMobileCompanion forKey:TEALPublishSettingKeyDisableMobileCompanion];
+    [aCoder encodeBool:self.disableCarrierInfoAutotracking forKey:TEALPublishSettingKeyDisableCarrierInfoAutotracking];
+    [aCoder encodeBool:self.disableDeviceInfoAutotracking forKey:TEALPublishSettingKeyDisableDeviceInfoAutotracking];
+    [aCoder encodeBool:self.disableUIEventAutotracking forKey:TEALPublishSettingKeyDisableUIEventAutotracking];
+    [aCoder encodeBool:self.disableViewAutotracking forKey:TEALPublishSettingKeyDisableViewAutotracking];
+    [aCoder encodeBool:self.disableiVarAutotracking forKey:TEALPublishSettingKeyDisableiVarAutotracking];
+    [aCoder encodeBool:self.disableLifecycleAutotracking forKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
+    [aCoder encodeBool:self.disableTimestampAutotracking forKey:TEALPublishSettingKeyDisableTimestampAutotracking];
+    [aCoder encodeBool:self.disableCrashTracking forKey:TEALPublishSettingKeyDisableCrashTracking];
+    [aCoder encodeBool:self.disableMobileCompanion forKey:TEALPublishSettingKeyDisableMobileCompanion];
     
 }
 
@@ -293,14 +296,15 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
     if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
     
-    if (otherSettings.overrideDisableCarrierInfoAutotracking != self.overrideDisableCarrierInfoAutotracking) return NO;
-    if (otherSettings.overrideDisableDeviceInfoAutotracking != self.overrideDisableDeviceInfoAutotracking) return NO;
-    if (otherSettings.overrideDisableUIEventAutotracking != self.overrideDisableUIEventAutotracking) return NO;
-    if (otherSettings.overrideDisableViewAutotracking != self.overrideDisableViewAutotracking) return NO;
-    if (otherSettings.overrideDisableiVarAutotracking != self.overrideDisableiVarAutotracking) return NO;
-    if (otherSettings.overrideDisableLifecycleAutotracking != self.overrideDisableLifecycleAutotracking) return NO;
-    if (otherSettings.overrideDisableCrashTracking != self.overrideDisableCrashTracking) return NO;
-    if (otherSettings.overrideDisableMobileCompanion != self.overrideDisableMobileCompanion) return NO;
+    if (otherSettings.disableCarrierInfoAutotracking != self.disableCarrierInfoAutotracking) return NO;
+    if (otherSettings.disableDeviceInfoAutotracking != self.disableDeviceInfoAutotracking) return NO;
+    if (otherSettings.disableUIEventAutotracking != self.disableUIEventAutotracking) return NO;
+    if (otherSettings.disableViewAutotracking != self.disableViewAutotracking) return NO;
+    if (otherSettings.disableiVarAutotracking != self.disableiVarAutotracking) return NO;
+    if (otherSettings.disableLifecycleAutotracking != self.disableLifecycleAutotracking) return NO;
+    if (otherSettings.disableTimestampAutotracking != self.disableTimestampAutotracking) return NO;
+    if (otherSettings.disableCrashTracking != self.disableCrashTracking) return NO;
+    if (otherSettings.disableMobileCompanion != self.disableMobileCompanion) return NO;
     
     return YES;
 }
@@ -324,6 +328,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     NSString *disableViewAutotracking = settings[@"disable_view_autotracking"];
     NSString *disableiVarAutotracking = settings[@"disable_ivar_autotracking"];
     NSString *disableLifecycleAutotracking = settings[@"disable_lifecycle_autotracking"];
+    NSString *disableTimestampAutotracking = settings[@"disable_timestamp_autotracking"];
     NSString *disableCrashTracking = settings[@"disable_crash_tracking"];
     NSString *disableMobileCompanion = settings[@"disable_mobilecompanion"];
     
@@ -361,35 +366,39 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     }
     
     if (disableCarrierInfoAutotracking) {
-        self.overrideDisableCarrierInfoAutotracking = [disableCarrierInfoAutotracking boolValue];
+        self.disableCarrierInfoAutotracking = [disableCarrierInfoAutotracking boolValue];
     }
     
     if (disableDeviceInfoAutotracking) {
-        self.overrideDisableDeviceInfoAutotracking = [disableDeviceInfoAutotracking boolValue];
+        self.disableDeviceInfoAutotracking = [disableDeviceInfoAutotracking boolValue];
     }
     
     if (disableUIEventAutotracking) {
-        self.overrideDisableUIEventAutotracking = [disableUIEventAutotracking boolValue];
+        self.disableUIEventAutotracking = [disableUIEventAutotracking boolValue];
     }
     
     if (disableViewAutotracking) {
-        self.overrideDisableViewAutotracking = [disableViewAutotracking boolValue];
+        self.disableViewAutotracking = [disableViewAutotracking boolValue];
     }
     
     if (disableiVarAutotracking) {
-        self.overrideDisableiVarAutotracking = [disableiVarAutotracking boolValue];
+        self.disableiVarAutotracking = [disableiVarAutotracking boolValue];
     }
     
     if (disableLifecycleAutotracking) {
-        self.overrideDisableLifecycleAutotracking = [disableLifecycleAutotracking boolValue];
+        self.disableLifecycleAutotracking = [disableLifecycleAutotracking boolValue];
+    }
+    
+    if (disableTimestampAutotracking) {
+        self.disableTimestampAutotracking = [disableTimestampAutotracking boolValue];
     }
     
     if (disableCrashTracking) {
-        self.overrideDisableCrashTracking = [disableCrashTracking boolValue];
+        self.disableCrashTracking = [disableCrashTracking boolValue];
     }
     
     if (disableMobileCompanion) {
-        self.overrideDisableMobileCompanion = [disableMobileCompanion boolValue];
+        self.disableMobileCompanion = [disableMobileCompanion boolValue];
     }
 }
 

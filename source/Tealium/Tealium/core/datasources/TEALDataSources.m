@@ -10,7 +10,6 @@
 #import <sys/sysctl.h>
 #import <mach/machine.h>
 
-#import "NSDate+Tealium.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
 #import "TEALDataSourceStore.h"
@@ -19,16 +18,17 @@
 
 @interface TEALDataSources()
 
-@property (nonatomic, strong) NSString *instanceID;
-@property (nonatomic, strong) TEALDataSourceStore *store;
-@property (nonatomic, strong) NSDictionary *staticData;
-@property (nonatomic, strong) NSDictionary *compileTimeData;
+@property (nonatomic, strong) NSString *privateInstanceID;
+@property (nonatomic, strong) TEALDataSourceStore *privateStore;
+@property (nonatomic, strong) NSDictionary *privateStaticData;
+@property (nonatomic, strong) NSDictionary *privateCompileTimeData;
+@property (atomic) NSMutableDictionary *privateVolatileDataSources;
 
 @end
 
 @implementation TEALDataSources
 
-#pragma mark - PUBLIC CLASS METHODS
+#pragma mark - PUBLIC METHODS
 
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj {
     
@@ -70,74 +70,6 @@
     }
     
     return [title copy];
-}
-
-#pragma mark - PUBLIC METHODS
-
-- (instancetype) initWithInstanceID:(NSString *) instanceID {
-    
-    if (!instanceID) {
-        return nil;
-    }
-    
-    self = [super init];
-    
-    if (self) {
-        _instanceID = instanceID;
-        _store = [[TEALDataSourceStore alloc] initWithInstanceID:instanceID];
-    }
-    return self;
-}
-
-- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType {
-    
-    NSMutableDictionary *datasources = [NSMutableDictionary new];
-    
-    [datasources addEntriesFromDictionary:[self staticDatasources]];
-    [datasources addEntriesFromDictionary:[self compileTimeDataSources]];
-
-    switch (eventType) {
-        case TEALDispatchTypeEvent:
-            datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
-            break;
-        case TEALDispatchTypeView:
-            datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
-            break;
-        default:
-            break;
-    }
-    
-    NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
-    
-    if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
-    
-    return datasources;
-}
-
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
-    
-    NSMutableDictionary *datasources = [NSMutableDictionary new];
-    
-#warning REPLACE with full timestamps data
-    
-    datasources[TEALDataSourceKey_Timestamp] = [[NSDate date] teal_timestampISOStringValue];
-    
-    if (title) {
-        switch (eventType) {
-            case TEALDispatchTypeEvent:
-                datasources[TEALDataSourceKey_EventTitle] = title;
-                break;
-            case TEALDispatchTypeView:
-                datasources[TEALDataSourceKey_ViewTitle] = title;
-                break;
-            default:
-                break;
-        }
-    }
-    
-    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
-    
-    return datasources;
 }
 
 + (NSDictionary *) carrierInfoDataSources {
@@ -197,7 +129,7 @@
     NSString *batteryIsCharging = [TEALDataSources batteryIsChargingAsString];
     NSString *cpuType = [TEALDataSources cpuType];
     NSString *device = [TEALDataSources model];
-//    NSString *hardware = [TEALDataSources hardware];
+    //    NSString *hardware = [TEALDataSources hardware];
     NSString *orientation = [TEALDataSources currentOrientation];
     NSString *resolution = [TEALDataSources resolution];
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
@@ -210,7 +142,7 @@
     if (batteryIsCharging)  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
     if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
     if (device)             mDict[TEALDataSourceKey_Device] = device;
-//    if (hardware)              mDict[@"device_model"] = hardware;
+    //    if (hardware)              mDict[@"device_model"] = hardware;
     if (orientation)        mDict[TEALDataSourceKey_Orientation] = orientation;
     if (resolution)         mDict[TEALDataSourceKey_DeviceResolution] = resolution;
     if (systemVersion)      mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
@@ -218,9 +150,100 @@
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
+- (instancetype) initWithInstanceID:(NSString *) instanceID {
+    
+    if (!instanceID) {
+        return nil;
+    }
+    
+    self = [super init];
+    
+    if (self) {
+        _privateInstanceID = instanceID;
+        _privateStore = [[TEALDataSourceStore alloc] initWithInstanceID:_privateInstanceID];
+    }
+    return self;
+}
+
+//- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType {
+//    
+//    NSMutableDictionary *datasources = [NSMutableDictionary new];
+//    
+//    [datasources addEntriesFromDictionary:[self staticDatasources]];
+//    [datasources addEntriesFromDictionary:[self compileTimeDataSources]];
+//
+//    switch (eventType) {
+//        case TEALDispatchTypeEvent:
+//            datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
+//            break;
+//        case TEALDispatchTypeView:
+//            datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
+//            break;
+//        default:
+//            break;
+//    }
+//    
+//    NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
+//    
+//    if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
+//    
+//    return datasources;
+//}
+
+- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
+    
+    NSMutableDictionary *datasources = [NSMutableDictionary new];
+    
+#warning REPLACE with full timestamps data
+        
+    if (title) {
+        switch (eventType) {
+            case TEALDispatchTypeEvent:
+                datasources[TEALDataSourceKey_EventTitle] = title;
+                datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
+                break;
+            case TEALDispatchTypeView:
+                datasources[TEALDataSourceKey_ViewTitle] = title;
+                datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
+    if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
+
+    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
+    
+    return datasources;
+}
+
+- (NSMutableDictionary *) volatileDataSources {
+    if (!self.privateVolatileDataSources){
+        
+        self.privateVolatileDataSources = [NSMutableDictionary dictionary];
+        
+        [self.privateVolatileDataSources addEntriesFromDictionary:[self staticDatasources]];
+        [self.privateVolatileDataSources addEntriesFromDictionary:[self compileTimeDataSources]];
+        
+    }
+    
+    return self.privateVolatileDataSources;
+}
+
+- (NSDictionary *) persistentDataSourcesCopy {
+    
+    NSDictionary *copy = [self.privateStore dataSourcesCopy];
+    if (!copy){
+        copy = @{};
+    }
+    return copy;
+}
+
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
     
-    [self.store addDataSources:additionalDataSources];
+    [self.privateStore addDataSources:additionalDataSources];
     
 }
 
@@ -228,7 +251,7 @@
     
     NSArray *copy = [dataSourceKeys copy];
     [copy enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [self.store removeDataSourceForKey:obj];
+        [self.privateStore removeDataSourceForKey:obj];
     }];
 }
 
@@ -236,12 +259,12 @@
 
 - (NSString *) applicationUUID {
     
-    NSString *applicationUUID = self.store.dataSourcesCopy[TEALDataSourceKey_UUID];
+    NSString *applicationUUID = self.privateStore.dataSourcesCopy[TEALDataSourceKey_UUID];
     
     if (!applicationUUID) {
         applicationUUID = [[NSUUID UUID] UUIDString];
         
-        [self.store addDataSources:@{TEALDataSourceKey_UUID:applicationUUID}];
+        [self.privateStore addDataSources:@{TEALDataSourceKey_UUID:applicationUUID}];
     }
     
     return applicationUUID;
@@ -249,7 +272,7 @@
 
 - (NSString *) visitorIDCopy {
     
-    NSString *visitorID = [self persistentDataSources][TEALDataSourceKey_VisitorID];
+    NSString *visitorID = [self persistentDataSourcesCopy][TEALDataSourceKey_VisitorID];
     
     if (!visitorID) {
 
@@ -260,33 +283,23 @@
         }
         
         visitorID = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        [self.store addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
+        [self.privateStore addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
     }
     
     return visitorID;
 }
 
-- (NSDictionary *) persistentDataSources {
-    
-    NSDictionary *copy = [self.store dataSourcesCopy];
-    if (!copy){
-        copy = @{};
-    }
-    return copy;
-}
-
 #pragma mark - PRIVATE METHODS
 
 - (TEALDataSourceStore *) instanceStore {
-    return self.store;
+    return self.privateStore;
 }
-
 
 #pragma mark - PRIVATE TRANSMISSION TIME METHODS
 
 - (NSDictionary *) compileTimeDataSources {
     
-    if (!self.compileTimeData){
+    if (!self.privateCompileTimeData){
 
         NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
         
@@ -295,21 +308,21 @@
         mDict[TEALDataSourceKey_LibraryVersion] = TEALLibraryVersion;
         if (appName)        mDict[TEALDataSourceKey_ApplicationName] = appName;
         
-        self.compileTimeData = [NSDictionary dictionaryWithDictionary:mDict];
+        self.privateCompileTimeData = [NSDictionary dictionaryWithDictionary:mDict];
     }
     
-    return self.compileTimeData;
+    return self.privateCompileTimeData;
 }
 
 - (NSDictionary *) staticDatasources {
     
-    if (!self.staticData){
-        self.staticData = @{
+    if (!self.privateStaticData){
+        self.privateStaticData = @{
                             TEALDataSourceKey_Platform : TEALDataSourceValue_Platform
                             };
     }
     
-    return self.staticData;
+    return self.privateStaticData;
     
 }
 
@@ -329,10 +342,9 @@
 
 #pragma mark - PRIVATE DEVICE INFO HELPERS
 
-static NSString *deviceCpuType;
-
+static NSString *staticDeviceCPUType;
 + (NSString *) cpuType {
-    if (!deviceCpuType){
+    if (!staticDeviceCPUType){
         NSMutableString *cpu = [NSMutableString string];
         size_t size;
         cpu_type_t type;
@@ -395,26 +407,25 @@ static NSString *deviceCpuType;
                     // ...
             }
         }
-        deviceCpuType = cpu;
+        staticDeviceCPUType = cpu;
     }
     
-    return deviceCpuType;
+    return staticDeviceCPUType;
 }
 
-static NSString *deviceArchitecture;
-
+static NSString *staticDeviceArchitecture;
 + (NSString *) architecture {
     
-    if (!deviceArchitecture){
+    if (!staticDeviceArchitecture){
         NSString *arch = nil;
         if(sizeof(int*) == 4) {
             arch = @"32";
         } else if(sizeof(int*) == 8) {
             arch = @"64";
         }
-        deviceArchitecture = arch;
+        staticDeviceArchitecture = arch;
     }
-    return deviceArchitecture;
+    return staticDeviceArchitecture;
 }
 
 + (NSString *) batteryIsChargingAsString {
@@ -493,23 +504,23 @@ static NSString *deviceModel;
     return deviceModel;
 }
 
-static NSString *deviceResolution;
+static NSString *staticDeviceResolution;
 + (NSString *) resolution {
-    if (!deviceResolution){
+    if (!staticDeviceResolution){
         CGFloat scale       = [[UIScreen mainScreen] scale];
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         
         CGFloat width       = CGRectGetWidth(screenBounds) * scale;
         CGFloat height      = CGRectGetHeight(screenBounds) * scale;
         
-        deviceResolution = [NSString stringWithFormat:@"%.0fx%.0f", width, height];
+        staticDeviceResolution = [NSString stringWithFormat:@"%.0fx%.0f", width, height];
     }
-    return deviceResolution;
+    return staticDeviceResolution;
 }
 
-//static NSString *deviceHardware;
+//static NSString *staticDeviceHardware;
 //+ (NSString *) hardware {
-//    if (!deviceHardware){
+//    if (!staticDeviceHardware){
 //        NSString *hardwareName = nil;
 //        
 //        size_t size;
@@ -518,52 +529,15 @@ static NSString *deviceResolution;
 //        sysctlbyname("hw.machine", machine, &size, NULL, 0);
 //        hardwareName = [NSString stringWithUTF8String:machine];
 //        free(machine);
-//        deviceHardware = hardwareName;
+//        staticDeviceHardware = hardwareName;
 //    }
 //    
-//    return deviceHardware;
+//    return staticDeviceHardware;
 //}
 
-#pragma mark - PRIVATE TRANSMISSION TIME HELPERS
 
-+ (NSString*) localGMTOffset{
-    // return hours offset
-    int offset = (int)([[NSTimeZone localTimeZone] secondsFromGMT] / 3600);
-    return [NSString stringWithFormat:@"%i", offset];
-}
 
-+ (NSString*) timestampAsISOLocalFrom:(NSDate*) date{
-    // modified from original by Radu Poenaru
-    NSDateFormatter *_sISO8601Local = nil;
-    if (!_sISO8601Local) {
-        _sISO8601Local = [[NSDateFormatter alloc] init];
-        
-        NSMutableString *strFormat = [NSMutableString stringWithString:@"yyyy-MM-dd'T'HH:mm:ss"];
-        [_sISO8601Local setTimeStyle:NSDateFormatterFullStyle];
-        [_sISO8601Local setDateFormat:strFormat];
-    }
-    if (date) return[_sISO8601Local stringFromDate:date];
-    return nil;
-}
 
-+ (NSString*) timestampAsISOFrom:(NSDate*)date{
-    // modified from original by Radu Poenaru
-    NSDateFormatter *_sISO8601 = nil;
-    
-    if (!_sISO8601) {
-        _sISO8601 = [[NSDateFormatter alloc] init];
-        
-        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-        [_sISO8601 setTimeZone:timeZone];
-        
-        NSMutableString *strFormat = [NSMutableString stringWithString:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        
-        [_sISO8601 setTimeStyle:NSDateFormatterFullStyle];
-        [_sISO8601 setDateFormat:strFormat];
-    }
-    if (date) return[_sISO8601 stringFromDate:date];
-    return nil;
-}
 
 
 @end

@@ -16,7 +16,6 @@
 #import "TEALOperationManager.h"
 #import "TEALRemoteCommandManager.h"
 #import "NSDictionary+Tealium.h"
-#import "UIWebView+Tealium.h"
 
 @import Security;
 
@@ -25,15 +24,11 @@
 @property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
 @property (weak, nonatomic) NSString *publishURLString;
 @property (weak, nonatomic) TEALOperationManager *operationManager;
-@property (nonatomic) TEALDispatchNetworkServiceStatus status;
-@property (nonatomic) BOOL areRemoteCommandsEnabled;
-@property (nonatomic, weak) TEALLogger *logger;
+@property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
 
 @end
 
 @implementation TEALTagDispatchService
-
-#warning REFACTOR to remove need of logger in this class
 
 #pragma mark - PUBLIC INSTANCE
 
@@ -57,12 +52,8 @@
     return [self.publishURLString copy];
 }
 
-- (TEALDispatchNetworkServiceStatus) currentStatus {
-    return self.status;
-}
-
-- (void) setCurrentStatus:(TEALDispatchNetworkServiceStatus) status {
-    self.status = status;
+- (void) setStatus:(TEALDispatchNetworkServiceStatus) status {
+    self.privateStatus = status;
 }
 
 - (TEALRemoteCommandManager *) remoteCommandManager {
@@ -75,18 +66,14 @@
 
 #pragma mark - PRIVATE INSTANCE
 
-- (void) setRemoteCommandsEnabled:(BOOL)enable {
-    self.areRemoteCommandsEnabled = enable;
-}
-
-- (void) setLogger:(TEALLogger *)logger {
-#warning DO WE NEED THIS?
+- (NSString *) description {
+    return [NSString stringWithFormat:@"<TEALTagDispatch Service publishURL:%@ status:%lu>", self.publishURLString, (unsigned long)self.privateStatus];
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
 
 - (TEALDispatchNetworkServiceStatus) status{
-    return self.status;
+    return self.privateStatus;
 }
 
 - (void) setup{
@@ -144,16 +131,17 @@
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     
-    if ([webView teal_areRemoteCommandsEnabled]){
+    if ([[self remoteCommandManager] isEnabled]) {
     
-        __weak __block TEALLogger *weakLogger = self.logger;
+//        __weak __block TEALLogger *weakLogger = self.logger;
 
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [self.remoteCommandManager processRequest:request
                                     completionHandler:^(TEALRemoteCommandResponse *response) {
                                         
-                                        [weakLogger logVerbose:@"Remote command processed:%@", response];
+#warning Implement some other means of logging remote command reponse
+//                                        [weakLogger logVerbose:@"Remote command processed:%@", response];
                                         
                                     }];
             
@@ -171,7 +159,7 @@
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.status = TEALDispatchNetworkServiceStatusReady;
+        self.privateStatus = TEALDispatchNetworkServiceStatusReady;
 
     });
 }
@@ -191,7 +179,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
         if ([init isEqualToString:@"false"]){
-            [weakSelf.logger logVerbose:@"Webkit was unable to process callback command: %@", command];
+            
+#warning Implement alternative log method
+//            [weakSelf.logger logVerbose:@"Webkit was unable to process callback command: %@", command];
         }
     });
 }

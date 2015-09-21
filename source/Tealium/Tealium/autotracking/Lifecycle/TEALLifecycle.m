@@ -7,6 +7,7 @@
 //
 
 #import "TEALLifecycle.h"
+#import "TEALLifecycleEvents.h"
 #import "TEALLifecycleStore.h"
 #import "Tealium.h"
 #import "TEALDataSourceConstants.h"
@@ -14,9 +15,13 @@
 @interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
-@property (nonatomic, strong) NSString *ivarInstanceID;
+@property (nonatomic, strong) NSString *privateInstanceID;
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
-@property (nonatomic, strong) TEALLifecycleStore *ivarStore;
+@property (nonatomic, strong) TEALLifecycleStore *privateStore;
+
+@property () TEALLifecycleEvents *privateLaunchEvents;
+@property () TEALLifecycleEvents *privateWakeEvents;
+@property () TEALLifecycleEvents *privateSleepEvents;
 
 @end
 
@@ -30,7 +35,13 @@
     self = [super init];
     if (self) {
         
-        _ivarInstanceID = instanceID;
+        _privateInstanceID = instanceID;
+        _privateStore = [[TEALLifecycleStore alloc] initWithInstanceID:instanceID];
+        [_privateStore loadArchive];
+        
+        _privateLaunchEvents = _privateStore[@"launchEvents"];
+        _privateWakeEvents = _privateStore[@"wakeEvents"];
+        _privateSleepEvents = _privateStore[@"sleepEvents"];
         
     }
     return self;
@@ -91,16 +102,16 @@
 }
 
 - (NSString *) instanceID {
-    return self.ivarInstanceID;
+    return self.privateInstanceID;
 }
 
 - (TEALLifecycleStore *) store {
 
-    if (!self.ivarStore){
-        self.ivarStore = [[TEALLifecycleStore alloc] initWithInstanceID:[self instanceID]];
+    if (!self.privateStore){
+        self.privateStore = [[TEALLifecycleStore alloc] initWithInstanceID:[self instanceID]];
     }
     
-    return self.ivarStore;
+    return self.privateStore;
     
 }
 
@@ -126,6 +137,27 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+}
+
+- (TEALLifecycleEvents *) launchEvents {
+    if (!self.privateLaunchEvents) {
+        self.privateLaunchEvents = [[TEALLifecycleEvents alloc] init];
+    }
+    return self.privateLaunchEvents;
+}
+
+- (TEALLifecycleEvents *) wakeEvents {
+    if (!self.privateWakeEvents) {
+        self.privateWakeEvents = [[TEALLifecycleEvents alloc] init];
+    }
+    return self.privateWakeEvents;
+}
+
+- (TEALLifecycleEvents *) sleepEvents {
+    if (!self.privateSleepEvents) {
+        self.privateSleepEvents = [[TEALLifecycleEvents alloc] init];
+    }
+    return self.privateSleepEvents;
 }
 
 - (void) processLifecycleEvent:(NSNotification*) notification {

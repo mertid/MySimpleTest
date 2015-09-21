@@ -14,13 +14,16 @@
 #import "TEALDispatchService.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
+#import "TEALExceptionHandler.h"
 #import "TEALError.h"
 #import "TEALOperationManager.h"
 #import "TEALLogger.h"
 #import "TEALModulesDelegate.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALOperationManager.h"
+#import "TEALSettings+PrivateHeader.h"
 #import "TEALSystemHelpers.h"
+#import "TEALTimestamps.h"
 #import "TEALURLSessionManager.h"
 
 @interface Tealium () <
@@ -37,7 +40,7 @@
 @property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALSettings *settings;
 @property (nonatomic, weak)   id<TEALModulesDelegate> modulesDelegate;
-@property (nonatomic, weak) UIViewController *iVarActiveViewController;
+@property (nonatomic, weak) UIViewController *privateActiveViewController;
 
 @property (nonatomic, strong) NSDictionary *moduleData;
 
@@ -45,7 +48,7 @@
 
 @end
 
-__strong static NSDictionary *_allInstances = nil;
+__strong static NSDictionary *staticAllInstances = nil;
 
 @implementation Tealium
 
@@ -65,7 +68,7 @@ __strong static NSDictionary *_allInstances = nil;
         return nil;
     }
     
-    Tealium *instance = _allInstances[key];
+    Tealium *instance = staticAllInstances[key];
     
     return instance;
     
@@ -126,16 +129,20 @@ __strong static NSDictionary *_allInstances = nil;
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
-    NSDictionary *persistentDataSources = [self.dataSources persistentDataSources];
+    NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
+    NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
+    NSDictionary *timestampDataSources = [TEALTimestamps timestampDataSourcesForDate:[NSDate date]];
     
     // capture time datasources
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     carrierInfo,
                                                                                     deviceInfo,
                                                                                     captureTimeDataSources? captureTimeDataSources:@{},
+                                                                                    timestampDataSources? timestampDataSources:@{},
                                                                                     persistentDataSources? persistentDataSources:@{},
+                                                                                    volatileDataSources? volatileDataSources:@{},
                                                                                     clientDataSources? clientDataSources:@{}
                                                                                     ]];
     
@@ -152,14 +159,18 @@ __strong static NSDictionary *_allInstances = nil;
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
-    NSDictionary *persistentDataSources = [self.dataSources persistentDataSources];
+    NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
-
+    NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
+    NSDictionary *timestampDataSources = [TEALTimestamps timestampDataSourcesForDate:[NSDate date]];
+    
     NSMutableArray *dataToComposite = [NSMutableArray array];
     
     if (captureTimeDataSources) [dataToComposite addObject:captureTimeDataSources];
+    if (timestampDataSources)   [dataToComposite addObject:timestampDataSources];
     if (persistentDataSources)  [dataToComposite addObject:persistentDataSources];
+    if (volatileDataSources)    [dataToComposite addObject:volatileDataSources];
     if (clientDataSources)      [dataToComposite addObject:clientDataSources];
 
     [dataToComposite addObject:carrierInfo];
@@ -176,24 +187,32 @@ __strong static NSDictionary *_allInstances = nil;
     }];
 }
 
-- (NSDictionary *) baselineDataSources {
+- (NSDictionary *) volatileDataSourcesCopy {
     
-    NSDictionary *captureTime = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeNone title:nil];
-    NSDictionary *transmissionTime = [self.dataSources transmissionTimeDatasourcesForEventType:TEALDispatchTypeNone];
-    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
-    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
-    
-    NSDictionary *composite = [TEALSystemHelpers compositeDictionaries:@[captureTime,
-                                                                         carrierInfo,
-                                                                         deviceInfo,
-                                                                         transmissionTime]];
-    
-    return composite;
+    return [self.dataSources.volatileDataSources copy];
     
 }
 
-- (NSDictionary *) persistentDataSources {
-    return [[self.dataSources persistentDataSources] copy];
+- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
+ 
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+        [weakSelf.dataSources.volatileDataSources addEntriesFromDictionary:[additionalDataSources copy]];
+    }];
+}
+
+- (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+        [weakSelf.dataSources.volatileDataSources removeObjectsForKeys:[dataSourceKeys copy]];
+    }];
+}
+
+- (NSDictionary *) persistentDataSourcesCopy {
+    return [self.dataSources persistentDataSourcesCopy];
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
@@ -207,7 +226,7 @@ __strong static NSDictionary *_allInstances = nil;
     
 }
 
-- (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys {
+- (void) removePersistentDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
     __block typeof(self) __weak weakSelf = self;
 
@@ -257,7 +276,7 @@ __strong static NSDictionary *_allInstances = nil;
 }
 
 + (NSDictionary *) allInstances {
-    return _allInstances;
+    return staticAllInstances;
 }
 
 + (void) addInstance:(Tealium *)instance key:(NSString *)key {
@@ -267,12 +286,12 @@ __strong static NSDictionary *_allInstances = nil;
         return;
     }
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[_allInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     mDict[key] = instance;
     
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
 
-    _allInstances = newInstances;
+    staticAllInstances = newInstances;
 }
 
 + (void) removeInstanceWithKey:(NSString *)key {
@@ -281,12 +300,12 @@ __strong static NSDictionary *_allInstances = nil;
         return;
     }
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[_allInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     [mDict removeObjectForKey:key];
     
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
     
-    _allInstances = newInstances;
+    staticAllInstances = newInstances;
     
 }
 
@@ -342,6 +361,8 @@ __strong static NSDictionary *_allInstances = nil;
     
     __block typeof(self) __weak weakSelf = self;
     
+#warning What will handle update in application version check and notification?
+    
     [self setupSettingsWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
         
         if (success) {
@@ -359,6 +380,37 @@ __strong static NSDictionary *_allInstances = nil;
         if (setupCompletion) setupCompletion(success, error);
         
     }];
+    
+}
+
+- (void) addModuleData:(NSDictionary *) dictionary {
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:self.moduleData];
+    [mDict addEntriesFromDictionary:dictionary];
+    
+    NSDictionary *newModuleData = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+        weakSelf.moduleData = newModuleData;
+    }];
+    
+}
+
+- (void) removeModuleDataForKey:(NSString *)key {
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[self.moduleData copy]];
+    
+    if (![[mDict allKeys] containsObject:key]){
+        return;
+    }
+    
+    [mDict removeObjectForKey:key];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    self.moduleData = dict;
     
 }
 
@@ -414,6 +466,16 @@ __strong static NSDictionary *_allInstances = nil;
         }
     }
     
+    if ([self.settings crashTrackingEnabled]) {
+        [TEALExceptionHandler enable];
+#warning Check and process prior crash
+        
+    }
+    
+}
+
+- (void) disableModules {
+    
 }
 
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
@@ -427,13 +489,7 @@ __strong static NSDictionary *_allInstances = nil;
 
     [self.logger logVerbose:@"Current View Controller is now: %@", viewController];
     
-    self.iVarActiveViewController = viewController;
-}
-
-- (UIViewController *) activeViewController {
-    
-    return self.iVarActiveViewController;
-    
+    self.privateActiveViewController = viewController;
 }
 
 - (void) sendEvent:(TEALDispatchType)eventType withData:(NSDictionary *)customData title:(NSString *)title{
@@ -466,17 +522,14 @@ __strong static NSDictionary *_allInstances = nil;
                           //        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
                           //    }];
                           
-                          
+                          [weakSelf.dispatchManager archiveDispatchQueue];
+
                       }];
-    
-#warning Shouldn't this go within completion block?
-    [self.dispatchManager archiveDispatchQueue];
 
 }
 
 - (void) logDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status error:(NSError *)error{
     if ([self.settings logLevel] >= TEALLogLevelVerbose) {
-        
         
         NSString *statusString = nil;
         
@@ -627,34 +680,9 @@ __strong static NSDictionary *_allInstances = nil;
     
 }
 
-- (void) addModuleData:(NSDictionary *) dictionary {
+- (UIViewController *) activeViewController {
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:self.moduleData];
-    [mDict addEntriesFromDictionary:dictionary];
-    
-    NSDictionary *newModuleData = [NSDictionary dictionaryWithDictionary:mDict];
-    
-    __block typeof(self) __weak weakSelf = self;
-
-    [self.operationManager addOperationWithBlock:^{
-        weakSelf.moduleData = newModuleData;
-    }];
-    
-}
-
-- (void) removeModuleDataForKey:(NSString *)key {
-    
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[self.moduleData copy]];
-    
-    if (![[mDict allKeys] containsObject:key]){
-        return;
-    }
-    
-    [mDict removeObjectForKey:key];
-    
-    NSDictionary *dict = [NSDictionary dictionaryWithDictionary:mDict];
-    
-   self.moduleData = dict;
+    return self.privateActiveViewController;
     
 }
 
@@ -693,12 +721,6 @@ __strong static NSDictionary *_allInstances = nil;
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock {
-
-    // Add transmission type data
-    NSDictionary *datasources = [self.dataSources transmissionTimeDatasourcesForEventType:dispatch.dispatchType];
-
-    [self addDatasources:datasources
-              toDispatch:dispatch];
     
     
     // Prep

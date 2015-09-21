@@ -37,9 +37,9 @@ void (*oSendEvent)(id, SEL, UIEvent *e);
 }
 
 // duplicate suppression
-static id     _lastEvent;
-static NSDate *_lastEventTS;
-static int _maxScans = 6;
+//static id     _lastEvent;
+//static NSDate *_lastEventTS;
+static int staticMaxScans = 6;
 
 static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     
@@ -156,7 +156,7 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
     
     if (parent &&
         ![parent isKindOfClass:[UITableViewCell class]] &&
-        scanCount < _maxScans){
+        scanCount < staticMaxScans){
         
         scanCount++;
         return [self teal_viewToAutoTrack:parent scanCount:scanCount];

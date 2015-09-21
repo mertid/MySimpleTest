@@ -17,6 +17,8 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
 
 #pragma mark - PUBLIC INSTANCE
 
+#warning UPDATE to allow autotracking enable / disable on a per instance basis
+
 - (void) teal_setAutotrackingEnabled:(BOOL)enabled
 {
     NSNumber *enableOnNumber = @(enabled);

@@ -12,6 +12,8 @@
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
+- (void) loadArchive;
+
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key;
 
 - (void) setObject:(id<NSCopying, NSSecureCoding>)object

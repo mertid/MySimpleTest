@@ -45,7 +45,7 @@
 //    [[Tealium sharedInstance] setDelegate:self];
     
 //    [[Tealium instanceForKey:@"1"] addPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
-    [[Tealium instanceForKey:@"1"] removePersistentDataSourceForKeys:@[@"somePersistKey"]];
+    [[Tealium instanceForKey:@"1"] removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
     
     
     

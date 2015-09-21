@@ -21,13 +21,7 @@
 
 - (NSString *) publishURLStringCopy;
 
-- (TEALDispatchNetworkServiceStatus) currentStatus;
-
-- (void) setCurrentStatus:(TEALDispatchNetworkServiceStatus) status;
-
-- (void) setRemoteCommandsEnabled:(BOOL)enable;
-
-- (void) setLogger:(TEALLogger *)logger;
+- (void) setStatus:(TEALDispatchNetworkServiceStatus) status;
 
 - (TEALRemoteCommandManager *) remoteCommandManager;
 

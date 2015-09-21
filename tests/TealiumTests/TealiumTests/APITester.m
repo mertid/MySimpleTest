@@ -206,9 +206,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showView"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(teal_setAutotrackingEnabled:)]){
-            [segue.destinationViewController teal_setAutotrackingEnabled:self.autotrackingViewEnabled];
-        }
+        
+        [[Tealium instanceForKey:@"1"] setAutotrackingForObject:segue.destinationViewController enable:self.autotrackingViewEnabled];
+            
     }
     
 }

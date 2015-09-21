@@ -14,6 +14,7 @@
 @interface TEALConfiguration (Private)
 
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
+@property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
 
 @end
 
