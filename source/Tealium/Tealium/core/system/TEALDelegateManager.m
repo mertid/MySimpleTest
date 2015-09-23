@@ -13,6 +13,7 @@
 @property (weak, nonatomic) id<TealiumDelegate> delegate;
 @property (nonatomic) BOOL hasDidFinishLoadingRemoteSettings;
 @property (nonatomic) BOOL hasShouldSendDispatch;
+@property (nonatomic) BOOL hasShouldQueueDispatch;
 @property (nonatomic) BOOL hasDidSendDispatch;
 @property (nonatomic) BOOL hasDidQueueDispatch;
 
@@ -27,6 +28,7 @@
 
     self.hasDidFinishLoadingRemoteSettings = [self.delegate respondsToSelector:@selector(tealiumDidFinishLoadingRemoteSettings:)];
     self.hasShouldSendDispatch = [self.delegate respondsToSelector:@selector(tealium:shouldSendDispatch:)];
+    self.hasShouldQueueDispatch = [self.delegate respondsToSelector:@selector(tealium:shouldQueueDispatch:)];
     self.hasDidSendDispatch = [self.delegate respondsToSelector:@selector(tealium:didSendDispatch:)];
     self.hasDidQueueDispatch = [self.delegate respondsToSelector:@selector(tealium:didQueueDispatch:)];
 }
@@ -46,6 +48,14 @@
         return [self.delegate tealium:tealium shouldSendDispatch:dispatch];
     }
     return YES;
+}
+
+- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
+    
+    if (self.hasShouldQueueDispatch) {
+        return [self.delegate tealium:tealium shouldQueueDispatch:dispatch];
+    }
+    return NO;
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {

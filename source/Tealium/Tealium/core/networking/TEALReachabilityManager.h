@@ -1,4 +1,4 @@
-/*
+/**
  Copyright (c) 2011, Tony Million.
  All rights reserved.
  
@@ -25,7 +25,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
  */
 
- /* 
+ /** 
 
   TEALReachabilityManager is a modification of the original code from: https://github.com/tonymillion/Reachability
 

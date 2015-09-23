@@ -13,6 +13,7 @@
 
 @property (nonatomic) TEALLogLevel logLevel;
 @property (nonatomic, strong) NSString *messageHeader;
+
 @end
 
 @implementation TEALLogger
@@ -32,6 +33,20 @@
         _messageHeader = [TEALLogger messageHeaderFromConfiguration:configuration];
     }
     return self;
+}
+
+- (void) logWarning:(NSString *) format, ... {
+    
+    NSString *message = nil;
+    va_list args;
+    va_start(args, format);
+    message = [[NSString alloc] initWithFormat:format
+                                     arguments:args];
+    va_end(args);
+    
+    NSString *warning = NSLocalizedString(@"!!! WARNING !!!", @"Console log string prefix for warning messages.");
+    NSString *finalMessage = [NSString stringWithFormat:@"%@: %@", warning, message];
+    [self logVerbosity:TEALLogLevelWarningsOnly message:finalMessage];
 }
 
 - (void) logNormal:(NSString *) format, ... {
@@ -59,10 +74,15 @@
     [self logVerbosity:TEALLogLevelVerbose message:message];
 }
 
-- (void) logVerbosity:(TEALLogLevel)logLeval message:(NSString *) message{
+- (void) logVerbosity:(TEALLogLevel)logLevel message:(NSString *) message{
+    
+#warning Log warning levels still displaying logs for Normal and Verbose
     
     BOOL shouldLog = NO;
-    switch (self.logLevel) {
+    switch (logLevel) {
+        case TEALLogLevelWarningsOnly:
+            shouldLog = (self.logLevel >= TEALLogLevelWarningsOnly);
+            break;
         case TEALLogLevelNormal:
             shouldLog = (self.logLevel >= TEALLogLevelNormal);
             break;
@@ -73,7 +93,7 @@
             break;
     }
     
-    if (shouldLog && message) {
+    if (shouldLog == YES && message) {
     
         NSLog(@"%@%@", self.messageHeader, message);
     }

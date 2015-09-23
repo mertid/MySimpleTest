@@ -221,7 +221,7 @@
 
 - (void) executeHTTPCommandWithResponse:(TEALRemoteCommandResponse*)oResponse completionBlock:(TEALRemoteCommandResponseBlock)oResponseBlock{
     
-    /* TEMPLATE OF RWEMOTE API COMMAND DICT
+    /* TEMPLATE OF REMOTE API COMMAND DICT
      
      commandId:{
      authenticate:{

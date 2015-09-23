@@ -30,7 +30,7 @@
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
     
-    configuration.logLevel = TEALLogLevelVerbose;
+    configuration.logLevel = TEALLogLevelWarningsOnly;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled = YES;
@@ -97,7 +97,7 @@
 
 - (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
 
-    /*
+    /**
      *  Uncomment to test delegate suppression of dispatches
      */
     
@@ -115,6 +115,10 @@
     return YES;
      
 }
+
+//- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
+//    return YES;
+//}
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
 //    NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);

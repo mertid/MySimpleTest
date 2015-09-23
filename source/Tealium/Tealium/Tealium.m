@@ -150,7 +150,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
     NSDictionary *universalDataSources = [self universalTrackDataSources];
-    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
+    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeView title:title];
     
     NSMutableArray *dataToComposite = [NSMutableArray array];
     
@@ -214,10 +214,16 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
+    if (![dataSourceKeys isKindOfClass:([NSArray class])]) {
+        [self.logger logWarning:@"Non-array passed into argument of removeVolatileDataSourcesForKey: method."];
+        return;
+        
+    }
     __block typeof(self) __weak weakSelf = self;
+    __block NSArray *keys = [dataSourceKeys copy];
     
     [self.operationManager addOperationWithBlock:^{
-        [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:[dataSourceKeys copy]];
+        [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:keys];
     }];
 }
 
@@ -773,6 +779,13 @@ __strong static NSDictionary *staticAllInstances = nil;
         return;
     }
     
+    // Queue check
+    if ([self.delegateManager tealium:self shouldQueueDispatch:dispatch]) {
+        status = TEALDispatchStatusQueued;
+        if (completionBlock) completionBlock (status, dispatch, nil);
+        return;
+    }
+    
 
     // Pass dispatch to dispatch services
     for ( id<TEALDispatchService> service in [self currentDispatchNetworkServices]) {
@@ -794,6 +807,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) didEnqueueDispatch:(TEALDispatch *)dispatch {
+    
+    [self.delegateManager tealium:self didQueueDispatch:dispatch];
     
 }
 

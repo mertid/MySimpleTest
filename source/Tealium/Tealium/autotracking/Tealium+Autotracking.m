@@ -212,6 +212,8 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
         
+        [self.logger logVerbose:@"Lifecycle data updated: %@", lifecycle];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];

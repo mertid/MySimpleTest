@@ -14,7 +14,7 @@
 
 @interface Tealium (MobileCompanion)
 
-/*
+/**
  
  */
 - (void) revealMobileCompanion;

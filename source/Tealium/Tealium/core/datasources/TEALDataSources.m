@@ -201,22 +201,18 @@ static NSDictionary *staticCompileTimeDataSources;
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
-    
-#warning REPLACE with full timestamps data
         
-    if (title) {
-        switch (eventType) {
-            case TEALDispatchTypeEvent:
-                datasources[TEALDataSourceKey_EventTitle] = title;
-                datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
-                break;
-            case TEALDispatchTypeView:
-                datasources[TEALDataSourceKey_ViewTitle] = title;
-                datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
-                break;
-            default:
-                break;
-        }
+    switch (eventType) {
+        case TEALDispatchTypeEvent:
+            if (title) datasources[TEALDataSourceKey_EventTitle] = title;
+            datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
+            break;
+        case TEALDispatchTypeView:
+            if (title) datasources[TEALDataSourceKey_ViewTitle] = title;
+            datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
+            break;
+        default:
+            break;
     }
     
     NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];

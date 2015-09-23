@@ -22,6 +22,8 @@
     self.title = @"Second View Controller";
     [self teal_setDataSources:@{@"test":@"executeTestCommand"}];
     self.testProperty = @"iVarTestValue";
+    
+    [[Tealium instanceForKey:@"1"] removeVolatileDataSourcesForKeys:@[@"volatileKey"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -45,7 +47,7 @@
 }
 
 
-/*
+/**
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

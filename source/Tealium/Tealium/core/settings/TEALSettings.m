@@ -148,22 +148,34 @@
 }
 
 - (BOOL) autotrackingApplicationInfoEnabled {
+    
+#warning REMOVE these auto NOs for production
+    return NO;
+    
     if (self.publishSettings.disableApplicationInfoAutotracking) return NO;
     return self.configuration.autotrackingApplicationInfoEnabled;
 }
 
 - (BOOL) autotrackingCarrierInfoEnabled {
+    
+    return NO;
+    
     if (self.publishSettings.disableCarrierInfoAutotracking) return NO;
     return self.configuration.autotrackingCarrierInfoEnabled;
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
     
+    return NO;
+    
     if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
+    
+    return NO;
+    
     if (self.publishSettings.disableiVarAutotracking) return NO;
     return self.configuration.autotrackingIvarsEnabled;
 }
@@ -174,6 +186,9 @@
 }
 
 - (BOOL) autotrackingTimestampInfoEnabled {
+    
+    return NO;
+    
     if (self.publishSettings.disableTimestampAutotracking) return NO;
     return self.configuration.autotrackingTimestampInfoEnabled;
 }

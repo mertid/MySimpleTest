@@ -15,6 +15,8 @@
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
+- (void) logWarning:(NSString *) format, ...;
+
 - (void) logNormal:(NSString *) format, ...;
 
 - (void) logVerbose:(NSString *) format, ...;

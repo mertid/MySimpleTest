@@ -17,27 +17,27 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
-@property () TEALPublishSettingsStatus status;
-@property () NSString *url;
-@property () NSUInteger dispatchSize; // batching
-@property () NSUInteger offlineDispatchQueueSize;
-@property () double minutesBetweenRefresh;
-@property () double numberOfDaysDispatchesAreValid;
-@property () BOOL enableLowBatterySuppress;
-@property () BOOL enableSendWifiOnly;
-@property () BOOL enableAudienceStream;
-@property () BOOL enableTagManagement;
+@property (nonatomic) TEALPublishSettingsStatus status;
+@property (nonatomic, strong) NSString *url;
+@property (nonatomic) NSUInteger dispatchSize; // batching
+@property (nonatomic) NSUInteger offlineDispatchQueueSize;
+@property (nonatomic) double minutesBetweenRefresh;
+@property (nonatomic) double numberOfDaysDispatchesAreValid;
+@property (nonatomic) BOOL enableLowBatterySuppress;
+@property (nonatomic) BOOL enableSendWifiOnly;
+@property (nonatomic) BOOL enableAudienceStream;
+@property (nonatomic) BOOL enableTagManagement;
 
-@property () BOOL disableApplicationInfoAutotracking;
-@property () BOOL disableCarrierInfoAutotracking;
-@property () BOOL disableDeviceInfoAutotracking;
-@property () BOOL disableUIEventAutotracking;
-@property () BOOL disableViewAutotracking;
-@property () BOOL disableiVarAutotracking;
-@property () BOOL disableLifecycleAutotracking;
-@property () BOOL disableTimestampAutotracking;
-@property () BOOL disableCrashTracking;
-@property () BOOL disableMobileCompanion;
+@property (nonatomic) BOOL disableApplicationInfoAutotracking;
+@property (nonatomic) BOOL disableCarrierInfoAutotracking;
+@property (nonatomic) BOOL disableDeviceInfoAutotracking;
+@property (nonatomic) BOOL disableUIEventAutotracking;
+@property (nonatomic) BOOL disableViewAutotracking;
+@property (nonatomic) BOOL disableiVarAutotracking;
+@property (nonatomic) BOOL disableLifecycleAutotracking;
+@property (nonatomic) BOOL disableTimestampAutotracking;
+@property (nonatomic) BOOL disableCrashTracking;
+@property (nonatomic) BOOL disableMobileCompanion;
 
 - (instancetype) initWithURLString:(NSString *)url;
 

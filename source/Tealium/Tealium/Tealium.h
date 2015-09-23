@@ -40,14 +40,14 @@
 + (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration;
 
 #pragma mark - Instance Management
-/*
+/**
  *  Returns an instance of the library for the given key, or NIL is such an instance has not been previously initialized.
  *
  *  @param key NSString identifier for the library instance.
  */
 + (instancetype) instanceForKey:(NSString *)key;
 
-/*
+/**
  *  Removes and nils out an instance of the library with the given key.
  *
  *  @param key NSString identifier for the library instance to remove.
@@ -59,11 +59,12 @@
  */
 - (void) disable;
 
-/*
+/**
  */
 - (void) enable;
 
-/*
+/**
+ 
  */
 - (BOOL) isEnabled;
 
@@ -89,14 +90,14 @@
 
 #pragma mark - Data Management
 
-/*
+/**
  *  Copy of all non persistent, UI object and dispatch specific data sources captured by a Tealium library instance at time of call.
  *
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
 - (NSDictionary *) volatileDataSourcesCopy;
 
-/*
+/**
  *  Adds additional data to the temporary data sources dictionary. This command is added to the end of the current Tealium background queue for writing.
  *
  *  @param additionalDataSources New or overwrite data sources to add to the volatile data sources store.  These key values can only be superceded by the custom data sources added to track calls.
@@ -104,23 +105,25 @@
  */
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources;
 
-/*
+/**
+ *  Removes key-value pairs from the library instance's volatile memory
  *
+ *  @param dataSourceKeys An NSArray of string keys to remove
  */
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys;
 
-/*
+/**
  *  Copy of all long term Tealium data source data written to and read from disk, specific to a given library instance.
  *  
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
 - (NSDictionary *) persistentDataSourcesCopy;
 
-/*
+/**
  */
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources;
 
-/*
+/**
  
  */
 - (void) removePersistentDataSourcesForKeys:(NSArray *)dataSourceKeys;

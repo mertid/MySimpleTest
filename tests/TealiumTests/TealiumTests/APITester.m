@@ -28,7 +28,6 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     self.title = @"API Sampler";
     self.autotrackingViewEnabled = YES;
-//    [self.tableView registerClass:[ShowViewTableViewCell class] forCellReuseIdentifier:@"autotrackingSwitchCell"];
     
     [[Tealium instanceForKey:@"1"] addRemoteCommandId:@"testCommand"
                                      description:nil
@@ -36,14 +35,13 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
                                            block:^(TEALRemoteCommandResponse *response) {
                                                
                                                NSLog(@"%s Response Received: %@", __FUNCTION__, response);
+                                               
                                            }];
 
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    NSLog(@"%s VolatileDataSources:%@", __FUNCTION__, [[Tealium instanceForKey:@"1"] volatileDataSourcesCopy]);
 
 }
 

@@ -112,7 +112,6 @@
                 }
                 return;
             } else {
-                
                 NSError *error = [TEALError errorWithCode:TEALRemoteResponseErrorMalformedURL
                                               description:@"Dispatch was unsuccessful"
                                                    reason:[NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload]

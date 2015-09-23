@@ -138,8 +138,6 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 - (UIView *) teal_viewToAutoTrack:(UIView *)view scanCount:(int)scanCount {
 
     NSString *vClass = NSStringFromClass([view class]);
-
-//    NSLog(@"%s view:%@ vClass:%@", __FUNCTION__, view, vClass);
     
     if (![view teal_autotrackingEnabled]){
         return nil;

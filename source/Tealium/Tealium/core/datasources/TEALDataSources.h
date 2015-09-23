@@ -16,19 +16,19 @@
 
 + (NSDictionary *) applicationInfoDataSources;
 
-/*
+/**
  *  Current carrier info if CoreTelephony framework available
  */
 + (NSDictionary *) carrierInfoDataSources;
 
-/*
+/**
  *  Device information
  */
 + (NSDictionary *) deviceInfoDataSources;
 
 + (NSDictionary *) tealiumInfoDataSources;
 
-/*
+/**
  *  Title for object, intended for view track calls
  *
  *  @param obj Any NSObject
@@ -37,35 +37,35 @@
  */
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj;
 
-/*
+/**
  Data Sources that can be processed in the background
  */
 //- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
 
-/*
+/**
  Data Sources that are processed and converted to dictionary data at call time - Main Thread
  */
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 
-/*
+/**
  *
  *
  *  @return NSMutableDictionary of client volatile data sources.
  */
 - (NSMutableDictionary *) clientVolatileDataSources;
 
-/*
+/**
  // TODO Comments
  */
 - (NSDictionary *) persistentDataSourcesCopy;
 
-/*
+/**
  // TODO Comments
  */
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources;
 
 
-/*
+/**
  // TODO Comments
  */
 - (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys;

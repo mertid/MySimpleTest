@@ -19,9 +19,9 @@
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
 @property (nonatomic, strong) TEALLifecycleStore *privateStore;
 
-@property () TEALLifecycleEvents *privateLaunchEvents;
-@property () TEALLifecycleEvents *privateWakeEvents;
-@property () TEALLifecycleEvents *privateSleepEvents;
+@property (nonatomic, strong) TEALLifecycleEvents *privateLaunchEvents;
+@property (nonatomic, strong) TEALLifecycleEvents *privateWakeEvents;
+@property (nonatomic, strong) TEALLifecycleEvents *privateSleepEvents;
 
 @end
 
@@ -199,9 +199,14 @@
     }
 }
 
-//- (NSString *) description {
-//    return [NSString stringWithFormat:@"TEALLifecycle with instanceID: %@", self.instanceID];
-//}
+- (NSString *) description {
+    return [NSString stringWithFormat:@"<%@ with instanceID: %@ launched:\n %@ wakes:\n%@ sleeps:\n%@",
+            NSStringFromClass([self class]),
+            self.instanceID,
+            [self launchEvents],
+            [self wakeEvents],
+            [self sleepEvents]];
+}
 
 - (void) dealloc {
     

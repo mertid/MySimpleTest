@@ -12,9 +12,9 @@
 @interface TEALConfiguration()
 
 // No public API for this settings at this time
-@property () BOOL autotrackingApplicationInfoEnabled;
-@property () BOOL autotrackingCarrierInfoEnabled;
-@property () BOOL autotrackingTimestampInfoEnabled;
+@property (nonatomic) BOOL autotrackingApplicationInfoEnabled;
+@property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
+@property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
 
 @end
 

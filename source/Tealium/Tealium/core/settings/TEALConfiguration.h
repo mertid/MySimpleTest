@@ -33,6 +33,10 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
      */
     TEALLogLevelNone = 1,
     /**
+     *  Only errors and improper API use reported
+     */
+    TEALLogLevelWarningsOnly,
+    /**
      *  Normal is minimal informative feedback of events processed and requested task status
      */
     TEALLogLevelNormal,
@@ -49,7 +53,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  */
 @interface TEALConfiguration : NSObject
 
-/*
+/**
  *  The instance id assigned to the library instance associated with this configuration
  *
  *  @param instanceKey NSString identifier

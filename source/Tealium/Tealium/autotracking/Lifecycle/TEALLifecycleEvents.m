@@ -10,11 +10,11 @@
 
 @interface TEALLifecycleEvents()
 
-@property () NSDate *privateFirstEventDate;
-@property () NSDate *privateLastEventDate;
-@property () NSDate *privateLastUpdateDate;
-@property () double privateCurrentCount;
-@property () double privateTotalCount;
+@property (nonatomic, strong) NSDate *privateFirstEventDate;
+@property (nonatomic, strong) NSDate *privateLastEventDate;
+@property (nonatomic, strong) NSDate *privateLastUpdateDate;
+@property (nonatomic) double privateCurrentCount;
+@property (nonatomic) double privateTotalCount;
 
 @end
 
@@ -101,4 +101,12 @@
     
 }
 
+- (NSString *) description {
+    return [NSString stringWithFormat:@"<%@ lastEventDate:%@ lastAppVersionUpdateDate:%@ currentCount:%@ totalCount:%@>",
+            NSStringFromClass([self class]),
+            [self lastEventDate],
+            [self.privateLastUpdateDate copy],
+            [self currentCount],
+            [self totalCount]];
+}
 @end

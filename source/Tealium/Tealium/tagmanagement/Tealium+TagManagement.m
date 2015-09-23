@@ -69,9 +69,7 @@
 - (void) enableRemoteCommands {
     
     TEALTagDispatchService *service = [self currentTagDispatchService];
-    
-        NSLog(@"%s service:%@", __FUNCTION__, service);
-    
+        
     [service.remoteCommandManager enable];
     
     [self.logger logVerbose:@"Remote Commands enabled."];
