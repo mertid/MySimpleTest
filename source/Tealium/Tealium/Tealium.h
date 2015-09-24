@@ -26,7 +26,6 @@
 @interface Tealium : NSObject
 
 @property (readonly, nonatomic) TEALSettings *settings;
-@property (weak, nonatomic) id<TealiumDelegate> delegate;
 
 # pragma mark - Setup / Configuration
 
@@ -64,6 +63,10 @@
 - (void) enable;
 
 /**
+ */
+- (void) setDelegate:(id<TealiumDelegate> _Nullable)delegate;
+
+/**
  
  */
 - (BOOL) isEnabled;
@@ -76,7 +79,7 @@
  *  @param title String title of event
  *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
  */
-- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
+- (void) trackEventWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
 
 /**
  *  Sends a view to Collect.  Views are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
@@ -85,7 +88,7 @@
  *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
  */
 
-- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)customDataSources;
+- (void) trackViewWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
 
 
 #pragma mark - Data Management

@@ -140,8 +140,7 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
                         @{NSLocalizedString(@"No View data currently available.", @""):@""}
                         ];
         
-    }
-    else {
+    } else {
         // Object Data
         NSMutableDictionary *objectDataSources = [NSMutableDictionary dictionary];
         
@@ -176,9 +175,8 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
                         @{NSLocalizedString(@"No Element data currently available.", @""):[NSNull null]}
                         ];
         
-    }
-    else {
-        
+    } else {
+#warning FINISH
     }
     
     

@@ -44,7 +44,9 @@
     
 #warning THIS check does not actually work
     
-    if (self.hasDidSendDispatch) {
+    if (self.hasShouldSendDispatch) {
+//    if ([self.delegate respondsToSelector:@selector(tealium:shouldSendDispatch:)]){
+            NSLog(@"%s ERROR in hasDiDSendDispatch check", __FUNCTION__);
         return [self.delegate tealium:tealium shouldSendDispatch:dispatch];
     }
     return YES;

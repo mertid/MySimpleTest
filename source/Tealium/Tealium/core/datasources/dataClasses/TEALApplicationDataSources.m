@@ -11,6 +11,9 @@
 
 @implementation TEALApplicationDataSources
 
+
+#pragma mark - PUBLIC
+
 + (NSDictionary *) dataSources {
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
@@ -25,6 +28,14 @@
     
     return [NSDictionary dictionaryWithDictionary:dataSources];
 }
+
++ (NSString *) appVersion {
+    
+    return [TEALApplicationDataSources bundleVersion];
+    
+}
+
+#pragma mark - PRIVATE HELPERS
 
 + (NSString *) applicationName {
     

@@ -53,8 +53,7 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
     
     if ([self isKindOfClass:([UIViewController class])]) {
         type = TEALDispatchTypeView;
-    }
-    else {
+    } else {
         type = TEALDispatchTypeEvent;
     }
     

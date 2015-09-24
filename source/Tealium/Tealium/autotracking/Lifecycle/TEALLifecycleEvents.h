@@ -8,13 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TEALLifecycleEvents : NSObject
+@interface TEALLifecycleEvents : NSObject <NSCoding, NSCopying, NSSecureCoding>
 
-- (void) incrementCountNow;
-- (void) startNewCountNow;
-- (NSDate *) lastEventDate;
-- (NSDate *) lastNewCountRecorded;
-- (NSNumber *) currentCount;
-- (NSNumber *) totalCount;
+- (void) addEvent;
+- (void) setEvents:(NSDictionary *)newEvents;
+- (NSDictionary *) allEvents;
 
 @end

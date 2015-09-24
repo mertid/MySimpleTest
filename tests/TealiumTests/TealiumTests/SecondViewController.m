@@ -31,6 +31,8 @@
     
     [[Tealium instanceForKey:@"1"] setAutotrackingForObject:self enable:YES];
     
+    [NSException raise:@"testException" format:@"exception data blah blah"];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

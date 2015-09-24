@@ -120,8 +120,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     if ([profileRaw isKindOfClass:([TEALVisitorProfile class])]){
         profile = profileRaw;
-    }
-    else {
+    } else {
         profile = [[TEALVisitorProfile alloc] initWithVisitorID:self.visitorIDCopy];
         objc_setAssociatedObject(self, TEALKVOAutotrackCollectProfile, profile, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -165,8 +164,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     id profileStoreRaw = objc_getAssociatedObject(self, TEALKVOAutotrackCollectProfileStore);
     if ([profileStoreRaw isKindOfClass:([TEALVisitorProfileStore class])]){
         profileStore = profileStoreRaw;
-    }
-    else {
+    } else {
         profileStore = [[TEALVisitorProfileStore alloc] initWithVisitorID:self.settings.visitorIDCopy profileURL:self.settings.profileURL profileDefinitionURL:self.settings.profileDefinitionsURL urlSessionManager:self.urlSessionManager];
         objc_setAssociatedObject(self, TEALKVOAutotrackCollectProfileStore, profileStore, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }

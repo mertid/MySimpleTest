@@ -15,6 +15,7 @@
 
 - (void) enableAudienceStream;
 - (void) enableTagManagement;
+- (void) enableAutotrackingCrashes;
 - (void) enableAutotrackingLifecycle;
 - (void) enableAutotrackingUIEvents;
 - (void) enableAutotrackingViews;
@@ -22,6 +23,7 @@
 - (void) enableRemoteCommands;
 
 - (void) disableAutotrackingLifecycle;
+- (void) disableAutotrackingCrashes;
 
 #warning IMPLEMENT remaining in respective modules
 - (void) disableAutotrackingUIEvents;

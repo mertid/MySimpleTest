@@ -30,6 +30,10 @@
 
 @implementation TEALVisitorProfile
 
++ (BOOL) supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype) initWithVisitorID:(NSString *)visitorID {
     
     self = [self init];
@@ -48,14 +52,14 @@
     self = [self initWithVisitorID:visitorID];
     
     if (self) {
-        _audiences  = [aDecoder decodeObjectForKey:@"audiences"];
-        _badges     = [aDecoder decodeObjectForKey:@"badges"];
-        _dates      = [aDecoder decodeObjectForKey:@"dates"];
-        _flags      = [aDecoder decodeObjectForKey:@"flags"];
-        _metrics    = [aDecoder decodeObjectForKey:@"metrics"];
-        _properties = [aDecoder decodeObjectForKey:@"properties"];
+        _audiences  = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"audiences"];
+        _badges     = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"badges"];
+        _dates      = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"dates"];
+        _flags      = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"flags"];
+        _metrics    = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"metrics"];
+        _properties = [aDecoder decodeObjectOfClass:[NSArray class] forKey:@"properties"];
         
-        _currentVisit = [aDecoder decodeObjectForKey:@"currentVisit"];
+        _currentVisit = [aDecoder decodeObjectOfClass:[TEALVisitorProfileCurrentVisit class] forKey:@"currentVisit"];
     }
     
     return self;

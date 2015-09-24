@@ -140,33 +140,23 @@ static NSDictionary *staticCompileTimeDataSources;
         
         title = [obj performSelector:@selector(title)];
         
-    }
-    
-    else if ([obj respondsToSelector:@selector(currentTitle)]) {
+    } else if ([obj respondsToSelector:@selector(currentTitle)]) {
         
         title = [obj performSelector:@selector(currentTitle)];
         
-    }
-    
-    else if ([obj respondsToSelector:@selector(possibleTitles)]) {
+    } else if ([obj respondsToSelector:@selector(possibleTitles)]) {
         
         NSSet *titles = [obj performSelector:@selector(possibleTitles)];
         title = [titles anyObject];
         
-    }
-    
-    else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
+    } else if ([obj respondsToSelector:@selector(restorationIdentifier)]) {
         
         title = [obj performSelector:@selector(restorationIdentifier)];
         
-    }
-    
-    else if ([obj respondsToSelector:@selector(nibName)]) {
+    } else if ([obj respondsToSelector:@selector(nibName)]) {
         
         title = [obj performSelector:@selector(nibName)];
-    }
-    
-    else {
+    } else {
         title = classType;
     }
     

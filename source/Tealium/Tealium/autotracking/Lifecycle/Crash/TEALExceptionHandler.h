@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TEALBlocks.h"
 
 extern void TEALException(NSException *exception);
 
 @interface TEALExceptionHandler : NSObject
 
-+ (void) enable;
++ (void) enableWithProcessingBlock:(TEALDictionaryCompletionBlock)block;
 + (void) disable;
 
 #warning Add exception retrieval methods

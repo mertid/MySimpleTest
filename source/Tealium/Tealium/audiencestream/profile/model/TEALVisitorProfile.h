@@ -16,7 +16,7 @@
  *  This is meant as a convenience to interact with a profile in a native, typed, safe manner.
  *  To access the "raw" profile as was deserialized from the returned JSON use the rawProfile method.
  */
-@interface TEALVisitorProfile : NSObject <NSCoding, NSCopying>
+@interface TEALVisitorProfile : NSObject <NSCoding, NSCopying, NSSecureCoding>
 
 /**
  * Create instance with vistorID

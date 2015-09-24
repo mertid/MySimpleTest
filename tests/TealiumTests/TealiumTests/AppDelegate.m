@@ -30,12 +30,12 @@
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
     
-    configuration.logLevel = TEALLogLevelWarningsOnly;
+    configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingIvarsEnabled = NO;
-    configuration.autotrackingLifecycleEnabled = YES;
+    configuration.autotrackingLifecycleEnabled = NO;
     configuration.autotrackingUIEventsEnabled = YES;
-    configuration.autotrackingViewsEnabled = YES;
+    configuration.autotrackingViewsEnabled = NO;
     configuration.mobileCompanionEnabled = NO;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
@@ -95,7 +95,7 @@
 
 #pragma mark - TEALIUM DELEGATE
 
-- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
+//- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
 
     /**
      *  Uncomment to test delegate suppression of dispatches
@@ -111,10 +111,9 @@
 //    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
 //        return NO;
 //    }
-    
-    return YES;
-     
-}
+//    return YES;
+//     
+//}
 
 //- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
 //    return YES;

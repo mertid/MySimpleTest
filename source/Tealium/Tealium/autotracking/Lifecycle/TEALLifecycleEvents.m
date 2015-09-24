@@ -7,85 +7,81 @@
 //
 
 #import "TEALLifecycleEvents.h"
+#import "TEALApplicationDataSources.h"
 
 @interface TEALLifecycleEvents()
 
-@property (nonatomic, strong) NSDate *privateFirstEventDate;
-@property (nonatomic, strong) NSDate *privateLastEventDate;
-@property (nonatomic, strong) NSDate *privateLastUpdateDate;
-@property (nonatomic) double privateCurrentCount;
-@property (nonatomic) double privateTotalCount;
+/*
+ * @{appVersion:arrayOfTimestampsAsNSNumbersOfDoubles}
+ */
+@property (nonatomic, strong) NSDictionary *privateEvents;
 
 @end
 
 @implementation TEALLifecycleEvents
 
-#pragma mark - PUBLIC INSTANCE
+#pragma mark - PUBLIC
 
-- (void) incrementCountNow {
+- (void) addEvent {
     
-    self.privateCurrentCount++;
-    self.privateTotalCount++;
+    NSString *key = [TEALApplicationDataSources appVersion];
     
-    NSDate *now = [NSDate date];
-    self.privateLastEventDate = now;
-    if (!self.privateFirstEventDate){
-        self.privateFirstEventDate = now;
-    }
-}
-
-- (void) startNewCountNow {
+    NSArray *versionEvents = self.privateEvents[key];
     
-    self.privateCurrentCount = 1;
-    self.privateTotalCount++;
-    NSDate *now = [NSDate date];
-    self.privateLastEventDate = now;
-    self.privateLastUpdateDate = now;
-}
-
-- (NSDate *) lastEventDate {
+    NSMutableDictionary *newEvents = [NSMutableDictionary dictionaryWithDictionary:self.privateEvents];
     
-    return [self.privateLastEventDate copy];
-}
-
-
-- (NSDate *) lastNewCountRecorded {
+    NSMutableArray *newVersionEvents = [NSMutableArray arrayWithArray:versionEvents];
     
-    return [self.privateLastEventDate copy];
-}
-
-- (NSNumber *) currentCount {
-    
-    return @(self.privateCurrentCount);
-    
-}
-
-- (NSNumber *) totalCount {
-    
-    return @(self.privateTotalCount);
-}
-
-#pragma mark - PRIVATE INSTANCE
-
-- (instancetype) init {
-    self = [super init];
-    if (self) {
+    @synchronized(self) {
         
-        _privateCurrentCount = 0;
-        _privateTotalCount = 0;
+        double now = [[NSDate date] timeIntervalSince1970];
+        
+        [newVersionEvents addObject:@(now)];
+        
+        newEvents[key] = [NSArray arrayWithArray:newVersionEvents];
+        
+        self.privateEvents = [NSDictionary dictionaryWithDictionary:newEvents];
     }
-    return self;
+    
+}
+
+- (void) setEvents:(NSDictionary *)newEvents {
+
+    @synchronized(self) {
+        
+        self.privateEvents = [newEvents copy];
+        
+    }
+
+    
+}
+
+- (NSDictionary *) allEvents {
+    
+    return [self.privateEvents copy];
+    
+}
+
+#pragma mark - PRIVATE
+
++ (BOOL) supportsSecureCoding {
+    return YES;
+}
+
+- (instancetype) copyWithZone:(NSZone *)zone {
+    TEALLifecycleEvents *newEvents = [[self class] allocWithZone:zone];
+    
+    newEvents->_privateEvents = [_privateEvents copyWithZone:zone];
+    
+    return newEvents;
+    
 }
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     if (self) {
         
-        _privateFirstEventDate = [aDecoder decodeObjectForKey:@"firstEventDate"];
-        _privateLastEventDate = [aDecoder decodeObjectForKey:@"lastEventDate"];
-        _privateLastUpdateDate = [aDecoder decodeObjectForKey:@"lastUpdateDate"];
-        _privateCurrentCount = [aDecoder decodeDoubleForKey:@"currentCount"];
-        _privateTotalCount = [aDecoder decodeDoubleForKey:@"totalCount"];
+        _privateEvents = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:@"allEvents"];
         
     }
     return self;
@@ -93,20 +89,15 @@
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
     
-    [aCoder encodeObject:self.privateFirstEventDate forKey:@"firstEventDate"];
-    [aCoder encodeObject:self.privateLastEventDate forKey:@"lastEventDate"];
-    [aCoder encodeObject:self.privateLastUpdateDate forKey:@"lastUpdateDate"];
-    [aCoder encodeDouble:self.privateCurrentCount forKey:@"currentCount"];
-    [aCoder encodeDouble:self.privateTotalCount forKey:@"totalCount"];
+    [aCoder encodeObject:self.privateEvents forKey:@"allEvents"];
     
 }
 
+
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<%@ lastEventDate:%@ lastAppVersionUpdateDate:%@ currentCount:%@ totalCount:%@>",
+    return [NSString stringWithFormat:@"<%@ events:%@>",
             NSStringFromClass([self class]),
-            [self lastEventDate],
-            [self.privateLastUpdateDate copy],
-            [self currentCount],
-            [self totalCount]];
+            [self allEvents]
+            ];
 }
 @end

@@ -34,7 +34,6 @@ extern NSString * const TEALDataSourceKey_DeviceResolution;
 extern NSString * const TEALDataSourceKey_DeviceToken;
 extern NSString * const TEALDataSourceKey_EventName;
 extern NSString * const TEALDataSourceKey_EventTitle;
-extern NSString * const TEALDataSourceKey_ExceptionType;
 extern NSString * const TEALDataSourceKey_ExceptionName;
 extern NSString * const TEALDataSourceKey_ExceptionReason;
 extern NSString * const TEALDataSourceKey_ExceptionTrace;

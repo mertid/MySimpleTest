@@ -34,7 +34,6 @@ NSString * const TEALDataSourceKey_DeviceResolution     = @"device_resolution";
 NSString * const TEALDataSourceKey_DeviceToken          = @"device_push_token";
 NSString * const TEALDataSourceKey_EventName            = @"event_name";
 NSString * const TEALDataSourceKey_EventTitle           = @"link_id";
-NSString * const TEALDataSourceKey_ExceptionType        = @"exception_type";
 NSString * const TEALDataSourceKey_ExceptionName        = @"exception_name";
 NSString * const TEALDataSourceKey_ExceptionReason      = @"exception_reason";
 NSString * const TEALDataSourceKey_ExceptionTrace       = @"exception_trace";

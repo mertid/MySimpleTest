@@ -171,20 +171,15 @@
         
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
         eventName = TEALDataSourceValue_LifecycleLaunch;
-    }
-    else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
+    } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
         eventName = TEALDataSourceValue_LifecycleSleep;
-    }
-    else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
+    } else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
         eventName = TEALDataSourceValue_LifecycleWake;
-    }
-    else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
+    } else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
         eventName = TEALDataSourceValue_LifecycleSleep;
-    }
-    else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
+    } else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
         eventName = TEALDataSourceValue_LifecycleTerminate;
-    }
-    else {
+    } else {
         eventName = TEALDataSourceValue_Unknown;
     }
 

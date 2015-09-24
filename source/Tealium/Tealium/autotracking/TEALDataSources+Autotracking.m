@@ -216,9 +216,8 @@
         NSString *name = exception.name;
         NSString *reason = exception.reason;
         NSArray *traceArray = exception.callStackSymbols;
-        NSString *trace = [TEALDataSources stringifyExceptionTrace:traceArray];
+        NSString *trace = [NSString stringWithFormat:@"%@", traceArray];
         NSMutableDictionary *eventDict = [NSMutableDictionary dictionary];
-        eventDict[TEALDataSourceKey_ExceptionType] = TEALDataSourceValue_ExceptionCaught;
         
         if (name) eventDict[TEALDataSourceKey_ExceptionName] = name;
         if (reason) eventDict[TEALDataSourceKey_ExceptionReason] = reason;
@@ -407,15 +406,6 @@
         string = [NSString stringWithFormat:@"%1.0f", aStepper.value];
     }
     return string;
-}
-
-#warning MOVE THIS
-+ (NSString*) stringifyExceptionTrace:(NSArray*)callStack{
-    NSMutableString *mString = [NSMutableString string];
-    for (NSString *string in callStack){
-        [mString appendString:string];
-    }
-    return [NSString stringWithString:mString];
 }
 
 + (NSString*) subTitleFor:(id) obj{

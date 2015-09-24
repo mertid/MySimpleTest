@@ -24,6 +24,7 @@
 @property (nonatomic, strong) TEALOperationManager *operationManager;
 @property (nonatomic, strong) TEALSettings *settings;
 @property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, weak) id<TealiumDelegate> delegate;
 
 + (NSDictionary *) allInstances;
 

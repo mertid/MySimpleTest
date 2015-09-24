@@ -13,7 +13,7 @@
 
 #import "TEALVisitorProfileBaseAttribute.h"
 
-@interface TEALVisitorProfilePropertyAttribute : TEALVisitorProfileBaseAttribute <NSCoding, NSCopying>
+@interface TEALVisitorProfilePropertyAttribute : TEALVisitorProfileBaseAttribute <NSCoding, NSCopying, NSSecureCoding>
 
 /**
  *  String value of a given property or trait.

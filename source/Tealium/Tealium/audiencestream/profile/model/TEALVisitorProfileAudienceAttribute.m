@@ -17,6 +17,12 @@
 
 @implementation TEALVisitorProfileAudienceAttribute
 
++ (BOOL) supportsSecureCoding {
+
+    return YES;
+
+}
+
 - (instancetype) init {
     
     self = [super initWithType:TEALVisitorProfileAttributeTypeAudience];
@@ -40,7 +46,7 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        _name = [aDecoder decodeObjectForKey:@"name"];
+        _name = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"name"];
     }
     
     return self;

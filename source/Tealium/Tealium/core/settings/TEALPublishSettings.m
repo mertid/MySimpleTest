@@ -225,7 +225,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     
     if (self) {
         
-        _url                            = [aDecoder decodeObjectForKey:TEALPublishSettingKeyUrl];
+        _url                            = [aDecoder decodeObjectOfClass:[NSString class] forKey:TEALPublishSettingKeyUrl];
         _minutesBetweenRefresh          = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyMinutesBetweenRefresh];
         _numberOfDaysDispatchesAreValid = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyDispatchExpiration];
         _dispatchSize                   = [aDecoder decodeIntegerForKey:@"dispatchSize"];

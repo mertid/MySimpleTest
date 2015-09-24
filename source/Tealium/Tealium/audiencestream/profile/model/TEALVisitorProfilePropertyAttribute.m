@@ -17,6 +17,12 @@
 
 @implementation TEALVisitorProfilePropertyAttribute
 
++ (BOOL) supportsSecureCoding {
+
+    return YES;
+
+}
+
 - (instancetype) init {
     
     self = [super initWithType:TEALVisitorProfileAttributeTypeProperty];
@@ -40,7 +46,7 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        _value = [aDecoder decodeObjectForKey:@"value"];
+        _value = [aDecoder decodeObjectOfClass:[NSString class] forKey:@"value"];
     }
     
     return self;

@@ -315,11 +315,9 @@
     
     if (!username || [username isEqualToString:@""]){
         //        TEALIUMLOG(@"Remote API call %@ - username key found but missing value.", urlString);
-    }
-    else if (!password || [password isEqualToString:@""]){
+    } else if (!password || [password isEqualToString:@""]){
         //        TEALIUMLOG(@"Remote API Call %@ - password key found but missing value.", urlString);
-    }
-    else {
+    } else {
         NSString *httpPrefix = [urlString substringToIndex:6];
         NSString *httpsPrefix = [urlString substringToIndex:7];
         NSString *urlStringstripped;

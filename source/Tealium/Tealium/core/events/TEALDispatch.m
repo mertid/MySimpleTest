@@ -51,7 +51,7 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
     
     if (self) {
         _dispatchType  = [aDecoder decodeIntegerForKey:@"dispatchType"];
-        _payload    = [aDecoder decodeObjectForKey:@"payload"];
+        _payload    = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:@"payload"];
         _timestamp  = [aDecoder decodeDoubleForKey:@"timestamp"];
         _queued     = [aDecoder decodeBoolForKey:@"queued"];
     }

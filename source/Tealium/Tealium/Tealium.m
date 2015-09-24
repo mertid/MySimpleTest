@@ -39,7 +39,8 @@
 @property (nonatomic, strong) TEALDelegateManager *delegateManager;
 @property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALSettings *settings;
-@property (nonatomic, weak)   id<TEALModulesDelegate> modulesDelegate;
+@property (nonatomic, weak) id<TealiumDelegate> delegate;
+@property (nonatomic, weak) id<TEALModulesDelegate> modulesDelegate;
 @property (nonatomic, weak) UIViewController *privateActiveViewController;
 
 @property (nonatomic, strong) NSDictionary *moduleData;
@@ -91,15 +92,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC INSTANCE METHODS
 
-- (void) setDelegate:(id<TealiumDelegate>)delegate {
-
-    @synchronized(self){
-        
-        [self.delegateManager updateWithDelegate:delegate];
-    }
-    
-}
-
 - (id<TealiumDelegate>) delegate {
     @synchronized(self){
         return self.delegateManager.delegate;
@@ -121,6 +113,16 @@ __strong static NSDictionary *staticAllInstances = nil;
         self.enabled = YES;
     }
 }
+
+- (void) setDelegate:(id<TealiumDelegate> _Nullable)delegate {
+    
+    @synchronized(self){
+        
+        [self.delegateManager updateWithDelegate:delegate];
+    }
+    
+}
+
 
 - (BOOL) isEnabled {
     return self.enabled? YES: NO;
@@ -483,14 +485,16 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     if ([self.settings crashTrackingEnabled]) {
-        [TEALExceptionHandler enable];
-#warning Check and process prior crash
-        
+        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
+            [self.modulesDelegate enableAutotrackingCrashes];
+        }
     }
     
 }
 
 - (void) disableModules {
+    
+#warning IMPLEMENT
     
 }
 
@@ -674,8 +678,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         array = [[NSArray alloc] init];
         
-    }
-    else {
+    } else {
         array = self.dispatchNetworkServices;
     }
     

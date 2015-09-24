@@ -336,8 +336,7 @@
     for (UIButton *tab in [self tabButtons]) {
         if (tab != button) {
             [tab setBackgroundColor:[UIColor teal_liteGrey]];
-        }
-        else {
+        } else {
             [tab setBackgroundColor:[UIColor teal_blue]];
         }
     }

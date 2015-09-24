@@ -12,4 +12,6 @@
 
 + (NSDictionary *) dataSources;
 
++ (NSString *) appVersion;
+
 @end

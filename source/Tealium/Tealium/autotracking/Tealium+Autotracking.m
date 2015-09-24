@@ -11,6 +11,7 @@
 #import "Tealium+Autotracking.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALDataSources+Autotracking.h"
+#import "TEALExceptionHandler.h"
 #import "TEALLifecycle.h"
 #import "TEALSystemHelpers.h"
 #import "TEALViewScanner.h"
@@ -136,6 +137,18 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 #pragma mark - PRIVATE INSTANCE
 
+- (void) enableAutotrackingCrashes {
+    
+    __block typeof(self) __weak weakSelf = self;
+
+    [TEALExceptionHandler enableWithProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
+
+        [weakSelf trackEventWithTitle:nil dataSources:dataDictionary];
+        
+    }];
+    
+}
+
 - (void) enableAutotrackingLifecycle {
     
     TEALLifecycle *lifecycle = [self lifecycleInstance];
@@ -170,6 +183,12 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     }];
     
     [[TEALViewScanner rootWindowController] teal_viewDidAppearCallOnly];
+    
+}
+
+- (void) disableAutotrackingCrashes {
+    
+    [TEALExceptionHandler disable];
     
 }
 

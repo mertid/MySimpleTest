@@ -13,9 +13,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 @interface TEALLifecycleStore()
 
 @property (nonatomic, strong) dispatch_queue_t queue;
-
 @property (nonatomic, strong) NSMutableDictionary *lifecycleEvents;
-
 @property (nonatomic, strong) NSString *privateInstanceID;
 
 @end

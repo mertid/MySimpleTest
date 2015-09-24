@@ -201,9 +201,7 @@
                                                reason:NSLocalizedString(@"Dispatch payload empty.", @"")
                                            suggestion:NSLocalizedString(@"At least one key-value pair of data most be present in payload to dispatch.", @"")];
         }
-    }
-    
-    else if (![NSJSONSerialization isValidJSONObject:dispatchData]) {
+    } else if (![NSJSONSerialization isValidJSONObject:dispatchData]) {
         if (completion) {
 
             error = [TEALError errorWithCode:400
@@ -212,9 +210,7 @@
                                            suggestion:NSLocalizedString(@"Make sure all custom values passed to library are JSON serializable.", @"")];
         }
         
-    }
-    
-    else {
+    } else {
         
         NSString *trackType = dispatchData[TEALDataSourceKey_CallType];
         

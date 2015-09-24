@@ -10,7 +10,7 @@
 
 #import "TEALVisitorProfileBaseAttribute.h"
 
-@interface TEALVisitorProfileAudienceAttribute : TEALVisitorProfileBaseAttribute <NSCoding, NSCopying>
+@interface TEALVisitorProfileAudienceAttribute : TEALVisitorProfileBaseAttribute <NSCoding, NSCopying, NSSecureCoding>
 
 /**
  *  Name of the Audience, this is a display name, all attributes are refenerenced by their unique attributeID
