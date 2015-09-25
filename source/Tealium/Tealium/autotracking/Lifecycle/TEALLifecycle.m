@@ -85,6 +85,8 @@
 
 - (NSDictionary *)currentLifecycleData {
     
+//    NSString *launchCount
+    
 #warning IMPLEMENT
     return nil;
     
@@ -182,7 +184,7 @@
     } else {
         eventName = TEALDataSourceValue_Unknown;
     }
-
+    
 #warning COMPLETE with additional lifeycycle data
     
     NSDictionary *lifecycleData = @{TEALDataSourceKey_LifecycleType: eventName};
@@ -210,7 +212,6 @@
 }
 
 #pragma mark - HELPERS
-
 
 
 @end

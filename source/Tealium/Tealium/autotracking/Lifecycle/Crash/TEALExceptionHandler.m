@@ -33,6 +33,8 @@ static TEALExceptionEvents *staticExceptionEvents;
 
     }
     
+#warning Get current uncaughtExceptionHandler and chain?
+    
     NSSetUncaughtExceptionHandler(&TEALException);
 }
 
@@ -71,7 +73,6 @@ static TEALExceptionEvents *staticExceptionEvents;
 
 void TEALException(NSException *exception) {
     
-
     [staticExceptionEvents updateLastException:exception];
     
     [staticExceptionEvents addEvent];
@@ -79,39 +80,3 @@ void TEALException(NSException *exception) {
     [TEALExceptionHandler saveExceptionData];
     
 }
-
-//void TEALException(NSException *exception) {
-//    
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    
-//    NSData *exceptionData = [NSKeyedArchiver archivedDataWithRootObject:exception];
-//    
-//    [defaults setObject:exceptionData forKey:TEALKeyExceptionHandler];
-//    
-//    NSArray *stackTrace = exception.callStackSymbols;
-//    
-//    if (stackTrace) {
-//        NSString *stackTraceStringValue = [NSString stringWithFormat:@"%@", stackTrace];
-//        
-//        [defaults setObject:stackTraceStringValue forKey:TEALDataSourceKey_ExceptionTrace];
-//    }
-//    // update exception count
-//    
-//#warning Update with actual constant
-//    
-//    NSNumber *currentCrashCount = [defaults objectForKey:@"crash_count"];
-//    NSNumber *newCurrentCrashCount = @([currentCrashCount intValue] + 1);
-//    
-//#warning Update with actual constants
-//
-//    [defaults setObject:newCurrentCrashCount forKey:@"crash_count"];
-//    
-//    NSNumber *totalCrashCount = [defaults objectForKey:@"total_crash_count"];
-//    NSNumber *newTotalCrashCount = @([totalCrashCount intValue] + 1);
-//    
-//    [defaults setObject:newTotalCrashCount forKey:@"total_crash_count"];
-//    
-//    // force IO
-//    [defaults synchronize];
-//    
-//}

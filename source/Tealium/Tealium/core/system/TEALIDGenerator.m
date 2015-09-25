@@ -20,7 +20,8 @@ static UIViewController *_rootController;
 
 + (NSString*) tealiumIdForObject:(id)object {
     
-    if (![object isKindOfClass:([UIView class])]){
+    if (![object isKindOfClass:([UIView class])] &&
+        ![object isKindOfClass:([UIViewController class])]){
         return nil;
     }
     

@@ -166,16 +166,14 @@
 
 - (BOOL) autotrackingDeviceInfoEnabled {
     
-    return NO;
+//    return NO;
     
     if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
-    
-    return NO;
-    
+        
     if (self.publishSettings.disableiVarAutotracking) return NO;
     return self.configuration.autotrackingIvarsEnabled;
 }

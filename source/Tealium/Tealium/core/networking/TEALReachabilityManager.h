@@ -97,4 +97,6 @@ typedef void (^NetworkUnreachable)(TEALReachabilityManager * reachability);
 -(NSString*)currentReachabilityString;
 -(NSString*)currentReachabilityFlags;
 
+- (NSDictionary *)connectionDataSources;
+
 @end

@@ -37,13 +37,14 @@
  */
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj;
 
-/**
- Data Sources that can be processed in the background
- */
-//- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType;
 
 /**
- Data Sources that are processed and converted to dictionary data at call time - Main Thread
+ * Data Sources that must be processed and converted to dictionary data on the Main Thread
+ *
+ * @param eventType Type of event - TEALDispatchTypeNone, TEALDispatchTypeEvent, or TEALDispatchTypeView
+ * @param title Optional title for track event
+ *
+ * @return NSDictionary of data source keys and populated values
  */
 - (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
 

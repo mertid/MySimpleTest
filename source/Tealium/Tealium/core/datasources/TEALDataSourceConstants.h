@@ -24,6 +24,7 @@ extern NSString * const TEALDataSourceKey_Carrier;
 extern NSString * const TEALDataSourceKey_CarrierISO;
 extern NSString * const TEALDataSourceKey_CarrierMCC;
 extern NSString * const TEALDataSourceKey_CarrierMNC;
+extern NSString * const TEALDataSourceKey_ConnectionType;
 extern NSString * const TEALDataSourceKey_Device;
 extern NSString * const TEALDataSourceKey_DeviceArchitecture;
 extern NSString * const TEALDataSourceKey_DeviceBatteryLevel;
@@ -37,6 +38,7 @@ extern NSString * const TEALDataSourceKey_EventTitle;
 extern NSString * const TEALDataSourceKey_ExceptionName;
 extern NSString * const TEALDataSourceKey_ExceptionReason;
 extern NSString * const TEALDataSourceKey_ExceptionTrace;
+extern NSString * const TEALDataSourceKey_ExceptionTotalCount;
 extern NSString * const TEALDataSourceKey_LibraryVersion;
 extern NSString * const TEALDataSourceKey_LifecycleType;
 extern NSString * const TEALDataSourceKey_LifecycleLastLaunchDate;
@@ -69,6 +71,8 @@ extern NSString * const TEALDataSourceKey_WebViewURL;
 
 #pragma mark - UDO / Datasource Values
 
+extern NSString * const TEALDataSourceValue_ConnectionCellular;
+extern NSString * const TEALDataSourceValue_ConnectionWifi;
 extern NSString * const TEALDataSourceValue_EventName;
 extern NSString * const TEALDataSourceValue_False;
 extern NSString * const TEALDataSourceValue_LifecycleLaunch;

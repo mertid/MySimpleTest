@@ -55,6 +55,8 @@
     if (self.exceptionReason)exceptionData[TEALDataSourceKey_ExceptionReason] = self.exceptionReason;
     if (self.exceptionTrace) exceptionData[TEALDataSourceKey_ExceptionTrace] = self.exceptionTrace;
     
+    if ([self totalCount]) exceptionData[TEALDataSourceKey_ExceptionTotalCount] = @([self totalCount]);
+    
     [exceptionData addEntriesFromDictionary:[self allEvents]];
     
     NSDictionary *exceptionCallData = [NSDictionary dictionaryWithDictionary:exceptionData];

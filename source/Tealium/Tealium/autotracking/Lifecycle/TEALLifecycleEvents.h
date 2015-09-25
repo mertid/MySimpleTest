@@ -11,7 +11,19 @@
 @interface TEALLifecycleEvents : NSObject <NSCoding, NSCopying, NSSecureCoding>
 
 - (void) addEvent;
+
 - (void) setEvents:(NSDictionary *)newEvents;
+
+- (double) currentCount;
+
+- (double) totalCount;
+
 - (NSDictionary *) allEvents;
+
+- (NSDate *) firstEvent;
+
+- (NSDate *) lastEvent;
+
+- (NSDate *) lastUpdate;
 
 @end

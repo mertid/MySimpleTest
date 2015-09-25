@@ -190,6 +190,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
+    NSDictionary *connectionInfo = [self.urlSessionManager.reachability connectionDataSources];
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
     NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
     NSDictionary *clientVolatileInfo = [self.dataSources clientVolatileDataSources];
@@ -197,6 +198,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     applicationInfo,
                                                                                     carrierInfo,
+                                                                                    connectionInfo,
                                                                                     deviceInfo,
                                                                                     tealiumInfo? tealiumInfo:@{},
                                                                                     clientVolatileInfo? clientVolatileInfo:@{},

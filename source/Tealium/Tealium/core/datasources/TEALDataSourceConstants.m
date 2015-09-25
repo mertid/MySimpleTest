@@ -23,6 +23,7 @@ NSString * const TEALDataSourceKey_Carrier              = @"carrier";
 NSString * const TEALDataSourceKey_CarrierISO           = @"carrier_iso";
 NSString * const TEALDataSourceKey_CarrierMCC           = @"carrier_mcc";
 NSString * const TEALDataSourceKey_CarrierMNC           = @"carrier_mnc";
+NSString * const TEALDataSourceKey_ConnectionType       = @"connection_type";
 
 NSString * const TEALDataSourceKey_Device               = @"device";
 NSString * const TEALDataSourceKey_DeviceArchitecture   = @"device_architecture";
@@ -37,6 +38,7 @@ NSString * const TEALDataSourceKey_EventTitle           = @"link_id";
 NSString * const TEALDataSourceKey_ExceptionName        = @"exception_name";
 NSString * const TEALDataSourceKey_ExceptionReason      = @"exception_reason";
 NSString * const TEALDataSourceKey_ExceptionTrace       = @"exception_trace";
+NSString * const TEALDataSourceKey_ExceptionTotalCount  = @"exception_totalcrashcount";
 NSString * const TEALDataSourceKey_ExcludeClasses       = @"exclude_classes";
 NSString * const TEALDataSourceKey_LibraryVersion       = @"library_version";
 NSString * const TEALDataSourceKey_LifecycleType        = @"lifecycle_type";
@@ -69,6 +71,8 @@ NSString * const TEALDataSourceKey_WebViewURL           = @"webview_url";
 
 #pragma mark - UDO / Datasource Values
 
+NSString * const TEALDataSourceValue_ConnectionCellular = @"cellular";
+NSString * const TEALDataSourceValue_ConnectionWifi     = @"wifi";
 NSString * const TEALDataSourceValue_EventName          = @"mobile_link";
 NSString * const TEALDataSourceValue_Exception          = @"exception";
 NSString * const TEALDataSourceValue_ExceptionCaught    = @"caught";
@@ -81,7 +85,7 @@ NSString * const TEALDataSourceValue_LifecycleTerminate = @"terminate";
 NSString * const TEALDataSourceValue_Link               = @"link";
 NSString * const TEALDataSourceValue_Origin             = @"mobile";
 NSString * const TEALDataSourceValue_Pagetype           = @"mobile_view";
-NSString * const TEALDataSourceValue_Platform           = @"ios";
+NSString * const TEALDataSourceValue_Platform           = @"iOS";
 NSString * const TEALDataSourceValue_True               = @"true";
 NSString * const TEALDataSourceValue_View               = @"view";
 NSString * const TEALDataSourceValue_Unknown            = @"unknown";

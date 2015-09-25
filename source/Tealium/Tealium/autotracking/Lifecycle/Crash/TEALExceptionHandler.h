@@ -16,6 +16,4 @@ extern void TEALException(NSException *exception);
 + (void) enableWithProcessingBlock:(TEALDictionaryCompletionBlock)block;
 + (void) disable;
 
-#warning Add exception retrieval methods
-
 @end

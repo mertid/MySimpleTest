@@ -132,7 +132,7 @@
 
 + (NSDictionary*) dataForEventCalls:(id)sender{
     
-    NSString    *linkId = nil;
+    NSString    *linkId = [self objectClassFor:sender];
     NSString    *title = [TEALDataSources titleForEvent:sender];
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
@@ -140,8 +140,8 @@
         data[TEALDataSourceKey_SelectedTitle] = title;
         linkId = [linkId stringByAppendingFormat:@": %@", title];
     }
-    if (linkId) data[TEALDataSourceKey_EventTitle] = linkId;
     
+    data[TEALDataSourceKey_EventTitle] = linkId;
     data[TEALDataSourceKey_CallType] = [TEALDispatch stringFromDispatchType:TEALDispatchTypeEvent];
     
     return [NSDictionary dictionaryWithDictionary:data];

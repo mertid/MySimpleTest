@@ -93,7 +93,7 @@
     NSString * (*funcMCC)(id, SEL) = (void *)impMCC;
     mobileCountryCode = funcMCC(carrier, selectorMCC);
     
-    SEL selectorMNC = NSSelectorFromString(@"mobileCountryCode");
+    SEL selectorMNC = NSSelectorFromString(@"mobileNetworkCode");
     IMP impMNC = [carrier methodForSelector:selectorMNC];
     NSString * (*funcMNC)(id, SEL) = (void *)impMNC;
     mobileNetworkCode = funcMNC(carrier, selectorMNC);
@@ -109,7 +109,13 @@
 
 + (NSDictionary *) deviceInfoDataSources{
     
-    return [TEALDeviceDataSources dataSources];
+    NSDictionary *deviceInfo =
+    [TEALSystemHelpers compositeDictionaries:
+     @[
+       [TEALDeviceDataSources mainThreadDataSources],
+       [TEALDeviceDataSources backgroundDataSources]
+       ]];
+    return deviceInfo;
     
 }
 

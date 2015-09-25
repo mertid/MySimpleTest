@@ -77,6 +77,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 - (NSString *) storageKey {
     
     return [NSString stringWithFormat:@"com.tealium.lifecyclestore.%@", self.privateInstanceID];
+    
 }
 
 - (BOOL) unarchiveWithStorageKey:(NSString *)key {

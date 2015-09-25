@@ -26,6 +26,7 @@
  */
 
 #import "TEALReachabilityManager.h"
+#import "TEALDataSourceConstants.h"
 
 #import <sys/socket.h>
 #import <netinet/in.h>
@@ -467,6 +468,19 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     NSString *description = [NSString stringWithFormat:@"<%@: %#x (%@)>",
                              NSStringFromClass([self class]), (unsigned int) self, [self currentReachabilityFlags]];
     return description;
+}
+
+#pragma mark - TEALIUM
+
+- (NSDictionary *)connectionDataSources {
+    
+    NSString *connectionType = nil;
+    if ([self isReachableViaWiFi]) connectionType = TEALDataSourceValue_ConnectionWifi;
+    if ([self isReachableViaWWAN]) connectionType = TEALDataSourceValue_ConnectionCellular;
+
+    if (connectionType) return @{TEALDataSourceKey_ConnectionType:connectionType};
+    return @{};
+    
 }
 
 @end

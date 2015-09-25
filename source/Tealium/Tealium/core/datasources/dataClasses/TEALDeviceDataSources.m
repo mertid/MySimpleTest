@@ -14,34 +14,52 @@
 
 @implementation TEALDeviceDataSources
 
-+ (NSDictionary *) dataSources{
+#pragma mark - PUBLIC
+
++ (NSDictionary *) backgroundDataSources{
     
     // get runtime changable default data
     NSString *architecture = [self architecture];
-    NSString *batteryLevel = [self batteryLevelAsPercentString];
-    NSString *batteryIsCharging = [self batteryIsChargingAsString];
     NSString *cpuType = [self cpuType];
-    NSString *device = [self model];
+    NSString *language = [self currentLanguage];
     //    NSString *hardware = [TEALDataSources hardware];
-    NSString *orientation = [self currentOrientation];
-    NSString *resolution = [self resolution];
-    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-    
+
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
     
     // if particular data is not available, skip
     if (architecture)       mDict[TEALDataSourceKey_DeviceArchitecture] = architecture;
+    if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
+    if (language)           mDict[TEALDataSourceKey_DeviceLanguage] = language;
+    //    if (hardware)              mDict[@"device_model"] = hardware;
+
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+}
+
++ (NSDictionary *) mainThreadDataSources {
+    
+    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
+
+    NSString *batteryLevel = [self batteryLevelAsPercentString];
+    NSString *batteryIsCharging = [self batteryIsChargingAsString];
+    NSString *device = [self model];
+    NSString *orientation = [self currentOrientation];
+    NSString *resolution = [self resolution];
+    
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
     if (batteryLevel)       mDict[TEALDataSourceKey_DeviceBatteryLevel] = batteryLevel;
     if (batteryIsCharging)  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
-    if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
     if (device)             mDict[TEALDataSourceKey_Device] = device;
-    //    if (hardware)              mDict[@"device_model"] = hardware;
     if (orientation)        mDict[TEALDataSourceKey_Orientation] = orientation;
     if (resolution)         mDict[TEALDataSourceKey_DeviceResolution] = resolution;
     if (systemVersion)      mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
     
     return [NSDictionary dictionaryWithDictionary:mDict];
+
 }
+
+#pragma mark - PRIVATE BACKGROUND SAFE
 
 static NSString *staticDeviceCPUType;
 + (NSString *) cpuType {
@@ -129,6 +147,15 @@ static NSString *staticDeviceArchitecture;
     return staticDeviceArchitecture;
 }
 
+
++ (NSString*) currentLanguage{
+    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    if(language) return language;
+    return nil;
+}
+
+#pragma mark - PRIVATE MAIN THREAD ONLY
+
 + (NSString *) batteryIsChargingAsString {
     
     NSString *string = @"false";
@@ -189,12 +216,6 @@ static NSString *staticDeviceArchitecture;
     }
     
     return string;
-}
-
-+ (NSString*) currentLanguage{
-    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    if(language) return language;
-    return nil;
 }
 
 static NSString *deviceModel;

@@ -10,6 +10,7 @@
 
 @interface TEALDeviceDataSources : NSObject
 
-+ (NSDictionary *) dataSources;
++ (NSDictionary *) backgroundDataSources;
++ (NSDictionary *) mainThreadDataSources;
 
 @end
