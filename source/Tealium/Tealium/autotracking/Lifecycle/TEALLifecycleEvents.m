@@ -42,16 +42,26 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
             
             if (self.privateCurrentVersion) {
                 self.privateLastUpdate = newVersion;
+                self.privateLastUpdate = NSTimeIntervalSince1970;
             }
             
             self.privateCurrentVersion = newVersion;
             self.privateCurrentCount = 0;
         }
         
-        self.privateCurrentCount++;
-        self.privateTotalCount++;
+        [self increment];
     }
     
+}
+
+- (void) increment {
+    
+    if (!self.privateFirstEvent) {
+        self.privateFirstEvent = NSTimeIntervalSince1970;
+    }
+    self.privateLastEvent = NSTimeIntervalSince1970;
+    self.privateCurrentCount++;
+    self.privateTotalCount++;
 }
 
 - (double) currentCount {
@@ -121,6 +131,28 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
     
 }
 
+- (NSDictionary *) dataForUserDefaults {
+    
+    return @{
+             TEALKeyLifecycleCurrentCount:@(self.privateCurrentCount),
+             TEALKeyLifecycleCurrentVersion:@(self.privateCurrentVersion),
+             TEALKeyLifecycleFirstEvent:@(self.privateFirstEvent),
+             TEALKeyLifecycleLastEvent:@(self.privateLastEvent),
+             TEALKeyLifecycleLastUpdate:@(self.privateLastUpdate),
+             TEALKeyLifecycleTotalCount:@(self.privateTotalCount)
+             };
+}
+
+- (void) loadFromUserDefaults:(NSDictionary *)dictionary {
+    
+    self.privateCurrentCount = [dictionary[TEALKeyLifecycleCurrentCount] doubleValue];
+    self.privateCurrentVersion = [dictionary[TEALKeyLifecycleCurrentVersion] doubleValue];
+    self.privateFirstEvent = [dictionary[TEALKeyLifecycleFirstEvent] doubleValue];
+    self.privateLastEvent = [dictionary[TEALKeyLifecycleLastEvent] doubleValue];
+    self.privateLastUpdate = [dictionary[TEALKeyLifecycleLastUpdate] doubleValue];
+    self.privateTotalCount = [dictionary[TEALKeyLifecycleTotalCount] doubleValue];
+    
+}
 
 #pragma mark - PRIVATE HELPERS
 

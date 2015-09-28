@@ -32,7 +32,7 @@ NSString * const TEALPublishSettingKeyDisableViewAutotracking = @"disableViewAut
 NSString * const TEALPublishSettingKeyDisableiVarAutotracking = @"disableiVarAutotracking";
 NSString * const TEALPublishSettingKeyDisableLifecycleAutotracking = @"disableLifecycleAutotracking";
 NSString * const TEALPublishSettingKeyDisableTimestampAutotracking = @"disableTimestampAutotracking";
-NSString * const TEALPublishSettingKeyDisableCrashTracking = @"disableLifecycleTracking";
+NSString * const TEALPublishSettingKeyDisableCrashAutotracking = @"disableCrashAutotracking";
 NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCompanion";
 
 @interface TEALPublishSettings()
@@ -243,7 +243,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _disableiVarAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableiVarAutotracking];
         _disableLifecycleAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
         _disableTimestampAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableTimestampAutotracking];
-        _disableCrashTracking   = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCrashTracking];
+        _disableCrashAutotracking   = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableCrashAutotracking];
         _disableMobileCompanion = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableMobileCompanion];
         _store                          = [[TEALPublishSettingsStore alloc] initWithInstanceID:_url];
         
@@ -278,7 +278,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     [aCoder encodeBool:self.disableiVarAutotracking forKey:TEALPublishSettingKeyDisableiVarAutotracking];
     [aCoder encodeBool:self.disableLifecycleAutotracking forKey:TEALPublishSettingKeyDisableLifecycleAutotracking];
     [aCoder encodeBool:self.disableTimestampAutotracking forKey:TEALPublishSettingKeyDisableTimestampAutotracking];
-    [aCoder encodeBool:self.disableCrashTracking forKey:TEALPublishSettingKeyDisableCrashTracking];
+    [aCoder encodeBool:self.disableCrashAutotracking forKey:TEALPublishSettingKeyDisableCrashAutotracking];
     [aCoder encodeBool:self.disableMobileCompanion forKey:TEALPublishSettingKeyDisableMobileCompanion];
     
 }
@@ -307,7 +307,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     if (otherSettings.disableiVarAutotracking != self.disableiVarAutotracking) return NO;
     if (otherSettings.disableLifecycleAutotracking != self.disableLifecycleAutotracking) return NO;
     if (otherSettings.disableTimestampAutotracking != self.disableTimestampAutotracking) return NO;
-    if (otherSettings.disableCrashTracking != self.disableCrashTracking) return NO;
+    if (otherSettings.disableCrashAutotracking != self.disableCrashAutotracking) return NO;
     if (otherSettings.disableMobileCompanion != self.disableMobileCompanion) return NO;
     
     return YES;
@@ -334,7 +334,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     NSString *disableiVarAutotracking = settings[@"disable_ivar_autotracking"];
     NSString *disableLifecycleAutotracking = settings[@"disable_lifecycle_autotracking"];
     NSString *disableTimestampAutotracking = settings[@"disable_timestamp_autotracking"];
-    NSString *disableCrashTracking = settings[@"disable_crash_tracking"];
+    NSString *disableCrashAutotracking = settings[@"disable_crash_autotracking"];
     NSString *disableMobileCompanion = settings[@"disable_mobilecompanion"];
     
     if (batchSize) {
@@ -401,8 +401,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         self.disableTimestampAutotracking = [disableTimestampAutotracking boolValue];
     }
     
-    if (disableCrashTracking) {
-        self.disableCrashTracking = [disableCrashTracking boolValue];
+    if (disableCrashAutotracking) {
+        self.disableCrashAutotracking = [disableCrashAutotracking boolValue];
     }
     
     if (disableMobileCompanion) {

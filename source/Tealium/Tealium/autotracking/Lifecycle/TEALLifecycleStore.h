@@ -12,7 +12,11 @@
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
-- (void) loadArchive;
+- (NSDictionary *) loadDataForKey:(NSString *)key;
+
+- (void) saveData:(NSDictionary *)data forKey:(NSString *)key;
+
+#warning DELETE BELOW
 
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key;
 

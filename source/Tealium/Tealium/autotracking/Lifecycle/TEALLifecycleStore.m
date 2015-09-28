@@ -38,8 +38,29 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     return self;
 }
 
-- (void) loadArchive {
-    [self unarchiveWithStorageKey:[self storageKey]];
+- (NSDictionary *) loadDataForKey:(NSString *)key {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *allEvents = [defaults objectForKey:[self storageKey]];
+    NSDictionary *keyEvents = allEvents[key];
+    
+    if (![keyEvents isKindOfClass:[NSDictionary class]]){
+        return @{};
+    }
+    
+    [self.lifecycleEvents addEntriesFromDictionary:@{key:keyEvents}];
+    return self.lifecycleEvents[key];
+    
+}
+
+- (void) saveData:(NSDictionary *)data forKey:(NSString *)key {
+    
+//    dispatch_barrier_async(self.queue, ^{
+    
+        self.lifecycleEvents[key] = data;
+        [self archiveWithStorageKey:[self storageKey]];
+        
+//    });
 }
 
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key {
@@ -60,11 +81,12 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 - (void) setObject:(id<NSCopying, NSSecureCoding>)object
             forKey:(id<NSCopying, NSSecureCoding>)aKey {
     
-    dispatch_barrier_async(self.queue, ^{
-        
+//    dispatch_barrier_async(self.queue, ^{
+    
         self.lifecycleEvents[aKey] = object;
+        [self archiveWithStorageKey:[self storageKey]];
         
-    });
+//    });
 }
 
 - (void) setObject:(id)obj forKeyedSubscript:(id <NSCopying, NSSecureCoding>)key {

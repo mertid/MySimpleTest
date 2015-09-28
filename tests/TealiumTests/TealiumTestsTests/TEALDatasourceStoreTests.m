@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Tealium/TEALDatasourceStore.h>
+//#import <Tealium/TEALDatasourceStore.h>
 
 @interface TEALDatasourceStoreTests : XCTestCase
 
-@property (nonatomic, strong) TEALDataSourceStore *store;
+//@property (nonatomic, strong) TEALDataSourceStore *store;
 
 @end
 
@@ -26,7 +26,7 @@
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    self.store = nil;
+//    self.store = nil;
     [super tearDown];
     
 }

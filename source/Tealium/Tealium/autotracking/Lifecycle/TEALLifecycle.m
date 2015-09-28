@@ -12,9 +12,14 @@
 #import "Tealium.h"
 #import "TEALDataSourceConstants.h"
 
+NSString * const TEALKeyLifecycleLaunchEvents = @"launchEvents";
+NSString * const TEALKeyLifecycleWakeEvents = @"wakeEvents";
+NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
+
 @interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
+@property (nonatomic) BOOL launchAlreadyDetected;
 @property (nonatomic, strong) NSString *privateInstanceID;
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
 @property (nonatomic, strong) TEALLifecycleStore *privateStore;
@@ -37,11 +42,6 @@
         
         _privateInstanceID = instanceID;
         _privateStore = [[TEALLifecycleStore alloc] initWithInstanceID:instanceID];
-        [_privateStore loadArchive];
-        
-        _privateLaunchEvents = _privateStore[@"launchEvents"];
-        _privateWakeEvents = _privateStore[@"wakeEvents"];
-        _privateSleepEvents = _privateStore[@"sleepEvents"];
         
     }
     return self;
@@ -75,8 +75,9 @@
 }
 
 - (void) recordLaunch {
-    NSNotification *notification = [NSNotification notificationWithName:UIApplicationDidFinishLaunchingNotification object:self];
-    [self processLifecycleEvent:notification];
+    
+    [self processLifecycleEventWithName:TEALDataSourceValue_LifecycleLaunch];
+    
 }
 
 - (BOOL) isEnabled {
@@ -85,14 +86,23 @@
 
 - (NSDictionary *)currentLifecycleData {
     
-//    NSString *launchCount
+    NSNumber *launchCount = @([[self launchEvents] totalCount]);
+    NSNumber *wakeCount = @([[self wakeEvents] totalCount]);
+    NSNumber *sleepCount = @([[self sleepEvents] totalCount]);
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    if (launchCount)mDict[TEALDataSourceKey_LifecycleTotalLaunchCount] = launchCount;
+    if (wakeCount)  mDict[TEALDataSourceKey_LifecycleTotalWakeCount] = wakeCount;
+    if (sleepCount) mDict[TEALDataSourceKey_LifecycleTotalSleepCount] = sleepCount;
+
     
 #warning IMPLEMENT
-    return nil;
+    return [NSDictionary dictionaryWithDictionary:mDict];
     
 }
 
-#pragma mark - PRIVATE INSTANCE
+#pragma mark - PRIVATE LIFECYCLE
 
 - (instancetype) init {
     
@@ -128,7 +138,7 @@
     [events enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(processLifecycleEvent:)
+                                                 selector:@selector(processLifecycleEventWithNotification:)
                                                      name:obj
                                                    object:nil];
     }];
@@ -141,9 +151,20 @@
     
 }
 
+- (void) dealloc {
+    
+    [self disableListeners];
+    
+}
+
+#pragma mark - PRIVATE CONVENIENCE ACCESSORS
+
 - (TEALLifecycleEvents *) launchEvents {
+    
     if (!self.privateLaunchEvents) {
         self.privateLaunchEvents = [[TEALLifecycleEvents alloc] init];
+        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleLaunchEvents];
+        [self.privateLaunchEvents loadFromUserDefaults:saveData];
     }
     return self.privateLaunchEvents;
 }
@@ -151,6 +172,8 @@
 - (TEALLifecycleEvents *) wakeEvents {
     if (!self.privateWakeEvents) {
         self.privateWakeEvents = [[TEALLifecycleEvents alloc] init];
+        [self.privateWakeEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleWakeEvents]];
+
     }
     return self.privateWakeEvents;
 }
@@ -158,42 +181,134 @@
 - (TEALLifecycleEvents *) sleepEvents {
     if (!self.privateSleepEvents) {
         self.privateSleepEvents = [[TEALLifecycleEvents alloc] init];
+        [self.privateSleepEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleSleepEvents]];
     }
     return self.privateSleepEvents;
 }
 
-- (void) processLifecycleEvent:(NSNotification*) notification {
+
+#pragma mark - PRIVATE 
+
+- (void) processLifecycleEventWithNotification:(NSNotification*) notification {
     
     if (!self.isEnabled){
         return;
     }
     
-    NSString *name = notification.name;
-    NSString *eventName = nil;
-        
-    if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
-        eventName = TEALDataSourceValue_LifecycleLaunch;
-    } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]){
-        eventName = TEALDataSourceValue_LifecycleSleep;
-    } else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
-        eventName = TEALDataSourceValue_LifecycleWake;
-    } else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
-        eventName = TEALDataSourceValue_LifecycleSleep;
-    } else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
-        eventName = TEALDataSourceValue_LifecycleTerminate;
-    } else {
-        eventName = TEALDataSourceValue_Unknown;
+    NSString *eventName = [self eventNameFromNotification:notification];
+    
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+        if (self.launchAlreadyDetected){
+            return;
+        }
     }
     
-#warning COMPLETE with additional lifeycycle data
+    [self processLifecycleEventWithName:eventName];
     
-    NSDictionary *lifecycleData = @{TEALDataSourceKey_LifecycleType: eventName};
+}
+
+- (void) processLifecycleEventWithName:(NSString *)eventName {
+    
+    if(!eventName){
+        return;
+    }
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+
+    [self incrementEventWithName:eventName];
+    
+    [self updateStoreDataForEventWithName:eventName];
+
+    mDict[TEALDataSourceKey_LifecycleType] = eventName;
+    
+    [mDict addEntriesFromDictionary:[self currentLifecycleData]];
+    
+    NSDictionary *lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+    
+#warning duplicate lifecycle launch events seen.
+    
+#warning First launch event does not have updated count, but all other events at the same time do
+
+#warning Wakes and sleep events not loading from archive
     
     if (self.eventProcessingBlock) {
         // TODO: Add error handling?
         
         self.eventProcessingBlock(lifecycleData, nil);
     }
+}
+
+#warning OPTIMIZE
+
+- (NSString *) eventNameFromNotification:(NSNotification *) notification {
+    
+    NSString *name = notification.name;
+    NSString *eventName = nil;
+    
+    if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]){
+        
+        eventName = TEALDataSourceValue_LifecycleLaunch;
+        
+    } else if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]){
+        
+        eventName = TEALDataSourceValue_LifecycleWake;
+        
+    } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification] ||
+               [name isEqualToString:UIApplicationDidEnterBackgroundNotification]){
+        
+        eventName = TEALDataSourceValue_LifecycleSleep;
+        
+    } else if ([name isEqualToString:UIApplicationWillTerminateNotification]){
+        
+        eventName = TEALDataSourceValue_LifecycleTerminate;
+        
+    } else {
+        
+        eventName = TEALDataSourceValue_Unknown;
+        
+    }
+    
+    return eventName;
+    
+}
+
+- (void) incrementEventWithName:(NSString *)eventName {
+    
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
+        [[self launchEvents] addEvent];
+    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+        [[self wakeEvents] addEvent];
+    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+        [[self sleepEvents] addEvent];
+    }
+    
+}
+
+- (void) updateStoreDataForEventWithName:(NSString *)eventName {
+    
+    NSDictionary *data = nil;
+    NSString *key = nil;
+    
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
+        data = [[self launchEvents] dataForUserDefaults];
+        key = TEALKeyLifecycleLaunchEvents;
+        
+    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+        data = [[self wakeEvents] dataForUserDefaults];
+        key = TEALKeyLifecycleWakeEvents;
+        
+    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+        data = [[self sleepEvents] dataForUserDefaults];
+        key = TEALKeyLifecycleSleepEvents;
+        
+    }
+    
+    if (!eventName ||
+        !data){
+        return;
+    }
+    
+    [self.store saveData:data forKey:eventName];
 }
 
 - (NSString *) description {
@@ -204,14 +319,5 @@
             [self wakeEvents],
             [self sleepEvents]];
 }
-
-- (void) dealloc {
-    
-    [self disableListeners];
-        
-}
-
-#pragma mark - HELPERS
-
 
 @end

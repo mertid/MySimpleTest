@@ -17,7 +17,7 @@
 - (void) reEnable;
 - (void) recordLaunch;
 - (BOOL) isEnabled;
-- (NSDictionary *)currentLifecycleData;
+- (NSDictionary *) currentLifecycleData;
 
 
 @end

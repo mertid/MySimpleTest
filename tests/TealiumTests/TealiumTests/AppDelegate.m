@@ -32,7 +32,7 @@
     
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.crashTrackingEnabled = YES;
+    configuration.autotrackingCrashesEnabled = YES;
     configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = YES;

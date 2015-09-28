@@ -12,6 +12,7 @@
 #import "NSString+Tealium.h"
 
 static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
+
 const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue";
 
 @interface TEALDataSourceStore ()

@@ -30,13 +30,13 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 @property (nonatomic) BOOL disableApplicationInfoAutotracking;
 @property (nonatomic) BOOL disableCarrierInfoAutotracking;
+@property (nonatomic) BOOL disableCrashAutotracking;
 @property (nonatomic) BOOL disableDeviceInfoAutotracking;
 @property (nonatomic) BOOL disableUIEventAutotracking;
 @property (nonatomic) BOOL disableViewAutotracking;
 @property (nonatomic) BOOL disableiVarAutotracking;
 @property (nonatomic) BOOL disableLifecycleAutotracking;
 @property (nonatomic) BOOL disableTimestampAutotracking;
-@property (nonatomic) BOOL disableCrashTracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
 - (instancetype) initWithURLString:(NSString *)url;

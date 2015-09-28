@@ -47,7 +47,7 @@
     configuration.autotrackingTimestampInfoEnabled = YES;
     configuration.autotrackingUIEventsEnabled = NO;
     configuration.autotrackingViewsEnabled = YES;
-    configuration.crashTrackingEnabled = YES;
+    configuration.autotrackingCrashesEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
     configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
@@ -93,7 +93,7 @@
                                           @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
                                           @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
                                           @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.crashTrackingEnabled],
+                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
                                           @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
                                           @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],

@@ -26,4 +26,8 @@
 
 - (NSDate *) lastUpdate;
 
+- (NSDictionary *) dataForUserDefaults;
+
+- (void) loadFromUserDefaults:(NSDictionary *)dictionary;
+
 @end

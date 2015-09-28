@@ -212,14 +212,18 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 
 - (TEALLifecycle *) lifecycleInstance {
     
-    id raw = [self moduleDataCopy][[self lifecycleInstanceID]];
-    if (!raw ||
-        ![raw isKindOfClass:([TEALLifecycle class])]){
-        return [self newLifecycleInstance];
+    @synchronized(self) {
+        NSString *lifecycleInstanceID = [self lifecycleInstanceID];
+        id raw = [self moduleDataCopy][lifecycleInstanceID];
+        if (!raw ||
+            ![raw isKindOfClass:([TEALLifecycle class])]){
+            raw = [self newLifecycleInstance];
+            [self addModuleData:@{lifecycleInstanceID:raw}];
+        }
+        
+        TEALLifecycle *lifecycle = (TEALLifecycle*)raw;
+        return lifecycle;
     }
-    
-    TEALLifecycle *lifecycle = (TEALLifecycle*)raw;
-    return lifecycle;
     
 }
 

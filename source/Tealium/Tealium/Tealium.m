@@ -414,6 +414,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.operationManager addOperationWithBlock:^{
         weakSelf.moduleData = newModuleData;
+        NSLog(@"%s new module data written: %@", __FUNCTION__, weakSelf.moduleData);
     }];
     
 }
@@ -486,7 +487,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
     }
     
-    if ([self.settings crashTrackingEnabled]) {
+    if ([self.settings autotrackingCrashesEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
             [self.modulesDelegate enableAutotrackingCrashes];
         }

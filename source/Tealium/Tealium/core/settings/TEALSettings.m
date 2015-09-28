@@ -166,7 +166,7 @@
 
 - (BOOL) autotrackingDeviceInfoEnabled {
     
-//    return NO;
+    return NO;
     
     if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
@@ -201,9 +201,9 @@
     return self.configuration.autotrackingViewsEnabled;
 }
 
-- (BOOL) crashTrackingEnabled {
-    if (self.publishSettings.disableCrashTracking) return NO;
-    return self.configuration.crashTrackingEnabled;
+- (BOOL) autotrackingCrashesEnabled {
+    if (self.publishSettings.disableCrashAutotracking) return NO;
+    return self.configuration.autotrackingCrashesEnabled;
 }
 
 - (BOOL) mobileCompanionEnabled {

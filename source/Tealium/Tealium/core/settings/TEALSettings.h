@@ -28,7 +28,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
-- (BOOL) crashTrackingEnabled;
+- (BOOL) autotrackingCrashesEnabled;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
 - (BOOL) isValid;
