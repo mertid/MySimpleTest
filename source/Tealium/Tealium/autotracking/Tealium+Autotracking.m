@@ -214,7 +214,9 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     @synchronized(self) {
         NSString *lifecycleInstanceID = [self lifecycleInstanceID];
+        
         id raw = [self moduleDataCopy][lifecycleInstanceID];
+        
         if (!raw ||
             ![raw isKindOfClass:([TEALLifecycle class])]){
             raw = [self newLifecycleInstance];
@@ -235,15 +237,22 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     [lifecycle enableWithEventProcessingBlock:^(NSDictionary *dataDictionary, NSError *error) {
         
-        [self.logger logVerbose:@"Lifecycle data updated: %@", lifecycle];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if (dataDictionary &&
+            [[dataDictionary allKeys] count] > 0 ){
             
-            NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
-            NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary? dataDictionary:@{},
-                                                                                    autotrackedDataSources? autotrackedDataSources:@{}]];
-            [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
-        });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSDictionary *autotrackedDataSources = [TEALDataSources autotrackDataSourcesForDispatchType:TEALDispatchTypeEvent withObject:lifecycle];
+                NSDictionary *deliveryData = [TEALSystemHelpers compositeDictionaries:@[dataDictionary? dataDictionary:@{},
+                                                                                        autotrackedDataSources? autotrackedDataSources:@{}]];
+                [weakSelf trackEventWithTitle:nil dataSources:deliveryData];
+            });
+        }
+        
+        if (error) {
+            [weakSelf.logger logWarning:@"Lifecycle tracking error:%@ reason:%@ suggestion:%@", [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
+        }
         
     }];
     

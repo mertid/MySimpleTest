@@ -17,7 +17,7 @@
 
 - (instancetype) initWithInstanceID:(NSString *)instanceID;
 
-- (void) addContent:(TEALMobileCompanionContent * )content forTitle:(NSString *)title;
+- (void) refreshWithContent:(TEALMobileCompanionContent *) content;
 
 - (void) enable;
 

@@ -32,12 +32,12 @@
     
     configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.autotrackingCrashesEnabled = YES;
+    configuration.autotrackingCrashesEnabled = NO;
     configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled = YES;
     configuration.autotrackingUIEventsEnabled = YES;
     configuration.autotrackingViewsEnabled = YES;
-    configuration.mobileCompanionEnabled = NO;
+    configuration.mobileCompanionEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];

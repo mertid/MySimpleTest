@@ -7,6 +7,7 @@
 //
 
 #import "TEALLifecycleStore.h"
+#import "TEALError.h"
 
 const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 
@@ -53,13 +54,18 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     
 }
 
-- (void) saveData:(NSDictionary *)data forKey:(NSString *)key {
+- (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion{
     
 //    dispatch_barrier_async(self.queue, ^{
     
-        self.lifecycleEvents[key] = data;
-        [self archiveWithStorageKey:[self storageKey]];
-        
+    if (!data){
+        return;
+    }
+    
+    self.lifecycleEvents[key] = data;
+    
+    [self archiveWithStorageKey:[self storageKey] completion:completion];
+    
 //    });
 }
 
@@ -84,7 +90,7 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
 //    dispatch_barrier_async(self.queue, ^{
     
         self.lifecycleEvents[aKey] = object;
-        [self archiveWithStorageKey:[self storageKey]];
+        [self archiveWithStorageKey:[self storageKey] completion:nil];
         
 //    });
 }
@@ -117,9 +123,12 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     return unarchived;
 }
 
-- (void) archiveWithStorageKey:(NSString *)key {
+- (void) archiveWithStorageKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion {
     
+    BOOL success = NO;
     __block NSDictionary *dataCopy = nil;
+    NSError *error = nil;
+    
     
     dispatch_barrier_sync(self.queue, ^{
         dataCopy = [self.lifecycleEvents copy];
@@ -129,7 +138,16 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
         [[NSUserDefaults standardUserDefaults] setObject:dataCopy
                                                   forKey:key];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        success = YES;
+    } else {
+        error = [TEALError errorWithCode:400
+                             description:@""
+                                  reason:@""
+                              suggestion:@""];
+        
     }
+    
+    if (completion) completion(success, error);
 }
 
 #pragma mark - PRIVATE INSTANCE METHODS

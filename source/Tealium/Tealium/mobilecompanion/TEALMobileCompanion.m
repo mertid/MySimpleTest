@@ -41,7 +41,7 @@
     return self;
 }
 
-- (void) addContent:(TEALMobileCompanionContent * )content forTitle:(NSString *)title {
+- (void) refreshWithContent:(TEALMobileCompanionContent *)content {
     
     self.tableViewController.currentContent = content;
     [self refresh];
@@ -144,11 +144,6 @@
 
 #pragma mark - HELPERS
 
-//- (UIViewController*) rootWindowController{
-//    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:0];
-//    UIViewController *vc = window.rootViewController;
-//    return vc;
-//}
 
 - (UIPanGestureRecognizer *) panGestureRecognizers {
     

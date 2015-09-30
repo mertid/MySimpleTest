@@ -70,7 +70,7 @@
                                                         options:0
                                                           range:NSMakeRange(0, [uuid length])];
     
-    NSLog(@"%s Number of matches: %lu", __FUNCTION__, (unsigned long)numberOfMatches);
+//    NSLog(@"%s Number of matches: %lu", __FUNCTION__, (unsigned long)numberOfMatches);
     
     if (numberOfMatches == 1) {
         return YES;

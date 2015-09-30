@@ -13,6 +13,7 @@
 @interface TEALMobileCompanionContent()
 
 @property (nonatomic, strong) NSArray *instanceSectionData;
+@property (nonatomic) TEALMobileCompanionContentType *privateType;
 
 @end
 
@@ -84,6 +85,17 @@
         
     }];
     
+}
+- (void) setType:(TEALMobileCompanionContentType)type {
+    
+    self.privateType = &(type);
+    
+}
+
+- (TEALMobileCompanionContentType) type {
+ 
+    if (self.privateType) return *(self.privateType);
+    return TEALMobileCompanionContentTypeNormal;
 }
 
 - (void) addSectionData:(TEALMobileCompanionContentSection *)section {

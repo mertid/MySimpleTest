@@ -91,6 +91,8 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     return [self.sentDispatches.allQueuedObjects copy];
 }
 
+
+
 #pragma mark - enqueue / dequeue dispatches
 
 - (void) addDispatch:(TEALDispatch *)aDispatch completionBlock:(TEALDispatchBlock)completionBlock {
@@ -107,14 +109,15 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         __block typeof(self) __weak weakSelf = self;
 
         [weakSelf attemptDispatch:aDispatch
-              completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-
-                  if (status == TEALDispatchStatusQueued) {
-                      [weakSelf enqueueDispatch:dispatch completionBlock:completionBlock];
-                  } else if (completionBlock) {
-                      completionBlock(status, dispatch, error);
-                  }
-              }];
+                  completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+                      
+                      if (status == TEALDispatchStatusQueued) {
+                          [weakSelf enqueueDispatch:dispatch completionBlock:completionBlock];
+                      } else if (completionBlock) {
+                          completionBlock(status, dispatch, error);
+                      }
+                  }];
+        
     } else {
         
         [self enqueueDispatch:aDispatch completionBlock:completionBlock];

@@ -11,6 +11,8 @@
 #import "TEALLifecycleStore.h"
 #import "Tealium.h"
 #import "TEALDataSourceConstants.h"
+#import "TEALBlocks.h"
+#import "TEALError.h"
 
 NSString * const TEALKeyLifecycleLaunchEvents = @"launchEvents";
 NSString * const TEALKeyLifecycleWakeEvents = @"wakeEvents";
@@ -97,7 +99,8 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     if (sleepCount) mDict[TEALDataSourceKey_LifecycleTotalSleepCount] = sleepCount;
 
     
-#warning IMPLEMENT
+#warning IMPLEMENT remaining data sources
+    
     return [NSDictionary dictionaryWithDictionary:mDict];
     
 }
@@ -173,7 +176,8 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     if (!self.privateWakeEvents) {
         self.privateWakeEvents = [[TEALLifecycleEvents alloc] init];
         [self.privateWakeEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleWakeEvents]];
-
+        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleWakeEvents];
+        [self.privateWakeEvents loadFromUserDefaults:saveData];
     }
     return self.privateWakeEvents;
 }
@@ -182,6 +186,8 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     if (!self.privateSleepEvents) {
         self.privateSleepEvents = [[TEALLifecycleEvents alloc] init];
         [self.privateSleepEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleSleepEvents]];
+        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleSleepEvents];
+        [self.privateSleepEvents loadFromUserDefaults:saveData];
     }
     return self.privateSleepEvents;
 }
@@ -197,45 +203,14 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     
     NSString *eventName = [self eventNameFromNotification:notification];
     
-    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
-        if (self.launchAlreadyDetected){
-            return;
-        }
-    }
+//    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+//        if (self.launchAlreadyDetected){
+//            return;
+//        }
+//    }
     
     [self processLifecycleEventWithName:eventName];
     
-}
-
-- (void) processLifecycleEventWithName:(NSString *)eventName {
-    
-    if(!eventName){
-        return;
-    }
-    
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
-
-    [self incrementEventWithName:eventName];
-    
-    [self updateStoreDataForEventWithName:eventName];
-
-    mDict[TEALDataSourceKey_LifecycleType] = eventName;
-    
-    [mDict addEntriesFromDictionary:[self currentLifecycleData]];
-    
-    NSDictionary *lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
-    
-#warning duplicate lifecycle launch events seen.
-    
-#warning First launch event does not have updated count, but all other events at the same time do
-
-#warning Wakes and sleep events not loading from archive
-    
-    if (self.eventProcessingBlock) {
-        // TODO: Add error handling?
-        
-        self.eventProcessingBlock(lifecycleData, nil);
-    }
 }
 
 #warning OPTIMIZE
@@ -272,47 +247,105 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     
 }
 
-- (void) incrementEventWithName:(NSString *)eventName {
+
+- (void) processLifecycleEventWithName:(NSString *)eventName {
     
-    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
-        [[self launchEvents] addEvent];
-    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
-        [[self wakeEvents] addEvent];
-    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
-        [[self sleepEvents] addEvent];
+    if(!eventName){
+        return;
     }
     
+    __block typeof(self) __weak weakSelf = self;
+    __block NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+
+    [self incrementEventWithName:eventName completion:^(BOOL success, NSError *error) {
+        
+        NSDictionary *lifecycleData = nil;
+        
+        if (success) {
+            mDict[TEALDataSourceKey_LifecycleType] = eventName;
+            
+            [mDict addEntriesFromDictionary:[self currentLifecycleData]];
+            
+            lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+        }
+#warning duplicate lifecycle launch events seen.
+        
+#warning First launch event does not have updated count, but all other events at the same time do
+        
+#warning Wakes and sleep events not loading from archive
+        
+        if (weakSelf.eventProcessingBlock) {
+            
+            weakSelf.eventProcessingBlock(lifecycleData, error);
+        }
+        
+    }];
+    
+
 }
 
-- (void) updateStoreDataForEventWithName:(NSString *)eventName {
+
+- (void) incrementEventWithName:(NSString *)eventName completion:(TEALBooleanCompletionBlock)completion{
     
     NSDictionary *data = nil;
     NSString *key = nil;
+    TEALLifecycleEvents *events = nil;
     
     if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
+        
+        events = [self launchEvents];
+        [events addEvent];
         data = [[self launchEvents] dataForUserDefaults];
         key = TEALKeyLifecycleLaunchEvents;
         
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+        
+        events = [self wakeEvents];
+        [events addEvent];
         data = [[self wakeEvents] dataForUserDefaults];
         key = TEALKeyLifecycleWakeEvents;
-        
+    
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+        
+        events = [self sleepEvents];
+        [events addEvent];
         data = [[self sleepEvents] dataForUserDefaults];
         key = TEALKeyLifecycleSleepEvents;
-        
     }
     
-    if (!eventName ||
-        !data){
+    if (!events){
+        
+        NSString *reason = [NSString stringWithFormat:@"No lifecycle event associated with eventName:%@", eventName];
+        NSError *error = [TEALError errorWithCode:400
+                                      description:@"Failed to increment lifecycle event."
+                                           reason:reason
+                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 315."];
+        
+        if (completion) completion(NO, error);
         return;
     }
     
-    [self.store saveData:data forKey:eventName];
+    if (!data){
+        
+        NSString *reason = [NSString stringWithFormat:@"Unable to retrieve lifecycle data for eventName:%@", eventName];
+        NSError *error = [TEALError errorWithCode:400
+                                      description:@"Failed to increment lifecycle event."
+                                           reason:reason
+                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 327."];
+        
+        if (completion) completion(NO, error);
+        return;
+    }
+    
+    
+    [self.store saveData:data forKey:eventName completion:^(BOOL success, NSError *error) {
+        if (completion) completion(success, error);
+    }];
+    
 }
 
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<%@ with instanceID: %@ launched:\n %@ wakes:\n%@ sleeps:\n%@",
+    return [NSString stringWithFormat:@"<%@ with instanceID:%@ \n launches:%@ \n wakes:%@ \n sleeps:%@",
             NSStringFromClass([self class]),
             self.instanceID,
             [self launchEvents],

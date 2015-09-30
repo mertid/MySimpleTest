@@ -126,8 +126,11 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
                                  ]}
                              ];
     
-    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
-                       forTitle:TEALMobileCompanionTabTitleOverview];
+    TEALMobileCompanionContent *content = [TEALMobileCompanionContent contentFromArray:contentData];
+    [mobileCompanion refreshWithContent:content];
+    
+//    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
+//                       forTitle:TEALMobileCompanionTabTitleOverview];
     
 }
 
@@ -135,20 +138,42 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
     
     NSArray *contentData = nil;
     
+    if (!object) object = [self activeViewController];
+    
     if (!object){
         contentData = @[
                         @{NSLocalizedString(@"No View data currently available.", @""):@""}
                         ];
         
     } else {
-        // Object Data
+        
+//#ifdef TEAL_MODULE_AUTOTRACKING
+//        NSDictionary *autotrackedObjectData = [object teal_autotrackDataSources];
+//        [objectDataSources addEntriesFromDictionary:autotrackedObjectData];
+//#endif
+        
+        
+        // Info
+        NSMutableDictionary *objectInfoDataSources = [NSMutableDictionary dictionary];
+        
+        BOOL trackingObject;
+        SEL selector = NSSelectorFromString(@"teal_autotrackingEnabled");
+        IMP impSelector = [object methodForSelector:selector];
+        BOOL (*funcInfo)(id, SEL) = (void *)impSelector;
+        trackingObject = funcInfo(object, selector);
+        
+        objectInfoDataSources[@"Autotracking"] = [NSString stringWithFormat:@"%@", trackingObject? @"YES":@"NO"];
+        
+        // Data Sources
         NSMutableDictionary *objectDataSources = [NSMutableDictionary dictionary];
+        NSDictionary *autotrackedObjectData = nil;
         
-#ifdef TEAL_MODULE_AUTOTRACKING
-        NSDictionary *autotrackedObjectData = [object teal_autotrackDataSources];
+        SEL autotrackDataSources = NSSelectorFromString(@"teal_autotrackDataSources");
+        IMP impAutotrackDataSources = [object methodForSelector:autotrackDataSources];
+        id (*func)(id, SEL) = (void *)impAutotrackDataSources;
+        autotrackedObjectData = func(object, autotrackDataSources);
+        
         [objectDataSources addEntriesFromDictionary:autotrackedObjectData];
-#endif
-        
         [objectDataSources addEntriesFromDictionary:[self volatileDataSourcesCopy]];
         [objectDataSources addEntriesFromDictionary:[self persistentDataSourcesCopy]];
         
@@ -158,18 +183,23 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
         
         // Content Data
         contentData = @[
-                        @{@"Data Sources":objectDataSources}
+                        @{@"Info":@[objectInfoDataSources]},
+                        @{@"Data Sources":@[objectDataSources]}
                         ];
     }
     
-    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
-                       forTitle:TEALMobileCompanionTabTitleView];
+    TEALMobileCompanionContent *content = [TEALMobileCompanionContent contentFromArray:contentData];
+    [mobileCompanion refreshWithContent:content];
+    
+//    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
+//                       forTitle:TEALMobileCompanionTabTitleView];
     
 }
 
 - (void) tealiumMobileCompanionRequestsEventDataSources:(TEALMobileCompanion *)mobileCompanion forObject:(NSObject *)object {
     
     NSArray *contentData = nil;
+    
     if (!object){
         contentData = @[
                         @{NSLocalizedString(@"No Element data currently available.", @""):[NSNull null]}
@@ -179,17 +209,21 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
 #warning FINISH
     }
     
+    TEALMobileCompanionContent *content = [TEALMobileCompanionContent contentFromArray:contentData];
+    [mobileCompanion refreshWithContent:content];
     
-    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
-                       forTitle:TEALMobileCompanionTabTitleElement];
+//    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
+//                       forTitle:TEALMobileCompanionTabTitleElement];
     
 }
 
 - (void) tealiumMobileCompanionRequestsDispatchLogs:(TEALMobileCompanion *)mobileCompanion {
     
    
-    NSArray *sent = [self.dispatchManager sentDispatchesCopy];
-    NSArray *queued = [self.dispatchManager queuedDispatchesCopy];
+    NSArray *sentDispatches = [self.dispatchManager sentDispatchesCopy];
+    NSArray *queuedDispatches = [self.dispatchManager queuedDispatchesCopy];
+    NSArray *sent = [self payloadDataFromDispatchArray:sentDispatches];
+    NSArray *queued = [self payloadDataFromDispatchArray:queuedDispatches];
     
     // Content Data
     NSArray *contentData = @[
@@ -197,17 +231,22 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
                                @{@"Queued Dispatches":queued}
                              ];
     
-    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
-                       forTitle:TEALMobileCompanionTabTitleLogs];
+    TEALMobileCompanionContent *content = [TEALMobileCompanionContent contentFromArray:contentData];
+    [mobileCompanion refreshWithContent:content];
+    
+//    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:contentData]
+//                       forTitle:TEALMobileCompanionTabTitleLogs];
     
 }
 
 - (void) tealiumMobileCompanionRequestsTools:(TEALMobileCompanion *)mobileCompanion {
     
     
+    TEALMobileCompanionContent *content = [TEALMobileCompanionContent contentFromArray:nil];
+    [mobileCompanion refreshWithContent:content];
     
-    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:nil]
-                       forTitle:TEALMobileCompanionTabTitleTools];
+//    [mobileCompanion addContent:[TEALMobileCompanionContent contentFromArray:nil]
+//                       forTitle:TEALMobileCompanionTabTitleTools];
 }
 
 - (void) tealiumMobileCompanionEnabledTrace:(TEALMobileCompanion *)mobileCompanion withID:(NSString *)traceID {
@@ -224,6 +263,24 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
     
 #endif
     
+}
+
+#pragma mark - HELPERS
+
+// TODO move to a category
+
+- (NSArray *) payloadDataFromDispatchArray:(NSArray *)array {
+    
+    NSMutableArray *mArray = [NSMutableArray array];
+    
+    for (TEALDispatch *dispatch in array) {
+        NSString *key = [NSString stringWithFormat:@"%@", [NSDate dateWithTimeIntervalSince1970:dispatch.timestamp]];
+        NSString *value = [TEALDispatch stringFromDispatchType:dispatch.dispatchType];
+        NSDictionary *payload = @{key:value};
+        [mArray addObject:payload];
+    }
+    
+    return [NSArray arrayWithArray:mArray];
 }
 
 @end

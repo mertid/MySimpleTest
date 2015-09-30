@@ -55,13 +55,30 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC CLASS METHODS
 
-
 + (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration {
     
-    return [Tealium instanceForKey:key configuration:configuration completion:nil];
-
+    if (!key){
+        return nil;
+    }
+    
+    configuration.instanceID = key;
+    
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+        
+        if (error) {
+            
+            [instance.logger logWarning:@"Problem initializing instance: %@ reason:%@ suggestion:%@",
+             [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
+             
+        }
+        
+    }];
+    
+    if (instance) [Tealium addInstance:instance key:key];
+    
+    return instance;
+    
 }
-
 
 + (instancetype) instanceForKey:(NSString *)key {
     
@@ -74,7 +91,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     return instance;
     
 }
-
 
 + (void) destroyInstanceForKey:(NSString *)key {
     
@@ -89,7 +105,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-
 #pragma mark - PUBLIC INSTANCE METHODS
 
 - (id<TealiumDelegate>) delegate {
@@ -101,7 +116,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) disable {
     @synchronized(self) {
 #warning remove all observers in all objects here
-        
+
         self.enabled = NO;
     }
 }
@@ -122,7 +137,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
 }
-
 
 - (BOOL) isEnabled {
     return self.enabled? YES: NO;
@@ -258,22 +272,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PRIVATE CLASS METHODS
 
-+ (instancetype) instanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock)completion {
-
-    if (!key){
-        return nil;
-    }
-    
-    configuration.instanceID = key;
-    
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:completion];
-    
-    [Tealium addInstance:instance key:key];
-    
-    return instance;
-    
-}
-
 + (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion{
     
     Tealium *instance = [[Tealium alloc] initPrivate];
@@ -281,15 +279,22 @@ __strong static NSDictionary *staticAllInstances = nil;
     __weak Tealium *weakInstance = instance;
     
     [weakInstance.operationManager addOperationWithBlock:^{
+        
         [weakInstance instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+            
             if (success) {
+                
                 [weakInstance.dispatchManager runQueuedDispatches];
+                
             } else {
+                
                 [weakInstance disable];
-                [weakInstance.logger logNormal:@"Failed to start: %@", error ];
+                
             }
+            
             if (completion) completion(success, error);
         }];
+        
     }];
     
     return instance;
@@ -357,9 +362,13 @@ __strong static NSDictionary *staticAllInstances = nil;
     self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
     
     if (![TEALConfiguration isValidConfiguration:configuration]) {
-        [self.logger logNormal:(@"Invalid Configuration, check your account, profile and enviornment options.")];
+        
+        NSError *error = [TEALError errorWithCode:400
+                                      description:@"Could not initialize instance."
+                                           reason:@"Invalid Configuration."
+                                       suggestion:@"Check the account, profile and environment options."];
         if (setupCompletion) {
-            setupCompletion(NO, nil);
+            setupCompletion(NO, error);
         }
         return;
     }
@@ -413,8 +422,9 @@ __strong static NSDictionary *staticAllInstances = nil;
     __block typeof(self) __weak weakSelf = self;
     
     [self.operationManager addOperationWithBlock:^{
+        
         weakSelf.moduleData = newModuleData;
-        NSLog(@"%s new module data written: %@", __FUNCTION__, weakSelf.moduleData);
+        
     }];
     
 }
@@ -609,6 +619,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+    
+    
     self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
     //    [self.settings setVisitorIDCopy:self.dataSources.visitorIDCopy];
     self.settings.urlSessionManager = self.urlSessionManager;

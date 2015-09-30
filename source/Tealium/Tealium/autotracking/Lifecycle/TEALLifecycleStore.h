@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TEALBlocks.h"
 
 @interface TEALLifecycleStore : NSObject
 
@@ -14,7 +15,7 @@
 
 - (NSDictionary *) loadDataForKey:(NSString *)key;
 
-- (void) saveData:(NSDictionary *)data forKey:(NSString *)key;
+- (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion;
 
 #warning DELETE BELOW
 

@@ -26,8 +26,14 @@
 
 @interface Tealium (Collect) <TEALModulesDelegate>
 
+/**
+ *
+ */
 - (NSURL *) profileURL;
 
+/**
+ *
+ */
 - (NSURL *) profileDefinitionURL;
 
 /**

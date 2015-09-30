@@ -20,7 +20,7 @@
 
 + (NSString *) messageHeaderFromConfiguration:(TEALConfiguration *) configuration {
     NSString *version = TEALLibraryVersion;
-    NSString *instanceID = configuration.instanceID;
+    NSString *instanceID = configuration? configuration.instanceID:@"(unknown instance id)";
     
     return [NSString stringWithFormat:@"TEALIUM %@: instance %@: ", version, instanceID];
 }
@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         
-        _logLevel = configuration.logLevel;
+        _logLevel = configuration? configuration.logLevel: TEALLogLevelWarningsOnly;
         _messageHeader = [TEALLogger messageHeaderFromConfiguration:configuration];
     }
     return self;

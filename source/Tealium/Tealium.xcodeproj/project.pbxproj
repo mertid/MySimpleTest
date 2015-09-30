@@ -502,8 +502,8 @@
 			children = (
 				7123B60B1B6BB81600EA308C /* TEALDispatchConstants.h */,
 				E726B10C1B5D6362007864E4 /* TEALDispatchManager.h */,
-				71DCA7C11B5971D0001706CF /* TEALDispatch.h */,
 				E726B10D1B5D6362007864E4 /* TEALDispatchManager.m */,
+				71DCA7C11B5971D0001706CF /* TEALDispatch.h */,
 				71DCA7C21B5971D0001706CF /* TEALDispatch.m */,
 			);
 			path = events;

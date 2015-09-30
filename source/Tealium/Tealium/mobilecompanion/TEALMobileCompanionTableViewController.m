@@ -37,11 +37,21 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TEALMobileCompanionCellID forIndexPath:indexPath];
     
-    // Configure the cell...
+    // TODO: Format cells
     
-    TEALMobileCompanionContentRow *row = [self.currentContent rowDataForSectionIndex:indexPath.section][indexPath.row];
+    if ([self.currentContent type] == TEALMobileCompanionContentTypeNormal) {
     
-    cell.textLabel.text = row? [row keyValue]:nil;
+        TEALMobileCompanionContentRow *row = [self.currentContent rowDataForSectionIndex:indexPath.section][indexPath.row];
+        
+        cell.textLabel.text = row? [row keyValue]:nil;
+        
+    } else {
+        
+//        cell = [self toolCell:cell
+//                 forIndexPath:indexPath
+//                  inTableView:tableView];
+        
+    }
     
     return cell;
 }
@@ -126,5 +136,80 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - PRIVATE HELPER
+
+//- (UITableViewCell*) toolCell:(UITableViewCell*)cell forIndexPath:(NSIndexPath*)indexPath inTableView:(UITableView*)tableView{
+//    
+//    if ((int)indexPath.row >= (int)[_currentContent all count]){
+//        return nil;
+//    }
+//    
+//        [cell.contentView setBackgroundColor:tableView.backgroundColor];
+//        NSString *key = [_currentContentDict allKeys][indexPath.row];
+//        
+//        // match tableview width but keep cell.contentview height
+//        CGFloat baseW = tableView.bounds.size.width;
+//        CGFloat baseH = kTableviewHeight_tools;
+//        CGFloat baseX = cell.contentView.frame.origin.x;
+//        CGFloat baseY = cell.contentView.frame.origin.y;
+//        CGRect rect = CGRectMake(baseX, baseY, baseW, baseH);
+//        
+//        // Background
+//        UIView *bg = [[UIView alloc] initWithFrame:rect];
+//        [bg setBackgroundColor:[UIColor whiteColor]];
+//        bg.layer.cornerRadius = 8;
+//        bg.layer.masksToBounds = YES;
+//        [TealiumInternalConstants markAsTealiumObject:bg];
+//        [cell.contentView addSubview:bg];
+//        CGRect bgBounds = bg.bounds;
+//        
+//        // Title
+//        CGFloat tx = 5; //bgBounds.size.width * 0.05;
+//        CGFloat ty = 5; //bgBounds.size.height * 0.05;
+//        CGFloat tw = bgBounds.size.width - tx;
+//        CGFloat th = 16; //bgBounds.size.height * 0.1;
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(tx, ty, tw, th)];
+//        [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:10]];
+//        [label setText:key];
+//        [TealiumInternalConstants markAsTealiumObject:label];
+//        [bg addSubview:label];
+//        
+//        // Add button to tool view
+//        CGFloat x = bgBounds.size.width * 0.4;
+//        CGFloat y = bgBounds.size.height * 0.75;
+//        CGFloat w = bgBounds.size.width - x - 5;
+//        CGFloat h = kToolButtonMinHeight; //bgBounds.size.height * 0.15;
+//        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(x, y, w, h)];
+//        NSDictionary *dict = _currentContentDict[key];
+//        NSNumber *tagNumber = dict[@"buttonTag"];
+//        if (tagNumber)[button setTag:[tagNumber intValue]];
+//        NSString *buttonTitle = dict[@"buttonTitle"];
+//        if (buttonTitle) [button setTitle:buttonTitle forState:UIControlStateNormal];
+//        [button.titleLabel setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+//        [button setBackgroundColor:[self colorFor:ColorBlue]];
+//        [button addTarget:_delegate action:@selector(popupViewToolButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+//        [TealiumInternalConstants markAsTealiumObject:button];
+//        [bg addSubview:button];
+//        
+//        // Description - squeezed between button and title
+//        CGFloat dx = bgBounds.size.width * 0.05;
+//        CGFloat dy = ty + th;
+//        CGFloat dw = bgBounds.size.width - (2 * dx);
+//        CGFloat dh = 50; //bgBounds.size.height - dy - y;
+//        UITextView *tv = [[UITextView alloc] initWithFrame:CGRectMake(dx, dy, dw, dh)];
+//        NSString *description = dict[@"description"];
+//        [tv setEditable:NO];
+//        [tv setBackgroundColor:[UIColor clearColor]];
+//        [tv setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+//        [tv setText:description];
+//        [tv setUserInteractionEnabled:NO];
+//        [TealiumInternalConstants markAsTealiumObject:tv];
+//        [bg addSubview:tv];
+//    }
+//    return cell;
+//}
+
+
 
 @end
