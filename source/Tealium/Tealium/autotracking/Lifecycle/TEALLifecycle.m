@@ -11,18 +11,18 @@
 #import "TEALLifecycleStore.h"
 #import "Tealium.h"
 #import "TEALDataSourceConstants.h"
+#import "TEALLifecycleDataSources.h"
 #import "TEALBlocks.h"
 #import "TEALError.h"
-
-NSString * const TEALKeyLifecycleLaunchEvents = @"launchEvents";
-NSString * const TEALKeyLifecycleWakeEvents = @"wakeEvents";
-NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
 
 @interface TEALLifecycle ()
 
 @property (nonatomic) BOOL enabled;
 @property (nonatomic) BOOL launchAlreadyDetected;
+@property (nonatomic) double privateSecondAwake;
 @property (nonatomic, strong) NSString *privateInstanceID;
+@property (nonatomic, strong) NSDictionary *privateStaticLifecycleData;
+@property (nonatomic, strong) NSDictionary *privateLastIncrementedLifecycleData;
 @property (nonatomic, copy) TEALDictionaryCompletionBlock eventProcessingBlock;
 @property (nonatomic, strong) TEALLifecycleStore *privateStore;
 
@@ -44,6 +44,7 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
         
         _privateInstanceID = instanceID;
         _privateStore = [[TEALLifecycleStore alloc] initWithInstanceID:instanceID];
+        [_privateStore loadAllData];
         
     }
     return self;
@@ -88,15 +89,21 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
 
 - (NSDictionary *)currentLifecycleData {
     
-    NSNumber *launchCount = @([[self launchEvents] totalCount]);
-    NSNumber *wakeCount = @([[self wakeEvents] totalCount]);
-    NSNumber *sleepCount = @([[self sleepEvents] totalCount]);
+    TEALLifecycleEvents *launchEvents = [self launchEvents];
+    
+    NSNumber *daysSinceLaunch = [TEALLifecycleDataSources daysSinceDate:[launchEvents firstEvent]];
+    NSNumber *daysSinceUpdate = [TEALLifecycleDataSources daysSinceDate:[launchEvents lastUpdate]];
+    
+    NSNumber *secondsAwake = @((unsigned int)[self secondsAwake]);
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     
-    if (launchCount)mDict[TEALDataSourceKey_LifecycleTotalLaunchCount] = launchCount;
-    if (wakeCount)  mDict[TEALDataSourceKey_LifecycleTotalWakeCount] = wakeCount;
-    if (sleepCount) mDict[TEALDataSourceKey_LifecycleTotalSleepCount] = sleepCount;
+    [mDict addEntriesFromDictionary:[self staticLifecycleData]];
+    [mDict addEntriesFromDictionary:self.privateLastIncrementedLifecycleData];
+
+    if (daysSinceLaunch)mDict[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
+    if (daysSinceUpdate)mDict[TEALDataSourceKey_LifecycleDaysSinceUpdate] = daysSinceUpdate;
+    if (secondsAwake) mDict[TEALDataSourceKey_LifecycleSecondsAwake] = secondsAwake;
 
     
 #warning IMPLEMENT remaining data sources
@@ -166,8 +173,9 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     
     if (!self.privateLaunchEvents) {
         self.privateLaunchEvents = [[TEALLifecycleEvents alloc] init];
-        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleLaunchEvents];
+        NSDictionary *saveData = self.privateStore[TEALDataSourceValue_LifecycleLaunch];
         [self.privateLaunchEvents loadFromUserDefaults:saveData];
+        
     }
     return self.privateLaunchEvents;
 }
@@ -175,8 +183,7 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
 - (TEALLifecycleEvents *) wakeEvents {
     if (!self.privateWakeEvents) {
         self.privateWakeEvents = [[TEALLifecycleEvents alloc] init];
-        [self.privateWakeEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleWakeEvents]];
-        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleWakeEvents];
+        NSDictionary *saveData = self.privateStore[TEALDataSourceValue_LifecycleWake];
         [self.privateWakeEvents loadFromUserDefaults:saveData];
     }
     return self.privateWakeEvents;
@@ -185,13 +192,11 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
 - (TEALLifecycleEvents *) sleepEvents {
     if (!self.privateSleepEvents) {
         self.privateSleepEvents = [[TEALLifecycleEvents alloc] init];
-        [self.privateSleepEvents loadFromUserDefaults:[_privateStore loadDataForKey:TEALKeyLifecycleSleepEvents]];
-        NSDictionary *saveData = [self.privateStore loadDataForKey:TEALKeyLifecycleSleepEvents];
+        NSDictionary *saveData = self.privateStore[TEALDataSourceValue_LifecycleSleep];
         [self.privateSleepEvents loadFromUserDefaults:saveData];
     }
     return self.privateSleepEvents;
 }
-
 
 #pragma mark - PRIVATE 
 
@@ -202,12 +207,6 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     }
     
     NSString *eventName = [self eventNameFromNotification:notification];
-    
-//    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
-//        if (self.launchAlreadyDetected){
-//            return;
-//        }
-//    }
     
     [self processLifecycleEventWithName:eventName];
     
@@ -247,7 +246,6 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     
 }
 
-
 - (void) processLifecycleEventWithName:(NSString *)eventName {
     
     if(!eventName){
@@ -264,15 +262,18 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
         if (success) {
             mDict[TEALDataSourceKey_LifecycleType] = eventName;
             
-            [mDict addEntriesFromDictionary:[self currentLifecycleData]];
+            [mDict addEntriesFromDictionary:[weakSelf currentLifecycleData]];
+            
+            // Special Launch time data sources
+            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+                [mDict addEntriesFromDictionary:[weakSelf additionalLaunchDataForEvents:[weakSelf launchEvents]]];
+            }
+            
+            // Special sleep time processing
+            
             
             lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
         }
-#warning duplicate lifecycle launch events seen.
-        
-#warning First launch event does not have updated count, but all other events at the same time do
-        
-#warning Wakes and sleep events not loading from archive
         
         if (weakSelf.eventProcessingBlock) {
             
@@ -283,7 +284,6 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     
 
 }
-
 
 - (void) incrementEventWithName:(NSString *)eventName completion:(TEALBooleanCompletionBlock)completion{
     
@@ -296,21 +296,21 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
         events = [self launchEvents];
         [events addEvent];
         data = [[self launchEvents] dataForUserDefaults];
-        key = TEALKeyLifecycleLaunchEvents;
+        key = TEALDataSourceValue_LifecycleLaunch;
         
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
         
         events = [self wakeEvents];
         [events addEvent];
         data = [[self wakeEvents] dataForUserDefaults];
-        key = TEALKeyLifecycleWakeEvents;
+        key = TEALDataSourceValue_LifecycleWake;
     
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
         
         events = [self sleepEvents];
         [events addEvent];
         data = [[self sleepEvents] dataForUserDefaults];
-        key = TEALKeyLifecycleSleepEvents;
+        key = TEALDataSourceValue_LifecycleSleep;
     }
     
     if (!events){
@@ -338,10 +338,124 @@ NSString * const TEALKeyLifecycleSleepEvents = @"sleepEvents";
     }
     
     
+    __block typeof(self) __weak weakSelf = self;
+
     [self.store saveData:data forKey:eventName completion:^(BOOL success, NSError *error) {
+        
+        [weakSelf updateLastIncrementedLifecycleData];
+
         if (completion) completion(success, error);
+        
     }];
     
+}
+
+- (void) updateLastIncrementedLifecycleData {
+    
+    TEALLifecycleEvents *launchEvents = [self launchEvents];
+    TEALLifecycleEvents *wakeEvents = [self wakeEvents];
+    TEALLifecycleEvents *sleepEvents = [self sleepEvents];
+    
+    NSNumber *daysSinceLaunch = [TEALLifecycleDataSources daysSinceDate:[launchEvents firstEvent]];
+    NSNumber *daysSinceUpdate = [TEALLifecycleDataSources daysSinceDate:[launchEvents lastUpdate]];
+    
+    NSNumber *currentLaunchCount = @([launchEvents currentCount]);
+    NSNumber *currentWakeCount = @([wakeEvents currentCount]);
+    NSNumber *currentSleepCount = @([sleepEvents currentCount]);
+    NSNumber *launchCount = @([launchEvents totalCount]);
+    NSNumber *wakeCount = @([wakeEvents totalCount]);
+    NSNumber *sleepCount = @([sleepEvents totalCount]);
+    
+    NSString *lastLaunchDate = [TEALLifecycleDataSources timestampISOFromDate:[launchEvents lastEvent]];
+    NSString *lastWakeDate = [TEALLifecycleDataSources timestampISOFromDate:[wakeEvents lastEvent]];
+    NSString *lastSleepDate = [TEALLifecycleDataSources timestampISOFromDate:[sleepEvents lastEvent]];
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    [mDict addEntriesFromDictionary:[self staticLifecycleData]];
+    
+    if (daysSinceLaunch)mDict[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
+    if (daysSinceUpdate)mDict[TEALDataSourceKey_LifecycleDaysSinceUpdate] = daysSinceUpdate;
+    if (currentLaunchCount) mDict[TEALDataSourceKey_LifecycleLaunchCount] = currentLaunchCount;
+    if (currentWakeCount) mDict[TEALDataSourceKey_LifecycleWakeCount] = currentWakeCount;
+    if (currentSleepCount)mDict[TEALDataSourceKey_LifecycleSleepCount] = currentSleepCount;
+    if (launchCount)mDict[TEALDataSourceKey_LifecycleTotalLaunchCount] = launchCount;
+    if (wakeCount)  mDict[TEALDataSourceKey_LifecycleTotalWakeCount] = wakeCount;
+    if (sleepCount) mDict[TEALDataSourceKey_LifecycleTotalSleepCount] = sleepCount;
+    if (lastLaunchDate) mDict[TEALDataSourceKey_LifecycleLastLaunchDate] = lastLaunchDate;
+    if (lastWakeDate) mDict[TEALDataSourceKey_LifecycleLastWakeDate] = lastWakeDate;
+    if (lastSleepDate)mDict[TEALDataSourceKey_LifecycleLastSleepDate] = lastSleepDate;
+    
+#warning IMPLEMENT remaining data sources
+    
+    self.privateLastIncrementedLifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+    
+}
+
+- (NSDictionary *) staticLifecycleData {
+    
+    if (!self.privateStaticLifecycleData){
+        TEALLifecycleEvents *launchEvents = [self launchEvents];
+        
+        NSString *firstLaunch = [TEALLifecycleDataSources timestampISOFromDate:[launchEvents firstEvent]];
+        NSString *firstLaunchMMDDYYY = [TEALLifecycleDataSources timestampAsMMDDYYYYFromDate:[launchEvents firstEvent]];
+        
+        
+        NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+        
+        if (firstLaunch) mDict[TEALDataSourceKey_LifecycleFirstLaunchDate] = firstLaunch;
+        if (firstLaunchMMDDYYY) mDict[TEALDataSourceKey_LifecycleFirstLaunchDate_MMDDYYYY] = firstLaunchMMDDYYY;
+        
+        self.privateStaticLifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+    }
+    
+    return self.privateStaticLifecycleData;
+}
+
+- (NSDictionary *) additionalLaunchDataForEvents:(TEALLifecycleEvents *)launchEvents {
+    
+    BOOL isFirstLaunch = NO;
+    if ([launchEvents totalCount] == 1){
+        isFirstLaunch = YES;
+    }
+    
+    BOOL isFirstLaunchAfterUpdate = NO;
+    if ([launchEvents totalCount] > [launchEvents currentCount] &&
+        [launchEvents currentCount] == 1){
+        isFirstLaunchAfterUpdate = YES;
+    }
+    
+#warning Prior seconds awake calculation here
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    if (isFirstLaunch) mDict[TEALDataSourceKey_LifecycleIsFirstLaunch] = TEALDataSourceValue_True;
+    if (isFirstLaunchAfterUpdate) mDict[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate] = TEALDataSourceValue_True;
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+}
+
+- (double) priorSecondsAwake {
+    
+#warning IMPLEMENT
+    
+    return 0.0;
+}
+
+- (double) secondsAwake {
+
+    NSDate *lastLaunchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[[self launchEvents] lastEvent] anotherDate:[[self wakeEvents] lastEvent]];
+    
+    double seconds = [TEALLifecycleDataSources secondsAppHasBeenAwakeToNowFrom:lastLaunchOrWake];
+    
+    return seconds;
+    
+}
+
+- (void) updateSecondsAwake {
+    
+    
+#warning IMPLEMENt
 }
 
 - (NSString *) description {

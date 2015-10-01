@@ -184,9 +184,7 @@
 }
 
 - (BOOL) autotrackingTimestampInfoEnabled {
-    
-    return NO;
-    
+        
     if (self.publishSettings.disableTimestampAutotracking) return NO;
     return self.configuration.autotrackingTimestampInfoEnabled;
 }

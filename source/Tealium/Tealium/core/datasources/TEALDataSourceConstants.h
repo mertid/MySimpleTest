@@ -62,6 +62,7 @@ extern NSString * const TEALDataSourceKey_LifecycleType;
 extern NSString * const TEALDataSourceKey_LifecycleTotalLaunchCount;
 extern NSString * const TEALDataSourceKey_LifecycleTotalWakeCount;
 extern NSString * const TEALDataSourceKey_LifecycleTotalSleepCount;
+extern NSString * const TEALDataSourceKey_LifecycleWakeCount;
 
 extern NSString * const TEALDataSourceKey_ObjectClass;
 extern NSString * const TEALDataSourceKey_Orientation;

@@ -414,18 +414,18 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) addModuleData:(NSDictionary *) dictionary {
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:self.moduleData];
+    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
+    [mDict addEntriesFromDictionary:self.moduleData];
     [mDict addEntriesFromDictionary:dictionary];
     
     NSDictionary *newModuleData = [NSDictionary dictionaryWithDictionary:mDict];
     
-    __block typeof(self) __weak weakSelf = self;
+    self.moduleData = newModuleData;
     
-    [self.operationManager addOperationWithBlock:^{
-        
-        weakSelf.moduleData = newModuleData;
-        
-    }];
+//    __block typeof(self) __weak weakSelf = self;
+//    [self.operationManager addOperationWithBlock:^{
+//        weakSelf.moduleData = newModuleData;
+//    }];
     
 }
 

@@ -25,7 +25,7 @@
  */
 @interface Tealium : NSObject
 
-@property (readonly, nonatomic) TEALSettings *settings;
+@property (readonly, nonatomic) TEALSettings * _Nullable settings;
 
 # pragma mark - Setup / Configuration
 
@@ -36,7 +36,7 @@
  *
  *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
  */
-+ (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration;
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration * _Nullable)configuration;
 
 #pragma mark - Instance Management
 /**
@@ -44,14 +44,14 @@
  *
  *  @param key NSString identifier for the library instance.
  */
-+ (instancetype) instanceForKey:(NSString *)key;
++ (_Nullable instancetype) instanceForKey:(NSString * _Nonnull)key;
 
 /**
  *  Removes and nils out an instance of the library with the given key.
  *
  *  @param key NSString identifier for the library instance to remove.
  */
-+ (void) destroyInstanceForKey:(NSString *)key;
++ (void) destroyInstanceForKey:(NSString * _Nonnull)key;
 
 /**
  *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
@@ -98,7 +98,7 @@
  *
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
-- (NSDictionary *) volatileDataSourcesCopy;
+- (NSDictionary * _Nonnull) volatileDataSourcesCopy;
 
 /**
  *  Adds additional data to the temporary data sources dictionary. This command is added to the end of the current Tealium background queue for writing.
@@ -106,30 +106,30 @@
  *  @param additionalDataSources New or overwrite data sources to add to the volatile data sources store.  These key values can only be superceded by the custom data sources added to track calls.
  *
  */
-- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources;
+- (void) addVolatileDataSources:(NSDictionary * _Nonnull)additionalDataSources;
 
 /**
  *  Removes key-value pairs from the library instance's volatile memory
  *
  *  @param dataSourceKeys An NSArray of string keys to remove
  */
-- (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys;
+- (void) removeVolatileDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 
 /**
  *  Copy of all long term Tealium data source data written to and read from disk, specific to a given library instance.
  *  
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
-- (NSDictionary *) persistentDataSourcesCopy;
+- (NSDictionary * _Nonnull) persistentDataSourcesCopy;
 
 /**
  */
-- (void) addPersistentDataSources:(NSDictionary *)additionalDataSources;
+- (void) addPersistentDataSources:(NSDictionary * _Nonnull)additionalDataSources;
 
 /**
  
  */
-- (void) removePersistentDataSourcesForKeys:(NSArray *)dataSourceKeys;
+- (void) removePersistentDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 
 
 

@@ -13,7 +13,7 @@
 
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
-- (NSDictionary *) loadDataForKey:(NSString *)key;
+- (void) loadAllData;
 
 - (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion;
 

@@ -203,6 +203,18 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
 }
 
+- (void) disableAutotrackingUIEvents {
+    
+#warning IMPLMENT
+    
+}
+
+- (void) disableAutotrackingViews {
+    
+#warning IMPLEMENT
+    
+}
+
 #pragma mark - PRIVATE LIFECYCLE HANLDING
 
 - (NSString *) lifecycleInstanceID {

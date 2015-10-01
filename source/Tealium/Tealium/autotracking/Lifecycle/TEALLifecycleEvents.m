@@ -42,7 +42,7 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
             
             if (self.privateCurrentVersion) {
                 self.privateLastUpdate = newVersion;
-                self.privateLastUpdate = NSTimeIntervalSince1970;
+                self.privateLastUpdate = [[NSDate date] timeIntervalSince1970];
             }
             
             self.privateCurrentVersion = newVersion;
@@ -57,11 +57,12 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 - (void) increment {
     
     if (!self.privateFirstEvent) {
-        self.privateFirstEvent = NSTimeIntervalSince1970;
+        self.privateFirstEvent = [[NSDate date] timeIntervalSince1970];
     }
-    self.privateLastEvent = NSTimeIntervalSince1970;
+    self.privateLastEvent = [[NSDate date] timeIntervalSince1970];
     self.privateCurrentCount++;
     self.privateTotalCount++;
+    
 }
 
 - (double) currentCount {
@@ -103,7 +104,8 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 
 - (NSDate *) firstEvent {
     
-    if (!self.privateFirstEvent) {
+    if (!self.privateFirstEvent ||
+        self.privateFirstEvent <= 0) {
         return nil;
     }
     
@@ -113,7 +115,8 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 
 - (NSDate *) lastEvent {
     
-    if (!self.privateLastEvent) {
+    if (!self.privateLastEvent ||
+        self.privateLastEvent <= 0) {
         return nil;
     }
     
@@ -123,7 +126,8 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 
 - (NSDate *) lastUpdate {
     
-    if (!self.privateLastUpdate) {
+    if (!self.privateLastUpdate ||
+        self.privateLastUpdate <= 0) {
         return nil;
     }
     
@@ -144,6 +148,8 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 }
 
 - (void) loadFromUserDefaults:(NSDictionary *)dictionary {
+    
+    if (!dictionary) return;
     
     self.privateCurrentCount = [dictionary[TEALKeyLifecycleCurrentCount] doubleValue];
     self.privateCurrentVersion = [dictionary[TEALKeyLifecycleCurrentVersion] doubleValue];
@@ -210,8 +216,10 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 
 
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<%@ firstEvent:%@ lastEvent:%@ lastUpdate:%@>",
+    return [NSString stringWithFormat:@"<%@ current count:%f total count:%f firstEvent:%@ lastEvent:%@ lastUpdate:%@>",
             NSStringFromClass([self class]),
+            [self currentCount],
+            [self totalCount],
             [self firstEvent],
             [self lastEvent],
             [self lastUpdate]

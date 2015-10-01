@@ -24,8 +24,6 @@
 
 - (void) disableAutotrackingLifecycle;
 - (void) disableAutotrackingCrashes;
-
-#warning IMPLEMENT remaining in respective modules
 - (void) disableAutotrackingUIEvents;
 - (void) disableAutotrackingViews;
 - (void) disableMobileCompanion;

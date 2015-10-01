@@ -54,8 +54,6 @@
 
     }
     
-    self.isUILoaded = YES;
-    
     __block typeof(self) __weak weakSelf = self;
 
     [UIView animateWithDuration:0.5
@@ -76,6 +74,11 @@
                          [weakSelf minimizedBackground].alpha = 0.0;
                          
                      } completion:^(BOOL finished) {
+                         
+                         if (!weakSelf.isUILoaded){
+                             [weakSelf selectTab:[self.privateTabButtons objectAtIndex:0]];
+                             weakSelf.isUILoaded = YES;
+                         }
                          
                      }];
 

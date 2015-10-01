@@ -39,20 +39,28 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     return self;
 }
 
-- (NSDictionary *) loadDataForKey:(NSString *)key {
+- (void) loadAllData {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *allEvents = [defaults objectForKey:[self storageKey]];
-    NSDictionary *keyEvents = allEvents[key];
-    
-    if (![keyEvents isKindOfClass:[NSDictionary class]]){
-        return @{};
-    }
-    
-    [self.lifecycleEvents addEntriesFromDictionary:@{key:keyEvents}];
-    return self.lifecycleEvents[key];
-    
+    [self.lifecycleEvents addEntriesFromDictionary:allEvents];
+
 }
+
+//- (NSDictionary *) loadDataForKey:(NSString *)key {
+//    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSDictionary *allEvents = [defaults objectForKey:[self storageKey]];
+//    NSDictionary *keyEvents = allEvents[key];
+//    
+//    if (![keyEvents isKindOfClass:[NSDictionary class]]){
+//        return @{};
+//    }
+//    
+//    [self.lifecycleEvents addEntriesFromDictionary:@{key:keyEvents}];
+//    return self.lifecycleEvents[key];
+//    
+//}
 
 - (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion{
     
@@ -61,6 +69,8 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     if (!data){
         return;
     }
+    
+#warning Save seconds awake here if sleep?
     
     self.lifecycleEvents[key] = data;
     
@@ -115,10 +125,15 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     
     if (obj && [obj isKindOfClass:[NSDictionary class]]) {
+        
         dispatch_barrier_sync(self.queue, ^{
+            
             [self.lifecycleEvents addEntriesFromDictionary:obj];
+            
             unarchived = YES;
+            
         });
+        
     }
     return unarchived;
 }
@@ -139,11 +154,12 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
                                                   forKey:key];
         [[NSUserDefaults standardUserDefaults] synchronize];
         success = YES;
+        
     } else {
         error = [TEALError errorWithCode:400
-                             description:@""
-                                  reason:@""
-                              suggestion:@""];
+                             description:@"Problem saving lifecycle data."
+                                  reason:@"Data for lifecycle event missing."
+                              suggestion:@"Consult Tealium mobile Engineer - LifecycleStore line 143"];
         
     }
     
