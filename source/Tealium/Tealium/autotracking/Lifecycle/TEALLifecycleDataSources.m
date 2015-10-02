@@ -13,7 +13,7 @@
 
 #pragma mark - PUBLIC
 
-+ (NSNumber*) localDayOfWeek {
++ (NSNumber*) dayOfWeekLocal {
     
     NSNumber *dayOfWeek = @0;
     
@@ -42,6 +42,20 @@
     
     return @0;
     
+}
+
+static NSDateFormatter *_HH;
+
++ (NSString *) hourOfDayLocal{
+    
+    NSDate *date = [NSDate date];
+    if (!_HH){
+        _HH = [[NSDateFormatter alloc]init];
+        _HH.dateFormat = @"HH";
+        [_HH setTimeZone:[NSTimeZone systemTimeZone]];
+    }
+    if (date) return [_HH stringFromDate:date];
+    return nil;
 }
 
 + (double) secondsAppHasBeenAwakeToNowFrom:(NSDate*)date{
@@ -92,21 +106,41 @@ static NSDateFormatter *_MMDDYYYY;
 
 #warning First Wake today and month calculations don't make sense
 
-+ (BOOL) isFirstWakeTodayForDate:(NSDate*)date{
-    NSDate *startOfToday = [self beginningOfDayForDate:date];
-    if([date compare: startOfToday] == NSOrderedAscending){ // if first is earlier in time than second
-        return YES;
-    }
-    return NO;
++ (BOOL) wasYesterdayDate:(NSDate *) date {
+ 
+    NSDate *dayThreshold = [self beginningOfDayForDate:[NSDate date]];
+    
+    NSDate *earlierDate = [self earlierDateBetweenDate:date anotherDate:dayThreshold];
+    
+    return [earlierDate isEqualToDate:date];
+    
 }
 
-+ (BOOL) isFirstWakeOfMonthForDate:(NSDate*)date{
-    NSDate *startOfMonth = [self beginningOfMonthForDate:date];
-    if([date compare: startOfMonth] == NSOrderedAscending){ // if first is earlier in time than second
-        return YES;
-    }
-    return NO;
++ (BOOL) wasLastMonthDate:(NSDate *) date {
+    
+    NSDate *monthThreshold = [self beginningOfMonthForDate:[NSDate date]];
+    
+    NSDate *earlierDate = [self earlierDateBetweenDate:date anotherDate:monthThreshold];
+    
+    return [earlierDate isEqual:date];
 }
+
+
+//+ (BOOL) isFirstWakeTodayForDate:(NSDate*)date{
+//    NSDate *startOfToday = [self beginningOfDayForDate:date];
+//    if([date compare: startOfToday] == NSOrderedAscending){ // if first is earlier in time than second
+//        return YES;
+//    }
+//    return NO;
+//}
+
+//+ (BOOL) isFirstWakeOfMonthForDate:(NSDate*)date{
+//    NSDate *startOfMonth = [self beginningOfMonthForDate:date];
+//    if([date compare: startOfMonth] == NSOrderedAscending){ // if first is earlier in time than second
+//        return YES;
+//    }
+//    return NO;
+//}
 
 + (NSDate *) earlierDateBetweenDate:(NSDate *)date anotherDate:(NSDate*)anotherDate {
     

@@ -35,6 +35,8 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 - (void) addEvent {
     
     @synchronized(self) {
+    
+        NSDate *now = [NSDate date];
         
         if ([self newVersionDetected]){
             
@@ -42,24 +44,26 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
             
             if (self.privateCurrentVersion) {
                 self.privateLastUpdate = newVersion;
-                self.privateLastUpdate = [[NSDate date] timeIntervalSince1970];
+                self.privateLastUpdate = [now timeIntervalSince1970];
             }
             
             self.privateCurrentVersion = newVersion;
             self.privateCurrentCount = 0;
         }
         
-        [self increment];
+        [self incrementAtDate:now];
     }
     
 }
 
-- (void) increment {
+- (void) incrementAtDate:(NSDate*) date {
+    
+    double now = [date timeIntervalSince1970];
     
     if (!self.privateFirstEvent) {
-        self.privateFirstEvent = [[NSDate date] timeIntervalSince1970];
+        self.privateFirstEvent = now;
     }
-    self.privateLastEvent = [[NSDate date] timeIntervalSince1970];
+    self.privateLastEvent = now;
     self.privateCurrentCount++;
     self.privateTotalCount++;
     

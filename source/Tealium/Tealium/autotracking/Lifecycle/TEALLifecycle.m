@@ -34,8 +34,6 @@
 
 @implementation TEALLifecycle
 
-#warning ADD milestone dates tracking system
-
 #pragma mark - PUBLIC
 
 - (instancetype) initWithInstanceID:(NSString *)instanceID {
@@ -93,6 +91,8 @@
     
     NSNumber *daysSinceLaunch = [TEALLifecycleDataSources daysSinceDate:[launchEvents firstEvent]];
     NSNumber *daysSinceUpdate = [TEALLifecycleDataSources daysSinceDate:[launchEvents lastUpdate]];
+    NSNumber *dayOfWeekLocal = [TEALLifecycleDataSources dayOfWeekLocal];
+    NSString *hourOfDayLocal = [TEALLifecycleDataSources hourOfDayLocal];
     
     NSNumber *secondsAwake = @((unsigned int)[self secondsAwake]);
     
@@ -101,9 +101,11 @@
     [mDict addEntriesFromDictionary:[self staticLifecycleData]];
     [mDict addEntriesFromDictionary:self.privateLastIncrementedLifecycleData];
 
+    if (dayOfWeekLocal) mDict[TEALDataSourceKey_LifecycleDayOfWeek] = dayOfWeekLocal;
     if (daysSinceLaunch)mDict[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
     if (daysSinceUpdate)mDict[TEALDataSourceKey_LifecycleDaysSinceUpdate] = daysSinceUpdate;
     if (secondsAwake) mDict[TEALDataSourceKey_LifecycleSecondsAwake] = secondsAwake;
+    if (hourOfDayLocal) mDict[TEALDataSourceKey_LifecycleHourOfDayLocal] = hourOfDayLocal;
 
     
 #warning IMPLEMENT remaining data sources
@@ -212,8 +214,6 @@
     
 }
 
-#warning OPTIMIZE
-
 - (NSString *) eventNameFromNotification:(NSNotification *) notification {
     
     NSString *name = notification.name;
@@ -264,13 +264,19 @@
             
             [mDict addEntriesFromDictionary:[weakSelf currentLifecycleData]];
             
-            // Special Launch time data sources
+            // Special event based data sources
             if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
-                [mDict addEntriesFromDictionary:[weakSelf additionalLaunchDataForEvents:[weakSelf launchEvents]]];
+                [mDict addEntriesFromDictionary:[weakSelf additionalLaunchOnlyDataForEvents:[weakSelf launchEvents]]];
+                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
             }
             
-            // Special sleep time processing
+            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
+            }
             
+            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+                [weakSelf updatePriorSecondsAwake];
+            }
             
             lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
         }
@@ -356,9 +362,6 @@
     TEALLifecycleEvents *wakeEvents = [self wakeEvents];
     TEALLifecycleEvents *sleepEvents = [self sleepEvents];
     
-    NSNumber *daysSinceLaunch = [TEALLifecycleDataSources daysSinceDate:[launchEvents firstEvent]];
-    NSNumber *daysSinceUpdate = [TEALLifecycleDataSources daysSinceDate:[launchEvents lastUpdate]];
-    
     NSNumber *currentLaunchCount = @([launchEvents currentCount]);
     NSNumber *currentWakeCount = @([wakeEvents currentCount]);
     NSNumber *currentSleepCount = @([sleepEvents currentCount]);
@@ -374,8 +377,6 @@
     
     [mDict addEntriesFromDictionary:[self staticLifecycleData]];
     
-    if (daysSinceLaunch)mDict[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
-    if (daysSinceUpdate)mDict[TEALDataSourceKey_LifecycleDaysSinceUpdate] = daysSinceUpdate;
     if (currentLaunchCount) mDict[TEALDataSourceKey_LifecycleLaunchCount] = currentLaunchCount;
     if (currentWakeCount) mDict[TEALDataSourceKey_LifecycleWakeCount] = currentWakeCount;
     if (currentSleepCount)mDict[TEALDataSourceKey_LifecycleSleepCount] = currentSleepCount;
@@ -385,8 +386,6 @@
     if (lastLaunchDate) mDict[TEALDataSourceKey_LifecycleLastLaunchDate] = lastLaunchDate;
     if (lastWakeDate) mDict[TEALDataSourceKey_LifecycleLastWakeDate] = lastWakeDate;
     if (lastSleepDate)mDict[TEALDataSourceKey_LifecycleLastSleepDate] = lastSleepDate;
-    
-#warning IMPLEMENT remaining data sources
     
     self.privateLastIncrementedLifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
     
@@ -412,7 +411,18 @@
     return self.privateStaticLifecycleData;
 }
 
-- (NSDictionary *) additionalLaunchDataForEvents:(TEALLifecycleEvents *)launchEvents {
+- (NSString *) description {
+    return [NSString stringWithFormat:@"<%@ with instanceID:%@ \n launches:%@ \n wakes:%@ \n sleeps:%@",
+            NSStringFromClass([self class]),
+            self.instanceID,
+            [self launchEvents],
+            [self wakeEvents],
+            [self sleepEvents]];
+}
+
+#pragma mark - PRIVATE HELPERS
+
+- (NSDictionary *) additionalLaunchOnlyDataForEvents:(TEALLifecycleEvents *)launchEvents {
     
     BOOL isFirstLaunch = NO;
     if ([launchEvents totalCount] == 1){
@@ -425,25 +435,48 @@
         isFirstLaunchAfterUpdate = YES;
     }
     
-#warning Prior seconds awake calculation here
+    NSDate *lastUpdate = [launchEvents lastUpdate];
+    NSString *lastUpdateString = lastUpdate? [TEALLifecycleDataSources timestampISOFromDate:lastUpdate]:nil;
+    
+    NSNumber *priorSecondsAwake = @((unsigned int)[self priorSecondsAwake]);
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     
     if (isFirstLaunch) mDict[TEALDataSourceKey_LifecycleIsFirstLaunch] = TEALDataSourceValue_True;
     if (isFirstLaunchAfterUpdate) mDict[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate] = TEALDataSourceValue_True;
+    if (lastUpdate) mDict[TEALDataSourceKey_LifecycleUpdateLaunchDate] = lastUpdateString;
+    if (priorSecondsAwake) mDict[TEALDataSourceKey_LifecyclePriorSecondsAwake] = priorSecondsAwake;
     
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
+- (NSDictionary *) additionalWakeOrLaunchData {
+    
+    NSString *isFirstWakeToday = [self isFirstWakeToday]? TEALDataSourceValue_True: nil;
+    NSString *isFirstWakeMonth = [self isFirstWakeThisMonth]? TEALDataSourceValue_True: nil;
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    if (isFirstWakeToday){
+        mDict[TEALDataSourceKey_LifecycleIsFirstWakeToday] = isFirstWakeToday;
+    }
+    
+    if (isFirstWakeMonth){
+        mDict[TEALDataSourceKey_LifecycleIsFirstWakeThisMonth] = isFirstWakeMonth;
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+    
+}
+
 - (double) priorSecondsAwake {
     
-#warning IMPLEMENT
+    double prior = [self.privateStore[TEALDataSourceKey_LifecyclePriorSecondsAwake] doubleValue];
     
-    return 0.0;
+    return prior;
 }
 
 - (double) secondsAwake {
-
+    
     NSDate *lastLaunchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[[self launchEvents] lastEvent] anotherDate:[[self wakeEvents] lastEvent]];
     
     double seconds = [TEALLifecycleDataSources secondsAppHasBeenAwakeToNowFrom:lastLaunchOrWake];
@@ -452,19 +485,56 @@
     
 }
 
-- (void) updateSecondsAwake {
+- (void) updatePriorSecondsAwake {
     
+    double priorSeconds = [self.privateStore[TEALDataSourceKey_LifecyclePriorSecondsAwake] doubleValue];
+    double newSecondsToAdd = [self secondsAwake];
+    double newSecondsToRecord = priorSeconds + newSecondsToAdd;
     
-#warning IMPLEMENt
+    self.privateStore[TEALDataSourceKey_LifecyclePriorSecondsAwake] = @(newSecondsToRecord);
+    
 }
 
-- (NSString *) description {
-    return [NSString stringWithFormat:@"<%@ with instanceID:%@ \n launches:%@ \n wakes:%@ \n sleeps:%@",
-            NSStringFromClass([self class]),
-            self.instanceID,
-            [self launchEvents],
-            [self wakeEvents],
-            [self sleepEvents]];
+- (BOOL) isFirstWakeToday {
+    
+    // Find most recent prior wake or launch event
+    TEALLifecycleEvents *launchEvents = [self launchEvents];
+    TEALLifecycleEvents *wakeEvents = [self wakeEvents];
+    
+    NSDate *launchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[wakeEvents lastEvent] anotherDate:[launchEvents lastEvent]];
+    NSDate *firstLaunchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[wakeEvents firstEvent] anotherDate:[launchEvents firstEvent]];
+    
+    // First launch or wake period
+    if (!launchOrWake ||
+        [launchOrWake isEqualToDate:firstLaunchOrWake]){
+     
+        return YES;
+    }
+    
+    // If prior was yesterday = current event is true, false if vice-versa
+    return [TEALLifecycleDataSources wasYesterdayDate:launchOrWake];
+    
+}
+
+- (BOOL) isFirstWakeThisMonth {
+ 
+    TEALLifecycleEvents *launchEvents = [self launchEvents];
+    TEALLifecycleEvents *wakeEvents = [self wakeEvents];
+    
+    NSDate *launchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[wakeEvents lastEvent] anotherDate:[launchEvents lastEvent]];
+    NSDate *firstLaunchOrWake = [TEALLifecycleDataSources laterDateBetweenDate:[wakeEvents firstEvent] anotherDate:[launchEvents firstEvent]];
+    
+    // First wake or launch period
+    if (!launchOrWake ||
+        [launchOrWake isEqualToDate:firstLaunchOrWake]) {
+        
+        return YES;
+    }
+    
+    // If prior was month prior = current event is true
+    return [TEALLifecycleDataSources wasLastMonthDate:launchOrWake];
+    
+    
 }
 
 @end

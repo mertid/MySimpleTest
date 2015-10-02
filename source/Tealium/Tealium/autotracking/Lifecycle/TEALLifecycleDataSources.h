@@ -11,7 +11,11 @@
 @interface TEALLifecycleDataSources : NSException
 
 
++ (NSNumber *) dayOfWeekLocal;
+
 + (NSNumber *) daysSinceDate:(NSDate *)date;
+
++ (NSString *) hourOfDayLocal;
 
 + (double) secondsAppHasBeenAwakeToNowFrom:(NSDate*)date;
 
@@ -19,12 +23,13 @@
 
 + (NSDate *) laterDateBetweenDate:(NSDate *)date anotherDate:(NSDate*)anotherDate;
 
-+ (NSString*) timestampISOFromDate:(NSDate*)date;
++ (NSString *) timestampISOFromDate:(NSDate*)date;
 
-+ (NSString*) timestampAsMMDDYYYYFromDate:(NSDate*)timestamp;
++ (NSString *) timestampAsMMDDYYYYFromDate:(NSDate*)timestamp;
 
-+ (BOOL) isFirstWakeTodayForDate:(NSDate*)date;
++ (BOOL) wasYesterdayDate:(NSDate *) date;
 
-+ (BOOL) isFirstWakeOfMonthForDate:(NSDate*)date;
++ (BOOL) wasLastMonthDate:(NSDate *) date;
+
 
 @end
