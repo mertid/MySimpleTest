@@ -40,6 +40,10 @@ typedef NS_ENUM(NSInteger, TEALVisitorProfileAttributeType){
 
 @interface TEALVisitorProfileBaseAttribute : NSObject <NSCoding>
 
+/**
+ *
+ */
+- (instancetype) initWithType:(TEALVisitorProfileAttributeType)type;
 
 /**
  *  Compares relavent properties of two attributes for equality

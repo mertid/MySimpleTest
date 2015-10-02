@@ -139,9 +139,9 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 
     NSString *vClass = NSStringFromClass([view class]);
     
-    if (![view teal_autotrackingEnabled]){
-        return nil;
-    }
+//    if (![view teal_autotrackingEnabled]){
+//        return nil;
+//    }
     
     // if private skip and move up the chain
     if (![vClass hasPrefix:@"_"]) {

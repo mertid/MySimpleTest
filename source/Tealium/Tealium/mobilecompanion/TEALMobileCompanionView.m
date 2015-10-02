@@ -436,9 +436,11 @@
 
 - (void) disableAutotrackingOf:(NSObject *)object {
     
-#ifdef TEAL_MODULE_AUTOTRACKING
-    [object teal_setAutotrackingEnabled:NO];
-#endif
+#warning FIND Best way to implement this
+    
+//#ifdef TEAL_MODULE_AUTOTRACKING
+//    [object teal_setAutotrackingEnabled:NO forInstance:self.ins];
+//#endif
     
 }
 

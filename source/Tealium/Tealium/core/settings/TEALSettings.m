@@ -356,9 +356,12 @@
                                                                                                  error:&parseError];
                                 
                                 if ([weakPublishSettings areValidRawPublishSettings:parsedData]) {
+                                    
                                     [weakPublishSettings updateWithRawSettings:parsedData];
                                     if (completion) completion( weakPublishSettings.status, nil);
+                                    
                                 } else {
+                                    
                                     [weakPublishSettings loadArchived];
                                     if (completion) completion( weakPublishSettings.status, parseError );
                                 }

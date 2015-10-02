@@ -130,8 +130,8 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
 }
 
 - (void) setAutotrackingForObject:(NSObject *)object enable:(BOOL)isEnabled {
-    if ([object respondsToSelector:@selector(teal_setAutotrackingEnabled:)]){
-        [object teal_setAutotrackingEnabled:isEnabled];
+    if ([object respondsToSelector:@selector(teal_setAutotrackingEnabled:forInstance:)]){
+        [object teal_setAutotrackingEnabled:isEnabled forInstance:self.settings.instanceID];
     }
 }
 

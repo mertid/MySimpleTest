@@ -280,7 +280,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [weakInstance.operationManager addOperationWithBlock:^{
         
-        [weakInstance instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+        [weakInstance privateInstanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
             
             if (success) {
                 
@@ -356,7 +356,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     return nil;
 }
 
-- (void) instanceWithConfiguration:(TEALConfiguration *)configuration
+- (void) privateInstanceWithConfiguration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)setupCompletion {
     
     self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
@@ -675,7 +675,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         [self.logger logVerbose:@"Network found."];
 #warning IMPLMENT minutes to refresh system here
-        [weakSettings fetchPublishSettingsWithCompletion:nil];
+//        [weakSettings fetchPublishSettingsWithCompletion:nil];
     };
     
     weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {

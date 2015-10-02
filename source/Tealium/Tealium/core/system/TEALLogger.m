@@ -75,9 +75,7 @@
 }
 
 - (void) logVerbosity:(TEALLogLevel)logLevel message:(NSString *) message{
-    
-#warning Log warning levels still displaying logs for Normal and Verbose
-    
+        
     BOOL shouldLog = NO;
     switch (logLevel) {
         case TEALLogLevelWarningsOnly:

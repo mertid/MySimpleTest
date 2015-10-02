@@ -13,14 +13,14 @@
 @implementation NSDictionary (Tealium)
 
 - (NSDictionary *) teal_stringifiedDictionary {
- 
-#warning This method unsafe, causing crashes in 4.1.11
-    
+     
     NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
     
-    @autoreleasepool {
-        NSArray *allKeys = [self allKeys];
-        for (unsigned int i = 0; i < [allKeys count]; i++){
+    NSArray *allKeys = [self allKeys];
+    for (unsigned int i = 0; i < [allKeys count]; i++){
+        
+        @autoreleasepool {
+            
             id key = allKeys[i];
             id obj = self[key];
             
@@ -45,11 +45,12 @@
 
     NSMutableArray *sortedArray = [NSMutableArray array];
     
-    @autoreleasepool {
-        NSArray *keys = [self allKeys];
-        NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-        
-        for (NSString *key in sortedKeys) {
+    NSArray *keys = [self allKeys];
+    NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    for (NSString *key in sortedKeys) {
+        @autoreleasepool {
+            
             id object = self[key];
             NSString *string = [NSString stringWithFormat:@"%@ = %@", key, object];
             [sortedArray addObject:string];
