@@ -20,7 +20,7 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Second View Controller";
-    [self teal_setDataSources:@{@"test":@"executeTestCommand"}];
+    [self teal_setDataSources:@{@"event_name":@"reveal"}];
     self.testProperty = @"iVarTestValue";
     
     [[Tealium instanceForKey:@"1"] removeVolatileDataSourcesForKeys:@[@"volatileKey"]];
@@ -38,7 +38,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [[Tealium instanceForKey:@"1"] revealMobileCompanion];
+//    [[Tealium instanceForKey:@"1"] revealMobileCompanion];
     [[Tealium instanceForKey:@"2"] trackViewWithTitle:@"2ndView" dataSources:nil];
         
 }

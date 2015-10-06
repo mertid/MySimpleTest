@@ -157,7 +157,7 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
         NSMutableDictionary *objectInfoDataSources = [NSMutableDictionary dictionary];
         
         BOOL trackingObject;
-        SEL selector = NSSelectorFromString(@"teal_autotrackingEnabled");
+        SEL selector = NSSelectorFromString(@"teal_autotrackingEnabledForInstance:");
         IMP impSelector = [object methodForSelector:selector];
         BOOL (*funcInfo)(id, SEL) = (void *)impSelector;
         trackingObject = funcInfo(object, selector);

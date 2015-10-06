@@ -71,26 +71,37 @@
     
     if (!self.ivarIsEnabled) return;
     
-    [self.customView redrawExpanded];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.customView redrawExpanded];
+        
+    });
 }
 
 - (void) reveal {
     
     if (!self.ivarIsEnabled) return;
-    if ([self rootWindowControllerViewContainsSelf]) return;
     
-    self.view.alpha = 0.0;
-    
-    [self.overlays addOverlays];
-    
-    [[TEALViewScanner rootWindowController].view addSubview:self.view];
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         self.view.alpha = 1.0;
-                     } completion:^(BOOL finished) {
-                         
-                     }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if ([self rootWindowControllerViewContainsSelf]) return;
+        
+        self.view.alpha = 0.0;
+        
+        [self.overlays addOverlays];
+        
+        
+        [[TEALViewScanner rootWindowController].view addSubview:self.view];
+        
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.view.alpha = 1.0;
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+        
+    });
+
 }
 
 - (BOOL) rootWindowControllerViewContainsSelf {

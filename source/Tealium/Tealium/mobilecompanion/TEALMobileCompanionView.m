@@ -136,6 +136,8 @@
 
 #pragma mark - PRIVATE INSTANCE
 
+#warning REPLACE with initWithInstanceID
+
 - (instancetype) init {
 
     CGFloat x = ([[UIScreen mainScreen] bounds].size.width * 0.5) - (kControllerWidth * 0.5);
@@ -436,11 +438,10 @@
 
 - (void) disableAutotrackingOf:(NSObject *)object {
     
-#warning FIND Best way to implement this
-    
-//#ifdef TEAL_MODULE_AUTOTRACKING
-//    [object teal_setAutotrackingEnabled:NO forInstance:self.ins];
-//#endif
+    SEL setAutotracking = NSSelectorFromString(@"teal_setAutotrackingEnabled:forInstance:");
+    IMP impSetAutotracking = [object methodForSelector:setAutotracking];
+    void (*funcSetAutotracking)(id, SEL, BOOL, NSString*) = (void *)impSetAutotracking; // add arguments after SEL if needed
+    funcSetAutotracking(object, setAutotracking, NO, @"tempInstanceID"); // add arguments after selectorCarrierName if needed
     
 }
 

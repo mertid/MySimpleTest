@@ -40,37 +40,30 @@
 - (void) addReservedCommands:(TEALBooleanBlock)successBlock {
     
     __block typeof(self) __weak weakSelf = self;
-    __block __weak TEALOperationManager *weakOperationManager = self.operationManager;
+    __block TEALOperationManager *blockOperationManager = self.operationManager;
     
-    [weakOperationManager addOperationWithBlock:^{
-        
-        BOOL loadedHTTPCommand =
-        [weakSelf addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
-                         description:@"Processes tag created HTTP calls"
-                         targetQueue:weakOperationManager.underlyingQueue
-                               block:^(TEALRemoteCommandResponse*response) {
-                                   
-                                   if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
-                                       [responseB send];
-                                   }];
-                                   
-                               }];
-        
-        BOOL loadedMobileCompanionCommand =
-        [weakSelf addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
-                         description:@"Remote unlock Mobile Companion"
-                         targetQueue:weakOperationManager.underlyingQueue
-                               block:^(TEALRemoteCommandResponse*response) {
-                                   
-#warning THIS only works if the call comes in at least twice
-                                   
-                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:weakOperationManager];
-                               }];
-        
-        if (successBlock) successBlock(loadedHTTPCommand && loadedMobileCompanionCommand);
-        
-    }];
+    BOOL loadedHTTPCommand =
+    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
+                 description:@"Processes tag created HTTP calls"
+                 targetQueue:self.operationManager.underlyingQueue
+                       block:^(TEALRemoteCommandResponse*response) {
+                           
+                           if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
+                               [responseB send];
+                           }];
+                           
+                       }];
     
+    BOOL loadedMobileCompanionCommand =
+    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
+                 description:@"Remote unlock Mobile Companion"
+                 targetQueue:self.operationManager.underlyingQueue
+                       block:^(TEALRemoteCommandResponse*response) {
+                           
+                           [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:blockOperationManager];
+                       }];
+    
+    if (successBlock) successBlock(loadedHTTPCommand && loadedMobileCompanionCommand);
     
     
 }

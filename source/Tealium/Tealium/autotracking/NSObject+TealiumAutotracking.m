@@ -10,7 +10,6 @@
 #import "TEALDataSources+Autotracking.h"
 #import <objc/runtime.h>
 
-//static CFStringRef  const TEALKVOAutotrackDatasources = CFSTR("TEALIUM_KVO_AUTOTRACKING_DATASOURCES");
 #define  TEALKeyAutotrackingEnabled @"com.tealium.autotracking.enableautotracking.%@"
 
 static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKING_IVARS");
@@ -18,7 +17,6 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
 @implementation NSObject (TealiumAutotracking)
 
 #pragma mark - PUBLIC INSTANCE
-
 
 - (void) teal_setAutotrackingEnabled:(BOOL)enabled forInstance:(NSString *)instanceID {
     
@@ -33,7 +31,6 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
     
     objc_setAssociatedObject(self, &key, enableOnNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
-    CFRelease(key);
 }
 
 - (BOOL) teal_autotrackingEnabledForInstance:(NSString *)instanceID {
@@ -42,9 +39,7 @@ static CFStringRef  const TEALKVOAutotrackIvars = CFSTR("TEALIUM_KVO_AUTOTRACKIN
     CFStringRef key = (__bridge CFStringRef)(nsKey);
     
     NSNumber *enableOnNumber = objc_getAssociatedObject(self, &key);
-    
-    CFRelease(key);
-    
+        
     if (enableOnNumber){
         return [enableOnNumber boolValue];
     }

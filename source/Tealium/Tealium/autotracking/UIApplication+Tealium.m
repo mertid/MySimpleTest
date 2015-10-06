@@ -54,31 +54,14 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         // TODO: mobile companion
     }
     
-    // check for tracking viability - duplicate suppression
-//    BOOL isViable = YES;
-    
     if (touch.phase == UITouchPhaseEnded && view){
         
-//        NSDate *now = [NSDate date];
-//        if ([now compare:_lastEventTS] == NSOrderedAscending && _lastEvent == view) {
-//            isViable = NO;
-//        }
-//        if (isViable &&
-//            [view respondsToSelector:@selector(isUserInteractionEnabled)]){
-//            isViable = [view isUserInteractionEnabled];
-//        }
-//        if (isViable){
+        __weak UIView *weakTargetView = [self teal_viewToAutoTrack:view scanCount:0];
         
-            __weak UIView *weakTargetView = [self teal_viewToAutoTrack:view scanCount:0];
+        if (weakTargetView) {
             
-            if (weakTargetView) {
-                
-                [self teal_autotrackEvent:weakTargetView];
-            }
-//        }
-//        
-//        _lastEvent = view;
-//        _lastEventTS = [NSDate dateWithTimeInterval:0.1 sinceDate:now];
+            [self teal_autotrackEvent:weakTargetView];
+        }
     }
     
     // Forward event to original target object
@@ -98,6 +81,10 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
         }
         
         Tealium *instance = obj;
+        
+        if (![target teal_autotrackingEnabledForInstance:[instance.settings instanceID]]){
+            return;
+        }
         
         NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
 
@@ -138,10 +125,6 @@ static void teal_sendEvent(UIApplication *self, SEL _cmd, UIEvent *e) {
 - (UIView *) teal_viewToAutoTrack:(UIView *)view scanCount:(int)scanCount {
 
     NSString *vClass = NSStringFromClass([view class]);
-    
-//    if (![view teal_autotrackingEnabled]){
-//        return nil;
-//    }
     
     // if private skip and move up the chain
     if (![vClass hasPrefix:@"_"]) {

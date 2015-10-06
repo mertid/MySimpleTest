@@ -12,6 +12,7 @@
 
 - (void) teal_setAutotrackingEnabled:(BOOL)enabled forInstance:(NSString *)instanceID;
 - (BOOL) teal_autotrackingEnabledForInstance:(NSString *)instanceID;
+
 - (void) teal_setAutotrackIvarsEnabled:(BOOL)enabled;
 - (BOOL) teal_autotrackIvarsEnabled;
 
