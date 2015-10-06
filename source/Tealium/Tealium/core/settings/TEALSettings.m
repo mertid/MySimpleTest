@@ -356,23 +356,29 @@
                                 NSError *parseError = nil;
                                 NSDictionary *parsedData = [weakPublishSettings mobilePublishSettingsFromHTMLData:data
                                                                                                  error:&parseError];
-                                
-#warning Compare against current settings
-                                
-                                if ([weakPublishSettings areValidRawPublishSettings:parsedData]) {
+                                if (![weakPublishSettings areNewRawPublishSettings:parsedData]){
                                     
-                                    [weakPublishSettings updateWithRawSettings:parsedData];
-                                    if (completion) completion( weakPublishSettings.status, nil);
-                                    
-                                } else {
-                                    
-                                    [weakPublishSettings loadArchived];
-                                    if (completion) completion( weakPublishSettings.status, parseError );
+                                    if (completion){
+                                        completion(TEALPublishSettingsStatusUnchanged, nil);
+                                    }
+                                    return;
                                 }
                                 
+                                if (![weakPublishSettings areValidRawPublishSettings:parsedData]) {
+                                    
+                                    [weakPublishSettings loadArchived];
+                                    if (completion) {
+                                        completion( weakPublishSettings.status, parseError );
+                                    }
+                                    return;
+                                }
+                                
+                                [weakPublishSettings updateWithRawSettings:parsedData];
+                                if (completion) {
+                                    completion( weakPublishSettings.status, nil);
+                                }
                                 
                             }];
-    
     
 }
 
@@ -389,14 +395,15 @@
     
     if (self.lastFetch){
         double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
-        if (elapsedTime > [self.publishSettings minutesBetweenRefresh]) {
+        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
             fetchAcceptable = YES;
+            self.lastFetch = now;
         }
     } else {
         fetchAcceptable = YES;
+        self.lastFetch = now;
     }
     
-    self.lastFetch = now;
     
     return fetchAcceptable;
 }

@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
 @property (nonatomic) TEALPublishSettingsStatus status;
-@property (nonatomic, strong) NSString *url;
+@property (nonatomic) NSString *url;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
 @property (nonatomic) double minutesBetweenRefresh;
@@ -44,9 +44,10 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 - (BOOL) areValidRawPublishSettings:(NSDictionary *) rawPublishSettings;
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
+- (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;
 - (void) loadArchived;
-- (NSString *) mpsVersion;
+//- (NSString *) mpsVersion;
 - (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
 @end

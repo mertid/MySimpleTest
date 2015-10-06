@@ -37,8 +37,9 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
 
 @interface TEALPublishSettings()
 
+@property (nonatomic) BOOL alreadyLoadedArchive;
 @property (nonatomic, strong) TEALPublishSettingsStore *store;
-@property (copy, nonatomic) NSString *mpsVersionCopy;
+@property (nonatomic, strong) NSDictionary *privateRawPublishSettings;
 
 @end
 
@@ -72,7 +73,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
 
 - (BOOL) areValidRawPublishSettings:(NSDictionary *) rawPublishSettings {
     
-    NSDictionary *settings = rawPublishSettings[[self mpsVersion]];
+    NSDictionary *settings = rawPublishSettings[[TEALSystemHelpers mpsVersionNumber]];
     
     if (!settings) {
         return NO;
@@ -108,15 +109,23 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     return YES;
 }
 
+- (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings {
+    
+    return ![rawPublishSettings isEqualToDictionary:self.privateRawPublishSettings];
+   
+}
+
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings {
     
-    NSDictionary *settings = rawPublishSettings[[self mpsVersion]];
+    NSDictionary *settings = rawPublishSettings[[TEALSystemHelpers mpsVersionNumber]];
     
     if (!settings) {
         return;
     }
     
-    [self storeLocalSettingsFromRawSettings:settings];
+    [self importLocalSettingsFromRawSettings:settings];
+    
+    self.privateRawPublishSettings = settings;
     
     self.status = TEALPublishSettingsStatusLoadedRemote;
     
@@ -124,30 +133,47 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
 }
 
 - (void) loadArchived {
+    
+    if (self.alreadyLoadedArchive) {
+        return;
+    }
+    
     TEALPublishSettings *settings = [self.store unarchivePublishSettings];
-    
-#warning Only archive once
-    
-#warning COMPLETE
-    
+        
     if (settings) {
         self.url = settings.url;
         self.dispatchSize = settings.dispatchSize;
         self.offlineDispatchQueueSize = settings.offlineDispatchQueueSize;
+        self.minutesBetweenRefresh = settings.minutesBetweenRefresh;
         self.numberOfDaysDispatchesAreValid = settings.numberOfDaysDispatchesAreValid;
         self.enableLowBatterySuppress = settings.enableLowBatterySuppress;
         self.enableSendWifiOnly = settings.enableSendWifiOnly;
+        self.enableAudienceStream = settings.enableAudienceStream;
+        self.enableTagManagement = settings.enableTagManagement;
+        
+        self.disableApplicationInfoAutotracking = settings.disableApplicationInfoAutotracking;
+        self.disableCarrierInfoAutotracking = settings.disableCarrierInfoAutotracking;
+        self.disableCrashAutotracking = settings.disableCrashAutotracking;
+        self.disableDeviceInfoAutotracking = settings.disableDeviceInfoAutotracking;
+        self.disableiVarAutotracking = settings.disableiVarAutotracking;
+        self.disableLifecycleAutotracking = settings.disableLifecycleAutotracking;
+        self.disableMobileCompanion = settings.disableMobileCompanion;
+        self.disableTimestampAutotracking = settings.disableTimestampAutotracking;
+        self.disableUIEventAutotracking = settings.disableUIEventAutotracking;
+        self.disableViewAutotracking = settings.disableViewAutotracking;
+        
         self.status = TEALPublishSettingsStatusLoadedArchive;
     }
     
+    self.alreadyLoadedArchive = YES;
 }
 
-- (NSString *) mpsVersion {
-    if (!self.mpsVersionCopy) {
-        self.mpsVersionCopy = [[TEALSystemHelpers mpsVersionNumber] copy];
-    }
-    return self.mpsVersionCopy;
-}
+//- (NSString *) mpsVersion {
+//    if (!self.mpsVersionCopy) {
+//        self.mpsVersionCopy = [[TEALSystemHelpers mpsVersionNumber] copy];
+//    }
+//    return self.mpsVersionCopy;
+//}
 
 - (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
     
@@ -317,6 +343,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
 
 - (BOOL) isEqual:(id)object {
     
+    // TODO: Redundant - could remove
+    
     if (![object isKindOfClass:([TEALPublishSettings class])]) {
         return NO;
     }
@@ -330,6 +358,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     if (otherSettings.numberOfDaysDispatchesAreValid != self.numberOfDaysDispatchesAreValid) return  NO;
     if (otherSettings.enableLowBatterySuppress != self.enableLowBatterySuppress) return  NO;
     if (otherSettings.enableSendWifiOnly != self.enableSendWifiOnly) return  NO;
+    if (otherSettings.enableTagManagement != self.enableTagManagement) return NO;
+    if (otherSettings.enableAudienceStream != self.enableAudienceStream) return NO;
     
     if (otherSettings.disableApplicationInfoAutotracking != self.disableApplicationInfoAutotracking) return NO;
     if (otherSettings.disableCarrierInfoAutotracking != self.disableCarrierInfoAutotracking) return NO;
@@ -345,7 +375,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     return YES;
 }
 
-- (void) storeLocalSettingsFromRawSettings:(NSDictionary *)settings {
+- (void) importLocalSettingsFromRawSettings:(NSDictionary *)settings {
     
     // Referencing keys from MPS Json object - keep keys separate from encoder keys for clarity
     
@@ -447,7 +477,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     NSDictionary *descriptionDictionary = @{
                                             @"status":[NSString stringWithFormat:@"%lu", (unsigned long)self.status],
                                             @"url":[NSString teal_dictionarySafeString:self.url],
-                                            @"mps version":[NSString teal_dictionarySafeString:self.mpsVersion],
+                                            @"mps version":[NSString teal_dictionarySafeString:[TEALSystemHelpers mpsVersionNumber]],
                                             @"dispatch size":[NSString stringWithFormat:@"%i", (int)self.dispatchSize],
                                             @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)self.offlineDispatchQueueSize],
                                             @"minutes between refresh":[NSString stringWithFormat:@"%f", (double)self.minutesBetweenRefresh],

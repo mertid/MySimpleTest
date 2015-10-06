@@ -613,50 +613,27 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
     
     if (!self.settings){
+        
         self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-        
-        
         self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
-        //    [self.settings setVisitorIDCopy:self.dataSources.visitorIDCopy];
         self.settings.urlSessionManager = self.urlSessionManager;
         
+        [self.settings loadArchivedSettings];
+        
+        if (setupCompletion){
+            setupCompletion(YES, nil);
+        }
+        
+    } else {
+        
+        if (setupCompletion){
+            NSError *error = [TEALError errorWithCode:400
+                                          description:NSLocalizedString(@"Could not setup settings.", @"")
+                                               reason:NSLocalizedString(@"Settings already available.", @"")
+                                           suggestion:NSLocalizedString(@"Check setup call.", @"")];
+            setupCompletion(NO, error);
+        }
     }
-    
-    [self fetchNewSettingsWithCompletion:setupCompletion];
-    
-//    __weak TEALSettings *weakSettings = self.settings;
-//    
-//    [self.settings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
-//        
-//        if (error) {
-//            [self.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
-//        }
-//        
-//        BOOL success = NO;
-//        switch (status) {
-//            case TEALPublishSettingsStatusDefault:
-//                [self.logger logVerbose:@"Using default Remote Publish Settings."];
-//                success = YES;
-//                break;
-//            case TEALPublishSettingsStatusLoadedArchive:
-//                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
-//                success = YES;
-//                break;
-//            case TEALPublishSettingsStatusLoadedRemote:
-//                [self.logger logVerbose:@"New Remote Publish Settings set."];
-//                success = YES;
-//                break;
-//            case TEALPublishSettingsStatusDisable:
-//                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
-//                break;
-//            default:
-//                break;
-//        }
-//        
-//        
-//        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
-//        if (setupCompletion) setupCompletion (success, nil);
-//    }];
 }
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
@@ -722,6 +699,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         [weakSelf.logger logVerbose:@"Network found."];
         [weakSelf fetchNewSettingsWithCompletion:nil];
         [weakSelf.dispatchManager runQueuedDispatches];
+        
     };
     
     weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
@@ -864,6 +842,9 @@ __strong static NSDictionary *staticAllInstances = nil;
     return [self.settings offlineDispatchQueueSize];
 }
 
+/**
+ *  Return an error if the dispatch manager should not send now
+ */
 - (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch {
     
     NSError *error = nil;
@@ -895,7 +876,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         error = [TEALError errorWithCode:400
                              description:NSLocalizedString(@"Dispatch queued.", @"")
                                   reason:NSLocalizedString(@"No network detected.", @"")
-                              suggestion:NSLocalizedString(@"Waiting for network availability.", @"")];
+                              suggestion:NSLocalizedString(@"Wait for network availability.", @"")];
         
     } else if (!dispatchServices ||
              [dispatchServices count] == 0) {
