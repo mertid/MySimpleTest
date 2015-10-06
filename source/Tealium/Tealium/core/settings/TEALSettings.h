@@ -59,7 +59,4 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 
 
 
-
-
-
 @end

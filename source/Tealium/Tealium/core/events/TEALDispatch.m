@@ -7,6 +7,7 @@
 //
 
 #import "TEALDispatch.h"
+#import "TEALDataSourceConstants.h"
 
 NSString * const TEALDispatchTypeLinkStringValue = @"link";
 NSString * const TEALDispatchTypeViewStringValue = @"view";
@@ -43,6 +44,22 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
     return eventString;
 }
 
+- (void) queue:(BOOL)wasQueued {
+
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    [mDict addEntriesFromDictionary:self.payload];
+    
+    if (!wasQueued){
+        [mDict removeObjectForKey:TEALDataSourceKey_WasQueued];
+    } else {
+        mDict[TEALDataSourceKey_WasQueued] = TEALDataSourceValue_True;
+    }
+    
+    self.payload = [NSDictionary dictionaryWithDictionary:mDict];
+    
+}
+
+
 #pragma mark - PRIVATE INSTANCE METHODS
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {
@@ -53,7 +70,6 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
         _dispatchType  = [aDecoder decodeIntegerForKey:@"dispatchType"];
         _payload    = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:@"payload"];
         _timestamp  = [aDecoder decodeDoubleForKey:@"timestamp"];
-        _queued     = [aDecoder decodeBoolForKey:@"queued"];
     }
     return self;
 }
@@ -63,7 +79,6 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
     [aCoder encodeInteger:self.dispatchType forKey:@"dispatchType"];
     [aCoder encodeObject:self.payload forKey:@"payload"];
     [aCoder encodeDouble:self.timestamp forKey:@"timestamp"];
-    [aCoder encodeBool:self.queued forKey:@"queued"];
 }
 
 - (NSString*) description {

@@ -160,7 +160,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     [weakSelf.operationManager addOperationWithBlock:^{
        
         [weakSelf trackDispatch:dispatch];
-//        [weakSelf sendEvent:TEALDispatchTypeEvent withData:compositeDataSources title:title];
 
     }];
     
@@ -186,7 +185,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     [weakSelf.operationManager addOperationWithBlock:^{
         
         [weakSelf trackDispatch:dispatch];
-//        [weakSelf sendEvent:TEALDispatchTypeView withData:compositeDataSources title:title];
         
     }];
 }
@@ -614,46 +612,99 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
     
-    self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+    if (!self.settings){
+        self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+        
+        
+        self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
+        //    [self.settings setVisitorIDCopy:self.dataSources.visitorIDCopy];
+        self.settings.urlSessionManager = self.urlSessionManager;
+        
+    }
+    
+    [self fetchNewSettingsWithCompletion:setupCompletion];
+    
+//    __weak TEALSettings *weakSettings = self.settings;
+//    
+//    [self.settings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
+//        
+//        if (error) {
+//            [self.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
+//        }
+//        
+//        BOOL success = NO;
+//        switch (status) {
+//            case TEALPublishSettingsStatusDefault:
+//                [self.logger logVerbose:@"Using default Remote Publish Settings."];
+//                success = YES;
+//                break;
+//            case TEALPublishSettingsStatusLoadedArchive:
+//                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
+//                success = YES;
+//                break;
+//            case TEALPublishSettingsStatusLoadedRemote:
+//                [self.logger logVerbose:@"New Remote Publish Settings set."];
+//                success = YES;
+//                break;
+//            case TEALPublishSettingsStatusDisable:
+//                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
+//                break;
+//            default:
+//                break;
+//        }
+//        
+//        
+//        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
+//        if (setupCompletion) setupCompletion (success, nil);
+//    }];
+}
+
+- (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
     
     
-    self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
-    //    [self.settings setVisitorIDCopy:self.dataSources.visitorIDCopy];
-    self.settings.urlSessionManager = self.urlSessionManager;
-    
-    __weak TEALSettings *weakSettings = self.settings;
-    
-    [weakSettings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.settings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
         
         if (error) {
-            [self.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
+            [weakSelf.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
         }
         
         BOOL success = NO;
+        NSString *message = nil;
+        
         switch (status) {
             case TEALPublishSettingsStatusDefault:
-                [self.logger logVerbose:@"Using default Remote Publish Settings."];
+                message = NSLocalizedString(@"Using default Remote Publish Settings.", @"");
                 success = YES;
                 break;
             case TEALPublishSettingsStatusLoadedArchive:
-                [self.logger logVerbose:@"Archived Remote Publish Settings loaded."];
+                message = NSLocalizedString(@"Archived Remote Publish Settings loaded.", @"");
                 success = YES;
                 break;
             case TEALPublishSettingsStatusLoadedRemote:
-                [self.logger logVerbose:@"New Remote Publish Settings set."];
+                message = NSLocalizedString(@"New Remote Publish Settings set.", @"");
                 success = YES;
                 break;
             case TEALPublishSettingsStatusDisable:
-                [self.logger logVerbose:@"Library disabled by Remote Publish Settings."];
+                message = NSLocalizedString(@"Library disabled by Remote Publish Settings.", @"");
+                break;
+            case TEALPublishSettingsStatusUnchanged:
+                message = NSLocalizedString(@"No new publish settings read.", @"");
+                success = YES;
                 break;
             default:
                 break;
         }
         
+        if (message){
+            [weakSelf.logger logVerbose:message];
+        }
         
-        [self.logger logVerbose:@"Remote Publish Settings: %@", [weakSettings publishSettingsDescription]];
-        if (setupCompletion) setupCompletion (success, nil);
+        [weakSelf.logger logVerbose:@"Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+        if (completion) completion (success, nil);
     }];
+    
 }
 
 - (void) setupSettingsReachabilityCallbacks {
@@ -665,13 +716,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     [self.urlSessionManager.reachability startNotifier];
     
     __weak Tealium *weakSelf = self;
-    __weak TEALSettings *weakSettings = weakSelf.settings;
     
     weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
-        [self.logger logVerbose:@"Network found."];
-#warning IMPLMENT minutes to refresh system here
-//        [weakSettings fetchPublishSettingsWithCompletion:nil];
+        [weakSelf.logger logVerbose:@"Network found."];
+        [weakSelf fetchNewSettingsWithCompletion:nil];
+        [weakSelf.dispatchManager runQueuedDispatches];
     };
     
     weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {

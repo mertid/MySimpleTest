@@ -25,6 +25,7 @@
 @property (nonatomic, weak) NSString *visitorID;
 @property (nonatomic, strong) NSURL *audienceStreamProfileURL;
 @property (nonatomic, strong) NSURL *audienceStreamProfileDefinitionsURL;
+@property (nonatomic, strong) NSDate *lastFetch;
 
 @end
 
@@ -149,24 +150,17 @@
 
 - (BOOL) autotrackingApplicationInfoEnabled {
     
-#warning REMOVE these auto NOs for production
-    return NO;
-    
     if (self.publishSettings.disableApplicationInfoAutotracking) return NO;
     return self.configuration.autotrackingApplicationInfoEnabled;
 }
 
 - (BOOL) autotrackingCarrierInfoEnabled {
     
-    return NO;
-    
     if (self.publishSettings.disableCarrierInfoAutotracking) return NO;
     return self.configuration.autotrackingCarrierInfoEnabled;
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
-    
-    return NO;
     
     if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
@@ -314,19 +308,22 @@
 
 - (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion {
     
+    
+    // Drop fetch requests for following conditions:
     if (!self.configuration) {
         return;
     }
     
-    // Get Publish Settings
+    if (![self canFetchNow]){
+        return;
+    }
     
+    
+    // Get Publish Settings
     NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
     NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
-    
     NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
-    
     NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
-    
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
     
     if (!request) {
@@ -360,6 +357,8 @@
                                 NSDictionary *parsedData = [weakPublishSettings mobilePublishSettingsFromHTMLData:data
                                                                                                  error:&parseError];
                                 
+#warning Compare against current settings
+                                
                                 if ([weakPublishSettings areValidRawPublishSettings:parsedData]) {
                                     
                                     [weakPublishSettings updateWithRawSettings:parsedData];
@@ -381,6 +380,26 @@
     [self.publishSettings loadArchived];
 }
 
+#pragma mark - PRIVATE
+
+- (BOOL) canFetchNow {
+    
+    BOOL fetchAcceptable = NO;
+    NSDate *now = [NSDate date];
+    
+    if (self.lastFetch){
+        double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
+        if (elapsedTime > [self.publishSettings minutesBetweenRefresh]) {
+            fetchAcceptable = YES;
+        }
+    } else {
+        fetchAcceptable = YES;
+    }
+    
+    self.lastFetch = now;
+    
+    return fetchAcceptable;
+}
 //- (void) setVisitorIDCopy:(NSString *)visitorID {
 //    
 //    self.visitorID = visitorID;

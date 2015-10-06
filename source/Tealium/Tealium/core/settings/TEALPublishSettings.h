@@ -12,7 +12,8 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
     TEALPublishSettingsStatusDefault,
     TEALPublishSettingsStatusLoadedRemote,
     TEALPublishSettingsStatusLoadedArchive,
-    TEALPublishSettingsStatusDisable
+    TEALPublishSettingsStatusDisable,
+    TEALPublishSettingsStatusUnchanged
 };
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 - (instancetype) initWithURLString:(NSString *)url;
 
 - (BOOL) areValidRawPublishSettings:(NSDictionary *) rawPublishSettings;
+- (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;
 - (void) loadArchived;
 - (NSString *) mpsVersion;

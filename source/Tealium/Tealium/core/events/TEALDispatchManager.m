@@ -127,9 +127,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         [self enqueueDispatch:aDispatch completionBlock:completionBlock];
     }
     
-    if ([self.queuedDispatches count] >= batchSize) {
-        [self runQueuedDispatches];
-    }
+    [self runQueuedDispatches];
     
     [self.delegate didUpdateDispatchQueues];
 }
@@ -138,7 +136,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self.delegate willEnqueueDispatch:dispatch];
     
-    dispatch.queued = YES;
+    [dispatch queue:YES];
     
     TEALDispatch *dequeued = [self.queuedDispatches enqueueObject:dispatch];
     
@@ -203,8 +201,11 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 }
 
 - (void) runQueuedDispatches {
-    
-    if ([self.delegate networkReadyForDispatch]) {
+
+    NSUInteger batchSize    = [self.configuration dispatchBatchSize];
+
+    if ([self.queuedDispatches count] >= batchSize &&
+        [self.delegate networkReadyForDispatch]) {
 
         if ([self beginQueueTraversal]) {
             [self recursivelyDispatchWithCompletion:^{

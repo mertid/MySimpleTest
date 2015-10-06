@@ -23,10 +23,11 @@ extern NSString * const TEALDispatchTypeViewStringValue;
 @property (nonatomic, strong) NSString *dispatchServiceName;
 @property (nonatomic, strong) NSDictionary *payload;
 @property (nonatomic) NSTimeInterval timestamp;
-@property (nonatomic) BOOL queued;
 
 + (TEALDispatch *) dispatchForType:(TEALDispatchType)dispatchType withPayload:(NSDictionary *)payload;
+
 + (NSString *) stringFromDispatchType:(TEALDispatchType)dispatchType;
 
+- (void) queue:(BOOL)wasQueued;
 
 @end
