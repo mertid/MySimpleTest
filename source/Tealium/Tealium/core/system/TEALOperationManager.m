@@ -20,6 +20,8 @@
 
 @implementation TEALOperationManager
 
+#warning UPDATE to use instance id instead of constant
+
 - (instancetype) init {
     
     self = [super init];

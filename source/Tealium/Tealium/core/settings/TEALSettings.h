@@ -35,6 +35,8 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
 
+- (double) daysDispatchesValid;
+
 - (NSString *) account;
 - (NSString *) asProfile;
 - (NSString *) tiqProfile;

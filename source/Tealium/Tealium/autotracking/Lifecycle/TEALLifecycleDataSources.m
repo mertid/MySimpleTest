@@ -104,8 +104,6 @@ static NSDateFormatter *_MMDDYYYY;
     return nil;
 }
 
-#warning First Wake today and month calculations don't make sense
-
 + (BOOL) wasYesterdayDate:(NSDate *) date {
  
     NSDate *dayThreshold = [self beginningOfDayForDate:[NSDate date]];
@@ -124,23 +122,6 @@ static NSDateFormatter *_MMDDYYYY;
     
     return [earlierDate isEqual:date];
 }
-
-
-//+ (BOOL) isFirstWakeTodayForDate:(NSDate*)date{
-//    NSDate *startOfToday = [self beginningOfDayForDate:date];
-//    if([date compare: startOfToday] == NSOrderedAscending){ // if first is earlier in time than second
-//        return YES;
-//    }
-//    return NO;
-//}
-
-//+ (BOOL) isFirstWakeOfMonthForDate:(NSDate*)date{
-//    NSDate *startOfMonth = [self beginningOfMonthForDate:date];
-//    if([date compare: startOfMonth] == NSOrderedAscending){ // if first is earlier in time than second
-//        return YES;
-//    }
-//    return NO;
-//}
 
 + (NSDate *) earlierDateBetweenDate:(NSDate *)date anotherDate:(NSDate*)anotherDate {
     

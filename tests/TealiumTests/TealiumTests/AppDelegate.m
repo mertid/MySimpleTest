@@ -42,26 +42,22 @@
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];
     [tealiumInstance1 setDelegate:self];
-//    [Tealium sharedInstanceWithConfiguration:configuration];
-//    [[Tealium sharedInstance] setDelegate:self];
-    
-//    [[Tealium instanceForKey:@"1"] addPersistentDataSources:@{@"somePersistKey":@"somePersistValue"}];
     [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
     
     [tealiumInstance1 addVolatileDataSources:@{@"volatileKey":@"volatileValue"}];
     
     // Instance 2
-    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"android-demo"
-                                                                       environment:@"dev"];
-    instanceConfig.logLevel = TEALLogLevelVerbose;
-    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    instanceConfig.autotrackingLifecycleEnabled = NO;
-    instanceConfig.autotrackingUIEventsEnabled = YES;
-    instanceConfig.autotrackingViewsEnabled = NO;
-    
-    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
-    [[Tealium instanceForKey:@"2"] setDelegate:self];
+//    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                           profile:@"android-demo"
+//                                                                       environment:@"dev"];
+//    instanceConfig.logLevel = TEALLogLevelVerbose;
+//    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//    instanceConfig.autotrackingLifecycleEnabled = NO;
+//    instanceConfig.autotrackingUIEventsEnabled = YES;
+//    instanceConfig.autotrackingViewsEnabled = NO;
+//    
+//    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
+//    [[Tealium instanceForKey:@"2"] setDelegate:self];
     
     
 #endif

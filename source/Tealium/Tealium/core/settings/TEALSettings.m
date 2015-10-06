@@ -225,6 +225,11 @@
     return self.configuration.useHTTP;
 }
 
+- (double) daysDispatchesValid {
+    return self.publishSettings.numberOfDaysDispatchesAreValid;
+}
+
+
 - (NSString *) account {
     return self.configuration.accountName;
 }

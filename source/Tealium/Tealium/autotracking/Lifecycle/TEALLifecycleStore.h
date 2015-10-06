@@ -17,8 +17,6 @@
 
 - (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion;
 
-#warning DELETE BELOW
-
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key;
 
 - (void) setObject:(id<NSCopying, NSSecureCoding>)object

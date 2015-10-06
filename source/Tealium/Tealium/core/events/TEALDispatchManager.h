@@ -21,7 +21,7 @@
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock;
 
-- (BOOL) shouldAttemptDispatch;
+- (BOOL) networkReadyForDispatch;
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch;
 
@@ -45,6 +45,8 @@
 
 - (NSUInteger) dispatchQueueCapacity;
 
+- (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch;
+
 @end
 
 @interface TEALDispatchManager : NSObject
@@ -66,12 +68,14 @@
 - (void) addDispatch:(TEALDispatch *)dispatch
      completionBlock:(TEALDispatchBlock)completionBlock;
 
-- (void) unarchiveDispatchQueue;
-- (void) archiveDispatchQueue;
+//- (void) unarchiveDispatchQueue;
+//- (void) archiveDispatchQueue;
 
 - (void) runQueuedDispatches;
 
-- (void) purgeStaleDispatches;
+//- (void) purgeStaleDispatches;
+
+- (void) purgeDispatchesOlderThan:(NSDate*)date;
 
 - (void) disableDispatchQueue;
 
