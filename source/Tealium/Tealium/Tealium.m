@@ -211,6 +211,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *connectionInfo = [self.urlSessionManager.reachability connectionDataSources];
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
     NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
+    
     NSDictionary *clientVolatileInfo = [self.dataSources clientVolatileDataSources];
     
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
@@ -363,8 +364,10 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) privateInstanceWithConfiguration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)setupCompletion {
     
+    // Init logger
     self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
     
+    // Check configuration
     if (![TEALConfiguration isValidConfiguration:configuration]) {
         
         NSError *error = [TEALError errorWithCode:400
@@ -376,12 +379,11 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
         return;
     }
-    
     [self.logger logNormal:@"%@", configuration];
     
+    // Init data sources + it's store
     self.enabled = YES;
     self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
-    
     if (!self.dataSources) {
         [self.logger logNormal:@"Datasources did not init - Could not instantiate library"];
         NSError *error =[TEALError errorWithCode:400
@@ -396,16 +398,19 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 #warning What will handle update in application version check and notification?
     
+    // Init all modules
     [self setupSettingsWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
         
         if (success) {
+            
+            [weakSelf.logger logVerbose:@"Loaded Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+
             
             [weakSelf setupCore];
             [weakSelf setupModules];
             
         } else {
             
-            [weakSelf.logger logNormal:@"Problem creating instance: %@", [error localizedDescription]];
             [weakSelf disable];
             
         }
@@ -425,11 +430,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *newModuleData = [NSDictionary dictionaryWithDictionary:mDict];
     
     self.moduleData = newModuleData;
-    
-//    __block typeof(self) __weak weakSelf = self;
-//    [self.operationManager addOperationWithBlock:^{
-//        weakSelf.moduleData = newModuleData;
-//    }];
     
 }
 
@@ -545,12 +545,6 @@ __strong static NSDictionary *staticAllInstances = nil;
                               return;
                           }
                           
-#warning Enable a refetch system
-                          //    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
-                          //
-                          //        TEAL_LogVerbose(@"did fetch profile: %@ after dispatch event", profile);
-                          //    }];
-                          
                       }];
     
 }
@@ -612,74 +606,53 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
     
+    BOOL success = NO;
+    NSError *error = nil;
+    
     if (!self.settings){
         
         self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
         self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
         self.settings.urlSessionManager = self.urlSessionManager;
         
-        [self.settings loadArchivedSettings];
-        
-        if (setupCompletion){
-            setupCompletion(YES, nil);
-        }
+        success = YES;
         
     } else {
-        
-        if (setupCompletion){
-            NSError *error = [TEALError errorWithCode:400
-                                          description:NSLocalizedString(@"Could not setup settings.", @"")
-                                               reason:NSLocalizedString(@"Settings already available.", @"")
-                                           suggestion:NSLocalizedString(@"Check setup call.", @"")];
-            setupCompletion(NO, error);
-        }
+        error = [TEALError errorWithCode:400
+                             description:NSLocalizedString(@"Could not setup settings.", @"")
+                                  reason:NSLocalizedString(@"Settings already available.", @"")
+                              suggestion:NSLocalizedString(@"Check setup call.", @"")];
+        success = NO;
+    }
+    
+    if (setupCompletion){
+        setupCompletion(success, error);
     }
 }
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
     
-    
     __block typeof(self) __weak weakSelf = self;
-
-    [self.settings fetchPublishSettingsWithCompletion:^(TEALPublishSettingsStatus status, NSError *error) {
-        
-        if (error) {
-            [weakSelf.logger logNormal:@"Remote Publish Settings Error: %@", [error localizedDescription]];
-        }
+    
+    [self.settings fetchNewRawPublishSettingsWithCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         
         BOOL success = NO;
+        BOOL newPublishSettings = NO;
         NSString *message = nil;
-        
-        switch (status) {
-            case TEALPublishSettingsStatusDefault:
-                message = NSLocalizedString(@"Using default Remote Publish Settings.", @"");
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusLoadedArchive:
-                message = NSLocalizedString(@"Archived Remote Publish Settings loaded.", @"");
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusLoadedRemote:
-                message = NSLocalizedString(@"New Remote Publish Settings set.", @"");
-                success = YES;
-                break;
-            case TEALPublishSettingsStatusDisable:
-                message = NSLocalizedString(@"Library disabled by Remote Publish Settings.", @"");
-                break;
-            case TEALPublishSettingsStatusUnchanged:
-                message = NSLocalizedString(@"No new publish settings read.", @"");
-                success = YES;
-                break;
-            default:
-                break;
+
+        if (dataDictionary){
+            
+            // New raw setting found
+            newPublishSettings = YES;
+            success = YES;
+            
         }
         
         if (message){
             [weakSelf.logger logVerbose:message];
         }
         
-        [weakSelf.logger logVerbose:@"Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-        if (completion) completion (success, nil);
+        if (completion) completion (success, error);
     }];
     
 }
@@ -697,8 +670,37 @@ __strong static NSDictionary *staticAllInstances = nil;
     weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
         [weakSelf.logger logVerbose:@"Network found."];
-        [weakSelf fetchNewSettingsWithCompletion:nil];
-        [weakSelf.dispatchManager runQueuedDispatches];
+        
+        [weakSelf fetchNewSettingsWithCompletion:^(BOOL success, NSError *error) {
+            
+            if (error){
+                [weakSelf.logger logWarning:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                                             [error localizedDescription],
+                                             [error localizedFailureReason],
+                                             [error localizedRecoverySuggestion]
+                                             ]];
+            }
+            
+            if (success){
+                
+                [weakSelf.logger logVerbose:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+
+                if ([weakSelf.settings libraryShouldDisable]){
+                    
+                    [weakSelf.logger logVerbose:NSLocalizedString(@"Mobile Publish Setting is enabled set to FALSE", @"Shut down message")];
+                        
+                    [weakSelf disable];
+                }
+
+            } else {
+                
+                BOOL usingDefaults = [self.settings isDefaultPublishSettings];
+                [weakSelf.logger logVerbose:[NSString stringWithFormat:@"Continuing to use %@ Remote Publish Settings.", usingDefaults? @"Default":@"Archived"]];
+            }
+            
+            [weakSelf.dispatchManager runQueuedDispatches];
+
+        }];
         
     };
     
@@ -744,21 +746,59 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+- (BOOL) networkReadyForDispatch {
+    
+    BOOL reachable = [self.urlSessionManager.reachability isReachable];
+    
+    return reachable;
+    
+}
+
+- (BOOL) suppressForWifiOnly {
+    
+    BOOL suppress = NO;
+    if ([self.settings wifiOnlySending]){
+        suppress = ![self.urlSessionManager.reachability isReachableViaWiFi];
+    }
+    
+    return suppress;
+}
+
+- (BOOL) suppressForBetterBatteryLevels {
+    // 20% is cutoff
+    
+    BOOL suppress = NO;
+    double batteryLevel = [self.dataSources deviceBatteryLevel];
+    
+    if ([self.settings goodBatteryLevelOnlySending] &&
+        (batteryLevel < 20.0 && batteryLevel >= 0)) {
+            
+        suppress = YES;
+    }
+    
+    return suppress;
+
+}
+
 #pragma mark - TEALDISPATCHMANAGER DELEGATE
 
  //Agnostic - use configuration
  // TODO: handle wifi only, low battery and other settings
  // ~commHandlers big if else checks
 
-- (BOOL) networkReadyForDispatch {
+- (BOOL) delegateManagerShouldDispatch {
     
-    BOOL shouldAttempt = YES;
+    BOOL shouldDispatch = YES;
     
-    if (shouldAttempt) {
-        shouldAttempt = [self.urlSessionManager.reachability isReachable];
+    if (!self.settings ||
+        ![self networkReadyForDispatch] ||
+        [self suppressForWifiOnly] ||
+        [self suppressForBetterBatteryLevels]){
+        
+        shouldDispatch = NO;
     }
     
-    return shouldAttempt;
+    return shouldDispatch;
 }
 
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
@@ -877,6 +917,20 @@ __strong static NSDictionary *staticAllInstances = nil;
                              description:NSLocalizedString(@"Dispatch queued.", @"")
                                   reason:NSLocalizedString(@"No network detected.", @"")
                               suggestion:NSLocalizedString(@"Wait for network availability.", @"")];
+        
+    } else if ([self suppressForWifiOnly]) {
+        
+        error = [TEALError errorWithCode:400
+                             description:NSLocalizedString(@"Dispatch queued.", @"")
+                                  reason:NSLocalizedString(@"Queing calls for wifi only.", @"")
+                              suggestion:NSLocalizedString(@"Wait for wifi availability.", @"")];
+        
+    } else if ([self suppressForBetterBatteryLevels]) {
+        
+        error = [TEALError errorWithCode:400
+                             description:NSLocalizedString(@"Dispatch queued.", @"")
+                                  reason:NSLocalizedString(@"Queing calls due to low battery level.", @"")
+                              suggestion:NSLocalizedString(@"Wait for battery levels to be above 20%.", @"")];
         
     } else if (!dispatchServices ||
              [dispatchServices count] == 0) {

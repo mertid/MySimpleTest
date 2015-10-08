@@ -18,35 +18,11 @@
 
 @implementation TEALPublishSettingsStore
 
-- (instancetype) initWithInstanceID:(NSString *)instanceId;{
-    
-    if (!instanceId) {
-        return nil;
-    }
-    
-    if ([[instanceId stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""]){
-        return nil;
-    }
-    
-    
-    self = [super init];
-    
-    if (self){
-        
-        _instanceId = instanceId;
-    
-    }
-    
-    return self;
-}
+#pragma mark - PUBLIC CLASS
 
-- (NSString *) instanceIDCopy {
-    return [self.instanceId copy];
-}
-
-- (TEALPublishSettings *) unarchivePublishSettings {
++ (TEALPublishSettings *) unarchivePublishSettingsForInstanceID:(NSString *)instanceID {
     
-    NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:self.instanceId];
+    NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:instanceID];
     
     id settings = nil;
     
@@ -65,7 +41,7 @@
     
 }
 
-- (void) archivePublishSettings:(TEALPublishSettings *)settings {
++ (void) archivePublishSettings:(TEALPublishSettings *)settings {
     
     if (!settings) {
         
@@ -74,12 +50,43 @@
     
     NSData *settingsData = [NSKeyedArchiver archivedDataWithRootObject:settings];
     
-    // TODO: re-enable background thread operation
-//    [[self.configuration operationManager] addIOOperationWithBlock:^{
+#warning re-enable background thread operation
+    //    [[self.configuration operationManager] addIOOperationWithBlock:^{
     
-        [[NSUserDefaults standardUserDefaults] setObject:settingsData
-                                                  forKey:self.instanceId];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-//    }];
+    [[NSUserDefaults standardUserDefaults] setObject:settingsData
+                                              forKey:settings.url];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    //    }];
 }
+
+//#pragma mark - PUBLIC INSTANCE
+//
+//- (instancetype) initWithInstanceID:(NSString *)instanceId;{
+//    
+//    if (!instanceId) {
+//        return nil;
+//    }
+//    
+//    if ([[instanceId stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""]){
+//        return nil;
+//    }
+//    
+//    
+//    self = [super init];
+//    
+//    if (self){
+//        
+//        _instanceId = instanceId;
+//    
+//    }
+//    
+//    return self;
+//}
+//
+//- (NSString *) instanceIDCopy {
+//    return [self.instanceId copy];
+//}
+
+
+
 @end

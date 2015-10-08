@@ -12,9 +12,7 @@
 
 @interface TEALPublishSettingsStore : NSObject
 
-- (instancetype) initWithInstanceID:(NSString *)instanceId;
-- (NSString *) instanceIDCopy;
-- (TEALPublishSettings *) unarchivePublishSettings;
-- (void) archivePublishSettings:(TEALPublishSettings *)settings;
++ (TEALPublishSettings *) unarchivePublishSettingsForInstanceID:(NSString *)instanceID;
++ (void) archivePublishSettings:(TEALPublishSettings *)settings;
 
 @end

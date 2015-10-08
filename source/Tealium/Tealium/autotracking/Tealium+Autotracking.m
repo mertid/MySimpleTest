@@ -207,6 +207,8 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
         [self.logger logVerbose:@"Autotracking Lifecycle disabled."];
     }
     
+#warning IMPLEMENT publish settings refetch from wake events
+    
 }
 
 - (void) disableAutotrackingUIEvents {

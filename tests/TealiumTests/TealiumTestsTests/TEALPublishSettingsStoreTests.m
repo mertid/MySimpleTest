@@ -51,41 +51,16 @@
     [super tearDown];
 }
 
-#pragma mark - INITIALIZATION TESTS
-
-- (void) testInitializeWithInstanceID {
-    
-    NSString *instanceID = @"testInstance";
-    
-    self.store = [[TEALPublishSettingsStore alloc] initWithInstanceID:instanceID];
-    
-    XCTAssertTrue(self.store, @"Publish Settings Store did not initialize as expected.");
-
-    XCTAssertTrue([[self.store instanceIDCopy] isEqualToString:instanceID], @"Publish Settings Store did not retain expected instanceID:%@", [self.store instanceIDCopy]);
-}
-
-- (void) testInitializeWithMissingInstanceID {
-    self.store = [[TEALPublishSettingsStore alloc] initWithInstanceID:nil];
-    
-    XCTAssertFalse(self.store, @"Publish Settings Store initialized unexpectedly.");
-}
-
-- (void) testInitializeWithBlankInstanceID {
-    self.store = [[TEALPublishSettingsStore alloc] initWithInstanceID:@"   "];
-    
-    XCTAssertFalse(self.store, @"Publish Settings Store initialized unexpectedly.");
-}
 
 #pragma mark - ARCHIVING / UNARCHIVING TESTS
 
 - (void) testArchiving {
     
-    self.store = [[TEALPublishSettingsStore alloc] initWithInstanceID:@"test"];
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:@"testURLString"];
     
-    [self.store archivePublishSettings:settings];
+    [TEALPublishSettingsStore archivePublishSettings:settings];
     
-    TEALPublishSettings *unarchivedSettings = [self.store unarchivePublishSettings];
+    TEALPublishSettings *unarchivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:settings.url];
     
     XCTAssertTrue([settings isEqual:unarchivedSettings], @"Problem archiving / unarchiving test publish settings");
 

@@ -12,6 +12,9 @@
 #import <sys/sysctl.h>
 #import <mach/machine.h>
 
+static BOOL deviceIsCharging;
+static double deviceBatteryLevel;
+
 @implementation TEALDeviceDataSources
 
 #pragma mark - PUBLIC
@@ -57,6 +60,20 @@
     
     return [NSDictionary dictionaryWithDictionary:mDict];
 
+}
+
++ (BOOL) isCharging {
+    
+#warning make call to main thread for info if nil
+    return deviceIsCharging;
+    
+}
+
++ (double) batteryLevel {
+
+#warning make call to main thread for info if nil
+    return deviceBatteryLevel;
+    
 }
 
 #pragma mark - PRIVATE BACKGROUND SAFE
@@ -158,10 +175,14 @@ static NSString *staticDeviceArchitecture;
 
 + (NSString *) batteryIsChargingAsString {
     
-    NSString *string = @"false";
+    NSString *string;
     
     if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
-        string = @"true";
+        deviceIsCharging = true;
+        string = TEALDataSourceValue_True;
+    } else {
+        deviceIsCharging = false;
+        string = TEALDataSourceValue_False;
     }
     
     return string;
@@ -169,14 +190,13 @@ static NSString *staticDeviceArchitecture;
 
 + (NSString *) batteryLevelAsPercentString {
     
-    float ddFloat = 0.0;
-    
     if(![UIDevice currentDevice].isBatteryMonitoringEnabled){
         [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
     }
-    ddFloat = [UIDevice currentDevice].batteryLevel * 100;
     
-    NSString *percentString = [NSString stringWithFormat:@"%.0f", ddFloat];
+    deviceBatteryLevel = [UIDevice currentDevice].batteryLevel * 100;
+    
+    NSString *percentString = [NSString stringWithFormat:@"%.0f", deviceBatteryLevel];
     
     if (percentString) {
         return percentString;

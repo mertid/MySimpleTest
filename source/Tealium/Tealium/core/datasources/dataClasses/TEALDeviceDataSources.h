@@ -13,4 +13,7 @@
 + (NSDictionary *) backgroundDataSources;
 + (NSDictionary *) mainThreadDataSources;
 
++ (BOOL) isCharging;
++ (double) batteryLevel;
+
 @end

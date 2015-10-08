@@ -29,6 +29,12 @@
     self = [super init];
     if (self) {
         
+#warning OPTIMIZE
+        
+        if (configuration.logLevel == TEALLogLevelNone) {
+            return nil;
+        }
+        
         _logLevel = configuration? configuration.logLevel: TEALLogLevelWarningsOnly;
         _messageHeader = [TEALLogger messageHeaderFromConfiguration:configuration];
     }

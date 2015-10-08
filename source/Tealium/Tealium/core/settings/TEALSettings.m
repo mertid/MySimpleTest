@@ -198,6 +198,10 @@
     return self.configuration.autotrackingCrashesEnabled;
 }
 
+- (BOOL) libraryShouldDisable {
+    return !self.publishSettings.libraryIsEnabled;
+}
+
 - (BOOL) mobileCompanionEnabled {
     if (self.publishSettings.disableMobileCompanion) return NO;
     return self.configuration.mobileCompanionEnabled;
@@ -208,7 +212,8 @@
 }
 
 - (BOOL) isValid {
-    return ([TEALConfiguration isValidConfiguration:self.configuration] && self.publishSettings.status != TEALPublishSettingsStatusDisable);
+    return ([TEALConfiguration isValidConfiguration:self.configuration] &&
+            self.publishSettings.status != TEALPublishSettingsStatusDisable);
 }
 
 - (BOOL) tagManagementEnabled {
@@ -217,6 +222,27 @@
 
 - (BOOL) useHTTP {
     return self.configuration.useHTTP;
+}
+
+- (BOOL) wifiOnlySending {
+    
+    return YES;
+#warning CLEAR
+    
+    return self.publishSettings.enableSendWifiOnly;
+}
+
+- (BOOL) goodBatteryLevelOnlySending {
+    
+    return YES;
+    
+    return !self.publishSettings.enableLowBatterySuppress;
+}
+
+- (BOOL) isDefaultPublishSettings {
+    
+    return !self.publishSettings.loadedArchive;
+    
 }
 
 - (double) daysDispatchesValid {
@@ -306,85 +332,176 @@
     return self.audienceStreamProfileDefinitionsURL;
 }
 
-- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion {
+
+- (NSURLRequest *) publishSettingsRequest {
     
-    
-    // Drop fetch requests for following conditions:
-    if (!self.configuration) {
-        return;
-    }
-    
-    if (![self canFetchNow]){
-        return;
-    }
-    
-    
-    // Get Publish Settings
     NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
     NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
     NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
     NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
     
-    if (!request) {
-        
-        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Settings request unsuccessful"
-                                           reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
-                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
-        
-        [self.publishSettings loadArchived];
-        
-        completion( self.publishSettings.status, error );
+    return request;
+}
+
+- (void) fetchNewRawPublishSettingsWithCompletion:(TEALDictionaryCompletionBlock)completion{
+    
+    // Drop requests for following conditions:
+    if (!self.configuration ||
+        ![self canFetchNow]) {
         return;
     }
     
-    __weak TEALSettings *weakSelf = self;
-    __weak TEALPublishSettings *weakPublishSettings = weakSelf.publishSettings;
+    NSURLRequest *request = [self publishSettingsRequest];
     
+    if (!request) {
+        
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                                      description:@"Settings request unsuccessful"
+                                           reason:@"Failed to generate valid request."
+                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
+        
+        completion( nil, error );
+        return;
+    }
+    
+    __block typeof(self) __weak weakSelf = self;
+
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                                 
-                                if (connectionError) {
-                                    
-                                    [weakPublishSettings loadArchived];
-                                    if (completion) completion( weakPublishSettings.status, connectionError);
-                                    
-                                    return;
-                                }
+        NSError *error = nil;
+        NSDictionary *rawPublishSettings = nil;
+        
+        if (connectionError) {
+            error = connectionError;
+        }
+        
+        NSError *parseError = nil;
+        NSDictionary *parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data
+                                                                                    error:&parseError];
+        if (![TEALPublishSettings correctMPSVersionRawPublishSettings:parsedData]) {
+            // No MPS Settings for current library version
+            error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                                 description:NSLocalizedString(@"No mobile publish settings found.", @"")
+                                      reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
+                                  suggestion:NSLocalizedString(@"Add the correct Mobile Publish Setting version, re-publish, or update library.", @"")];
+        }
+        
+        
+        if (!error &&
+            parseError){
+            error = parseError;
+        }
+        
+        if (!error &&
+            parsedData){
+            
+            if (![weakSelf.publishSettings areNewRawPublishSettings:parsedData]){
+                
+                rawPublishSettings = nil;
+
+            } else {
+                
+                [weakSelf.publishSettings updateWithRawSettings:rawPublishSettings];
+                rawPublishSettings = parsedData;
+            }
+        }
                                 
-                                NSError *parseError = nil;
-                                NSDictionary *parsedData = [weakPublishSettings mobilePublishSettingsFromHTMLData:data
-                                                                                                 error:&parseError];
-                                if (![weakPublishSettings areNewRawPublishSettings:parsedData]){
-                                    
-                                    if (completion){
-                                        completion(TEALPublishSettingsStatusUnchanged, nil);
-                                    }
-                                    return;
-                                }
-                                
-                                if (![weakPublishSettings areValidRawPublishSettings:parsedData]) {
-                                    
-                                    [weakPublishSettings loadArchived];
-                                    if (completion) {
-                                        completion( weakPublishSettings.status, parseError );
-                                    }
-                                    return;
-                                }
-                                
-                                [weakPublishSettings updateWithRawSettings:parsedData];
-                                if (completion) {
-                                    completion( weakPublishSettings.status, nil);
-                                }
-                                
-                            }];
+        if (error) {
+            parsedData = nil;
+        }
+        
+        if (completion) {
+            completion( rawPublishSettings, error);
+        }
+        
+    }];
     
 }
 
-- (void) loadArchivedSettings {
-    [self.publishSettings loadArchived];
-}
+//- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion {
+//    
+//    
+//    // Drop fetch requests for following conditions:
+//    if (!self.configuration) {
+//        return;
+//    }
+//    
+//    if (![self canFetchNow]){
+//        return;
+//    }
+//    
+//    
+//    // Get Publish Settings
+//    NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+//    NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
+//    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+//    NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
+//    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
+//    
+//    if (!request) {
+//        
+//        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+//                                      description:@"Settings request unsuccessful"
+//                                           reason:[NSString stringWithFormat:@"Failed to generate valid request from URL string: %@", settingsURLString]
+//                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
+//        
+//        [self.publishSettings loadArchived];
+//        
+//        completion( self.publishSettings.status, error );
+//        return;
+//    }
+//    
+//    __weak TEALSettings *weakSelf = self;
+//    __weak TEALPublishSettings *weakPublishSettings = weakSelf.publishSettings;
+//    
+//    [self.urlSessionManager performRequest:request
+//                            withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
+//                                
+//#warning REFACTOR needed - outcome not as expected
+//                                
+//                                if (connectionError) {
+//                                    
+//                                    [weakPublishSettings loadArchived];
+//                                    if (completion) completion( weakPublishSettings.status, connectionError);
+//                                    
+//                                    return;
+//                                }
+//                                
+//                                NSError *parseError = nil;
+//                                NSDictionary *parsedData = [weakPublishSettings mobilePublishSettingsFromHTMLData:data
+//                                                                                                 error:&parseError];
+//                                if (![weakPublishSettings areNewRawPublishSettings:parsedData]){
+//                                    
+//                                    if (completion){
+//                                        completion(TEALPublishSettingsStatusUnchanged, nil);
+//                                    }
+//                                    return;
+//                                }
+//                                
+//                                if (![weakPublishSettings areValidRawPublishSettings:parsedData]) {
+//                                    
+//                                    [weakPublishSettings loadArchived];
+//                                    if (completion) {
+//                                        completion( weakPublishSettings.status, parseError );
+//                                    }
+//                                    return;
+//                                }
+//                                
+//                                [weakPublishSettings updateWithRawSettings:parsedData];
+//                                if (completion) {
+//                                    completion( weakPublishSettings.status, nil);
+//                                }
+//                                
+//                            }];
+//    
+//}
+
+
+//- (void) loadArchivedSettings {
+//    [self.publishSettings loadArchived];
+//}
 
 #pragma mark - PRIVATE
 

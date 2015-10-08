@@ -21,7 +21,7 @@
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock;
 
-- (BOOL) networkReadyForDispatch;
+- (BOOL) delegateManagerShouldDispatch;
 
 - (void) willEnqueueDispatch:(TEALDispatch *)dispatch;
 
@@ -68,14 +68,7 @@
 - (void) addDispatch:(TEALDispatch *)dispatch
      completionBlock:(TEALDispatchBlock)completionBlock;
 
-//- (void) unarchiveDispatchQueue;
-//- (void) archiveDispatchQueue;
-
 - (void) runQueuedDispatches;
-
-//- (void) purgeStaleDispatches;
-
-- (void) purgeDispatchesOlderThan:(NSDate*)date;
 
 - (void) disableDispatchQueue;
 

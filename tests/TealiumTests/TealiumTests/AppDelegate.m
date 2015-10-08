@@ -30,13 +30,13 @@
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
     
-    configuration.logLevel = TEALLogLevelNone;
+    configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingCrashesEnabled = NO;
     configuration.autotrackingIvarsEnabled = NO;
     configuration.autotrackingLifecycleEnabled = NO;
-    configuration.autotrackingUIEventsEnabled = YES;
-    configuration.autotrackingViewsEnabled = YES;
+    configuration.autotrackingUIEventsEnabled = NO;
+    configuration.autotrackingViewsEnabled = NO;
     configuration.mobileCompanionEnabled = YES;
 //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     

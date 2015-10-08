@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TEALPublishSettings.h"
+#import "TEALBlocks.h"
 
 @class TEALConfiguration;
 @class TEALURLSessionManager;
@@ -17,6 +18,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 @interface TEALSettings : NSObject
 
 @property (weak) TEALURLSessionManager *urlSessionManager;
+@property (readonly) TEALPublishSettings *publishSettings;
 @property (weak) NSString *traceID;
 @property (weak) NSString *visitorIDCopy;
 
@@ -29,11 +31,15 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) autotrackingCrashesEnabled;
+- (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
 - (BOOL) isValid;
 - (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
+- (BOOL) wifiOnlySending;
+- (BOOL) goodBatteryLevelOnlySending;
+- (BOOL) isDefaultPublishSettings;
 
 - (double) daysDispatchesValid;
 
@@ -54,9 +60,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSUInteger) pollingFrequency;
 - (NSURL *) profileURL;
 - (NSURL *) profileDefinitionsURL;
-- (void) fetchPublishSettingsWithCompletion:(TEALFetchPublishSettingsCompletionBlock)completion;
-- (void) loadArchivedSettings;
 
-
+- (void) fetchNewRawPublishSettingsWithCompletion:(TEALDictionaryCompletionBlock)completion;
 
 @end

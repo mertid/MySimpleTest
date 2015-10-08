@@ -16,6 +16,8 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
     TEALPublishSettingsStatusUnchanged
 };
 
+extern NSString * const TEALPublishSettingKeyIsEnabled;
+
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
 @property (nonatomic) TEALPublishSettingsStatus status;
@@ -40,14 +42,17 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) BOOL disableTimestampAutotracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
+@property (nonatomic) BOOL libraryIsEnabled;
+@property (nonatomic) BOOL loadedArchive;
+
+
++ (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings;
++ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
+
 - (instancetype) initWithURLString:(NSString *)url;
 
-- (BOOL) areValidRawPublishSettings:(NSDictionary *) rawPublishSettings;
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
 - (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;
-- (void) loadArchived;
-//- (NSString *) mpsVersion;
-- (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
 @end

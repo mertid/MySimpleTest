@@ -254,6 +254,17 @@ static NSDictionary *staticCompileTimeDataSources;
 
 #pragma mark - PUBLIC HELPERS
 
+- (double) deviceBatteryLevel {
+    
+    return [TEALDeviceDataSources batteryLevel];
+}
+
+- (BOOL) deviceIsCharging {
+    
+    return [TEALDeviceDataSources isCharging];
+    
+}
+
 - (NSString *) applicationUUID {
     
     NSString *applicationUUID = self.privateStore.dataSourcesCopy[TEALDataSourceKey_UUID];

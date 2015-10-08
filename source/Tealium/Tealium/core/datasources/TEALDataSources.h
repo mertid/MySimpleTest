@@ -74,6 +74,10 @@
 
 // HELPERS
 
+- (double) deviceBatteryLevel;
+
+- (BOOL) deviceIsCharging;
+
 - (NSString *) applicationUUID;
 
 - (NSString *) visitorIDCopy;
