@@ -13,62 +13,111 @@
 
 @property (nonatomic) TEALLogLevel logLevel;
 @property (nonatomic, strong) NSString *messageHeader;
+@property (nonatomic) BOOL isDisabled;
 
 @end
 
 @implementation TEALLogger
 
-+ (NSString *) messageHeaderFromConfiguration:(TEALConfiguration *) configuration {
++ (NSString *) messageHeaderWithInstanceID:(NSString *) instanceID {
     NSString *version = TEALLibraryVersion;
-    NSString *instanceID = configuration? configuration.instanceID:@"(unknown instance id)";
-    
     return [NSString stringWithFormat:@"TEALIUM %@: instance %@: ", version, instanceID];
 }
 
-- (instancetype) initWithConfiguration:(TEALConfiguration *)configuration{
++ (TEALLogLevel) logLevelFromString:(NSString*)string {
+    
+    TEALLogLevel level = TEALLogLevelNone;
+    
+    if ([[string lowercaseString] isEqualToString:@"dev"]){
+        level = TEALLogLevelDev;
+    } else if ([[string lowercaseString] isEqualToString:@"qa"]){
+        level = TEALLogLevelQA;
+    } else if ([[string lowercaseString] isEqualToString:@"prod"]){
+        level = TEALLogLevelProd;
+    }
+    return level;
+}
+
++ (NSString *) logLevelStringFromLogLevel:(TEALLogLevel) logLevel {
+    
+    NSString *string = nil;
+    switch (logLevel) {
+        case TEALLogLevelDev:
+            string = @"dev";
+            break;
+        case TEALLogLevelQA:
+            string = @"qa";
+            break;
+        case TEALLogLevelProd:
+            string = @"prod";
+            break;
+        default:
+            string = @"none";
+            break;
+    }
+    
+    return string;
+}
+
+- (instancetype) initWithInstanceID:(NSString *)instanceID{
+    
     self = [super init];
     if (self) {
-        
-#warning OPTIMIZE
-        
-        if (configuration.logLevel == TEALLogLevelNone) {
-            return nil;
-        }
-        
-        _logLevel = configuration? configuration.logLevel: TEALLogLevelWarningsOnly;
-        _messageHeader = [TEALLogger messageHeaderFromConfiguration:configuration];
+        _messageHeader = [TEALLogger messageHeaderWithInstanceID:instanceID];
     }
     return self;
 }
 
-- (void) logWarning:(NSString *) format, ... {
+- (void) enable {
     
-    NSString *message = nil;
-    va_list args;
-    va_start(args, format);
-    message = [[NSString alloc] initWithFormat:format
-                                     arguments:args];
-    va_end(args);
+    self.isDisabled = NO;
     
-    NSString *warning = NSLocalizedString(@"!!! WARNING !!!", @"Console log string prefix for warning messages.");
-    NSString *finalMessage = [NSString stringWithFormat:@"%@: %@", warning, message];
-    [self logVerbosity:TEALLogLevelWarningsOnly message:finalMessage];
 }
 
-- (void) logNormal:(NSString *) format, ... {
+- (void) disable {
     
-    NSString *message = nil;
-    va_list args;
-    va_start(args, format);
-    message = [[NSString alloc] initWithFormat:format
-                                     arguments:args];
-    va_end(args);
+    self.isDisabled = YES;
     
-    [self logVerbosity:TEALLogLevelNormal message:message];
 }
 
-- (void) logVerbose:(NSString *) format, ...{
-        
+- (void) updateLogLevel:(TEALLogLevel)logLevel {
+    self.logLevel = logLevel;
+}
+
+- (void) logProd:(NSString *) format, ... {
+    
+    if (self.isDisabled) return;
+    
+    NSString *message = nil;
+    va_list args;
+    va_start(args, format);
+    message = [[NSString alloc] initWithFormat:format
+                                     arguments:args];
+    va_end(args);
+    
+//    NSString *warning = NSLocalizedString(@"!!! WARNING !!!", @"Console log string prefix for warning messages.");
+//    NSString *finalMessage = [NSString stringWithFormat:@"%@: %@", warning, message];
+    [self logVerbosity:TEALLogLevelProd message:message];
+}
+
+- (void) logQA:(NSString *) format, ... {
+    
+    if (self.isDisabled) return;
+
+    NSString *message = nil;
+    va_list args;
+    va_start(args, format);
+    message = [[NSString alloc] initWithFormat:format
+                                     arguments:args];
+    va_end(args);
+    
+    [self logVerbosity:TEALLogLevelQA message:message];
+}
+
+- (void) logDev:(NSString *) format, ...{
+    
+    if (self.isDisabled) return;
+
     NSString *message = nil;
     va_list args;
     va_start(args, format);
@@ -77,21 +126,21 @@
                                      arguments:args];
     va_end(args);
     
-    [self logVerbosity:TEALLogLevelVerbose message:message];
+    [self logVerbosity:TEALLogLevelDev message:message];
 }
 
 - (void) logVerbosity:(TEALLogLevel)logLevel message:(NSString *) message{
         
     BOOL shouldLog = NO;
     switch (logLevel) {
-        case TEALLogLevelWarningsOnly:
-            shouldLog = (self.logLevel >= TEALLogLevelWarningsOnly);
+        case TEALLogLevelProd:
+            shouldLog = (self.logLevel >= TEALLogLevelProd);
             break;
-        case TEALLogLevelNormal:
-            shouldLog = (self.logLevel >= TEALLogLevelNormal);
+        case TEALLogLevelQA:
+            shouldLog = (self.logLevel >= TEALLogLevelQA);
             break;
-        case TEALLogLevelVerbose:
-            shouldLog = (self.logLevel >= TEALLogLevelVerbose);
+        case TEALLogLevelDev:
+            shouldLog = (self.logLevel >= TEALLogLevelDev);
             break;
         default:
             break;
@@ -103,4 +152,7 @@
     }
 }
 
+- (TEALLogLevel) currentLogLevel {
+    return self.logLevel;
+}
 @end

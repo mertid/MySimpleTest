@@ -30,7 +30,6 @@
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
     
-    configuration.logLevel = TEALLogLevelVerbose;
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingCrashesEnabled = NO;
     configuration.autotrackingIvarsEnabled = NO;

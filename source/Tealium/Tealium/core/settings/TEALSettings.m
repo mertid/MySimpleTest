@@ -199,7 +199,8 @@
 }
 
 - (BOOL) libraryShouldDisable {
-    return !self.publishSettings.libraryIsEnabled;
+
+    return (self.publishSettings.status == TEALPublishSettingsStatusDisable);
 }
 
 - (BOOL) mobileCompanionEnabled {
@@ -241,7 +242,7 @@
 
 - (BOOL) isDefaultPublishSettings {
     
-    return !self.publishSettings.loadedArchive;
+    return (self.publishSettings.status == TEALPublishSettingsStatusDefault);
     
 }
 
@@ -277,6 +278,10 @@
     return self.audienceStreamDispatchURLString;
 }
 
+- (NSString *) configurationDescription {
+    return self.configuration.description;
+}
+
 - (NSString *) publishSettingsDescription {
     return self.publishSettings.description;
 }
@@ -306,8 +311,21 @@
     return self.publishSettings.dispatchSize;
 }
 
-- (NSUInteger) logLevel {
-    return self.configuration.logLevel;
+- (TEALLogLevel) logLevel {
+    
+    NSString *logLevelString = self.publishSettings.overrideLogLevel;
+    
+    if (!logLevelString){
+        
+        // Automatic off of env setting
+        logLevelString = self.configuration.environmentName;
+        
+    }
+    
+    TEALLogLevel logLevel = [TEALLogger logLevelFromString:logLevelString];
+    
+    return logLevel;
+    
 }
 
 - (NSUInteger) offlineDispatchQueueSize {

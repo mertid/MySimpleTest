@@ -10,6 +10,8 @@ typedef void (^TEALVoidBlock)(void);
 
 typedef void (^TEALBooleanBlock)(BOOL successful);
 
+typedef void (^TEALErrorBlock)(NSError *error);
+
 typedef void (^TEALBooleanCompletionBlock)(BOOL success, NSError *error);
 
 typedef void (^TEALDictionaryCompletionBlock)(NSDictionary *dataDictionary, NSError *error);

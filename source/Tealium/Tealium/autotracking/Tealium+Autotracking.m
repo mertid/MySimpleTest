@@ -165,7 +165,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     }
     
     if ([lifecycle isEnabled]){
-        [self.logger logVerbose:@"Autotracking Lifecycle enabled."];
+        [self.logger logDev:@"Autotracking Lifecycle enabled."];
     }
     
 }
@@ -174,7 +174,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     [UIApplication swizzleWithCompletion:^(BOOL success, NSError *error) {
         if (success){
-            [self.logger logVerbose:@"Autotracking UIEvents enabled."];
+            [self.logger logDev:@"Autotracking UIEvents enabled."];
         }
     }];
 
@@ -184,7 +184,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     [UIViewController swizzleWithCompletion:^(BOOL success, NSError *error) {
         if (success){
-            [self.logger logVerbose:@"Autotracking Views enabled."];
+            [self.logger logDev:@"Autotracking Views enabled."];
         }
     }];
     
@@ -204,7 +204,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
     
     if ([lifecycle isEnabled]){
         [lifecycle disable];
-        [self.logger logVerbose:@"Autotracking Lifecycle disabled."];
+        [self.logger logDev:@"Autotracking Lifecycle disabled."];
     }
     
 #warning IMPLEMENT publish settings refetch from wake events
@@ -271,7 +271,7 @@ char const * const TEALKVOAutotrackLifecycle = "com.tealium.kvo.autotracking.lif
         }
         
         if (error) {
-            [weakSelf.logger logWarning:@"Lifecycle tracking error:%@ reason:%@ suggestion:%@", [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
+            [weakSelf.logger logProd:@"Lifecycle tracking error:%@ reason:%@ suggestion:%@", [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
         }
         
     }];

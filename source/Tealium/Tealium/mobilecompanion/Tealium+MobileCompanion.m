@@ -47,7 +47,7 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
     [[self mobileCompanionInstance] enable];
     [self enableMobileCompanionRevealListener];
     
-    [self.logger logVerbose:@"Mobile Companion enabled."];
+    [self.logger logDev:@"Mobile Companion enabled."];
     
 }
 
@@ -70,7 +70,7 @@ NSString * const TEALKeyMobileCompanion = @"com.tealium.mobilecompanion";
     [self disableMobileCompanionRevealListener];
     [[self mobileCompanionInstance] disable];
     
-    [self.logger logVerbose:@"Mobile Companion disabled."];
+    [self.logger logDev:@"Mobile Companion disabled."];
 
     
 }

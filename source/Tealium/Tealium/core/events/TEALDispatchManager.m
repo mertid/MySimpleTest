@@ -362,7 +362,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     NSUInteger dispatchCount = [self queuedDispatchCount];
     
     if (dispatchCount) {
-//        TEAL_LogNormal(@"%lu archived dispatches have been enqueued.", (unsigned long)dispatchCount);
+//        TEAL_logQA(@"%lu archived dispatches have been enqueued.", (unsigned long)dispatchCount);
     }
 }
 
@@ -387,7 +387,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     NSUInteger count = [dataObjects count];
     
     if (count) {
-//        TEAL_LogNormal(@"%lu dispatches archived", count);
+//        TEAL_logQA(@"%lu dispatches archived", count);
     }
 }
 

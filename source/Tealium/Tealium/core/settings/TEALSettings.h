@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TEALPublishSettings.h"
 #import "TEALBlocks.h"
+#import "TEALLogger.h"
 
 @class TEALConfiguration;
 @class TEALURLSessionManager;
@@ -50,9 +51,10 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSString *) instanceID;
 
 - (NSUInteger) dispatchSize;
-- (NSUInteger) logLevel;
+- (TEALLogLevel) logLevel;
 - (NSUInteger) offlineDispatchQueueSize;
 
+- (NSString *) configurationDescription;
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;
 - (NSString *) publishURLString;

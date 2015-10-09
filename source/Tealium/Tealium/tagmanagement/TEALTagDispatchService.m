@@ -140,7 +140,7 @@
                                     completionHandler:^(TEALRemoteCommandResponse *response) {
                                         
 #warning Implement some other means of logging remote command reponse
-//                                        [weakLogger logVerbose:@"Remote command processed:%@", response];
+//                                        [weakLogger logDev:@"Remote command processed:%@", response];
                                         
                                     }];
             
@@ -180,7 +180,7 @@
         if ([init isEqualToString:@"false"]){
             
 #warning Implement alternative log method
-//            [weakSelf.logger logVerbose:@"Webkit was unable to process callback command: %@", command];
+//            [weakSelf.logger logDev:@"Webkit was unable to process callback command: %@", command];
         }
     });
 }

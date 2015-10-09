@@ -38,7 +38,6 @@
     configuration.environmentName   = [environmentName lowercaseString];
     configuration.useHTTP           = NO;
     configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-    configuration.logLevel          = TEALLogLevelNone;
     configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;
@@ -87,7 +86,6 @@
                                           @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
                                           @"use http":[NSString teal_stringFromBool:self.useHTTP],
                                           @"polling frequency":@(self.pollingFrequency),
-                                          @"log level":@(self.logLevel),
                                           @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
                                           @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
                                           @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],

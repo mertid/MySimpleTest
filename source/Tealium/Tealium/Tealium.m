@@ -67,8 +67,8 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         if (error) {
             
-            [instance.logger logWarning:@"Problem initializing instance: %@ reason:%@ suggestion:%@",
-             [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
+            NSLog(@"Problem initializing Tealium instance: %@ \nerror:%@ \nreason:%@ \nsuggestion:%@",
+             key, [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]);
              
         }
         
@@ -114,17 +114,27 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) disable {
+    
+
     @synchronized(self) {
 #warning remove all observers in all objects here
-
+        [self disableCore];
+        [self disableModules];
+        
+        [self.logger logQA:@"Library Disabled."];
+        [self.logger disable];
         self.enabled = NO;
     }
 }
 
 - (void) enable {
     
+    [self.logger logQA:@"Library Enabled."];
+
     @synchronized(self) {
-        
+        [self enableCore];
+        [self enableModules];
+        [self.logger enable];
         self.enabled = YES;
     }
 }
@@ -143,6 +153,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+    
+    if (!self.isEnabled) return;
     
     NSDictionary *universalInfo = [self universalTrackDataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
@@ -167,6 +179,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
+    if (!self.isEnabled) return;
+
     NSDictionary *universalDataSources = [self universalTrackDataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeView title:title];
     
@@ -238,7 +252,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
     if (![dataSourceKeys isKindOfClass:([NSArray class])]) {
-        [self.logger logWarning:@"Non-array passed into argument of removeVolatileDataSourcesForKey: method."];
+        [self.logger logProd:@"Non-array passed into argument of removeVolatileDataSourcesForKey: method."];
         return;
         
     }
@@ -364,61 +378,69 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) privateInstanceWithConfiguration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)setupCompletion {
     
-    // Init logger
-    self.logger = [[TEALLogger alloc] initWithConfiguration:configuration];
+    BOOL success = NO;
+    NSError *error = nil;
     
     // Check configuration
     if (![TEALConfiguration isValidConfiguration:configuration]) {
         
-        NSError *error = [TEALError errorWithCode:400
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
                                       description:@"Could not initialize instance."
                                            reason:@"Invalid Configuration."
                                        suggestion:@"Check the account, profile and environment options."];
-        if (setupCompletion) {
-            setupCompletion(NO, error);
-        }
-        return;
+
     }
-    [self.logger logNormal:@"%@", configuration];
     
-    // Init data sources + it's store
-    self.enabled = YES;
+    // Init data sources
     self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
-    if (!self.dataSources) {
-        [self.logger logNormal:@"Datasources did not init - Could not instantiate library"];
-        NSError *error =[TEALError errorWithCode:400
-                                     description:@"Could not init library instance."
-                                          reason:@"DataSources failed to init."
-                                      suggestion:@"Check that all configuration data is correct."];
-        if (setupCompletion) setupCompletion(NO, error);
-        return;
+    if (!error &&
+        !self.dataSources) {
+        error =[TEALError errorWithCode:TEALErrorCodeFailure
+                            description:@"Could not initialize data sources."
+                                 reason:@"Unknown problem with initialization."
+                             suggestion:@"Consult Tealium Mobile Engineering - Tealium Line 400"];
     }
-    
-    __block typeof(self) __weak weakSelf = self;
     
 #warning What will handle update in application version check and notification?
     
-    // Init all modules
-    [self setupSettingsWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
-        
-        if (success) {
-            
-            [weakSelf.logger logVerbose:@"Loaded Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-
-            
-            [weakSelf setupCore];
-            [weakSelf setupModules];
-            
-        } else {
-            
-            [weakSelf disable];
-            
-        }
-        
-        if (setupCompletion) setupCompletion(success, error);
-        
-    }];
+    // Init Settings
+    self.settings = [self settingsFromConfiguration:configuration];
+    if (!error &&
+        !self.settings){
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Could not initialize settings.", @"")
+                                  reason:NSLocalizedString(@"Unknown problem with initialization", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Mobile Engineering - Tealium Line 410", @"")];
+    }
     
+    // Init logger
+    self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
+    [self.logger updateLogLevel:[self.settings logLevel]];
+    [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+    if (!error &&
+        !self.logger) {
+        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Could not initialize logger.", @"")
+                                  reason:NSLocalizedString(@"Unknown problem with initialization.", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Mobile Engineering - Tealium Line 388", @"")];
+        
+    } else {
+    
+        [self.logger logDev:@"Configuration: %@", [self.settings configurationDescription]];
+        [self.logger logDev:@"Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
+    }
+
+    // Finalize
+    if (!error) {
+        
+        success = YES;
+        [self enable];
+
+    }
+
+    if (setupCompletion) setupCompletion(success, error);
+
 }
 
 - (void) addModuleData:(NSDictionary *) dictionary {
@@ -449,13 +471,13 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) setupCore {
+- (void) enableCore {
     self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
                                                                         delegate:self];
     [self setupSettingsReachabilityCallbacks];
 }
 
-- (void) setupModules {
+- (void) enableModules {
     
     self.modulesDelegate = self;
     
@@ -509,10 +531,33 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+- (void) disableCore {
+#warning IMPLEMENT
+    
+}
+
 - (void) disableModules {
     
 #warning IMPLEMENT
     
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]){
+        [self.modulesDelegate disableAutotrackingCrashes];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
+        [self.modulesDelegate disableAutotrackingLifecycle];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableUIEventAutotracking)]) {
+        [self.modulesDelegate disableAutotrackingUIEvents];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableViewAutotracking)]) {
+        [self.modulesDelegate disableAutotrackingViews];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
+        [self.modulesDelegate disableMobileCompanion];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
+        [self.modulesDelegate disableRemoteCommands];
+    }
 }
 
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
@@ -524,7 +569,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) setActiveViewController:(UIViewController *)viewController {
 
-    [self.logger logVerbose:@"Current View Controller is now: %@", viewController];
+    [self.logger logDev:@"Current View Controller is now: %@", viewController];
     
     self.privateActiveViewController = viewController;
 }
@@ -550,7 +595,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) logDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status error:(NSError *)error{
-    if ([self.settings logLevel] >= TEALLogLevelVerbose) {
+    
+    if ([self.settings logLevel] >= TEALLogLevelNone) {
         
         NSString *statusString = nil;
         
@@ -578,11 +624,11 @@ __strong static NSDictionary *staticAllInstances = nil;
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
             NSDictionary *datalayerDump = [TEALNetworkHelpers dictionaryFromUrlParamString:(NSString *)dispatch.payload];
             
-            [self.logger logVerbose:@"%@ dispatch with payload %@%@%@", statusString, datalayerDump, error? reason:@"", error? suggestion:@""];
+            [self.logger logDev:@"%@ dispatch with payload %@%@%@", statusString, datalayerDump, error? reason:@"", error? suggestion:@""];
             
         } else {
             
-            [self.logger logVerbose:@"%@ dispatch: %@%@%@", statusString, dispatch, error? reason:@"", error? suggestion:@""];
+            [self.logger logDev:@"%@ dispatch: %@%@%@", statusString, dispatch, error? reason:@"", error? suggestion:@""];
             
         }
     }
@@ -604,30 +650,13 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) setupSettingsWithConfiguration:(TEALConfiguration *) configuration completion:(TEALBooleanCompletionBlock)setupCompletion{
+- (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
     
-    BOOL success = NO;
-    NSError *error = nil;
+    TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
+    settings.urlSessionManager = self.urlSessionManager;
     
-    if (!self.settings){
-        
-        self.settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-        self.settings.visitorIDCopy = [self.dataSources visitorIDCopy];
-        self.settings.urlSessionManager = self.urlSessionManager;
-        
-        success = YES;
-        
-    } else {
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Could not setup settings.", @"")
-                                  reason:NSLocalizedString(@"Settings already available.", @"")
-                              suggestion:NSLocalizedString(@"Check setup call.", @"")];
-        success = NO;
-    }
-    
-    if (setupCompletion){
-        setupCompletion(success, error);
-    }
+    return settings;
 }
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
@@ -637,19 +666,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     [self.settings fetchNewRawPublishSettingsWithCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         
         BOOL success = NO;
-        BOOL newPublishSettings = NO;
-        NSString *message = nil;
 
         if (dataDictionary){
             
             // New raw setting found
-            newPublishSettings = YES;
             success = YES;
             
-        }
-        
-        if (message){
-            [weakSelf.logger logVerbose:message];
         }
         
         if (completion) completion (success, error);
@@ -658,6 +680,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) setupSettingsReachabilityCallbacks {
+    
+#warning DISABLE CALLBACKS IF LIBRARY DISABLED - PERMIT ONLY AT LAUNCH TIME TO CHECK FOR CHANGE
     
     if (self.urlSessionManager.reachability.reachableBlock) {
         return;
@@ -669,12 +693,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
-        [weakSelf.logger logVerbose:@"Network found."];
+        [weakSelf.logger logDev:@"Network found."];
         
         [weakSelf fetchNewSettingsWithCompletion:^(BOOL success, NSError *error) {
             
             if (error){
-                [weakSelf.logger logWarning:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
                                              [error localizedDescription],
                                              [error localizedFailureReason],
                                              [error localizedRecoverySuggestion]
@@ -683,19 +707,21 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             if (success){
                 
-                [weakSelf.logger logVerbose:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-
-                if ([weakSelf.settings libraryShouldDisable]){
-                    
-                    [weakSelf.logger logVerbose:NSLocalizedString(@"Mobile Publish Setting is enabled set to FALSE", @"Shut down message")];
-                        
-                    [weakSelf disable];
-                }
-
-            } else {
+                [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
                 
-                BOOL usingDefaults = [self.settings isDefaultPublishSettings];
-                [weakSelf.logger logVerbose:[NSString stringWithFormat:@"Continuing to use %@ Remote Publish Settings.", usingDefaults? @"Default":@"Archived"]];
+                [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
+                [self.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+
+#warning REPLACE WITH AN UPDATE SYSTEM
+                [weakSelf enableModules];
+
+            }
+            
+            if ([weakSelf.settings libraryShouldDisable]){
+                
+                [weakSelf disable];
+                
+                return;
             }
             
             [weakSelf.dispatchManager runQueuedDispatches];
@@ -706,7 +732,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
         
-        [self.logger logVerbose:@"Network unreachable."];
+        [self.logger logDev:@"Network unreachable."];
 
     };
 }

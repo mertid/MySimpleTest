@@ -42,7 +42,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
     
-    [self.logger logVerbose:@"Audiencestream enabled."];
+    [self.logger logDev:@"Audiencestream enabled."];
 
 }
 
@@ -61,12 +61,12 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     [weakSelf.operationManager addOperationWithBlock:^{
         
         if (![weakSelf isEnabled]) {
-            [weakSelf.logger logVerbose:@"Library Disabled, Ignoring: %s", __func__];
+            [weakSelf.logger logDev:@"Library Disabled, Ignoring: %s", __func__];
             return; // No fail log because these they should be logged once for each public method
         }
         
         if (![weakSelf.settings audienceStreamEnabled]) {
-            [weakSelf.logger logVerbose:@"Audience Stream disabled, Ignoring: %s", __func__];
+            [weakSelf.logger logDev:@"Audience Stream disabled, Ignoring: %s", __func__];
             if (completion) {
                 
                 completion(nil, nil);
@@ -78,14 +78,14 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
             
             if (profile) {
-                [weakSelf.logger logVerbose:@"got profile!!! : %@", profile];
+                [weakSelf.logger logDev:@"got profile!!! : %@", profile];
                 
                 [weakSelf collect_setCachedProfile:profile];
                 
                 completion(weakSelf.collect_cachedProfile, nil);
                 
             } else {
-                [weakSelf.logger logVerbose:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
+                [weakSelf.logger logDev:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
             }
         };
         [[weakSelf profileStore] fetchProfileWithCompletion:storeCompletion];
@@ -205,7 +205,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         if (![weakSelf isEnabled]) {
-            [self.logger logVerbose:@"Library Disabled, Ignoring: %s", __func__ ];
+            [self.logger logDev:@"Library Disabled, Ignoring: %s", __func__ ];
             return;
         }
         
@@ -228,7 +228,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         if (![weakSelf isEnabled]) {
-            [self.logger logVerbose:@"Library Disabled, Ignoring: %s", __func__];
+            [self.logger logDev:@"Library Disabled, Ignoring: %s", __func__];
             return;
         }
         

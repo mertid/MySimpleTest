@@ -61,7 +61,7 @@
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
     
     if (tagService) {
-        [self.logger logVerbose:@"TagManagement enabled."];
+        [self.logger logDev:@"TagManagement enabled."];
     }
 
 }
@@ -72,11 +72,11 @@
         
     [service.remoteCommandManager enable];
     
-    [self.logger logVerbose:@"Remote Commands enabled."];
+    [self.logger logDev:@"Remote Commands enabled."];
 
     [service.remoteCommandManager addReservedCommands:^(BOOL successful) {
         if (successful) {
-            [self.logger logVerbose:@"Reserved Remote Commands enabled."];
+            [self.logger logDev:@"Reserved Remote Commands enabled."];
         }
     }];
     

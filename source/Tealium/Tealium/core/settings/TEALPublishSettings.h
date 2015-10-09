@@ -13,7 +13,6 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
     TEALPublishSettingsStatusLoadedRemote,
     TEALPublishSettingsStatusLoadedArchive,
     TEALPublishSettingsStatusDisable,
-    TEALPublishSettingsStatusUnchanged
 };
 
 extern NSString * const TEALPublishSettingKeyIsEnabled;
@@ -24,6 +23,7 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
+@property (nonatomic) NSString *overrideLogLevel;
 @property (nonatomic) double minutesBetweenRefresh;
 @property (nonatomic) double numberOfDaysDispatchesAreValid;
 @property (nonatomic) BOOL enableLowBatterySuppress;
@@ -31,6 +31,7 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL enableAudienceStream;
 @property (nonatomic) BOOL enableTagManagement;
 
+@property (nonatomic) BOOL disableLibrary;
 @property (nonatomic) BOOL disableApplicationInfoAutotracking;
 @property (nonatomic) BOOL disableCarrierInfoAutotracking;
 @property (nonatomic) BOOL disableCrashAutotracking;
@@ -42,14 +43,10 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL disableTimestampAutotracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
-@property (nonatomic) BOOL libraryIsEnabled;
-@property (nonatomic) BOOL loadedArchive;
-
-
 + (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings;
 + (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
-- (instancetype) initWithURLString:(NSString *)url;
+- (instancetype) initWithURLString: (NSString *)url;
 
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
 - (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings;

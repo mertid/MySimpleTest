@@ -24,28 +24,6 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
     TEALVisitorProfilePollingFrequencyAfterEveryEvent
 };
 
-/**
- *  Unsigned integer value that controls the verbosity level of any log output.
- */
-typedef NS_ENUM(NSUInteger, TEALLogLevel){
-    /**
-     *  Nothing is logged to the console, this is the default.
-     */
-    TEALLogLevelNone = 1,
-    /**
-     *  Only errors and improper API use reported
-     */
-    TEALLogLevelWarningsOnly,
-    /**
-     *  Normal is minimal informative feedback of events processed and requested task status
-     */
-    TEALLogLevelNormal,
-    /**
-     *  Verbose is a more verbose version of normal, expanded logs for each event.  Useful for debugging and verifing during development.
-     */
-    TEALLogLevelVerbose,
-};
-
 
 /**
  *  Configuration Class for the Tealium Mobile Library
@@ -96,14 +74,6 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
  *  @see TEALVisitorProfilePollingFrequency
  */
 @property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
-
-/**
- *  How verbose the library's logs should be.  This defaults to showing nothing.
- *
- *  @default TEALLogLevelNone
- *  @see TEALLogLevel
- */
-@property (nonatomic) TEALLogLevel logLevel;
 
 /**
  *  Profile name Collect should use to query AudienceStream with.  Usually this is the account's main profile, however if a different profile is desired that profile's name goes here.
