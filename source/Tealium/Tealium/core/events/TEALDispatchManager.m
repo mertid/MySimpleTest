@@ -132,12 +132,12 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self runQueuedDispatches];
     
-    [self.delegate didUpdateDispatchQueues];
+    [self.delegate dispatchManagerdDidUpdateDispatchQueues];
 }
 
 - (void) enqueueDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
     
-    [self.delegate willEnqueueDispatch:dispatch];
+    [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
     
     [dispatch queue:YES];
     
@@ -148,7 +148,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
               completionBlock:nil];
     }
     
-    [self.delegate didEnqueueDispatch:dispatch];
+    [self.delegate dispatchManagerdDidEnqueueDispatch:dispatch];
     [self archiveDispatchQueue];
     
     if (completionBlock) {
@@ -165,7 +165,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self.sentDispatches enqueueObject:sentDispatch];
     
-    [self.delegate didUpdateDispatchQueues];
+    [self.delegate dispatchManagerdDidUpdateDispatchQueues];
 }
 
 - (void) purgeStaleDispatches {
@@ -182,7 +182,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
             
             TEALDispatch *dispatch = (TEALDispatch *)obj;
             
-            if ([self.delegate shouldPurgeDispatch:dispatch]) {
+            if ([self.delegate dispatchManagerdShouldPurgeDispatch:dispatch]) {
                 [purgeData addObject:dispatch];
             }
         }
@@ -190,9 +190,9 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     }];
     
     if ([purgeData count]) {
-        // Note: little slower than if implemented with the shouldPurgeDispatch
+        // Note: little slower than if implemented with the dispatchManagerdShouldPurgeDispatch
         [self.queuedDispatches dequeueObjects:purgeData withBlock:^(id dequeuedObject) {
-            [self.delegate didPurgeDispatch:dequeuedObject];
+            [self.delegate dispatchManagerdDidPurgeDispatch:dequeuedObject];
         }];
     }
 }
@@ -203,7 +203,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
     if ([self.queuedDispatches count] >= batchSize &&
         self.delegate &&
-        [self.delegate delegateManagerShouldDispatch]) {
+        [self.delegate dispatchManagerShouldDispatch]) {
 
         if ([self beginQueueTraversal]) {
             [self recursivelyDispatchWithCompletion:^{
@@ -231,7 +231,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         
         NSUInteger processingCount = [self.processingQueue count];
 
-        [self.delegate willRunDispatchQueueWithCount:processingCount];
+        [self.delegate dispatchManagerdWillRunDispatchQueueWithCount:processingCount];
             
         return YES;
     }
@@ -296,7 +296,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         }
 
         NSUInteger remainingCount = [self.queuedDispatches count];
-        [self.delegate didRunDispatchQueueWithCount:remainingCount];
+        [self.delegate dispatchManagerdDidRunDispatchQueueWithCount:remainingCount];
     }
     self.processingQueue = nil;
 }

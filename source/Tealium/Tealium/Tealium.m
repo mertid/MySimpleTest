@@ -812,7 +812,7 @@ __strong static NSDictionary *staticAllInstances = nil;
  // TODO: handle wifi only, low battery and other settings
  // ~commHandlers big if else checks
 
-- (BOOL) delegateManagerShouldDispatch {
+- (BOOL) dispatchManagerShouldDispatch {
     
     BOOL shouldDispatch = YES;
     
@@ -846,21 +846,21 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) willEnqueueDispatch:(TEALDispatch *)dispatch {
+- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch {
     
 }
 
-- (void) didEnqueueDispatch:(TEALDispatch *)dispatch {
+- (void) dispatchManagerdDidEnqueueDispatch:(TEALDispatch *)dispatch {
     
     [self.delegateManager tealium:self didQueueDispatch:dispatch];
     
 }
 
-- (void) didUpdateDispatchQueues {
+- (void) dispatchManagerdDidUpdateDispatchQueues {
     
 }
 
-- (BOOL) shouldPurgeDispatch:(TEALDispatch *)dispatch {
+- (BOOL) dispatchManagerdShouldPurgeDispatch:(TEALDispatch *)dispatch {
     
     BOOL hasExpired = NO;
     
@@ -884,15 +884,15 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 }
 
-- (void) didPurgeDispatch:(TEALDispatch *)dispatch {
+- (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch *)dispatch {
 
 }
 
-- (void) willRunDispatchQueueWithCount:(NSUInteger)count {
+- (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count {
     
 }
 
-- (void) didRunDispatchQueueWithCount:(NSUInteger)count {
+- (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
     
 }
 

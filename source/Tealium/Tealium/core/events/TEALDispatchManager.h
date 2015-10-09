@@ -21,21 +21,21 @@
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock;
 
-- (BOOL) delegateManagerShouldDispatch;
+- (BOOL) dispatchManagerShouldDispatch;
 
-- (void) willEnqueueDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch;
 
-- (void) didEnqueueDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerdDidEnqueueDispatch:(TEALDispatch *)dispatch;
 
-- (void) didUpdateDispatchQueues;
+- (void) dispatchManagerdDidUpdateDispatchQueues;
 
-- (BOOL) shouldPurgeDispatch:(TEALDispatch *)dispatch;
+- (BOOL) dispatchManagerdShouldPurgeDispatch:(TEALDispatch *)dispatch;
 
-- (void) didPurgeDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch *)dispatch;
 
-- (void) willRunDispatchQueueWithCount:(NSUInteger)count;
+- (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count;
 
-- (void) didRunDispatchQueueWithCount:(NSUInteger)count;
+- (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count;
 
 @end
 
