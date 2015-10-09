@@ -365,8 +365,23 @@
 - (void) fetchNewRawPublishSettingsWithCompletion:(TEALDictionaryCompletionBlock)completion{
     
     // Drop requests for following conditions:
-    if (!self.configuration ||
-        ![self canFetchNow]) {
+    NSError *preFetchError = nil;
+    if (!self.configuration){
+        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+                                  reason:NSLocalizedString(@"No configuration available.", @"")
+                              suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
+    }
+    if (![self canFetchNow]) {
+        preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+                                  reason:NSLocalizedString(@"Can not fetch at this time", @"")
+                              suggestion:NSLocalizedString(@"Check prior minutes between refresh setting.", @"")];
+    }
+    
+    if (preFetchError &&
+        completion){
+        completion (nil, preFetchError);
         return;
     }
     
@@ -530,7 +545,11 @@
     
     if (self.lastFetch){
         double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
-        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
+        
+#warning RESET for prod
+        if (elapsedTime > 1) {
+
+//        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
             fetchAcceptable = YES;
             self.lastFetch = now;
         }

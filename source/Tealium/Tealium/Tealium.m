@@ -580,10 +580,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-                          
-                          [weakSelf logDispatch:dispatch status:status error:error];
-                          [weakSelf notifyDelegateOfDispatch:dispatch status:status];
-                          
+
 #warning Move to Collect module
                           
                           if ([weakSelf.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
@@ -691,7 +688,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     __weak Tealium *weakSelf = self;
     
-    weakSelf.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
+    self.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
         [weakSelf.logger logDev:@"Network found."];
         
@@ -710,7 +707,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                 [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
                 
                 [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
-                [self.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
 
 #warning REPLACE WITH AN UPDATE SYSTEM
                 [weakSelf enableModules];
@@ -831,6 +828,9 @@ __strong static NSDictionary *staticAllInstances = nil;
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock {
     
+    
+    __block typeof(self) __weak weakSelf = self;
+
     // Pass dispatch to dispatch services
     for ( id<TEALDispatchService> service in [self currentDispatchNetworkServices]) {
         
@@ -838,7 +838,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                    completion:^(TEALDispatchStatus serviceStatus, TEALDispatch *serviceDispatch, NSError *serviceError) {
                        
                        dispatch.dispatchServiceName = [service name];
-            
+                       
                        if (completionBlock) completionBlock(serviceStatus, serviceDispatch, serviceError);
                        
                    }];
@@ -846,21 +846,33 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+- (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch {
+    
+    [self.delegate tealium:self didSendDispatch:dispatch];
+    [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
+    
+}
+
 - (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch {
     
+#warning HOOKUP?
+    
 }
 
-- (void) dispatchManagerdDidEnqueueDispatch:(TEALDispatch *)dispatch {
+- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch {
     
     [self.delegateManager tealium:self didQueueDispatch:dispatch];
+    [self logDispatch:dispatch status:TEALDispatchStatusQueued error:nil];
     
 }
 
-- (void) dispatchManagerdDidUpdateDispatchQueues {
+- (void) dispatchManagerDidUpdateDispatchQueues {
+    
+#warning HOOKUP?
     
 }
 
-- (BOOL) dispatchManagerdShouldPurgeDispatch:(TEALDispatch *)dispatch {
+- (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch *)dispatch {
     
     BOOL hasExpired = NO;
     
@@ -886,14 +898,23 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch *)dispatch {
 
+    [self.logger logDev:[NSString stringWithFormat:@"Did purge dispatch: %@", dispatch]];
+
 }
 
 - (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count {
+    
+    [self.logger logDev:[NSString stringWithFormat:@"Will dispatch queue with %lu dispatches.", (unsigned long)count]];
+
     
 }
 
 - (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
     
+#warning THIS count is always zero
+    
+    [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
+
 }
 
 #pragma mark - TEALDISPATCHMANAGER CONFIGURATION

@@ -132,7 +132,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self runQueuedDispatches];
     
-    [self.delegate dispatchManagerdDidUpdateDispatchQueues];
+    [self.delegate dispatchManagerDidUpdateDispatchQueues];
 }
 
 - (void) enqueueDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
@@ -148,7 +148,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
               completionBlock:nil];
     }
     
-    [self.delegate dispatchManagerdDidEnqueueDispatch:dispatch];
+    [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
     [self archiveDispatchQueue];
     
     if (completionBlock) {
@@ -165,7 +165,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     
     [self.sentDispatches enqueueObject:sentDispatch];
     
-    [self.delegate dispatchManagerdDidUpdateDispatchQueues];
+    [self.delegate dispatchManagerDidUpdateDispatchQueues];
 }
 
 - (void) purgeStaleDispatches {
@@ -182,7 +182,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
             
             TEALDispatch *dispatch = (TEALDispatch *)obj;
             
-            if ([self.delegate dispatchManagerdShouldPurgeDispatch:dispatch]) {
+            if ([self.delegate dispatchManagerShouldPurgeDispatch:dispatch]) {
                 [purgeData addObject:dispatch];
             }
         }
@@ -190,7 +190,7 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     }];
     
     if ([purgeData count]) {
-        // Note: little slower than if implemented with the dispatchManagerdShouldPurgeDispatch
+        // Note: little slower than if implemented with the dispatchManagerShouldPurgeDispatch
         [self.queuedDispatches dequeueObjects:purgeData withBlock:^(id dequeuedObject) {
             [self.delegate dispatchManagerdDidPurgeDispatch:dequeuedObject];
         }];
@@ -199,43 +199,62 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 - (void) runQueuedDispatches {
 
-    NSUInteger batchSize    = [self.configuration dispatchBatchSize];
+    if ([self shouldBeginQueueTraversal]) {
 
-    if ([self.queuedDispatches count] >= batchSize &&
-        self.delegate &&
-        [self.delegate dispatchManagerShouldDispatch]) {
+        [self beginQueueTraversal];
 
-        if ([self beginQueueTraversal]) {
-            [self recursivelyDispatchWithCompletion:^{
-                
-                [self endQueueTraversal];
-            }];
-        }
     }
 }
 
-- (BOOL) beginQueueTraversal {
+- (BOOL) shouldBeginQueueTraversal {
+    
+    NSUInteger batchSize    = [self.configuration dispatchBatchSize];
+
+    if ([self.queuedDispatches count] < batchSize) {
+        
+        return NO;
+    }
+    
+    if (self.delegate &&
+        ![self.delegate dispatchManagerShouldDispatch]) {
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void) beginQueueTraversal {
 
     NSUInteger queueCount = [self queuedDispatchCount];
+    
     if (!self.processingQueue && queueCount) {
 
         self.processingQueue = [TEALDataQueue queueWithCapacity:queueCount];
 
-        __weak TEALDispatchManager *weakSelf = self;
-        
-        [self.queuedDispatches dequeueNumberOfObjects:queueCount
-                                            withBlock:^(id dequeuedObject) {
-                                                
-                                                [weakSelf.processingQueue enqueueObject:dequeuedObject];
-                                            }];
-        
-        NSUInteger processingCount = [self.processingQueue count];
-
-        [self.delegate dispatchManagerdWillRunDispatchQueueWithCount:processingCount];
-            
-        return YES;
     }
-    return NO;
+    
+    __weak TEALDispatchManager *weakSelf = self;
+    
+    
+    [self.queuedDispatches dequeueNumberOfObjects:queueCount
+                                        withBlock:^(id dequeuedObject) {
+                                            
+                                            [weakSelf.processingQueue enqueueObject:dequeuedObject];
+                                            
+                                        }];
+    
+    NSUInteger processingCount = [self.processingQueue count];
+
+    [self.delegate dispatchManagerdWillRunDispatchQueueWithCount:processingCount];
+    
+    [self recursivelyDispatchWithCompletion:^{
+        
+        [self endQueueTraversal];
+        
+    }];
+        
+
 }
 
 - (void) recursivelyDispatchWithCompletion:(TEALVoidBlock)completion {
@@ -312,13 +331,25 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
         } else if (error.code == 400){
             completionBlock(TEALDispatchStatusQueued, aDispatch, error);
         }
+        
         return;
     }
     
     [self.delegate dispatchManager:self
                   requestsDispatch:aDispatch
-                   completionBlock:completionBlock
-                   ];
+                   completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+                    
+                       if (status == TEALDispatchStatusSent &&
+                           self.delegate) {
+                           
+                           [self.delegate dispatchManagerDidSendDispatch:aDispatch];
+                           
+                       }
+                       
+                       if (completionBlock){
+                           completionBlock(status, dispatch, error);
+                       }
+                   }];
 
 }
 

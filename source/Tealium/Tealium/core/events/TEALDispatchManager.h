@@ -23,13 +23,15 @@
 
 - (BOOL) dispatchManagerShouldDispatch;
 
+- (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch;
+
 - (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch;
 
-- (void) dispatchManagerdDidEnqueueDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch;
 
-- (void) dispatchManagerdDidUpdateDispatchQueues;
+- (void) dispatchManagerDidUpdateDispatchQueues;
 
-- (BOOL) dispatchManagerdShouldPurgeDispatch:(TEALDispatch *)dispatch;
+- (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch *)dispatch;
 
 - (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch *)dispatch;
 
