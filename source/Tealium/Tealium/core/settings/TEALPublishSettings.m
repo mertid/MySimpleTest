@@ -215,10 +215,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _dispatchSize                   = 1;
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
-#warning FLIP enableAudienceStream TO YES FOR RELEASE
-        _enableAudienceStream           = NO;
-#warning FLIP enableTagManagment TO NO FOR RELEASE
-        _enableTagManagement            = YES;
+        _enableAudienceStream           = YES;
+        _enableTagManagement            = NO;
         
         _disableLibrary = NO;
         _disableApplicationInfoAutotracking = NO;

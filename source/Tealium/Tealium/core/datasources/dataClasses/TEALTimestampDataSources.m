@@ -31,10 +31,9 @@
     return [NSString stringWithFormat:@"%i", offset];
 }
 
-static NSDateFormatter *staticISO8601Local;
+static NSDateFormatter *staticISO8601Local = nil;
 + (NSString*) stringOfTimestampAsISOLocalFrom:(NSDate*)date{
     // modified from original by Radu Poenaru
-    staticISO8601Local = nil;
     if (!staticISO8601Local) {
         staticISO8601Local = [[NSDateFormatter alloc] init];
         

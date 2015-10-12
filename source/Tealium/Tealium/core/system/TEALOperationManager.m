@@ -9,30 +9,41 @@
 
 #import "TEALOperationManager.h"
 
+NSString * const TEALOperationManagerSerialBaseQueueName = @"com.tealium.operations.queue";
+NSString * const TEALOperationManagerIOBaseQueueName = @"com.tealium.operations.ioqueue";
+
 @interface TEALOperationManager ()
 
 @property (nonatomic, strong) dispatch_queue_t serialQueue;
 @property (nonatomic, strong) dispatch_queue_t ioQueue;
-
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
 @implementation TEALOperationManager
 
-#warning UPDATE to use instance id instead of constant
-
-- (instancetype) init {
+- (instancetype) initWithInstanceID:(NSString * _Nonnull)instanceID {
     
     self = [super init];
     
     if (self) {
-        _serialQueue = dispatch_queue_create("com.tealium.serial-queue", DISPATCH_QUEUE_SERIAL);
-        _ioQueue = dispatch_queue_create("com.tealium.io-queue", DISPATCH_QUEUE_CONCURRENT);
+        
+        NSString *fullSerialQueueName = [NSString stringWithFormat:@"%@.%@", TEALOperationManagerSerialBaseQueueName , instanceID];
+        const char * serialQueueName = [fullSerialQueueName UTF8String];
+        _serialQueue = dispatch_queue_create(serialQueueName, DISPATCH_QUEUE_SERIAL);
+        
+        NSString *fullIOQueueName = [NSString stringWithFormat:@"%@.%@", TEALOperationManagerIOBaseQueueName , instanceID];
+        const char * ioQueueName = [fullIOQueueName UTF8String];
+        _ioQueue = dispatch_queue_create(ioQueueName, DISPATCH_QUEUE_CONCURRENT);
         
         _operationQueue = [NSOperationQueue new];
     }
     return self;
+}
+
+- (instancetype) init {
+    [NSException raise:@"TEALOperationManager init should not be directly called." format:@""];
+    return nil;
 }
 
 - (void) addOperationWithBlock:(TEALVoidBlock)block {

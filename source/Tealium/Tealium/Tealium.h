@@ -54,22 +54,15 @@
 + (void) destroyInstanceForKey:(NSString * _Nonnull)key;
 
 /**
- *  Disabled the library from operating.  Sets the libraries internal state to disabled, all subsequent method calls with be ignored.
+ *  @return The current delegate of the library instance
  */
-- (void) disable;
+- (id<TealiumDelegate> _Nullable) delegate;
 
 /**
- */
-- (void) enable;
-
-/**
+ *  Set the library delegate for overriding and or monitoring dispatch processes.
  */
 - (void) setDelegate:(id<TealiumDelegate> _Nullable)delegate;
 
-/**
- 
- */
-- (BOOL) isEnabled;
 
 # pragma mark - Track Data
 

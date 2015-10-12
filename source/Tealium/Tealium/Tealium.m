@@ -45,8 +45,6 @@
 
 @property (nonatomic, strong) NSDictionary *moduleData;
 
-@property (readwrite) BOOL enabled;
-
 @end
 
 __strong static NSDictionary *staticAllInstances = nil;
@@ -55,11 +53,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC CLASS METHODS
 
-+ (instancetype) newInstanceForKey:(NSString *)key configuration:(TEALConfiguration *)configuration {
-    
-    if (!key){
-        return nil;
-    }
++ (instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration *)configuration {
     
     configuration.instanceID = key;
     
@@ -80,11 +74,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-+ (instancetype) instanceForKey:(NSString *)key {
-    
-    if (!key) {
-        return nil;
-    }
++ (instancetype) instanceForKey:(NSString * _Nonnull)key {
     
     Tealium *instance = staticAllInstances[key];
     
@@ -92,13 +82,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-+ (void) destroyInstanceForKey:(NSString *)key {
-    
-    if (!key) {
-        return;
-    }
++ (void) destroyInstanceForKey:(NSString * _Nonnull)key {
     
     Tealium *instance = [Tealium instanceForKey:key];
+    
     instance = nil;
     
     [Tealium removeInstanceWithKey:key];
@@ -107,35 +94,9 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC INSTANCE METHODS
 
-- (id<TealiumDelegate>) delegate {
+- (id<TealiumDelegate> _Nullable) delegate {
     @synchronized(self){
         return self.delegateManager.delegate;
-    }
-}
-
-- (void) disable {
-    
-
-    @synchronized(self) {
-#warning remove all observers in all objects here
-        [self disableCore];
-        [self disableModules];
-        
-        [self.logger logQA:@"Library Disabled."];
-        [self.logger disable];
-        self.enabled = NO;
-    }
-}
-
-- (void) enable {
-    
-    [self.logger logQA:@"Library Enabled."];
-
-    @synchronized(self) {
-        [self enableCore];
-        [self enableModules];
-        [self.logger enable];
-        self.enabled = YES;
     }
 }
 
@@ -148,14 +109,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (BOOL) isEnabled {
-    return self.enabled? YES: NO;
-}
-
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
-    
-    if (!self.isEnabled) return;
-    
+        
     NSDictionary *universalInfo = [self universalTrackDataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
     
@@ -179,8 +134,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    if (!self.isEnabled) return;
-
     NSDictionary *universalDataSources = [self universalTrackDataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeView title:title];
     
@@ -291,9 +244,27 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PRIVATE CLASS METHODS
 
-+ (instancetype) instanceWithConfiguration:(TEALConfiguration *)configuration completion:(TEALBooleanCompletionBlock) completion{
++ (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
     
-    Tealium *instance = [[Tealium alloc] initPrivate];
+#warning OPTIMIZE
+    
+    if (![TEALConfiguration isValidConfiguration:configuration]) {
+        
+        // Check configuration
+        
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                                      description:@"Could not initialize instance."
+                                           reason:@"Invalid Configuration."
+                                       suggestion:@"Check the account, profile and environment options."];
+        
+        
+        if (completion) {
+            completion(NO, error);
+        }
+        return nil;
+    }
+    
+    Tealium *instance = [[Tealium alloc] initPrivateWithInstanceID:configuration.instanceID];
     
     __weak Tealium *weakInstance = instance;
     
@@ -323,12 +294,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     return staticAllInstances;
 }
 
-+ (void) addInstance:(Tealium *)instance key:(NSString *)key {
-    
-    if (!instance ||
-        !key) {
-        return;
-    }
++ (void) addInstance:(Tealium * _Nonnull)instance key:(NSString * _Nonnull)key {
+
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     mDict[key] = instance;
@@ -338,11 +305,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     staticAllInstances = newInstances;
 }
 
-+ (void) removeInstanceWithKey:(NSString *)key {
-    
-    if (!key) {
-        return;
-    }
++ (void) removeInstanceWithKey:(NSString * _Nonnull)key {
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     [mDict removeObjectForKey:key];
@@ -355,12 +318,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PRIVATE INSTANCE METHODS
 
-- (instancetype) initPrivate {
+- (instancetype) initPrivateWithInstanceID:(NSString * _Nonnull) instanceID {
     
     self = [super init];
     
     if (self) {
-        _operationManager   = [TEALOperationManager new];
+        _operationManager   = [[TEALOperationManager alloc] initWithInstanceID:instanceID];
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
         _delegateManager    = [[TEALDelegateManager alloc] init];
@@ -380,16 +343,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     BOOL success = NO;
     NSError *error = nil;
-    
-    // Check configuration
-    if (![TEALConfiguration isValidConfiguration:configuration]) {
-        
-        error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Could not initialize instance."
-                                           reason:@"Invalid Configuration."
-                                       suggestion:@"Check the account, profile and environment options."];
-
-    }
     
     // Init data sources
     self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
@@ -443,6 +396,29 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 }
 
+- (void) disable {
+    
+    @synchronized(self) {
+#warning remove all observers in all objects here
+        [self disableCore];
+        [self updateModules];
+        
+        [self.logger logQA:@"Library Disabled."];
+        [self.logger disable];
+    }
+}
+
+- (void) enable {
+    
+    [self.logger logQA:@"Library Enabled."];
+    
+    @synchronized(self) {
+        [self enableCore];
+        [self updateModules];
+        [self.logger enable];
+    }
+}
+
 - (void) addModuleData:(NSDictionary *) dictionary {
     
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
@@ -472,21 +448,28 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) enableCore {
-    self.dispatchManager = [TEALDispatchManager dispatchManagerWithConfiguration:self
-                                                                        delegate:self];
+    self.dispatchManager = [TEALDispatchManager dispatchManagerWithInstanceID:self.settings.instanceID
+                                                                Configuration:self
+                                                                     delegate:self];
     [self setupSettingsReachabilityCallbacks];
 }
 
-- (void) enableModules {
+- (void) updateModules {
     
     self.modulesDelegate = self;
     
+    // Lifecycle
     if ([self.settings autotrackingLifecycleEnabled]){
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]) {
             [self.modulesDelegate enableAutotrackingLifecycle];
         }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
+            [self.modulesDelegate disableAutotrackingLifecycle];
+        }
     }
     
+    // Tag Management
     if ([self.settings tagManagementEnabled]){
         if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]) {
             [self.modulesDelegate enableTagManagement];
@@ -496,69 +479,82 @@ __strong static NSDictionary *staticAllInstances = nil;
             if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]) {
                 [self.modulesDelegate enableRemoteCommands];
             }
+        } else {
+            if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
+                [self.modulesDelegate disableRemoteCommands];
+            }
+        }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableTagMangement)]) {
+            [self.modulesDelegate disableTagMangement];
         }
     }
     
+    
+    // AudienceStream
     if ([self.settings audienceStreamEnabled]){
         if ([self.modulesDelegate respondsToSelector:@selector(enableAudienceStream)]) {
             [self.modulesDelegate enableAudienceStream];
         }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableAudienceStream)]) {
+            [self.modulesDelegate disableAudienceStream];
+        }
     }
     
+    // UIEvents
     if ([self.settings autotrackingUIEventsEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]) {
             [self.modulesDelegate enableAutotrackingUIEvents];
         }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingUIEvents)]) {
+            [self.modulesDelegate disableAutotrackingUIEvents];
+        }
     }
     
+    // Views
     if ([self.settings autotrackingViewsEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]) {
             [self.modulesDelegate enableAutotrackingViews];
         }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingViews)]) {
+            [self.modulesDelegate disableAutotrackingViews];
+        }
     }
     
+    // Mobile Companion
     if ([self.settings mobileCompanionEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableMobileCompanion)]) {
             [self.modulesDelegate enableMobileCompanion];
         }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
+            [self.modulesDelegate disableMobileCompanion];
+        }
     }
     
+    
+    // Crashes
     if ([self.settings autotrackingCrashesEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
             [self.modulesDelegate enableAutotrackingCrashes];
+        }
+    } else {
+        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]) {
+            [self.modulesDelegate disableAutotrackingCrashes];
         }
     }
     
 }
 
 - (void) disableCore {
+    
 #warning IMPLEMENT
     
 }
 
-- (void) disableModules {
-    
-#warning IMPLEMENT
-    
-    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]){
-        [self.modulesDelegate disableAutotrackingCrashes];
-    }
-    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
-        [self.modulesDelegate disableAutotrackingLifecycle];
-    }
-    if ([self.modulesDelegate respondsToSelector:@selector(disableUIEventAutotracking)]) {
-        [self.modulesDelegate disableAutotrackingUIEvents];
-    }
-    if ([self.modulesDelegate respondsToSelector:@selector(disableViewAutotracking)]) {
-        [self.modulesDelegate disableAutotrackingViews];
-    }
-    if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
-        [self.modulesDelegate disableMobileCompanion];
-    }
-    if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
-        [self.modulesDelegate disableRemoteCommands];
-    }
-}
 
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
     
@@ -709,8 +705,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                 [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
                 [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
 
-#warning REPLACE WITH AN UPDATE SYSTEM
-                [weakSelf enableModules];
+                [weakSelf updateModules];
 
             }
             
@@ -937,19 +932,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSError *error = nil;
     NSArray *dispatchServices = [self currentDispatchNetworkServices];
 
-    if (!self.enabled) {
-        
-        error = [TEALError errorWithCode:999
-                             description:NSLocalizedString(@"Ignoring dispatch.", @"")
-                                  reason:NSLocalizedString(@"Library currently disabled.", @"")
-                              suggestion:NSLocalizedString(@"Re-enable library prior to track request.", @"")];
-        
-    } else if  (![self.delegateManager tealium:self shouldSendDispatch:dispatch]) {
+    if  ([self.delegateManager tealium:self shouldDropDispatch:dispatch]) {
         
         error = [TEALError errorWithCode:999
                              description:NSLocalizedString(@"Dispatch destroyed.", @"")
-                                  reason:NSLocalizedString(@"Public delegate requested suppression of dispatch.", @"")
-                              suggestion:NSLocalizedString(@"See implemented tealium:shouldSendDispatch delegate method.", @"")];
+                                  reason:NSLocalizedString(@"Public delegate requested destruction of dispatch.", @"")
+                              suggestion:NSLocalizedString(@"See implemented tealium:shouldDropDispatch delegate method.", @"")];
         
     } else if ([self.delegateManager tealium:self shouldQueueDispatch:dispatch]) {
 

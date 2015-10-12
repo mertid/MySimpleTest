@@ -9,7 +9,7 @@
 #import "TEALLifecycleStore.h"
 #import "TEALError.h"
 
-const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
+static NSString * const TEALLifecycleStoreBaseQueueName = @"com.tealium.lifecycle.queue";
 
 @interface TEALLifecycleStore()
 
@@ -32,9 +32,14 @@ const char * kTEALLifecycleStoreQueueName = "com.tealium.lifecyclestore.queue";
     self = [super init];
     
     if (self) {
-        _queue = dispatch_queue_create(kTEALLifecycleStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
+        
+        NSString *fullQueueName = [NSString stringWithFormat:@"%@.queue.%@", TEALLifecycleStoreBaseQueueName , instanceID];
+        const char * queueName = [fullQueueName UTF8String];
+        
+        _queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
         _lifecycleEvents = [NSMutableDictionary new];
         _privateInstanceID = instanceID;
+        
     }
     return self;
 }

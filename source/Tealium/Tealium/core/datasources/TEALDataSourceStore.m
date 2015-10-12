@@ -11,9 +11,9 @@
 #import "TEALDataSourceConstants.h"
 #import "NSString+Tealium.h"
 
-static NSString * const kTEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
+static NSString * const TEALMobileDatasourceStorageKey = @"com.tealium.datasourcestore";
 
-const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue";
+static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasourcestore.queue";
 
 @interface TEALDataSourceStore ()
 
@@ -38,7 +38,11 @@ const char * kTEALDatasourceStoreQueueName = "com.tealium.datasourcestore.queue"
     self = [super init];
     
     if (self) {
-        _queue = dispatch_queue_create(kTEALDatasourceStoreQueueName, DISPATCH_QUEUE_CONCURRENT);
+        
+        NSString *fullQueueName = [NSString stringWithFormat:@"%@.%@", TEALDatasourceStoreBaseQueueName , instanceID];
+        const char * queueName = [fullQueueName UTF8String];
+
+        _queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
         _dataSources = [NSMutableDictionary new];
         _instanceID = instanceID;
         [self unarchiveWithStorageKey:instanceID];

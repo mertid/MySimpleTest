@@ -25,26 +25,7 @@
     
 #ifndef TEST
     
-    // Instance 1
-    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
-                                                                       environment:@"dev"];
-    
-    configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.autotrackingCrashesEnabled = NO;
-    configuration.autotrackingIvarsEnabled = NO;
-    configuration.autotrackingLifecycleEnabled = NO;
-    configuration.autotrackingUIEventsEnabled = NO;
-    configuration.autotrackingViewsEnabled = NO;
-    configuration.mobileCompanionEnabled = YES;
-//    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
-    
-    Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];
-    [tealiumInstance1 setDelegate:self];
-    [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
-    
-    [tealiumInstance1 addVolatileDataSources:@{@"volatileKey":@"volatileValue"}];
-    
+//    [self startupTealiumInstance1];
     // Instance 2
 //    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
 //                                                                           profile:@"android-demo"
@@ -62,6 +43,28 @@
 #endif
     
     return YES;
+}
+
+- (void) startupTealiumInstance1 {
+    
+    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                           profile:@"demo"
+                                                                       environment:@"dev"];
+    
+    configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    configuration.autotrackingCrashesEnabled = NO;
+    configuration.autotrackingIvarsEnabled = NO;
+    configuration.autotrackingLifecycleEnabled = NO;
+    configuration.autotrackingUIEventsEnabled = NO;
+    configuration.autotrackingViewsEnabled = NO;
+    configuration.mobileCompanionEnabled = YES;
+    //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
+    
+    Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];
+    [tealiumInstance1 setDelegate:self];
+    [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
+    
+    [tealiumInstance1 addVolatileDataSources:@{@"volatileKey":@"volatileValue"}];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -88,7 +91,7 @@
 
 #pragma mark - TEALIUM DELEGATE
 
-//- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
+//- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
 
     /**
      *  Uncomment to test delegate suppression of dispatches

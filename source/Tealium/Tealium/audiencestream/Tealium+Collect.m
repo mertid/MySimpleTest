@@ -60,11 +60,6 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        if (![weakSelf isEnabled]) {
-            [weakSelf.logger logDev:@"Library Disabled, Ignoring: %s", __func__];
-            return; // No fail log because these they should be logged once for each public method
-        }
-        
         if (![weakSelf.settings audienceStreamEnabled]) {
             [weakSelf.logger logDev:@"Audience Stream disabled, Ignoring: %s", __func__];
             if (completion) {
@@ -204,10 +199,6 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     __weak Tealium *weakSelf = self;
     
     [weakSelf.operationManager addOperationWithBlock:^{
-        if (![weakSelf isEnabled]) {
-            [self.logger logDev:@"Library Disabled, Ignoring: %s", __func__ ];
-            return;
-        }
         
         if (!token || ![token length]) {
             return;
@@ -227,10 +218,6 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     __weak Tealium *weakSelf = self;
     
     [weakSelf.operationManager addOperationWithBlock:^{
-        if (![weakSelf isEnabled]) {
-            [self.logger logDev:@"Library Disabled, Ignoring: %s", __func__];
-            return;
-        }
         
         weakSelf.settings.traceID = nil;
     }];

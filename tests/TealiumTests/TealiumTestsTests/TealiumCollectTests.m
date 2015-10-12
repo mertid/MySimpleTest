@@ -11,7 +11,7 @@
 #import <Tealium/Tealium.h>
 #import <Tealium/Tealium+Collect.h>
 #import <Tealium/TEALConfiguration.h>
-#import "Tealium+PrivateHeader.h"
+#import "Tealium+PrivateTestHeader.h"
 
 @interface TealiumCollectTests : XCTestCase
 

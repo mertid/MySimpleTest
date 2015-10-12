@@ -12,10 +12,12 @@
 
 @interface TEALOperationManager : NSObject
 
-- (void) addOperationWithBlock:(TEALVoidBlock)block;
+- (instancetype _Nullable) initWithInstanceID:(NSString * _Nonnull)instanceID;
 
-- (void) addIOOperationWithBlock:(TEALVoidBlock)ioBlock;
+- (void) addOperationWithBlock:(TEALVoidBlock _Nullable)block;
 
-- (dispatch_queue_t) underlyingQueue;
+- (void) addIOOperationWithBlock:(TEALVoidBlock _Nullable)ioBlock;
+
+- (dispatch_queue_t _Nullable) underlyingQueue;
 
 @end

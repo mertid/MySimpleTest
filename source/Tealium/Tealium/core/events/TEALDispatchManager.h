@@ -57,18 +57,20 @@
 @property (strong, nonatomic, readonly) TEALDataQueue *queuedDispatches;
 
 
-+ (instancetype) dispatchManagerWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
-                                         delegate:(id<TEALDispatchManagerDelegate>)delegate;
++ (instancetype) dispatchManagerWithInstanceID:(NSString * _Nonnull) instanceID
+                                 Configuration:(id<TEALDispatchManagerConfiguration> _Nonnull)configuration
+                                      delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
 
-- (instancetype) initWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
-                              delegate:(id<TEALDispatchManagerDelegate>)delegate;
+- (instancetype _Nullable) initWithInstanceID:(NSString * _Nonnull)instanceID
+                                Configuration:(id<TEALDispatchManagerConfiguration> _Nonnull)configuration
+                                     delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
 
 - (void) updateQueuedCapacity:(NSUInteger)capacity;
 
 #pragma mark - enqueue / dequeue dispatches
 
-- (void) addDispatch:(TEALDispatch *)dispatch
-     completionBlock:(TEALDispatchBlock)completionBlock;
+- (void) addDispatch:(TEALDispatch * _Nonnull)dispatch
+     completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
 - (void) runQueuedDispatches;
 
@@ -76,8 +78,8 @@
 
 - (void) dequeueAllData;
 
-- (NSArray *) queuedDispatchesCopy;
+- (NSArray * _Nonnull) queuedDispatchesCopy;
 
-- (NSArray *) sentDispatchesCopy;
+- (NSArray * _Nonnull) sentDispatchesCopy;
 
 @end

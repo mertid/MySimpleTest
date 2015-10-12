@@ -34,7 +34,6 @@ static NSString * const TEALBaseKeyDataStore = @"com.tealium.datastore";
     if (self) {
 
         NSString *fullQueueName = [NSString stringWithFormat:@"%@.queue.%@", TEALBaseKeyDataStore, instanceID];
-        
         const char * queueName = [fullQueueName UTF8String];
         
         _queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);

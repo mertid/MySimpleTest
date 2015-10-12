@@ -19,17 +19,17 @@
  *  Delegate method that permits last minute manipulation or suppression (destruction)
  *      of a track call dispatch.
  *
- *  @param tealium The Tealium instance requesting confirmation
+ *  @param tealium The Tealium instance to process this dispatch
  *  @param dispatch The dispatch in question. Property and payload data manipulated
  *          here will overwrite this dispatch's outbound data - effects not
  *          persistent
  *
  *  @return Boolean indicating whether dispatch should be sent or destroyed
  */
-- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch;
+- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch;
 
 /**
- *  Dispatches approved by the tealium:shouldSendDispatch: delegate method can be
+ *  Dispatches passing the tealium:shouldDropDispatch: delegate method can be
  *      queued / saved by this method.  Also supercedes any remote publish setting
  *      batching and offline options.
  *

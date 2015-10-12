@@ -11,7 +11,7 @@
 
 #import <Tealium/Tealium.h>
 #import <Tealium/TEALSettings.h>
-#import "Tealium+PrivateHeader.h"
+#import "Tealium+PrivateTestHeader.h"
 #import <Tealium/TEALDispatch.h>
 
 @interface TealiumDispatchTests : XCTestCase
@@ -26,16 +26,17 @@
 - (void)setUp {
     [super setUp];
     
-    self.library = [[Tealium alloc] initPrivate];
     
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                              profile:@"demo"
                                                          environment:@"dev"];
+    
+    self.library = [Tealium  newInstanceForKey:@"testInstance" configuration:self.configuration];
+
 }
 
 - (void)tearDown {
     
-    [[Tealium instanceForKey:@"1"] disable];
     self.library = nil;
     [super tearDown];
 }
@@ -50,24 +51,24 @@
 
 #pragma mark - Helpers
 
-- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
-    
-    if (!config) {
-        config = self.configuration;
-    }
-
-    XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
-    
-    self.library = [Tealium newInstanceForKey:@"test" configuration:config];
-    [self.library instanceWithConfiguration:config
-                          completion:^(BOOL success, NSError *error) {
-                              [finishedLoadingExpectation fulfill];
-                          }];
-    
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
-            NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
-}
+//- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
+//    
+//    if (!config) {
+//        config = self.configuration;
+//    }
+//
+//    XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
+//    
+//    self.library = [Tealium newInstanceForKey:@"test" configuration:config];
+//    [self.library instanceWithConfiguration:config
+//                          completion:^(BOOL success, NSError *error) {
+//                              [finishedLoadingExpectation fulfill];
+//                          }];
+//    
+//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+//            NSLog(@"%s error:%@", __FUNCTION__, error);
+//    }];
+//}
 
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
@@ -88,8 +89,6 @@
 #pragma mark - Dispatch
 
 - (void) testEventDispatch {
-    
-    [self enableLibraryWithConfiguration:nil];
     
     XCTestExpectation *finished = [self expectationWithDescription:@"finishedEventDispatch"];
 
@@ -175,7 +174,6 @@
 
 - (void) testViewDispatch {
     
-    [self enableLibraryWithConfiguration:nil];
     
     XCTestExpectation *finished = [self expectationWithDescription:@"finishedViewDispatch"];
 

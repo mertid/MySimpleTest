@@ -11,7 +11,7 @@
 #import "TEALBlocks.h"
 
 static NSString * const Tealium_DispatchQueueKey = @"com.tealium.dispatch_queue";
-static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
+static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioqueue";
 
 @interface TEALDispatchManager ()
 
@@ -31,16 +31,19 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
 
 #pragma mark - PUBLIC CLASS
 
-+ (instancetype) dispatchManagerWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
++ (instancetype) dispatchManagerWithInstanceID:(NSString * _Nonnull) instanceID
+                                 Configuration:(id<TEALDispatchManagerConfiguration>)configuration
                                          delegate:(id<TEALDispatchManagerDelegate>)delegate {
 
-    return [[[self class] alloc] initWithConfiguration:configuration
-                                              delegate:delegate];
+    return [[[self class] alloc] initWithInstanceID: instanceID
+                                      Configuration:configuration
+                                           delegate:delegate];
 }
 
 #pragma mark - PUBLIC INSTANCE
 
-- (instancetype) initWithConfiguration:(id<TEALDispatchManagerConfiguration>)configuration
+- (instancetype) initWithInstanceID:(NSString * _Nonnull)instanceID
+                      Configuration:(id<TEALDispatchManagerConfiguration>)configuration
                               delegate:(id<TEALDispatchManagerDelegate>)delegate {
 
     self = [self init];
@@ -48,8 +51,11 @@ static NSString * const Tealium_IOQueueKey = @"com.tealium.io_queue";
     if (self) {
         _configuration      = configuration;
         _delegate           = delegate;
-        _ioQueue            = dispatch_queue_create([Tealium_IOQueueKey cStringUsingEncoding:NSUTF8StringEncoding],
-                                                    DISPATCH_QUEUE_SERIAL);
+        
+        NSString *fullQueueName = [NSString stringWithFormat:@"%@.%@", TEALIODispatchBaseQueueName , instanceID];
+        const char * ioQueueName = [fullQueueName UTF8String];
+        
+        _ioQueue            = dispatch_queue_create(ioQueueName, DISPATCH_QUEUE_SERIAL);
         
         NSUInteger dispatchCapacity = [_configuration dispatchQueueCapacity];
         

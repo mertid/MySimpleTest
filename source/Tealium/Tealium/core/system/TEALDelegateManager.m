@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) id<TealiumDelegate> delegate;
 @property (nonatomic) BOOL hasDidFinishLoadingRemoteSettings;
-@property (nonatomic) BOOL hasShouldSendDispatch;
+@property (nonatomic) BOOL hasShouldDropDispatch;
 @property (nonatomic) BOOL hasShouldQueueDispatch;
 @property (nonatomic) BOOL hasDidSendDispatch;
 @property (nonatomic) BOOL hasDidQueueDispatch;
@@ -27,7 +27,7 @@
     self.delegate = delegate;
 
     self.hasDidFinishLoadingRemoteSettings = [self.delegate respondsToSelector:@selector(tealiumDidFinishLoadingRemoteSettings:)];
-    self.hasShouldSendDispatch = [self.delegate respondsToSelector:@selector(tealium:shouldSendDispatch:)];
+    self.hasShouldDropDispatch = [self.delegate respondsToSelector:@selector(tealium:shouldDropDispatch:)];
     self.hasShouldQueueDispatch = [self.delegate respondsToSelector:@selector(tealium:shouldQueueDispatch:)];
     self.hasDidSendDispatch = [self.delegate respondsToSelector:@selector(tealium:didSendDispatch:)];
     self.hasDidQueueDispatch = [self.delegate respondsToSelector:@selector(tealium:didQueueDispatch:)];
@@ -40,14 +40,12 @@
     }
 }
 
-- (BOOL) tealium:(Tealium *)tealium shouldSendDispatch:(TEALDispatch *)dispatch {
+- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
     
 #warning THIS check does not actually work
     
-    if (self.hasShouldSendDispatch) {
-//    if ([self.delegate respondsToSelector:@selector(tealium:shouldSendDispatch:)]){
-            NSLog(@"%s ERROR in hasDiDSendDispatch check", __FUNCTION__);
-        return [self.delegate tealium:tealium shouldSendDispatch:dispatch];
+    if (self.hasShouldDropDispatch) {
+        return [self.delegate tealium:tealium shouldDropDispatch:dispatch];
     }
     return YES;
 }

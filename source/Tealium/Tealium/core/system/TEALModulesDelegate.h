@@ -22,6 +22,8 @@
 - (void) enableMobileCompanion;
 - (void) enableRemoteCommands;
 
+- (void) disableAudienceStream;
+- (void) disableTagMangement;
 - (void) disableAutotrackingLifecycle;
 - (void) disableAutotrackingCrashes;
 - (void) disableAutotrackingUIEvents;

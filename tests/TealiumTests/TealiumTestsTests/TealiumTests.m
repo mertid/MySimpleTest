@@ -10,13 +10,15 @@
 #import <XCTest/XCTest.h>
 #import <Tealium/Tealium.h>
 #import <Tealium/Tealium+TagManagement.h>
-#import "Tealium+PrivateHeader.h"
+#import "Tealium+PrivateTestHeader.h"
 #import "TEALSettings+PrivateHeader.h"
+#import "TealiumDelegateTestObject.h"
 
-@interface TealiumTests : XCTestCase
+@interface TealiumTests : XCTestCase <TealiumDelegate>
 
-@property (nonatomic, strong) Tealium *library;
-@property (nonatomic, strong) TEALConfiguration *configuration;
+@property (nonatomic) BOOL shouldQueue;
+@property (nonatomic) BOOL shouldDrop;
+@property (nonatomic, strong) Tealium *tealium;
 
 @end
 
@@ -24,99 +26,243 @@
 
 - (void)setUp {
     [super setUp];
+    self.tealium = [Tealium newInstanceForKey:@"testInstance"
+                                configuration:[self defaultConfig]];
+    
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    self.library = nil;
-    self.configuration = nil;
+    self.shouldDrop = NO;
+    self.shouldQueue = NO;
+    [Tealium destroyInstanceForKey:@"testInstance"];
+    
     [super tearDown];
 }
 
-#pragma mark - Helpers
-
-//- (void) enableSharedInstanceWithConfiguration:(TEALConfiguration *) config {
-//    
-//    if (!config) {
-//        config = self.configuration;
-//    }
-//    
-//    __weak XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
-//    
-//    
-//    [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
-//        
-//        if ([[Tealium instanceForKey:@"test"] enabled]){
-//            [finishedLoading fulfill];
-//        }
-//    }];
-//    
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-//        NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//}
-
-- (void) enableLibraryForKey:(NSString *)key configuration:(TEALConfiguration *)config {
+- (TEALConfiguration *) defaultConfig {
     
-    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingInstance"];
-    
-    
-    [Tealium instanceForKey:key configuration:config completion:^(BOOL success, NSError *error) {
-        [finishedLoading fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-        NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
-    
+    return [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                               profile:@"demo"
+                                           environment:@"dev"];
 }
 
-#pragma mark - PUBLIC APIS TESTS
+#pragma mark - PUBLIC APIs TESTS
 
-- (void) testEnableInstanceAndSharedInstance {
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+#pragma mark - Lifecycle Tests
+
+- (void) testCreateInstanceWithMissingConfigurationData {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
+                                                                    profile:nil
+                                                                environment:nil];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateInstanceWithConfigurationMissingAccountInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-    [self enableLibraryForKey:@"instance1" configuration:config];
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateInstanceWithConfigurationMissingProfileInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:nil
+                                                                environment:@"dev"];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateInstanceWithConfigurationMissingEnvInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:nil];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+
+- (void) testCreateInstanceWithConfigurationBlankAccountInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@""
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateInstanceWithConfigurationBlankProfileInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@" "
+                                                                environment:@"dev"];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateInstanceWithConfigurationBlankEnvInfo {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"   "];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+}
+
+- (void) testCreateSingleInstance {
+    
+    Tealium *instance1 = [Tealium newInstanceForKey:@"instance1" configuration:[self defaultConfig]];
+
+    XCTAssertTrue(instance1, @"Instance1 was not initialized.");
+}
+
+- (void) testCreateMultipleInstances {
+
+    TEALConfiguration *config1 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    [Tealium newInstanceForKey:@"instance1" configuration:config1];
+    
     
     TEALConfiguration *config2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                             profile:@"ios"
                                                                         environment:@"dev"];
-    [self enableLibraryForKey:@"instance2" configuration:config2];
+    [Tealium newInstanceForKey:@"instance2" configuration:config2];
     
-    XCTAssertTrue([Tealium instanceForKey:@"instance1"], @"Instance1 was not initialized.");
-    XCTAssertTrue([Tealium instanceForKey:@"instance2"], @"Instance2 was not initialized.");
+    TEALConfiguration *config3 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                     profile:@"ios-demo"
+                                                                 environment:@"dev"];
+    [Tealium newInstanceForKey:@"instance3" configuration:config3];
+
+    
+    Tealium *instance1 = [Tealium instanceForKey:@"instance1"];
+    Tealium *instance2 = [Tealium instanceForKey:@"instance2"];
+    Tealium *instance3 = [Tealium instanceForKey:@"instance3"];
+    
+    XCTAssertTrue(instance1, @"Instance1 was not initialized.");
+    XCTAssertTrue(instance2, @"Instance2 was not initialized.");
+    XCTAssertTrue(instance3, @"Instance3 was not initialized.");
     
 }
 
+- (void) testDestroyInstance {
 
-#pragma mark - Shared Instance Tests
+    [Tealium newInstanceForKey:@"instanceD" configuration:[self defaultConfig]];
+    
+    [Tealium destroyInstanceForKey:@"instanceD"];
+    
+    XCTAssertFalse([Tealium instanceForKey:@"instanceD"], @"Instance was not destroyed.");
+    
+}
 
-//- (void) testEnableSharedInstance {
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    
-//    [self enableSharedInstanceWithConfiguration:config];
-//    
-//    XCTAssertTrue([Tealium instanceForKey:@"test"], @"SharedInstance was not initialized.");
-//    
-//}
-//
-//
-//- (void) testDestroySharedInstance {
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//
-//    [self enableSharedInstanceWithConfiguration:config];
-//    [Tealium destroyinstanceForKey:@"test"];
-//    
-//    XCTAssertTrue(![Tealium instanceForKey:@"test"], @"SharedInstance was not destroyed.");
-//}
+- (void) testDestroyOneInstanceAmongMany {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    [Tealium newInstanceForKey:@"testDisableInstance" configuration:config];
+    
+    TEALConfiguration *config2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"ios"
+                                                                environment:@"dev"];
+    [Tealium newInstanceForKey:@"instance1" configuration:config2];
+    
+    TEALConfiguration *config3 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"ios-demo"
+                                                                environment:@"dev"];
+    [Tealium newInstanceForKey:@"instance2" configuration:config3];
+    
+    Tealium *instanceD = [Tealium instanceForKey:@"testDisableInstance"];
+    
+    Tealium *instance1 = [Tealium instanceForKey:@"instance1"];
+    
+    Tealium *instance2 = [Tealium instanceForKey:@"instance2"];
+    
+    [Tealium destroyInstanceForKey:@"testDisableInstance"];
+    
+    Tealium *instanceDCheck = [Tealium instanceForKey:@"testDisableInstance"];
+    
+    NSLog(@"%s instanceD: %@", __FUNCTION__, instanceD);
+    
+    XCTAssertFalse(instanceDCheck, @"Instance was not destroyed.");
+    XCTAssertTrue(instance1, @"Instance1 was not initialized.");
+    XCTAssertTrue(instance2, @"Instance2 was not initialized.");
+    
+}
+
+#pragma mark - Delegate Tests
+
+- (void) testSetAndRemoveDelegate {
+    
+    [self.tealium setDelegate:self];
+    
+    XCTAssertTrue([self.tealium delegate] == self, @"Delegate did not set to test object.");
+    
+    [self.tealium setDelegate:nil];
+    
+    XCTAssertFalse([self.tealium delegate], @"Delegate did not clear.");
+}
+
+- (void) testUnimplementedDelegateMethods {
+    
+    TealiumDelegateTestObject *testDelegate = [TealiumDelegateTestObject new];
+    
+    [self.tealium setDelegate:testDelegate];
+    
+    [self.tealium trackEventWithTitle:@"testCall" dataSources:nil];
+    
+    id <TealiumDelegate> delegate = [self.tealium delegate];
+    
+    XCTAssertTrue(delegate == testDelegate, @"testDelegate did not take.");
+    
+    // This will cause a crash if the optional delegates are not trully optional
+}
+
+
+#pragma mark - LIBRARY DELEGATES
+
+- (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
+    
+}
+
+- (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
+    
+}
+
+- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
+    
+    return self.shouldDrop;
+}
+
+- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
+    
+    return self.shouldQueue;
+}
+
+#pragma mark - PRIVATE API TESTS
+
 
 
 #pragma mark - WebView Tests

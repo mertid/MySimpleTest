@@ -11,7 +11,7 @@
 
 #import <Tealium/Tealium.h>
 #import <Tealium/TEALSettings.h>
-#import "Tealium+PrivateHeader.h"
+#import "Tealium+PrivateTestHeader.h"
 
 @interface TealiumAudienceStreamTests : XCTestCase
 
@@ -35,7 +35,6 @@
 
 - (void)tearDown {
     
-    [[Tealium instanceForKey:@"1"] disable];
     self.library = nil;
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
