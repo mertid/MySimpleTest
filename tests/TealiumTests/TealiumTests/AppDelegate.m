@@ -25,7 +25,7 @@
     
 #ifndef TEST
     
-//    [self startupTealiumInstance1];
+    [self startupTealiumInstance1];
     // Instance 2
 //    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
 //                                                                           profile:@"android-demo"
@@ -92,23 +92,23 @@
 #pragma mark - TEALIUM DELEGATE
 
 //- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
-
-    /**
-     *  Uncomment to test delegate suppression of dispatches
-     */
-    
-//    NSDictionary *payload = dispatch.payload;
+//
+//    /**
+//     *  Uncomment to test delegate suppression of dispatches
+//     */
 //    
-//    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:dispatch.payload];
-//    mDict[@"ClientAddedKey"] = @"clientAddedValue";
-//    
-//    dispatch.payload = [NSDictionary dictionaryWithDictionary:mDict];
-//    
-//    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
-//        return NO;
-//    }
-//    return YES;
-//     
+////    NSDictionary *payload = dispatch.payload;
+////    
+////    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:dispatch.payload];
+////    mDict[@"ClientAddedKey"] = @"clientAddedValue";
+////    
+////    dispatch.payload = [NSDictionary dictionaryWithDictionary:mDict];
+////    
+////    if ([payload[@"custom_key"] isEqualToString:@"custom_value_event"]) {
+////        return NO;
+////    }
+////    return YES;
+////    
 //}
 
 //- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
@@ -121,5 +121,10 @@
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
 //        NSLog(@"%s %@ dispatch: %@", __FUNCTION__, tealium, dispatch);
+}
+
+- (void) tealium:(Tealium *)tealium webViewIsReady:(UIWebView *)webView {
+    
+        NSLog(@"%s webViewReady: %@", __FUNCTION__, webView);
 }
 @end

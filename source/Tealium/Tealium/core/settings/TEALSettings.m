@@ -218,6 +218,9 @@
 }
 
 - (BOOL) tagManagementEnabled {
+    
+    return YES;
+#warning RESET TO NO FOR PROD
     return self.publishSettings.enableTagManagement;
 }
 

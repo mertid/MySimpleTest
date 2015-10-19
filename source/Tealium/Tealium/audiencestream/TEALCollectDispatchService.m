@@ -40,6 +40,12 @@
     return YES;
 }
 
+#pragma mark - PRIVATE
+
+- (NSString *) description {
+    return [NSString stringWithFormat:@"<TEALCollectDispatch Service dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)self.status];
+}
+
 #pragma mark - TEALNETWORKSERVICE DELEGATES
 
 

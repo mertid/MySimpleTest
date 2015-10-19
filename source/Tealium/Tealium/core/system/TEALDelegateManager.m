@@ -41,13 +41,12 @@
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
-    
-#warning THIS check does not actually work
-    
+        
     if (self.hasShouldDropDispatch) {
         return [self.delegate tealium:tealium shouldDropDispatch:dispatch];
     }
-    return YES;
+    
+    return NO;
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {

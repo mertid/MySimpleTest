@@ -13,9 +13,16 @@
 @class TEALLogger;
 @class TEALRemoteCommandManager;
 
+@protocol TEALTagDispatchServiceDelegate <NSObject>
+
+- (void) TEALTagDispatchServiceWebViewReady:(UIWebView *)webView;
+
+@end
+
 @interface TEALTagDispatchService : NSObject <TEALDispatchService>
 
 @property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, weak) id<TEALTagDispatchServiceDelegate> delegate;
 
 - (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager;
 

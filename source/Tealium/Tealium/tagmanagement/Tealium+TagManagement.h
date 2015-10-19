@@ -16,14 +16,6 @@
 
 @interface Tealium (TagManagement)
 
-/**
- *  The UIWebView instance used by the internal tag management system.
- *
- *  @return UIWebView if the remote publish settings tag management toggle is TRUE, otherwise will return nil.
- */
-- (UIWebView *) webView;
-
-
 - (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock;
 
 @end

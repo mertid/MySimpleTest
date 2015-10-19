@@ -18,7 +18,7 @@
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandManager.h"
 
-@interface Tealium() <TEALModulesDelegate>
+@interface Tealium() <TEALModulesDelegate, TEALTagDispatchServiceDelegate>
 
 @end
 
@@ -59,17 +59,9 @@
     }
 
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
-    
+        
     if (tagService) {
         [self.logger logDev:@"TagManagement enabled."];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]){
-        
-        UIWebView *webView = [self webView];
-        
-        [self.delegate tealium:self webViewIsReady:webView];
-        
     }
 
 }
@@ -131,7 +123,7 @@
     if (!targetService) {
         
         targetService = [self newTagDispatchService];
-        
+                
         NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
         
         [newServices addObject:targetService];
@@ -146,6 +138,8 @@
     
     TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
     
+    [tagService setDelegate:self];
+    
     [tagService setup];
     
     return tagService;
@@ -154,5 +148,11 @@
 
 #pragma mark - TEAL TAG DISPATCH SERVICE DELEGATE
 
+- (void) TEALTagDispatchServiceWebViewReady:(UIWebView *)webView {
+    
+    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
+        [self.delegate tealium:self webViewIsReady:webView];
+    }
+}
 
 @end

@@ -20,6 +20,7 @@
 #import "TEALLogger.h"
 #import "TEALModulesDelegate.h"
 #import "TEALNetworkHelpers.h"
+#import "TEALNotificationConstants.h"
 #import "TEALOperationManager.h"
 #import "TEALSettings+PrivateHeader.h"
 #import "TEALSystemHelpers.h"
@@ -556,7 +557,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-
 - (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
     
     self.dispatchNetworkServices = nil;
@@ -576,13 +576,18 @@ __strong static NSDictionary *staticAllInstances = nil;
     __block typeof(self) __weak weakSelf = self;
     
     [self.dispatchManager addDispatch:dispatch
-                      completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+                      completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatchReturned, NSError *error) {
 
+                          if (error) {
+                              [weakSelf logDispatch:dispatchReturned status:status error:error];
+                          }
+                          
 #warning Move to Collect module
                           
                           if ([weakSelf.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
                               return;
                           }
+                          
                           
                       }];
     
@@ -642,15 +647,6 @@ __strong static NSDictionary *staticAllInstances = nil;
             break;
     }
     
-}
-
-- (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
-    
-    TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
-    settings.urlSessionManager = self.urlSessionManager;
-    
-    return settings;
 }
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
@@ -728,6 +724,40 @@ __strong static NSDictionary *staticAllInstances = nil;
     };
 }
 
+- (BOOL) networkReadyForDispatch {
+    
+    BOOL reachable = [self.urlSessionManager.reachability isReachable];
+    
+    return reachable;
+    
+}
+
+- (BOOL) suppressForWifiOnly {
+    
+    BOOL suppress = NO;
+    if ([self.settings wifiOnlySending]){
+        suppress = ![self.urlSessionManager.reachability isReachableViaWiFi];
+    }
+    
+    return suppress;
+}
+
+- (BOOL) suppressForBetterBatteryLevels {
+    // 20% is cutoff
+    
+    BOOL suppress = NO;
+    double batteryLevel = [self.dataSources deviceBatteryLevel];
+    
+    if ([self.settings goodBatteryLevelOnlySending] &&
+        (batteryLevel < 20.0 && batteryLevel >= 0)) {
+        
+        suppress = YES;
+    }
+    
+    return suppress;
+    
+}
+
 - (NSArray *) currentDispatchNetworkServices {
     
     NSArray *array = nil;
@@ -763,39 +793,15 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (BOOL) networkReadyForDispatch {
+- (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
     
-    BOOL reachable = [self.urlSessionManager.reachability isReachable];
+    TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:configuration];
+    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
+    settings.urlSessionManager = self.urlSessionManager;
     
-    return reachable;
-    
+    return settings;
 }
 
-- (BOOL) suppressForWifiOnly {
-    
-    BOOL suppress = NO;
-    if ([self.settings wifiOnlySending]){
-        suppress = ![self.urlSessionManager.reachability isReachableViaWiFi];
-    }
-    
-    return suppress;
-}
-
-- (BOOL) suppressForBetterBatteryLevels {
-    // 20% is cutoff
-    
-    BOOL suppress = NO;
-    double batteryLevel = [self.dataSources deviceBatteryLevel];
-    
-    if ([self.settings goodBatteryLevelOnlySending] &&
-        (batteryLevel < 20.0 && batteryLevel >= 0)) {
-            
-        suppress = YES;
-    }
-    
-    return suppress;
-
-}
 
 #pragma mark - TEALDISPATCHMANAGER DELEGATE
 
@@ -821,9 +827,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock {
-    
-    
-    __block typeof(self) __weak weakSelf = self;
+        
 
     // Pass dispatch to dispatch services
     for ( id<TEALDispatchService> service in [self currentDispatchNetworkServices]) {

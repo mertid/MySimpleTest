@@ -22,9 +22,10 @@
 @interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandManagerDelegate>
 
 @property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
-@property (weak, nonatomic) NSString *publishURLString;
-@property (weak, nonatomic) TEALOperationManager *operationManager;
+@property (nonatomic, weak) NSString *publishURLString;
+@property (nonatomic, weak) TEALOperationManager *operationManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
+@property (nonatomic) BOOL webViewInitialLoadFinished;
 
 @end
 
@@ -64,6 +65,20 @@
     return NSLocalizedString(@"Tag Management", @"");
 }
 
+- (void) setup {
+    
+    __weak TEALTagDispatchService *weakSelf = self;
+    NSString *urlString = self.publishURLString;
+    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:urlString];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+        weakSelf.webView.delegate = weakSelf;
+        [weakSelf.webView loadRequest:request];
+        
+    });
+}
+
 #pragma mark - PRIVATE INSTANCE
 
 - (NSString *) description {
@@ -74,23 +89,6 @@
 
 - (TEALDispatchNetworkServiceStatus) status{
     return self.privateStatus;
-}
-
-- (void) setupWithDelegate:(id) delegate  {
-    
-    __weak TEALTagDispatchService *weakSelf = self;
-    NSString *urlString = self.publishURLString;
-    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:urlString];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        weakSelf.webView.delegate = weakSelf;
-        [weakSelf.webView loadRequest:request];
-        
-        //if(delegate respondsToSelector:@selector(<#selector#>))
-
-    });
-
 }
 
 - (void) sendDispatch:(TEALDispatch *)dispatch completion:(TEALDispatchBlock)completion{
@@ -160,10 +158,23 @@
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.privateStatus = TEALDispatchNetworkServiceStatusReady;
 
-    });
+    // Initial load complete?
+    if (!self.webViewInitialLoadFinished &&
+        ![webView isLoading]){
+        
+        self.webViewInitialLoadFinished = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.privateStatus = TEALDispatchNetworkServiceStatusReady;
+            
+            if (self.delegate) {
+                [self.delegate TEALTagDispatchServiceWebViewReady:webView];
+            }
+        });
+        
+
+    }
 }
 
 - (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
