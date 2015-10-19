@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL shouldQueue;
 @property (nonatomic) BOOL shouldDrop;
 @property (nonatomic, strong) Tealium *tealium;
+@property (nonatomic, strong) XCTestExpectation *testExpectation;
 
 @end
 
@@ -28,7 +29,7 @@
     [super setUp];
     self.tealium = [Tealium newInstanceForKey:@"testInstance"
                                 configuration:[self defaultConfig]];
-    
+    self.testExpectation = [self expectationWithDescription:@"testExpectation"];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -37,15 +38,19 @@
     self.shouldDrop = NO;
     self.shouldQueue = NO;
     [Tealium destroyInstanceForKey:@"testInstance"];
-    
+    self.testExpectation = nil;
     [super tearDown];
 }
 
 - (TEALConfiguration *) defaultConfig {
     
-    return [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                               profile:@"demo"
-                                           environment:@"dev"];
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    config.autotrackingUIEventsEnabled = NO;
+    config.autotrackingViewsEnabled = NO;
+    
+    return config;
 }
 
 #pragma mark - PUBLIC APIs TESTS
@@ -95,7 +100,6 @@
     
     XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
 }
-
 
 - (void) testCreateInstanceWithConfigurationBlankAccountInfo {
     
@@ -240,6 +244,106 @@
     // This will cause a crash if the optional delegates are not trully optional
 }
 
+#pragma mark - TRACK Tests
+
+- (void) testTrackEvents {
+    
+#warning TODO
+    // no title no data
+    
+    // title no data
+    
+    // title + data
+    
+    // no title + data
+    
+}
+
+- (void) testTrackViews {
+    
+#warning TODO
+    // no title no data
+    
+    // title no data
+    
+    // title + data
+    
+    // no title + data
+}
+
+#pragma mark - Volatile Data Sources
+
+- (void) testKeyCheckOfVolatileDataSourcesCopy {
+    
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    config.autotrackingCrashesEnabled = YES;
+    config.autotrackingDeviceInfoEnabled = YES;
+    config.autotrackingIvarsEnabled = YES;
+    config.autotrackingLifecycleEnabled = YES;
+    config.autotrackingUIEventsEnabled = YES;
+    config.autotrackingViewsEnabled = YES;
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"volatileTest" configuration:config];
+    
+    NSDictionary *dataSources = [instance volatileDataSourcesCopy];
+    
+        NSLog(@"%s dataSources: \n%@", __FUNCTION__, dataSources);
+    
+#warning CHECK dataSources for expected keys + values
+
+    
+}
+
+//- (void) testAddSingleVolatileDataSource {
+//    
+//#warning REWRITE to check an immediate track call instead.
+//
+//    Tealium *instance = self.tealium;
+//    
+//    [instance setDelegate:self];
+//    
+//    self.shouldDrop = YES;
+//    
+//    NSString *key = @"testKey";
+//    NSString *value = @"testValue";
+//    
+//    [instance addVolatileDataSources:@{key:value}];
+//    
+//    [instance trackEventWithTitle:@"testEvent" dataSources:nil];
+//    
+//    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+//    
+//    NSDictionary *volatileDataSources = [instance volatileDataSourcesCopy];
+//    
+//    XCTAssertTrue([volatileDataSources[key] isEqualToString:value],
+//                  @"addVolatile dataSource failed.");
+//    
+//}
+
+
+#pragma mark - Persistent Data Sources
+
+- (void) testPersistentDataSourcesCopy {
+    
+#warning TODO
+    
+}
+
+- (void) testAddPersistentDataSources {
+    
+#warning TODO
+    
+}
+
+- (void) testRemovePersistentDataSources {
+    
+#warning TODO
+    
+}
 
 #pragma mark - LIBRARY DELEGATES
 
@@ -252,6 +356,10 @@
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
+    
+    if (self.testExpectation){
+        [self.testExpectation fulfill];
+    }
     
     return self.shouldDrop;
 }

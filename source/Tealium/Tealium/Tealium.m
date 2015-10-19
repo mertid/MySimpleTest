@@ -194,13 +194,14 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
- 
+    
     __block typeof(self) __weak weakSelf = self;
     
     [self.operationManager addOperationWithBlock:^{
         [[weakSelf.dataSources clientVolatileDataSources] addEntriesFromDictionary:[additionalDataSources copy]];
     }];
 }
+
 
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
@@ -674,8 +675,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) setupSettingsReachabilityCallbacks {
     
-#warning DISABLE CALLBACKS IF LIBRARY DISABLED - PERMIT ONLY AT LAUNCH TIME TO CHECK FOR CHANGE
-    
     if (self.urlSessionManager.reachability.reachableBlock) {
         return;
     }
@@ -703,7 +702,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                 [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
                 
                 [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
-                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
 
                 [weakSelf updateModules];
 

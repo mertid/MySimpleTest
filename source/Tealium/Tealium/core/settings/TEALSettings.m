@@ -473,9 +473,4 @@
     return fetchAcceptable;
 }
 
-//- (void) setVisitorIDCopy:(NSString *)visitorID {
-//    
-//    self.visitorID = visitorID;
-//}
-
 @end

@@ -63,6 +63,14 @@
     if (tagService) {
         [self.logger logDev:@"TagManagement enabled."];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]){
+        
+        UIWebView *webView = [self webView];
+        
+        [self.delegate tealium:self webViewIsReady:webView];
+        
+    }
 
 }
 
@@ -139,7 +147,6 @@
     TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
     
     [tagService setup];
-    
     
     return tagService;
 

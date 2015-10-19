@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class Tealium;
 @class TEALDispatch;
@@ -45,7 +45,7 @@
 /**
  *
  *
- *  @param tealium The Tealium instance requesting confirmation
+ *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its
  *          properties or payload data here as they will not take effect or
  *          persist.
@@ -56,12 +56,20 @@
 /**
  *
  *
- *  @param tealium The Tealium instance requesting confirmation
+ *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its 
  *          properties or payload data here as they will not take effect or
  *          persist.
  *
  */
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
+
+/*
+ *
+ *  @param tealium The Tealium instance ready
+ *  @param webView The WebView instance used by any Tag Management service - nil 
+ *          if none initialized.
+ */
+- (void) tealium:(Tealium *)tealium webViewIsReady:(UIWebView *)webView;
 
 @end

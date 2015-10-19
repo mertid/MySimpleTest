@@ -24,7 +24,7 @@
 
 + (void) addInstanceForKey:(NSString * _Nonnull)key
              configuration:(TEALConfiguration * _Nonnull)configuration
-                completion:(void (^)(Tealium * _Nullable instance, NSError * _Nullable error))completion;
+                completion:(void (^ _Nullable)(Tealium * _Nullable instance, NSError * _Nullable error))completion;
     
 + (_Nullable instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion;
 
@@ -32,6 +32,7 @@
 
 - (void) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration
                  completion:(TEALBooleanCompletionBlock _Nullable)setupCompletion;
+
 
 - (void) fetchSettings:(TEALSettings * _Nonnull)settings
             completion:(TEALBooleanCompletionBlock _Nullable)setupCompletion;

@@ -13,29 +13,31 @@
 #import "TEALSystemHelpers.h"
 #import "TEALError.h"
 
-NSString * const TEALPublishSettingKeyUrl = @"url";
-NSString * const TEALPublishSettingKeyMinutesBetweenRefresh = @"minutesBetweenRefresh";
-NSString * const TEALPublishSettingKeyDispatchExpiration = @"numberOfDaysDispatchesAreValid";
-NSString * const TEALPublishSettingKeyDispatchSize = @"dispatchBatchSize";
-NSString * const TEALPublishSettingKeyOfflineDispatchSize = @"offlineDispatchQueueSize";
-NSString * const TEALPublishSettingKeyLowBatteryMode = @"shouldSuppressIfLowBattery";
-NSString * const TEALPublishSettingKeyWifiOnlyMode = @"shouldSendWifiOnly";
-NSString * const TEALPublishSettingKeyCollectEnable = @"shouldEnableCollect";
-NSString * const TEALPublishSettingKeyTagManagmentEnable = @"shouldEnableTagManagment";
-NSString * const TEALPublishSettingKeyStatus = @"status";
+
 NSString * const TEALPublishSettingKeyIsEnabled = @"_is_enabled";
 NSString * const TEALPublishSettingKeyOverrideLog = @"override_log";
 
-NSString * const TEALPublishSettingKeyDisableApplicationInfoAutotracking = @"disableApplicationInfoAutotracking";
-NSString * const TEALPublishSettingKeyDisableCarrierInfoAutotracking = @"disableCarrierAutotracking";
-NSString * const TEALPublishSettingKeyDisableDeviceInfoAutotracking = @"disableDeviceInfoAutotracking";
-NSString * const TEALPublishSettingKeyDisableUIEventAutotracking = @"disableUIEventAutotracking";
-NSString * const TEALPublishSettingKeyDisableViewAutotracking = @"disableViewAutotracking";
-NSString * const TEALPublishSettingKeyDisableiVarAutotracking = @"disableiVarAutotracking";
-NSString * const TEALPublishSettingKeyDisableLifecycleAutotracking = @"disableLifecycleAutotracking";
-NSString * const TEALPublishSettingKeyDisableTimestampAutotracking = @"disableTimestampAutotracking";
-NSString * const TEALPublishSettingKeyDisableCrashAutotracking = @"disableCrashAutotracking";
-NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCompanion";
+NSString * const TEALPublishSettingKeyUrl = @"url";
+NSString * const TEALPublishSettingKeyMinutesBetweenRefresh = @"minutes_between_refresh";
+NSString * const TEALPublishSettingKeyDispatchExpiration = @"dispatch_expiration"; // Number of days dispatch is valid
+NSString * const TEALPublishSettingKeyDispatchSize = @"event_batch_size";
+NSString * const TEALPublishSettingKeyOfflineDispatchSize = @"offline_dispatch_limit";
+NSString * const TEALPublishSettingKeyLowBatteryMode = @"battery_saver";
+NSString * const TEALPublishSettingKeyWifiOnlyMode = @"wifi_only_sending";
+NSString * const TEALPublishSettingKeyCollectEnable = @"enable_audiencestream";
+NSString * const TEALPublishSettingKeyTagManagmentEnable = @"enable_tag_management";
+NSString * const TEALPublishSettingKeyStatus = @"status";
+
+NSString * const TEALPublishSettingKeyDisableApplicationInfoAutotracking = @"disable_application_info_autotracking";
+NSString * const TEALPublishSettingKeyDisableCarrierInfoAutotracking = @"disable_carrer_info_autotracking";
+NSString * const TEALPublishSettingKeyDisableDeviceInfoAutotracking = @"disable_device_info_autotracking";
+NSString * const TEALPublishSettingKeyDisableUIEventAutotracking = @"disable_uievent_autotracking";
+NSString * const TEALPublishSettingKeyDisableViewAutotracking = @"disable_view_autotracking";
+NSString * const TEALPublishSettingKeyDisableiVarAutotracking = @"disable_ivar_autotracking";
+NSString * const TEALPublishSettingKeyDisableLifecycleAutotracking = @"disable_lifecycle_autotracking";
+NSString * const TEALPublishSettingKeyDisableTimestampAutotracking = @"disable_timestamp_autotracking";
+NSString * const TEALPublishSettingKeyDisableCrashAutotracking = @"disable_crash_autotracking";
+NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilecompanion";
 
 
 @interface TEALPublishSettings()
@@ -230,8 +232,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
         _disableUIEventAutotracking = NO;
         _disableViewAutotracking = NO;
         
-        _minutesBetweenRefresh          = 1;
-        _numberOfDaysDispatchesAreValid = -1;
+        _minutesBetweenRefresh          = 1.0;
+        _numberOfDaysDispatchesAreValid = -1.0;
         _offlineDispatchQueueSize       = 100; // -1 is supposed to be inf. but yeah thats alot
         _overrideLogLevel               = nil;
         
@@ -376,27 +378,27 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disableMobileCo
     
     // Referencing keys from MPS Json object - keep keys separate from encoder keys for clarity
     
-    NSString *batchSize = settings[@"event_batch_size"];
-    NSString *offlineSize = settings[@"offline_dispatch_limit"];
-    NSString *minutesBetweenRefresh = settings[@"minutes_between_refresh"];
-    NSString *dispatchExpiration = settings[@"dispatch_expiration"];
-    NSString *lowBattery = settings[@"battery_saver"];
-    NSString *wifiOnly = settings[@"wifi_only_sending"];
-    NSString *audiencestream = settings[@"audiencestream"];
-    NSString *tagmanagement = settings[@"tag_management"];
+    NSString *batchSize = settings[TEALPublishSettingKeyDispatchSize];
+    NSString *offlineSize = settings[TEALPublishSettingKeyOfflineDispatchSize];
+    NSString *minutesBetweenRefresh = settings[TEALPublishSettingKeyMinutesBetweenRefresh];
+    NSString *dispatchExpiration = settings[TEALPublishSettingKeyDispatchExpiration];
+    NSString *lowBattery = settings[TEALPublishSettingKeyLowBatteryMode];
+    NSString *wifiOnly = settings[TEALPublishSettingKeyWifiOnlyMode];
+    NSString *audiencestream = settings[TEALPublishSettingKeyCollectEnable];
+    NSString *tagmanagement = settings[TEALPublishSettingKeyTagManagmentEnable];
     NSString *overrideLog = [settings[TEALPublishSettingKeyOverrideLog] lowercaseString];
     
     NSString *disableLibrary = settings[TEALPublishSettingKeyIsEnabled];
-    NSString *disableApplicationInfoAutotracking = settings[@"disable_application_info_autotracking"];
-    NSString *disableCarrierInfoAutotracking = settings[@"disable_carrer_info_autotracking"];
-    NSString *disableDeviceInfoAutotracking = settings[@"disable_device_info_autotracking"];
-    NSString *disableUIEventAutotracking = settings[@"disable_uievent_autotracking"];
-    NSString *disableViewAutotracking = settings[@"disable_view_autotracking"];
-    NSString *disableiVarAutotracking = settings[@"disable_ivar_autotracking"];
-    NSString *disableLifecycleAutotracking = settings[@"disable_lifecycle_autotracking"];
-    NSString *disableTimestampAutotracking = settings[@"disable_timestamp_autotracking"];
-    NSString *disableCrashAutotracking = settings[@"disable_crash_autotracking"];
-    NSString *disableMobileCompanion = settings[@"disable_mobilecompanion"];
+    NSString *disableApplicationInfoAutotracking = settings[TEALPublishSettingKeyDisableApplicationInfoAutotracking];
+    NSString *disableCarrierInfoAutotracking = settings[TEALPublishSettingKeyDisableCarrierInfoAutotracking];
+    NSString *disableDeviceInfoAutotracking = settings[TEALPublishSettingKeyDisableDeviceInfoAutotracking];
+    NSString *disableUIEventAutotracking = settings[TEALPublishSettingKeyDisableUIEventAutotracking];
+    NSString *disableViewAutotracking = settings[TEALPublishSettingKeyDisableViewAutotracking];
+    NSString *disableiVarAutotracking = settings[TEALPublishSettingKeyDisableiVarAutotracking];
+    NSString *disableLifecycleAutotracking = settings[TEALPublishSettingKeyDisableLifecycleAutotracking];
+    NSString *disableTimestampAutotracking = settings[TEALPublishSettingKeyDisableTimestampAutotracking];
+    NSString *disableCrashAutotracking = settings[TEALPublishSettingKeyDisableCrashAutotracking];
+    NSString *disableMobileCompanion = settings[TEALPublishSettingKeyDisableMobileCompanion];
     
     
     if (batchSize) {

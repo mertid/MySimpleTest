@@ -76,7 +76,7 @@
     return self.privateStatus;
 }
 
-- (void) setup{
+- (void) setupWithDelegate:(id) delegate  {
     
     __weak TEALTagDispatchService *weakSelf = self;
     NSString *urlString = self.publishURLString;
@@ -86,6 +86,9 @@
         weakSelf.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         weakSelf.webView.delegate = weakSelf;
         [weakSelf.webView loadRequest:request];
+        
+        //if(delegate respondsToSelector:@selector(<#selector#>))
+
     });
 
 }
