@@ -15,6 +15,8 @@
 
 - (void) loadAllData;
 
+- (void) resetData;
+
 - (void) saveData:(NSDictionary *)data forKey:(NSString *)key completion:(TEALBooleanCompletionBlock)completion;
 
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key;

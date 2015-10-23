@@ -75,6 +75,16 @@
     }
 }
 
+- (void) reset {
+    
+    [self.store resetData];
+    
+    self.privateLaunchEvents = nil;
+    self.privateWakeEvents = nil;
+    self.privateSleepEvents = nil;
+    
+}
+
 - (void) recordLaunch {
     
     [self processLifecycleEventWithName:TEALDataSourceValue_LifecycleLaunch];
@@ -84,6 +94,8 @@
 - (BOOL) isEnabled {
     return self.enabled;
 }
+
+#warning Update to use set dates for testing
 
 - (NSDictionary *)currentLifecycleData {
     
@@ -107,6 +119,8 @@
     if (secondsAwake) mDict[TEALDataSourceKey_LifecycleSecondsAwake] = secondsAwake;
     if (hourOfDayLocal) mDict[TEALDataSourceKey_LifecycleHourOfDayLocal] = hourOfDayLocal;
 
+    // total seconds awake
+    // prior seconds awake
     
 #warning IMPLEMENT remaining data sources
     
@@ -253,108 +267,273 @@
     }
     
     __block typeof(self) __weak weakSelf = self;
-    __block NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
 
-    [self incrementEventWithName:eventName completion:^(BOOL success, NSError *error) {
-        
-        NSDictionary *lifecycleData = nil;
-        
-        if (success) {
-            mDict[TEALDataSourceKey_LifecycleType] = eventName;
-            
-            [mDict addEntriesFromDictionary:[weakSelf currentLifecycleData]];
-            
-            // Special event based data sources
-            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
-                [mDict addEntriesFromDictionary:[weakSelf additionalLaunchOnlyDataForEvents:[weakSelf launchEvents]]];
-                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
-            }
-            
-            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
-                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
-            }
-            
-            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
-                [weakSelf updatePriorSecondsAwake];
-            }
-            
-            lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
-        }
-        
-        if (weakSelf.eventProcessingBlock) {
-            
-            weakSelf.eventProcessingBlock(lifecycleData, error);
-        }
-        
-    }];
+    [self incrementEventWithName:eventName
+                            date:[NSDate date]
+                      completion:^(NSDictionary *dataDictionary, NSError *error) {
+                          
+                          
+                          if (weakSelf.eventProcessingBlock) {
+                              
+                              weakSelf.eventProcessingBlock(dataDictionary, error);
+                          }
+                          
+                      }];
+    
+//    [self incrementEventWithName:eventName
+//                            date:[NSDate date]
+//                      completion:^(BOOL success, NSError *error) {
+//        
+//        NSDictionary *lifecycleData = nil;
+//        
+//        if (success) {
+//            mDict[TEALDataSourceKey_LifecycleType] = eventName;
+//            
+//            [mDict addEntriesFromDictionary:[weakSelf currentLifecycleData]];
+//            
+//            // Special event based data sources
+//            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+//                [mDict addEntriesFromDictionary:[weakSelf additionalLaunchOnlyDataForEvents:[weakSelf launchEvents]]];
+//                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
+//            }
+//            
+//            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+//                [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
+//            }
+//            
+//            if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+//                [weakSelf updatePriorSecondsAwake];
+//            }
+//            
+//            lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+//        }
+//        
+//        if (weakSelf.eventProcessingBlock) {
+//            
+//            weakSelf.eventProcessingBlock(lifecycleData, error);
+//        }
+//        
+//    }];
     
 
 }
 
-- (void) incrementEventWithName:(NSString *)eventName completion:(TEALBooleanCompletionBlock)completion{
+
+- (void) incrementEventWithName:(NSString *)eventName
+                           date:(NSDate *)date
+                     completion:(TEALDictionaryCompletionBlock)completion{
     
+    // Setup
+    BOOL success = NO;
+    NSError *error = nil;
+    NSString *errorReason = nil;
     NSDictionary *data = nil;
     NSString *key = nil;
     TEALLifecycleEvents *events = nil;
     
+    
+    // Update applicable lifecycle event data
     if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
         
         events = [self launchEvents];
-        [events addEvent];
+        [events addEvent:date];
         data = [[self launchEvents] dataForUserDefaults];
         key = TEALDataSourceValue_LifecycleLaunch;
         
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
         
         events = [self wakeEvents];
-        [events addEvent];
+        [events addEvent:date];
         data = [[self wakeEvents] dataForUserDefaults];
         key = TEALDataSourceValue_LifecycleWake;
-    
+        
     } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
         
         events = [self sleepEvents];
-        [events addEvent];
+        [events addEvent:date];
         data = [[self sleepEvents] dataForUserDefaults];
         key = TEALDataSourceValue_LifecycleSleep;
     }
     
     if (!events){
         
-        NSString *reason = [NSString stringWithFormat:@"No lifecycle event associated with eventName:%@", eventName];
-        NSError *error = [TEALError errorWithCode:400
-                                      description:@"Failed to increment lifecycle event."
-                                           reason:reason
-                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 315."];
+        errorReason = [NSString stringWithFormat:@"No lifecycle event associated with eventName:%@", eventName];
         
-        if (completion) completion(NO, error);
-        return;
-    }
-    
-    if (!data){
+    } else if (!data){
         
-        NSString *reason = [NSString stringWithFormat:@"Unable to retrieve lifecycle data for eventName:%@", eventName];
-        NSError *error = [TEALError errorWithCode:400
-                                      description:@"Failed to increment lifecycle event."
-                                           reason:reason
-                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 327."];
+        errorReason = [NSString stringWithFormat:@"Unable to retrieve lifecycle data for eventName:%@", eventName];
         
-        if (completion) completion(NO, error);
-        return;
+    } else {
+        
+        success = YES;
+        
     }
     
     
-    __block typeof(self) __weak weakSelf = self;
+    // Bail out if error occurred
+    if (!success) {
+        if (!errorReason) {
+            errorReason = NSLocalizedString(@"Unknown error.", @"");
+        }
+        
+        error = [TEALError errorWithCode:400
+                             description:NSLocalizedString(@"Could not increment lifecycle data.", @"")
+                                  reason:errorReason
+                              suggestion:NSLocalizedString(@"Contact Tealium Mobile Engineering - Lifecycle Line 382", @"")];
+        if (completion) {
+            completion(nil, error);
+        }
+        return;
+    }
+    
+    // Prep Lifecycle data
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    mDict[TEALDataSourceKey_LifecycleType] = eventName;
 
+    [mDict addEntriesFromDictionary:[self currentLifecycleData]];
+
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+        [mDict addEntriesFromDictionary:[self additionalLaunchOnlyDataForEvents:[self launchEvents]]];
+        [mDict addEntriesFromDictionary:[self additionalWakeOrLaunchData]];
+    }
+
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+        [mDict addEntriesFromDictionary:[self additionalWakeOrLaunchData]];
+    }
+
+    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+        [self updatePriorSecondsAwake];
+    }
+
+    NSDictionary * lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    
+    // Save data and return data to callback
+    __block typeof(self) __weak weakSelf = self;
+    
     [self.store saveData:data forKey:eventName completion:^(BOOL success, NSError *error) {
         
         [weakSelf updateLastIncrementedLifecycleData];
-
-        if (completion) completion(success, error);
+        
+        if (completion) completion(lifecycleData, error);
         
     }];
     
 }
+
+//- (void) processLifecycleEventWithName:(NSString *)eventName {
+//    
+//    if(!eventName){
+//        return;
+//    }
+//    
+//    __block typeof(self) __weak weakSelf = self;
+//    __block NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+//    
+//    [self incrementEventWithName:eventName
+//                            date:[NSDate date]
+//                      completion:^(BOOL success, NSError *error) {
+//                          
+//                          NSDictionary *lifecycleData = nil;
+//                          
+//                          if (success) {
+//                              mDict[TEALDataSourceKey_LifecycleType] = eventName;
+//                              
+//                              [mDict addEntriesFromDictionary:[weakSelf currentLifecycleData]];
+//                              
+//                              // Special event based data sources
+//                              if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]){
+//                                  [mDict addEntriesFromDictionary:[weakSelf additionalLaunchOnlyDataForEvents:[weakSelf launchEvents]]];
+//                                  [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
+//                              }
+//                              
+//                              if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+//                                  [mDict addEntriesFromDictionary:[weakSelf additionalWakeOrLaunchData]];
+//                              }
+//                              
+//                              if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+//                                  [weakSelf updatePriorSecondsAwake];
+//                              }
+//                              
+//                              lifecycleData = [NSDictionary dictionaryWithDictionary:mDict];
+//                          }
+//                          
+//                          if (weakSelf.eventProcessingBlock) {
+//                              
+//                              weakSelf.eventProcessingBlock(lifecycleData, error);
+//                          }
+//                          
+//                      }];
+//    
+//    
+//}
+//- (void) incrementEventWithName:(NSString *)eventName
+//                           date:(NSDate *)date
+//                     completion:(TEALBooleanCompletionBlock)completion{
+//    
+//    NSDictionary *data = nil;
+//    NSString *key = nil;
+//    TEALLifecycleEvents *events = nil;
+//    
+//    if ([eventName isEqualToString:TEALDataSourceValue_LifecycleLaunch]) {
+//        
+//        events = [self launchEvents];
+//        [events addEvent:date];
+//        data = [[self launchEvents] dataForUserDefaults];
+//        key = TEALDataSourceValue_LifecycleLaunch;
+//        
+//    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleWake]) {
+//        
+//        events = [self wakeEvents];
+//        [events addEvent:date];
+//        data = [[self wakeEvents] dataForUserDefaults];
+//        key = TEALDataSourceValue_LifecycleWake;
+//    
+//    } else if ([eventName isEqualToString:TEALDataSourceValue_LifecycleSleep]) {
+//        
+//        events = [self sleepEvents];
+//        [events addEvent:date];
+//        data = [[self sleepEvents] dataForUserDefaults];
+//        key = TEALDataSourceValue_LifecycleSleep;
+//    }
+//    
+//    if (!events){
+//        
+//        NSString *reason = [NSString stringWithFormat:@"No lifecycle event associated with eventName:%@", eventName];
+//        NSError *error = [TEALError errorWithCode:400
+//                                      description:@"Failed to increment lifecycle event."
+//                                           reason:reason
+//                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 315."];
+//        
+//        if (completion) completion(NO, error);
+//        return;
+//    }
+//    
+//    if (!data){
+//        
+//        NSString *reason = [NSString stringWithFormat:@"Unable to retrieve lifecycle data for eventName:%@", eventName];
+//        NSError *error = [TEALError errorWithCode:400
+//                                      description:@"Failed to increment lifecycle event."
+//                                           reason:reason
+//                                       suggestion:@"Contact Tealium Mobile Engineering - Reference Lifecycle Line 327."];
+//        
+//        if (completion) completion(NO, error);
+//        return;
+//    }
+//    
+//    
+//    __block typeof(self) __weak weakSelf = self;
+//
+//    [self.store saveData:data forKey:eventName completion:^(BOOL success, NSError *error) {
+//        
+//        [weakSelf updateLastIncrementedLifecycleData];
+//
+//        if (completion) completion(success, error);
+//        
+//    }];
+//    
+//}
 
 - (void) updateLastIncrementedLifecycleData {
     

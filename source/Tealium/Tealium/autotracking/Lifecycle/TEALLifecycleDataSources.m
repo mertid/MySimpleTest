@@ -52,6 +52,7 @@ static NSDateFormatter *_HH;
     if (!_HH){
         _HH = [[NSDateFormatter alloc]init];
         _HH.dateFormat = @"HH";
+        [NSTimeZone resetSystemTimeZone];
         [_HH setTimeZone:[NSTimeZone systemTimeZone]];
     }
     if (date) return [_HH stringFromDate:date];

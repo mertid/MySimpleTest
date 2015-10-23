@@ -52,6 +52,17 @@ static NSString * const TEALLifecycleStoreBaseQueueName = @"com.tealium.lifecycl
 
 }
 
+- (void) resetData {
+    
+    [self.lifecycleEvents removeAllObjects];
+    
+    NSString *key = [self storageKey];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+}
+
 //- (NSDictionary *) loadDataForKey:(NSString *)key {
 //    
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

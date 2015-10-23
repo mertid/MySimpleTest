@@ -75,7 +75,7 @@ void TEALException(NSException *exception) {
     
     [staticExceptionEvents updateLastException:exception];
     
-    [staticExceptionEvents addEvent];
+    [staticExceptionEvents addEvent:[NSDate date]];
     
     [TEALExceptionHandler saveExceptionData];
     

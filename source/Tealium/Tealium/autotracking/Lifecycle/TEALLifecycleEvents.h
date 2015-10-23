@@ -10,7 +10,7 @@
 
 @interface TEALLifecycleEvents : NSObject <NSCoding, NSCopying, NSSecureCoding>
 
-- (void) addEvent;
+- (void) addEvent:(NSDate *)date;
 
 - (void) setEvents:(NSDictionary *)newEvents;
 

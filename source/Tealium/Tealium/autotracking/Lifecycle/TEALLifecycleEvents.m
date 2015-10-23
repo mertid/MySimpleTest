@@ -32,26 +32,25 @@ NSString * const TEALKeyLifecycleTotalCount = @"totalCount";
 
 #pragma mark - PUBLIC
 
-- (void) addEvent {
+- (void) addEvent:(NSDate *)date {
     
     @synchronized(self) {
-    
-        NSDate *now = [NSDate date];
         
         if ([self newVersionDetected]){
             
+#warning Move app version check to lifecycle class so that it can be tested
             double newVersion = [[TEALApplicationDataSources appVersion] doubleValue];
             
             if (self.privateCurrentVersion) {
                 self.privateLastUpdate = newVersion;
-                self.privateLastUpdate = [now timeIntervalSince1970];
+                self.privateLastUpdate = [date timeIntervalSince1970];
             }
             
             self.privateCurrentVersion = newVersion;
             self.privateCurrentCount = 0;
         }
         
-        [self incrementAtDate:now];
+        [self incrementAtDate:date];
     }
     
 }
