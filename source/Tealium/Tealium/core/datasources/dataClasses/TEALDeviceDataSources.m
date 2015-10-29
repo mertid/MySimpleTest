@@ -175,7 +175,9 @@ static NSString *staticDeviceArchitecture;
 
 + (NSString *) batteryIsChargingAsString {
     
-    NSString *string;
+    NSString *string = nil;
+    
+#ifndef TARGET_OS_TV
     
     if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
         deviceIsCharging = true;
@@ -184,31 +186,37 @@ static NSString *staticDeviceArchitecture;
         deviceIsCharging = false;
         string = TEALDataSourceValue_False;
     }
+#endif
     
     return string;
 }
 
 + (NSString *) batteryLevelAsPercentString {
     
+    NSString *percentString = TEALDataSourceValue_Unknown;
+    
+#ifndef TARGET_OS_TV
+
     if(![UIDevice currentDevice].isBatteryMonitoringEnabled){
         [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
     }
     
     deviceBatteryLevel = [UIDevice currentDevice].batteryLevel * 100;
     
-    NSString *percentString = [NSString stringWithFormat:@"%.0f", deviceBatteryLevel];
+    percentString = [NSString stringWithFormat:@"%.0f", deviceBatteryLevel];
     
-    if (percentString) {
-        return percentString;
-    } else {
-        return TEALDataSourceValue_Unknown;
-    }
+#endif
+    
+    return percentString;
+
 }
 
 + (NSString*) currentOrientation {
     
     NSString *string = nil;
     
+#ifndef TARGET_OS_TV
+ 
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (interfaceOrientation == UIInterfaceOrientationPortrait) string = @"Portrait";
     else if (interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) string = @"Portrait UpsideDown";
@@ -234,6 +242,8 @@ static NSString *staticDeviceArchitecture;
     if (!string) {
         string = TEALDataSourceValue_Unknown;
     }
+    
+#endif
     
     return string;
 }

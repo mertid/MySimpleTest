@@ -394,7 +394,10 @@
                                            reason:@"Failed to generate valid request."
                                        suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
         
-        completion( nil, error );
+        if (completion){
+            completion( nil, error );
+        }
+        
         return;
     }
     

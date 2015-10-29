@@ -105,7 +105,6 @@ NSString * const TEALDataSourceValue_LifecycleTerminate = @"terminate";
 NSString * const TEALDataSourceValue_Link               = @"link";
 NSString * const TEALDataSourceValue_Origin             = @"mobile";
 NSString * const TEALDataSourceValue_Pagetype           = @"mobile_view";
-NSString * const TEALDataSourceValue_Platform           = @"iOS";
 NSString * const TEALDataSourceValue_True               = @"true";
 NSString * const TEALDataSourceValue_View               = @"view";
 NSString * const TEALDataSourceValue_Unknown            = @"unknown";

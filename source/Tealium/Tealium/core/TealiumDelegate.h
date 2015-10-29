@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @class Tealium;
 @class TEALDispatch;
@@ -70,6 +70,6 @@
  *  @param webView The WebView instance used by any Tag Management service - nil 
  *          if none initialized.
  */
-- (void) tealium:(Tealium *)tealium webViewIsReady:(UIWebView *)webView;
+- (void) tealium:(Tealium *)tealium webViewIsReady:(id)webView;
 
 @end

@@ -12,7 +12,6 @@
 #import "TEALDispatch.h"
 #import "TealiumDelegate.h"
 #import "NSObject+Tealium.h"
-#import "TEALSettings.h"
 
 /**
  *  Tealium is the main class for the Tealium Library.
@@ -24,8 +23,6 @@
  *
  */
 @interface Tealium : NSObject
-
-@property (readonly, nonatomic) TEALSettings * _Nullable settings;
 
 # pragma mark - Setup / Configuration
 

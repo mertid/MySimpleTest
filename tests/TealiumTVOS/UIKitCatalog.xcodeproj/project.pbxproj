@@ -1,0 +1,1789 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		71D084BD1BDBCC3C0059FB7C /* MenuSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */; };
+		71D084BE1BDBCC3C0059FB7C /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935511B738C7B00439392 /* ButtonsViewController.swift */; };
+		71D084BF1BDBCC3C0059FB7C /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCD1B7AE1200052954A /* MenuTableViewController.swift */; };
+		71D084C01BDBCC3C0059FB7C /* DataItemCellComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B534E2C41B867B3F0038B5DD /* DataItemCellComposer.swift */; };
+		71D084C11BDBCC3C0059FB7C /* FocusGuidesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3EB51B83AE2C00F5077C /* FocusGuidesViewController.swift */; };
+		71D084C21BDBCC3C0059FB7C /* GradientMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DE40741B941868002313B2 /* GradientMaskView.swift */; };
+		71D084C31BDBCC3C0059FB7C /* DataItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935581B738C9300439392 /* DataItemCollectionViewCell.swift */; };
+		71D084C41BDBCC3C0059FB7C /* AlertFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5975FFC1B7BBBF000D6068A /* AlertFormViewController.swift */; };
+		71D084C51BDBCC3C0059FB7C /* ControlsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BC31B7AACF10052954A /* ControlsMenuViewController.swift */; };
+		71D084C61BDBCC3C0059FB7C /* CustomInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526F2871B989C7D00BADB57 /* CustomInputAccessoryView.swift */; };
+		71D084C71BDBCC3C0059FB7C /* DataItem+ImageName.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808271B8E840700663622 /* DataItem+ImageName.swift */; };
+		71D084C81BDBCC3C0059FB7C /* TextEntryMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5975FFA1B7BB62000D6068A /* TextEntryMenuViewController.swift */; };
+		71D084C91BDBCC3C0059FB7C /* DataItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B56C081B83F67E00CE4B1D /* DataItemViewController.swift */; };
+		71D084CA1BDBCC3C0059FB7C /* DataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935731B738D0800439392 /* DataItem.swift */; };
+		71D084CB1BDBCC3C0059FB7C /* DataItem+SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808291B8E849000663622 /* DataItem+SampleData.swift */; };
+		71D084CC1BDBCC3C0059FB7C /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935591B738C9300439392 /* CollectionViewController.swift */; };
+		71D084CD1BDBCC3C0059FB7C /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A9356A1B738CE500439392 /* SearchViewController.swift */; };
+		71D084CE1BDBCC3C0059FB7C /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B56C061B83F64400CE4B1D /* PageViewController.swift */; };
+		71D084CF1BDBCC3C0059FB7C /* AlertsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A9354C1B738C6B00439392 /* AlertsViewController.swift */; };
+		71D084D01BDBCC3C0059FB7C /* SegmentedControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935701B738CF800439392 /* SegmentedControlsViewController.swift */; };
+		71D084D11BDBCC3C0059FB7C /* CollectionViewContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C792851B7BF52600A21550 /* CollectionViewContainerViewController.swift */; };
+		71D084D21BDBCC3C0059FB7C /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526F2891B98A0BE00BADB57 /* TextFieldsViewController.swift */; };
+		71D084D31BDBCC3C0059FB7C /* CollectionViewContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C7928A1B7C0A6400A21550 /* CollectionViewContainerCell.swift */; };
+		71D084D41BDBCC3C0059FB7C /* ViewControllersMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B7EF3E1B7B8728005DF13D /* ViewControllersMenuViewController.swift */; };
+		71D084D51BDBCC3C0059FB7C /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935641B738CC100439392 /* ProgressViewController.swift */; };
+		71D084D61BDBCC3C0059FB7C /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D59EE11B85025C00D01057 /* SearchResultsViewController.swift */; };
+		71D084D71BDBCC3C0059FB7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935381B738BDC00439392 /* AppDelegate.swift */; };
+		71D084DA1BDBCC3C0059FB7C /* Baby 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEF1B8639B600BB0D27 /* Baby 3.jpg */; };
+		71D084DB1BDBCC3C0059FB7C /* Iceland 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CA1B85319300EC48F3 /* Iceland 6.jpg */; };
+		71D084DC1BDBCC3C0059FB7C /* Baby 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF31B8639B600BB0D27 /* Baby 7.jpg */; };
+		71D084DD1BDBCC3C0059FB7C /* Lola 1 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234671B8CDF0400D91DA0 /* Lola 1 Large.jpg */; };
+		71D084DE1BDBCC3C0059FB7C /* Italy 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFC1B8639B600BB0D27 /* Italy 8.jpg */; };
+		71D084DF1BDBCC3C0059FB7C /* Italy 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFB1B8639B600BB0D27 /* Italy 7.jpg */; };
+		71D084E01BDBCC3C0059FB7C /* Italy 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF81B8639B600BB0D27 /* Italy 4.jpg */; };
+		71D084E11BDBCC3C0059FB7C /* Iceland 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C91B85319300EC48F3 /* Iceland 5.jpg */; };
+		71D084E21BDBCC3C0059FB7C /* Iceland 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CB1B85319300EC48F3 /* Iceland 7.jpg */; };
+		71D084E31BDBCC3C0059FB7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E0DE2D1B9DB4AA00A7A1BD /* InfoPlist.strings */; };
+		71D084E41BDBCC3C0059FB7C /* Iceland 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C61B85319300EC48F3 /* Iceland 2.jpg */; };
+		71D084E51BDBCC3C0059FB7C /* Lola 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFF1B8639B600BB0D27 /* Lola 3.jpg */; };
+		71D084E61BDBCC3C0059FB7C /* Baby 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF01B8639B600BB0D27 /* Baby 4.jpg */; };
+		71D084E71BDBCC3C0059FB7C /* Baby 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF41B8639B600BB0D27 /* Baby 8.jpg */; };
+		71D084E81BDBCC3C0059FB7C /* Italy 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF71B8639B600BB0D27 /* Italy 3.jpg */; };
+		71D084E91BDBCC3C0059FB7C /* Iceland 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CC1B85319300EC48F3 /* Iceland 8.jpg */; };
+		71D084EA1BDBCC3C0059FB7C /* Italy 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFA1B8639B600BB0D27 /* Italy 6.jpg */; };
+		71D084EB1BDBCC3C0059FB7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A9353F1B738BDC00439392 /* Assets.xcassets */; };
+		71D084EC1BDBCC3C0059FB7C /* Lola 4 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E2346A1B8CDF0400D91DA0 /* Lola 4 Large.jpg */; };
+		71D084ED1BDBCC3C0059FB7C /* Italy 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF91B8639B600BB0D27 /* Italy 5.jpg */; };
+		71D084EE1BDBCC3C0059FB7C /* Baby 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF11B8639B600BB0D27 /* Baby 5.jpg */; };
+		71D084EF1BDBCC3C0059FB7C /* Lola 2 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234681B8CDF0400D91DA0 /* Lola 2 Large.jpg */; };
+		71D084F01BDBCC3C0059FB7C /* TextEntry.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B55F8AF81B7BACDA00511037 /* TextEntry.storyboard */; };
+		71D084F11BDBCC3C0059FB7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E0DE291B9DB37900A7A1BD /* Localizable.strings */; };
+		71D084F21BDBCC3C0059FB7C /* Lola 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFD1B8639B600BB0D27 /* Lola 1.jpg */; };
+		71D084F31BDBCC3C0059FB7C /* Lola 3 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234691B8CDF0400D91DA0 /* Lola 3 Large.jpg */; };
+		71D084F41BDBCC3C0059FB7C /* Lola 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFE1B8639B600BB0D27 /* Lola 2.jpg */; };
+		71D084F51BDBCC3C0059FB7C /* Iceland 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C71B85319300EC48F3 /* Iceland 3.jpg */; };
+		71D084F61BDBCC3C0059FB7C /* Baby 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCED1B8639B600BB0D27 /* Baby 1.jpg */; };
+		71D084F71BDBCC3C0059FB7C /* Baby 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEE1B8639B600BB0D27 /* Baby 2.jpg */; };
+		71D084F81BDBCC3C0059FB7C /* Italy 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF61B8639B600BB0D27 /* Italy 2.jpg */; };
+		71D084F91BDBCC3C0059FB7C /* Baby 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF21B8639B600BB0D27 /* Baby 6.jpg */; };
+		71D084FA1BDBCC3C0059FB7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5BD43CE1B7AAB500030BABA /* Main.storyboard */; };
+		71D084FB1BDBCC3C0059FB7C /* ViewControllerSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5B7EF3B1B7B86A6005DF13D /* ViewControllerSamples.storyboard */; };
+		71D084FC1BDBCC3C0059FB7C /* Iceland 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C51B85319300EC48F3 /* Iceland 1.jpg */; };
+		71D084FD1BDBCC3C0059FB7C /* ControlSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5728BC51B7AB30C0052954A /* ControlSamples.storyboard */; };
+		71D084FE1BDBCC3C0059FB7C /* Iceland 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C81B85319300EC48F3 /* Iceland 4.jpg */; };
+		71D084FF1BDBCC3C0059FB7C /* Italy 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF51B8639B600BB0D27 /* Italy 1.jpg */; };
+		71D085001BDBCC3C0059FB7C /* FocusSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C792871B7C000B00A21550 /* FocusSamples.storyboard */; };
+		71D085011BDBCC3C0059FB7C /* Lola 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CD001B8639B600BB0D27 /* Lola 4.jpg */; };
+		71D085031BDBCC3C0059FB7C /* UIKitCatalog Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		71D085D21BDBCC9D0059FB7C /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085141BDBCC9D0059FB7C /* TEALVisitorProfile.m */; };
+		71D085D31BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085161BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.m */; };
+		71D085D41BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085181BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.m */; };
+		71D085D51BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0851A1BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.m */; };
+		71D085D61BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0851C1BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.m */; };
+		71D085D71BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0851E1BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.m */; };
+		71D085D81BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085201BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.m */; };
+		71D085D91BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085221BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.m */; };
+		71D085DA1BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085241BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.m */; };
+		71D085DB1BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085271BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.m */; };
+		71D085DC1BDBCC9D0059FB7C /* TEALVisitorProfileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085291BDBCC9D0059FB7C /* TEALVisitorProfileStore.m */; };
+		71D085DD1BDBCC9D0059FB7C /* TEALCollectDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0852B1BDBCC9D0059FB7C /* TEALCollectDispatchService.m */; };
+		71D085DE1BDBCC9D0059FB7C /* Tealium+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0852D1BDBCC9D0059FB7C /* Tealium+Collect.m */; };
+		71D085DF1BDBCC9D0059FB7C /* TEALExceptionEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085321BDBCC9D0059FB7C /* TEALExceptionEvents.m */; };
+		71D085E01BDBCC9D0059FB7C /* TEALExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085341BDBCC9D0059FB7C /* TEALExceptionHandler.m */; };
+		71D085E11BDBCC9D0059FB7C /* TEALLifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085361BDBCC9D0059FB7C /* TEALLifecycle.m */; };
+		71D085E21BDBCC9D0059FB7C /* TEALLifecycleConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085381BDBCC9D0059FB7C /* TEALLifecycleConstants.m */; };
+		71D085E31BDBCC9D0059FB7C /* TEALLifecycleDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0853A1BDBCC9D0059FB7C /* TEALLifecycleDataSources.m */; };
+		71D085E41BDBCC9D0059FB7C /* TEALLifecycleEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0853C1BDBCC9D0059FB7C /* TEALLifecycleEvents.m */; };
+		71D085E51BDBCC9D0059FB7C /* TEALLifecycleStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0853E1BDBCC9D0059FB7C /* TEALLifecycleStore.m */; };
+		71D085E61BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085401BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.m */; };
+		71D085E71BDBCC9D0059FB7C /* TEALDataSources+Autotracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085421BDBCC9D0059FB7C /* TEALDataSources+Autotracking.m */; };
+		71D085E81BDBCC9D0059FB7C /* Tealium+Autotracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085441BDBCC9D0059FB7C /* Tealium+Autotracking.m */; };
+		71D085E91BDBCC9D0059FB7C /* UIApplication+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085461BDBCC9D0059FB7C /* UIApplication+Tealium.m */; };
+		71D085EA1BDBCC9D0059FB7C /* UIViewController+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085481BDBCC9D0059FB7C /* UIViewController+Tealium.m */; };
+		71D085EB1BDBCC9D0059FB7C /* NSArray+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0854C1BDBCC9D0059FB7C /* NSArray+Tealium.m */; };
+		71D085EC1BDBCC9D0059FB7C /* NSDictionary+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0854E1BDBCC9D0059FB7C /* NSDictionary+Tealium.m */; };
+		71D085ED1BDBCC9D0059FB7C /* NSObject+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085501BDBCC9D0059FB7C /* NSObject+Tealium.m */; };
+		71D085EE1BDBCC9D0059FB7C /* NSString+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085521BDBCC9D0059FB7C /* NSString+Tealium.m */; };
+		71D085EF1BDBCC9D0059FB7C /* UIImage+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085541BDBCC9D0059FB7C /* UIImage+Tealium.m */; };
+		71D085F01BDBCC9D0059FB7C /* TEALApplicationDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085581BDBCC9D0059FB7C /* TEALApplicationDataSources.m */; };
+		71D085F11BDBCC9D0059FB7C /* TEALDeviceDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0855A1BDBCC9D0059FB7C /* TEALDeviceDataSources.m */; };
+		71D085F21BDBCC9D0059FB7C /* TEALTimestampDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0855C1BDBCC9D0059FB7C /* TEALTimestampDataSources.m */; };
+		71D085F31BDBCC9D0059FB7C /* TEALDataSourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0855E1BDBCC9D0059FB7C /* TEALDataSourceConstants.m */; };
+		71D085F41BDBCC9D0059FB7C /* TEALDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085611BDBCC9D0059FB7C /* TEALDataSources.m */; };
+		71D085F51BDBCC9D0059FB7C /* TEALDataSourceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085631BDBCC9D0059FB7C /* TEALDataSourceStore.m */; };
+		71D085F61BDBCC9D0059FB7C /* TEALSharedDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085651BDBCC9D0059FB7C /* TEALSharedDataSources.m */; };
+		71D085F71BDBCC9D0059FB7C /* TEALDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085681BDBCC9D0059FB7C /* TEALDispatch.m */; };
+		71D085F81BDBCC9D0059FB7C /* TEALDispatchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0856B1BDBCC9D0059FB7C /* TEALDispatchManager.m */; };
+		71D085F91BDBCC9D0059FB7C /* TEALDataQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0856F1BDBCC9D0059FB7C /* TEALDataQueue.m */; };
+		71D085FA1BDBCC9D0059FB7C /* TEALNetworkHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085731BDBCC9D0059FB7C /* TEALNetworkHelpers.m */; };
+		71D085FB1BDBCC9D0059FB7C /* TEALReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085751BDBCC9D0059FB7C /* TEALReachabilityManager.m */; };
+		71D085FC1BDBCC9D0059FB7C /* TEALURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085771BDBCC9D0059FB7C /* TEALURLSessionManager.m */; };
+		71D085FD1BDBCC9D0059FB7C /* TEALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0857B1BDBCC9D0059FB7C /* TEALConfiguration.m */; };
+		71D085FE1BDBCC9D0059FB7C /* TEALPublishSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0857D1BDBCC9D0059FB7C /* TEALPublishSettings.m */; };
+		71D085FF1BDBCC9D0059FB7C /* TEALPublishSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0857F1BDBCC9D0059FB7C /* TEALPublishSettingsStore.m */; };
+		71D086001BDBCC9D0059FB7C /* TEALSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085821BDBCC9D0059FB7C /* TEALSettings.m */; };
+		71D086011BDBCC9D0059FB7C /* TEALDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085851BDBCC9D0059FB7C /* TEALDataStore.m */; };
+		71D086021BDBCC9D0059FB7C /* TEALActionQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085881BDBCC9D0059FB7C /* TEALActionQueueManager.m */; };
+		71D086031BDBCC9D0059FB7C /* TEALDelegateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0858B1BDBCC9D0059FB7C /* TEALDelegateManager.m */; };
+		71D086041BDBCC9D0059FB7C /* TEALError.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0858D1BDBCC9D0059FB7C /* TEALError.m */; };
+		71D086051BDBCC9D0059FB7C /* TEALIDGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0858F1BDBCC9D0059FB7C /* TEALIDGenerator.m */; };
+		71D086061BDBCC9D0059FB7C /* TEALLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085921BDBCC9D0059FB7C /* TEALLogger.m */; };
+		71D086071BDBCC9D0059FB7C /* TEALNotificationConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085951BDBCC9D0059FB7C /* TEALNotificationConstants.m */; };
+		71D086081BDBCC9D0059FB7C /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085971BDBCC9D0059FB7C /* TEALOperationManager.m */; };
+		71D086091BDBCC9D0059FB7C /* TEALSimpleNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085991BDBCC9D0059FB7C /* TEALSimpleNetworkManager.m */; };
+		71D0860A1BDBCC9D0059FB7C /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0859B1BDBCC9D0059FB7C /* TEALSystemHelpers.m */; };
+		71D0860B1BDBCC9D0059FB7C /* TEALViewScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D0859E1BDBCC9D0059FB7C /* TEALViewScanner.m */; };
+		71D086181BDBCC9D0059FB7C /* TEALRemoteCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085BF1BDBCC9D0059FB7C /* TEALRemoteCommand.m */; };
+		71D086191BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085C11BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.m */; };
+		71D0861A1BDBCC9D0059FB7C /* TEALRemoteCommandErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085C41BDBCC9D0059FB7C /* TEALRemoteCommandErrors.m */; };
+		71D0861B1BDBCC9D0059FB7C /* TEALRemoteCommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085C61BDBCC9D0059FB7C /* TEALRemoteCommandManager.m */; };
+		71D0861C1BDBCC9D0059FB7C /* TEALRemoteCommandResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085C81BDBCC9D0059FB7C /* TEALRemoteCommandResponse.m */; };
+		71D0861D1BDBCC9D0059FB7C /* Tealium+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085CA1BDBCC9D0059FB7C /* Tealium+TagManagement.m */; };
+		71D0861E1BDBCC9D0059FB7C /* TEALTagDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085CC1BDBCC9D0059FB7C /* TEALTagDispatchService.m */; };
+		71D0861F1BDBCC9D0059FB7C /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D085CE1BDBCC9D0059FB7C /* Tealium.m */; };
+		B51247761B8D2A2B008A96B2 /* Lola 1 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234671B8CDF0400D91DA0 /* Lola 1 Large.jpg */; };
+		B51247771B8D2A2B008A96B2 /* Lola 2 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234681B8CDF0400D91DA0 /* Lola 2 Large.jpg */; };
+		B51247781B8D2A2B008A96B2 /* Lola 3 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234691B8CDF0400D91DA0 /* Lola 3 Large.jpg */; };
+		B51247791B8D2A2B008A96B2 /* Lola 4 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E2346A1B8CDF0400D91DA0 /* Lola 4 Large.jpg */; };
+		B526F2881B989C7D00BADB57 /* CustomInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526F2871B989C7D00BADB57 /* CustomInputAccessoryView.swift */; };
+		B526F28A1B98A0BE00BADB57 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526F2891B98A0BE00BADB57 /* TextFieldsViewController.swift */; };
+		B534E2C51B867B3F0038B5DD /* DataItemCellComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B534E2C41B867B3F0038B5DD /* DataItemCellComposer.swift */; };
+		B5391A721B7D37BF0033BAF8 /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5391A601B7D37870033BAF8 /* TVServices.framework */; };
+		B5391A751B7D37BF0033BAF8 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5391A741B7D37BF0033BAF8 /* ServiceProvider.swift */; };
+		B5391A791B7D37BF0033BAF8 /* UIKitCatalog Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B5391A7D1B7D41420033BAF8 /* DataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935731B738D0800439392 /* DataItem.swift */; };
+		B54796CF1B85319300EC48F3 /* Iceland 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C51B85319300EC48F3 /* Iceland 1.jpg */; };
+		B54796D01B85319300EC48F3 /* Iceland 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C61B85319300EC48F3 /* Iceland 2.jpg */; };
+		B54796D11B85319300EC48F3 /* Iceland 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C71B85319300EC48F3 /* Iceland 3.jpg */; };
+		B54796D21B85319300EC48F3 /* Iceland 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C81B85319300EC48F3 /* Iceland 4.jpg */; };
+		B54796D31B85319300EC48F3 /* Iceland 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C91B85319300EC48F3 /* Iceland 5.jpg */; };
+		B54796D41B85319300EC48F3 /* Iceland 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CA1B85319300EC48F3 /* Iceland 6.jpg */; };
+		B54796D51B85319300EC48F3 /* Iceland 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CB1B85319300EC48F3 /* Iceland 7.jpg */; };
+		B54796D61B85319300EC48F3 /* Iceland 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CC1B85319300EC48F3 /* Iceland 8.jpg */; };
+		B54796D91B85319A00EC48F3 /* Iceland 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C51B85319300EC48F3 /* Iceland 1.jpg */; };
+		B54796DA1B85319A00EC48F3 /* Iceland 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C61B85319300EC48F3 /* Iceland 2.jpg */; };
+		B54796DB1B85319A00EC48F3 /* Iceland 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C71B85319300EC48F3 /* Iceland 3.jpg */; };
+		B54796DC1B85384C00EC48F3 /* Iceland 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C81B85319300EC48F3 /* Iceland 4.jpg */; };
+		B54796DD1B85384C00EC48F3 /* Iceland 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796C91B85319300EC48F3 /* Iceland 5.jpg */; };
+		B54796DE1B85384C00EC48F3 /* Iceland 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CA1B85319300EC48F3 /* Iceland 6.jpg */; };
+		B54796DF1B85384C00EC48F3 /* Iceland 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CB1B85319300EC48F3 /* Iceland 7.jpg */; };
+		B54796E01B85384C00EC48F3 /* Iceland 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B54796CC1B85319300EC48F3 /* Iceland 8.jpg */; };
+		B55F8AFA1B7BACDA00511037 /* TextEntry.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B55F8AF81B7BACDA00511037 /* TextEntry.storyboard */; };
+		B560CD011B8639B600BB0D27 /* Baby 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCED1B8639B600BB0D27 /* Baby 1.jpg */; };
+		B560CD021B8639B600BB0D27 /* Baby 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEE1B8639B600BB0D27 /* Baby 2.jpg */; };
+		B560CD031B8639B600BB0D27 /* Baby 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEF1B8639B600BB0D27 /* Baby 3.jpg */; };
+		B560CD041B8639B600BB0D27 /* Baby 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF01B8639B600BB0D27 /* Baby 4.jpg */; };
+		B560CD051B8639B600BB0D27 /* Baby 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF11B8639B600BB0D27 /* Baby 5.jpg */; };
+		B560CD061B8639B600BB0D27 /* Baby 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF21B8639B600BB0D27 /* Baby 6.jpg */; };
+		B560CD071B8639B600BB0D27 /* Baby 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF31B8639B600BB0D27 /* Baby 7.jpg */; };
+		B560CD081B8639B600BB0D27 /* Baby 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF41B8639B600BB0D27 /* Baby 8.jpg */; };
+		B560CD091B8639B600BB0D27 /* Italy 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF51B8639B600BB0D27 /* Italy 1.jpg */; };
+		B560CD0A1B8639B600BB0D27 /* Italy 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF61B8639B600BB0D27 /* Italy 2.jpg */; };
+		B560CD0B1B8639B600BB0D27 /* Italy 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF71B8639B600BB0D27 /* Italy 3.jpg */; };
+		B560CD0C1B8639B600BB0D27 /* Italy 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF81B8639B600BB0D27 /* Italy 4.jpg */; };
+		B560CD0D1B8639B600BB0D27 /* Italy 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF91B8639B600BB0D27 /* Italy 5.jpg */; };
+		B560CD0E1B8639B600BB0D27 /* Italy 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFA1B8639B600BB0D27 /* Italy 6.jpg */; };
+		B560CD0F1B8639B600BB0D27 /* Italy 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFB1B8639B600BB0D27 /* Italy 7.jpg */; };
+		B560CD101B8639B600BB0D27 /* Italy 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFC1B8639B600BB0D27 /* Italy 8.jpg */; };
+		B560CD111B8639B600BB0D27 /* Lola 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFD1B8639B600BB0D27 /* Lola 1.jpg */; };
+		B560CD121B8639B600BB0D27 /* Lola 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFE1B8639B600BB0D27 /* Lola 2.jpg */; };
+		B560CD131B8639B600BB0D27 /* Lola 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFF1B8639B600BB0D27 /* Lola 3.jpg */; };
+		B560CD141B8639B600BB0D27 /* Lola 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CD001B8639B600BB0D27 /* Lola 4.jpg */; };
+		B560CD151B863C4B00BB0D27 /* Baby 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCED1B8639B600BB0D27 /* Baby 1.jpg */; };
+		B560CD161B863C4B00BB0D27 /* Baby 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEE1B8639B600BB0D27 /* Baby 2.jpg */; };
+		B560CD171B863C4B00BB0D27 /* Baby 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCEF1B8639B600BB0D27 /* Baby 3.jpg */; };
+		B560CD181B863C4B00BB0D27 /* Baby 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF01B8639B600BB0D27 /* Baby 4.jpg */; };
+		B560CD191B863C4B00BB0D27 /* Baby 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF11B8639B600BB0D27 /* Baby 5.jpg */; };
+		B560CD1A1B863C4B00BB0D27 /* Baby 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF21B8639B600BB0D27 /* Baby 6.jpg */; };
+		B560CD1B1B863C4B00BB0D27 /* Baby 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF31B8639B600BB0D27 /* Baby 7.jpg */; };
+		B560CD1C1B863C4B00BB0D27 /* Baby 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF41B8639B600BB0D27 /* Baby 8.jpg */; };
+		B560CD1D1B863C4B00BB0D27 /* Italy 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF51B8639B600BB0D27 /* Italy 1.jpg */; };
+		B560CD1E1B863C4B00BB0D27 /* Italy 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF61B8639B600BB0D27 /* Italy 2.jpg */; };
+		B560CD1F1B863C4B00BB0D27 /* Italy 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF71B8639B600BB0D27 /* Italy 3.jpg */; };
+		B560CD201B863C4B00BB0D27 /* Italy 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF81B8639B600BB0D27 /* Italy 4.jpg */; };
+		B560CD211B863C4B00BB0D27 /* Italy 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCF91B8639B600BB0D27 /* Italy 5.jpg */; };
+		B560CD221B863C4B00BB0D27 /* Italy 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFA1B8639B600BB0D27 /* Italy 6.jpg */; };
+		B560CD231B863C4B00BB0D27 /* Italy 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFB1B8639B600BB0D27 /* Italy 7.jpg */; };
+		B560CD241B863C4B00BB0D27 /* Italy 8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFC1B8639B600BB0D27 /* Italy 8.jpg */; };
+		B560CD251B863C4B00BB0D27 /* Lola 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFD1B8639B600BB0D27 /* Lola 1.jpg */; };
+		B560CD261B863C4B00BB0D27 /* Lola 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFE1B8639B600BB0D27 /* Lola 2.jpg */; };
+		B560CD271B863C4B00BB0D27 /* Lola 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CCFF1B8639B600BB0D27 /* Lola 3.jpg */; };
+		B560CD281B863C4B00BB0D27 /* Lola 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B560CD001B8639B600BB0D27 /* Lola 4.jpg */; };
+		B56A3EB61B83AE2C00F5077C /* FocusGuidesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56A3EB51B83AE2C00F5077C /* FocusGuidesViewController.swift */; };
+		B5728BC41B7AACF10052954A /* ControlsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BC31B7AACF10052954A /* ControlsMenuViewController.swift */; };
+		B5728BC71B7AB30C0052954A /* ControlSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5728BC51B7AB30C0052954A /* ControlSamples.storyboard */; };
+		B5728BCC1B7AD4170052954A /* MenuSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */; };
+		B5728BCE1B7AE1200052954A /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCD1B7AE1200052954A /* MenuTableViewController.swift */; };
+		B5975FFB1B7BB62000D6068A /* TextEntryMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5975FFA1B7BB62000D6068A /* TextEntryMenuViewController.swift */; };
+		B5975FFD1B7BBBF000D6068A /* AlertFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5975FFC1B7BBBF000D6068A /* AlertFormViewController.swift */; };
+		B5A935391B738BDC00439392 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935381B738BDC00439392 /* AppDelegate.swift */; };
+		B5A935401B738BDC00439392 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A9353F1B738BDC00439392 /* Assets.xcassets */; };
+		B5A9354E1B738C6B00439392 /* AlertsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A9354C1B738C6B00439392 /* AlertsViewController.swift */; };
+		B5A935541B738C7B00439392 /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935511B738C7B00439392 /* ButtonsViewController.swift */; };
+		B5A9355B1B738C9300439392 /* DataItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935581B738C9300439392 /* DataItemCollectionViewCell.swift */; };
+		B5A9355C1B738C9300439392 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935591B738C9300439392 /* CollectionViewController.swift */; };
+		B5A935661B738CC100439392 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935641B738CC100439392 /* ProgressViewController.swift */; };
+		B5A9356D1B738CE500439392 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A9356A1B738CE500439392 /* SearchViewController.swift */; };
+		B5A935721B738CF800439392 /* SegmentedControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935701B738CF800439392 /* SegmentedControlsViewController.swift */; };
+		B5A935751B738D0800439392 /* DataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935731B738D0800439392 /* DataItem.swift */; };
+		B5B56C071B83F64400CE4B1D /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B56C061B83F64400CE4B1D /* PageViewController.swift */; };
+		B5B56C091B83F67E00CE4B1D /* DataItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B56C081B83F67E00CE4B1D /* DataItemViewController.swift */; };
+		B5B7EF3D1B7B86A6005DF13D /* ViewControllerSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5B7EF3B1B7B86A6005DF13D /* ViewControllerSamples.storyboard */; };
+		B5B7EF3F1B7B8728005DF13D /* ViewControllersMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B7EF3E1B7B8728005DF13D /* ViewControllersMenuViewController.swift */; };
+		B5B808281B8E840700663622 /* DataItem+ImageName.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808271B8E840700663622 /* DataItem+ImageName.swift */; };
+		B5B8082A1B8E849000663622 /* DataItem+SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808291B8E849000663622 /* DataItem+SampleData.swift */; };
+		B5B8082B1B8E84E500663622 /* DataItem+ImageName.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808271B8E840700663622 /* DataItem+ImageName.swift */; };
+		B5B8082C1B8E84E500663622 /* DataItem+SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B808291B8E849000663622 /* DataItem+SampleData.swift */; };
+		B5BD43D01B7AAB500030BABA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5BD43CE1B7AAB500030BABA /* Main.storyboard */; };
+		B5C792861B7BF52600A21550 /* CollectionViewContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C792851B7BF52600A21550 /* CollectionViewContainerViewController.swift */; };
+		B5C792891B7C000B00A21550 /* FocusSamples.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C792871B7C000B00A21550 /* FocusSamples.storyboard */; };
+		B5C7928B1B7C0A6400A21550 /* CollectionViewContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C7928A1B7C0A6400A21550 /* CollectionViewContainerCell.swift */; };
+		B5D59EE21B85025C00D01057 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D59EE11B85025C00D01057 /* SearchResultsViewController.swift */; };
+		B5DE40751B941868002313B2 /* GradientMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DE40741B941868002313B2 /* GradientMaskView.swift */; };
+		B5E0DE2A1B9DB37900A7A1BD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E0DE291B9DB37900A7A1BD /* Localizable.strings */; };
+		B5E0DE2F1B9DB4AA00A7A1BD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E0DE2D1B9DB4AA00A7A1BD /* InfoPlist.strings */; };
+		B5E2346B1B8CDF0400D91DA0 /* Lola 1 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234671B8CDF0400D91DA0 /* Lola 1 Large.jpg */; };
+		B5E2346C1B8CDF0400D91DA0 /* Lola 2 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234681B8CDF0400D91DA0 /* Lola 2 Large.jpg */; };
+		B5E2346D1B8CDF0400D91DA0 /* Lola 3 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E234691B8CDF0400D91DA0 /* Lola 3 Large.jpg */; };
+		B5E2346E1B8CDF0400D91DA0 /* Lola 4 Large.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5E2346A1B8CDF0400D91DA0 /* Lola 4 Large.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		714A13541BDACC620015A393 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 714A133C1BDAAE670015A393;
+			remoteInfo = TealiumTVOS;
+		};
+		714A13581BDACC630015A393 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 714A133D1BDAAE670015A393;
+			remoteInfo = TealiumTVOS;
+		};
+		714A135A1BDACC630015A393 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 714A13461BDAAE670015A393;
+			remoteInfo = TealiumTVOSTests;
+		};
+		71D084BB1BDBCC3C0059FB7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5A9352D1B738BDC00439392 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5391A701B7D37BF0033BAF8;
+			remoteInfo = "UIKitCatalog Extension";
+		};
+		71E9DD5E1BDA7FAE00011633 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 37A759F11B56F70E00E6E9E2;
+			remoteInfo = Tealium;
+		};
+		71E9DD601BDA7FAE00011633 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 37A759FC1B56F70E00E6E9E2;
+			remoteInfo = TealiumTests;
+		};
+		71E9DDC31BDA818F00011633 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 71E9DD661BDA7FEB00011633;
+			remoteInfo = TealiumTVOS;
+		};
+		B5391A771B7D37BF0033BAF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5A9352D1B738BDC00439392 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5391A701B7D37BF0033BAF8;
+			remoteInfo = "UIKitCatalog Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		71D085021BDBCC3C0059FB7C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				71D085031BDBCC3C0059FB7C /* UIKitCatalog Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5391A6C1B7D37870033BAF8 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B5391A791B7D37BF0033BAF8 /* UIKitCatalog Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitCatalogDirect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		71D0850D1BDBCC3D0059FB7C /* UIKitCatalog copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog copy-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-ios/tests/TealiumTVOS/UIKitCatalog copy-Info.plist"; sourceTree = "<absolute>"; };
+		71D085121BDBCC9D0059FB7C /* TEALVisitorProfile+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALVisitorProfile+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D085131BDBCC9D0059FB7C /* TEALVisitorProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfile.h; sourceTree = "<group>"; };
+		71D085141BDBCC9D0059FB7C /* TEALVisitorProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfile.m; sourceTree = "<group>"; };
+		71D085151BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileAudienceAttribute.h; sourceTree = "<group>"; };
+		71D085161BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileAudienceAttribute.m; sourceTree = "<group>"; };
+		71D085171BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBadgeAttribute.h; sourceTree = "<group>"; };
+		71D085181BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBadgeAttribute.m; sourceTree = "<group>"; };
+		71D085191BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBaseAttribute.h; sourceTree = "<group>"; };
+		71D0851A1BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBaseAttribute.m; sourceTree = "<group>"; };
+		71D0851B1BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileCurrentVisit.h; sourceTree = "<group>"; };
+		71D0851C1BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileCurrentVisit.m; sourceTree = "<group>"; };
+		71D0851D1BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDateAttribute.h; sourceTree = "<group>"; };
+		71D0851E1BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileDateAttribute.m; sourceTree = "<group>"; };
+		71D0851F1BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileFlagAttribute.h; sourceTree = "<group>"; };
+		71D085201BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileFlagAttribute.m; sourceTree = "<group>"; };
+		71D085211BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileMetricAttribute.h; sourceTree = "<group>"; };
+		71D085221BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileMetricAttribute.m; sourceTree = "<group>"; };
+		71D085231BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfilePropertyAttribute.h; sourceTree = "<group>"; };
+		71D085241BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfilePropertyAttribute.m; sourceTree = "<group>"; };
+		71D085251BDBCC9D0059FB7C /* TEALVisitorProfileDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDelegate.h; sourceTree = "<group>"; };
+		71D085261BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileHelpers.h; sourceTree = "<group>"; };
+		71D085271BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileHelpers.m; sourceTree = "<group>"; };
+		71D085281BDBCC9D0059FB7C /* TEALVisitorProfileStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileStore.h; sourceTree = "<group>"; };
+		71D085291BDBCC9D0059FB7C /* TEALVisitorProfileStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileStore.m; sourceTree = "<group>"; };
+		71D0852A1BDBCC9D0059FB7C /* TEALCollectDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALCollectDispatchService.h; sourceTree = "<group>"; };
+		71D0852B1BDBCC9D0059FB7C /* TEALCollectDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALCollectDispatchService.m; sourceTree = "<group>"; };
+		71D0852C1BDBCC9D0059FB7C /* Tealium+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Collect.h"; sourceTree = "<group>"; };
+		71D0852D1BDBCC9D0059FB7C /* Tealium+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Collect.m"; sourceTree = "<group>"; };
+		71D085311BDBCC9D0059FB7C /* TEALExceptionEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALExceptionEvents.h; sourceTree = "<group>"; };
+		71D085321BDBCC9D0059FB7C /* TEALExceptionEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALExceptionEvents.m; sourceTree = "<group>"; };
+		71D085331BDBCC9D0059FB7C /* TEALExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALExceptionHandler.h; sourceTree = "<group>"; };
+		71D085341BDBCC9D0059FB7C /* TEALExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALExceptionHandler.m; sourceTree = "<group>"; };
+		71D085351BDBCC9D0059FB7C /* TEALLifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycle.h; sourceTree = "<group>"; };
+		71D085361BDBCC9D0059FB7C /* TEALLifecycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycle.m; sourceTree = "<group>"; };
+		71D085371BDBCC9D0059FB7C /* TEALLifecycleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleConstants.h; sourceTree = "<group>"; };
+		71D085381BDBCC9D0059FB7C /* TEALLifecycleConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleConstants.m; sourceTree = "<group>"; };
+		71D085391BDBCC9D0059FB7C /* TEALLifecycleDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleDataSources.h; sourceTree = "<group>"; };
+		71D0853A1BDBCC9D0059FB7C /* TEALLifecycleDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleDataSources.m; sourceTree = "<group>"; };
+		71D0853B1BDBCC9D0059FB7C /* TEALLifecycleEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleEvents.h; sourceTree = "<group>"; };
+		71D0853C1BDBCC9D0059FB7C /* TEALLifecycleEvents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleEvents.m; sourceTree = "<group>"; };
+		71D0853D1BDBCC9D0059FB7C /* TEALLifecycleStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleStore.h; sourceTree = "<group>"; };
+		71D0853E1BDBCC9D0059FB7C /* TEALLifecycleStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleStore.m; sourceTree = "<group>"; };
+		71D0853F1BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+TealiumAutotracking.h"; sourceTree = "<group>"; };
+		71D085401BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+TealiumAutotracking.m"; sourceTree = "<group>"; };
+		71D085411BDBCC9D0059FB7C /* TEALDataSources+Autotracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDataSources+Autotracking.h"; sourceTree = "<group>"; };
+		71D085421BDBCC9D0059FB7C /* TEALDataSources+Autotracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALDataSources+Autotracking.m"; sourceTree = "<group>"; };
+		71D085431BDBCC9D0059FB7C /* Tealium+Autotracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Autotracking.h"; sourceTree = "<group>"; };
+		71D085441BDBCC9D0059FB7C /* Tealium+Autotracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Autotracking.m"; sourceTree = "<group>"; };
+		71D085451BDBCC9D0059FB7C /* UIApplication+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+Tealium.h"; sourceTree = "<group>"; };
+		71D085461BDBCC9D0059FB7C /* UIApplication+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Tealium.m"; sourceTree = "<group>"; };
+		71D085471BDBCC9D0059FB7C /* UIViewController+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Tealium.h"; sourceTree = "<group>"; };
+		71D085481BDBCC9D0059FB7C /* UIViewController+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Tealium.m"; sourceTree = "<group>"; };
+		71D0854B1BDBCC9D0059FB7C /* NSArray+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Tealium.h"; sourceTree = "<group>"; };
+		71D0854C1BDBCC9D0059FB7C /* NSArray+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Tealium.m"; sourceTree = "<group>"; };
+		71D0854D1BDBCC9D0059FB7C /* NSDictionary+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Tealium.h"; sourceTree = "<group>"; };
+		71D0854E1BDBCC9D0059FB7C /* NSDictionary+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Tealium.m"; sourceTree = "<group>"; };
+		71D0854F1BDBCC9D0059FB7C /* NSObject+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tealium.h"; sourceTree = "<group>"; };
+		71D085501BDBCC9D0059FB7C /* NSObject+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Tealium.m"; sourceTree = "<group>"; };
+		71D085511BDBCC9D0059FB7C /* NSString+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Tealium.h"; sourceTree = "<group>"; };
+		71D085521BDBCC9D0059FB7C /* NSString+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Tealium.m"; sourceTree = "<group>"; };
+		71D085531BDBCC9D0059FB7C /* UIImage+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tealium.h"; sourceTree = "<group>"; };
+		71D085541BDBCC9D0059FB7C /* UIImage+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tealium.m"; sourceTree = "<group>"; };
+		71D085571BDBCC9D0059FB7C /* TEALApplicationDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALApplicationDataSources.h; sourceTree = "<group>"; };
+		71D085581BDBCC9D0059FB7C /* TEALApplicationDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALApplicationDataSources.m; sourceTree = "<group>"; };
+		71D085591BDBCC9D0059FB7C /* TEALDeviceDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDeviceDataSources.h; sourceTree = "<group>"; };
+		71D0855A1BDBCC9D0059FB7C /* TEALDeviceDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDeviceDataSources.m; sourceTree = "<group>"; };
+		71D0855B1BDBCC9D0059FB7C /* TEALTimestampDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTimestampDataSources.h; sourceTree = "<group>"; };
+		71D0855C1BDBCC9D0059FB7C /* TEALTimestampDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTimestampDataSources.m; sourceTree = "<group>"; };
+		71D0855D1BDBCC9D0059FB7C /* TEALDataSourceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceConstants.h; sourceTree = "<group>"; };
+		71D0855E1BDBCC9D0059FB7C /* TEALDataSourceConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceConstants.m; sourceTree = "<group>"; };
+		71D0855F1BDBCC9D0059FB7C /* TEALDataSources+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDataSources+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D085601BDBCC9D0059FB7C /* TEALDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSources.h; sourceTree = "<group>"; };
+		71D085611BDBCC9D0059FB7C /* TEALDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSources.m; sourceTree = "<group>"; };
+		71D085621BDBCC9D0059FB7C /* TEALDataSourceStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceStore.h; sourceTree = "<group>"; };
+		71D085631BDBCC9D0059FB7C /* TEALDataSourceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceStore.m; sourceTree = "<group>"; };
+		71D085641BDBCC9D0059FB7C /* TEALSharedDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSharedDataSources.h; sourceTree = "<group>"; };
+		71D085651BDBCC9D0059FB7C /* TEALSharedDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSharedDataSources.m; sourceTree = "<group>"; };
+		71D085671BDBCC9D0059FB7C /* TEALDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatch.h; sourceTree = "<group>"; };
+		71D085681BDBCC9D0059FB7C /* TEALDispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatch.m; sourceTree = "<group>"; };
+		71D085691BDBCC9D0059FB7C /* TEALDispatchConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchConstants.h; sourceTree = "<group>"; };
+		71D0856A1BDBCC9D0059FB7C /* TEALDispatchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchManager.h; sourceTree = "<group>"; };
+		71D0856B1BDBCC9D0059FB7C /* TEALDispatchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatchManager.m; sourceTree = "<group>"; };
+		71D0856D1BDBCC9D0059FB7C /* TEALDataQueue+PrivateHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDataQueue+PrivateHeaders.h"; sourceTree = "<group>"; };
+		71D0856E1BDBCC9D0059FB7C /* TEALDataQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataQueue.h; sourceTree = "<group>"; };
+		71D0856F1BDBCC9D0059FB7C /* TEALDataQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataQueue.m; sourceTree = "<group>"; };
+		71D085711BDBCC9D0059FB7C /* TEALDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchService.h; sourceTree = "<group>"; };
+		71D085721BDBCC9D0059FB7C /* TEALNetworkHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALNetworkHelpers.h; sourceTree = "<group>"; };
+		71D085731BDBCC9D0059FB7C /* TEALNetworkHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNetworkHelpers.m; sourceTree = "<group>"; };
+		71D085741BDBCC9D0059FB7C /* TEALReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachabilityManager.h; sourceTree = "<group>"; };
+		71D085751BDBCC9D0059FB7C /* TEALReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachabilityManager.m; sourceTree = "<group>"; };
+		71D085761BDBCC9D0059FB7C /* TEALURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALURLSessionManager.h; sourceTree = "<group>"; };
+		71D085771BDBCC9D0059FB7C /* TEALURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALURLSessionManager.m; sourceTree = "<group>"; };
+		71D085791BDBCC9D0059FB7C /* TEALConfiguration+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D0857A1BDBCC9D0059FB7C /* TEALConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALConfiguration.h; sourceTree = "<group>"; };
+		71D0857B1BDBCC9D0059FB7C /* TEALConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfiguration.m; sourceTree = "<group>"; };
+		71D0857C1BDBCC9D0059FB7C /* TEALPublishSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettings.h; sourceTree = "<group>"; };
+		71D0857D1BDBCC9D0059FB7C /* TEALPublishSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettings.m; sourceTree = "<group>"; };
+		71D0857E1BDBCC9D0059FB7C /* TEALPublishSettingsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettingsStore.h; sourceTree = "<group>"; };
+		71D0857F1BDBCC9D0059FB7C /* TEALPublishSettingsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsStore.m; sourceTree = "<group>"; };
+		71D085801BDBCC9D0059FB7C /* TEALSettings+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D085811BDBCC9D0059FB7C /* TEALSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSettings.h; sourceTree = "<group>"; };
+		71D085821BDBCC9D0059FB7C /* TEALSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettings.m; sourceTree = "<group>"; };
+		71D085841BDBCC9D0059FB7C /* TEALDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataStore.h; sourceTree = "<group>"; };
+		71D085851BDBCC9D0059FB7C /* TEALDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataStore.m; sourceTree = "<group>"; };
+		71D085871BDBCC9D0059FB7C /* TEALActionQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALActionQueueManager.h; sourceTree = "<group>"; };
+		71D085881BDBCC9D0059FB7C /* TEALActionQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALActionQueueManager.m; sourceTree = "<group>"; };
+		71D085891BDBCC9D0059FB7C /* TEALBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALBlocks.h; sourceTree = "<group>"; };
+		71D0858A1BDBCC9D0059FB7C /* TEALDelegateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDelegateManager.h; sourceTree = "<group>"; };
+		71D0858B1BDBCC9D0059FB7C /* TEALDelegateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDelegateManager.m; sourceTree = "<group>"; };
+		71D0858C1BDBCC9D0059FB7C /* TEALError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALError.h; sourceTree = "<group>"; };
+		71D0858D1BDBCC9D0059FB7C /* TEALError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALError.m; sourceTree = "<group>"; };
+		71D0858E1BDBCC9D0059FB7C /* TEALIDGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALIDGenerator.h; sourceTree = "<group>"; };
+		71D0858F1BDBCC9D0059FB7C /* TEALIDGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALIDGenerator.m; sourceTree = "<group>"; };
+		71D085901BDBCC9D0059FB7C /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D085911BDBCC9D0059FB7C /* TEALLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLogger.h; sourceTree = "<group>"; };
+		71D085921BDBCC9D0059FB7C /* TEALLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLogger.m; sourceTree = "<group>"; };
+		71D085931BDBCC9D0059FB7C /* TEALModulesDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALModulesDelegate.h; sourceTree = "<group>"; };
+		71D085941BDBCC9D0059FB7C /* TEALNotificationConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALNotificationConstants.h; sourceTree = "<group>"; };
+		71D085951BDBCC9D0059FB7C /* TEALNotificationConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNotificationConstants.m; sourceTree = "<group>"; };
+		71D085961BDBCC9D0059FB7C /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
+		71D085971BDBCC9D0059FB7C /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
+		71D085981BDBCC9D0059FB7C /* TEALSimpleNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSimpleNetworkManager.h; sourceTree = "<group>"; };
+		71D085991BDBCC9D0059FB7C /* TEALSimpleNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSimpleNetworkManager.m; sourceTree = "<group>"; };
+		71D0859A1BDBCC9D0059FB7C /* TEALSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemHelpers.h; sourceTree = "<group>"; };
+		71D0859B1BDBCC9D0059FB7C /* TEALSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSystemHelpers.m; sourceTree = "<group>"; };
+		71D0859C1BDBCC9D0059FB7C /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
+		71D0859D1BDBCC9D0059FB7C /* TEALViewScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALViewScanner.h; sourceTree = "<group>"; };
+		71D0859E1BDBCC9D0059FB7C /* TEALViewScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALViewScanner.m; sourceTree = "<group>"; };
+		71D0859F1BDBCC9D0059FB7C /* TealiumDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegate.h; sourceTree = "<group>"; };
+		71D085A01BDBCC9D0059FB7C /* iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOS.h; sourceTree = "<group>"; };
+		71D085BE1BDBCC9D0059FB7C /* TEALRemoteCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommand.h; sourceTree = "<group>"; };
+		71D085BF1BDBCC9D0059FB7C /* TEALRemoteCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommand.m; sourceTree = "<group>"; };
+		71D085C01BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALRemoteCommandConstants+PrivateHeader.h"; sourceTree = "<group>"; };
+		71D085C11BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALRemoteCommandConstants+PrivateHeader.m"; sourceTree = "<group>"; };
+		71D085C21BDBCC9D0059FB7C /* TEALRemoteCommandConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandConstants.h; sourceTree = "<group>"; };
+		71D085C31BDBCC9D0059FB7C /* TEALRemoteCommandErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandErrors.h; sourceTree = "<group>"; };
+		71D085C41BDBCC9D0059FB7C /* TEALRemoteCommandErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandErrors.m; sourceTree = "<group>"; };
+		71D085C51BDBCC9D0059FB7C /* TEALRemoteCommandManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandManager.h; sourceTree = "<group>"; };
+		71D085C61BDBCC9D0059FB7C /* TEALRemoteCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManager.m; sourceTree = "<group>"; };
+		71D085C71BDBCC9D0059FB7C /* TEALRemoteCommandResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandResponse.h; sourceTree = "<group>"; };
+		71D085C81BDBCC9D0059FB7C /* TEALRemoteCommandResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandResponse.m; sourceTree = "<group>"; };
+		71D085C91BDBCC9D0059FB7C /* Tealium+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+TagManagement.h"; sourceTree = "<group>"; };
+		71D085CA1BDBCC9D0059FB7C /* Tealium+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+TagManagement.m"; sourceTree = "<group>"; };
+		71D085CB1BDBCC9D0059FB7C /* TEALTagDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTagDispatchService.h; sourceTree = "<group>"; };
+		71D085CC1BDBCC9D0059FB7C /* TEALTagDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchService.m; sourceTree = "<group>"; };
+		71D085CD1BDBCC9D0059FB7C /* Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tealium.h; sourceTree = "<group>"; };
+		71D085CE1BDBCC9D0059FB7C /* Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium.m; sourceTree = "<group>"; };
+		71D085CF1BDBCC9D0059FB7C /* TealiumBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumBridgingHeader.h; sourceTree = "<group>"; };
+		71D085D01BDBCC9D0059FB7C /* TealiumTVOSBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumTVOSBridgingHeader.h; sourceTree = "<group>"; };
+		71D085D11BDBCC9D0059FB7C /* tvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tvOS.h; sourceTree = "<group>"; };
+		71D086201BDBCD3D0059FB7C /* TealiumDirectBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDirectBridgingHeader.h; sourceTree = "<group>"; };
+		71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tealium.xcodeproj; path = ../../../source/Tealium/Tealium.xcodeproj; sourceTree = "<group>"; };
+		71E9DDC61BDA819400011633 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B526F2871B989C7D00BADB57 /* CustomInputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInputAccessoryView.swift; sourceTree = "<group>"; };
+		B526F2891B98A0BE00BADB57 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
+		B534E2C41B867B3F0038B5DD /* DataItemCellComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataItemCellComposer.swift; sourceTree = "<group>"; };
+		B5391A601B7D37870033BAF8 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
+		B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "UIKitCatalog Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5391A741B7D37BF0033BAF8 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		B5391A761B7D37BF0033BAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B54796C51B85319300EC48F3 /* Iceland 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 1.jpg"; sourceTree = "<group>"; };
+		B54796C61B85319300EC48F3 /* Iceland 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 2.jpg"; sourceTree = "<group>"; };
+		B54796C71B85319300EC48F3 /* Iceland 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 3.jpg"; sourceTree = "<group>"; };
+		B54796C81B85319300EC48F3 /* Iceland 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 4.jpg"; sourceTree = "<group>"; };
+		B54796C91B85319300EC48F3 /* Iceland 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 5.jpg"; sourceTree = "<group>"; };
+		B54796CA1B85319300EC48F3 /* Iceland 6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 6.jpg"; sourceTree = "<group>"; };
+		B54796CB1B85319300EC48F3 /* Iceland 7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 7.jpg"; sourceTree = "<group>"; };
+		B54796CC1B85319300EC48F3 /* Iceland 8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Iceland 8.jpg"; sourceTree = "<group>"; };
+		B55F8AF91B7BACDA00511037 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TextEntry.storyboard; sourceTree = "<group>"; };
+		B560CCED1B8639B600BB0D27 /* Baby 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 1.jpg"; sourceTree = "<group>"; };
+		B560CCEE1B8639B600BB0D27 /* Baby 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 2.jpg"; sourceTree = "<group>"; };
+		B560CCEF1B8639B600BB0D27 /* Baby 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 3.jpg"; sourceTree = "<group>"; };
+		B560CCF01B8639B600BB0D27 /* Baby 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 4.jpg"; sourceTree = "<group>"; };
+		B560CCF11B8639B600BB0D27 /* Baby 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 5.jpg"; sourceTree = "<group>"; };
+		B560CCF21B8639B600BB0D27 /* Baby 6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 6.jpg"; sourceTree = "<group>"; };
+		B560CCF31B8639B600BB0D27 /* Baby 7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 7.jpg"; sourceTree = "<group>"; };
+		B560CCF41B8639B600BB0D27 /* Baby 8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Baby 8.jpg"; sourceTree = "<group>"; };
+		B560CCF51B8639B600BB0D27 /* Italy 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 1.jpg"; sourceTree = "<group>"; };
+		B560CCF61B8639B600BB0D27 /* Italy 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 2.jpg"; sourceTree = "<group>"; };
+		B560CCF71B8639B600BB0D27 /* Italy 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 3.jpg"; sourceTree = "<group>"; };
+		B560CCF81B8639B600BB0D27 /* Italy 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 4.jpg"; sourceTree = "<group>"; };
+		B560CCF91B8639B600BB0D27 /* Italy 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 5.jpg"; sourceTree = "<group>"; };
+		B560CCFA1B8639B600BB0D27 /* Italy 6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 6.jpg"; sourceTree = "<group>"; };
+		B560CCFB1B8639B600BB0D27 /* Italy 7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 7.jpg"; sourceTree = "<group>"; };
+		B560CCFC1B8639B600BB0D27 /* Italy 8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Italy 8.jpg"; sourceTree = "<group>"; };
+		B560CCFD1B8639B600BB0D27 /* Lola 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 1.jpg"; sourceTree = "<group>"; };
+		B560CCFE1B8639B600BB0D27 /* Lola 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 2.jpg"; sourceTree = "<group>"; };
+		B560CCFF1B8639B600BB0D27 /* Lola 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 3.jpg"; sourceTree = "<group>"; };
+		B560CD001B8639B600BB0D27 /* Lola 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 4.jpg"; sourceTree = "<group>"; };
+		B56A3EB51B83AE2C00F5077C /* FocusGuidesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusGuidesViewController.swift; sourceTree = "<group>"; };
+		B5728BC31B7AACF10052954A /* ControlsMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsMenuViewController.swift; sourceTree = "<group>"; };
+		B5728BC61B7AB30C0052954A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ControlSamples.storyboard; sourceTree = "<group>"; };
+		B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuSplitViewController.swift; sourceTree = "<group>"; };
+		B5728BCD1B7AE1200052954A /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		B5975FFA1B7BB62000D6068A /* TextEntryMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEntryMenuViewController.swift; sourceTree = "<group>"; };
+		B5975FFC1B7BBBF000D6068A /* AlertFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertFormViewController.swift; sourceTree = "<group>"; };
+		B5A935351B738BDC00439392 /* UIKitCatalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitCatalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5A935381B738BDC00439392 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B5A9353F1B738BDC00439392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B5A935411B738BDC00439392 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5A9354C1B738C6B00439392 /* AlertsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsViewController.swift; sourceTree = "<group>"; };
+		B5A935511B738C7B00439392 /* ButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonsViewController.swift; sourceTree = "<group>"; };
+		B5A935581B738C9300439392 /* DataItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		B5A935591B738C9300439392 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		B5A935641B738CC100439392 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		B5A9356A1B738CE500439392 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		B5A935701B738CF800439392 /* SegmentedControlsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlsViewController.swift; sourceTree = "<group>"; };
+		B5A935731B738D0800439392 /* DataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataItem.swift; sourceTree = "<group>"; };
+		B5B56C061B83F64400CE4B1D /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		B5B56C081B83F67E00CE4B1D /* DataItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataItemViewController.swift; sourceTree = "<group>"; };
+		B5B7EF3C1B7B86A6005DF13D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ViewControllerSamples.storyboard; sourceTree = "<group>"; };
+		B5B7EF3E1B7B8728005DF13D /* ViewControllersMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllersMenuViewController.swift; sourceTree = "<group>"; };
+		B5B808271B8E840700663622 /* DataItem+ImageName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataItem+ImageName.swift"; sourceTree = "<group>"; };
+		B5B808291B8E849000663622 /* DataItem+SampleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataItem+SampleData.swift"; sourceTree = "<group>"; };
+		B5BD43CF1B7AAB500030BABA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B5C792851B7BF52600A21550 /* CollectionViewContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewContainerViewController.swift; sourceTree = "<group>"; };
+		B5C792881B7C000B00A21550 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FocusSamples.storyboard; sourceTree = "<group>"; };
+		B5C7928A1B7C0A6400A21550 /* CollectionViewContainerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewContainerCell.swift; sourceTree = "<group>"; };
+		B5D2D2D31B854DE5005CFC46 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		B5D59EE11B85025C00D01057 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
+		B5DE40741B941868002313B2 /* GradientMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientMaskView.swift; sourceTree = "<group>"; };
+		B5E0DE291B9DB37900A7A1BD /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		B5E0DE2E1B9DB4AA00A7A1BD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B5E234671B8CDF0400D91DA0 /* Lola 1 Large.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 1 Large.jpg"; sourceTree = "<group>"; };
+		B5E234681B8CDF0400D91DA0 /* Lola 2 Large.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 2 Large.jpg"; sourceTree = "<group>"; };
+		B5E234691B8CDF0400D91DA0 /* Lola 3 Large.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 3 Large.jpg"; sourceTree = "<group>"; };
+		B5E2346A1B8CDF0400D91DA0 /* Lola 4 Large.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Lola 4 Large.jpg"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		71D084D81BDBCC3C0059FB7C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5391A6E1B7D37BF0033BAF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5391A721B7D37BF0033BAF8 /* TVServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5A935321B738BDC00439392 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		71D0850E1BDBCC9D0059FB7C /* Tealium Source Direct */ = {
+			isa = PBXGroup;
+			children = (
+				71D0850F1BDBCC9D0059FB7C /* audiencestream */,
+				71D0852E1BDBCC9D0059FB7C /* autotracking */,
+				71D085491BDBCC9D0059FB7C /* core */,
+				71D085A01BDBCC9D0059FB7C /* iOS.h */,
+				71D085BC1BDBCC9D0059FB7C /* tagmanagement */,
+				71D085CD1BDBCC9D0059FB7C /* Tealium.h */,
+				71D085CE1BDBCC9D0059FB7C /* Tealium.m */,
+				71D085CF1BDBCC9D0059FB7C /* TealiumBridgingHeader.h */,
+				71D085D01BDBCC9D0059FB7C /* TealiumTVOSBridgingHeader.h */,
+				71D085D11BDBCC9D0059FB7C /* tvOS.h */,
+			);
+			name = "Tealium Source Direct";
+			path = ../../../source/Tealium/Tealium;
+			sourceTree = "<group>";
+		};
+		71D0850F1BDBCC9D0059FB7C /* audiencestream */ = {
+			isa = PBXGroup;
+			children = (
+				71D085101BDBCC9D0059FB7C /* profile */,
+				71D0852A1BDBCC9D0059FB7C /* TEALCollectDispatchService.h */,
+				71D0852B1BDBCC9D0059FB7C /* TEALCollectDispatchService.m */,
+				71D0852C1BDBCC9D0059FB7C /* Tealium+Collect.h */,
+				71D0852D1BDBCC9D0059FB7C /* Tealium+Collect.m */,
+			);
+			path = audiencestream;
+			sourceTree = "<group>";
+		};
+		71D085101BDBCC9D0059FB7C /* profile */ = {
+			isa = PBXGroup;
+			children = (
+				71D085111BDBCC9D0059FB7C /* model */,
+				71D085251BDBCC9D0059FB7C /* TEALVisitorProfileDelegate.h */,
+				71D085261BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.h */,
+				71D085271BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.m */,
+				71D085281BDBCC9D0059FB7C /* TEALVisitorProfileStore.h */,
+				71D085291BDBCC9D0059FB7C /* TEALVisitorProfileStore.m */,
+			);
+			path = profile;
+			sourceTree = "<group>";
+		};
+		71D085111BDBCC9D0059FB7C /* model */ = {
+			isa = PBXGroup;
+			children = (
+				71D085121BDBCC9D0059FB7C /* TEALVisitorProfile+PrivateHeader.h */,
+				71D085131BDBCC9D0059FB7C /* TEALVisitorProfile.h */,
+				71D085141BDBCC9D0059FB7C /* TEALVisitorProfile.m */,
+				71D085151BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.h */,
+				71D085161BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.m */,
+				71D085171BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.h */,
+				71D085181BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.m */,
+				71D085191BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.h */,
+				71D0851A1BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.m */,
+				71D0851B1BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.h */,
+				71D0851C1BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.m */,
+				71D0851D1BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.h */,
+				71D0851E1BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.m */,
+				71D0851F1BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.h */,
+				71D085201BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.m */,
+				71D085211BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.h */,
+				71D085221BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.m */,
+				71D085231BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.h */,
+				71D085241BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		71D0852E1BDBCC9D0059FB7C /* autotracking */ = {
+			isa = PBXGroup;
+			children = (
+				71D0852F1BDBCC9D0059FB7C /* Lifecycle */,
+				71D0853F1BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.h */,
+				71D085401BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.m */,
+				71D085411BDBCC9D0059FB7C /* TEALDataSources+Autotracking.h */,
+				71D085421BDBCC9D0059FB7C /* TEALDataSources+Autotracking.m */,
+				71D085431BDBCC9D0059FB7C /* Tealium+Autotracking.h */,
+				71D085441BDBCC9D0059FB7C /* Tealium+Autotracking.m */,
+				71D085451BDBCC9D0059FB7C /* UIApplication+Tealium.h */,
+				71D085461BDBCC9D0059FB7C /* UIApplication+Tealium.m */,
+				71D085471BDBCC9D0059FB7C /* UIViewController+Tealium.h */,
+				71D085481BDBCC9D0059FB7C /* UIViewController+Tealium.m */,
+			);
+			path = autotracking;
+			sourceTree = "<group>";
+		};
+		71D0852F1BDBCC9D0059FB7C /* Lifecycle */ = {
+			isa = PBXGroup;
+			children = (
+				71D085301BDBCC9D0059FB7C /* Crash */,
+				71D085351BDBCC9D0059FB7C /* TEALLifecycle.h */,
+				71D085361BDBCC9D0059FB7C /* TEALLifecycle.m */,
+				71D085371BDBCC9D0059FB7C /* TEALLifecycleConstants.h */,
+				71D085381BDBCC9D0059FB7C /* TEALLifecycleConstants.m */,
+				71D085391BDBCC9D0059FB7C /* TEALLifecycleDataSources.h */,
+				71D0853A1BDBCC9D0059FB7C /* TEALLifecycleDataSources.m */,
+				71D0853B1BDBCC9D0059FB7C /* TEALLifecycleEvents.h */,
+				71D0853C1BDBCC9D0059FB7C /* TEALLifecycleEvents.m */,
+				71D0853D1BDBCC9D0059FB7C /* TEALLifecycleStore.h */,
+				71D0853E1BDBCC9D0059FB7C /* TEALLifecycleStore.m */,
+			);
+			path = Lifecycle;
+			sourceTree = "<group>";
+		};
+		71D085301BDBCC9D0059FB7C /* Crash */ = {
+			isa = PBXGroup;
+			children = (
+				71D085311BDBCC9D0059FB7C /* TEALExceptionEvents.h */,
+				71D085321BDBCC9D0059FB7C /* TEALExceptionEvents.m */,
+				71D085331BDBCC9D0059FB7C /* TEALExceptionHandler.h */,
+				71D085341BDBCC9D0059FB7C /* TEALExceptionHandler.m */,
+			);
+			path = Crash;
+			sourceTree = "<group>";
+		};
+		71D085491BDBCC9D0059FB7C /* core */ = {
+			isa = PBXGroup;
+			children = (
+				71D0854A1BDBCC9D0059FB7C /* categories */,
+				71D085551BDBCC9D0059FB7C /* datasources */,
+				71D085661BDBCC9D0059FB7C /* events */,
+				71D0856C1BDBCC9D0059FB7C /* models */,
+				71D085701BDBCC9D0059FB7C /* networking */,
+				71D085781BDBCC9D0059FB7C /* settings */,
+				71D085831BDBCC9D0059FB7C /* stores */,
+				71D085861BDBCC9D0059FB7C /* system */,
+				71D0859F1BDBCC9D0059FB7C /* TealiumDelegate.h */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		71D0854A1BDBCC9D0059FB7C /* categories */ = {
+			isa = PBXGroup;
+			children = (
+				71D0854B1BDBCC9D0059FB7C /* NSArray+Tealium.h */,
+				71D0854C1BDBCC9D0059FB7C /* NSArray+Tealium.m */,
+				71D0854D1BDBCC9D0059FB7C /* NSDictionary+Tealium.h */,
+				71D0854E1BDBCC9D0059FB7C /* NSDictionary+Tealium.m */,
+				71D0854F1BDBCC9D0059FB7C /* NSObject+Tealium.h */,
+				71D085501BDBCC9D0059FB7C /* NSObject+Tealium.m */,
+				71D085511BDBCC9D0059FB7C /* NSString+Tealium.h */,
+				71D085521BDBCC9D0059FB7C /* NSString+Tealium.m */,
+				71D085531BDBCC9D0059FB7C /* UIImage+Tealium.h */,
+				71D085541BDBCC9D0059FB7C /* UIImage+Tealium.m */,
+			);
+			path = categories;
+			sourceTree = "<group>";
+		};
+		71D085551BDBCC9D0059FB7C /* datasources */ = {
+			isa = PBXGroup;
+			children = (
+				71D085561BDBCC9D0059FB7C /* dataClasses */,
+				71D0855D1BDBCC9D0059FB7C /* TEALDataSourceConstants.h */,
+				71D0855E1BDBCC9D0059FB7C /* TEALDataSourceConstants.m */,
+				71D0855F1BDBCC9D0059FB7C /* TEALDataSources+PrivateHeader.h */,
+				71D085601BDBCC9D0059FB7C /* TEALDataSources.h */,
+				71D085611BDBCC9D0059FB7C /* TEALDataSources.m */,
+				71D085621BDBCC9D0059FB7C /* TEALDataSourceStore.h */,
+				71D085631BDBCC9D0059FB7C /* TEALDataSourceStore.m */,
+				71D085641BDBCC9D0059FB7C /* TEALSharedDataSources.h */,
+				71D085651BDBCC9D0059FB7C /* TEALSharedDataSources.m */,
+			);
+			path = datasources;
+			sourceTree = "<group>";
+		};
+		71D085561BDBCC9D0059FB7C /* dataClasses */ = {
+			isa = PBXGroup;
+			children = (
+				71D085571BDBCC9D0059FB7C /* TEALApplicationDataSources.h */,
+				71D085581BDBCC9D0059FB7C /* TEALApplicationDataSources.m */,
+				71D085591BDBCC9D0059FB7C /* TEALDeviceDataSources.h */,
+				71D0855A1BDBCC9D0059FB7C /* TEALDeviceDataSources.m */,
+				71D0855B1BDBCC9D0059FB7C /* TEALTimestampDataSources.h */,
+				71D0855C1BDBCC9D0059FB7C /* TEALTimestampDataSources.m */,
+			);
+			path = dataClasses;
+			sourceTree = "<group>";
+		};
+		71D085661BDBCC9D0059FB7C /* events */ = {
+			isa = PBXGroup;
+			children = (
+				71D085671BDBCC9D0059FB7C /* TEALDispatch.h */,
+				71D085681BDBCC9D0059FB7C /* TEALDispatch.m */,
+				71D085691BDBCC9D0059FB7C /* TEALDispatchConstants.h */,
+				71D0856A1BDBCC9D0059FB7C /* TEALDispatchManager.h */,
+				71D0856B1BDBCC9D0059FB7C /* TEALDispatchManager.m */,
+			);
+			path = events;
+			sourceTree = "<group>";
+		};
+		71D0856C1BDBCC9D0059FB7C /* models */ = {
+			isa = PBXGroup;
+			children = (
+				71D0856D1BDBCC9D0059FB7C /* TEALDataQueue+PrivateHeaders.h */,
+				71D0856E1BDBCC9D0059FB7C /* TEALDataQueue.h */,
+				71D0856F1BDBCC9D0059FB7C /* TEALDataQueue.m */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		71D085701BDBCC9D0059FB7C /* networking */ = {
+			isa = PBXGroup;
+			children = (
+				71D085711BDBCC9D0059FB7C /* TEALDispatchService.h */,
+				71D085721BDBCC9D0059FB7C /* TEALNetworkHelpers.h */,
+				71D085731BDBCC9D0059FB7C /* TEALNetworkHelpers.m */,
+				71D085741BDBCC9D0059FB7C /* TEALReachabilityManager.h */,
+				71D085751BDBCC9D0059FB7C /* TEALReachabilityManager.m */,
+				71D085761BDBCC9D0059FB7C /* TEALURLSessionManager.h */,
+				71D085771BDBCC9D0059FB7C /* TEALURLSessionManager.m */,
+			);
+			path = networking;
+			sourceTree = "<group>";
+		};
+		71D085781BDBCC9D0059FB7C /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				71D085791BDBCC9D0059FB7C /* TEALConfiguration+PrivateHeader.h */,
+				71D0857A1BDBCC9D0059FB7C /* TEALConfiguration.h */,
+				71D0857B1BDBCC9D0059FB7C /* TEALConfiguration.m */,
+				71D0857C1BDBCC9D0059FB7C /* TEALPublishSettings.h */,
+				71D0857D1BDBCC9D0059FB7C /* TEALPublishSettings.m */,
+				71D0857E1BDBCC9D0059FB7C /* TEALPublishSettingsStore.h */,
+				71D0857F1BDBCC9D0059FB7C /* TEALPublishSettingsStore.m */,
+				71D085801BDBCC9D0059FB7C /* TEALSettings+PrivateHeader.h */,
+				71D085811BDBCC9D0059FB7C /* TEALSettings.h */,
+				71D085821BDBCC9D0059FB7C /* TEALSettings.m */,
+			);
+			path = settings;
+			sourceTree = "<group>";
+		};
+		71D085831BDBCC9D0059FB7C /* stores */ = {
+			isa = PBXGroup;
+			children = (
+				71D085841BDBCC9D0059FB7C /* TEALDataStore.h */,
+				71D085851BDBCC9D0059FB7C /* TEALDataStore.m */,
+			);
+			path = stores;
+			sourceTree = "<group>";
+		};
+		71D085861BDBCC9D0059FB7C /* system */ = {
+			isa = PBXGroup;
+			children = (
+				71D085871BDBCC9D0059FB7C /* TEALActionQueueManager.h */,
+				71D085881BDBCC9D0059FB7C /* TEALActionQueueManager.m */,
+				71D085891BDBCC9D0059FB7C /* TEALBlocks.h */,
+				71D0858A1BDBCC9D0059FB7C /* TEALDelegateManager.h */,
+				71D0858B1BDBCC9D0059FB7C /* TEALDelegateManager.m */,
+				71D0858C1BDBCC9D0059FB7C /* TEALError.h */,
+				71D0858D1BDBCC9D0059FB7C /* TEALError.m */,
+				71D0858E1BDBCC9D0059FB7C /* TEALIDGenerator.h */,
+				71D0858F1BDBCC9D0059FB7C /* TEALIDGenerator.m */,
+				71D085901BDBCC9D0059FB7C /* Tealium+PrivateHeader.h */,
+				71D085911BDBCC9D0059FB7C /* TEALLogger.h */,
+				71D085921BDBCC9D0059FB7C /* TEALLogger.m */,
+				71D085931BDBCC9D0059FB7C /* TEALModulesDelegate.h */,
+				71D085941BDBCC9D0059FB7C /* TEALNotificationConstants.h */,
+				71D085951BDBCC9D0059FB7C /* TEALNotificationConstants.m */,
+				71D085961BDBCC9D0059FB7C /* TEALOperationManager.h */,
+				71D085971BDBCC9D0059FB7C /* TEALOperationManager.m */,
+				71D085981BDBCC9D0059FB7C /* TEALSimpleNetworkManager.h */,
+				71D085991BDBCC9D0059FB7C /* TEALSimpleNetworkManager.m */,
+				71D0859A1BDBCC9D0059FB7C /* TEALSystemHelpers.h */,
+				71D0859B1BDBCC9D0059FB7C /* TEALSystemHelpers.m */,
+				71D0859C1BDBCC9D0059FB7C /* TEALSystemProtocols.h */,
+				71D0859D1BDBCC9D0059FB7C /* TEALViewScanner.h */,
+				71D0859E1BDBCC9D0059FB7C /* TEALViewScanner.m */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
+		71D085BC1BDBCC9D0059FB7C /* tagmanagement */ = {
+			isa = PBXGroup;
+			children = (
+				71D085BD1BDBCC9D0059FB7C /* RemoteCommands */,
+				71D085C91BDBCC9D0059FB7C /* Tealium+TagManagement.h */,
+				71D085CA1BDBCC9D0059FB7C /* Tealium+TagManagement.m */,
+				71D085CB1BDBCC9D0059FB7C /* TEALTagDispatchService.h */,
+				71D085CC1BDBCC9D0059FB7C /* TEALTagDispatchService.m */,
+			);
+			path = tagmanagement;
+			sourceTree = "<group>";
+		};
+		71D085BD1BDBCC9D0059FB7C /* RemoteCommands */ = {
+			isa = PBXGroup;
+			children = (
+				71D085BE1BDBCC9D0059FB7C /* TEALRemoteCommand.h */,
+				71D085BF1BDBCC9D0059FB7C /* TEALRemoteCommand.m */,
+				71D085C01BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.h */,
+				71D085C11BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.m */,
+				71D085C21BDBCC9D0059FB7C /* TEALRemoteCommandConstants.h */,
+				71D085C31BDBCC9D0059FB7C /* TEALRemoteCommandErrors.h */,
+				71D085C41BDBCC9D0059FB7C /* TEALRemoteCommandErrors.m */,
+				71D085C51BDBCC9D0059FB7C /* TEALRemoteCommandManager.h */,
+				71D085C61BDBCC9D0059FB7C /* TEALRemoteCommandManager.m */,
+				71D085C71BDBCC9D0059FB7C /* TEALRemoteCommandResponse.h */,
+				71D085C81BDBCC9D0059FB7C /* TEALRemoteCommandResponse.m */,
+			);
+			path = RemoteCommands;
+			sourceTree = "<group>";
+		};
+		71E9D9FF1BDA7E6600011633 /* Tealium Source Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */,
+			);
+			name = "Tealium Source Frameworks";
+			sourceTree = "<group>";
+		};
+		71E9DD591BDA7FAE00011633 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				71E9DD5F1BDA7FAE00011633 /* libTealium.a */,
+				71E9DD611BDA7FAE00011633 /* TealiumTests.xctest */,
+				71E9DDC41BDA818F00011633 /* libTealiumStaticTVOS.a */,
+				714A13591BDACC630015A393 /* TealiumTVOS.framework */,
+				714A135B1BDACC630015A393 /* TealiumTVOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5391A5F1B7D37870033BAF8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				71E9DDC61BDA819400011633 /* SystemConfiguration.framework */,
+				B5391A601B7D37870033BAF8 /* TVServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B5391A731B7D37BF0033BAF8 /* UIKitCatalog Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B5391A741B7D37BF0033BAF8 /* ServiceProvider.swift */,
+				B5391A761B7D37BF0033BAF8 /* Info.plist */,
+			);
+			path = "UIKitCatalog Extension";
+			sourceTree = "<group>";
+		};
+		B54796C41B85313600EC48F3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B560CCED1B8639B600BB0D27 /* Baby 1.jpg */,
+				B560CCEE1B8639B600BB0D27 /* Baby 2.jpg */,
+				B560CCEF1B8639B600BB0D27 /* Baby 3.jpg */,
+				B560CCF01B8639B600BB0D27 /* Baby 4.jpg */,
+				B560CCF11B8639B600BB0D27 /* Baby 5.jpg */,
+				B560CCF21B8639B600BB0D27 /* Baby 6.jpg */,
+				B560CCF31B8639B600BB0D27 /* Baby 7.jpg */,
+				B560CCF41B8639B600BB0D27 /* Baby 8.jpg */,
+				B560CCF51B8639B600BB0D27 /* Italy 1.jpg */,
+				B560CCF61B8639B600BB0D27 /* Italy 2.jpg */,
+				B560CCF71B8639B600BB0D27 /* Italy 3.jpg */,
+				B560CCF81B8639B600BB0D27 /* Italy 4.jpg */,
+				B560CCF91B8639B600BB0D27 /* Italy 5.jpg */,
+				B560CCFA1B8639B600BB0D27 /* Italy 6.jpg */,
+				B560CCFB1B8639B600BB0D27 /* Italy 7.jpg */,
+				B560CCFC1B8639B600BB0D27 /* Italy 8.jpg */,
+				B560CCFD1B8639B600BB0D27 /* Lola 1.jpg */,
+				B5E234671B8CDF0400D91DA0 /* Lola 1 Large.jpg */,
+				B560CCFE1B8639B600BB0D27 /* Lola 2.jpg */,
+				B5E234681B8CDF0400D91DA0 /* Lola 2 Large.jpg */,
+				B560CCFF1B8639B600BB0D27 /* Lola 3.jpg */,
+				B5E234691B8CDF0400D91DA0 /* Lola 3 Large.jpg */,
+				B560CD001B8639B600BB0D27 /* Lola 4.jpg */,
+				B5E2346A1B8CDF0400D91DA0 /* Lola 4 Large.jpg */,
+				B54796C51B85319300EC48F3 /* Iceland 1.jpg */,
+				B54796C61B85319300EC48F3 /* Iceland 2.jpg */,
+				B54796C71B85319300EC48F3 /* Iceland 3.jpg */,
+				B54796C81B85319300EC48F3 /* Iceland 4.jpg */,
+				B54796C91B85319300EC48F3 /* Iceland 5.jpg */,
+				B54796CA1B85319300EC48F3 /* Iceland 6.jpg */,
+				B54796CB1B85319300EC48F3 /* Iceland 7.jpg */,
+				B54796CC1B85319300EC48F3 /* Iceland 8.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B55F8AF51B7BACB000511037 /* Text Entry */ = {
+			isa = PBXGroup;
+			children = (
+				B55F8AF81B7BACDA00511037 /* TextEntry.storyboard */,
+				B5975FFA1B7BB62000D6068A /* TextEntryMenuViewController.swift */,
+				B526F2891B98A0BE00BADB57 /* TextFieldsViewController.swift */,
+				B5975FFC1B7BBBF000D6068A /* AlertFormViewController.swift */,
+				B526F2871B989C7D00BADB57 /* CustomInputAccessoryView.swift */,
+			);
+			name = "Text Entry";
+			sourceTree = "<group>";
+		};
+		B5728BC21B7AAC9F0052954A /* Control samples */ = {
+			isa = PBXGroup;
+			children = (
+				B5728BC51B7AB30C0052954A /* ControlSamples.storyboard */,
+				B5728BC31B7AACF10052954A /* ControlsMenuViewController.swift */,
+				B5A935511B738C7B00439392 /* ButtonsViewController.swift */,
+				B5A935641B738CC100439392 /* ProgressViewController.swift */,
+				B5A935701B738CF800439392 /* SegmentedControlsViewController.swift */,
+			);
+			name = "Control samples";
+			sourceTree = "<group>";
+		};
+		B5728BCA1B7AC0B50052954A /* View Controller samples */ = {
+			isa = PBXGroup;
+			children = (
+				B5B7EF3B1B7B86A6005DF13D /* ViewControllerSamples.storyboard */,
+				B5B7EF3E1B7B8728005DF13D /* ViewControllersMenuViewController.swift */,
+				B5A9354C1B738C6B00439392 /* AlertsViewController.swift */,
+				B5A935591B738C9300439392 /* CollectionViewController.swift */,
+				B5DE40741B941868002313B2 /* GradientMaskView.swift */,
+				B5B56C061B83F64400CE4B1D /* PageViewController.swift */,
+				B5B56C081B83F67E00CE4B1D /* DataItemViewController.swift */,
+				B5A9356A1B738CE500439392 /* SearchViewController.swift */,
+				B5D59EE11B85025C00D01057 /* SearchResultsViewController.swift */,
+			);
+			name = "View Controller samples";
+			sourceTree = "<group>";
+		};
+		B5A9352C1B738BDC00439392 = {
+			isa = PBXGroup;
+			children = (
+				B5D2D2D31B854DE5005CFC46 /* README.md */,
+				B5A935371B738BDC00439392 /* UIKitCatalog */,
+				B5391A731B7D37BF0033BAF8 /* UIKitCatalog Extension */,
+				B54796C41B85313600EC48F3 /* Resources */,
+				B5391A5F1B7D37870033BAF8 /* Frameworks */,
+				B5A935361B738BDC00439392 /* Products */,
+				71D0850D1BDBCC3D0059FB7C /* UIKitCatalog copy-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		B5A935361B738BDC00439392 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5A935351B738BDC00439392 /* UIKitCatalog.app */,
+				B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */,
+				71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5A935371B738BDC00439392 /* UIKitCatalog */ = {
+			isa = PBXGroup;
+			children = (
+				71E9D9FF1BDA7E6600011633 /* Tealium Source Frameworks */,
+				71D0850E1BDBCC9D0059FB7C /* Tealium Source Direct */,
+				B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */,
+				B5728BCD1B7AE1200052954A /* MenuTableViewController.swift */,
+				B5A935581B738C9300439392 /* DataItemCollectionViewCell.swift */,
+				B534E2C41B867B3F0038B5DD /* DataItemCellComposer.swift */,
+				B5BD43CE1B7AAB500030BABA /* Main.storyboard */,
+				B5A9353F1B738BDC00439392 /* Assets.xcassets */,
+				B5B8082D1B8E863B00663622 /* Data items */,
+				B5728BC21B7AAC9F0052954A /* Control samples */,
+				B5728BCA1B7AC0B50052954A /* View Controller samples */,
+				B55F8AF51B7BACB000511037 /* Text Entry */,
+				B5C792841B7BF0A300A21550 /* Focus samples */,
+				B5A935381B738BDC00439392 /* AppDelegate.swift */,
+				B5E0DE281B9DB34200A7A1BD /* Supporting files */,
+				71D086201BDBCD3D0059FB7C /* TealiumDirectBridgingHeader.h */,
+			);
+			path = UIKitCatalog;
+			sourceTree = "<group>";
+		};
+		B5B8082D1B8E863B00663622 /* Data items */ = {
+			isa = PBXGroup;
+			children = (
+				B5A935731B738D0800439392 /* DataItem.swift */,
+				B5B808271B8E840700663622 /* DataItem+ImageName.swift */,
+				B5B808291B8E849000663622 /* DataItem+SampleData.swift */,
+			);
+			name = "Data items";
+			sourceTree = "<group>";
+		};
+		B5C792841B7BF0A300A21550 /* Focus samples */ = {
+			isa = PBXGroup;
+			children = (
+				B5C792871B7C000B00A21550 /* FocusSamples.storyboard */,
+				B5C792851B7BF52600A21550 /* CollectionViewContainerViewController.swift */,
+				B5C7928A1B7C0A6400A21550 /* CollectionViewContainerCell.swift */,
+				B56A3EB51B83AE2C00F5077C /* FocusGuidesViewController.swift */,
+			);
+			name = "Focus samples";
+			sourceTree = "<group>";
+		};
+		B5E0DE281B9DB34200A7A1BD /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				B5E0DE291B9DB37900A7A1BD /* Localizable.strings */,
+				B5A935411B738BDC00439392 /* Info.plist */,
+				B5E0DE2D1B9DB4AA00A7A1BD /* InfoPlist.strings */,
+			);
+			name = "Supporting files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		71D084B71BDBCC3C0059FB7C /* UIKitCatalogDirect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71D085041BDBCC3C0059FB7C /* Build configuration list for PBXNativeTarget "UIKitCatalogDirect" */;
+			buildPhases = (
+				71D084BC1BDBCC3C0059FB7C /* Sources */,
+				71D084D81BDBCC3C0059FB7C /* Frameworks */,
+				71D084D91BDBCC3C0059FB7C /* Resources */,
+				71D085021BDBCC3C0059FB7C /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71D084BA1BDBCC3C0059FB7C /* PBXTargetDependency */,
+			);
+			name = UIKitCatalogDirect;
+			productName = UIKitCatalog;
+			productReference = 71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B5391A701B7D37BF0033BAF8 /* UIKitCatalog Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5391A7A1B7D37BF0033BAF8 /* Build configuration list for PBXNativeTarget "UIKitCatalog Extension" */;
+			buildPhases = (
+				B5391A6D1B7D37BF0033BAF8 /* Sources */,
+				B5391A6E1B7D37BF0033BAF8 /* Frameworks */,
+				B5391A6F1B7D37BF0033BAF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "UIKitCatalog Extension";
+			productName = "UIKitCatalog Extension";
+			productReference = B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */;
+			productType = "com.apple.product-type.tv-app-extension";
+		};
+		B5A935341B738BDC00439392 /* UIKitCatalog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5A935441B738BDC00439392 /* Build configuration list for PBXNativeTarget "UIKitCatalog" */;
+			buildPhases = (
+				B5A935311B738BDC00439392 /* Sources */,
+				B5A935321B738BDC00439392 /* Frameworks */,
+				B5A935331B738BDC00439392 /* Resources */,
+				B5391A6C1B7D37870033BAF8 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				714A13551BDACC620015A393 /* PBXTargetDependency */,
+				B5391A781B7D37BF0033BAF8 /* PBXTargetDependency */,
+			);
+			name = UIKitCatalog;
+			productName = UIKitCatalog;
+			productReference = B5A935351B738BDC00439392 /* UIKitCatalog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5A9352D1B738BDC00439392 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Apple;
+				TargetAttributes = {
+					B5391A701B7D37BF0033BAF8 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					B5A935341B738BDC00439392 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = B5A935301B738BDC00439392 /* Build configuration list for PBXProject "UIKitCatalog" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B5A9352C1B738BDC00439392;
+			productRefGroup = B5A935361B738BDC00439392 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 71E9DD591BDA7FAE00011633 /* Products */;
+					ProjectRef = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				B5A935341B738BDC00439392 /* UIKitCatalog */,
+				B5391A701B7D37BF0033BAF8 /* UIKitCatalog Extension */,
+				71D084B71BDBCC3C0059FB7C /* UIKitCatalogDirect */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		714A13591BDACC630015A393 /* TealiumTVOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TealiumTVOS.framework;
+			remoteRef = 714A13581BDACC630015A393 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		714A135B1BDACC630015A393 /* TealiumTVOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TealiumTVOSTests.xctest;
+			remoteRef = 714A135A1BDACC630015A393 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		71E9DD5F1BDA7FAE00011633 /* libTealium.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libTealium.a;
+			remoteRef = 71E9DD5E1BDA7FAE00011633 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		71E9DD611BDA7FAE00011633 /* TealiumTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TealiumTests.xctest;
+			remoteRef = 71E9DD601BDA7FAE00011633 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		71E9DDC41BDA818F00011633 /* libTealiumStaticTVOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libTealiumStaticTVOS.a;
+			remoteRef = 71E9DDC31BDA818F00011633 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		71D084D91BDBCC3C0059FB7C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71D084DA1BDBCC3C0059FB7C /* Baby 3.jpg in Resources */,
+				71D084DB1BDBCC3C0059FB7C /* Iceland 6.jpg in Resources */,
+				71D084DC1BDBCC3C0059FB7C /* Baby 7.jpg in Resources */,
+				71D084DD1BDBCC3C0059FB7C /* Lola 1 Large.jpg in Resources */,
+				71D084DE1BDBCC3C0059FB7C /* Italy 8.jpg in Resources */,
+				71D084DF1BDBCC3C0059FB7C /* Italy 7.jpg in Resources */,
+				71D084E01BDBCC3C0059FB7C /* Italy 4.jpg in Resources */,
+				71D084E11BDBCC3C0059FB7C /* Iceland 5.jpg in Resources */,
+				71D084E21BDBCC3C0059FB7C /* Iceland 7.jpg in Resources */,
+				71D084E31BDBCC3C0059FB7C /* InfoPlist.strings in Resources */,
+				71D084E41BDBCC3C0059FB7C /* Iceland 2.jpg in Resources */,
+				71D084E51BDBCC3C0059FB7C /* Lola 3.jpg in Resources */,
+				71D084E61BDBCC3C0059FB7C /* Baby 4.jpg in Resources */,
+				71D084E71BDBCC3C0059FB7C /* Baby 8.jpg in Resources */,
+				71D084E81BDBCC3C0059FB7C /* Italy 3.jpg in Resources */,
+				71D084E91BDBCC3C0059FB7C /* Iceland 8.jpg in Resources */,
+				71D084EA1BDBCC3C0059FB7C /* Italy 6.jpg in Resources */,
+				71D084EB1BDBCC3C0059FB7C /* Assets.xcassets in Resources */,
+				71D084EC1BDBCC3C0059FB7C /* Lola 4 Large.jpg in Resources */,
+				71D084ED1BDBCC3C0059FB7C /* Italy 5.jpg in Resources */,
+				71D084EE1BDBCC3C0059FB7C /* Baby 5.jpg in Resources */,
+				71D084EF1BDBCC3C0059FB7C /* Lola 2 Large.jpg in Resources */,
+				71D084F01BDBCC3C0059FB7C /* TextEntry.storyboard in Resources */,
+				71D084F11BDBCC3C0059FB7C /* Localizable.strings in Resources */,
+				71D084F21BDBCC3C0059FB7C /* Lola 1.jpg in Resources */,
+				71D084F31BDBCC3C0059FB7C /* Lola 3 Large.jpg in Resources */,
+				71D084F41BDBCC3C0059FB7C /* Lola 2.jpg in Resources */,
+				71D084F51BDBCC3C0059FB7C /* Iceland 3.jpg in Resources */,
+				71D084F61BDBCC3C0059FB7C /* Baby 1.jpg in Resources */,
+				71D084F71BDBCC3C0059FB7C /* Baby 2.jpg in Resources */,
+				71D084F81BDBCC3C0059FB7C /* Italy 2.jpg in Resources */,
+				71D084F91BDBCC3C0059FB7C /* Baby 6.jpg in Resources */,
+				71D084FA1BDBCC3C0059FB7C /* Main.storyboard in Resources */,
+				71D084FB1BDBCC3C0059FB7C /* ViewControllerSamples.storyboard in Resources */,
+				71D084FC1BDBCC3C0059FB7C /* Iceland 1.jpg in Resources */,
+				71D084FD1BDBCC3C0059FB7C /* ControlSamples.storyboard in Resources */,
+				71D084FE1BDBCC3C0059FB7C /* Iceland 4.jpg in Resources */,
+				71D084FF1BDBCC3C0059FB7C /* Italy 1.jpg in Resources */,
+				71D085001BDBCC3C0059FB7C /* FocusSamples.storyboard in Resources */,
+				71D085011BDBCC3C0059FB7C /* Lola 4.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5391A6F1B7D37BF0033BAF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54796DF1B85384C00EC48F3 /* Iceland 7.jpg in Resources */,
+				B560CD221B863C4B00BB0D27 /* Italy 6.jpg in Resources */,
+				B54796DC1B85384C00EC48F3 /* Iceland 4.jpg in Resources */,
+				B54796DD1B85384C00EC48F3 /* Iceland 5.jpg in Resources */,
+				B560CD1E1B863C4B00BB0D27 /* Italy 2.jpg in Resources */,
+				B560CD1A1B863C4B00BB0D27 /* Baby 6.jpg in Resources */,
+				B51247791B8D2A2B008A96B2 /* Lola 4 Large.jpg in Resources */,
+				B51247761B8D2A2B008A96B2 /* Lola 1 Large.jpg in Resources */,
+				B560CD161B863C4B00BB0D27 /* Baby 2.jpg in Resources */,
+				B51247781B8D2A2B008A96B2 /* Lola 3 Large.jpg in Resources */,
+				B560CD1F1B863C4B00BB0D27 /* Italy 3.jpg in Resources */,
+				B54796DE1B85384C00EC48F3 /* Iceland 6.jpg in Resources */,
+				B51247771B8D2A2B008A96B2 /* Lola 2 Large.jpg in Resources */,
+				B560CD281B863C4B00BB0D27 /* Lola 4.jpg in Resources */,
+				B54796E01B85384C00EC48F3 /* Iceland 8.jpg in Resources */,
+				B54796DA1B85319A00EC48F3 /* Iceland 2.jpg in Resources */,
+				B560CD251B863C4B00BB0D27 /* Lola 1.jpg in Resources */,
+				B560CD231B863C4B00BB0D27 /* Italy 7.jpg in Resources */,
+				B560CD1B1B863C4B00BB0D27 /* Baby 7.jpg in Resources */,
+				B54796D91B85319A00EC48F3 /* Iceland 1.jpg in Resources */,
+				B54796DB1B85319A00EC48F3 /* Iceland 3.jpg in Resources */,
+				B560CD1D1B863C4B00BB0D27 /* Italy 1.jpg in Resources */,
+				B560CD191B863C4B00BB0D27 /* Baby 5.jpg in Resources */,
+				B560CD271B863C4B00BB0D27 /* Lola 3.jpg in Resources */,
+				B560CD211B863C4B00BB0D27 /* Italy 5.jpg in Resources */,
+				B560CD151B863C4B00BB0D27 /* Baby 1.jpg in Resources */,
+				B560CD171B863C4B00BB0D27 /* Baby 3.jpg in Resources */,
+				B560CD201B863C4B00BB0D27 /* Italy 4.jpg in Resources */,
+				B560CD241B863C4B00BB0D27 /* Italy 8.jpg in Resources */,
+				B560CD261B863C4B00BB0D27 /* Lola 2.jpg in Resources */,
+				B560CD181B863C4B00BB0D27 /* Baby 4.jpg in Resources */,
+				B560CD1C1B863C4B00BB0D27 /* Baby 8.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5A935331B738BDC00439392 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B560CD031B8639B600BB0D27 /* Baby 3.jpg in Resources */,
+				B54796D41B85319300EC48F3 /* Iceland 6.jpg in Resources */,
+				B560CD071B8639B600BB0D27 /* Baby 7.jpg in Resources */,
+				B5E2346B1B8CDF0400D91DA0 /* Lola 1 Large.jpg in Resources */,
+				B560CD101B8639B600BB0D27 /* Italy 8.jpg in Resources */,
+				B560CD0F1B8639B600BB0D27 /* Italy 7.jpg in Resources */,
+				B560CD0C1B8639B600BB0D27 /* Italy 4.jpg in Resources */,
+				B54796D31B85319300EC48F3 /* Iceland 5.jpg in Resources */,
+				B54796D51B85319300EC48F3 /* Iceland 7.jpg in Resources */,
+				B5E0DE2F1B9DB4AA00A7A1BD /* InfoPlist.strings in Resources */,
+				B54796D01B85319300EC48F3 /* Iceland 2.jpg in Resources */,
+				B560CD131B8639B600BB0D27 /* Lola 3.jpg in Resources */,
+				B560CD041B8639B600BB0D27 /* Baby 4.jpg in Resources */,
+				B560CD081B8639B600BB0D27 /* Baby 8.jpg in Resources */,
+				B560CD0B1B8639B600BB0D27 /* Italy 3.jpg in Resources */,
+				B54796D61B85319300EC48F3 /* Iceland 8.jpg in Resources */,
+				B560CD0E1B8639B600BB0D27 /* Italy 6.jpg in Resources */,
+				B5A935401B738BDC00439392 /* Assets.xcassets in Resources */,
+				B5E2346E1B8CDF0400D91DA0 /* Lola 4 Large.jpg in Resources */,
+				B560CD0D1B8639B600BB0D27 /* Italy 5.jpg in Resources */,
+				B560CD051B8639B600BB0D27 /* Baby 5.jpg in Resources */,
+				B5E2346C1B8CDF0400D91DA0 /* Lola 2 Large.jpg in Resources */,
+				B55F8AFA1B7BACDA00511037 /* TextEntry.storyboard in Resources */,
+				B5E0DE2A1B9DB37900A7A1BD /* Localizable.strings in Resources */,
+				B560CD111B8639B600BB0D27 /* Lola 1.jpg in Resources */,
+				B5E2346D1B8CDF0400D91DA0 /* Lola 3 Large.jpg in Resources */,
+				B560CD121B8639B600BB0D27 /* Lola 2.jpg in Resources */,
+				B54796D11B85319300EC48F3 /* Iceland 3.jpg in Resources */,
+				B560CD011B8639B600BB0D27 /* Baby 1.jpg in Resources */,
+				B560CD021B8639B600BB0D27 /* Baby 2.jpg in Resources */,
+				B560CD0A1B8639B600BB0D27 /* Italy 2.jpg in Resources */,
+				B560CD061B8639B600BB0D27 /* Baby 6.jpg in Resources */,
+				B5BD43D01B7AAB500030BABA /* Main.storyboard in Resources */,
+				B5B7EF3D1B7B86A6005DF13D /* ViewControllerSamples.storyboard in Resources */,
+				B54796CF1B85319300EC48F3 /* Iceland 1.jpg in Resources */,
+				B5728BC71B7AB30C0052954A /* ControlSamples.storyboard in Resources */,
+				B54796D21B85319300EC48F3 /* Iceland 4.jpg in Resources */,
+				B560CD091B8639B600BB0D27 /* Italy 1.jpg in Resources */,
+				B5C792891B7C000B00A21550 /* FocusSamples.storyboard in Resources */,
+				B560CD141B8639B600BB0D27 /* Lola 4.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		71D084BC1BDBCC3C0059FB7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71D084BD1BDBCC3C0059FB7C /* MenuSplitViewController.swift in Sources */,
+				71D085DF1BDBCC9D0059FB7C /* TEALExceptionEvents.m in Sources */,
+				71D085E21BDBCC9D0059FB7C /* TEALLifecycleConstants.m in Sources */,
+				71D084BE1BDBCC3C0059FB7C /* ButtonsViewController.swift in Sources */,
+				71D086051BDBCC9D0059FB7C /* TEALIDGenerator.m in Sources */,
+				71D085E11BDBCC9D0059FB7C /* TEALLifecycle.m in Sources */,
+				71D084BF1BDBCC3C0059FB7C /* MenuTableViewController.swift in Sources */,
+				71D085D41BDBCC9D0059FB7C /* TEALVisitorProfileBadgeAttribute.m in Sources */,
+				71D085DA1BDBCC9D0059FB7C /* TEALVisitorProfilePropertyAttribute.m in Sources */,
+				71D084C01BDBCC3C0059FB7C /* DataItemCellComposer.swift in Sources */,
+				71D085EE1BDBCC9D0059FB7C /* NSString+Tealium.m in Sources */,
+				71D085E61BDBCC9D0059FB7C /* NSObject+TealiumAutotracking.m in Sources */,
+				71D085EF1BDBCC9D0059FB7C /* UIImage+Tealium.m in Sources */,
+				71D0861D1BDBCC9D0059FB7C /* Tealium+TagManagement.m in Sources */,
+				71D085E41BDBCC9D0059FB7C /* TEALLifecycleEvents.m in Sources */,
+				71D085F61BDBCC9D0059FB7C /* TEALSharedDataSources.m in Sources */,
+				71D086001BDBCC9D0059FB7C /* TEALSettings.m in Sources */,
+				71D085D31BDBCC9D0059FB7C /* TEALVisitorProfileAudienceAttribute.m in Sources */,
+				71D084C11BDBCC3C0059FB7C /* FocusGuidesViewController.swift in Sources */,
+				71D084C21BDBCC3C0059FB7C /* GradientMaskView.swift in Sources */,
+				71D086071BDBCC9D0059FB7C /* TEALNotificationConstants.m in Sources */,
+				71D085F91BDBCC9D0059FB7C /* TEALDataQueue.m in Sources */,
+				71D085EA1BDBCC9D0059FB7C /* UIViewController+Tealium.m in Sources */,
+				71D085D61BDBCC9D0059FB7C /* TEALVisitorProfileCurrentVisit.m in Sources */,
+				71D085EC1BDBCC9D0059FB7C /* NSDictionary+Tealium.m in Sources */,
+				71D0860A1BDBCC9D0059FB7C /* TEALSystemHelpers.m in Sources */,
+				71D084C31BDBCC3C0059FB7C /* DataItemCollectionViewCell.swift in Sources */,
+				71D084C41BDBCC3C0059FB7C /* AlertFormViewController.swift in Sources */,
+				71D085F51BDBCC9D0059FB7C /* TEALDataSourceStore.m in Sources */,
+				71D084C51BDBCC3C0059FB7C /* ControlsMenuViewController.swift in Sources */,
+				71D084C61BDBCC3C0059FB7C /* CustomInputAccessoryView.swift in Sources */,
+				71D085DB1BDBCC9D0059FB7C /* TEALVisitorProfileHelpers.m in Sources */,
+				71D086061BDBCC9D0059FB7C /* TEALLogger.m in Sources */,
+				71D086191BDBCC9D0059FB7C /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */,
+				71D0861E1BDBCC9D0059FB7C /* TEALTagDispatchService.m in Sources */,
+				71D085F31BDBCC9D0059FB7C /* TEALDataSourceConstants.m in Sources */,
+				71D084C71BDBCC3C0059FB7C /* DataItem+ImageName.swift in Sources */,
+				71D085E31BDBCC9D0059FB7C /* TEALLifecycleDataSources.m in Sources */,
+				71D084C81BDBCC3C0059FB7C /* TextEntryMenuViewController.swift in Sources */,
+				71D084C91BDBCC3C0059FB7C /* DataItemViewController.swift in Sources */,
+				71D084CA1BDBCC3C0059FB7C /* DataItem.swift in Sources */,
+				71D084CB1BDBCC3C0059FB7C /* DataItem+SampleData.swift in Sources */,
+				71D086011BDBCC9D0059FB7C /* TEALDataStore.m in Sources */,
+				71D085FF1BDBCC9D0059FB7C /* TEALPublishSettingsStore.m in Sources */,
+				71D084CC1BDBCC3C0059FB7C /* CollectionViewController.swift in Sources */,
+				71D085E51BDBCC9D0059FB7C /* TEALLifecycleStore.m in Sources */,
+				71D084CD1BDBCC3C0059FB7C /* SearchViewController.swift in Sources */,
+				71D085FB1BDBCC9D0059FB7C /* TEALReachabilityManager.m in Sources */,
+				71D084CE1BDBCC3C0059FB7C /* PageViewController.swift in Sources */,
+				71D086081BDBCC9D0059FB7C /* TEALOperationManager.m in Sources */,
+				71D0861B1BDBCC9D0059FB7C /* TEALRemoteCommandManager.m in Sources */,
+				71D086181BDBCC9D0059FB7C /* TEALRemoteCommand.m in Sources */,
+				71D084CF1BDBCC3C0059FB7C /* AlertsViewController.swift in Sources */,
+				71D085FC1BDBCC9D0059FB7C /* TEALURLSessionManager.m in Sources */,
+				71D085EB1BDBCC9D0059FB7C /* NSArray+Tealium.m in Sources */,
+				71D084D01BDBCC3C0059FB7C /* SegmentedControlsViewController.swift in Sources */,
+				71D084D11BDBCC3C0059FB7C /* CollectionViewContainerViewController.swift in Sources */,
+				71D086091BDBCC9D0059FB7C /* TEALSimpleNetworkManager.m in Sources */,
+				71D085E71BDBCC9D0059FB7C /* TEALDataSources+Autotracking.m in Sources */,
+				71D084D21BDBCC3C0059FB7C /* TextFieldsViewController.swift in Sources */,
+				71D0861C1BDBCC9D0059FB7C /* TEALRemoteCommandResponse.m in Sources */,
+				71D085ED1BDBCC9D0059FB7C /* NSObject+Tealium.m in Sources */,
+				71D085D21BDBCC9D0059FB7C /* TEALVisitorProfile.m in Sources */,
+				71D084D31BDBCC3C0059FB7C /* CollectionViewContainerCell.swift in Sources */,
+				71D084D41BDBCC3C0059FB7C /* ViewControllersMenuViewController.swift in Sources */,
+				71D085DE1BDBCC9D0059FB7C /* Tealium+Collect.m in Sources */,
+				71D0861A1BDBCC9D0059FB7C /* TEALRemoteCommandErrors.m in Sources */,
+				71D0861F1BDBCC9D0059FB7C /* Tealium.m in Sources */,
+				71D085E01BDBCC9D0059FB7C /* TEALExceptionHandler.m in Sources */,
+				71D085FD1BDBCC9D0059FB7C /* TEALConfiguration.m in Sources */,
+				71D085F81BDBCC9D0059FB7C /* TEALDispatchManager.m in Sources */,
+				71D085DD1BDBCC9D0059FB7C /* TEALCollectDispatchService.m in Sources */,
+				71D084D51BDBCC3C0059FB7C /* ProgressViewController.swift in Sources */,
+				71D085D91BDBCC9D0059FB7C /* TEALVisitorProfileMetricAttribute.m in Sources */,
+				71D085F21BDBCC9D0059FB7C /* TEALTimestampDataSources.m in Sources */,
+				71D085F01BDBCC9D0059FB7C /* TEALApplicationDataSources.m in Sources */,
+				71D085DC1BDBCC9D0059FB7C /* TEALVisitorProfileStore.m in Sources */,
+				71D086021BDBCC9D0059FB7C /* TEALActionQueueManager.m in Sources */,
+				71D086041BDBCC9D0059FB7C /* TEALError.m in Sources */,
+				71D086031BDBCC9D0059FB7C /* TEALDelegateManager.m in Sources */,
+				71D085F71BDBCC9D0059FB7C /* TEALDispatch.m in Sources */,
+				71D085FA1BDBCC9D0059FB7C /* TEALNetworkHelpers.m in Sources */,
+				71D084D61BDBCC3C0059FB7C /* SearchResultsViewController.swift in Sources */,
+				71D085F41BDBCC9D0059FB7C /* TEALDataSources.m in Sources */,
+				71D085E81BDBCC9D0059FB7C /* Tealium+Autotracking.m in Sources */,
+				71D085D51BDBCC9D0059FB7C /* TEALVisitorProfileBaseAttribute.m in Sources */,
+				71D0860B1BDBCC9D0059FB7C /* TEALViewScanner.m in Sources */,
+				71D085F11BDBCC9D0059FB7C /* TEALDeviceDataSources.m in Sources */,
+				71D085D81BDBCC9D0059FB7C /* TEALVisitorProfileFlagAttribute.m in Sources */,
+				71D085E91BDBCC9D0059FB7C /* UIApplication+Tealium.m in Sources */,
+				71D084D71BDBCC3C0059FB7C /* AppDelegate.swift in Sources */,
+				71D085FE1BDBCC9D0059FB7C /* TEALPublishSettings.m in Sources */,
+				71D085D71BDBCC9D0059FB7C /* TEALVisitorProfileDateAttribute.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5391A6D1B7D37BF0033BAF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5B8082C1B8E84E500663622 /* DataItem+SampleData.swift in Sources */,
+				B5B8082B1B8E84E500663622 /* DataItem+ImageName.swift in Sources */,
+				B5391A7D1B7D41420033BAF8 /* DataItem.swift in Sources */,
+				B5391A751B7D37BF0033BAF8 /* ServiceProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5A935311B738BDC00439392 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5728BCC1B7AD4170052954A /* MenuSplitViewController.swift in Sources */,
+				B5A935541B738C7B00439392 /* ButtonsViewController.swift in Sources */,
+				B5728BCE1B7AE1200052954A /* MenuTableViewController.swift in Sources */,
+				B534E2C51B867B3F0038B5DD /* DataItemCellComposer.swift in Sources */,
+				B56A3EB61B83AE2C00F5077C /* FocusGuidesViewController.swift in Sources */,
+				B5DE40751B941868002313B2 /* GradientMaskView.swift in Sources */,
+				B5A9355B1B738C9300439392 /* DataItemCollectionViewCell.swift in Sources */,
+				B5975FFD1B7BBBF000D6068A /* AlertFormViewController.swift in Sources */,
+				B5728BC41B7AACF10052954A /* ControlsMenuViewController.swift in Sources */,
+				B526F2881B989C7D00BADB57 /* CustomInputAccessoryView.swift in Sources */,
+				B5B808281B8E840700663622 /* DataItem+ImageName.swift in Sources */,
+				B5975FFB1B7BB62000D6068A /* TextEntryMenuViewController.swift in Sources */,
+				B5B56C091B83F67E00CE4B1D /* DataItemViewController.swift in Sources */,
+				B5A935751B738D0800439392 /* DataItem.swift in Sources */,
+				B5B8082A1B8E849000663622 /* DataItem+SampleData.swift in Sources */,
+				B5A9355C1B738C9300439392 /* CollectionViewController.swift in Sources */,
+				B5A9356D1B738CE500439392 /* SearchViewController.swift in Sources */,
+				B5B56C071B83F64400CE4B1D /* PageViewController.swift in Sources */,
+				B5A9354E1B738C6B00439392 /* AlertsViewController.swift in Sources */,
+				B5A935721B738CF800439392 /* SegmentedControlsViewController.swift in Sources */,
+				B5C792861B7BF52600A21550 /* CollectionViewContainerViewController.swift in Sources */,
+				B526F28A1B98A0BE00BADB57 /* TextFieldsViewController.swift in Sources */,
+				B5C7928B1B7C0A6400A21550 /* CollectionViewContainerCell.swift in Sources */,
+				B5B7EF3F1B7B8728005DF13D /* ViewControllersMenuViewController.swift in Sources */,
+				B5A935661B738CC100439392 /* ProgressViewController.swift in Sources */,
+				B5D59EE21B85025C00D01057 /* SearchResultsViewController.swift in Sources */,
+				B5A935391B738BDC00439392 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		714A13551BDACC620015A393 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TealiumTVOS;
+			targetProxy = 714A13541BDACC620015A393 /* PBXContainerItemProxy */;
+		};
+		71D084BA1BDBCC3C0059FB7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5391A701B7D37BF0033BAF8 /* UIKitCatalog Extension */;
+			targetProxy = 71D084BB1BDBCC3C0059FB7C /* PBXContainerItemProxy */;
+		};
+		B5391A781B7D37BF0033BAF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5391A701B7D37BF0033BAF8 /* UIKitCatalog Extension */;
+			targetProxy = B5391A771B7D37BF0033BAF8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B55F8AF81B7BACDA00511037 /* TextEntry.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B55F8AF91B7BACDA00511037 /* Base */,
+			);
+			name = TextEntry.storyboard;
+			sourceTree = "<group>";
+		};
+		B5728BC51B7AB30C0052954A /* ControlSamples.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5728BC61B7AB30C0052954A /* Base */,
+			);
+			name = ControlSamples.storyboard;
+			sourceTree = "<group>";
+		};
+		B5B7EF3B1B7B86A6005DF13D /* ViewControllerSamples.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5B7EF3C1B7B86A6005DF13D /* Base */,
+			);
+			name = ViewControllerSamples.storyboard;
+			sourceTree = "<group>";
+		};
+		B5BD43CE1B7AAB500030BABA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5BD43CF1B7AAB500030BABA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B5C792871B7C000B00A21550 /* FocusSamples.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5C792881B7C000B00A21550 /* Base */,
+			);
+			name = FocusSamples.storyboard;
+			sourceTree = "<group>";
+		};
+		B5E0DE2D1B9DB4AA00A7A1BD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B5E0DE2E1B9DB4AA00A7A1BD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		71D085051BDBCC3C0059FB7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "UIKitCatalog copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = UIKitCatalog/TealiumDirectBridgingHeader.h;
+				TOOLCHAINS = default;
+			};
+			name = Debug;
+		};
+		71D085061BDBCC3C0059FB7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "UIKitCatalog copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = UIKitCatalog/TealiumDirectBridgingHeader.h;
+				TOOLCHAINS = default;
+			};
+			name = Release;
+		};
+		B5391A7B1B7D37BF0033BAF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog.UIKitCatalog-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B5391A7C1B7D37BF0033BAF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog.UIKitCatalog-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		B5A935421B738BDC00439392 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = appletvos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		B5A935431B738BDC00439392 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B5A935451B738BDC00439392 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = ../../source/Tealium/Tealium/TealiumTVOSBridgingHeader.h;
+				TOOLCHAINS = default;
+			};
+			name = Debug;
+		};
+		B5A935461B738BDC00439392 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.UIKitCatalog";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = ../../source/Tealium/Tealium/TealiumTVOSBridgingHeader.h;
+				TOOLCHAINS = default;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		71D085041BDBCC3C0059FB7C /* Build configuration list for PBXNativeTarget "UIKitCatalogDirect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71D085051BDBCC3C0059FB7C /* Debug */,
+				71D085061BDBCC3C0059FB7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5391A7A1B7D37BF0033BAF8 /* Build configuration list for PBXNativeTarget "UIKitCatalog Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5391A7B1B7D37BF0033BAF8 /* Debug */,
+				B5391A7C1B7D37BF0033BAF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5A935301B738BDC00439392 /* Build configuration list for PBXProject "UIKitCatalog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5A935421B738BDC00439392 /* Debug */,
+				B5A935431B738BDC00439392 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5A935441B738BDC00439392 /* Build configuration list for PBXNativeTarget "UIKitCatalog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5A935451B738BDC00439392 /* Debug */,
+				B5A935461B738BDC00439392 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B5A9352D1B738BDC00439392 /* Project object */;
+}

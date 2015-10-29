@@ -127,7 +127,11 @@ static NSDictionary *staticCompileTimeDataSources;
         NSMutableDictionary *mDict = [NSMutableDictionary new];
         
         mDict[TEALDataSourceKey_LibraryVersion] = TEALLibraryVersion;
-        mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_Platform;
+#ifndef TARGET_OS_TV
+        mDict[TEALDataSourceKey_Platform] = @"iOS";
+#else
+        mDict[TEALDataSourceKey_Platform] = @"tvOS";        
+#endif
         mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Origin;
 
         staticCompileTimeDataSources = [NSDictionary dictionaryWithDictionary:mDict];

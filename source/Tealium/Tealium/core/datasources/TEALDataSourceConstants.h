@@ -103,7 +103,6 @@ extern NSString * const TEALDataSourceValue_LifecycleTerminate;
 extern NSString * const TEALDataSourceValue_Link;
 extern NSString * const TEALDataSourceValue_Origin;
 extern NSString * const TEALDataSourceValue_Pagetype;
-extern NSString * const TEALDataSourceValue_Platform;
 extern NSString * const TEALDataSourceValue_True;
 extern NSString * const TEALDataSourceValue_View;
 extern NSString * const TEALDataSourceValue_Exception;

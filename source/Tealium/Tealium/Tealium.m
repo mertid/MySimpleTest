@@ -85,11 +85,13 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (void) destroyInstanceForKey:(NSString * _Nonnull)key {
     
-    Tealium *instance = [Tealium instanceForKey:key];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     
-    instance = nil;
+    [mDict removeObjectForKey:key];
     
-    [Tealium removeInstanceWithKey:key];
+    NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    staticAllInstances = newInstances;
     
 }
 
@@ -305,17 +307,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
 
     staticAllInstances = newInstances;
-}
-
-+ (void) removeInstanceWithKey:(NSString * _Nonnull)key {
-    
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
-    [mDict removeObjectForKey:key];
-    
-    NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
-    
-    staticAllInstances = newInstances;
-    
 }
 
 #pragma mark - PRIVATE INSTANCE METHODS
