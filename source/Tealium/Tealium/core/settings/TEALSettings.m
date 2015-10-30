@@ -19,7 +19,8 @@
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *publishSettings;
-@property (nonatomic, strong) NSString *audienceStreamDispatchURLString;
+@property (nonatomic, strong) NSString *privateCollectDispatchURLString;
+@property (nonatomic, strong) NSString *privateCollectLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
 @property (nonatomic, weak) NSString *visitorID;
@@ -33,14 +34,14 @@
 
 #pragma mark - CLASS METHODS
 
-+ (NSString *) dispatchURLStringFromConfiguration:(TEALSettings *)settings {
++ (NSString *) collectDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
     NSString *urlPrefix = @"https";
     
     if ([settings useHTTP]) {
         urlPrefix = @"http";
     }
-    
+  
     NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
     
     NSMutableDictionary *params = [NSMutableDictionary new];
@@ -56,6 +57,25 @@
     NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
     
     return [baseURLString stringByAppendingString:queryString];
+}
+
++ (NSString *) collectLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
+    
+    NSString *urlPrefix = @"https";
+    
+    if ([settings useHTTP]) {
+        urlPrefix = @"http";
+    }
+    
+    NSString *account = [settings account];
+    NSString *profile = @"main"; //[settings tiqProfile];
+    
+    // TODO: update to be configurable
+    NSString *queue = @"2";
+    
+    NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
+
+    return baseURLString;
 }
 
 + (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
@@ -144,8 +164,12 @@
     return self;
 }
 
-- (BOOL) audienceStreamEnabled {
-    return self.publishSettings.enableAudienceStream;
+- (BOOL) collectEnabled {
+    
+    return NO;
+#warning Reset after dev
+    return self.publishSettings.enableCollect;
+    
 }
 
 - (BOOL) autotrackingApplicationInfoEnabled {
@@ -198,6 +222,12 @@
     return self.configuration.autotrackingCrashesEnabled;
 }
 
+- (BOOL) collectLegacyEnabled {
+    return YES;
+#warning Return to settings actual below
+    return self.publishSettings.enableCollectLegacy;
+}
+
 - (BOOL) libraryShouldDisable {
 
     return (self.publishSettings.status == TEALPublishSettingsStatusDisable);
@@ -219,8 +249,8 @@
 
 - (BOOL) tagManagementEnabled {
     
-    return YES;
-#warning RESET TO NO FOR PROD
+    return NO;
+#warning RESET for prod
     return self.publishSettings.enableTagManagement;
 }
 
@@ -235,8 +265,8 @@
 
 - (BOOL) goodBatteryLevelOnlySending {
     
-    return YES;
-    
+    return NO;
+#warning REMOVE force NO after dev
     return !self.publishSettings.enableLowBatterySuppress;
 }
 
@@ -271,11 +301,19 @@
     return self.configuration.instanceID;
 }
 
-- (NSString *) dispatchURLString {
-    if (!self.audienceStreamDispatchURLString) {
-        self.audienceStreamDispatchURLString = [TEALSettings dispatchURLStringFromConfiguration:self];
+- (NSString *) collectDispatchURLString {
+    if (!self.privateCollectDispatchURLString) {
+        self.privateCollectDispatchURLString = [TEALSettings collectDispatchURLStringFromConfiguration:self];
     }
-    return self.audienceStreamDispatchURLString;
+    return self.privateCollectDispatchURLString;
+}
+
+- (NSString *) collectLegacyDispatchURLString {
+    
+    if (!self.privateCollectLegacyDispatchURLString){
+        self.privateCollectLegacyDispatchURLString = [TEALSettings collectLegacyDispatchURLStringFromConfiguration:self];
+    }
+    return self.privateCollectLegacyDispatchURLString;
 }
 
 - (NSString *) configurationDescription {

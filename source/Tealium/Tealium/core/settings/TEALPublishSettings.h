@@ -28,7 +28,8 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) double numberOfDaysDispatchesAreValid;
 @property (nonatomic) BOOL enableLowBatterySuppress;
 @property (nonatomic) BOOL enableSendWifiOnly;
-@property (nonatomic) BOOL enableAudienceStream;
+@property (nonatomic) BOOL enableCollect;
+@property (nonatomic) BOOL enableCollectLegacy;
 @property (nonatomic) BOOL enableTagManagement;
 
 @property (nonatomic) BOOL disableLibrary;

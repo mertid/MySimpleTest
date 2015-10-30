@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, TEALErrorCode) {
     TEALErrorCodeException      = 555
 };
 
-extern NSString * const TEALAudienceStreamErrorDomain;
+extern NSString * const TEALErrorDomain;
 
 @interface TEALError : NSObject
 

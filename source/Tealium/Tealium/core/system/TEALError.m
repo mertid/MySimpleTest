@@ -8,7 +8,7 @@
 
 #import "TEALError.h"
 
-NSString * const TEALAudienceStreamErrorDomain = @"com.tealium.errordomain";
+NSString * const TEALErrorDomain = @"com.tealium.errordomain";
 
 @implementation TEALError
 
@@ -21,7 +21,7 @@ NSString * const TEALAudienceStreamErrorDomain = @"com.tealium.errordomain";
                                                          reason:reason
                                                      suggestion:suggestion];
 
-    return [NSError errorWithDomain:TEALAudienceStreamErrorDomain
+    return [NSError errorWithDomain:TEALErrorDomain
                                code:code
                            userInfo:userInfo];
 }

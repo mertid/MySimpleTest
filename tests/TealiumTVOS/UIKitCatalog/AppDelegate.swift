@@ -7,7 +7,6 @@
 */
 
 import UIKit
-import TealiumTVOS
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,8 +20,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(app: UIApplication, openURL url: NSURL, options: [String: AnyObject]) -> Bool {
         print("Application launched with URL: \(url)")
         
+
+        return true
+    }
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        
+        print("Application didFinishLaunchingWithOptions.")
+        
         let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev")
-        Tealium .newInstanceForKey("tealium", configuration: config)
+//        config.useHTTP = true
+        Tealium.newInstanceForKey("tealium", configuration: config)
+        
+        Tealium.instanceForKey("tealium")?.trackEventWithTitle("launched", dataSources: nil)
         
         return true
     }

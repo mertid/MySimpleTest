@@ -25,13 +25,14 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
 
-- (BOOL) audienceStreamEnabled;
 - (BOOL) autotrackingDeviceInfoEnabled;
 - (BOOL) autotrackingIvarsEnabled;
 - (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) autotrackingCrashesEnabled;
+- (BOOL) collectEnabled;
+- (BOOL) collectLegacyEnabled;
 - (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
@@ -54,11 +55,12 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (TEALLogLevel) logLevel;
 - (NSUInteger) offlineDispatchQueueSize;
 
+- (NSString *) collectDispatchURLString;
+- (NSString *) collectLegacyDispatchURLString;
 - (NSString *) configurationDescription;
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;
 - (NSString *) publishURLString;
-- (NSString *) dispatchURLString;
 - (NSUInteger) pollingFrequency;
 - (NSURL *) profileURL;
 - (NSURL *) profileDefinitionsURL;

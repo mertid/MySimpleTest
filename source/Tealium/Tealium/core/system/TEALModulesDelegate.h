@@ -5,6 +5,7 @@
 //  Created by Jason Koo on 8/24/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
+//  Brief: All optional commands to enable/disable modules listed here
 
 #ifndef Tealium_TEALModulesDelegate_h
 #define Tealium_TEALModulesDelegate_h
@@ -13,7 +14,9 @@
 
 @optional
 
-- (void) enableAudienceStream;
+#warning RENAME to enableCollect
+- (void) enableCollect;
+- (void) enableCollectLegacy;
 - (void) enableTagManagement;
 - (void) enableAutotrackingCrashes;
 - (void) enableAutotrackingLifecycle;
@@ -22,7 +25,8 @@
 - (void) enableMobileCompanion;
 - (void) enableRemoteCommands;
 
-- (void) disableAudienceStream;
+- (void) disableCollect;
+- (void) disableCollectLegacy;
 - (void) disableTagMangement;
 - (void) disableAutotrackingLifecycle;
 - (void) disableAutotrackingCrashes;

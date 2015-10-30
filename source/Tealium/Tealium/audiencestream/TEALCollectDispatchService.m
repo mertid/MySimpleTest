@@ -51,6 +51,8 @@
 
 - (void) setup {
     
+    // Any additional setup here
+    
 }
 
 - (void) sendDispatch:(TEALDispatch *)dispatch
@@ -82,7 +84,9 @@
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:urlString];
     
     if (!request) {
-        completion( TEALDispatchStatusFailed, dispatch, nil );
+        if (completion){
+            completion( TEALDispatchStatusFailed, dispatch, nil );
+        }
         return;
     }
     

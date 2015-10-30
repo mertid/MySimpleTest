@@ -14,7 +14,6 @@
 #import "TEALDispatchService.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
-#import "TEALExceptionHandler.h"
 #import "TEALError.h"
 #import "TEALOperationManager.h"
 #import "TEALLogger.h"
@@ -484,14 +483,27 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     
-    // AudienceStream
-    if ([self.settings audienceStreamEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAudienceStream)]) {
-            [self.modulesDelegate enableAudienceStream];
+    // Collect
+    if ([self.settings collectEnabled]){
+        if ([self.modulesDelegate respondsToSelector:@selector(enableCollect)]) {
+            [self.modulesDelegate enableCollect];
         }
     } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableAudienceStream)]) {
-            [self.modulesDelegate disableAudienceStream];
+        if ([self.modulesDelegate respondsToSelector:@selector(disableCollect)]) {
+            [self.modulesDelegate disableCollect];
+        }
+    }
+    
+    // Collect Legacy
+    if ([self.settings collectLegacyEnabled]){
+        
+        if ([self.modulesDelegate respondsToSelector:@selector(enableCollectLegacy)]){
+            [self.modulesDelegate enableCollectLegacy];
+        }
+        
+    } else {
+        if (([self.modulesDelegate respondsToSelector:@selector(disableCollectLegacy)])){
+            [self.modulesDelegate disableCollectLegacy];
         }
     }
     
@@ -608,17 +620,16 @@ __strong static NSDictionary *staticAllInstances = nil;
                 break;
         }
         
-        NSString *reason = [NSString stringWithFormat:@"\rReason: %@",[error localizedFailureReason]];
-        NSString *suggestion = [NSString stringWithFormat:@"\rSuggestion: %@",[error localizedRecoverySuggestion]];
+        NSString *errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
         
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
             NSDictionary *datalayerDump = [TEALNetworkHelpers dictionaryFromUrlParamString:(NSString *)dispatch.payload];
             
-            [self.logger logDev:@"%@ dispatch with payload %@%@%@", statusString, datalayerDump, error? reason:@"", error? suggestion:@""];
+            [self.logger logDev:@"%@ dispatch with payload %@%@", statusString, datalayerDump, error? errorInfo: @""];
             
         } else {
             
-            [self.logger logDev:@"%@ dispatch: %@%@%@", statusString, dispatch, error? reason:@"", error? suggestion:@""];
+            [self.logger logDev:@"%@ dispatch: %@%@%@", statusString, dispatch, error? errorInfo:@""];
             
         }
     }
@@ -739,6 +750,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     BOOL suppress = NO;
     double batteryLevel = [self.dataSources deviceBatteryLevel];
     
+    
+#warning IGNORE battery level requirements if device charging
     if ([self.settings goodBatteryLevelOnlySending] &&
         (batteryLevel < 20.0 && batteryLevel >= 0)) {
         

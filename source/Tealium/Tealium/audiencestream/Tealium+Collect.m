@@ -11,6 +11,7 @@
 #import "TEALVisitorProfileHelpers.h"
 #import "TEALVisitorProfileStore.h"
 #import "TEALCollectDispatchService.h"
+#import "TEALCollectLegacyDispatchService.h"
 #import "TEALError.h"
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>
@@ -21,10 +22,10 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 @implementation Tealium (Collect) 
 
 - (BOOL) collect_isEnabled {
-    return [self.settings audienceStreamEnabled];
+    return [self.settings collectEnabled];
 }
 
-- (void) enableAudienceStream {
+- (void) enableCollect {
     
     NSArray *dispatchNetworkServices = [[self currentDispatchNetworkServices] copy];
     
@@ -34,7 +35,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
     
-    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:[self.settings dispatchURLString] sessionManager:self.urlSessionManager];
+    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:[self.settings collectDispatchURLString] sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     
@@ -42,8 +43,30 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
     
-    [self.logger logDev:@"Audiencestream enabled."];
+    [self.logger logDev:@"Collect enabled."];
 
+}
+
+- (void) enableCollectLegacy {
+    
+    NSArray *dispatchNetworkServices = [[self currentDispatchNetworkServices] copy];
+    
+    if ([dispatchNetworkServices teal_containsObjectOfClass:[TEALCollectLegacyDispatchService class]]){
+        return;
+    }
+    
+    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
+    
+    TEALCollectLegacyDispatchService *dispatchService = [[TEALCollectLegacyDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString] visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
+    
+    [dispatchService setup];
+    
+    [newServices addObject:dispatchService];
+    
+    [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
+    
+    [self.logger logDev:@"Collect Legacy enabled."];
+    
 }
 
 - (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
@@ -60,7 +83,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        if (![weakSelf.settings audienceStreamEnabled]) {
+        if (![weakSelf.settings collectEnabled]) {
             [weakSelf.logger logDev:@"Audience Stream disabled, Ignoring: %s", __func__];
             if (completion) {
                 

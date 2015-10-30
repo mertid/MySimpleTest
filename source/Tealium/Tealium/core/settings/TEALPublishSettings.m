@@ -24,7 +24,8 @@ NSString * const TEALPublishSettingKeyDispatchSize = @"event_batch_size";
 NSString * const TEALPublishSettingKeyOfflineDispatchSize = @"offline_dispatch_limit";
 NSString * const TEALPublishSettingKeyLowBatteryMode = @"battery_saver";
 NSString * const TEALPublishSettingKeyWifiOnlyMode = @"wifi_only_sending";
-NSString * const TEALPublishSettingKeyCollectEnable = @"enable_audiencestream";
+NSString * const TEALPublishSettingKeyCollectEnable = @"enable_collect";
+NSString * const TEALPublishSettingKeyCollectLegacyEnable = @"enable_collect_legacy";
 NSString * const TEALPublishSettingKeyTagManagmentEnable = @"enable_tag_management";
 NSString * const TEALPublishSettingKeyStatus = @"status";
 
@@ -217,7 +218,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _dispatchSize                   = 1;
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
-        _enableAudienceStream           = YES;
+        _enableCollect           = YES;
+        _enableCollectLegacy            = NO;
         _enableTagManagement            = NO;
         
         _disableLibrary = NO;
@@ -251,7 +253,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
     if (self.enableLowBatterySuppress != otherPublishSettings.enableLowBatterySuppress) return NO;
     if (self.enableSendWifiOnly != otherPublishSettings.enableSendWifiOnly) return NO;
-    if (self.enableAudienceStream != otherPublishSettings.enableAudienceStream) return NO;
+    if (self.enableCollect != otherPublishSettings.enableCollect) return NO;
+    if (self.enableCollectLegacy != otherPublishSettings.enableCollectLegacy) return NO;
     if (self.enableTagManagement != otherPublishSettings.enableTagManagement) return NO;
     
     if (self.disableLibrary != otherPublishSettings.disableLibrary) return NO;
@@ -315,8 +318,9 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _offlineDispatchQueueSize       = [aDecoder decodeIntegerForKey:@"offlineDispatchQueueSize"];
         _enableLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
         _enableSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
-        _enableAudienceStream           = [aDecoder decodeBoolForKey:@"enableAudienceStream"];
-        _enableTagManagement            = [aDecoder decodeBoolForKey:@"enableTagManagment"];
+        _enableCollect           = [aDecoder decodeBoolForKey:TEALPublishSettingKeyCollectEnable];
+        _enableCollectLegacy            = [aDecoder decodeBoolForKey:TEALPublishSettingKeyCollectLegacyEnable];
+        _enableTagManagement            = [aDecoder decodeBoolForKey:TEALPublishSettingKeyTagManagmentEnable];
         
         _disableLibrary = [aDecoder decodeBoolForKey:@"disableLibrary"];
         _disableApplicationInfoAutotracking = [aDecoder decodeBoolForKey:TEALPublishSettingKeyDisableApplicationInfoAutotracking];
@@ -355,8 +359,9 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     [aCoder encodeInteger:self.offlineDispatchQueueSize forKey:@"offlineDispatchQueueSize"];
     [aCoder encodeBool:self.enableLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
     [aCoder encodeBool:self.enableSendWifiOnly forKey:@"shouldSendWifiOnly"];
-    [aCoder encodeBool:self.enableAudienceStream forKey:@"enableAudienceStream"];
-    [aCoder encodeBool:self.enableTagManagement forKey:@"enableTagManagment"];
+    [aCoder encodeBool:self.enableCollect forKey:TEALPublishSettingKeyCollectEnable];
+    [aCoder encodeBool:self.enableCollectLegacy forKey:TEALPublishSettingKeyCollectLegacyEnable];
+    [aCoder encodeBool:self.enableTagManagement forKey:TEALPublishSettingKeyTagManagmentEnable];
 
     [aCoder encodeBool:self.disableLibrary forKey:@"disableLibrary"];
     [aCoder encodeBool:self.disableApplicationInfoAutotracking forKey:TEALPublishSettingKeyDisableApplicationInfoAutotracking];
@@ -385,6 +390,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     NSString *lowBattery = settings[TEALPublishSettingKeyLowBatteryMode];
     NSString *wifiOnly = settings[TEALPublishSettingKeyWifiOnlyMode];
     NSString *audiencestream = settings[TEALPublishSettingKeyCollectEnable];
+    NSString *collectLegacy = settings[TEALPublishSettingKeyCollectLegacyEnable];
     NSString *tagmanagement = settings[TEALPublishSettingKeyTagManagmentEnable];
     NSString *overrideLog = [settings[TEALPublishSettingKeyOverrideLog] lowercaseString];
     
@@ -426,7 +432,11 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     }
     
     if (audiencestream) {
-        self.enableAudienceStream = [audiencestream boolValue];
+        self.enableCollect = [audiencestream boolValue];
+    }
+    
+    if (collectLegacy){
+        self.enableCollectLegacy = [collectLegacy boolValue];
     }
     
     if (tagmanagement) {
@@ -498,7 +508,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                             @"number of day dispatches valid":[NSString stringWithFormat:@"%f",(double)self.numberOfDaysDispatchesAreValid],
                                             @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
                                             @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
-                                            @"enable AudienceStream":[NSString teal_stringFromBool:self.enableAudienceStream],
+                                            @"enable Collect":[NSString teal_stringFromBool:self.enableCollect],
+                                            @"enable Collect Legacy":[NSString teal_stringFromBool:self.enableCollectLegacy],
                                             @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement],
                                             @"override log level":[NSString teal_dictionarySafeString:self.overrideLogLevel]
                                             };
