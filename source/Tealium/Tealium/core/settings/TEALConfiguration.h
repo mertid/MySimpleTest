@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @property (copy, nonatomic) NSString *accountName;
 
 /**
- *  Tealium iQ profile name, this should be the TiQ profile where the mobile publish settings have been configured for the collect library.
+ *  Tealium iQ profile name, this should be the TiQ profile where the mobile publish settings have been configured for Tealium collect.
  *
  *  Note: This is usually not the same profile used for Collect
  *  @see audienceStreamProfile
@@ -112,11 +112,11 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 // TODO: comments
 @property (nonatomic) NSString *overridePublishURL;
 
-#warning rename to overrideCollectDispatchURL
 // TODO: comments
-@property (nonatomic) NSString *overrideDispatchURL;
-
 @property (nonatomic) NSString *overrideCollectDispatchURL;
+
+// TODO: comments
+@property (nonatomic) NSString *overrideCollectLegacyDispatchURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used

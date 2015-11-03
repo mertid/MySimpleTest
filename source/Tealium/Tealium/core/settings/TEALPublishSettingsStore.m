@@ -50,43 +50,9 @@
     
     NSData *settingsData = [NSKeyedArchiver archivedDataWithRootObject:settings];
     
-#warning re-enable background thread operation
-    //    [[self.configuration operationManager] addIOOperationWithBlock:^{
-    
     [[NSUserDefaults standardUserDefaults] setObject:settingsData
                                               forKey:settings.url];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    //    }];
 }
-
-//#pragma mark - PUBLIC INSTANCE
-//
-//- (instancetype) initWithInstanceID:(NSString *)instanceId;{
-//    
-//    if (!instanceId) {
-//        return nil;
-//    }
-//    
-//    if ([[instanceId stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""]){
-//        return nil;
-//    }
-//    
-//    
-//    self = [super init];
-//    
-//    if (self){
-//        
-//        _instanceId = instanceId;
-//    
-//    }
-//    
-//    return self;
-//}
-//
-//- (NSString *) instanceIDCopy {
-//    return [self.instanceId copy];
-//}
-
-
 
 @end

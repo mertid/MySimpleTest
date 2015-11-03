@@ -47,8 +47,8 @@
 
 - (void) startupTealiumInstance1 {
     
-    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"jaredtest"
+                                                                           profile:@"main"
                                                                        environment:@"dev"];
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;

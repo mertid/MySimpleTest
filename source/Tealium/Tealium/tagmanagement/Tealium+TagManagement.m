@@ -28,6 +28,7 @@
 
 - (UIWebView *) webView {
     
+    
     TEALTagDispatchService *currentService = [self currentTagDispatchService];
     
     return currentService.webView;
@@ -54,11 +55,17 @@
 
 - (void) enableTagManagement {
     
-    if ([[[self currentDispatchNetworkServices] copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
+    if ([[[self currentDispatchServices] copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
         return;
     }
 
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
+    [tagService.remoteCommandManager enable];
+    
+    if (!tagService){
+        tagService = [self newTagDispatchService];
+        [self addNewDispatchService:tagService];
+    }
         
     if (tagService) {
         [self.logger logDev:@"TagManagement enabled."];
@@ -84,7 +91,11 @@
 
 - (void) disableTagManagement {
 
-#warning COMPLETE
+    
+    TEALTagDispatchService *service = [self currentTagDispatchService];
+    
+    [service.remoteCommandManager disable];
+    
     
 }
 
@@ -101,7 +112,7 @@
     
     __block TEALTagDispatchService *targetService = nil;
     
-    NSArray *dispatchServices = [[self currentDispatchNetworkServices] copy];
+    NSArray *dispatchServices = [[self currentDispatchServices] copy];
     
     if (dispatchServices) {
         
@@ -120,19 +131,20 @@
         }];
     }
     
-    if (!targetService) {
-        
-        targetService = [self newTagDispatchService];
-                
-        NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
-        
-        [newServices addObject:targetService];
-        
-        [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
-    }
-    
     return targetService;
 }
+
+//- (void) addNewTagDispatchService:(TEALTagDispatchService *)newService {
+//    
+//    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+//
+//    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
+//    
+//    [newServices addObject:newService];
+//    
+//    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
+//    
+//}
 
 - (TEALTagDispatchService *) newTagDispatchService {
     
@@ -151,6 +163,7 @@
 - (void) TEALTagDispatchServiceWebViewReady:(UIWebView *)webView {
     
     if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
+        
         [self.delegate tealium:self webViewIsReady:webView];
     }
 }

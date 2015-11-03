@@ -17,23 +17,23 @@
 @protocol TEALDispatchManagerDelegate <NSObject>
 
 // Internal
-- (void) dispatchManager:(TEALDispatchManager *)dataManager
-        requestsDispatch:(TEALDispatch *)dispatch
-         completionBlock:(TEALDispatchBlock)completionBlock;
+- (void) dispatchManager:(TEALDispatchManager * _Nonnull)dataManager
+        requestsDispatch:(TEALDispatch * _Nonnull)dispatch
+         completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
 - (BOOL) dispatchManagerShouldDispatch;
 
-- (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerDidSendDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch * _Nonnull)dispatch;
 
 - (void) dispatchManagerDidUpdateDispatchQueues;
 
-- (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch *)dispatch;
+- (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch *)dispatch;
+- (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
 
 - (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count;
 
@@ -47,17 +47,17 @@
 
 - (NSUInteger) dispatchQueueCapacity;
 
-- (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch;
+- (NSError * _Nullable) errorSendingDispatch:(TEALDispatch * _Nonnull)dispatch;
 
 @end
 
 @interface TEALDispatchManager : NSObject
 
-@property (strong, nonatomic, readonly) TEALDataQueue *sentDispatches;
-@property (strong, nonatomic, readonly) TEALDataQueue *queuedDispatches;
+@property (strong, nonatomic, readonly) TEALDataQueue * _Nonnull sentDispatches;
+@property (strong, nonatomic, readonly) TEALDataQueue * _Nonnull queuedDispatches;
 
 
-+ (instancetype) dispatchManagerWithInstanceID:(NSString * _Nonnull) instanceID
++ (instancetype _Nullable) dispatchManagerWithInstanceID:(NSString * _Nonnull) instanceID
                                  Configuration:(id<TEALDispatchManagerConfiguration> _Nonnull)configuration
                                       delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
 

@@ -24,7 +24,10 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                             profile:@"demo"
+                                                         environment:@"dev"];
 }
 
 - (void)tearDown {
@@ -34,7 +37,93 @@
     [super tearDown];
 }
 
-#pragma mark - Helpers
+#pragma mark - HELPERS
+
+- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
+    
+    if (!config) {
+        config = self.configuration;
+    }
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:@"test"
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+}
+
+- (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
+    
+    __block BOOL isReady = NO;
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        isReady = YES;
+        
+    }];
+    
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+}
+
+
+#pragma mark TESTS
+
+- (void) testTrace {
+    
+//    [self enableLibraryWithConfiguration:nil];
+//    
+//    NSString *token = @"A1B2C3";
+//    
+//    TEALSettings *settings = [self.library settings];
+//    
+//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
+//    
+//#warning Where is this old API being pulled from?
+//    [self.library joinTraceWithToken:token];
+//    
+//    XCTAssertTrue([settings traceID] != nil, @"TraceID datasource:%@ should have a value.", [settings traceID]);
+//    
+//    XCTAssertTrue([[settings traceID] isEqualToString:token], @"TraceID datasource value: %@ should be same as token passed in: %@", settings.traceID, token);
+//    
+//    [self.library leaveTrace];
+//    
+//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
+    
+}
+
+//- (void) testConfigurationPollingFrequency {
+//
+//    TEALVisitorProfilePollingFrequency targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//
+//    // default
+//    XCTAssertEqual(targetFrequency, self.configuration.pollingFrequency, @"TEALAudienceStreamConfiguration should default to %lu", (unsigned long)targetFrequency);
+//
+//    targetFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+//
+//    self.configuration.pollingFrequency = targetFrequency;
+//
+//    TEALRemoteSettings *settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//
+//
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//
+//
+//    targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+//
+//    self.configuration.pollingFrequency = targetFrequency;
+//
+//    settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
+//
+//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
+//
+//}
 
 //- (void) enableSharedInstanceWithConfiguration:(TEALConfiguration *) config {
 //    

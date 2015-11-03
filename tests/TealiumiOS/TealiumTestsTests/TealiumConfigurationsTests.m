@@ -25,8 +25,6 @@
 - (void) setUp {
     [super setUp];
     
-    self.library = [[Tealium alloc] initPrivate];
-
 }
 
 - (void) tearDown {

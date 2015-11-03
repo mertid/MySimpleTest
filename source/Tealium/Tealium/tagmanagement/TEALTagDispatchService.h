@@ -21,7 +21,7 @@
 
 @interface TEALTagDispatchService : NSObject <TEALDispatchService>
 
-@property (nonatomic, strong) id *webView;
+@property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, weak) id<TEALTagDispatchServiceDelegate> delegate;
 
 - (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager;

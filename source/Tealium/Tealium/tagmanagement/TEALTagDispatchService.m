@@ -190,8 +190,10 @@
     __block typeof(self) __weak weakSelf = self;
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
-        if ([init isEqualToString:@"false"]){
+        
+        if ([[init lowercaseString] isEqualToString:@"false"]){
             
 #warning Implement alternative log method
 //            [weakSelf.logger logDev:@"Webkit was unable to process callback command: %@", command];

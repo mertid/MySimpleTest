@@ -68,10 +68,8 @@
     }
     
     NSString *account = [settings account];
-    NSString *profile = @"main"; //[settings tiqProfile];
-    
-    // TODO: update to be configurable
-    NSString *queue = @"2";
+    NSString *profile = @"main"; // Collect calls should always go to main
+    NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
     
     NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
 
@@ -400,10 +398,21 @@
     return request;
 }
 
-- (void) fetchNewRawPublishSettingsWithCompletion:(TEALDictionaryCompletionBlock)completion{
+- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
     
-    // Drop requests for following conditions:
+    // Generate request
+    NSURLRequest *request = [self publishSettingsRequest];
+    
+    // Bail out checks:
     NSError *preFetchError = nil;
+    
+    if (!request) {
+        preFetchError = [TEALError errorWithCode:TEALErrorCodeNoContent
+                             description:NSLocalizedString(@"Settings request unsuccessful", @"")
+                                  reason:NSLocalizedString(@"Failed to generate valid request.", @"")
+                              suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
+        
+    }
     if (!self.configuration){
         preFetchError = [TEALError errorWithCode:TEALErrorCodeException
                              description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
@@ -417,77 +426,47 @@
                               suggestion:NSLocalizedString(@"Check prior minutes between refresh setting.", @"")];
     }
     
-    if (preFetchError &&
-        completion){
-        completion (nil, preFetchError);
-        return;
-    }
-    
-    NSURLRequest *request = [self publishSettingsRequest];
-    
-    if (!request) {
-        
-        NSError *error = [TEALError errorWithCode:TEALErrorCodeNoContent
-                                      description:@"Settings request unsuccessful"
-                                           reason:@"Failed to generate valid request."
-                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
-        
+    if (preFetchError){
         if (completion){
-            completion( nil, error );
+            completion (nil, preFetchError);
         }
-        
         return;
     }
+
     
+    // Perform request
     __block typeof(self) __weak weakSelf = self;
 
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
-                                
+                             
+        BOOL success = NO;
         NSError *error = nil;
-        NSDictionary *rawPublishSettings = nil;
-        
-        if (connectionError) {
-            error = connectionError;
-        }
-        
-        NSError *parseError = nil;
         NSDictionary *parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data
-                                                                                    error:&parseError];
-        if (![TEALPublishSettings correctMPSVersionRawPublishSettings:parsedData]) {
+                                                                                    error:&error];
+        if (!error &&
+            ![TEALPublishSettings correctMPSVersionRawPublishSettings:parsedData]) {
             // No MPS Settings for current library version
             error = [TEALError errorWithCode:TEALErrorCodeNoContent
                                  description:NSLocalizedString(@"No mobile publish settings found.", @"")
                                       reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
                                   suggestion:NSLocalizedString(@"Add the correct Mobile Publish Setting version, re-publish, or update library.", @"")];
         }
-        
-        
+    
         if (!error &&
-            parseError){
-            error = parseError;
+            connectionError) {
+            error = connectionError;
         }
-        
-        if (!error &&
-            parsedData){
             
-            if (![weakSelf.publishSettings areNewRawPublishSettings:parsedData]){
-                
-                rawPublishSettings = nil;
-
-            } else {
-                
-                [weakSelf.publishSettings updateWithRawSettings:rawPublishSettings];
-                rawPublishSettings = parsedData;
-            }
-        }
-                                
-        if (error) {
-            parsedData = nil;
+        if (!error &&
+            [weakSelf.publishSettings areNewRawPublishSettings:parsedData]){
+            
+            [weakSelf.publishSettings updateWithRawSettings:parsedData];
+            
         }
         
         if (completion) {
-            completion( rawPublishSettings, error);
+            completion( success, error);
         }
         
     }];

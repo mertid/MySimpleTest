@@ -14,7 +14,6 @@
 
 @optional
 
-#warning RENAME to enableCollect
 - (void) enableCollect;
 - (void) enableCollectLegacy;
 - (void) enableTagManagement;

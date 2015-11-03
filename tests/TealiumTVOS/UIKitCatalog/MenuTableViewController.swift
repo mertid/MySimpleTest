@@ -79,7 +79,7 @@ class MenuTableViewController: UITableViewController {
         let performSegueOperation = NSBlockOperation()
         let segueIdentifier = segueIdentifierMap[indexPath.section][indexPath.row]
         
-        Tealium.instanceForKey("tealium")?.trackEventWithTitle("focus_change", dataSources: ["newFocus":String.fromCString(object_getClassName(nextFocusedView))!])
+        Tealium.instanceForKey("tealium")?.trackViewWithTitle("focus_change", dataSources: ["newFocus":String.fromCString(object_getClassName(nextFocusedView))!])
         
         performSegueOperation.addExecutionBlock { [weak self, unowned performSegueOperation] in
             // Pause the block so the segue isn't immediately performed.

@@ -16,5 +16,5 @@ typedef NS_ENUM(NSUInteger, TEALDispatchStatus) {
     TEALDispatchStatusFailed
 };
 
-typedef void (^TEALDispatchBlock)(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error);
+typedef void (^TEALDispatchBlock)(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error);
 

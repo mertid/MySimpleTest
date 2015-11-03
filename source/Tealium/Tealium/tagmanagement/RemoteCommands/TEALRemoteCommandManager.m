@@ -12,6 +12,7 @@
 #import "TEALRemoteCommandErrors.h"
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandConstants+PrivateHeader.h"
+#import "TEALError.h"
 
 @interface TEALRemoteCommandManager()
 
@@ -214,6 +215,8 @@
 
 - (void) executeHTTPCommandWithResponse:(TEALRemoteCommandResponse*)oResponse completionBlock:(TEALRemoteCommandResponseBlock)oResponseBlock{
     
+    // TODO: Optimize this block to use &error as in the authenticate check below
+    
     /* TEMPLATE OF REMOTE API COMMAND DICT
      
      commandId:{
@@ -247,6 +250,7 @@
     NSDictionary *parameters = commandDict[TEALKeyTagRemoteCommandParameters];
     NSString *body = commandDict[TEALKeyTagRemoteCommandBody];
     NSString *method = commandDict[TEALKeyTagRemoteCommandMethod];
+    NSError *error = nil;
     
     // Check for minimum needed data
     if (!urlString){
@@ -259,7 +263,16 @@
     }
     
     // Set Authentification
-    if (authenticate) { urlString = [self urlString:urlString withAuthentificationFrom:authenticate];}
+    if (authenticate) {
+        urlString = [self urlString:urlString withAuthentificationFrom:authenticate error:&error];
+        if (error){
+            if (responseBlock){
+                tResponse.error = error;
+                responseBlock(tResponse);
+            }
+            return;
+        }
+    }
     
     // Set Parameters (post url data)
     if (parameters){ urlString = [self urlString:urlString withParametersFrom:parameters];}
@@ -299,7 +312,9 @@
 
 #pragma mark - HELPERS
 
-- (NSString*) urlString:(NSString*)urlString withAuthentificationFrom:(NSDictionary*)authentification{
+- (NSString*) urlString:(NSString*)urlString
+withAuthentificationFrom:(NSDictionary*)authentification
+                  error:(NSError * __autoreleasing *)error{
     
     // Failure will return original urlString passed in.
     
@@ -318,9 +333,14 @@
         if ([httpsPrefix isEqualToString:@"https://"]) urlStringstripped = [urlString substringFromIndex:7];
         if (!urlStringstripped || urlStringstripped.length == 0) {
             
-#warning SOME ERROR HANDLING?
-//            TEALIUMELOG(@"Could not properly parse %@ url string of http:// prefix.", urlString);
-            
+            if (error){
+                NSString *reason = [NSString stringWithFormat:@"Could not parse urlString: %@", urlString];
+                *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                     description:NSLocalizedString(@"HTTP Authentication failed.", @"")
+                                          reason:reason
+                                      suggestion:NSLocalizedString(@"Consult Tealium Engineering.", @"")];
+            }
+
             return nil;
         }
         NSString *newUrlString = [NSString stringWithFormat:@"https://%@:%@@%@", username, password, urlStringstripped];
@@ -329,6 +349,37 @@
     
     return urlString;
 }
+
+//- (NSString*) urlString:(NSString*)urlString withAuthentificationFrom:(NSDictionary*)authentification{
+//    
+//    // Failure will return original urlString passed in.
+//    
+//    NSString *username = authentification[TEALKeyTagRemoteCommandUsername];
+//    NSString *password = authentification[TEALKeyTagRemoteCommandPassword];
+//    
+//    if (!username || [username isEqualToString:@""]){
+//        //        TEALIUMLOG(@"Remote API call %@ - username key found but missing value.", urlString);
+//    } else if (!password || [password isEqualToString:@""]){
+//        //        TEALIUMLOG(@"Remote API Call %@ - password key found but missing value.", urlString);
+//    } else {
+//        NSString *httpPrefix = [urlString substringToIndex:6];
+//        NSString *httpsPrefix = [urlString substringToIndex:7];
+//        NSString *urlStringstripped;
+//        if ([httpPrefix isEqualToString:@"http://"]) urlStringstripped = [urlString substringFromIndex:6];
+//        if ([httpsPrefix isEqualToString:@"https://"]) urlStringstripped = [urlString substringFromIndex:7];
+//        if (!urlStringstripped || urlStringstripped.length == 0) {
+//            
+//#warning SOME ERROR HANDLING?
+////            TEALIUMELOG(@"Could not properly parse %@ url string of http:// prefix.", urlString);
+//            
+//            return nil;
+//        }
+//        NSString *newUrlString = [NSString stringWithFormat:@"https://%@:%@@%@", username, password, urlStringstripped];
+//        if (newUrlString) return newUrlString;
+//    }
+//    
+//    return urlString;
+//}
 
 - (NSString*) urlString:(NSString*)urlString withParametersFrom:(NSDictionary*)parameters{
     

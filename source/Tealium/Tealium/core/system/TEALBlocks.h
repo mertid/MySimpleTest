@@ -10,16 +10,16 @@ typedef void (^TEALVoidBlock)(void);
 
 typedef void (^TEALBooleanBlock)(BOOL successful);
 
-typedef void (^TEALErrorBlock)(NSError *error);
+typedef void (^TEALErrorBlock)(NSError * _Nullable error);
 
-typedef void (^TEALBooleanCompletionBlock)(BOOL success, NSError *error);
+typedef void (^TEALBooleanCompletionBlock)(BOOL success, NSError * _Nullable error);
 
-typedef void (^TEALDictionaryCompletionBlock)(NSDictionary *dataDictionary, NSError *error);
+typedef void (^TEALDictionaryCompletionBlock)(NSDictionary * _Nullable dataDictionary, NSError * _Nullable error);
 
-typedef void (^TEALURLResponseBlock)(NSURLResponse *response, NSData *data, NSError *connectionError);
+typedef void (^TEALURLResponseBlock)(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError);
 
-typedef void (^TEALURLTaskResponseBlock)(NSData *data, NSURLResponse *response, NSError *connectionError);
+typedef void (^TEALURLTaskResponseBlock)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable connectionError);
 
-typedef void (^TEALHTTPResponseBlock)(NSHTTPURLResponse *response, NSData *data, NSError *connectionError);
+typedef void (^TEALHTTPResponseBlock)(NSHTTPURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError);
 
-typedef void (^TEALHTTPResponseJSONBlock)(NSHTTPURLResponse *response, NSDictionary *data, NSError *connectionError);
+typedef void (^TEALHTTPResponseJSONBlock)(NSHTTPURLResponse * _Nullable response, NSDictionary * _Nullable data, NSError * _Nullable connectionError);

@@ -28,11 +28,13 @@
 
 + (NSDictionary *) allInstances;
 
-- (void) setCurrentDispatchNetworkServices:(NSArray *)newServices;
 - (void) addModuleData:(NSDictionary *) dictionary;
 - (void) removeModuleDataForKey:(NSString *)key;
 
-- (NSArray *) currentDispatchNetworkServices;
+- (NSArray *) currentDispatchServices;
+- (void) setCurrentDispatchServices:(NSArray *)newServices;
+- (void) addNewDispatchService:(id)newService;
+
 - (NSDictionary *) moduleDataCopy;
 
 - (void) setActiveViewController:(UIViewController *)viewController;

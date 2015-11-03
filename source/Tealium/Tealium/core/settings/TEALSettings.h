@@ -65,6 +65,13 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSURL *) profileURL;
 - (NSURL *) profileDefinitionsURL;
 
-- (void) fetchNewRawPublishSettingsWithCompletion:(TEALDictionaryCompletionBlock)completion;
+/*
+ *  Trigger settings to check for new publish settings
+ *
+ *  @param completion Returns a completion block when complete. Success equals
+ *      true if new settings found, false if no settings found or if no change
+ *      in settings found.
+ */
+- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion;
 
 @end

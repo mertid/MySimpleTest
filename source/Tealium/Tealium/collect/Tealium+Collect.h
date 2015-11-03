@@ -12,6 +12,8 @@
 
 #import "Tealium.h"
 
+#import "TEALBlocks.h"
+
 #import "TEALVisitorProfile.h"
 #import "TEALVisitorProfileCurrentVisit.h"
 
@@ -24,24 +26,25 @@
 #import "TEALVisitorProfilePropertyAttribute.h"
 #import "TEALModulesDelegate.h"
 
+
 @interface Tealium (Collect) <TEALModulesDelegate>
 
 /**
  *
  */
-- (NSURL *) profileURL;
+- (NSURL * _Nullable) profileURL;
 
 /**
  *
  */
-- (NSURL *) profileDefinitionURL;
+- (NSURL * _Nullable) profileDefinitionURL;
 
 /**
  *  Copy of the Unique visitor ID per Account / Device combination.
  *
  *  @return String value of the visitorID for the Account the library was enabled with.
  */
-- (NSString *) visitorIDCopy;
+- (NSString * _Nullable) visitorIDCopy;
 
 
 /**
@@ -49,7 +52,7 @@
  *
  *  @return Returns valid TEALVisitorProfile object.  Its properties might be nil of nothing is loaded into them yet.
  */
-- (TEALVisitorProfile *) cachedVisitorProfileCopy;
+- (TEALVisitorProfile * _Nullable) cachedVisitorProfileCopy;
 
 
 /**
@@ -57,15 +60,17 @@
  *
  *  @param completion Completion block with retrieved TEALVisitorProfile instance and an error should any problems occur.
  */
-- (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion;
+- (void) fetchVisitorProfileWithCompletion:(void (^ _Nullable)(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error))completion;
 
 
 /**
  *  Joins a trace initiated from the AudienceStream web app with a valid string token provide from the TraceUI
  *
  *  @param token String value should match the code provided via the AudienceStream web UI.
+ *  @param completion An optional completion block
  */
-- (void) joinTraceWithToken:(NSString *)token;
+- (void) joinTraceWithToken:(NSString * _Nonnull)token
+                 completion:(TEALBooleanCompletionBlock _Nullable)completion;
 
 /**
  *  Stops sending trace data for the provided token in the joinTraceWithToken: method.

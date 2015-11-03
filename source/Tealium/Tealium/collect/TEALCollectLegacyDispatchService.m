@@ -103,6 +103,9 @@
         
     }
     
+    // For inspecting output call request
+//    NSString *bodyString = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+    
 #warning Not reporting bad url destination
     
     [self.sessionManager performRequest:request

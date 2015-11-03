@@ -55,22 +55,18 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration *)configuration {
     
-    configuration.instanceID = key;
     
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
-        
-        if (error) {
-            
-            NSLog(@"Problem initializing Tealium instance: %@ \nerror:%@ \nreason:%@ \nsuggestion:%@",
-             key, [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]);
-             
-        }
-        
-    }];
-    
-    if (instance) [Tealium addInstance:instance key:key];
-    
-    return instance;
+    return [Tealium newInstanceForKey:key
+                        configuration:configuration
+                           completion:^(BOOL success, NSError * _Nullable error) {
+                               
+                               if (error) {
+                                   
+                                   NSLog(@"Problem initializing Tealium instance: %@ error:%@",
+                                         key, error);
+                               }
+                               
+                           }];
     
 }
 
@@ -204,7 +200,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     }];
 }
 
-
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
     if (![dataSourceKeys isKindOfClass:([NSArray class])]) {
@@ -246,6 +241,40 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 #pragma mark - PRIVATE CLASS METHODS
+
++ (instancetype) newInstanceForKey:(NSString * _Nonnull)key
+                     configuration:(TEALConfiguration *)configuration
+                        completion:(TEALBooleanCompletionBlock)completion{
+    
+    configuration.instanceID = key;
+    __block NSError *newInstanceError = nil;
+    
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+        
+        if (error) {
+            
+            newInstanceError = error;
+            
+        }
+        
+    }];
+    
+    
+    if (instance){
+        [Tealium addInstance:instance key:key];
+    } else {
+        newInstanceError = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
+                                  reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
+    }
+    
+    if (completion) completion(true, newInstanceError);
+    
+    return instance;
+    
+}
+
 
 + (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
     
@@ -463,6 +492,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     // Tag Management
     if ([self.settings tagManagementEnabled]){
+        
         if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]) {
             [self.modulesDelegate enableTagManagement];
         }
@@ -560,13 +590,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) setCurrentDispatchNetworkServices:(NSArray *)newServices {
-    
-    self.dispatchNetworkServices = nil;
-    self.dispatchNetworkServices = newServices;
-    
-}
-
 - (void) setActiveViewController:(UIViewController *)viewController {
 
     [self.logger logDev:@"Current View Controller is now: %@", viewController];
@@ -653,75 +676,68 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
     
-    __block typeof(self) __weak weakSelf = self;
-    
-    [self.settings fetchNewRawPublishSettingsWithCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        
-        BOOL success = NO;
+    __weak Tealium *weakSelf = self;
 
-        if (dataDictionary){
+    
+    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+       
+        if (error){
+            [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                                      [error localizedDescription],
+                                      [error localizedFailureReason],
+                                      [error localizedRecoverySuggestion]
+                                      ]];
+        }
+        
+        if (success){
             
-            // New raw setting found
-            success = YES;
+            [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+            
+            [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
+            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+            
+            [weakSelf updateModules];
             
         }
         
-        if (completion) completion (success, error);
+        if ([weakSelf.settings libraryShouldDisable]){
+            
+            [weakSelf disable];
+            
+            return;
+        }
+        
+        [weakSelf.dispatchManager runQueuedDispatches];
+        
     }];
     
 }
 
 - (void) setupSettingsReachabilityCallbacks {
     
+    // Disregard if block has already been setup
     if (self.urlSessionManager.reachability.reachableBlock) {
         return;
     }
     
+    // Start listening for reachability changes
     [self.urlSessionManager.reachability startNotifier];
     
+    // When network re-established
     __weak Tealium *weakSelf = self;
     
     self.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
         
         [weakSelf.logger logDev:@"Network found."];
         
-        [weakSelf fetchNewSettingsWithCompletion:^(BOOL success, NSError *error) {
-            
-            if (error){
-                [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
-                                             [error localizedDescription],
-                                             [error localizedFailureReason],
-                                             [error localizedRecoverySuggestion]
-                                             ]];
-            }
-            
-            if (success){
-                
-                [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-                
-                [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
-                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-
-                [weakSelf updateModules];
-
-            }
-            
-            if ([weakSelf.settings libraryShouldDisable]){
-                
-                [weakSelf disable];
-                
-                return;
-            }
-            
-            [weakSelf.dispatchManager runQueuedDispatches];
-
-        }];
+        [weakSelf fetchNewSettingsWithCompletion:nil];
         
     };
     
-    weakSelf.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
+    // When unreachable
+    self.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
         
-        [self.logger logDev:@"Network unreachable."];
+        [weakSelf.logger logDev:@"Network unreachable."];
 
     };
 }
@@ -762,20 +778,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (NSArray *) currentDispatchNetworkServices {
-    
-    NSArray *array = nil;
-    
-    if (!self.dispatchNetworkServices) {
-        
-        array = [[NSArray alloc] init];
-        
-    } else {
-        array = self.dispatchNetworkServices;
-    }
-    
-    return array;
-}
+
 
 - (NSString *) description {
     
@@ -806,6 +809,41 @@ __strong static NSDictionary *staticAllInstances = nil;
     return settings;
 }
 
+#pragma mark - DISPATCH SERVICES
+
+- (NSArray *) currentDispatchServices {
+    
+    NSArray *array = nil;
+    
+    if (!self.dispatchNetworkServices) {
+        
+        array = [[NSArray alloc] init];
+        
+    } else {
+        array = self.dispatchNetworkServices;
+    }
+    
+    return array;
+}
+
+- (void) setCurrentDispatchServices:(NSArray *)newServices {
+    
+    self.dispatchNetworkServices = nil;
+    self.dispatchNetworkServices = newServices;
+    
+}
+
+- (void) addNewDispatchService:(id)newService {
+    
+    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    
+    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
+    
+    [newServices addObject:newService];
+    
+    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
+    
+}
 
 #pragma mark - TEALDISPATCHMANAGER DELEGATE
 
@@ -834,7 +872,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
 
     // Pass dispatch to dispatch services
-    for ( id<TEALDispatchService> service in [self currentDispatchNetworkServices]) {
+    for ( id<TEALDispatchService> service in [self currentDispatchServices]) {
         
         [service sendDispatch:dispatch
                    completion:^(TEALDispatchStatus serviceStatus, TEALDispatch *serviceDispatch, NSError *serviceError) {
@@ -937,7 +975,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch {
     
     NSError *error = nil;
-    NSArray *dispatchServices = [self currentDispatchNetworkServices];
+    NSArray *dispatchServices = [self currentDispatchServices];
 
     if  ([self.delegateManager tealium:self shouldDropDispatch:dispatch]) {
         

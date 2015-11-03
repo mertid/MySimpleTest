@@ -64,14 +64,12 @@ static double deviceBatteryLevel;
 
 + (BOOL) isCharging {
     
-#warning make call to main thread for info if nil
     return deviceIsCharging;
     
 }
 
 + (double) batteryLevel {
 
-#warning make call to main thread for info if nil
     return deviceBatteryLevel;
     
 }

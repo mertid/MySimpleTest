@@ -10,23 +10,13 @@
 
 #import "TEALBlocks.h"
 #import "TEALVisitorProfileHelpers.h"
-
 #import "TEALVisitorProfileDelegate.h"
-
 #import "TEALSystemProtocols.h"
 
-//@protocol TEALVisitorProfileStoreConfiguration <NSObject, TEALURLSessions>
-//
-//- (NSURL *) profileURL;
-//- (NSURL *) profileDefinitionURL;
-//
-//- (NSString *) visitorID;
-//@end
 
 @interface TEALVisitorProfileStore : NSObject
 
 @property (readonly, nonatomic) TEALVisitorProfile *currentProfile;
-
 @property (weak, nonatomic) id<TEALVisitorProfileDelegate> profileDelegate;
 
 

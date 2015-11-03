@@ -28,9 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("Application didFinishLaunchingWithOptions.")
         
-        let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev")
+        let config = TEALConfiguration.init(account: "jaredtest", profile: "main", environment: "dev")
 //        config.useHTTP = true
+//        config.overrideCollectLegacyDispatchURL = "https://httpbin.org/"
         Tealium.newInstanceForKey("tealium", configuration: config)
+        
         
         Tealium.instanceForKey("tealium")?.trackEventWithTitle("launched", dataSources: nil)
         

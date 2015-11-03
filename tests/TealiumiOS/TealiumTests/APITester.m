@@ -194,7 +194,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void) joinTraceWithToken:(NSString *)token {
     
-    [[Tealium instanceForKey:@"1"] joinTraceWithToken:token];
+    [[Tealium instanceForKey:@"1"] joinTraceWithToken:token completion:nil];
 
 }
 

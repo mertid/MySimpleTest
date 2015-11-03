@@ -22,17 +22,17 @@
 
 @property (nonatomic) BOOL enabled;
 
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key
+                               configuration:(TEALConfiguration * _Nonnull)configuration
+                                  completion:(TEALBooleanCompletionBlock _Nullable)completion;
+    
 + (void) addInstanceForKey:(NSString * _Nonnull)key
              configuration:(TEALConfiguration * _Nonnull)configuration
                 completion:(void (^ _Nullable)(Tealium * _Nullable instance, NSError * _Nullable error))completion;
     
 + (_Nullable instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion;
 
-- (_Nullable instancetype) initPrivate;
-
-- (void) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration
-                 completion:(TEALBooleanCompletionBlock _Nullable)setupCompletion;
-
+- (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock _Nullable)completion;
 
 - (void) fetchSettings:(TEALSettings * _Nonnull)settings
             completion:(TEALBooleanCompletionBlock _Nullable)setupCompletion;

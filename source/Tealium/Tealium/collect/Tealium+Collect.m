@@ -27,7 +27,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) enableCollect {
     
-    NSArray *dispatchNetworkServices = [[self currentDispatchNetworkServices] copy];
+    NSArray *dispatchNetworkServices = [[self currentDispatchServices] copy];
     
     if ([dispatchNetworkServices teal_containsObjectOfClass:[TEALCollectDispatchService class]]){
         return;
@@ -41,7 +41,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [newServices addObject:dispatchService];
     
-    [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
+    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
     
     [self.logger logDev:@"Collect enabled."];
 
@@ -49,7 +49,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) enableCollectLegacy {
     
-    NSArray *dispatchNetworkServices = [[self currentDispatchNetworkServices] copy];
+    NSArray *dispatchNetworkServices = [[self currentDispatchServices] copy];
     
     if ([dispatchNetworkServices teal_containsObjectOfClass:[TEALCollectLegacyDispatchService class]]){
         return;
@@ -63,7 +63,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [newServices addObject:dispatchService];
     
-    [self setCurrentDispatchNetworkServices:[NSArray arrayWithArray:newServices]];
+    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
     
     [self.logger logDev:@"Collect Legacy enabled."];
     
@@ -213,9 +213,28 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 #pragma mark - TRACE
 
-- (void) joinTraceWithToken:(NSString *)token {
+- (void) joinTraceWithToken:(NSString * _Nonnull)token
+                 completion:(TEALBooleanCompletionBlock)completion {
+    
+    NSError *error = nil;
     
     if (![self collect_isEnabled]) {
+        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Join trace call failed.", @"")
+                                  reason:NSLocalizedString(@"Collect not enabled.", @"")
+                              suggestion:NSLocalizedString(@"Enable Collect service.", @"")];
+        
+    }   else if (!token || ![token length]) {
+
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Join trace call failed.", @"")
+                                  reason:NSLocalizedString(@"No token passed into joinTraceWithToken: call", @"")
+                              suggestion:NSLocalizedString(@"Add a token.", @"")];
+    }
+    
+    if (completion && error){
+        completion(false, error);
         return;
     }
     
@@ -223,11 +242,10 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        if (!token || ![token length]) {
-            return;
-        }
-        
         weakSelf.settings.traceID = token;
+        
+        if (completion) completion(true, nil);
+        
     }];
     
 }

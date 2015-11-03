@@ -28,15 +28,15 @@
 
 @implementation TEALVisitorProfileStore
 
-#warning Where's the account-profile change check?
-
 - (instancetype) initWithVisitorID:(NSString *)visitorID profileURL:(NSURL *)profileURL profileDefinitionURL:(NSURL *)profileDefinitionURL urlSessionManager:(TEALURLSessionManager *)sessionManager {
     
     self = [super init];
     if (self){
+        
         if (!visitorID) {
             return nil;
         }
+        
         _visitorID = visitorID;
         _profileURL = profileURL;
         _profileDefinitionURL = profileDefinitionURL;
@@ -75,7 +75,6 @@
     
     if (![self.sessionManager.reachability isReachable]) {
         
-//        TEAL_logDev(@"offline: %@", request);
         NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
                                       description:@"Profile Request Failed"
                                            reason:@"Network Connection Unavailable"
@@ -88,11 +87,6 @@
     __weak TEALVisitorProfileStore *weakSelf = self;
     
     TEALHTTPResponseJSONBlock urlCompletion = ^(NSHTTPURLResponse *response, NSDictionary *data, NSError *connectionError) {
-        
-        if (connectionError) {
-            
-//            TEAL_logDev(@"Profile Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
-        }
         
         TEALVisitorProfile *profile = weakSelf.currentProfile;
         
@@ -137,12 +131,8 @@
 
     TEALHTTPResponseJSONBlock urlCompletion = ^(NSHTTPURLResponse *response, NSDictionary *data, NSError *connectionError) {
         
-        if (connectionError) {
-            
-//            TEAL_logDev(@"Profile Definitions Fetch Failed with response: %@, error: %@", response, [connectionError localizedDescription]);
-            
-        }
         completion( data, connectionError);
+        
     };
     
     [self.sessionManager performRequest:request

@@ -51,7 +51,8 @@
     configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
-    configuration.overrideDispatchURL = nil;
+    configuration.overrideCollectDispatchURL = nil;
+    configuration.overrideCollectLegacyDispatchURL = nil;
    
     configuration.audienceStreamProfile = @"main";
     
@@ -96,7 +97,8 @@
                                           @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
-                                          @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideDispatchURL]
+                                          @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],
+                                          @"override collect legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectLegacyDispatchURL]
                                           };
     
     return [NSString teal_descriptionForObject:self description:@"Compile time options" fromDictionary:descriptionData];
