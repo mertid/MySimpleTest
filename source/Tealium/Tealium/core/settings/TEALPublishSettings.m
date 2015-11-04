@@ -187,26 +187,17 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
 - (instancetype) initWithURLString:(NSString *)url {
     
-    self = [super init];
+    TEALPublishSettings *archivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:url];
     
-    if (self) {
+    if (archivedSettings){
         
-#warning This ever going to have a read issue?
-        
-        TEALPublishSettings *archivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:url];
-        
-        if (archivedSettings){
-            return archivedSettings;
+        return archivedSettings;
 
-        } else {
-            
-#warning Possible init state issue
-            
-            return [self initDefaultSettingsForURLString:url];
-            
-        }
+    } else {
+        
+        return [self initDefaultSettingsForURLString:url];
+        
     }
-    return self;
 }
 
 - (instancetype) initDefaultSettingsForURLString:(NSString *)url {

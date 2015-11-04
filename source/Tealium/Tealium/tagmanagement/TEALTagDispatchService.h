@@ -12,10 +12,13 @@
 
 @class TEALLogger;
 @class TEALRemoteCommandManager;
+@class TEALRemoteCommandResponse;
 
 @protocol TEALTagDispatchServiceDelegate <NSObject>
 
-- (void) TEALTagDispatchServiceWebViewReady:(id)webView;
+- (void) tagDispatchServiceWebViewReady:(id)webView;
+- (void) tagDispatchServiceWebView:(id)webView encounteredError:(NSError *)error;
+- (void) tagDispatchServiceWebView:(id)webView processedCommandResponse:(TEALRemoteCommandResponse *)response;
 
 @end
 

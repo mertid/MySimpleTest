@@ -133,15 +133,15 @@
     
     if ([[self remoteCommandManager] isEnabled]) {
     
-//        __weak __block TEALLogger *weakLogger = self.logger;
+        __block typeof(self) __weak weakSelf = self;
 
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [self.remoteCommandManager processRequest:request
                                     completionHandler:^(TEALRemoteCommandResponse *response) {
                                         
-#warning Implement some other means of logging remote command reponse
-//                                        [weakLogger logDev:@"Remote command processed:%@", response];
+                                        [weakSelf reportWebView:webView
+                                                commandResponse:response];
                                         
                                     }];
             
@@ -169,7 +169,7 @@
             self.privateStatus = TEALDispatchNetworkServiceStatusReady;
             
             if (self.delegate) {
-                [self.delegate TEALTagDispatchServiceWebViewReady:webView];
+                [self.delegate tagDispatchServiceWebViewReady:webView];
             }
         });
         
@@ -195,8 +195,19 @@
         
         if ([[init lowercaseString] isEqualToString:@"false"]){
             
-#warning Implement alternative log method
-//            [weakSelf.logger logDev:@"Webkit was unable to process callback command: %@", command];
+            if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:encounteredError:)]) {
+                
+                NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@", command];
+                NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                     description:errorDescription
+                                          reason:NSLocalizedString(@"Command did not execute.", @"")
+                                      suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
+                
+                [self reportWebView:weakSelf.webView
+                              error:error];
+
+            }
+
         }
     });
 }
@@ -254,4 +265,26 @@
     
 }
 
+#pragma mark - HELPERS
+
+- (void) reportWebView:(id)webView error:(NSError *) error {
+    
+    if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:encounteredError:)]){
+        
+        [self.delegate tagDispatchServiceWebView:webView
+                                encounteredError:error];
+        
+    }
+    
+}
+
+- (void) reportWebView:(id)webView commandResponse:(TEALRemoteCommandResponse*)response {
+    
+    if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:processedCommandResponse:)]){
+        
+        [self.delegate tagDispatchServiceWebView:webView
+                        processedCommandResponse:response];
+        
+    }
+}
 @end

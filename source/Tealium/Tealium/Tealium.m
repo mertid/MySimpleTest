@@ -19,7 +19,6 @@
 #import "TEALLogger.h"
 #import "TEALModulesDelegate.h"
 #import "TEALNetworkHelpers.h"
-#import "TEALNotificationConstants.h"
 #import "TEALOperationManager.h"
 #import "TEALSettings+PrivateHeader.h"
 #import "TEALSystemHelpers.h"
@@ -278,7 +277,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
     
-#warning OPTIMIZE
+    // TODO: Optimize this method
     
     if (![TEALConfiguration isValidConfiguration:configuration]) {
         
@@ -375,8 +374,6 @@ __strong static NSDictionary *staticAllInstances = nil;
                              suggestion:@"Consult Tealium Mobile Engineering - Tealium Line 400"];
     }
     
-#warning What will handle update in application version check and notification?
-    
     // Init Settings
     self.settings = [self settingsFromConfiguration:configuration];
     if (!error &&
@@ -420,11 +417,11 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) disable {
     
     @synchronized(self) {
-#warning remove all observers in all objects here
-        [self disableCore];
-        [self updateModules];
         
-        [self.logger logQA:@"Library Disabled."];
+        [self disableCore];
+        [self disableModules];
+        
+        [self.logger logQA:@"Library Disabled. New configuration check will continue running, all other subsystems disabled"];
         [self.logger disable];
     }
 }
@@ -476,6 +473,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) updateModules {
+    
+    // TODO: Optimize this
     
     self.modulesDelegate = self;
     
@@ -570,7 +569,6 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
     }
     
-    
     // Crashes
     if ([self.settings autotrackingCrashesEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
@@ -584,9 +582,61 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+
+
 - (void) disableCore {
     
-#warning IMPLEMENT
+    self.dispatchManager = nil;
+    
+}
+
+/*
+ *  Force disables all modules
+ */
+- (void) disableModules {
+    
+    // Lifecycle
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
+        [self.modulesDelegate disableAutotrackingLifecycle];
+    }
+    
+    // Tag Management
+    if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
+        [self.modulesDelegate disableRemoteCommands];
+    }
+    if ([self.modulesDelegate respondsToSelector:@selector(disableTagMangement)]) {
+        [self.modulesDelegate disableTagMangement];
+    }
+    
+    // Collect
+    if ([self.modulesDelegate respondsToSelector:@selector(disableCollect)]) {
+        [self.modulesDelegate disableCollect];
+    }
+    
+    // Collect Legacy
+    if (([self.modulesDelegate respondsToSelector:@selector(disableCollectLegacy)])){
+        [self.modulesDelegate disableCollectLegacy];
+    }
+    
+    // UIEvents
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingUIEvents)]) {
+        [self.modulesDelegate disableAutotrackingUIEvents];
+    }
+    
+    // Views
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingViews)]) {
+        [self.modulesDelegate disableAutotrackingViews];
+    }
+    
+    // Mobile Companion
+    if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
+        [self.modulesDelegate disableMobileCompanion];
+    }
+    
+    // Crashes
+    if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]) {
+        [self.modulesDelegate disableAutotrackingCrashes];
+    }
     
 }
 
@@ -604,18 +654,18 @@ __strong static NSDictionary *staticAllInstances = nil;
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatchReturned, NSError *error) {
 
-                          if (error) {
-                              [weakSelf logDispatch:dispatchReturned status:status error:error];
-                          }
-                          
+          //Only log if error as succesful send or queuing is logged later
+          if (error) {
+              [weakSelf logDispatch:dispatchReturned status:status error:error];
+          }
+          
 #warning Move to Collect module
-                          
-                          if ([weakSelf.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
-                              return;
-                          }
-                          
-                          
-                      }];
+          
+          if ([weakSelf.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
+              return;
+          }
+          
+      }];
     
 }
 
@@ -646,9 +696,11 @@ __strong static NSDictionary *staticAllInstances = nil;
         NSString *errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
         
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
-            NSDictionary *datalayerDump = [TEALNetworkHelpers dictionaryFromUrlParamString:(NSString *)dispatch.payload];
             
-            [self.logger logDev:@"%@ dispatch with payload %@%@", statusString, datalayerDump, error? errorInfo: @""];
+            [self.logger logDev:@"%@ dispatch with payload %@%@",
+                 statusString,
+                 dispatch.payload,
+                 error? errorInfo: @""];
             
         } else {
             
@@ -763,18 +815,11 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (BOOL) suppressForBetterBatteryLevels {
     // 20% is cutoff
     
-    BOOL suppress = NO;
-    double batteryLevel = [self.dataSources deviceBatteryLevel];
+    double batteryLevel = [TEALDataSources deviceBatteryLevel];
     
-    
-#warning IGNORE battery level requirements if device charging
-    if ([self.settings goodBatteryLevelOnlySending] &&
-        (batteryLevel < 20.0 && batteryLevel >= 0)) {
-        
-        suppress = YES;
-    }
-    
-    return suppress;
+    return (![TEALDataSources deviceIsCharging] &&
+            [self.settings goodBatteryLevelOnlySending] &&
+            (batteryLevel < 20.0 && batteryLevel >= 0));
     
 }
 
@@ -895,7 +940,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch {
     
-#warning HOOKUP?
+    // Stub for possible Mobile Companion use
     
 }
 
@@ -908,7 +953,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerDidUpdateDispatchQueues {
     
-#warning HOOKUP?
+    // Stub for possible Mobile Companion use
     
 }
 
@@ -950,8 +995,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
-    
-#warning THIS count is always zero
     
     [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
 

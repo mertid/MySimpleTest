@@ -77,9 +77,9 @@
 
 // HELPERS
 
-- (double) deviceBatteryLevel;
++ (double) deviceBatteryLevel;
 
-- (BOOL) deviceIsCharging;
++ (BOOL) deviceIsCharging;
 
 - (NSString *) applicationUUID;
 

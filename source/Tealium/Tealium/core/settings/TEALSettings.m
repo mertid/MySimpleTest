@@ -70,7 +70,7 @@
     NSString *account = [settings account];
     NSString *profile = @"main"; // Collect calls should always go to main
     NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
-    
+
     NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
 
     return baseURLString;
@@ -163,9 +163,10 @@
 }
 
 - (BOOL) collectEnabled {
-    
+
+#warning RESET after dev
     return NO;
-#warning Reset after dev
+
     return self.publishSettings.enableCollect;
     
 }
@@ -221,8 +222,10 @@
 }
 
 - (BOOL) collectLegacyEnabled {
+
+#warning RESET after dev
     return YES;
-#warning Return to settings actual below
+    
     return self.publishSettings.enableCollectLegacy;
 }
 
@@ -247,8 +250,9 @@
 
 - (BOOL) tagManagementEnabled {
     
+#warning RESET after dev
     return NO;
-#warning RESET for prod
+
     return self.publishSettings.enableTagManagement;
 }
 
@@ -263,8 +267,6 @@
 
 - (BOOL) goodBatteryLevelOnlySending {
     
-    return NO;
-#warning REMOVE force NO after dev
     return !self.publishSettings.enableLowBatterySuppress;
 }
 

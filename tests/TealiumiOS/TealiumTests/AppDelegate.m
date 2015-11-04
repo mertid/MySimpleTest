@@ -26,19 +26,6 @@
 #ifndef TEST
     
     [self startupTealiumInstance1];
-    // Instance 2
-//    TEALConfiguration *instanceConfig = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                           profile:@"android-demo"
-//                                                                       environment:@"dev"];
-//    instanceConfig.logLevel = TEALLogLevelVerbose;
-//    instanceConfig.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-//    instanceConfig.autotrackingLifecycleEnabled = NO;
-//    instanceConfig.autotrackingUIEventsEnabled = YES;
-//    instanceConfig.autotrackingViewsEnabled = NO;
-//    
-//    [Tealium newInstanceForKey:@"2" configuration:instanceConfig];
-//    [[Tealium instanceForKey:@"2"] setDelegate:self];
-    
     
 #endif
     
@@ -52,16 +39,13 @@
                                                                        environment:@"dev"];
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-    configuration.autotrackingCrashesEnabled = NO;
-    configuration.autotrackingIvarsEnabled = NO;
-    configuration.autotrackingLifecycleEnabled = NO;
-    configuration.autotrackingUIEventsEnabled = NO;
-    configuration.autotrackingViewsEnabled = NO;
-    configuration.mobileCompanionEnabled = YES;
+    
     //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:@"1" configuration:configuration];
+    
     [tealiumInstance1 setDelegate:self];
+    
     [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"somePersistKey"]];
     
     [tealiumInstance1 addVolatileDataSources:@{@"volatileKey":@"volatileValue"}];

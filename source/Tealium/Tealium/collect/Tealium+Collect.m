@@ -12,6 +12,7 @@
 #import "TEALVisitorProfileStore.h"
 #import "TEALCollectDispatchService.h"
 #import "TEALCollectLegacyDispatchService.h"
+#import "TEALS2SDispatchService.h"
 #import "TEALError.h"
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>
@@ -57,7 +58,10 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
     
-    TEALCollectLegacyDispatchService *dispatchService = [[TEALCollectLegacyDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString] visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
+//    TEALCollectLegacyDispatchService *dispatchService = [[TEALCollectLegacyDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString] visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
+    
+    TEALS2SDispatchService *dispatchService = [[TEALS2SDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString]
+                                                                                              visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     
@@ -84,6 +88,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     [weakSelf.operationManager addOperationWithBlock:^{
         
         if (![weakSelf.settings collectEnabled]) {
+            
             [weakSelf.logger logDev:@"Audience Stream disabled, Ignoring: %s", __func__];
             if (completion) {
                 
@@ -103,9 +108,12 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
                 completion(weakSelf.collect_cachedProfile, nil);
                 
             } else {
+                
                 [weakSelf.logger logDev:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
+                
             }
         };
+        
         [[weakSelf profileStore] fetchProfileWithCompletion:storeCompletion];
         
     }];

@@ -84,6 +84,7 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     
     [request setHTTPMethod:@"POST"];
+    [request setHTTPShouldHandleCookies:YES];
     
     // Add VisitorID to header
     NSDictionary *headers = [self headerWithVisitorID:self.visitorID];
@@ -106,7 +107,6 @@
     // For inspecting output call request
 //    NSString *bodyString = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
     
-#warning Not reporting bad url destination
     
     [self.sessionManager performRequest:request
                          withCompletion:^(NSHTTPURLResponse *response,

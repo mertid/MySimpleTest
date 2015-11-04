@@ -57,6 +57,10 @@
 		71E3DEBE1BE26D450086B621 /* audiencestream_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 71E0AB4B1B87FA48008B38BE /* audiencestream_ON.html */; };
 		71E3DEBF1BE26D450086B621 /* tagmanagement_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 710D7DC21B6FEC89003F01AF /* tagmanagement_OFF.html */; };
 		71E3DEC01BE26D450086B621 /* tagmanagement_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 710D7DC31B6FEC89003F01AF /* tagmanagement_ON.html */; };
+		71E986011BE93AEE00675A1C /* TealiumCollectLegacyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E986001BE93AEE00675A1C /* TealiumCollectLegacyTests.m */; };
+		71E986021BE93AEE00675A1C /* TealiumCollectLegacyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E986001BE93AEE00675A1C /* TealiumCollectLegacyTests.m */; };
+		71E9860A1BE93B5400675A1C /* TealiumURLSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E986091BE93B5400675A1C /* TealiumURLSessionManagerTests.m */; };
+		71E9860B1BE93B5400675A1C /* TealiumURLSessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E986091BE93B5400675A1C /* TealiumURLSessionManagerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +182,8 @@
 		71E3DEA91BE26CB90086B621 /* TealiumiOSCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumiOSCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71E3DEAB1BE26CB90086B621 /* TealiumiOSCoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumiOSCoreTests.m; sourceTree = "<group>"; };
 		71E3DEAD1BE26CB90086B621 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71E986001BE93AEE00675A1C /* TealiumCollectLegacyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumCollectLegacyTests.m; sourceTree = "<group>"; };
+		71E986091BE93B5400675A1C /* TealiumURLSessionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumURLSessionManagerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +278,8 @@
 		37A75AED1B57109E00E6E9E2 /* TealiumTestsTests */ = {
 			isa = PBXGroup;
 			children = (
+				71E986091BE93B5400675A1C /* TealiumURLSessionManagerTests.m */,
+				71E986001BE93AEE00675A1C /* TealiumCollectLegacyTests.m */,
 				710D7DBF1B6FE85C003F01AF /* mps */,
 				71A35A001BD6EDA6002D19DF /* TEALLifecycle+PrivateTestHeader.h */,
 				71A6D95E1BD5897B0000CAC2 /* TealiumLifecycleTests.m */,
@@ -586,10 +594,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				37EBA24E1B571D4D0010CB75 /* TEALPublishSettingsStoreTests.m in Sources */,
+				71E986011BE93AEE00675A1C /* TealiumCollectLegacyTests.m in Sources */,
 				715CD45A1B73BBA700290F06 /* TEALDatasourceStoreTests.m in Sources */,
 				71A6D95B1BD589500000CAC2 /* TEALXMLParser.m in Sources */,
 				71E0AB451B87E2C9008B38BE /* TealiumCollectTests.m in Sources */,
 				713FC7431BCC228400B78AF3 /* TealiumDelegateTestObject.m in Sources */,
+				71E9860A1BE93B5400675A1C /* TealiumURLSessionManagerTests.m in Sources */,
 				710D71521B62A8B400CFB715 /* TealiumDispatchTests.m in Sources */,
 				71DE103A1B7F870E00346F33 /* TEALDatasourcesTests.m in Sources */,
 				710D7DBD1B6FBCBD003F01AF /* TealiumTests.m in Sources */,
@@ -615,7 +625,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71E9860B1BE93B5400675A1C /* TealiumURLSessionManagerTests.m in Sources */,
 				71E3DEB31BE26D3D0086B621 /* TealiumCollectTests.m in Sources */,
+				71E986021BE93AEE00675A1C /* TealiumCollectLegacyTests.m in Sources */,
 				71E3DEBA1BE26D3D0086B621 /* TEALSettingsTests.m in Sources */,
 				71E3DEB91BE26D3D0086B621 /* TealiumDelegateTestObject.m in Sources */,
 				71E3DEB41BE26D3D0086B621 /* TEALDatasourcesTests.m in Sources */,

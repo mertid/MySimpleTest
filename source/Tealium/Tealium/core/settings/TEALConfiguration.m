@@ -12,9 +12,21 @@
 @interface TEALConfiguration()
 
 // No public API for this settings at this time
+
+// Hidden
 @property (nonatomic) BOOL autotrackingApplicationInfoEnabled;
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
+
+// v5.1
+@property (nonatomic) BOOL autotrackingCrashesEnabled;
+@property (nonatomic) BOOL autotrackingDeviceInfoEnabled;
+@property (nonatomic) BOOL autotrackingIvarsEnabled;
+@property (nonatomic) BOOL autotrackingLifecycleEnabled;
+@property (nonatomic) BOOL autotrackingUIEventsEnabled;
+@property (nonatomic) BOOL autotrackingViewsEnabled;
+@property (nonatomic) BOOL mobileCompanionEnabled;
+@property (nonatomic) BOOL remoteCommandsEnabled;
 
 @end
 

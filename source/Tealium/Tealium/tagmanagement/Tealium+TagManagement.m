@@ -134,18 +134,6 @@
     return targetService;
 }
 
-//- (void) addNewTagDispatchService:(TEALTagDispatchService *)newService {
-//    
-//    NSArray *dispatchServices = [[self currentDispatchServices] copy];
-//
-//    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
-//    
-//    [newServices addObject:newService];
-//    
-//    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
-//    
-//}
-
 - (TEALTagDispatchService *) newTagDispatchService {
     
     TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
@@ -160,12 +148,24 @@
 
 #pragma mark - TEAL TAG DISPATCH SERVICE DELEGATE
 
-- (void) TEALTagDispatchServiceWebViewReady:(UIWebView *)webView {
+- (void) tagDispatchServiceWebViewReady:(UIWebView *)webView {
     
     if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
         
         [self.delegate tealium:self webViewIsReady:webView];
     }
+}
+
+- (void) tagDispatchServiceWebView:(UIWebView*)webView encounteredError:(NSError *)error {
+    
+    [self.logger logQA:@"Tag Management Webview error: %@", error];
+    
+}
+
+- (void) tagDispatchServiceWebView:(UIWebView*)webView processedCommandResponse:(TEALRemoteCommandResponse *)response{
+    
+    [self.logger logDev:@"Processed remote command: %@", response];
+    
 }
 
 @end

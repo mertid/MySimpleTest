@@ -260,12 +260,12 @@ static NSDictionary *staticCompileTimeDataSources;
 
 #pragma mark - PUBLIC HELPERS
 
-- (double) deviceBatteryLevel {
++ (double) deviceBatteryLevel {
     
     return [TEALDeviceDataSources batteryLevel];
 }
 
-- (BOOL) deviceIsCharging {
++ (BOOL) deviceIsCharging {
     
     return [TEALDeviceDataSources isCharging];
     
