@@ -32,6 +32,8 @@ extern NSString * const TEALDataSourceKey_DeviceCPUType;
 extern NSString * const TEALDataSourceKey_DeviceIsCharging;
 extern NSString * const TEALDataSourceKey_DeviceLanguage;
 extern NSString * const TEALDataSourceKey_DeviceResolution;
+extern NSString * const TEALDataSourceKey_DeviceOrientation;
+extern NSString * const TEALDataSourceKey_DeviceOSVersion;
 extern NSString * const TEALDataSourceKey_DeviceToken;
 extern NSString * const TEALDataSourceKey_EventName;
 extern NSString * const TEALDataSourceKey_EventTitle;

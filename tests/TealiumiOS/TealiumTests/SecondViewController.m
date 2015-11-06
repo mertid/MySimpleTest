@@ -20,7 +20,7 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Second View Controller";
-    [self teal_setDataSources:@{@"event_name":@"reveal"}];
+//    [self teal_setDataSources:@{@"event_name":@"reveal"}];
     self.testProperty = @"iVarTestValue";
     
     [[Tealium instanceForKey:@"1"] removeVolatileDataSourcesForKeys:@[@"volatileKey"]];

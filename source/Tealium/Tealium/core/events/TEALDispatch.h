@@ -8,26 +8,46 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *
+ */
 typedef NS_ENUM(NSUInteger, TEALDispatchType) {
     TEALDispatchTypeNone,
     TEALDispatchTypeEvent,
     TEALDispatchTypeView
 };
 
-extern NSString * const TEALDispatchTypeLinkStringValue;
-extern NSString * const TEALDispatchTypeViewStringValue;
+/**
+ *
+ */
+extern NSString * const TEALDispatchTypeLinkStringValue; // string actual - "link"
+extern NSString * const TEALDispatchTypeViewStringValue; // string actual - "view"
 
 @interface TEALDispatch : NSObject <NSCoding>
 
+/**
+ *
+ */
 @property (nonatomic) TEALDispatchType dispatchType;
+
+/**
+ *
+ */
 @property (nonatomic, strong) NSString *dispatchServiceName;
+
+/**
+ *
+ */
 @property (nonatomic, strong) NSDictionary *payload;
+
+/**
+ *
+ */
 @property (nonatomic) NSTimeInterval timestamp;
 
+#warning MOVE to private header
 + (TEALDispatch *) dispatchForType:(TEALDispatchType)dispatchType withPayload:(NSDictionary *)payload;
-
 + (NSString *) stringFromDispatchType:(TEALDispatchType)dispatchType;
-
 - (void) queue:(BOOL)wasQueued;
 
 @end

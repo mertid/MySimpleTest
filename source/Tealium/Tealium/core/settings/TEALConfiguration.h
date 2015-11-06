@@ -83,16 +83,24 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @property (copy, nonatomic) NSString *audienceStreamProfile;
 
 
-// TODO: comments
+/**
+ *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"
+ */
 @property (nonatomic) NSString *overridePublishSettingsURL;
 
-// TODO: comments
+/**
+ *  If assigned, will replace the default address used to retrieve the tag management UTAG.js file.  Example - "https://my.domain.com/app/mobile.html"
+ */
 @property (nonatomic) NSString *overridePublishURL;
 
-// TODO: comments
+/**
+ *  If assigned, will replace the destination endpoint for Collect dispatch calls.
+ */
 @property (nonatomic) NSString *overrideCollectDispatchURL;
 
-// TODO: comments
+/**
+ *  If assigned, will replace the destination endpoint for S2S Legacy dispatch calls.
+ */
 @property (nonatomic) NSString *overrideS2SLegacyDispatchURL;
 
 /**
@@ -108,6 +116,9 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
                                   profile:(NSString *)profileName
                               environment:(NSString *)environmentName;
 
+/**
+ *  Checks to see if configuration is populated with the minimum required properties.
+ */
 + (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
 
 

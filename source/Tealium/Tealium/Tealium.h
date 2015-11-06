@@ -11,7 +11,7 @@
 #import "TEALConfiguration.h"
 #import "TEALDispatch.h"
 #import "TealiumDelegate.h"
-#import "NSObject+Tealium.h"
+//#import "NSObject+Tealium.h"
 
 /**
  *  Tealium is the main class for the Tealium Library.

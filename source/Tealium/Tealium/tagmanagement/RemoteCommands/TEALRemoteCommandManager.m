@@ -41,7 +41,8 @@
 - (void) addReservedCommands:(TEALBooleanBlock)successBlock {
     
     __block typeof(self) __weak weakSelf = self;
-    __block TEALOperationManager *blockOperationManager = self.operationManager;
+    
+#warning RESERVED COMMANDS NOT WORKING
     
     BOOL loadedHTTPCommand =
     [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
@@ -54,17 +55,19 @@
                            }];
                            
                        }];
+
+    // For 5.1
+//    __block TEALOperationManager *blockOperationManager = self.operationManager;
+//    BOOL loadedMobileCompanionCommand =
+//    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
+//                 description:@"Remote unlock Mobile Companion"
+//                 targetQueue:self.operationManager.underlyingQueue
+//                       block:^(TEALRemoteCommandResponse*response) {
+//                           
+//                           [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:blockOperationManager];
+//                       }];
     
-    BOOL loadedMobileCompanionCommand =
-    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
-                 description:@"Remote unlock Mobile Companion"
-                 targetQueue:self.operationManager.underlyingQueue
-                       block:^(TEALRemoteCommandResponse*response) {
-                           
-                           [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:blockOperationManager];
-                       }];
-    
-    if (successBlock) successBlock(loadedHTTPCommand && loadedMobileCompanionCommand);
+    if (successBlock) successBlock(loadedHTTPCommand);
     
     
 }

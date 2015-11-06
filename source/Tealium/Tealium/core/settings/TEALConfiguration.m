@@ -11,6 +11,8 @@
 
 @interface TEALConfiguration()
 
+#warning CONSIDER replacing properties with a single dictionary that is accessed by public methods
+
 // No public API for this settings at this time
 
 // Hidden
@@ -110,7 +112,7 @@
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
                                           @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],
-                                          @"override collect legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL]
+                                          @"override s2s legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL]
                                           };
     
     return [NSString teal_descriptionForObject:self description:@"Compile time options" fromDictionary:descriptionData];

@@ -35,6 +35,7 @@
 - (void) disableRemoteCommands;
 
 - (void) revealMobileCompanion;
+- (void) fetchVisitorProfile;
 
 
 @end

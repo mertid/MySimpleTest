@@ -43,7 +43,7 @@
 - (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch;
 
 /**
- *
+ *  // TODO
  *
  *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its
@@ -54,7 +54,7 @@
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch;
 
 /**
- *
+ *  // TODO
  *
  *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its 
@@ -65,6 +65,7 @@
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
 
 /*
+ *  // TODO
  *
  *  @param tealium The Tealium instance ready
  *  @param webView The WebView instance used by any Tag Management service - nil 

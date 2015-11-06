@@ -26,6 +26,8 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     return [self.settings collectEnabled];
 }
 
+#pragma mark - MODULES DELEGATE
+
 - (void) enableCollect {
     
     NSArray *dispatchNetworkServices = [[self currentDispatchServices] copy];
@@ -67,9 +69,21 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
     
-    [self.logger logDev:@"Collect Legacy enabled."];
+    [self.logger logDev:@"S2S Legacy enabled."];
     
 }
+
+- (void) fetchVisitorProfile {
+    
+    [self fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
+    
+        [self.logger logDev:@"Did fetch profile: %@", profile];
+        
+    }];
+    
+}
+
+#pragma mark - PUBLIC
 
 - (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
     

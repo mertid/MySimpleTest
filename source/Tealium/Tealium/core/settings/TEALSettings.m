@@ -164,9 +164,6 @@
 
 - (BOOL) collectEnabled {
 
-#warning RESET after dev
-    return NO;
-
     return self.publishSettings.enableCollect;
     
 }
@@ -222,9 +219,6 @@
 }
 
 - (BOOL) s2SLegacyEnabled {
-
-#warning RESET after dev
-    return YES;
     
     return self.publishSettings.enableS2SLegacy;
 }
@@ -249,9 +243,6 @@
 }
 
 - (BOOL) tagManagementEnabled {
-    
-#warning RESET after dev
-    return NO;
 
     return self.publishSettings.enableTagManagement;
 }
@@ -404,6 +395,7 @@
     
     // Generate request
     NSURLRequest *request = [self publishSettingsRequest];
+    NSDate *fetchDate = [NSDate date];
     
     // Bail out checks:
     NSError *preFetchError = nil;
@@ -421,11 +413,16 @@
                                   reason:NSLocalizedString(@"No configuration available.", @"")
                               suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
     }
-    if (![self canFetchNow]) {
+    
+    double minutesToNextFetch = [self minutesToNextFetchFromDate:fetchDate];
+    if (minutesToNextFetch > 0.0) {
+        
+        NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
         preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
-                                  reason:NSLocalizedString(@"Can not fetch at this time", @"")
-                              suggestion:NSLocalizedString(@"Check prior minutes between refresh setting.", @"")];
+                                  reason:reason
+                              suggestion:NSLocalizedString(@"Wait for end of timeout or change prior minutes between refresh setting.", @"")];
+        
     }
     
     if (preFetchError){
@@ -434,9 +431,9 @@
         }
         return;
     }
-
     
     // Perform request
+    self.lastFetch = fetchDate;
     __block typeof(self) __weak weakSelf = self;
 
     [self.urlSessionManager performRequest:request
@@ -478,24 +475,35 @@
 
 #pragma mark - PRIVATE
 
-- (BOOL) canFetchNow {
+//- (BOOL) canFetchNow {
+//    
+//    BOOL fetchAcceptable = NO;
+//    NSDate *now = [NSDate date];
+//    
+//    if (self.lastFetch){
+//        double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
+//        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
+//            fetchAcceptable = YES;
+//            self.lastFetch = now;
+//        }
+//    } else {
+//        fetchAcceptable = YES;
+//        self.lastFetch = now;
+//    }
+//    
+//    
+//    return fetchAcceptable;
+//}
+
+- (double) minutesToNextFetchFromDate:(NSDate *)date {
     
-    BOOL fetchAcceptable = NO;
-    NSDate *now = [NSDate date];
+    double elapsedTime = 0.0;
     
     if (self.lastFetch){
-        double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
-        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
-            fetchAcceptable = YES;
-            self.lastFetch = now;
-        }
-    } else {
-        fetchAcceptable = YES;
-        self.lastFetch = now;
+        elapsedTime = [date timeIntervalSinceDate:self.lastFetch] / 60;
     }
     
-    
-    return fetchAcceptable;
+    return elapsedTime;
 }
 
 @end

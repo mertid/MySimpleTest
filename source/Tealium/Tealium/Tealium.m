@@ -658,12 +658,7 @@ __strong static NSDictionary *staticAllInstances = nil;
           if (error) {
               [weakSelf logDispatch:dispatchReturned status:status error:error];
           }
-          
-#warning Move to Collect module
-          
-          if ([weakSelf.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyOnRequest) {
-              return;
-          }
+              
           
       }];
     
@@ -933,6 +928,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch {
     
+    if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
+        if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfile)]){
+            [self.modulesDelegate fetchVisitorProfile];
+        }
+    }
+    
     [self.delegate tealium:self didSendDispatch:dispatch];
     [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
     
@@ -995,6 +996,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
+    
+    if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
+        if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfile)]){
+            [self.modulesDelegate fetchVisitorProfile];
+        }
+    }
     
     [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
 
