@@ -16,9 +16,8 @@
 /**
  *  Tealium is the main class for the Tealium Library.
  *
- *  This defines the public API for sending & receiving data through collect and by default audience stream
+ *  Currently implements a multiton pattern that permits multiple Tealium instances.
  *
- *  Currently it is entirely exposed via class methods.  This is done to allow flexabilitiy of changing the implementation.  Currently it is implemented using a singleton instance of the library and sending messages to it's instance methods.
  *  Internally the entire library runs inside its own serial queue so there is no need call Tealium methods from a background thread, it takes care of that on its own.
  *
  */
@@ -37,7 +36,7 @@
 
 #pragma mark - Instance Management
 /**
- *  Returns an instance of the library for the given key, or NIL is such an instance has not been previously initialized.
+ *  Returns an instance of the library for the given key, or NIL if such an instance has not been previously initialized.
  *
  *  @param key NSString identifier for the library instance.
  */
@@ -113,11 +112,16 @@
 - (NSDictionary * _Nonnull) persistentDataSourcesCopy;
 
 /**
+ *  Adds key-value info into the library instance's persistent data store.  Use this to track lifetime values or seldom-changed global data sources.
+ *
+ *  @param additionalDataSources An NSDictionary of string keys and values.
  */
 - (void) addPersistentDataSources:(NSDictionary * _Nonnull)additionalDataSources;
 
 /**
- 
+ *  Removes all keys from array parameter.
+ *
+ *  @param dataSourceKeys An NSArray of strings of the target keys to remove from the persistence store.
  */
 - (void) removePersistentDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 

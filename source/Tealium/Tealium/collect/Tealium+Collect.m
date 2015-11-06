@@ -11,8 +11,8 @@
 #import "TEALVisitorProfileHelpers.h"
 #import "TEALVisitorProfileStore.h"
 #import "TEALCollectDispatchService.h"
-#import "TEALCollectLegacyDispatchService.h"
-#import "TEALS2SDispatchService.h"
+#import "TEALS2SLegacyDispatchService.h"
+#import "TEALS2SLegacyDispatchService.h"
 #import "TEALError.h"
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>
@@ -48,19 +48,17 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 }
 
-- (void) enableCollectLegacy {
+- (void) enableS2SLegacy {
     
     NSArray *dispatchNetworkServices = [[self currentDispatchServices] copy];
     
-    if ([dispatchNetworkServices teal_containsObjectOfClass:[TEALCollectLegacyDispatchService class]]){
+    if ([dispatchNetworkServices teal_containsObjectOfClass:[TEALS2SLegacyDispatchService class]]){
         return;
     }
     
     NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
     
-//    TEALCollectLegacyDispatchService *dispatchService = [[TEALCollectLegacyDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString] visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
-    
-    TEALS2SDispatchService *dispatchService = [[TEALS2SDispatchService alloc] initWithDispatchURLString:[self.settings collectLegacyDispatchURLString]
+    TEALS2SLegacyDispatchService *dispatchService = [[TEALS2SLegacyDispatchService alloc] initWithDispatchURLString:[self.settings s2SLegacyDispatchURLString]
                                                                                               visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
     
     [dispatchService setup];

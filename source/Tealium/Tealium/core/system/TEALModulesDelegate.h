@@ -15,7 +15,7 @@
 @optional
 
 - (void) enableCollect;
-- (void) enableCollectLegacy;
+- (void) enableS2SLegacy;
 - (void) enableTagManagement;
 - (void) enableAutotrackingCrashes;
 - (void) enableAutotrackingLifecycle;
@@ -25,7 +25,7 @@
 - (void) enableRemoteCommands;
 
 - (void) disableCollect;
-- (void) disableCollectLegacy;
+- (void) disableS2SLegacy;
 - (void) disableTagMangement;
 - (void) disableAutotrackingLifecycle;
 - (void) disableAutotrackingCrashes;

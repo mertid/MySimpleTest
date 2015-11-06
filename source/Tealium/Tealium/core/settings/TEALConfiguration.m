@@ -64,7 +64,7 @@
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishURL = nil;
     configuration.overrideCollectDispatchURL = nil;
-    configuration.overrideCollectLegacyDispatchURL = nil;
+    configuration.overrideS2SLegacyDispatchURL = nil;
    
     configuration.audienceStreamProfile = @"main";
     
@@ -110,7 +110,7 @@
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
                                           @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],
-                                          @"override collect legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectLegacyDispatchURL]
+                                          @"override collect legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL]
                                           };
     
     return [NSString teal_descriptionForObject:self description:@"Compile time options" fromDictionary:descriptionData];

@@ -93,7 +93,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @property (nonatomic) NSString *overrideCollectDispatchURL;
 
 // TODO: comments
-@property (nonatomic) NSString *overrideCollectLegacyDispatchURL;
+@property (nonatomic) NSString *overrideS2SLegacyDispatchURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used

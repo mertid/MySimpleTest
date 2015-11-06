@@ -11,31 +11,30 @@
 #endif
 
 #import "Tealium.h"
-
 #import "TEALBlocks.h"
-
-#import "TEALVisitorProfile.h"
-#import "TEALVisitorProfileCurrentVisit.h"
-
-#import "TEALVisitorProfileBaseAttribute.h"
-#import "TEALVisitorProfileAudienceAttribute.h"
-#import "TEALVisitorProfileBadgeAttribute.h"
-#import "TEALVisitorProfileDateAttribute.h"
-#import "TEALVisitorProfileFlagAttribute.h"
-#import "TEALVisitorProfileMetricAttribute.h"
-#import "TEALVisitorProfilePropertyAttribute.h"
 #import "TEALModulesDelegate.h"
+#import "TEALVisitorProfile.h"
+
+#warning Are these necessary?
+//#import "TEALVisitorProfileCurrentVisit.h"
+//#import "TEALVisitorProfileBaseAttribute.h"
+//#import "TEALVisitorProfileAudienceAttribute.h"
+//#import "TEALVisitorProfileBadgeAttribute.h"
+//#import "TEALVisitorProfileDateAttribute.h"
+//#import "TEALVisitorProfileFlagAttribute.h"
+//#import "TEALVisitorProfileMetricAttribute.h"
+//#import "TEALVisitorProfilePropertyAttribute.h"
 
 
 @interface Tealium (Collect) <TEALModulesDelegate>
 
 /**
- *
+ *  TODO
  */
 - (NSURL * _Nullable) profileURL;
 
 /**
- *
+ *  TODO
  */
 - (NSURL * _Nullable) profileDefinitionURL;
 

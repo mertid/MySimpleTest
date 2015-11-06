@@ -20,7 +20,7 @@
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *publishSettings;
 @property (nonatomic, strong) NSString *privateCollectDispatchURLString;
-@property (nonatomic, strong) NSString *privateCollectLegacyDispatchURLString;
+@property (nonatomic, strong) NSString *privateS2SLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
 @property (nonatomic, weak) NSString *visitorID;
@@ -59,7 +59,7 @@
     return [baseURLString stringByAppendingString:queryString];
 }
 
-+ (NSString *) collectLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
++ (NSString *) s2SLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
     NSString *urlPrefix = @"https";
     
@@ -221,12 +221,12 @@
     return self.configuration.autotrackingCrashesEnabled;
 }
 
-- (BOOL) collectLegacyEnabled {
+- (BOOL) s2SLegacyEnabled {
 
 #warning RESET after dev
     return YES;
     
-    return self.publishSettings.enableCollectLegacy;
+    return self.publishSettings.enableS2SLegacy;
 }
 
 - (BOOL) libraryShouldDisable {
@@ -308,12 +308,12 @@
     return self.privateCollectDispatchURLString;
 }
 
-- (NSString *) collectLegacyDispatchURLString {
+- (NSString *) s2SLegacyDispatchURLString {
     
-    if (!self.privateCollectLegacyDispatchURLString){
-        self.privateCollectLegacyDispatchURLString = [TEALSettings collectLegacyDispatchURLStringFromConfiguration:self];
+    if (!self.privateS2SLegacyDispatchURLString){
+        self.privateS2SLegacyDispatchURLString = [TEALSettings s2SLegacyDispatchURLStringFromConfiguration:self];
     }
-    return self.privateCollectLegacyDispatchURLString;
+    return self.privateS2SLegacyDispatchURLString;
 }
 
 - (NSString *) configurationDescription {
@@ -430,7 +430,7 @@
     
     if (preFetchError){
         if (completion){
-            completion (nil, preFetchError);
+            completion (NO, preFetchError);
         }
         return;
     }

@@ -32,7 +32,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) autotrackingCrashesEnabled;
 - (BOOL) collectEnabled;
-- (BOOL) collectLegacyEnabled;
+- (BOOL) s2SLegacyEnabled;
 - (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
@@ -56,7 +56,7 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 - (NSUInteger) offlineDispatchQueueSize;
 
 - (NSString *) collectDispatchURLString;
-- (NSString *) collectLegacyDispatchURLString;
+- (NSString *) s2SLegacyDispatchURLString;
 - (NSString *) configurationDescription;
 - (NSString *) publishSettingsDescription;
 - (NSString *) publishSettingsURLString;

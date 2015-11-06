@@ -524,15 +524,15 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     // Collect Legacy
-    if ([self.settings collectLegacyEnabled]){
+    if ([self.settings s2SLegacyEnabled]){
         
-        if ([self.modulesDelegate respondsToSelector:@selector(enableCollectLegacy)]){
-            [self.modulesDelegate enableCollectLegacy];
+        if ([self.modulesDelegate respondsToSelector:@selector(enableS2SLegacy)]){
+            [self.modulesDelegate enableS2SLegacy];
         }
         
     } else {
-        if (([self.modulesDelegate respondsToSelector:@selector(disableCollectLegacy)])){
-            [self.modulesDelegate disableCollectLegacy];
+        if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
+            [self.modulesDelegate disableS2SLegacy];
         }
     }
     
@@ -614,8 +614,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     // Collect Legacy
-    if (([self.modulesDelegate respondsToSelector:@selector(disableCollectLegacy)])){
-        [self.modulesDelegate disableCollectLegacy];
+    if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
+        [self.modulesDelegate disableS2SLegacy];
     }
     
     // UIEvents

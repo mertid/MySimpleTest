@@ -1,12 +1,12 @@
 //
-//  TEALCollectLegacyDispatchManager.m
+//  TEALS2SLegacyDispatchManager.m
 //  Tealium Mobile Library
 //
 //  Created by Jason Koo on 10/29/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALS2SDispatchService.h"
+#import "TEALS2SLegacyDispatchService.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALURLSessionManager.h"
 #import "TEALDispatch.h"
@@ -14,7 +14,7 @@
 #import "TEALError.h"
 #import "TEALDataSourceConstants.h"
 
-@interface TEALS2SDispatchService ()
+@interface TEALS2SLegacyDispatchService ()
 
 @property (nonatomic, weak) NSString *dispatchURLString;
 @property (nonatomic, strong) NSString *visitorID;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation TEALS2SDispatchService
+@implementation TEALS2SLegacyDispatchService
 
 - (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString
                                  visitorID:(NSString *)visitorID
@@ -50,7 +50,7 @@
 #pragma mark - PRIVATE
 
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<TEALS2SDispatchService dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)self.status];
+    return [NSString stringWithFormat:@"<TEALS2SLegacyDispatchService dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)self.status];
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES

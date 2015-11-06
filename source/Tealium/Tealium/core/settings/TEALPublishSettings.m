@@ -25,7 +25,7 @@ NSString * const TEALPublishSettingKeyOfflineDispatchSize = @"offline_dispatch_l
 NSString * const TEALPublishSettingKeyLowBatteryMode = @"battery_saver";
 NSString * const TEALPublishSettingKeyWifiOnlyMode = @"wifi_only_sending";
 NSString * const TEALPublishSettingKeyCollectEnable = @"enable_collect";
-NSString * const TEALPublishSettingKeyCollectLegacyEnable = @"enable_collect_legacy";
+NSString * const TEALPublishSettingKeyS2SLegacyEnable = @"enable_s2s_legacy";
 NSString * const TEALPublishSettingKeyTagManagmentEnable = @"enable_tag_management";
 NSString * const TEALPublishSettingKeyStatus = @"status";
 
@@ -210,7 +210,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
         _enableCollect           = YES;
-        _enableCollectLegacy            = NO;
+        _enableS2SLegacy            = NO;
         _enableTagManagement            = NO;
         
         _disableLibrary = NO;
@@ -245,7 +245,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     if (self.enableLowBatterySuppress != otherPublishSettings.enableLowBatterySuppress) return NO;
     if (self.enableSendWifiOnly != otherPublishSettings.enableSendWifiOnly) return NO;
     if (self.enableCollect != otherPublishSettings.enableCollect) return NO;
-    if (self.enableCollectLegacy != otherPublishSettings.enableCollectLegacy) return NO;
+    if (self.enableS2SLegacy != otherPublishSettings.enableS2SLegacy) return NO;
     if (self.enableTagManagement != otherPublishSettings.enableTagManagement) return NO;
     
     if (self.disableLibrary != otherPublishSettings.disableLibrary) return NO;
@@ -310,7 +310,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _enableLowBatterySuppress       = [aDecoder decodeBoolForKey:@"shouldLowBatterySuppress"];
         _enableSendWifiOnly             = [aDecoder decodeBoolForKey:@"shouldSendWifiOnly"];
         _enableCollect           = [aDecoder decodeBoolForKey:TEALPublishSettingKeyCollectEnable];
-        _enableCollectLegacy            = [aDecoder decodeBoolForKey:TEALPublishSettingKeyCollectLegacyEnable];
+        _enableS2SLegacy            = [aDecoder decodeBoolForKey:TEALPublishSettingKeyS2SLegacyEnable];
         _enableTagManagement            = [aDecoder decodeBoolForKey:TEALPublishSettingKeyTagManagmentEnable];
         
         _disableLibrary = [aDecoder decodeBoolForKey:@"disableLibrary"];
@@ -351,7 +351,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     [aCoder encodeBool:self.enableLowBatterySuppress forKey:@"shouldLowBatterySuppress"];
     [aCoder encodeBool:self.enableSendWifiOnly forKey:@"shouldSendWifiOnly"];
     [aCoder encodeBool:self.enableCollect forKey:TEALPublishSettingKeyCollectEnable];
-    [aCoder encodeBool:self.enableCollectLegacy forKey:TEALPublishSettingKeyCollectLegacyEnable];
+    [aCoder encodeBool:self.enableS2SLegacy forKey:TEALPublishSettingKeyS2SLegacyEnable];
     [aCoder encodeBool:self.enableTagManagement forKey:TEALPublishSettingKeyTagManagmentEnable];
 
     [aCoder encodeBool:self.disableLibrary forKey:@"disableLibrary"];
@@ -381,7 +381,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     NSString *lowBattery = settings[TEALPublishSettingKeyLowBatteryMode];
     NSString *wifiOnly = settings[TEALPublishSettingKeyWifiOnlyMode];
     NSString *audiencestream = settings[TEALPublishSettingKeyCollectEnable];
-    NSString *collectLegacy = settings[TEALPublishSettingKeyCollectLegacyEnable];
+    NSString *s2SLegacy = settings[TEALPublishSettingKeyS2SLegacyEnable];
     NSString *tagmanagement = settings[TEALPublishSettingKeyTagManagmentEnable];
     NSString *overrideLog = [settings[TEALPublishSettingKeyOverrideLog] lowercaseString];
     
@@ -426,8 +426,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         self.enableCollect = [audiencestream boolValue];
     }
     
-    if (collectLegacy){
-        self.enableCollectLegacy = [collectLegacy boolValue];
+    if (s2SLegacy){
+        self.enableS2SLegacy = [s2SLegacy boolValue];
     }
     
     if (tagmanagement) {
@@ -500,7 +500,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                             @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
                                             @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
                                             @"enable Collect":[NSString teal_stringFromBool:self.enableCollect],
-                                            @"enable Collect Legacy":[NSString teal_stringFromBool:self.enableCollectLegacy],
+                                            @"enable Collect Legacy":[NSString teal_stringFromBool:self.enableS2SLegacy],
                                             @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement],
                                             @"override log level":[NSString teal_dictionarySafeString:self.overrideLogLevel]
                                             };

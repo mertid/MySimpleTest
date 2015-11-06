@@ -1,5 +1,5 @@
 //
-//  TEALCollectLegacyDispatchManager.h
+//  TEALS2SLegacyDispatchManager.h
 //  Tealium Mobile Library
 //
 //  Created by Jason Koo on 10/29/15.
@@ -14,7 +14,7 @@
 @class TEALURLSessionManager;
 
 
-@interface TEALS2SDispatchService : NSObject <TEALDispatchService>
+@interface TEALS2SLegacyDispatchService : NSObject <TEALDispatchService>
 
 - (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString
                                  visitorID:(NSString *)visitorID

@@ -22,6 +22,8 @@
 
 typedef void (^ TEALRemoteCommandResponseBlock)(TEALRemoteCommandResponse *response);
 
+#warning Move methods into private header - leave only read-only properties for public use
+
 - (instancetype) initWithURLString:(NSString*)urlString completionHandler:(TEALRemoteCommandResponseBlock)responseBlock;
 
 - (void) send;

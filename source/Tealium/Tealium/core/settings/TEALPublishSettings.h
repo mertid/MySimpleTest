@@ -29,7 +29,7 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL enableLowBatterySuppress;
 @property (nonatomic) BOOL enableSendWifiOnly;
 @property (nonatomic) BOOL enableCollect;
-@property (nonatomic) BOOL enableCollectLegacy;
+@property (nonatomic) BOOL enableS2SLegacy;
 @property (nonatomic) BOOL enableTagManagement;
 
 @property (nonatomic) BOOL disableLibrary;

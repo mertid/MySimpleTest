@@ -1,5 +1,5 @@
 //
-//  TealiumCollectLegacyTests.m
+//  TealiumS2SLegacyTests.m
 //  TealiumiOS
 //
 //  Created by Jason Koo on 11/3/15.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface TealiumCollectLegacyTests : XCTestCase
+@interface TealiumS2SLegacyTests : XCTestCase
 
 @end
 
-@implementation TealiumCollectLegacyTests
+@implementation TealiumS2SLegacyTests
 
 - (void)setUp {
     [super setUp];

@@ -138,6 +138,7 @@
     command.queue = queue;
     
     [self addNewCommands:@{name:command}];
+    
     return YES;
 }
 
