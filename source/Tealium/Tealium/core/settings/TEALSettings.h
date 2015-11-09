@@ -7,23 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TEALPublishSettings.h"
-#import "TEALBlocks.h"
-#import "TEALLogger.h"
 
 @class TEALConfiguration;
+@class TEALPublishSettings;
 @class TEALURLSessionManager;
-
-typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatus status, NSError *error);
 
 @interface TEALSettings : NSObject
 
 @property (weak) TEALURLSessionManager *urlSessionManager;
-@property (readonly) TEALPublishSettings *publishSettings;
+@property (readonly) TEALPublishSettings * _Nonnull publishSettings;
 @property (weak) NSString *traceID;
 @property (weak) NSString *visitorIDCopy;
 
-- (instancetype) initWithConfiguration:(TEALConfiguration *)configuration;
+- (instancetype _Nullable) initWithConfiguration:(TEALConfiguration * _Nonnull)configuration;
 
 - (BOOL) autotrackingDeviceInfoEnabled;
 - (BOOL) autotrackingIvarsEnabled;
@@ -45,25 +41,25 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
 
 - (double) daysDispatchesValid;
 
-- (NSString *) account;
-- (NSString *) asProfile;
-- (NSString *) tiqProfile;
-- (NSString *) environment;
-- (NSString *) instanceID;
+- (NSString * _Nonnull) account;
+- (NSString * _Nonnull) asProfile;
+- (NSString * _Nonnull) tiqProfile;
+- (NSString * _Nonnull) environment;
+- (NSString * _Nonnull) instanceID;
 
 - (NSUInteger) dispatchSize;
-- (TEALLogLevel) logLevel;
+- (NSString * _Nonnull) logLevelString;
 - (NSUInteger) offlineDispatchQueueSize;
 
-- (NSString *) collectDispatchURLString;
-- (NSString *) s2SLegacyDispatchURLString;
-- (NSString *) configurationDescription;
-- (NSString *) publishSettingsDescription;
-- (NSString *) publishSettingsURLString;
-- (NSString *) publishURLString;
+- (NSString * _Nullable) collectDispatchURLString;
+- (NSString * _Nullable) s2SLegacyDispatchURLString;
+- (NSString * _Nullable) configurationDescription;
+- (NSString * _Nullable) publishSettingsDescription;
+- (NSString * _Nullable) publishSettingsURLString;
+- (NSString * _Nullable) publishURLString;
 - (NSUInteger) pollingFrequency;
-- (NSURL *) profileURL;
-- (NSURL *) profileDefinitionsURL;
+- (NSURL * _Nullable) profileURL;
+- (NSURL * _Nullable) profileDefinitionsURL;
 
 /*
  *  Trigger settings to check for new publish settings
@@ -72,6 +68,6 @@ typedef void (^TEALFetchPublishSettingsCompletionBlock)(TEALPublishSettingsStatu
  *      true if new settings found, false if no settings found or if no change
  *      in settings found.
  */
-- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion;
+- (void) fetchNewRawPublishSettingsWithCompletion:(void (^ _Nonnull)(BOOL success, NSError * _Nullable error))completion;
 
 @end

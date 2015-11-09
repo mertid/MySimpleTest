@@ -11,8 +11,6 @@
 #endif
 
 #import "Tealium.h"
-#import "TEALBlocks.h"
-#import "TEALModulesDelegate.h"
 #import "TEALVisitorProfile.h"
 
 #warning Are these necessary?
@@ -25,8 +23,7 @@
 //#import "TEALVisitorProfileMetricAttribute.h"
 //#import "TEALVisitorProfilePropertyAttribute.h"
 
-
-@interface Tealium (Collect) <TEALModulesDelegate>
+@interface Tealium (Collect)
 
 /**
  *  TODO
@@ -69,7 +66,7 @@
  *  @param completion An optional completion block
  */
 - (void) joinTraceWithToken:(NSString * _Nonnull)token
-                 completion:(TEALBooleanCompletionBlock _Nullable)completion;
+                 completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 /**
  *  Stops sending trace data for the provided token in the joinTraceWithToken: method.

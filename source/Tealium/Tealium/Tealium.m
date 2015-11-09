@@ -9,6 +9,7 @@
 #import "Tealium.h"
 
 #import "TEALDataSources.h"
+#import "TEALDispatch+PrivateHeader.h"
 #import "TEALDispatchManager.h"
 #import "TEALDelegateManager.h"
 #import "TEALDispatchService.h"
@@ -386,8 +387,11 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     // Init logger
     self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
-    [self.logger updateLogLevel:[self.settings logLevel]];
+    
+    [self.logger updateLogLevel:[self.settings logLevelString]];
+    
     [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+    
     if (!error &&
         !self.logger) {
         
@@ -666,7 +670,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) logDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status error:(NSError *)error{
     
-    if ([self.settings logLevel] >= TEALLogLevelNone) {
+    TEALLogLevel logLevel = [TEALLogger logLevelFromString:[self.settings logLevelString]];
+    if (logLevel >= TEALLogLevelNone) {
         
         NSString *statusString = nil;
         
@@ -740,7 +745,8 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
             
-            [weakSelf.logger updateLogLevel:[weakSelf.settings logLevel]];
+            [weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]];
+            
             [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
             
             [weakSelf updateModules];
@@ -1019,11 +1025,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     return [self.settings offlineDispatchQueueSize];
 }
 
-/**
- *  Return an error if the dispatch manager should not send now
- */
 - (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch {
     
+    // Return an error if the dispatch manager should NOT send now
+
     NSError *error = nil;
     NSArray *dispatchServices = [self currentDispatchServices];
 

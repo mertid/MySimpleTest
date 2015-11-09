@@ -8,6 +8,7 @@
 
 #import "Tealium+Collect.h"
 #import "Tealium+PrivateHeader.h"
+#import "TEALModulesDelegate.h"
 #import "TEALVisitorProfileHelpers.h"
 #import "TEALVisitorProfileStore.h"
 #import "TEALCollectDispatchService.h"

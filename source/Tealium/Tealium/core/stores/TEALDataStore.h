@@ -10,11 +10,11 @@
 #import <Foundation/Foundation.h>
 
 
-/**
- *  Private data storage handling base class. Implements subscripting so mutable
- *  dictionary literal type subscript commands can be used on instances of this
- *  class or it's subclasses
- */
+
+// Private data storage handling base class. Implements subscripting so mutable
+// dictionary literal type subscript commands can be used on instances of this
+// class or it's subclasses
+
 @interface TEALDataStore : NSObject
 
 @property (nonatomic, readonly) dispatch_queue_t queue;

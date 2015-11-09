@@ -12,6 +12,7 @@
 #import "TEALError.h"
 #import "TEALBlocks.h"
 #import "TEALConfiguration+PrivateHeader.h"
+#import "TEALPublishSettings.h"
 #import "TEALURLSessionManager.h"
 #import "TEALDataSourceConstants.h"
 
@@ -340,20 +341,18 @@
     return self.publishSettings.dispatchSize;
 }
 
-- (TEALLogLevel) logLevel {
+- (NSString *) logLevelString {
     
-    NSString *logLevelString = self.publishSettings.overrideLogLevel;
+    NSString *finalLogLevelString = self.publishSettings.overrideLogLevel;
     
-    if (!logLevelString){
+    if (!finalLogLevelString){
         
         // Automatic off of env setting
-        logLevelString = self.configuration.environmentName;
+        finalLogLevelString = self.configuration.environmentName;
         
     }
     
-    TEALLogLevel logLevel = [TEALLogger logLevelFromString:logLevelString];
-    
-    return logLevel;
+    return finalLogLevelString;
     
 }
 

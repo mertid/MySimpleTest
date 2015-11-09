@@ -7,7 +7,7 @@
 //
 
 #import "TEALDispatchManager.h"
-#import "TEALDispatch.h"
+#import "TEALDispatch+PrivateHeader.h"
 #import "TEALBlocks.h"
 
 static NSString * const Tealium_DispatchQueueKey = @"com.tealium.dispatch_queue";

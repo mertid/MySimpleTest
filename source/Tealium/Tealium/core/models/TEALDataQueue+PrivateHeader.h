@@ -6,9 +6,7 @@
 //
 //
 
-//  Interface for Testing and possibly subclasssing only!
-
-@interface TEALDataQueue (PrivateHeaders)
+@interface TEALDataQueue (Private)
 
 @property (nonatomic, strong) NSMutableArray *dataQueue;
 

@@ -11,7 +11,6 @@
 #import "TEALConfiguration.h"
 #import "TEALDispatch.h"
 #import "TealiumDelegate.h"
-//#import "NSObject+Tealium.h"
 
 /**
  *  Tealium is the main class for the Tealium Library.
@@ -50,6 +49,8 @@
 + (void) destroyInstanceForKey:(NSString * _Nonnull)key;
 
 /**
+ *  Optional delegate primarily for monitoring or manipulating dispatch data.
+ *
  *  @return The current delegate of the library instance
  */
 - (id<TealiumDelegate> _Nullable) delegate;

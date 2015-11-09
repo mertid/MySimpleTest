@@ -10,6 +10,9 @@
 
 @protocol TEALRemoteCommandResponseDelegate ;
 
+/**
+ *
+ */
 @interface TEALRemoteCommandResponse : NSObject
 
 @property (nonatomic, weak)     id <TEALRemoteCommandResponseDelegate> delegate;

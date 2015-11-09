@@ -10,13 +10,10 @@
 
 @implementation TEALRemoteCommandConstantsPrivateHeader
 
-//NSString * const TEALKeyTagRemoteCommand =                                  @"command";
 NSString * const TEALKeyTagRemoteCommandID =                                @"commandId";
-//NSString * const TEALKeyTagRemoteCommandDescription =                       @"description";
 NSString * const TEALKeyTagRemoteCommandAuthenticate =                      @"authenticate";
 NSString * const TEALKeyTagRemoteCommandArguments =                         @"arguments";
 NSString * const TEALKeyTagRemoteCommandBody =                              @"body";
-//NSString * const TEALKeyTagRemoteCommandCommandBlock =                      @"command";
 NSString * const TEALKeyTagRemoteCommandCommandDict =                       @"commandDict";
 NSString * const TEALKeyTagRemoteCommandConfig =                            @"config";
 NSString * const TEALKeyTagRemoteCommandData =                              @"data";
@@ -33,6 +30,5 @@ NSString * const TEALKeyTagRemoteCommandURL =                               @"ur
 NSString * const TEALKeyTagRemoteCommandUsername =                          @"username";
 NSString * const TEALKeyTagRemoteReservedCommandHTTP =                      @"_http";
 NSString * const TEALKeyTagRemoteReservedCommandMobileCompanion =           @"_mobilecompanion";
-//NSString * const TEALRemoteCommandQueue =                                @"commandQueue";
 
 @end

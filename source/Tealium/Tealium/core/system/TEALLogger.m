@@ -80,8 +80,13 @@
     
 }
 
-- (void) updateLogLevel:(TEALLogLevel)logLevel {
-    self.logLevel = logLevel;
+//- (void) updateLogLevel:(TEALLogLevel)logLevel {
+//    self.logLevel = logLevel;
+//}
+
+- (void) updateLogLevel:(NSString *)logLevelString {
+    
+    self.logLevel = [TEALLogger logLevelFromString:logLevelString];
 }
 
 - (void) logProd:(NSString *) format, ... {

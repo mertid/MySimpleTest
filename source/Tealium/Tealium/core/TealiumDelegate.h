@@ -43,7 +43,7 @@
 - (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch;
 
 /**
- *  // TODO
+ *  Provides pointer to TEALDispatch that was just sent by a dispatch service.
  *
  *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its
@@ -54,7 +54,7 @@
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch;
 
 /**
- *  // TODO
+ *  Provides pointer to TEALDispatch that was just saved for later delivery.
  *
  *  @param tealium The Tealium instance confirming
  *  @param dispatch The dispatch in question. Do not manipulate any of its 
@@ -65,7 +65,8 @@
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
 
 /*
- *  // TODO
+ *  If Tag Management dispatch service is enabled, passes pointer to it's UIWebView
+ *  that hosts UTAG.js
  *
  *  @param tealium The Tealium instance ready
  *  @param webView The WebView instance used by any Tag Management service - nil 

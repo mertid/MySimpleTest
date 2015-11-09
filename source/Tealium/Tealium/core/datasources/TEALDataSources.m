@@ -13,6 +13,7 @@
 #import "TEALDeviceDataSources.h"
 #import "TEALSharedDataSources.h"
 #import "TEALSystemHelpers.h"
+#import "TEALDispatch+PrivateHeader.h"
 
 @interface TEALDataSources()
 
