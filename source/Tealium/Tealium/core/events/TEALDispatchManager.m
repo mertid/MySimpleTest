@@ -73,6 +73,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) updateQueuedCapacity:(NSUInteger)capacity {
 
+#warning Run queues here?
+    
     [self runQueuedDispatches];
     [self.queuedDispatches updateCapacity:capacity];
 }
@@ -135,6 +137,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         [self enqueueDispatch:aDispatch completionBlock:completionBlock];
     }
+    
+#warning MOVE THIS
     
     [self runQueuedDispatches];
     

@@ -904,6 +904,8 @@ __strong static NSDictionary *staticAllInstances = nil;
  // TODO: handle wifi only, low battery and other settings
  // ~commHandlers big if else checks
 
+#warning Add error argument for additional info
+
 - (BOOL) dispatchManagerShouldDispatch {
     
     BOOL shouldDispatch = YES;

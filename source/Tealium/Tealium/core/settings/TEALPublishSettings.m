@@ -209,8 +209,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _dispatchSize                   = 1;
         _enableLowBatterySuppress       = YES;
         _enableSendWifiOnly             = NO;
-        _enableCollect           = YES;
-        _enableS2SLegacy            = NO;
+        _enableCollect                  = NO;
+        _enableS2SLegacy                = NO;
         _enableTagManagement            = NO;
         
         _disableLibrary = NO;

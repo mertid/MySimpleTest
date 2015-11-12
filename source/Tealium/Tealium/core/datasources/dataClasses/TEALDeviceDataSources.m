@@ -189,7 +189,7 @@ static NSString *staticDeviceArchitecture;
     
     NSString *string = nil;
     
-#ifndef TARGET_OS_TV
+#ifdef TEAL_TARGET_IOS
     
     if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
         deviceIsCharging = true;

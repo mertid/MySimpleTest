@@ -8,7 +8,7 @@
 
 #import "SecondViewController.h"
 
-@import TealiumIOS;
+#import "Tracker.h"
 
 @interface SecondViewController ()
 
@@ -21,26 +21,20 @@
     // Do any additional setup after loading the view.
     
     self.title = @"Second View Controller";
-//    [self teal_setDataSources:@{@"event_name":@"reveal"}];
-    self.testProperty = @"iVarTestValue";
     
-    [[Tealium instanceForKey:@"1"] removeVolatileDataSourcesForKeys:@[@"volatileKey"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-//    [[Tealium instanceForKey:@"1"] setAutotrackingForObject:self enable:YES];
-    
-//    [NSException raise:@"testException" format:@"exception data blah blah"];
+    [Tracker trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
     
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-//    [[Tealium instanceForKey:@"1"] revealMobileCompanion];
-    [[Tealium instanceForKey:@"2"] trackViewWithTitle:@"2ndView" dataSources:nil];
+
         
 }
 

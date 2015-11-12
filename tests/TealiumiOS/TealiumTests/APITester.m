@@ -8,8 +8,7 @@
 
 #import "APITester.h"
 #import "ShowViewTableViewCell.h"
-
-@import TealiumIOS;
+#import "Tracker.h"
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     TealiumAPIMenuItemSendEvent = 0,
@@ -29,20 +28,14 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     
     self.title = @"API Sampler";
     self.autotrackingViewEnabled = YES;
-    
-    [[Tealium instanceForKey:@"1"] addRemoteCommandId:@"testCommand"
-                                     description:nil
-                                     targetQueue:dispatch_get_main_queue()
-                                           block:^(TEALRemoteCommandResponse *response) {
-                                               
-                                               NSLog(@"%s Response Received: %@", __FUNCTION__, response);
-                                               
-                                           }];
 
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [Tracker trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
+
 
 }
 
@@ -190,6 +183,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 - (void) presentTraceInputView {
+    
+    // TODO?
     
 }
 
