@@ -18,6 +18,16 @@
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>
 
+#warning Are these necessary?
+//#import "TEALVisitorProfileCurrentVisit.h"
+//#import "TEALVisitorProfileBaseAttribute.h"
+//#import "TEALVisitorProfileAudienceAttribute.h"
+//#import "TEALVisitorProfileBadgeAttribute.h"
+//#import "TEALVisitorProfileDateAttribute.h"
+//#import "TEALVisitorProfileFlagAttribute.h"
+//#import "TEALVisitorProfileMetricAttribute.h"
+//#import "TEALVisitorProfilePropertyAttribute.h"
+
 char const * const TEALKVOAutotrackCollectProfile = "com.tealium.kvo.collect.profile";
 char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collect.profilestore";
 
@@ -114,13 +124,14 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
             
             if (profile) {
-                [weakSelf.logger logDev:@"got profile!!! : %@", profile];
                 
                 [weakSelf collect_setCachedProfile:profile];
                 
                 completion(weakSelf.collect_cachedProfile, nil);
                 
             } else {
+                
+#warning Move this error message to callback
                 
                 [weakSelf.logger logDev:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
                 

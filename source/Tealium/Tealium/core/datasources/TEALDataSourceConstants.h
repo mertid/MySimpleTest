@@ -10,7 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define TEALLibraryVersion @"5.0";
+//#define TEALLibraryVersion [NSString stringWithFormat:@"%.02f", TEAL_TARGET_VERSION]
 
 #pragma mark - UDO / Datasource Keys
 

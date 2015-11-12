@@ -14,20 +14,4 @@
 
 + (NSString *) mpsVersionNumber;
 
-//+ (NSString *) architecture;
-
-//+ (NSString *) bundleId;
-//
-//+ (NSString *) bundleVersion;
-
-//+ (NSString *) cpuType;
-
-//+ (NSString *) applicationUUIDWithKey:(NSString *)key;
-
-//+ (NSString *) applicationName;
-
-//+ (NSString *) hardwareName;
-//
-//+ (NSString *) timestampAsStringFromDate:(NSDate *)date;
-
 @end

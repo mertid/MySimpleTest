@@ -6,5 +6,4 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-
-#import <TealiumTVOS/Tealium.h>
+@import TealiumTVOS;

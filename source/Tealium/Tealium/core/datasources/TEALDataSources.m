@@ -14,6 +14,7 @@
 #import "TEALSharedDataSources.h"
 #import "TEALSystemHelpers.h"
 #import "TEALDispatch+PrivateHeader.h"
+#import "TEALVersion.h"
 
 @interface TEALDataSources()
 
@@ -221,7 +222,8 @@ static NSDictionary *staticCompileTimeDataSources;
     NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
     if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
 
-    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
+    // TODO: 5.1
+//    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
     
     return datasources;
 }

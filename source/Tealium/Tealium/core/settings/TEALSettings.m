@@ -35,7 +35,7 @@
 
 #pragma mark - CLASS METHODS
 
-+ (NSString *) collectDispatchURLStringFromConfiguration:(TEALSettings *)settings {
++ (NSString *) defaultCollectDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
     NSString *urlPrefix = @"https";
     
@@ -60,7 +60,7 @@
     return [baseURLString stringByAppendingString:queryString];
 }
 
-+ (NSString *) s2SLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
++ (NSString *) defaultS2SLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
     NSString *urlPrefix = @"https";
     
@@ -69,7 +69,7 @@
     }
     
     NSString *account = [settings account];
-    NSString *profile = @"main"; // Collect calls should always go to main
+    NSString *profile = [settings asProfile];
     NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
 
     NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
@@ -78,6 +78,8 @@
 }
 
 + (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
+    
+#warning NOT working with override settings
     
     if (configuration.overridePublishSettingsURL) {
         return configuration.overridePublishSettingsURL;
@@ -123,7 +125,14 @@
         return nil;
     }
     
-    NSString *urlString = [NSString stringWithFormat:@"http://visitor-service.tealiumiq.com/%@/%@/%@",
+    NSString *urlPrefix = @"https:";
+    
+    if ([settings useHTTP]) {
+        urlPrefix = @"http:";
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/%@/%@/%@",
+                           urlPrefix,
                            settings.account,
                            settings.asProfile,
                            [settings visitorIDCopy]];
@@ -137,7 +146,14 @@
         return nil;
     }
     
-    NSString *urlString = [NSString stringWithFormat:@"http://visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
+    NSString *urlPrefix = @"https:";
+    
+    if ([settings useHTTP]) {
+        urlPrefix = @"http:";
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
+                           urlPrefix,
                            [settings account],
                            [settings asProfile]];
     
@@ -278,7 +294,7 @@
 }
 
 - (NSString *) asProfile {
-    return self.configuration.audienceStreamProfile;
+    return @"main";
 }
 
 - (NSString *) tiqProfile {
@@ -295,7 +311,7 @@
 
 - (NSString *) collectDispatchURLString {
     if (!self.privateCollectDispatchURLString) {
-        self.privateCollectDispatchURLString = [TEALSettings collectDispatchURLStringFromConfiguration:self];
+        self.privateCollectDispatchURLString = [TEALSettings defaultCollectDispatchURLStringFromConfiguration:self];
     }
     return self.privateCollectDispatchURLString;
 }
@@ -303,7 +319,7 @@
 - (NSString *) s2SLegacyDispatchURLString {
     
     if (!self.privateS2SLegacyDispatchURLString){
-        self.privateS2SLegacyDispatchURLString = [TEALSettings s2SLegacyDispatchURLStringFromConfiguration:self];
+        self.privateS2SLegacyDispatchURLString = [TEALSettings defaultS2SLegacyDispatchURLStringFromConfiguration:self];
     }
     return self.privateS2SLegacyDispatchURLString;
 }

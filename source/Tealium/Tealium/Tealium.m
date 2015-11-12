@@ -25,6 +25,7 @@
 #import "TEALSystemHelpers.h"
 #import "TEALTimestampDataSources.h"
 #import "TEALURLSessionManager.h"
+#import "TEALVersion.h"
 
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
@@ -55,6 +56,9 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration *)configuration {
     
+#warning OPTIMIZE this property assignment
+    
+    configuration.instanceID  = key;
     
     return [Tealium newInstanceForKey:key
                         configuration:configuration
@@ -246,7 +250,6 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)completion{
     
-    configuration.instanceID = key;
     __block NSError *newInstanceError = nil;
     
     Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
@@ -527,7 +530,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
     }
     
-    // Collect Legacy
+    // S2S Legacy
     if ([self.settings s2SLegacyEnabled]){
         
         if ([self.modulesDelegate respondsToSelector:@selector(enableS2SLegacy)]){
@@ -617,7 +620,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         [self.modulesDelegate disableCollect];
     }
     
-    // Collect Legacy
+    // S2S Legacy
     if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
         [self.modulesDelegate disableS2SLegacy];
     }
@@ -693,18 +696,22 @@ __strong static NSDictionary *staticAllInstances = nil;
                 break;
         }
         
-        NSString *errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
+        NSString *errorInfo = @"";
+        
+        if (error != nil){
+            errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
+        }
         
         if ([dispatch.payload isKindOfClass:[NSString class]]) {
             
             [self.logger logDev:@"%@ dispatch with payload %@%@",
                  statusString,
                  dispatch.payload,
-                 error? errorInfo: @""];
+                 errorInfo];
             
         } else {
             
-            [self.logger logDev:@"%@ dispatch: %@%@%@", statusString, dispatch, error? errorInfo:@""];
+            [self.logger logDev:@"%@ dispatch: %@%@", statusString, dispatch, errorInfo];
             
         }
     }
@@ -941,6 +948,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     [self.delegate tealium:self didSendDispatch:dispatch];
+    
     [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
     
 }

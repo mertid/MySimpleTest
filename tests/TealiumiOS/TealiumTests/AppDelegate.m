@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import <Tealium/iOS.h>
+@import TealiumIOS;
 
 @interface AppDelegate () <TealiumDelegate>
 

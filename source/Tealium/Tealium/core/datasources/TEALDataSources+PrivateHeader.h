@@ -10,7 +10,7 @@
 
 @class TEALDataSourceStore;
 
-@interface TEALDataSources_Private : NSObject
+@interface TEALDataSources (Private)
 
 @property (nonatomic, strong) NSMutableDictionary *datasources;
 

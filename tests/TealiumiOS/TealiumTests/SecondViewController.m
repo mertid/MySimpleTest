@@ -7,7 +7,8 @@
 //
 
 #import "SecondViewController.h"
-#import <Tealium/iOS.h>
+
+@import TealiumIOS;
 
 @interface SecondViewController ()
 

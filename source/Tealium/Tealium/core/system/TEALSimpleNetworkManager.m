@@ -7,6 +7,7 @@
 //
 
 #import "TEALSimpleNetworkManager.h"
+#import "TEALError.h"
 
 @interface TEALSimpleNetworkManager ()
 
@@ -34,7 +35,9 @@
                                             completionHandler:taskCompletion];
         [task resume];
         
-    } else {
+    }
+#ifdef TEAL_TARGET_IOS
+    else {
         
         NSOperationQueue *targetQueue = self.responseQueue;
         
@@ -51,6 +54,19 @@
                                    }
                                }];
     }
+#endif
+    
+#ifdef TEAL_TARGET_TVOS
+    else {
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Could not send async request.", @"")
+                                  reason:NSLocalizedString(@"NSURLSession & NSURLConnection not supported", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Mobile Engineering - SimpleNetworkManager", @"")];
+        if (completionHandler){
+            completionHandler(nil, nil, error);
+        }
+    }
+#endif
 }
 
 @end

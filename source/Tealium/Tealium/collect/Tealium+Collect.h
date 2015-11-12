@@ -13,16 +13,6 @@
 #import "Tealium.h"
 #import "TEALVisitorProfile.h"
 
-#warning Are these necessary?
-//#import "TEALVisitorProfileCurrentVisit.h"
-//#import "TEALVisitorProfileBaseAttribute.h"
-//#import "TEALVisitorProfileAudienceAttribute.h"
-//#import "TEALVisitorProfileBadgeAttribute.h"
-//#import "TEALVisitorProfileDateAttribute.h"
-//#import "TEALVisitorProfileFlagAttribute.h"
-//#import "TEALVisitorProfileMetricAttribute.h"
-//#import "TEALVisitorProfilePropertyAttribute.h"
-
 @interface Tealium (Collect)
 
 /**

@@ -32,31 +32,30 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @interface TEALConfiguration : NSObject
 
 /**
- *  The instance id assigned to the library instance associated with this configuration
- *
- *  @param instanceKey NSString identifier
- */
-@property (nonatomic, strong) NSString *instanceID;
-
-/**
  *  Tealium iQ account name
  */
-@property (copy, nonatomic) NSString *accountName;
+@property (nonatomic, copy) NSString *accountName;
 
 /**
  *  Tealium iQ profile name, this should be the TiQ profile where the mobile publish settings have been configured for Tealium collect.
  *
- *  Note: This is usually not the same profile used for Collect
- *  @see audienceStreamProfile
+ *  Note: This is usually not the same profile used for Collect which defaults to "main"
  */
-@property (copy, nonatomic) NSString *profileName;
+@property (nonatomic, copy) NSString *profileName;
 
 /**
  *  Tealium iQ evnvironment name.
  *
  *  @example dev/qa/prod
  */
-@property (copy, nonatomic) NSString *environmentName;
+@property (nonatomic, copy) NSString *environmentName;
+
+/**
+ *  The instance id assigned to the library instance associated with this configuration
+ *
+ *  @param instanceKey NSString identifier
+ */
+@property (nonatomic) NSString *instanceID;
 
 /**
  *  Flag when on will send all data for HTTP.  Suggested to be used in development only!
@@ -74,14 +73,6 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
  *  @see TEALVisitorProfilePollingFrequency
  */
 @property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
-
-/**
- *  Profile name Collect should use to query AudienceStream with.  Usually this is the account's main profile, however if a different profile is desired that profile's name goes here.
- *
- *  @default "main"
- */
-@property (copy, nonatomic) NSString *audienceStreamProfile;
-
 
 /**
  *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"
@@ -120,6 +111,5 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
  *  Checks to see if configuration is populated with the minimum required properties.
  */
 + (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
-
 
 @end

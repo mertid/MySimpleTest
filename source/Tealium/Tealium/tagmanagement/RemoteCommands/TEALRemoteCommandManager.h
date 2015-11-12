@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TEALRemoteCommandResponse.h"
+#import "TEALRemoteCommandResponse+PrivateHeader.h"
 #import "TEALRemoteCommandConstants.h"
 #import "TEALBlocks.h"
 

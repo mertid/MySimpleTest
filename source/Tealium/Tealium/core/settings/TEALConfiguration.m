@@ -29,6 +29,7 @@
 @property (nonatomic) BOOL autotrackingViewsEnabled;
 @property (nonatomic) BOOL mobileCompanionEnabled;
 @property (nonatomic) BOOL remoteCommandsEnabled;
+@property (nonatomic) NSString *privateInstanceID;
 
 @end
 
@@ -38,7 +39,7 @@
 
 + (instancetype) configurationWithAccount:(NSString *)accountName
                                   profile:(NSString *)profileName
-                              environment:(NSString *)environmentName {
+                              environment:(NSString *)environmentName{
     
     TEALConfiguration *configuration = [[TEALConfiguration alloc] init];
     
@@ -67,8 +68,6 @@
     configuration.overridePublishURL = nil;
     configuration.overrideCollectDispatchURL = nil;
     configuration.overrideS2SLegacyDispatchURL = nil;
-   
-    configuration.audienceStreamProfile = @"main";
     
     return configuration;
 }
@@ -101,13 +100,13 @@
                                           @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
                                           @"use http":[NSString teal_stringFromBool:self.useHTTP],
                                           @"polling frequency":@(self.pollingFrequency),
-                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
-                                          @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
-                                          @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
-                                          @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
-                                          @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
-                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
+//                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
+//                                          @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
+//                                          @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
+//                                          @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
+//                                          @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
+//                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
+//                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
                                           @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],

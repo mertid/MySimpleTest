@@ -7,6 +7,7 @@
 //
 
 #import "TEALLogger.h"
+#import "TEALVersion.h"
 #import "TEALDataSourceConstants.h"
 
 @interface TEALLogger()
@@ -21,7 +22,9 @@
 
 + (NSString *) messageHeaderWithInstanceID:(NSString *) instanceID {
     NSString *version = TEALLibraryVersion;
-    return [NSString stringWithFormat:@"TEALIUM %@: instance %@: ", version, instanceID];
+    NSString *platform = TEALPlatform;
+    
+    return [NSString stringWithFormat:@"TEALIUM %@ %@: instance %@: ", platform, version, instanceID];
 }
 
 + (TEALLogLevel) logLevelFromString:(NSString*)string {

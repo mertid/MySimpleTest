@@ -7,6 +7,7 @@
 //
 
 #import "TEALRemoteCommandResponse.h"
+#import "TEALRemoteCommandResponse+PrivateHeader.h"
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandErrors.h"
 #import "TEALRemoteCommandConstants+PrivateHeader.h"

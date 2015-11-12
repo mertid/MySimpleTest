@@ -18,9 +18,9 @@
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandManager.h"
 
-//@interface Tealium(TagManagement) <TEALTagDispatchServiceDelegate>
-//
-//@end
+@interface Tealium() <TEALTagDispatchServiceDelegate>
+
+@end
 
 @implementation Tealium (TagManagement)
 
@@ -138,7 +138,7 @@
     
     TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
     
-//    [tagService setDelegate:self];
+    [tagService setDelegate:self];
     
     [tagService setup];
     

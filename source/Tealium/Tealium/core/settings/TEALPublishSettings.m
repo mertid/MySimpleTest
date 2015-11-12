@@ -407,7 +407,9 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     }
     
     if (minutesBetweenRefresh) {
+        
         self.minutesBetweenRefresh = [minutesBetweenRefresh doubleValue];
+        
     }
     
     if (dispatchExpiration) {
@@ -500,7 +502,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                             @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
                                             @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
                                             @"enable Collect":[NSString teal_stringFromBool:self.enableCollect],
-                                            @"enable Collect Legacy":[NSString teal_stringFromBool:self.enableS2SLegacy],
+                                            @"enable S2S Legacy":[NSString teal_stringFromBool:self.enableS2SLegacy],
                                             @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement],
                                             @"override log level":[NSString teal_dictionarySafeString:self.overrideLogLevel]
                                             };

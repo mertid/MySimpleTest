@@ -7,8 +7,9 @@
 //
 
 #import "APITester.h"
-#import <Tealium/iOS.h>
 #import "ShowViewTableViewCell.h"
+
+@import TealiumIOS;
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     TealiumAPIMenuItemSendEvent = 0,

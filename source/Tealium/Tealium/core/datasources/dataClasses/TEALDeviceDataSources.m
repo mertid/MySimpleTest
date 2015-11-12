@@ -207,7 +207,7 @@ static NSString *staticDeviceArchitecture;
     
     NSString *percentString = TEALDataSourceValue_Unknown;
     
-#ifdef TARGET_OS_IPHONE
+#ifdef TEAL_TARGET_IOS
 
     if(![UIDevice currentDevice].isBatteryMonitoringEnabled){
         [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
@@ -227,7 +227,7 @@ static NSString *staticDeviceArchitecture;
     
     NSString *string = nil;
     
-#ifdef TARGET_OS_IPHONE
+#ifdef TEAL_TARGET_IOS
  
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (interfaceOrientation == UIInterfaceOrientationPortrait) string = @"Portrait";
