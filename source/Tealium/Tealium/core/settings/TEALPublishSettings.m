@@ -484,6 +484,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         self.overrideLogLevel = overrideLog;
     }
     
+    self.status = TEALPublishSettingsStatusLoadedRemote;
     
     [TEALPublishSettingsStore archivePublishSettings:self];
 }

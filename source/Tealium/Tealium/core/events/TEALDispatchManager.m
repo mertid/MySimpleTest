@@ -123,6 +123,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
                           
                           [weakSelf enqueueSentDispatch:dispatch];
                           
+                          [self runQueuedDispatches];
+                          
                       } else if (status == TEALDispatchStatusQueued) {
                           
                           [weakSelf enqueueDispatch:dispatch completionBlock:completionBlock];
@@ -137,10 +139,6 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         [self enqueueDispatch:aDispatch completionBlock:completionBlock];
     }
-    
-#warning MOVE THIS
-    
-    [self runQueuedDispatches];
     
     [self.delegate dispatchManagerDidUpdateDispatchQueues];
 }

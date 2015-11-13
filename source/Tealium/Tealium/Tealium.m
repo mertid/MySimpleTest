@@ -40,7 +40,6 @@
 @property (nonatomic, strong) TEALDelegateManager *delegateManager;
 @property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALSettings *settings;
-@property (nonatomic, weak) id<TealiumDelegate> delegate;
 @property (nonatomic, weak) id<TEALModulesDelegate> modulesDelegate;
 @property (nonatomic, weak) UIViewController *privateActiveViewController;
 
@@ -758,6 +757,8 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             [weakSelf updateModules];
             
+            [weakSelf.dispatchManager runQueuedDispatches];
+
         }
         
         if ([weakSelf.settings libraryShouldDisable]){
@@ -767,7 +768,6 @@ __strong static NSDictionary *staticAllInstances = nil;
             return;
         }
         
-        [weakSelf.dispatchManager runQueuedDispatches];
         
     }];
     
@@ -949,7 +949,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
     }
     
-    [self.delegate tealium:self didSendDispatch:dispatch];
+    [self.delegateManager tealium:self didSendDispatch:dispatch];
     
     [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
     

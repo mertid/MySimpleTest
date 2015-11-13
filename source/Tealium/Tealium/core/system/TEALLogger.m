@@ -29,14 +29,14 @@
 
 + (TEALLogLevel) logLevelFromString:(NSString*)string {
     
-    TEALLogLevel level = TEALLogLevelNone;
+    TEALLogLevel level = TEALLogLevelDev;
     
-    if ([[string lowercaseString] isEqualToString:@"dev"]){
-        level = TEALLogLevelDev;
-    } else if ([[string lowercaseString] isEqualToString:@"qa"]){
+    if ([[string lowercaseString] isEqualToString:@"qa"]){
         level = TEALLogLevelQA;
     } else if ([[string lowercaseString] isEqualToString:@"prod"]){
         level = TEALLogLevelProd;
+    } else if ([[string lowercaseString] isEqualToString:@"none"]){
+        level = TEALLogLevelNone;
     }
     return level;
 }

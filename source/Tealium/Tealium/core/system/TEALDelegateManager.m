@@ -10,7 +10,7 @@
 
 @interface TEALDelegateManager ()
 
-@property (weak, nonatomic) id<TealiumDelegate> delegate;
+@property (nonatomic, weak) id<TealiumDelegate> delegate;
 @property (nonatomic) BOOL hasDidFinishLoadingRemoteSettings;
 @property (nonatomic) BOOL hasShouldDropDispatch;
 @property (nonatomic) BOOL hasShouldQueueDispatch;
@@ -59,7 +59,7 @@
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     if (self.hasDidSendDispatch) {
-        [self.delegate tealium:tealium didSendDispatch:dispatch];
+            [self.delegate tealium:tealium didSendDispatch:dispatch];
     }
 }
 

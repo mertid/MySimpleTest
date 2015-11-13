@@ -31,7 +31,7 @@ static Tracker * _sharedInstance;
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
-    //    configuration.overridePublishSettingsURL = @"http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html";
+//    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/qa6/tealiummobile/demo/dev/mobile.html";
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
