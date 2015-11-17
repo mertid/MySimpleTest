@@ -12,6 +12,6 @@
 
 + (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries;
 
-+ (NSString *) mpsVersionNumber;
+//+ (NSString *) mpsVersionNumber;
 
 @end

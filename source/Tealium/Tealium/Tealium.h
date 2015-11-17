@@ -33,6 +33,7 @@
  */
 + (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration * _Nullable)configuration;
 
+
 #pragma mark - Instance Management
 /**
  *  Returns an instance of the library for the given key, or NIL if such an instance has not been previously initialized.
@@ -57,6 +58,7 @@
 
 /**
  *  Set the library delegate for overriding and or monitoring dispatch processes.
+ *
  */
 - (void) setDelegate:(id<TealiumDelegate> _Nullable)delegate;
 

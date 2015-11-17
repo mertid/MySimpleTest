@@ -15,7 +15,6 @@
 @interface TEALSettings : NSObject
 
 @property (weak) TEALURLSessionManager *urlSessionManager;
-@property (readonly) TEALPublishSettings * _Nonnull publishSettings;
 @property (weak) NSString *traceID;
 @property (weak) NSString *visitorIDCopy;
 
@@ -60,6 +59,8 @@
 - (NSUInteger) pollingFrequency;
 - (NSURL * _Nullable) profileURL;
 - (NSURL * _Nullable) profileDefinitionsURL;
+
+- (TEALPublishSettings * _Nonnull) publishSettings;
 
 /*
  *  Trigger settings to check for new publish settings

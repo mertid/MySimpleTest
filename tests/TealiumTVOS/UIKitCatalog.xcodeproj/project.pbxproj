@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		717CCD121BFB9B670023A3C1 /* TealiumHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */; };
+		71A0E6A21BFB9AE2002F43E8 /* TealiumHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */; };
 		71D084BD1BDBCC3C0059FB7C /* MenuSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */; };
 		71D084BE1BDBCC3C0059FB7C /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935511B738C7B00439392 /* ButtonsViewController.swift */; };
 		71D084BF1BDBCC3C0059FB7C /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCD1B7AE1200052954A /* MenuTableViewController.swift */; };
@@ -302,6 +304,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TealiumHelper.swift; sourceTree = "<group>"; };
 		71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitCatalogDirect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D0850D1BDBCC3D0059FB7C /* UIKitCatalog copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog copy-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-ios/tests/TealiumTVOS/UIKitCatalog copy-Info.plist"; sourceTree = "<absolute>"; };
 		71D086201BDBCD3D0059FB7C /* TealiumDirectBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDirectBridgingHeader.h; sourceTree = "<group>"; };
@@ -1088,6 +1091,7 @@
 				B5728BCA1B7AC0B50052954A /* View Controller samples */,
 				B55F8AF51B7BACB000511037 /* Text Entry */,
 				B5C792841B7BF0A300A21550 /* Focus samples */,
+				71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */,
 				B5A935381B738BDC00439392 /* AppDelegate.swift */,
 				B5E0DE281B9DB34200A7A1BD /* Supporting files */,
 				71D086201BDBCD3D0059FB7C /* TealiumDirectBridgingHeader.h */,
@@ -1442,6 +1446,7 @@
 				71F0F5521BF3A14A00C9B50F /* TEALNotifications.m in Sources */,
 				71D084CE1BDBCC3C0059FB7C /* PageViewController.swift in Sources */,
 				71D084CF1BDBCC3C0059FB7C /* AlertsViewController.swift in Sources */,
+				717CCD121BFB9B670023A3C1 /* TealiumHelper.swift in Sources */,
 				71F0F5361BF3A14A00C9B50F /* NSArray+Tealium.m in Sources */,
 				71F0F52E1BF3A14A00C9B50F /* TEALVisitorProfileFlagAttribute.m in Sources */,
 				71F0F54B1BF3A14A00C9B50F /* TEALSettings.m in Sources */,
@@ -1491,6 +1496,7 @@
 				B5728BCC1B7AD4170052954A /* MenuSplitViewController.swift in Sources */,
 				B5A935541B738C7B00439392 /* ButtonsViewController.swift in Sources */,
 				B5728BCE1B7AE1200052954A /* MenuTableViewController.swift in Sources */,
+				71A0E6A21BFB9AE2002F43E8 /* TealiumHelper.swift in Sources */,
 				B534E2C51B867B3F0038B5DD /* DataItemCellComposer.swift in Sources */,
 				B56A3EB61B83AE2C00F5077C /* FocusGuidesViewController.swift in Sources */,
 				B5DE40751B941868002313B2 /* GradientMaskView.swift in Sources */,

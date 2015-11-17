@@ -23,6 +23,7 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
+@property (nonatomic) NSString *publishSettingsVersion;
 @property (nonatomic) NSString *overrideLogLevel;
 @property (nonatomic) double minutesBetweenRefresh;
 @property (nonatomic) double numberOfDaysDispatchesAreValid;
@@ -44,11 +45,11 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL disableTimestampAutotracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
-+ (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings;
 + (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
 - (instancetype) initWithURLString: (NSString *)url;
 
+- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings;
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
 - (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;

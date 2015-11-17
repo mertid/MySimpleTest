@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "Tracker.h"
+#import "TealiumHelper.h"
 
 @interface AppDelegate ()
 
@@ -21,9 +21,11 @@
     
 #ifndef TEST
     
-    [Tracker startTracking];
+    [TealiumHelper startTracking];
     
-    [Tracker trackEventWithTitle:@"launch" dataSources:nil];
+    [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
+    
+    [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
 #endif
     
     return YES;
@@ -32,7 +34,7 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    [Tracker trackEventWithTitle:@"sleep" dataSources:nil];
+    [TealiumHelper trackEventWithTitle:@"sleep" dataSources:nil];
 
 }
 
@@ -49,7 +51,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    [Tracker trackEventWithTitle:@"wake" dataSources:nil];
+    [TealiumHelper trackEventWithTitle:@"wake" dataSources:nil];
 
 }
 

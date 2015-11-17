@@ -10,7 +10,9 @@
 
 #import <Foundation/Foundation.h>
 
-//#define TEALLibraryVersion [NSString stringWithFormat:@"%.02f", TEAL_TARGET_VERSION]
+#pragma mark - Library Constants
+
+extern NSString * const TEALDefaultPublishVersion;
 
 #pragma mark - UDO / Datasource Keys
 
@@ -113,7 +115,7 @@ extern NSString * const TEALDataSourceValue_ExceptionUncaught;
 extern NSString * const TEALDataSourceValue_Unknown;
 
 
-#pragma mark - AudienceStream API Keys
+#pragma mark - Collect API Keys
 
 extern NSString * const TEALCollectKey_Account;
 extern NSString * const TEALCollectKey_Environment;

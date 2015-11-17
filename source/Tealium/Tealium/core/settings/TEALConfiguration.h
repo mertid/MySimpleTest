@@ -51,11 +51,18 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @property (nonatomic, copy) NSString *environmentName;
 
 /**
- *  The instance id assigned to the library instance associated with this configuration
+ *  The instance id assigned to the library instance associated with this configuration.
  *
  *  @param instanceKey NSString identifier
  */
 @property (nonatomic) NSString *instanceID;
+
+/**
+ *  Flag for allowing remote commands triggerable via the Tag Management dispatch service.
+ *
+ *  @default YES
+ */
+@property (nonatomic) BOOL remoteCommandsEnabled;
 
 /**
  *  Flag when on will send all data for HTTP.  Suggested to be used in development only!

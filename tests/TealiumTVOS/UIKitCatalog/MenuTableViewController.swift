@@ -79,7 +79,7 @@ class MenuTableViewController: UITableViewController {
         let performSegueOperation = NSBlockOperation()
         let segueIdentifier = segueIdentifierMap[indexPath.section][indexPath.row]
         
-        Tealium.instanceForKey("tealium")?.trackViewWithTitle("focus_change", dataSources: [
+        TealiumHelper.trackView("focus_change", dataSources: [
             "event_name":"view",
             "newFocus":String.fromCString(object_getClassName(nextFocusedView))!])
         

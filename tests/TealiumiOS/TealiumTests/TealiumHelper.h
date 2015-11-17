@@ -22,10 +22,11 @@
 #import "TEALVisitorProfileCurrentVisit.h"
 
 /*
- *  This abstract class is the recommended best practice for utilizing analytics
- *  or other third party libraries requiring an event trigger with optional data.
+ *  Using an abstract class like this is the recommended best practice for 
+ *  utilizing analytics or other third party libraries requiring an event 
+ *  trigger with optional data.
  */
-@interface Tracker : NSObject<TealiumDelegate>
+@interface TealiumHelper : NSObject<TealiumDelegate>
 
 + (void) startTracking;
 
@@ -35,4 +36,10 @@
 
 + (void) stopTracking;
 
++ (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number;
+
++ (int) currentLifetimeValueForKey:(NSString *)key;
+
++ (void) enableRemoteCommandBlock;
+    
 @end

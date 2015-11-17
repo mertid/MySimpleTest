@@ -38,7 +38,6 @@
     
     if (self) {
         _privateInstanceID = instanceID;
-        _privateStore = [[TEALDataSourceStore alloc] initWithInstanceID:_privateInstanceID];
     }
     return self;
 }
@@ -240,16 +239,13 @@ static NSDictionary *staticCompileTimeDataSources;
 
 - (NSDictionary *) persistentDataSourcesCopy {
     
-    NSDictionary *copy = [self.privateStore dataSourcesCopy];
-    if (!copy){
-        copy = @{};
-    }
+    NSDictionary *copy = [[self instanceStore] dataSourcesCopy];
     return copy;
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
     
-    [self.privateStore addDataSources:additionalDataSources];
+    [[self instanceStore] addDataSources:additionalDataSources];
     
 }
 
@@ -257,7 +253,7 @@ static NSDictionary *staticCompileTimeDataSources;
     
     NSArray *copy = [dataSourceKeys copy];
     [copy enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [self.privateStore removeDataSourceForKey:obj];
+        [[self instanceStore] removeDataSourceForKey:obj];
     }];
 }
 
@@ -276,12 +272,12 @@ static NSDictionary *staticCompileTimeDataSources;
 
 - (NSString *) applicationUUID {
     
-    NSString *applicationUUID = self.privateStore.dataSourcesCopy[TEALDataSourceKey_UUID];
+    NSString *applicationUUID = [self instanceStore].dataSourcesCopy[TEALDataSourceKey_UUID];
     
     if (!applicationUUID) {
         applicationUUID = [[NSUUID UUID] UUIDString];
         
-        [self.privateStore addDataSources:@{TEALDataSourceKey_UUID:applicationUUID}];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID:applicationUUID}];
     }
     
     return applicationUUID;
@@ -300,7 +296,7 @@ static NSDictionary *staticCompileTimeDataSources;
         }
         
         visitorID = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        [self.privateStore addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
     }
     
     return visitorID;
@@ -309,6 +305,13 @@ static NSDictionary *staticCompileTimeDataSources;
 #pragma mark - PRIVATE METHODS
 
 - (TEALDataSourceStore *) instanceStore {
+    
+    if (!self.privateStore){
+        
+        self.privateStore = [[TEALDataSourceStore alloc] initWithInstanceID:self.privateInstanceID];
+
+    }
+    
     return self.privateStore;
 }
 

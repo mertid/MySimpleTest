@@ -655,16 +655,15 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackDispatch:(TEALDispatch *) dispatch {
     
-    __block typeof(self) __weak weakSelf = self;
+    if (![self.settings publishSettings]){
+        
+        
+    }
     
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatchReturned, NSError *error) {
 
-          //Only log if error as succesful send or queuing is logged later
-          if (error) {
-              [weakSelf logDispatch:dispatchReturned status:status error:error];
-          }
-              
+          // Stub for any additional processing
           
       }];
     
@@ -736,7 +735,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     __weak Tealium *weakSelf = self;
 
-    
     [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
        
         if (error){
@@ -767,7 +765,6 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             return;
         }
-        
         
     }];
     

@@ -7,8 +7,7 @@
 //
 
 #import "SecondViewController.h"
-
-#import "Tracker.h"
+#import "TealiumHelper.h"
 
 @interface SecondViewController ()
 
@@ -27,7 +26,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [Tracker trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
+    [TealiumHelper trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
     
 }
 

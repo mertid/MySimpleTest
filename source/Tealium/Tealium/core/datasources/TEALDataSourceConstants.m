@@ -10,6 +10,10 @@
 
 @implementation TEALDataSourceConstants
 
+#pragma mark - Library Constants
+
+NSString * const TEALDefaultPublishVersion = @"5"; // Needs to be int converable
+
 #pragma mark - UDO / Datasource Keys
 
 NSString * const TEALDataSourceKey_ApplicationName      = @"app_name";

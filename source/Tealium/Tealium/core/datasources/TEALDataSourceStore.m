@@ -43,7 +43,7 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
         const char * queueName = [fullQueueName UTF8String];
 
         _queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-        _dataSources = [NSMutableDictionary new];
+        _dataSources = [[NSMutableDictionary alloc] init];
         _instanceID = instanceID;
         [self unarchiveWithStorageKey:instanceID];
     }
@@ -81,6 +81,7 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
 }
 
 - (NSDictionary *) dataSourcesCopy {
+    
     return [self.dataSources copy];
 }
 

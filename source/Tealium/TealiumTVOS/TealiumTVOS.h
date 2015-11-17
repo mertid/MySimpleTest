@@ -2,7 +2,7 @@
 //  TealiumTVOS.h
 //  TealiumTVOS
 //
-//  Created by Jason Koo on 11/8/15.
+//  Created by Jason Koo on 11/17/15.
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
@@ -15,13 +15,5 @@ FOUNDATION_EXPORT double TealiumTVOSVersionNumber;
 FOUNDATION_EXPORT const unsigned char TealiumTVOSVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <TealiumTVOS/PublicHeader.h>
-#import <TealiumTVOS/Tealium.h>
-#import <TealiumTVOS/Tealium+Collect.h>
-#import <TealiumTVOS/TealiumDelegate.h>
 
-#import <TealiumTVOS/TEALConfiguration.h>
-#import <TealiumTVOS/TEALDataSourceConstants.h>
-#import <TealiumTVOS/TEALDispatch.h>
-#import <TealiumTVOS/TEALSettings.h>
-#import <TealiumTVOS/TEALVisitorProfile.h>
-#import <TealiumTVOS/TEALVisitorProfileCurrentVisit.h>
+

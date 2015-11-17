@@ -52,17 +52,6 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
 #pragma mark - PUBLIC CLASS
 
-+ (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
-    
-    NSDictionary *settings = rawPublishSettings[[TEALSystemHelpers mpsVersionNumber]];
-    
-    if (!settings) {
-        return NO;
-    }
-    
-    return YES;
-}
-
 + (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
     
     NSDictionary *resultDictionary = nil;
@@ -187,6 +176,10 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
 - (instancetype) initWithURLString:(NSString *)url {
     
+    if (!url) {
+        return nil;
+    }
+    
     TEALPublishSettings *archivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:url];
     
     if (archivedSettings){
@@ -238,6 +231,32 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     return self;
 }
 
+//- (instancetype) initWithRawPublishSettings:(NSDictionary *)rawPublishSettings{
+//    
+//    self = [super init];
+//    
+//    if (self) {
+//        
+//        [self updateWithRawSettings:rawPublishSettings];
+//        
+//    }
+//    
+//    return self;
+//}
+
+
+- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
+    
+    NSDictionary *settings = rawPublishSettings[self.publishSettingsVersion];
+    
+    if (!settings) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings {
     
     if (self.dispatchSize != otherPublishSettings.dispatchSize) return NO;
@@ -278,7 +297,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
 - (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings {
     
-    NSDictionary *settings = rawPublishSettings[[TEALSystemHelpers mpsVersionNumber]];
+    NSDictionary *settings = rawPublishSettings[self.publishSettingsVersion];
     
     if (!settings) {
         return;
@@ -288,9 +307,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     
     self.privateRawPublishSettings = settings;
     
-    self.status = TEALPublishSettingsStatusLoadedRemote;
-    
     [TEALPublishSettingsStore archivePublishSettings:self];
+    
 }
 
 #pragma mark - PRIVATE
@@ -486,7 +504,6 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     
     self.status = TEALPublishSettingsStatusLoadedRemote;
     
-    [TEALPublishSettingsStore archivePublishSettings:self];
 }
 
 - (NSString *) description {
@@ -495,7 +512,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                             @"status":[NSString stringWithFormat:@"%lu", (unsigned long)self.status],
                                             @"libray enabled":[NSString teal_stringFromBool:!self.disableLibrary],
                                             @"url":[NSString teal_dictionarySafeString:self.url],
-                                            @"mps version":[NSString teal_dictionarySafeString:[TEALSystemHelpers mpsVersionNumber]],
+                                            @"mps version":[NSString teal_dictionarySafeString:self.publishSettingsVersion],
                                             @"dispatch size":[NSString stringWithFormat:@"%i", (int)self.dispatchSize],
                                             @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)self.offlineDispatchQueueSize],
                                             @"minutes between refresh":[NSString stringWithFormat:@"%f", (double)self.minutesBetweenRefresh],

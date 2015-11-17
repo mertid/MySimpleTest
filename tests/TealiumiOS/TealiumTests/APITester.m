@@ -8,7 +8,7 @@
 
 #import "APITester.h"
 #import "ShowViewTableViewCell.h"
-#import "Tracker.h"
+#import "TealiumHelper.h"
 
 typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
     TealiumAPIMenuItemSendEvent = 0,
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSUInteger, TealiumAPIMenuItem) {
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [Tracker trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
+    [TealiumHelper trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
 
 
 }

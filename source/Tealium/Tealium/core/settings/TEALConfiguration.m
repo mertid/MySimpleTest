@@ -11,14 +11,11 @@
 
 @interface TEALConfiguration()
 
-#warning CONSIDER replacing properties with a single dictionary that is accessed by public methods
-
-// No public API for this settings at this time
-
 // Hidden
 @property (nonatomic) BOOL autotrackingApplicationInfoEnabled;
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
+@property (nonatomic) NSString *overridePublishSettingsVersion;
 
 // v5.1
 @property (nonatomic) BOOL autotrackingCrashesEnabled;
@@ -28,7 +25,6 @@
 @property (nonatomic) BOOL autotrackingUIEventsEnabled;
 @property (nonatomic) BOOL autotrackingViewsEnabled;
 @property (nonatomic) BOOL mobileCompanionEnabled;
-@property (nonatomic) BOOL remoteCommandsEnabled;
 @property (nonatomic) NSString *privateInstanceID;
 
 @end
@@ -65,6 +61,7 @@
     configuration.mobileCompanionEnabled = YES;
     configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
+    configuration.overridePublishSettingsVersion = nil;
     configuration.overridePublishURL = nil;
     configuration.overrideCollectDispatchURL = nil;
     configuration.overrideS2SLegacyDispatchURL = nil;
@@ -107,11 +104,13 @@
 //                                          @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
 //                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
 //                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
+//                                          @"override mps publish settings version":[NSString teal_dictionarySafeString:self.overridePublishSettingsVersion],
                                           @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
                                           @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
                                           @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
                                           @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],
-                                          @"override s2s legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL]
+                                          @"override s2s legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL],
+
                                           };
     
     return [NSString teal_descriptionForObject:self description:@"Compile time options" fromDictionary:descriptionData];

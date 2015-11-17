@@ -19,7 +19,7 @@
 @interface TEALSettings()
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
-@property (nonatomic, strong) TEALPublishSettings *publishSettings;
+@property (nonatomic, strong) TEALPublishSettings *privatePublishSettings;
 @property (nonatomic, strong) NSString *privateCollectDispatchURLString;
 @property (nonatomic, strong) NSString *privateS2SLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
@@ -78,9 +78,7 @@
 }
 
 + (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
-    
-#warning NOT working with override settings
-    
+        
     if (configuration.overridePublishSettingsURL) {
         return configuration.overridePublishSettingsURL;
     }
@@ -172,8 +170,6 @@
     
     if (self) {
         _configuration = configuration;
-        NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:configuration];
-        _publishSettings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     }
     
     return self;
@@ -181,72 +177,72 @@
 
 - (BOOL) collectEnabled {
 
-    return self.publishSettings.enableCollect;
+    return [self publishSettings].enableCollect;
     
 }
 
 - (BOOL) autotrackingApplicationInfoEnabled {
     
-    if (self.publishSettings.disableApplicationInfoAutotracking) return NO;
+    if ([self publishSettings].disableApplicationInfoAutotracking) return NO;
     return self.configuration.autotrackingApplicationInfoEnabled;
 }
 
 - (BOOL) autotrackingCarrierInfoEnabled {
     
-    if (self.publishSettings.disableCarrierInfoAutotracking) return NO;
+    if ([self publishSettings].disableCarrierInfoAutotracking) return NO;
     return self.configuration.autotrackingCarrierInfoEnabled;
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
     
-    if (self.publishSettings.disableDeviceInfoAutotracking) return NO;
+    if ([self publishSettings].disableDeviceInfoAutotracking) return NO;
     return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
         
-    if (self.publishSettings.disableiVarAutotracking) return NO;
+    if ([self publishSettings].disableiVarAutotracking) return NO;
     return self.configuration.autotrackingIvarsEnabled;
 }
 
 - (BOOL) autotrackingLifecycleEnabled {
-    if (self.publishSettings.disableLifecycleAutotracking) return NO;
+    if ([self publishSettings].disableLifecycleAutotracking) return NO;
     return self.configuration.autotrackingLifecycleEnabled;
 }
 
 - (BOOL) autotrackingTimestampInfoEnabled {
         
-    if (self.publishSettings.disableTimestampAutotracking) return NO;
+    if ([self publishSettings].disableTimestampAutotracking) return NO;
     return self.configuration.autotrackingTimestampInfoEnabled;
 }
 
 - (BOOL) autotrackingUIEventsEnabled {
-    if (self.publishSettings.disableUIEventAutotracking) return NO;
+    if ([self publishSettings].disableUIEventAutotracking) return NO;
     return self.configuration.autotrackingUIEventsEnabled;
 }
 
 - (BOOL) autotrackingViewsEnabled {
-    if (self.publishSettings.disableViewAutotracking) return NO;
+    if ([self publishSettings].disableViewAutotracking) return NO;
     return self.configuration.autotrackingViewsEnabled;
 }
 
 - (BOOL) autotrackingCrashesEnabled {
-    if (self.publishSettings.disableCrashAutotracking) return NO;
+    if ([self publishSettings].disableCrashAutotracking) return NO;
     return self.configuration.autotrackingCrashesEnabled;
 }
 
 - (BOOL) s2SLegacyEnabled {
     
-    return self.publishSettings.enableS2SLegacy;
+    return [self publishSettings].enableS2SLegacy;
 }
 
 - (BOOL) libraryShouldDisable {
 
-    return (self.publishSettings.status == TEALPublishSettingsStatusDisable);
+    return ([self publishSettings].status == TEALPublishSettingsStatusDisable);
 }
 
 - (BOOL) mobileCompanionEnabled {
-    if (self.publishSettings.disableMobileCompanion) return NO;
+    if ([self publishSettings].disableMobileCompanion) return NO;
     return self.configuration.mobileCompanionEnabled;
 }
 
@@ -256,12 +252,12 @@
 
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] &&
-            self.publishSettings.status != TEALPublishSettingsStatusDisable);
+            [self publishSettings].status != TEALPublishSettingsStatusDisable);
 }
 
 - (BOOL) tagManagementEnabled {
 
-    return self.publishSettings.enableTagManagement;
+    return [self publishSettings].enableTagManagement;
 }
 
 - (BOOL) useHTTP {
@@ -270,22 +266,22 @@
 
 - (BOOL) wifiOnlySending {
     
-    return self.publishSettings.enableSendWifiOnly;
+    return [self publishSettings].enableSendWifiOnly;
 }
 
 - (BOOL) goodBatteryLevelOnlySending {
     
-    return !self.publishSettings.enableLowBatterySuppress;
+    return ![self publishSettings].enableLowBatterySuppress;
 }
 
 - (BOOL) isDefaultPublishSettings {
     
-    return (self.publishSettings.status == TEALPublishSettingsStatusDefault);
+    return ([self publishSettings].status == TEALPublishSettingsStatusDefault);
     
 }
 
 - (double) daysDispatchesValid {
-    return self.publishSettings.numberOfDaysDispatchesAreValid;
+    return [self publishSettings].numberOfDaysDispatchesAreValid;
 }
 
 
@@ -329,12 +325,12 @@
 }
 
 - (NSString *) publishSettingsDescription {
-    return self.publishSettings.description;
+    return [self publishSettings].description;
 }
 
 - (NSString *) publishSettingsURLString {
     if (!self.mobilePublishSettingsURLString){
-        self.mobilePublishSettingsURLString = [self.publishSettings url];
+        self.mobilePublishSettingsURLString = [[self publishSettings] url];
     }
     return self.mobilePublishSettingsURLString;
 }
@@ -354,12 +350,12 @@
 //}
 
 - (NSUInteger) dispatchSize {
-    return self.publishSettings.dispatchSize;
+    return [self publishSettings].dispatchSize;
 }
 
 - (NSString *) logLevelString {
     
-    NSString *finalLogLevelString = self.publishSettings.overrideLogLevel;
+    NSString *finalLogLevelString = [self publishSettings].overrideLogLevel;
     
     if (!finalLogLevelString){
         
@@ -373,7 +369,7 @@
 }
 
 - (NSUInteger) offlineDispatchQueueSize {
-    return self.publishSettings.offlineDispatchQueueSize;
+    return [self publishSettings].offlineDispatchQueueSize;
 }
 
 - (NSUInteger) pollingFrequency {
@@ -406,11 +402,12 @@
     return request;
 }
 
+
 - (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
     
     // Generate request
     NSURLRequest *request = [self publishSettingsRequest];
-    NSDate *fetchDate = [NSDate date];
+    NSDate *now = [NSDate date];
     
     // Bail out checks:
     NSError *preFetchError = nil;
@@ -429,7 +426,7 @@
                               suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
     }
     
-    double minutesToNextFetch = [self minutesToNextFetchFromDate:fetchDate];
+    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:now];
     if (minutesToNextFetch > 0.0) {
         
         NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
@@ -448,18 +445,19 @@
     }
     
     // Perform request
-    self.lastFetch = fetchDate;
+    self.lastFetch = now;
     __block typeof(self) __weak weakSelf = self;
 
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
-        BOOL success = NO;
         NSError *error = nil;
         NSDictionary *parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data
                                                                                     error:&error];
+        TEALPublishSettings *publishSettings = [weakSelf publishSettings];
+
         if (!error &&
-            ![TEALPublishSettings correctMPSVersionRawPublishSettings:parsedData]) {
+            ![publishSettings correctMPSVersionRawPublishSettings:parsedData]) {
             // No MPS Settings for current library version
             error = [TEALError errorWithCode:TEALErrorCodeNoContent
                                  description:NSLocalizedString(@"No mobile publish settings found.", @"")
@@ -471,16 +469,40 @@
             connectionError) {
             error = connectionError;
         }
-            
+        
+                                
         if (!error &&
-            [weakSelf.publishSettings areNewRawPublishSettings:parsedData]){
+            !publishSettings){
             
-            [weakSelf.publishSettings updateWithRawSettings:parsedData];
+            NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+            
+            NSString *errorReaseon = [NSString stringWithFormat:@"Could not init publish settings with url: %@", urlString];
+            
+            error = [TEALError errorWithCode:TEALErrorCodeException
+                                  description:NSLocalizedString(@"Unable to update Publish Settings.", @"")
+                                       reason:errorReaseon
+                                   suggestion:NSLocalizedString(@"Check override publish setting.", @"")];
+        }
+                                
+                                
+        // Bail out
+        if (error){
+            if (completion){
+                completion( NO, error);
+            }
+            return;
+        }
+            
+        // Init or Update Publish Settings
+        if ([publishSettings areNewRawPublishSettings:parsedData]){
+
+            [publishSettings updateWithRawSettings:parsedData];
             
         }
         
+        // Return successful completion if new settings found or if exsisting okay
         if (completion) {
-            completion( success, error);
+            completion( YES, error);
         }
         
     }];
@@ -490,35 +512,46 @@
 
 #pragma mark - PRIVATE
 
-//- (BOOL) canFetchNow {
-//    
-//    BOOL fetchAcceptable = NO;
-//    NSDate *now = [NSDate date];
-//    
-//    if (self.lastFetch){
-//        double elapsedTime = [now timeIntervalSinceDate:self.lastFetch];
-//        if (elapsedTime > [self.publishSettings minutesBetweenRefresh] * 60) {
-//            fetchAcceptable = YES;
-//            self.lastFetch = now;
-//        }
-//    } else {
-//        fetchAcceptable = YES;
-//        self.lastFetch = now;
-//    }
-//    
-//    
-//    return fetchAcceptable;
-//}
-
-- (double) minutesToNextFetchFromDate:(NSDate *)date {
+- (TEALPublishSettings *) publishSettings {
     
-    double elapsedTime = 0.0;
-    
-    if (self.lastFetch){
-        elapsedTime = [date timeIntervalSinceDate:self.lastFetch] / 60;
+    if (!self.privatePublishSettings){
+        
+        self.privatePublishSettings = [self newPublishedSettings];
     }
     
-    return elapsedTime;
+    return self.privatePublishSettings;
+    
+}
+
+- (TEALPublishSettings *) newPublishedSettings {
+    
+    // Will load archive if available
+    
+    NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+    
+    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
+    NSString *override = self.configuration.overridePublishSettingsVersion;
+    
+    if (override){
+        settings.publishSettingsVersion = override;
+    } else {
+        settings.publishSettingsVersion = TEALDefaultPublishVersion;
+    }
+    
+    self.privatePublishSettings = settings;
+    
+    return self.privatePublishSettings;
+    
+}
+
+- (double) minutesBeforeNextFetchFromDate:(NSDate *)date {
+    
+    double currentTimeElapsed = [date timeIntervalSinceDate:self.lastFetch];
+    
+    double timeRemaining = self.publishSettings.minutesBetweenRefresh - currentTimeElapsed;
+    
+    return timeRemaining;
+    
 }
 
 @end
