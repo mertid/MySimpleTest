@@ -45,7 +45,7 @@
 
 - (NSUInteger) dispatchBatchSize;
 
-- (NSUInteger) dispatchQueueCapacity;
+- (NSUInteger) dispatchQueueCapacity;   // Good only for init time
 
 - (NSError * _Nullable) errorSendingDispatch:(TEALDispatch * _Nonnull)dispatch;
 

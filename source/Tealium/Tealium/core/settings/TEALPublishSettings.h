@@ -8,23 +8,41 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *  Status of remote publish settings
+ */
 typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
+    /**
+     *  Default - no remote or saved remote version available.
+     */
     TEALPublishSettingsStatusDefault,
+    /**
+     *  Newly pulled from the remote location.
+     */
     TEALPublishSettingsStatusLoadedRemote,
+    /**
+     *  Unarchived from storage - last new remote settings found.
+     */
     TEALPublishSettingsStatusLoadedArchive,
+    /**
+     *  Publish settings requests library disable.
+     */
     TEALPublishSettingsStatusDisable,
 };
 
-extern NSString * const TEALPublishSettingKeyIsEnabled;
+/**
+ *
+ */
+//extern NSString * const TEALPublishSettingKeyIsEnabled;
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
 @property (nonatomic) TEALPublishSettingsStatus status;
-@property (nonatomic) NSString *url;
+@property (nonatomic) NSString * _Nonnull url;
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
-@property (nonatomic) NSString *publishSettingsVersion;
-@property (nonatomic) NSString *overrideLogLevel;
+@property (nonatomic) NSString * _Nonnull publishSettingsVersion;
+@property (nonatomic) NSString * _Nullable overrideLogLevel;
 @property (nonatomic) double minutesBetweenRefresh;
 @property (nonatomic) double numberOfDaysDispatchesAreValid;
 @property (nonatomic) BOOL enableLowBatterySuppress;
@@ -45,14 +63,14 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL disableTimestampAutotracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
-+ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError * __autoreleasing *)error;
-+ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
++ (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
++ (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
-- (instancetype) initWithURLString: (NSString *)url;
+- (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
 
-- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings;
-- (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings;
-- (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings;
-- (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings;
+- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary * _Nonnull) rawPublishSettings;
+- (BOOL) isEqualToPublishSettings:(TEALPublishSettings * _Nonnull)otherPublishSettings;
+- (BOOL) areNewRawPublishSettings:(NSDictionary * _Nonnull)rawPublishSettings;
+- (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
 
 @end

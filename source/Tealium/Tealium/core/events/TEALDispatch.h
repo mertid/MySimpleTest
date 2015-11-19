@@ -18,6 +18,7 @@ typedef NS_ENUM(NSUInteger, TEALDispatchType) {
 };
 
 /**
+ *  Constants for the two most common dispatch types
  *
  */
 extern NSString * const TEALDispatchTypeLinkStringValue; // string actual - "link"

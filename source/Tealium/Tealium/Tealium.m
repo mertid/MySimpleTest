@@ -755,6 +755,8 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             [weakSelf updateModules];
             
+            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+                        
             [weakSelf.dispatchManager runQueuedDispatches];
 
         }
