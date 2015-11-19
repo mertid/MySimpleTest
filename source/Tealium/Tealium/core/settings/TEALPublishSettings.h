@@ -45,6 +45,7 @@ extern NSString * const TEALPublishSettingKeyIsEnabled;
 @property (nonatomic) BOOL disableTimestampAutotracking;
 @property (nonatomic) BOOL disableMobileCompanion;
 
++ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError * __autoreleasing *)error;
 + (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error;
 
 - (instancetype) initWithURLString: (NSString *)url;

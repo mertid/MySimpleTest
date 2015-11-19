@@ -1,8 +1,8 @@
 //
-//  TEALCollect-Bridging-Header.h
+//  TealiumTVOSBridgingHeader.h
 //  Tealium Mobile Library
 //
-//  Created by George Webster on 3/5/15.
+//  Created by Jason Koo on 10/5/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 

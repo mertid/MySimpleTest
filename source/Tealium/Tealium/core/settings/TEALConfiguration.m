@@ -48,7 +48,7 @@
     configuration.profileName       = [profileName lowercaseString];
     configuration.environmentName   = [environmentName lowercaseString];
     configuration.useHTTP           = NO;
-    configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
+    configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;

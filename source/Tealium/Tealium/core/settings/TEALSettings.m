@@ -24,10 +24,10 @@
 @property (nonatomic, strong) NSString *privateS2SLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
-@property (nonatomic, weak) NSString *visitorID;
 @property (nonatomic, strong) NSURL *audienceStreamProfileURL;
 @property (nonatomic, strong) NSURL *audienceStreamProfileDefinitionsURL;
 @property (nonatomic, strong) NSDate *lastFetch;
+@property (nonatomic, weak) NSString *visitorID;
 
 @end
 
@@ -452,17 +452,29 @@
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
         NSError *error = nil;
-        NSDictionary *parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data
-                                                                                    error:&error];
+                  
+        NSDictionary *parsedData = nil;
+
         TEALPublishSettings *publishSettings = [weakSelf publishSettings];
 
+        // For future MPS config location - currently ignoring any error from this
+        parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
+                                
+        if (!parsedData){
+         
+            // Fallback to current mobile.html MPS var
+            parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:&error];
+            
+        }
+            
         if (!error &&
             ![publishSettings correctMPSVersionRawPublishSettings:parsedData]) {
+            
             // No MPS Settings for current library version
             error = [TEALError errorWithCode:TEALErrorCodeNoContent
-                                 description:NSLocalizedString(@"No mobile publish settings found.", @"")
+                                 description:NSLocalizedString(@"No mobile publish settings for current library version found.", @"")
                                       reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
-                                  suggestion:NSLocalizedString(@"Add the correct Mobile Publish Setting version, re-publish, or update library.", @"")];
+                                  suggestion:NSLocalizedString(@"Activate the correct Mobile Publish Setting version in TIQ, re-publish, or update library.", @"")];
         }
     
         if (!error &&

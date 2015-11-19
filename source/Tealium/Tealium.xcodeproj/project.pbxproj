@@ -7,18 +7,6 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		37EBA2411B571C4C0010CB75 /* Framework */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 37EBA2421B571C4C0010CB75 /* Build configuration list for PBXAggregateTarget "Framework" */;
-			buildPhases = (
-				37EBA2451B571C530010CB75 /* ShellScript */,
-			);
-			dependencies = (
-				37EBA2471B571C5D0010CB75 /* PBXTargetDependency */,
-			);
-			name = Framework;
-			productName = Framework;
-		};
 		710807D01BF112DB006879E8 /* TealiumIOSDocumentation */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 710807D11BF112DB006879E8 /* Build configuration list for PBXAggregateTarget "TealiumIOSDocumentation" */;
@@ -44,9 +32,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		717CCE221BFBD67C0023A3C1 /* TealiumTVOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 717CCE211BFBD67C0023A3C1 /* TealiumTVOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE361BFBD6F80023A3C1 /* TEALVisitorProfile+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26B1BF3967300C9B50F /* TEALVisitorProfile+PrivateHeader.h */; };
-		717CCE371BFBD6F80023A3C1 /* TEALVisitorProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26C1BF3967300C9B50F /* TEALVisitorProfile.h */; };
+		717CCE371BFBD6F80023A3C1 /* TEALVisitorProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26C1BF3967300C9B50F /* TEALVisitorProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE381BFBD6F80023A3C1 /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F26D1BF3967300C9B50F /* TEALVisitorProfile.m */; };
 		717CCE391BFBD6F80023A3C1 /* TEALVisitorProfileAudienceAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26E1BF3967300C9B50F /* TEALVisitorProfileAudienceAttribute.h */; };
 		717CCE3A1BFBD6F80023A3C1 /* TEALVisitorProfileAudienceAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F26F1BF3967300C9B50F /* TEALVisitorProfileAudienceAttribute.m */; };
@@ -54,7 +41,7 @@
 		717CCE3C1BFBD6F80023A3C1 /* TEALVisitorProfileBadgeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2711BF3967300C9B50F /* TEALVisitorProfileBadgeAttribute.m */; };
 		717CCE3D1BFBD6F80023A3C1 /* TEALVisitorProfileBaseAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2721BF3967300C9B50F /* TEALVisitorProfileBaseAttribute.h */; };
 		717CCE3E1BFBD6F80023A3C1 /* TEALVisitorProfileBaseAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2731BF3967300C9B50F /* TEALVisitorProfileBaseAttribute.m */; };
-		717CCE3F1BFBD6F80023A3C1 /* TEALVisitorProfileCurrentVisit.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2741BF3967300C9B50F /* TEALVisitorProfileCurrentVisit.h */; };
+		717CCE3F1BFBD6F80023A3C1 /* TEALVisitorProfileCurrentVisit.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2741BF3967300C9B50F /* TEALVisitorProfileCurrentVisit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE401BFBD6F80023A3C1 /* TEALVisitorProfileCurrentVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2751BF3967300C9B50F /* TEALVisitorProfileCurrentVisit.m */; };
 		717CCE411BFBD6F80023A3C1 /* TEALVisitorProfileDateAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2761BF3967300C9B50F /* TEALVisitorProfileDateAttribute.h */; };
 		717CCE421BFBD6F80023A3C1 /* TEALVisitorProfileDateAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2771BF3967300C9B50F /* TEALVisitorProfileDateAttribute.m */; };
@@ -71,7 +58,7 @@
 		717CCE4D1BFBD6FC0023A3C1 /* TEALVisitorProfileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2821BF3967300C9B50F /* TEALVisitorProfileStore.m */; };
 		717CCE4E1BFBD7010023A3C1 /* TEALCollectDispatchService.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2831BF3967300C9B50F /* TEALCollectDispatchService.h */; };
 		717CCE4F1BFBD7010023A3C1 /* TEALCollectDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2841BF3967300C9B50F /* TEALCollectDispatchService.m */; };
-		717CCE501BFBD7010023A3C1 /* Tealium+Collect.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2851BF3967300C9B50F /* Tealium+Collect.h */; };
+		717CCE501BFBD7010023A3C1 /* Tealium+Collect.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2851BF3967300C9B50F /* Tealium+Collect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE511BFBD7010023A3C1 /* Tealium+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2861BF3967300C9B50F /* Tealium+Collect.m */; };
 		717CCE521BFBD7010023A3C1 /* TEALS2SLegacyDispatchService.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2871BF3967300C9B50F /* TEALS2SLegacyDispatchService.h */; };
 		717CCE531BFBD7010023A3C1 /* TEALS2SLegacyDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2881BF3967300C9B50F /* TEALS2SLegacyDispatchService.m */; };
@@ -91,7 +78,7 @@
 		717CCE611BFBD70E0023A3C1 /* TEALDeviceDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F29A1BF3967300C9B50F /* TEALDeviceDataSources.m */; };
 		717CCE621BFBD70E0023A3C1 /* TEALTimestampDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F29B1BF3967300C9B50F /* TEALTimestampDataSources.h */; };
 		717CCE631BFBD70E0023A3C1 /* TEALTimestampDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F29C1BF3967300C9B50F /* TEALTimestampDataSources.m */; };
-		717CCE641BFBD7110023A3C1 /* TEALDataSourceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F29D1BF3967300C9B50F /* TEALDataSourceConstants.h */; };
+		717CCE641BFBD7110023A3C1 /* TEALDataSourceConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F29D1BF3967300C9B50F /* TEALDataSourceConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE651BFBD7110023A3C1 /* TEALDataSourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F29E1BF3967300C9B50F /* TEALDataSourceConstants.m */; };
 		717CCE661BFBD7110023A3C1 /* TEALDataSources+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F29F1BF3967300C9B50F /* TEALDataSources+PrivateHeader.h */; };
 		717CCE671BFBD7110023A3C1 /* TEALDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2A01BF3967300C9B50F /* TEALDataSources.h */; };
@@ -101,7 +88,7 @@
 		717CCE6B1BFBD7110023A3C1 /* TEALSharedDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2A41BF3967300C9B50F /* TEALSharedDataSources.h */; };
 		717CCE6C1BFBD7110023A3C1 /* TEALSharedDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2A51BF3967300C9B50F /* TEALSharedDataSources.m */; };
 		717CCE6D1BFBD7160023A3C1 /* TEALDispatch+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2A71BF3967300C9B50F /* TEALDispatch+PrivateHeader.h */; };
-		717CCE6E1BFBD7160023A3C1 /* TEALDispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2A81BF3967300C9B50F /* TEALDispatch.h */; };
+		717CCE6E1BFBD7160023A3C1 /* TEALDispatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2A81BF3967300C9B50F /* TEALDispatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE6F1BFBD7160023A3C1 /* TEALDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2A91BF3967300C9B50F /* TEALDispatch.m */; };
 		717CCE701BFBD7160023A3C1 /* TEALDispatchConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2AA1BF3967300C9B50F /* TEALDispatchConstants.h */; };
 		717CCE711BFBD7160023A3C1 /* TEALDispatchManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2AB1BF3967300C9B50F /* TEALDispatchManager.h */; };
@@ -117,14 +104,14 @@
 		717CCE7B1BFBD7200023A3C1 /* TEALURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2B71BF3967300C9B50F /* TEALURLSessionManager.h */; };
 		717CCE7C1BFBD7200023A3C1 /* TEALURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2B81BF3967300C9B50F /* TEALURLSessionManager.m */; };
 		717CCE7D1BFBD7270023A3C1 /* TEALConfiguration+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2BA1BF3967300C9B50F /* TEALConfiguration+PrivateHeader.h */; };
-		717CCE7E1BFBD7270023A3C1 /* TEALConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2BB1BF3967300C9B50F /* TEALConfiguration.h */; };
+		717CCE7E1BFBD7270023A3C1 /* TEALConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2BB1BF3967300C9B50F /* TEALConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE7F1BFBD7270023A3C1 /* TEALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2BC1BF3967300C9B50F /* TEALConfiguration.m */; };
 		717CCE801BFBD7270023A3C1 /* TEALPublishSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2BD1BF3967300C9B50F /* TEALPublishSettings.h */; };
 		717CCE811BFBD7270023A3C1 /* TEALPublishSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2BE1BF3967300C9B50F /* TEALPublishSettings.m */; };
 		717CCE821BFBD7270023A3C1 /* TEALPublishSettingsStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2BF1BF3967300C9B50F /* TEALPublishSettingsStore.h */; };
 		717CCE831BFBD7270023A3C1 /* TEALPublishSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2C01BF3967300C9B50F /* TEALPublishSettingsStore.m */; };
 		717CCE841BFBD7270023A3C1 /* TEALSettings+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2C11BF3967300C9B50F /* TEALSettings+PrivateHeader.h */; };
-		717CCE851BFBD7270023A3C1 /* TEALSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2C21BF3967300C9B50F /* TEALSettings.h */; };
+		717CCE851BFBD7270023A3C1 /* TEALSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2C21BF3967300C9B50F /* TEALSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCE861BFBD7270023A3C1 /* TEALSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2C31BF3967300C9B50F /* TEALSettings.m */; };
 		717CCE871BFBD72F0023A3C1 /* TEALDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2C51BF3967300C9B50F /* TEALDataStore.h */; };
 		717CCE881BFBD72F0023A3C1 /* TEALDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2C61BF3967300C9B50F /* TEALDataStore.m */; };
@@ -153,11 +140,12 @@
 		717CCE9F1BFBD7390023A3C1 /* TEALViewScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2DE1BF3967300C9B50F /* TEALViewScanner.h */; };
 		717CCEA01BFBD7390023A3C1 /* TEALViewScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F2DF1BF3967300C9B50F /* TEALViewScanner.m */; };
 		717CCEA11BFBD7390023A3C1 /* TEALVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F58F1BF3E32B00C9B50F /* TEALVersion.h */; };
-		717CCEA21BFBD7410023A3C1 /* TealiumDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2E01BF3967300C9B50F /* TealiumDelegate.h */; };
-		717CCEA31BFBD74C0023A3C1 /* Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F30E1BF3967300C9B50F /* Tealium.h */; };
+		717CCEA21BFBD7410023A3C1 /* TealiumDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F2E01BF3967300C9B50F /* TealiumDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		717CCEA31BFBD74C0023A3C1 /* Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F30E1BF3967300C9B50F /* Tealium.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		717CCEA41BFBD74C0023A3C1 /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F30F1BF3967300C9B50F /* Tealium.m */; };
 		717CCEA51BFBD74C0023A3C1 /* TealiumTVOSBridgingHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F3111BF3967300C9B50F /* TealiumTVOSBridgingHeader.h */; };
 		717E6B171BF085C3002FED27 /* TealiumIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 717E6A911BF0830D002FED27 /* TealiumIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71E48B6F1BFCE4290090AF52 /* TealiumTVOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F57C1BF3AEF800C9B50F /* TealiumTVOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F0F32A1BF3967300C9B50F /* TEALVisitorProfile+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26B1BF3967300C9B50F /* TEALVisitorProfile+PrivateHeader.h */; };
 		71F0F32B1BF3967300C9B50F /* TEALVisitorProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F26C1BF3967300C9B50F /* TEALVisitorProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F0F32C1BF3967300C9B50F /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0F26D1BF3967300C9B50F /* TEALVisitorProfile.m */; };
@@ -288,21 +276,8 @@
 		71F0F5901BF3E32B00C9B50F /* TEALVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0F58F1BF3E32B00C9B50F /* TEALVersion.h */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		37EBA2461B571C5D0010CB75 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 37A759E91B56F70E00E6E9E2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 37A759F01B56F70E00E6E9E2;
-			remoteInfo = Tealium;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		37A759F11B56F70E00E6E9E2 /* libTealium.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTealium.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		717CCE1F1BFBD67C0023A3C1 /* TealiumTVOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		717CCE211BFBD67C0023A3C1 /* TealiumTVOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumTVOS.h; sourceTree = "<group>"; };
-		717CCE231BFBD67C0023A3C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		717E6A8F1BF0830C002FED27 /* TealiumIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		717E6A911BF0830D002FED27 /* TealiumIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumIOS.h; sourceTree = "<group>"; };
 		717E6A931BF0830D002FED27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -489,13 +464,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		37A759EE1B56F70E00E6E9E2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		717CCE1B1BFBD67C0023A3C1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,7 +487,6 @@
 				71F0F24C1BF3967300C9B50F /* Tealium */,
 				717E6A901BF0830D002FED27 /* TealiumIOS */,
 				71F0F57A1BF3AEF800C9B50F /* TealiumTVOS */,
-				717CCE201BFBD67C0023A3C1 /* TealiumTVOS */,
 				37A759F21B56F70E00E6E9E2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -527,20 +494,10 @@
 		37A759F21B56F70E00E6E9E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				37A759F11B56F70E00E6E9E2 /* libTealium.a */,
 				717E6A8F1BF0830C002FED27 /* TealiumIOS.framework */,
 				717CCE1F1BFBD67C0023A3C1 /* TealiumTVOS.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		717CCE201BFBD67C0023A3C1 /* TealiumTVOS */ = {
-			isa = PBXGroup;
-			children = (
-				717CCE211BFBD67C0023A3C1 /* TealiumTVOS.h */,
-				717CCE231BFBD67C0023A3C1 /* Info.plist */,
-			);
-			path = TealiumTVOS;
 			sourceTree = "<group>";
 		};
 		717E6A901BF0830D002FED27 /* TealiumIOS */ = {
@@ -900,8 +857,8 @@
 		71F0F57A1BF3AEF800C9B50F /* TealiumTVOS */ = {
 			isa = PBXGroup;
 			children = (
-				71F0F57B1BF3AEF800C9B50F /* Info.plist */,
 				71F0F57C1BF3AEF800C9B50F /* TealiumTVOS.h */,
+				71F0F57B1BF3AEF800C9B50F /* Info.plist */,
 			);
 			path = TealiumTVOS;
 			sourceTree = "<group>";
@@ -909,18 +866,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		37A75A981B57049B00E6E9E2 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		717CCE1C1BFBD67C0023A3C1 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				717CCE691BFBD7110023A3C1 /* TEALDataSourceStore.h in Headers */,
+				717CCE851BFBD7270023A3C1 /* TEALSettings.h in Headers */,
+				717CCE501BFBD7010023A3C1 /* Tealium+Collect.h in Headers */,
+				717CCEA21BFBD7410023A3C1 /* TealiumDelegate.h in Headers */,
+				71E48B6F1BFCE4290090AF52 /* TealiumTVOS.h in Headers */,
+				717CCEA31BFBD74C0023A3C1 /* Tealium.h in Headers */,
+				717CCE3F1BFBD6F80023A3C1 /* TEALVisitorProfileCurrentVisit.h in Headers */,
+				717CCE6E1BFBD7160023A3C1 /* TEALDispatch.h in Headers */,
+				717CCE641BFBD7110023A3C1 /* TEALDataSourceConstants.h in Headers */,
+				717CCE7E1BFBD7270023A3C1 /* TEALConfiguration.h in Headers */,
+				717CCE371BFBD6F80023A3C1 /* TEALVisitorProfile.h in Headers */,
 				717CCE961BFBD7390023A3C1 /* TEALNotifications.h in Headers */,
 				717CCE801BFBD7270023A3C1 /* TEALPublishSettings.h in Headers */,
 				717CCE731BFBD71B0023A3C1 /* TEALDataQueue+PrivateHeader.h in Headers */,
@@ -943,10 +903,7 @@
 				717CCE701BFBD7160023A3C1 /* TEALDispatchConstants.h in Headers */,
 				717CCE981BFBD7390023A3C1 /* TEALOperationManager.h in Headers */,
 				717CCE4C1BFBD6FC0023A3C1 /* TEALVisitorProfileStore.h in Headers */,
-				717CCE851BFBD7270023A3C1 /* TEALSettings.h in Headers */,
 				717CCE891BFBD7390023A3C1 /* TEALActionQueueManager.h in Headers */,
-				717CCE371BFBD6F80023A3C1 /* TEALVisitorProfile.h in Headers */,
-				717CCE7E1BFBD7270023A3C1 /* TEALConfiguration.h in Headers */,
 				717CCE361BFBD6F80023A3C1 /* TEALVisitorProfile+PrivateHeader.h in Headers */,
 				717CCE621BFBD70E0023A3C1 /* TEALTimestampDataSources.h in Headers */,
 				717CCE601BFBD70E0023A3C1 /* TEALDeviceDataSources.h in Headers */,
@@ -957,8 +914,6 @@
 				717CCE471BFBD6F80023A3C1 /* TEALVisitorProfilePropertyAttribute.h in Headers */,
 				717CCE901BFBD7390023A3C1 /* TEALIDGenerator.h in Headers */,
 				717CCE561BFBD7070023A3C1 /* NSDictionary+Tealium.h in Headers */,
-				717CCE501BFBD7010023A3C1 /* Tealium+Collect.h in Headers */,
-				717CCEA21BFBD7410023A3C1 /* TealiumDelegate.h in Headers */,
 				717CCE871BFBD72F0023A3C1 /* TEALDataStore.h in Headers */,
 				717CCE491BFBD6FC0023A3C1 /* TEALVisitorProfileDelegate.h in Headers */,
 				717CCE7D1BFBD7270023A3C1 /* TEALConfiguration+PrivateHeader.h in Headers */,
@@ -966,19 +921,14 @@
 				717CCE3B1BFBD6F80023A3C1 /* TEALVisitorProfileBadgeAttribute.h in Headers */,
 				717CCE9C1BFBD7390023A3C1 /* TEALSystemHelpers.h in Headers */,
 				717CCE9E1BFBD7390023A3C1 /* TEALSystemProtocols.h in Headers */,
-				717CCE221BFBD67C0023A3C1 /* TealiumTVOS.h in Headers */,
 				717CCE8B1BFBD7390023A3C1 /* TEALBlocks.h in Headers */,
-				717CCEA31BFBD74C0023A3C1 /* Tealium.h in Headers */,
 				717CCE841BFBD7270023A3C1 /* TEALSettings+PrivateHeader.h in Headers */,
 				717CCE541BFBD7070023A3C1 /* NSArray+Tealium.h in Headers */,
 				717CCE5E1BFBD70E0023A3C1 /* TEALApplicationDataSources.h in Headers */,
-				717CCE3F1BFBD6F80023A3C1 /* TEALVisitorProfileCurrentVisit.h in Headers */,
 				717CCE4A1BFBD6FC0023A3C1 /* TEALVisitorProfileHelpers.h in Headers */,
 				717CCE921BFBD7390023A3C1 /* Tealium+PrivateHeader.h in Headers */,
-				717CCE6E1BFBD7160023A3C1 /* TEALDispatch.h in Headers */,
 				717CCEA51BFBD74C0023A3C1 /* TealiumTVOSBridgingHeader.h in Headers */,
 				717CCE4E1BFBD7010023A3C1 /* TEALCollectDispatchService.h in Headers */,
-				717CCE641BFBD7110023A3C1 /* TEALDataSourceConstants.h in Headers */,
 				717CCE8C1BFBD7390023A3C1 /* TEALDelegateManager.h in Headers */,
 				717CCEA11BFBD7390023A3C1 /* TEALVersion.h in Headers */,
 				717CCE521BFBD7010023A3C1 /* TEALS2SLegacyDispatchService.h in Headers */,
@@ -1072,24 +1022,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		37A759F01B56F70E00E6E9E2 /* Tealium */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 37A75A051B56F70E00E6E9E2 /* Build configuration list for PBXNativeTarget "Tealium" */;
-			buildPhases = (
-				37A759ED1B56F70E00E6E9E2 /* Sources */,
-				37A759EE1B56F70E00E6E9E2 /* Frameworks */,
-				37A75A981B57049B00E6E9E2 /* Headers */,
-				37A75AC61B570EDB00E6E9E2 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Tealium;
-			productName = Tealium;
-			productReference = 37A759F11B56F70E00E6E9E2 /* libTealium.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		717CCE1E1BFBD67C0023A3C1 /* TealiumTVOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 717CCE301BFBD67C0023A3C1 /* Build configuration list for PBXNativeTarget "TealiumTVOS" */;
@@ -1098,6 +1030,7 @@
 				717CCE1B1BFBD67C0023A3C1 /* Frameworks */,
 				717CCE1C1BFBD67C0023A3C1 /* Headers */,
 				717CCE1D1BFBD67C0023A3C1 /* Resources */,
+				717CCEA71BFBDAA60023A3C1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1136,17 +1069,12 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Tealium Inc.";
 				TargetAttributes = {
-					37A759F01B56F70E00E6E9E2 = {
-						CreatedOnToolsVersion = 6.4;
-					};
-					37EBA2411B571C4C0010CB75 = {
-						CreatedOnToolsVersion = 6.4;
-					};
 					710807D01BF112DB006879E8 = {
 						CreatedOnToolsVersion = 7.1;
 					};
 					717CCE1E1BFBD67C0023A3C1 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = XC939GDC9P;
 					};
 					717E6A8E1BF0830C002FED27 = {
 						CreatedOnToolsVersion = 7.1;
@@ -1166,8 +1094,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				37A759F01B56F70E00E6E9E2 /* Tealium */,
-				37EBA2411B571C4C0010CB75 /* Framework */,
 				717E6A8E1BF0830C002FED27 /* TealiumIOS */,
 				710807D01BF112DB006879E8 /* TealiumIOSDocumentation */,
 				717CCE1E1BFBD67C0023A3C1 /* TealiumTVOS */,
@@ -1194,32 +1120,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		37A75AC61B570EDB00E6E9E2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nexport FRAMEWORK_LOCATION=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\n# Create the path to the real Headers die\nmkdir -p \"${FRAMEWORK_LOCATION}/Versions/A/Headers\"\n\n# Create the required symlinks\n/bin/ln -sfh A \"${FRAMEWORK_LOCATION}/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${FRAMEWORK_LOCATION}/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \\\n\"${FRAMEWORK_LOCATION}/${PRODUCT_NAME}\"\n\n# Copy the public headers into the framework\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \\\n\"${FRAMEWORK_LOCATION}/Versions/A/Headers\"";
-		};
-		37EBA2451B571C530010CB75 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# modified http://www.raywenderlich.com/65964/create-a-framework-for-ios\n\nset -e\n\n# If we're already inside this script then die\nif [ -n \"$TEAL_MULTIPLATFORM_BUILD_IN_PROGRESS\" ]; then\nexit 0\nfi\nexport TEAL_MULTIPLATFORM_BUILD_IN_PROGRESS=1\n\nTEAL_FRAMEWORK_NAME=${PRODUCT_NAME}\nTEAL_INPUT_STATIC_LIB=\"lib${PRODUCT_NAME}.a\"\nTEAL_FRAMEWORK_LOCATION=\"${BUILT_PRODUCTS_DIR}/${TEAL_FRAMEWORK_NAME}.framework\"\n\nfunction build_static_library {\n    # Will rebuild the static library as specified\n    #     build_static_library sdk\n    xcrun xcodebuild -project \"${PROJECT_FILE_PATH}\" \\\n    -target \"${TARGET_NAME}\" \\\n    -configuration \"${CONFIGURATION}\" \\\n    -sdk \"${1}\" \\\n    ONLY_ACTIVE_ARCH=NO \\\n    BUILD_DIR=\"${BUILD_DIR}\" \\\n    OBJROOT=\"${OBJROOT}\" \\\n    BUILD_ROOT=\"${BUILD_ROOT}\" \\\n    SYMROOT=\"${SYMROOT}\" $ACTION\n}\n\nfunction make_fat_library {\n    # Will smash 2 static libs together\n    #     make_fat_library in1 in2 out\n    xcrun lipo -create \"${1}\" \"${2}\" -output \"${3}\"\n}\n\n# 1 - Extract the platform (iphoneos/iphonesimulator) from the SDK name\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]; then\nTEAL_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# 2 - Extract the version from the SDK\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]; then\nTEAL_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# 3 - Determine the other platform\nif [ \"$TEAL_SDK_PLATFORM\" == \"iphoneos\" ]; then\nTEAL_OTHER_PLATFORM=iphonesimulator\nelse\nTEAL_OTHER_PLATFORM=iphoneos\nfi\n\n# 4 - Find the build directory\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$TEAL_SDK_PLATFORM$ ]]; then\nTEAL_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${TEAL_OTHER_PLATFORM}\"\nelse\necho \"Could not find other platform build directory.\"\nexit 1\nfi\n\n# Build the other platform.\nbuild_static_library \"${TEAL_OTHER_PLATFORM}${TEAL_SDK_VERSION}\"\n\n# If we're currently building for iphonesimulator, then need to rebuild\n#   to ensure that we get both i386 and x86_64\nif [ \"$TEAL_SDK_PLATFORM\" == \"iphonesimulator\" ]; then\nbuild_static_library \"${SDK_NAME}\"\nfi\n\n# Join the 2 static libs into 1 and push into the .framework\nmake_fat_library \"${BUILT_PRODUCTS_DIR}/${TEAL_INPUT_STATIC_LIB}\" \\\n\"${TEAL_OTHER_BUILT_PRODUCTS_DIR}/${TEAL_INPUT_STATIC_LIB}\" \\\n\"${TEAL_FRAMEWORK_LOCATION}/Versions/A/${TEAL_FRAMEWORK_NAME}\"\n\n# Ensure that the framework is present in both platform's build directories\ncp -a \"${TEAL_FRAMEWORK_LOCATION}/Versions/A/${TEAL_FRAMEWORK_NAME}\" \\\n\"${TEAL_OTHER_BUILT_PRODUCTS_DIR}/${TEAL_FRAMEWORK_NAME}.framework/Versions/A/${TEAL_FRAMEWORK_NAME}\"\n\n# Remove any pre-existing build\nrm -rf ${SRCROOT}/../audiencestream-builds/${TEAL_FRAMEWORK_NAME}.framework\n\n# Copy the framework to sibling ios-library-new directory\nditto \"${TEAL_FRAMEWORK_LOCATION}\" \"${SRCROOT}/../../builds/${TEAL_FRAMEWORK_NAME}.framework\"";
-		};
 		710807D41BF112DF006879E8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1233,6 +1133,19 @@
 			shellPath = /bin/sh;
 			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"iphoneos\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../../tealium-ios/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}IOS\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"autotracking\" \\\n--ignore \"mobilecompanion\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishingSettings.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}\"";
 		};
+		717CCEA71BFBDAA60023A3C1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Tealium Bash script for creating a universal iphoneos + iphonesimulator framework\n# Modified code from http://insert.io/framework-ios8-xcode6/  - Oded Regev\n\nset -e\nset +u\n\n# RUN SCRIPT ONLY ONCE\nif [[ $TEAL_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport TEAL_MASTER_SCRIPT_RUNNING=1\n\n\n# CONSTANTS\nFRAMEWORK_NAME=${PRODUCT_NAME}\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\nSDK_PLATFORM_TARGET=\"appletvsimulator\"\nDEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-$SDK_PLATFORM_TARGET\n\n# GET BUILD TARGET\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# OTHER PLATFORM\nif [ \"$SDK_PLATFORM\" == $SDK_PLATFORM_TARGET ]; then\nSDK_OTHER_PLATFORM=appletvos\nOTHER_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-$SDK_OTHER_PLATFORM\nelse\necho \"Please select a simulator as build target.\"\nexit 1\nfi\n\n# BUILD OTHER (non-simulator) PLATFORM\n\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk $SDK_OTHER_PLATFORM ONLY_ACTIVE_ARCH=NO BUILD_DIR=\"$DEVICE_BUILD_DIR-\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"$OTHER_DEVICE_BUILD_DIR\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\n# CLEAN & COPY TO UNIVERSAL FOLDER\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"$DEVICE_BUILD_DIR/$FRAMEWORK_NAME.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\"\n\n# SETUP ALL PATHS\nFRAMEWORK_PATH=\"$DEVICE_BUILD_DIR/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\"\n\nOTHER_FRAMEWORK_PATH=\"$OTHER_DEVICE_BUILD_DIR/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\"\n\nOUTPUT_FRAMEWORK_PATH=\"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\"\necho \"Simulator framework path: \"$FRAMEWORK_PATH\necho \"AppleTV framework path: \"$OTHER_FRAMEWORK_PATH\necho \"Universal output path: \"$OUTPUT_FRAMEWORK_PATH\n\n# SMASH INTO ONE FRAMEWORK\nlipo -create $FRAMEWORK_PATH $OTHER_FRAMEWORK_PATH -output $OUTPUT_FRAMEWORK_PATH\n\n# COPY TO BUILD FOLDER\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../builds/$FRAMEWORK_NAME.framework\"\n\n# COPY TO DEPLOYABLE FOLDER\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../../tealium-tvos/$FRAMEWORK_NAME.framework\"\n";
+		};
 		717E6A971BF0831D002FED27 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1244,7 +1157,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for creating a universal iphoneos + iphonesimulator framework\n# Modified code from http://insert.io/framework-ios8-xcode6/  - Oded Regev\n\nset -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\n\n# Constants\nFRAMEWORK_NAME=${PRODUCT_NAME}\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Take build target\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# 3 - Determine the other platform\n#if [ \"$SF_SDK_PLATFORM\" == \"iphoneos\" ]; then\n#TEAL_OTHER_PLATFORM=iphonesimulator\n#else\n#TEAL_OTHER_PLATFORM=iphoneos\n#fi\n\n# TODO: Update to be able to build with either target scheme\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\necho \"Please choose iPhone simulator as the build target.\"\nexit 1\nfi\n\nIPHONE_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n\n# Build the other (non-simulator) platform\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/arm64\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\"  CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/armv7\" SYMROOT=\"${SYMROOT}\" ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s' $ACTION\n\n# Copy the framework structure to the universal folder (clean it first)\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/$FRAMEWORK_NAME.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\"\n\n# Smash them together to combine all architectures\nlipo -create  \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" -output \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\"\n\n# Copy to Build Folder\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../builds/$FRAMEWORK_NAME.framework\"\n\n# Copy to Deliverable Folder\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../../tealium-ios/$FRAMEWORK_NAME.framework\"";
+			shellScript = "# Bash script for creating a universal iphoneos + iphonesimulator framework\n# Modified code from http://insert.io/framework-ios8-xcode6/  - Oded Regev\n\nset -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\n\n# Constants\nFRAMEWORK_NAME=${PRODUCT_NAME}\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Take build target\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# TODO: Update to be able to build with either target scheme\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\necho \"Please choose iPhone simulator as the build target.\"\nexit 1\nfi\n\nIPHONE_DEVICE_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos\n\n# Build the other (non-simulator) platform\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/arm64\" SYMROOT=\"${SYMROOT}\" ARCHS='arm64' VALID_ARCHS='arm64' $ACTION\n\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\"  CONFIGURATION_BUILD_DIR=\"${IPHONE_DEVICE_BUILD_DIR}/armv7\" SYMROOT=\"${SYMROOT}\" ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s' $ACTION\n\n# Copy the framework structure to the universal folder (clean it first)\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/$FRAMEWORK_NAME.framework\" \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\"\n\n# Smash them together to combine all architectures\nlipo -create  \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/arm64/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/armv7/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\" -output \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework/$FRAMEWORK_NAME\"\n\n# Copy to Build Folder\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../builds/$FRAMEWORK_NAME.framework\"\n\n# Copy to Deliverable Folder\nditto \"${UNIVERSAL_OUTPUTFOLDER}/$FRAMEWORK_NAME.framework\" \"${SRCROOT}/../../../tealium-ios/$FRAMEWORK_NAME.framework\"";
 		};
 		71F0F5811BF3B88300C9B50F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1262,13 +1175,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		37A759ED1B56F70E00E6E9E2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		717CCE1A1BFBD67C0023A3C1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1388,14 +1294,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		37EBA2471B571C5D0010CB75 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 37A759F01B56F70E00E6E9E2 /* Tealium */;
-			targetProxy = 37EBA2461B571C5D0010CB75 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		37A75A031B56F70E00E6E9E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1484,52 +1382,6 @@
 			};
 			name = Release;
 		};
-		37A75A061B56F70E00E6E9E2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					"TARGET_TEAL_IOS=1",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-			};
-			name = Debug;
-		};
-		37A75A071B56F70E00E6E9E2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_TEAL_IOS=1";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-			};
-			name = Release;
-		};
-		37EBA2431B571C4C0010CB75 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = Tealium;
-			};
-			name = Debug;
-		};
-		37EBA2441B571C4C0010CB75 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = Tealium;
-			};
-			name = Release;
-		};
 		710807D21BF112DB006879E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1547,6 +1399,7 @@
 		717CCE311BFBD67C0023A3C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -1565,6 +1418,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				TARGETED_DEVICE_FAMILY = 3;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1574,6 +1428,7 @@
 		717CCE321BFBD67C0023A3C1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1587,6 +1442,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				TARGETED_DEVICE_FAMILY = 3;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1673,24 +1529,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		37A75A051B56F70E00E6E9E2 /* Build configuration list for PBXNativeTarget "Tealium" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				37A75A061B56F70E00E6E9E2 /* Debug */,
-				37A75A071B56F70E00E6E9E2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		37EBA2421B571C4C0010CB75 /* Build configuration list for PBXAggregateTarget "Framework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				37EBA2431B571C4C0010CB75 /* Debug */,
-				37EBA2441B571C4C0010CB75 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		710807D11BF112DB006879E8 /* Build configuration list for PBXAggregateTarget "TealiumIOSDocumentation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1707,6 +1545,7 @@
 				717CCE321BFBD67C0023A3C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		717E6A941BF0830D002FED27 /* Build configuration list for PBXNativeTarget "TealiumIOS" */ = {
 			isa = XCConfigurationList;

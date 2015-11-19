@@ -31,7 +31,12 @@ static TealiumHelper * _sharedInstance;
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
-    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/qa6/tealiummobile/demo/dev/mobile.html";
+//    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/qa6/tealiummobile/demo/dev/mobile.html";
+
+//    configuration.overridePublishSettingsURL = @"https://raw.githubusercontent.com/wiki/tealium/android-library/mps-collect.js";
+
+    configuration.overridePublishSettingsURL = @"https://raw.githubusercontent.com/wiki/tealium/android-library/mps-tag_management.js";
+
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     

@@ -38,8 +38,6 @@
 
 + (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number;
 
-+ (int) currentLifetimeValueForKey:(NSString *)key;
-
 + (void) enableRemoteCommandBlock;
     
 @end

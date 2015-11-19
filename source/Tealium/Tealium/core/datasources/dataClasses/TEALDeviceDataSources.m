@@ -155,6 +155,7 @@ static NSString *staticDevicePlatform;
     if ([platform isEqualToString:@"AppleTV2,1"])   return @"Apple TV 2G";
     if ([platform isEqualToString:@"AppleTV3,1"])   return @"Apple TV 3";
     if ([platform isEqualToString:@"AppleTV3,2"])   return @"Apple TV 3 (2013)";
+    if ([platform isEqualToString:@"AppleTV5,3"])   return @"Apple TV 4";
     if ([platform isEqualToString:@"i386"])         return @"Simulator";
     if ([platform isEqualToString:@"x86_64"])       return @"Simulator";
     return platform;

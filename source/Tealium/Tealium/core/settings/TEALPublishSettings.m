@@ -52,7 +52,35 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 
 #pragma mark - PUBLIC CLASS
 
+
++ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError * __autoreleasing *)error {
+    
+    if (!data){
+        return nil;
+    }
+    
+    NSDictionary *resultDictionary = nil;
+    
+    NSError *jsonError = nil;
+    
+    resultDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                       options:0
+                                                         error:&jsonError];
+    
+    if (!resultDictionary){
+        *error = jsonError;
+        return nil;
+    }
+    
+    return resultDictionary;
+    
+}
+
 + (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
+    
+    if (!data){
+        return nil;
+    }
     
     NSDictionary *resultDictionary = nil;
     
@@ -108,7 +136,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         
         *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                               description:@"Mobile publish settings not found."
-                                   reason:@"Mobile publish settings not found. While parsing mobile.html"
+                                   reason:@"No Mobile publish settings not found while parsing mobile.html"
                                suggestion:@"Please enable mobile publish settings in Tealium iQ."];
         
         return nil;
