@@ -12,8 +12,17 @@
  *  Types of available dispatches
  */
 typedef NS_ENUM(NSUInteger, TEALDispatchType) {
+    /**
+     *  A dispatch with an unassigned type.
+     */
     TEALDispatchTypeNone,
+    /**
+     *  Any non-view type dispatch.
+     */
     TEALDispatchTypeEvent,
+    /**
+     *  Dispatch for view / screen appearances only.
+     */
     TEALDispatchTypeView
 };
 

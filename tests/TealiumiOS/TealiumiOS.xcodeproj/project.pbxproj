@@ -1741,6 +1741,7 @@
 				7188671F1BFE4DAB008E1165 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		71E3DE701BE2695C0086B621 /* Build configuration list for PBXNativeTarget "TealiumiOSCore" */ = {
 			isa = XCConfigurationList;

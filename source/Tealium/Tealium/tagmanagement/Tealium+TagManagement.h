@@ -20,9 +20,14 @@
  *
  *  @param name NSString that identifies this code block
  *  @param description Optional NSString description of the command block
- *  @param targetQueue The dispatch queue to run the command on.  Note, any UI commands must be done on the main thread.
- *  @param responseBlock An optional block that returns a TEALRemoteCommandResponse object whenever the command is executed.
+ *  @param queue The dispatch queue to run the command on.  Note, any UI
+ *  commands must be done on the main thread.
+ *  @param responseBlock An optional block that returns a TEALRemoteCommandResponse 
+ *  object whenever the command is executed.
  */
-- (void) addRemoteCommandId:(NSString* _Nonnull)name description:(NSString* _Nullable)description targetQueue:(dispatch_queue_t _Nonnull)queue block:(void (^ _Nonnull)(TEALRemoteCommandResponse * _Nullable response))responseBlock;
+- (void) addRemoteCommandId:(NSString* _Nonnull)name
+                description:(NSString* _Nullable)description
+                targetQueue:(dispatch_queue_t _Nonnull)queue
+                      block:(void (^ _Nonnull)(TEALRemoteCommandResponse * _Nullable response))responseBlock;
     
 @end

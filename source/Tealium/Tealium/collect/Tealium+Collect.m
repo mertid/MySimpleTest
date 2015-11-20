@@ -18,16 +18,6 @@
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>
 
-#warning Are these necessary?
-//#import "TEALVisitorProfileCurrentVisit.h"
-//#import "TEALVisitorProfileBaseAttribute.h"
-//#import "TEALVisitorProfileAudienceAttribute.h"
-//#import "TEALVisitorProfileBadgeAttribute.h"
-//#import "TEALVisitorProfileDateAttribute.h"
-//#import "TEALVisitorProfileFlagAttribute.h"
-//#import "TEALVisitorProfileMetricAttribute.h"
-//#import "TEALVisitorProfilePropertyAttribute.h"
-
 char const * const TEALKVOAutotrackCollectProfile = "com.tealium.kvo.collect.profile";
 char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collect.profilestore";
 

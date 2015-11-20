@@ -34,9 +34,12 @@
 
 
 /**
- *  Last retrieved profile instance.  This is updated every time the profile is queried.  Depending on the settings the library was enabled with, this could be after every sendEvent:customData: call or only on explicit request.
+ *  Last retrieved profile instance.  This is updated every time the profile is 
+ *  queried.  Depending on the settings the library was enabled with, this could 
+ *  be after every sendEvent:customData: call or only on explicit request.
  *
- *  @return Returns valid TEALVisitorProfile object.  Its properties might be nil of nothing is loaded into them yet.
+ *  @return Returns valid TEALVisitorProfile object.  Its properties might be 
+ *  nil of nothing is loaded into them yet.
  */
 - (TEALVisitorProfile * _Nullable) cachedVisitorProfileCopy;
 
@@ -44,13 +47,15 @@
 /**
  *  Retrieves the current visitor profile from AudienceStream.
  *
- *  @param completion Completion block with retrieved TEALVisitorProfile instance and an error should any problems occur.
+ *  @param completion Completion block with retrieved TEALVisitorProfile 
+ *  instance and an error should any problems occur.
  */
 - (void) fetchVisitorProfileWithCompletion:(void (^ _Nullable)(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error))completion;
 
 
 /**
- *  Joins a trace initiated from the AudienceStream web app with a valid string token provide from the TraceUI
+ *  Joins a trace initiated from the AudienceStream web app with a valid string 
+ *  token provide from the TraceUI
  *
  *  @param token String value should match the code provided via the AudienceStream web UI.
  *  @param completion An optional completion block

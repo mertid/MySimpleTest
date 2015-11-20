@@ -41,7 +41,10 @@ typedef NS_ENUM(NSInteger, TEALVisitorProfileAttributeType){
 @interface TEALVisitorProfileBaseAttribute : NSObject <NSCoding>
 
 /**
+ *  Constructor method.
  *
+ *  @param type Type of TEALVisitorProfileAttributeType that this base attribute
+ *  should be.
  */
 - (instancetype) initWithType:(TEALVisitorProfileAttributeType)type;
 

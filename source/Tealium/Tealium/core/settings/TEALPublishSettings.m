@@ -106,15 +106,19 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                               range:NSMakeRange(0, dataString.length)
                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                              
+#warning Re-enable logging of some sort
+                             
+#warning this script will break if an additional var is added by the publishing engine
+                             
                              if (result) {
-                                 //                                 TEAL_logDev(@"text checking result: %@", result);
+                                 //TEAL_logDev(@"text checking result: %@", result);
                              }
                              
                              if (result.range.location != NSNotFound) {
                                  scriptContents = [dataString substringWithRange:result.range];
                                  
                                  if (scriptContents) {
-                                     //                                     TEAL_logDev(@"scriptContents: %@", scriptContents);
+                                     //TEAL_logDev(@"scriptContents: %@", scriptContents);
                                  }
                                  
                                  *stop = YES;

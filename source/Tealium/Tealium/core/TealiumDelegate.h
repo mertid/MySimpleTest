@@ -11,6 +11,9 @@
 @class Tealium;
 @class TEALDispatch;
 
+/**
+ *  Optional Tealium Delegate for monitoring or overriding outbound dispatches.
+ */
 @protocol TealiumDelegate <NSObject>
 
 @optional

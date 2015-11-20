@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 /**
  *  The instance id assigned to the library instance associated with this configuration.
  *
- *  @param instanceKey NSString identifier
+ *  @param instanceID NSString identifier
  */
 @property (nonatomic) NSString *instanceID;
 
@@ -116,6 +116,10 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 
 /**
  *  Checks to see if configuration is populated with the minimum required properties.
+ *
+ *  @param configuration TEALConfiguration to check.
+ *
+ *  @return Boolean of whether the argument configuration is valid.
  */
 + (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
 

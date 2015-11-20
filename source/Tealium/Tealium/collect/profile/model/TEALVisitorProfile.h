@@ -19,9 +19,10 @@
 @interface TEALVisitorProfile : NSObject <NSCoding, NSCopying, NSSecureCoding>
 
 /**
- * Create instance with vistorID
+ *  Create instance with vistorID
  *
- * @return Instance of TEALVisitorProfile
+ *  @param visitorID Current visitorID of user
+ *  @return Instance of TEALVisitorProfile
  */
 - (instancetype) initWithVisitorID:(NSString *)visitorID;
 

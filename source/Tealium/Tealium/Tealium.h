@@ -17,7 +17,8 @@
  *
  *  Currently implements a multiton pattern that permits multiple Tealium instances.
  *
- *  Internally the entire library runs inside its own serial queue so there is no need call Tealium methods from a background thread, it takes care of that on its own.
+ *  Internally the entire library runs inside its own serial queue so there is 
+ *  no need call Tealium methods from a background thread, it takes care of that on its own.
  *
  */
 @interface Tealium : NSObject
@@ -25,7 +26,8 @@
 # pragma mark - Setup / Configuration
 
 /**
- *  Starts an instance of the Tealium Mobile Library for a given key with the given configuration object.
+ *  Starts an instance of the Tealium Mobile Library for a given key with the 
+ *  given configuration object.
  *
  *  @param key NSString identifier for the library instance
  *
@@ -36,7 +38,8 @@
 
 #pragma mark - Instance Management
 /**
- *  Returns an instance of the library for the given key, or NIL if such an instance has not been previously initialized.
+ *  Returns an instance of the library for the given key, or NIL if such an 
+ *  instance has not been previously initialized.
  *
  *  @param key NSString identifier for the library instance.
  */
@@ -59,6 +62,8 @@
 /**
  *  Set the library delegate for overriding and or monitoring dispatch processes.
  *
+ *  @param delegate Any object that implements one or more optional Tealium Delegate
+ *  protocols.
  */
 - (void) setDelegate:(id<TealiumDelegate> _Nullable)delegate;
 
@@ -66,18 +71,24 @@
 # pragma mark - Track Data
 
 /**
- *  Sends an event to Collect.  Event are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
+ *  Sends an event to Collect.  Event are packaged with any custom key/value 
+ *  data sources passed in along with the default datasources provided by the library.
  *
  *  @param title String title of event
- *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
+ *  @param customDataSources Dictionary of custom datasources (key/value pairs) 
+ *  to be included in the event dispatch. If a value is an array, be sure to use 
+ *  an array of strings.
  */
 - (void) trackEventWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
 
 /**
- *  Sends a view to Collect.  Views are packaged with any custom key/value data sources passed in along with the default datasources provided by the library.
+ *  Sends a view to Collect.  Views are packaged with any custom key/value data 
+ *  sources passed in along with the default datasources provided by the library.
  *
  *  @param title String title of view
- *  @param customDataSources Dictionary of custom datasources (key/value pairs) to be included in the event dispatch.
+ *  @param customDataSources Dictionary of custom datasources (key/value pairs) 
+ *  to be included in the event dispatch. If a value is an array, be sure to use
+ *  an array of strings.
  */
 
 - (void) trackViewWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
@@ -86,16 +97,21 @@
 #pragma mark - Data Management
 
 /**
- *  Copy of all non persistent, UI object and dispatch specific data sources captured by a Tealium library instance at time of call.
+ *  Copy of all non persistent, UI object and dispatch specific data sources 
+ *  captured by a Tealium library instance at time of call.
  *
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
 - (NSDictionary * _Nonnull) volatileDataSourcesCopy;
 
 /**
- *  Adds additional data to the temporary data sources dictionary. This command is added to the end of the current Tealium background queue for writing.
+ *  Adds additional data to the temporary data sources dictionary. This command 
+ *  is added to the end of the current Tealium background queue for writing.
  *
- *  @param additionalDataSources New or overwrite data sources to add to the volatile data sources store.  These key values can only be superceded by the custom data sources added to track calls.
+ *  @param additionalDataSources New or overwrite data sources to add to the 
+ *  volatile data sources store.  These key values can only be superceded by the 
+ *  custom data sources added to track calls. If a value is an array, be sure to use
+ *  an array of strings.
  *
  */
 - (void) addVolatileDataSources:(NSDictionary * _Nonnull)additionalDataSources;
@@ -108,23 +124,27 @@
 - (void) removeVolatileDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 
 /**
- *  Copy of all long term Tealium data source data written to and read from disk, specific to a given library instance.
+ *  Copy of all long term Tealium data source data written to and read from disk, 
+ *  specific to a given library instance.
  *  
  *  @return NSDictionary of Tealium Data Source keys and values at time of call.
  */
 - (NSDictionary * _Nonnull) persistentDataSourcesCopy;
 
 /**
- *  Adds key-value info into the library instance's persistent data store.  Use this to track lifetime values or seldom-changed global data sources.
+ *  Adds key-value info into the library instance's persistent data store.  Use 
+ *  this to track lifetime values or seldom-changed global data sources.
  *
- *  @param additionalDataSources An NSDictionary of string keys and values.
+ *  @param additionalDataSources An NSDictionary of string keys and values. If 
+ *  a value is an array, be sure to use an array of strings.
  */
 - (void) addPersistentDataSources:(NSDictionary * _Nonnull)additionalDataSources;
 
 /**
  *  Removes all keys from array parameter.
  *
- *  @param dataSourceKeys An NSArray of strings of the target keys to remove from the persistence store.
+ *  @param dataSourceKeys An NSArray of strings of the target keys to remove 
+ *  from the persistence store.
  */
 - (void) removePersistentDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 

@@ -11,7 +11,7 @@
 @protocol TEALRemoteCommandResponseDelegate ;
 
 /**
- *
+ *  A response object for triggered Remote Commands.
  */
 @interface TEALRemoteCommandResponse : NSObject
 

@@ -18,6 +18,8 @@ typedef NS_ENUM(NSUInteger, TEALRemoteResponseErrors) {
     TEALRemoteResponseErrorHttp_NoTargetUrl
 };
 
+#warning MERGE with TEALError codes?
+
 typedef NS_ENUM(NSInteger, TealiumResponseCodes){
     TealiumRC_Unknown   = 0,
     TealiumRC_Success   = 200,
