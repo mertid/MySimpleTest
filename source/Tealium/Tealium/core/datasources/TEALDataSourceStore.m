@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <UIKit/UIDevice.h>
+//#import <UIKit/UIDevice.h>
 #import "TEALDataSourceStore.h"
 #import "TEALDataSourceConstants.h"
 #import "NSString+Tealium.h"

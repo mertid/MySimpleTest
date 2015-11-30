@@ -28,7 +28,10 @@
         configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     }
     
-    _reachability = [TEALReachabilityManager reachabilityWithHostname:@"www.google.com"];
+#ifndef TEAL_TARGET_WATCHOS
+    
+    _reachabilityManager = [TEALReachabilityManager reachabilityManagerWithHostName:@"www.google.com"];
+#endif
 
     _sessionQueue = [[NSOperationQueue alloc] init];
     _sessionQueue.maxConcurrentOperationCount =1;
@@ -38,6 +41,7 @@
                                            delegateQueue:_sessionQueue];
     return self;
 }
+
 
 - (void) performRequest:(NSURLRequest *)request withCompletion:(TEALHTTPResponseBlock)completion {
     

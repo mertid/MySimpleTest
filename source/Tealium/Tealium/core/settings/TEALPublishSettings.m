@@ -61,14 +61,13 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     
     NSDictionary *resultDictionary = nil;
     
-    NSError *jsonError = nil;
-    
     resultDictionary = [NSJSONSerialization JSONObjectWithData:data
                                                        options:0
-                                                         error:&jsonError];
+                                                          error:error];
     
-    if (!resultDictionary){
-        *error = jsonError;
+    if (!resultDictionary ||
+        resultDictionary == nil){
+        
         return nil;
     }
     

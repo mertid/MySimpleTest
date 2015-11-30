@@ -37,10 +37,10 @@
 
 - (NSDictionary *) moduleDataCopy;
 
-- (void) setActiveViewController:(UIViewController *)viewController;
+//- (void) setActiveViewController:(UIViewController *)viewController;
+//
+//- (UIViewController *) activeViewController;
 
-- (UIViewController *) activeViewController;
-    
 @end
 
 #endif

@@ -73,7 +73,7 @@
         return;
     }
     
-    if (![self.sessionManager.reachability isReachable]) {
+    if (![self.sessionManager.reachabilityManager isReachable]) {
         
         NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
                                       description:@"Profile Request Failed"

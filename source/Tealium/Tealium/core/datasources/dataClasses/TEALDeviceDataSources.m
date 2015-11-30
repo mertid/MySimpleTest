@@ -49,7 +49,11 @@ static double deviceBatteryLevel;
     NSString *orientation = [self currentOrientation];
     NSString *resolution = [self resolution];
     
-    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    NSString *systemVersion;
+    
+#ifndef TEAL_TARGET_WATCHOS
+    systemVersion = [[UIDevice currentDevice] systemVersion];
+#endif
     
     if (batteryLevel)       mDict[TEALDataSourceKey_DeviceBatteryLevel] = batteryLevel;
     if (batteryIsCharging)  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
@@ -341,6 +345,8 @@ static NSString *staticDeviceArchitecture;
 
 static NSString *staticDeviceResolution;
 + (NSString *) resolution {
+#ifndef TEAL_TARGET_WATCHOS
+
     if (!staticDeviceResolution){
         CGFloat scale       = [[UIScreen mainScreen] scale];
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -351,6 +357,9 @@ static NSString *staticDeviceResolution;
         staticDeviceResolution = [NSString stringWithFormat:@"%.0fx%.0f", width, height];
     }
     return staticDeviceResolution;
+#else
+    return @"unknown";
+#endif
 }
 
 //static NSString *staticDeviceHardware;

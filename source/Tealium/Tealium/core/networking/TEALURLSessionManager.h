@@ -7,21 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "TEALReachabilityManager.h"
-
 #import "TEALBlocks.h"
+#import "TEALReachabilityManager.h"
 
 @interface TEALURLSessionManager : NSObject
 
-@property (nonatomic, strong) TEALReachabilityManager *reachability;
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
+@property (nonatomic, strong) TEALReachabilityManager *reachabilityManager;
 
 - (instancetype) initWithConfiguration:(NSURLSessionConfiguration *)configuration;
 
 - (void) performRequest:(NSURLRequest *)request withCompletion:(TEALHTTPResponseBlock)completion;
 
 - (void) performRequest:(NSURLRequest *)request withJSONCompletion:(TEALHTTPResponseJSONBlock)completion;
+
 
 @end

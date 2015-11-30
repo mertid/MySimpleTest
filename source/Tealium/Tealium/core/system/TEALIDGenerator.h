@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#warning Move to autotracking module
+
 @interface TEALIDGenerator : NSObject
 
 + (NSString*)tealiumIdForObject:(id)object;

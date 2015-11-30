@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#warning MOVE TO AUTOTRACKING MODULE
+
 @interface TEALViewScanner : NSObject
 
 + (UIViewController*) rootWindowController;

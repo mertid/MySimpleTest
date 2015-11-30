@@ -41,7 +41,7 @@
 @property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALSettings *settings;
 @property (nonatomic, weak) id<TEALModulesDelegate> modulesDelegate;
-@property (nonatomic, weak) UIViewController *privateActiveViewController;
+//@property (nonatomic, weak) UIViewController *privateActiveViewController;
 
 @property (nonatomic, strong) NSDictionary *moduleData;
 
@@ -176,7 +176,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
-    NSDictionary *connectionInfo = [self.urlSessionManager.reachability connectionDataSources];
+    NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources];
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
     NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
     
@@ -646,12 +646,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) setActiveViewController:(UIViewController *)viewController {
-
-    [self.logger logDev:@"Current View Controller is now: %@", viewController];
-    
-    self.privateActiveViewController = viewController;
-}
+//- (void) setActiveViewController:(UIViewController *)viewController {
+//
+//    [self.logger logDev:@"Current View Controller is now: %@", viewController];
+//    
+//    self.privateActiveViewController = viewController;
+//}
 
 - (void) trackDispatch:(TEALDispatch *) dispatch {
     
@@ -775,35 +775,49 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) setupSettingsReachabilityCallbacks {
     
     // Disregard if block has already been setup
-    if (self.urlSessionManager.reachability.reachableBlock) {
+    if ([self.urlSessionManager.reachabilityManager isReachableBlockEnabled]) {
         return;
     }
     
-    // Start listening for reachability changes
-    [self.urlSessionManager.reachability startNotifier];
+    [self.urlSessionManager.reachabilityManager startListeningForReachabilityChanges];
     
-    // When network re-established
     __weak Tealium *weakSelf = self;
     
-    self.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
-        
-        [weakSelf.logger logDev:@"Network found."];
-        
-        [weakSelf fetchNewSettingsWithCompletion:nil];
-        
-    };
-    
-    // When unreachable
-    self.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
-        
-        [weakSelf.logger logDev:@"Network unreachable."];
+    [self.urlSessionManager.reachabilityManager reachabilityChanged:^(BOOL canReach) {
+       
+        if (canReach){
+          
+            [weakSelf.logger logDev:@"Network found."];
+            
+            [weakSelf fetchNewSettingsWithCompletion:nil];
+            
+        } else {
+            
+            [weakSelf.logger logDev:@"Network unreachable."];
 
-    };
+        }
+        
+    }];
+    
+//    self.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
+//        
+//        [weakSelf.logger logDev:@"Network found."];
+//        
+//        [weakSelf fetchNewSettingsWithCompletion:nil];
+//        
+//    };
+//    
+//    // When unreachable
+//    self.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
+//        
+//        [weakSelf.logger logDev:@"Network unreachable."];
+//
+//    };
 }
 
 - (BOOL) networkReadyForDispatch {
     
-    BOOL reachable = [self.urlSessionManager.reachability isReachable];
+    BOOL reachable = [self.urlSessionManager.reachabilityManager isReachable];
     
     return reachable;
     
@@ -813,7 +827,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     BOOL suppress = NO;
     if ([self.settings wifiOnlySending]){
-        suppress = ![self.urlSessionManager.reachability isReachableViaWiFi];
+        suppress = ![self.urlSessionManager.reachabilityManager isReachableViaWifi];
     }
     
     return suppress;
@@ -846,11 +860,11 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (UIViewController *) activeViewController {
-    
-    return self.privateActiveViewController;
-    
-}
+//- (UIViewController *) activeViewController {
+//    
+//    return self.privateActiveViewController;
+//    
+//}
 
 - (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
     
