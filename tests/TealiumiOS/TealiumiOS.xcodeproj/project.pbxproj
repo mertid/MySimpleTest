@@ -92,6 +92,19 @@
 		715B6DAD1BF5209D00C4CD9C /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 715B6D5C1BF5209D00C4CD9C /* Tealium.m */; };
 		715CD45A1B73BBA700290F06 /* TEALDatasourceStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715CD4591B73BBA700290F06 /* TEALDatasourceStoreTests.m */; };
 		7188671A1BFE4DAB008E1165 /* TealiumiOSDirectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718867191BFE4DAB008E1165 /* TealiumiOSDirectTests.m */; };
+		71A3B8C31C0E087E002C1028 /* TEALReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 712932351C0D0ED000A128C5 /* TEALReachabilityManager.m */; };
+		71A3B8C41C0E087E002C1028 /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7129322E1C0D0CF700A128C5 /* TEALReachability.m */; };
+		71A3B8C51C0E087E002C1028 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D11B5EAED900543639 /* SecondViewController.m */; };
+		71A3B8C61C0E087E002C1028 /* ShowViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 713248D61B5EB65F00543639 /* ShowViewTableViewCell.m */; };
+		71A3B8C71C0E087E002C1028 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75AD91B57109E00E6E9E2 /* AppDelegate.m */; };
+		71A3B8C81C0E087E002C1028 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A75AD61B57109E00E6E9E2 /* main.m */; };
+		71A3B8C91C0E087E002C1028 /* APITester.m in Sources */ = {isa = PBXBuildFile; fileRef = 71DCA7B61B5968A1001706CF /* APITester.m */; };
+		71A3B8CB1C0E087E002C1028 /* TealiumIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0F59B1BF3FAF200C9B50F /* TealiumIOS.framework */; };
+		71A3B8CC1C0E087E002C1028 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37EBA23F1B571A960010CB75 /* SystemConfiguration.framework */; };
+		71A3B8CE1C0E087E002C1028 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A75ADE1B57109E00E6E9E2 /* Main.storyboard */; };
+		71A3B8CF1C0E087E002C1028 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE31B57109E00E6E9E2 /* LaunchScreen.xib */; };
+		71A3B8D01C0E087E002C1028 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37A75AE11B57109E00E6E9E2 /* Images.xcassets */; };
+		71A3B8D21C0E087E002C1028 /* TealiumIOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0F59B1BF3FAF200C9B50F /* TealiumIOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		71A5A2C51BFA88F700F6E572 /* TealiumHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A5A2C41BFA88F700F6E572 /* TealiumHelper.m */; };
 		71A6D95B1BD589500000CAC2 /* TEALXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A6D95A1BD589500000CAC2 /* TEALXMLParser.m */; };
 		71A6D95F1BD5897B0000CAC2 /* TealiumLifecycleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A6D95E1BD5897B0000CAC2 /* TealiumLifecycleTests.m */; };
@@ -147,6 +160,13 @@
 			remoteGlobalIDString = 715B6C811BF5206B00C4CD9C;
 			remoteInfo = TealiumiOSDirect;
 		};
+		71A3B8C11C0E087E002C1028 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37A75AFA1B57168900E6E9E2 /* Tealium.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 717E6A8E1BF0830C002FED27;
+			remoteInfo = TealiumIOS;
+		};
 		71E3DEAE1BE26CB90086B621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 37A75AC91B57109E00E6E9E2 /* Project object */;
@@ -178,6 +198,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		71A3B8D11C0E087E002C1028 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				71A3B8D21C0E087E002C1028 /* TealiumIOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71F0F5A01BF3FAFD00C9B50F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -406,6 +437,8 @@
 		718867191BFE4DAB008E1165 /* TealiumiOSDirectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumiOSDirectTests.m; sourceTree = "<group>"; };
 		7188671B1BFE4DAB008E1165 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71A35A001BD6EDA6002D19DF /* TEALLifecycle+PrivateTestHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALLifecycle+PrivateTestHeader.h"; path = "TealiumTestsTests/TEALLifecycle+PrivateTestHeader.h"; sourceTree = SOURCE_ROOT; };
+		71A3B8D61C0E087E002C1028 /* TealiumiOSCore+Integrations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TealiumiOSCore+Integrations.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		71A3B8D71C0E087F002C1028 /* TealiumiOSCore copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "TealiumiOSCore copy2-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-apple-builder/tests/TealiumiOS/TealiumiOSCore copy2-Info.plist"; sourceTree = "<absolute>"; };
 		71A5A2C31BFA88F700F6E572 /* TealiumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumHelper.h; sourceTree = "<group>"; };
 		71A5A2C41BFA88F700F6E572 /* TealiumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumHelper.m; sourceTree = "<group>"; };
 		71A6D9591BD589500000CAC2 /* TEALXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALXMLParser.h; sourceTree = "<group>"; };
@@ -459,6 +492,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71A3B8CA1C0E087E002C1028 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71A3B8CB1C0E087E002C1028 /* TealiumIOS.framework in Frameworks */,
+				71A3B8CC1C0E087E002C1028 /* SystemConfiguration.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71E3DE691BE2695C0086B621 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -490,6 +532,7 @@
 				71E3DE741BE2695C0086B621 /* TealiumiOS copy-Info.plist */,
 				71E3DE9D1BE2698A0086B621 /* TealiumiOSTests copy-Info.plist */,
 				715B6C971BF5206B00C4CD9C /* TealiumiOSCore copy-Info.plist */,
+				71A3B8D71C0E087F002C1028 /* TealiumiOSCore copy2-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -502,6 +545,7 @@
 				71E3DEA91BE26CB90086B621 /* TealiumiOSCoreTests.xctest */,
 				715B6C961BF5206B00C4CD9C /* TealiumiOSDirect.app */,
 				718867171BFE4DAB008E1165 /* TealiumiOSDirectTests.xctest */,
+				71A3B8D61C0E087E002C1028 /* TealiumiOSCore+Integrations.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1049,6 +1093,25 @@
 			productReference = 718867171BFE4DAB008E1165 /* TealiumiOSDirectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		71A3B8BF1C0E087E002C1028 /* TealiumiOSCore+Integrations */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71A3B8D31C0E087E002C1028 /* Build configuration list for PBXNativeTarget "TealiumiOSCore+Integrations" */;
+			buildPhases = (
+				71A3B8C21C0E087E002C1028 /* Sources */,
+				71A3B8CA1C0E087E002C1028 /* Frameworks */,
+				71A3B8CD1C0E087E002C1028 /* Resources */,
+				71A3B8D11C0E087E002C1028 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71A3B8C01C0E087E002C1028 /* PBXTargetDependency */,
+			);
+			name = "TealiumiOSCore+Integrations";
+			productName = TealiumTests;
+			productReference = 71A3B8D61C0E087E002C1028 /* TealiumiOSCore+Integrations.app */;
+			productType = "com.apple.product-type.application";
+		};
 		71E3DE601BE2695C0086B621 /* TealiumiOSCore */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 71E3DE701BE2695C0086B621 /* Build configuration list for PBXNativeTarget "TealiumiOSCore" */;
@@ -1132,6 +1195,7 @@
 			);
 			projectRoot = "";
 			targets = (
+				71A3B8BF1C0E087E002C1028 /* TealiumiOSCore+Integrations */,
 				71E3DE601BE2695C0086B621 /* TealiumiOSCore */,
 				37A75AD01B57109E00E6E9E2 /* TealiumiOS */,
 				37A75AE91B57109E00E6E9E2 /* TealiumiOSTests */,
@@ -1196,6 +1260,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		71A3B8CD1C0E087E002C1028 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71A3B8CE1C0E087E002C1028 /* Main.storyboard in Resources */,
+				71A3B8CF1C0E087E002C1028 /* LaunchScreen.xib in Resources */,
+				71A3B8D01C0E087E002C1028 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1332,6 +1406,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		71A3B8C21C0E087E002C1028 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71A3B8C31C0E087E002C1028 /* TEALReachabilityManager.m in Sources */,
+				71A3B8C41C0E087E002C1028 /* TEALReachability.m in Sources */,
+				71A3B8C51C0E087E002C1028 /* SecondViewController.m in Sources */,
+				71A3B8C61C0E087E002C1028 /* ShowViewTableViewCell.m in Sources */,
+				71A3B8C71C0E087E002C1028 /* AppDelegate.m in Sources */,
+				71A3B8C81C0E087E002C1028 /* main.m in Sources */,
+				71A3B8C91C0E087E002C1028 /* APITester.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71E3DE631BE2695C0086B621 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1377,6 +1465,11 @@
 			isa = PBXTargetDependency;
 			target = 715B6C811BF5206B00C4CD9C /* TealiumiOSDirect */;
 			targetProxy = 7188671C1BFE4DAB008E1165 /* PBXContainerItemProxy */;
+		};
+		71A3B8C01C0E087E002C1028 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TealiumIOS;
+			targetProxy = 71A3B8C11C0E087E002C1028 /* PBXContainerItemProxy */;
 		};
 		71E3DEAF1BE26CB90086B621 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1640,6 +1733,44 @@
 			};
 			name = Release;
 		};
+		71A3B8D41C0E087E002C1028 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "TealiumiOSCore copy2-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tealium.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		71A3B8D51C0E087E002C1028 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "TealiumiOSCore copy2-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tealium.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
 		71E3DE711BE2695C0086B621 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1749,6 +1880,15 @@
 			buildConfigurations = (
 				7188671E1BFE4DAB008E1165 /* Debug */,
 				7188671F1BFE4DAB008E1165 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		71A3B8D31C0E087E002C1028 /* Build configuration list for PBXNativeTarget "TealiumiOSCore+Integrations" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71A3B8D41C0E087E002C1028 /* Debug */,
+				71A3B8D51C0E087E002C1028 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

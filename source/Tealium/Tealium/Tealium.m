@@ -55,10 +55,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration *)configuration {
     
-#warning OPTIMIZE this property assignment
-    
-    configuration.instanceID  = key;
-    
     return [Tealium newInstanceForKey:key
                         configuration:configuration
                            completion:^(BOOL success, NSError * _Nullable error) {
@@ -249,6 +245,8 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)completion{
     
+    configuration.instanceID  = key;
+
     __block NSError *newInstanceError = nil;
     
     Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
@@ -262,8 +260,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     }];
     
     
+#warning Flip to do a bail out check first - return false if no instance?
+    
     if (instance){
+        
         [Tealium addInstance:instance key:key];
+        
     } else {
         newInstanceError = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Failed to create new Tealium instance", @"")

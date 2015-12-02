@@ -26,6 +26,7 @@
 
 #pragma mark - PUBLIC INSTANCE
 
+#warning Move to private?
 - (UIWebView *) webView {
     
     
@@ -50,6 +51,9 @@
     
 }
 
+- (void) integrateWithFramework:(id)framework {
+    
+}
 
 #pragma mark - PRIVATE INSTANCE
 
