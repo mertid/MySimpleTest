@@ -7,17 +7,44 @@
  */
 
 #import "AAPLAppDelegate.h"
+#import "TealiumHelper.h"
 
 @implementation AAPLAppDelegate
 
 - (void)applicationDidFinishLaunching:(nonnull UIApplication *)application {
+    
+    [TealiumHelper startTracking];
+    
+    [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
+    
     if ([WCSession isSupported]) {
         [WCSession defaultSession].delegate = self;
         [[WCSession defaultSession] activateSession];
     }
 }
 
+//- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions{
+//    
+//    
+//    
+//    
+//    return true;
+//}
+//
+//- (void) applicationDidBecomeActive:(UIApplication *)application{
+//    
+//}
+
+//- (void) application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void (^)(NSDictionary * _Nullable))reply {
+//    
+////    [TealiumHelper application:application handleWatchKitExtensionRequest:userInfo reply:reply];
+//    
+//}
+
 - (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * __nonnull))replyHandler {
+    
+    
+    
     /*
          Because this method is likely to be called when the app is in the
          background, begin a background task. Starting a background task ensures
@@ -49,6 +76,9 @@
     
     // Sends a confirmation message to the WatchKit app extension that the text input result was received.
     replyHandler(@{@"Confirmation" : @"Text was received."});
+    
+    [TealiumHelper session:session didReceiveMessage:message replyHandler:replyHandler];
+
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {

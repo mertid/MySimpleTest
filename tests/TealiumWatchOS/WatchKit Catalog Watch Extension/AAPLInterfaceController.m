@@ -8,6 +8,7 @@
 
 #import "AAPLInterfaceController.h"
 #import "AAPLElementRowController.h"
+#import "TealiumWKHelper.h"
 
 @interface AAPLInterfaceController()
 
@@ -34,22 +35,33 @@
         self.elementsList = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AppData" ofType:@"plist"]];
         
         [self loadTableRows];
+        
+        [TealiumWKHelper startTracking];
+        
+        [TealiumWKHelper trackEventWithTitle:@"watchLaunch" dataSources:nil];
     }
 
     return self;
 }
 
 - (void)awakeWithContext:(id)context {
+        
     NSLog(@"%@ awake with context: %@", self, context);
 }
 
 - (void)willActivate {
     // This method is called when the controller is about to be visible to the wearer.
+    
+    [TealiumWKHelper trackEventWithTitle:@"wakeWatch" dataSources:nil];
+
     NSLog(@"%@ will activate", self);
 }
 
 - (void)didDeactivate {
     // This method is called when the controller is no longer visible.
+    
+    [TealiumWKHelper trackEventWithTitle:@"watchSleep" dataSources:nil];
+
     NSLog(@"%@ did deactivate", self);
 }
 
@@ -69,6 +81,10 @@
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex {
     NSDictionary *rowData = self.elementsList[rowIndex];
 
+    NSString *nextInterface = rowData[@"controllerIdentifier"];
+    
+    [TealiumWKHelper trackEventWithTitle:@"interfaceSelection" dataSources:@{@"nextInterface":nextInterface}];
+    
     [self pushControllerWithName:rowData[@"controllerIdentifier"] context:nil];
 }
 

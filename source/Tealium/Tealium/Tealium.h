@@ -79,7 +79,7 @@
  *  to be included in the event dispatch. If a value is an array, be sure to use 
  *  an array of strings.
  */
-- (void) trackEventWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
+- (void) trackEventWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources;
 
 /**
  *  Sends a view to Collect.  Views are packaged with any custom key/value data 
@@ -91,7 +91,7 @@
  *  an array of strings.
  */
 
-- (void) trackViewWithTitle:(NSString * _Nullable)title dataSources:(NSDictionary * _Nullable)customDataSources;
+- (void) trackViewWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources;
 
 
 #pragma mark - Data Management

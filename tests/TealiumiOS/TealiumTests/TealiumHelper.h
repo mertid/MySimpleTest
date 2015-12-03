@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "Tealium.h"
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
+#import "Tealium+WatchKit.h"
 #import "TealiumDelegate.h"
 
 #import "TEALConfiguration.h"
@@ -21,6 +21,7 @@
 #import "TEALVisitorProfile.h"
 #import "TEALVisitorProfileCurrentVisit.h"
 
+
 /*
  *  Using an abstract class like this is the recommended best practice for 
  *  utilizing analytics or other third party libraries requiring an event 
@@ -30,14 +31,16 @@
 
 + (void) startTracking;
 
-+ (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data;
++ (void) trackEventWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)data;
 
-+ (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)data;
++ (void) trackViewWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)data;
 
 + (void) stopTracking;
 
 + (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number;
 
 + (void) enableRemoteCommandBlock;
-    
+
++ (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * __nonnull))replyHandler;
+
 @end

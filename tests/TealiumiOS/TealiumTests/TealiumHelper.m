@@ -24,6 +24,9 @@ static TealiumHelper * _sharedInstance;
 }
 
 + (void) startTracking {
+
+    
+    // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                            profile:@"demo"
@@ -41,7 +44,7 @@ static TealiumHelper * _sharedInstance;
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
-        
+    
 }
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
@@ -60,42 +63,6 @@ static TealiumHelper * _sharedInstance;
     
 }
 
-#pragma mark - OPTIONAL TEALIUM DELEGATE
-
-- (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
-
-    // Add optional tracking suppression logic here - returning YES will destroy
-    // any processed dispatch so some conditional must eventually return NO
-    
-    return NO;
-    
-}
-
-- (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
-
-    // Add optional queuing / saving logic here - returning YES will save
-    // a dispatch so some condition must eventually return NO.
-    
-    return NO;
-    
-}
-
-- (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch{
-    
-    // Add optional code here to respond to queuing of dispatches.
-    
-}
-
-- (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch{
-    
-    // Add optional code here to respond to sent dispatches.
-    
-}
-
-- (void) tealium:(Tealium *)tealium webViewIsReady:(id)webView{
-    
-    // Use this to interact with the Tag Management Dispatcher's webview - available only if Tag Management enabled via remote settings.
-}
 
 #pragma mark - EXAMPLE METHODS USING OTHER TEALIUM APIS
 
@@ -126,6 +93,15 @@ static TealiumHelper * _sharedInstance;
     }];
     
 }
+
+#pragma mark - WATCHKIT RESPONSE HANDLING
+
+
++ (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * __nonnull))replyHandler {
+    
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] session:session didReceiveMessage:message replyHandler:replyHandler];
+}
+
 
 
 @end

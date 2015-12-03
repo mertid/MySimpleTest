@@ -126,9 +126,9 @@
     
 #ifndef TEAL_TARGET_WATCHOS
     return [self.reachability connectionDataSources];
-#else
-    return @{};
 #endif
+    return @{};
+
 }
 
 @end
