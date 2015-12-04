@@ -14,6 +14,9 @@ extern NSString * const TEALWKCommandTrackArgumentInstanceIDKey;
 extern NSString * const TEALWKCommandTrackArgumentTitleKey;
 extern NSString * const TEALWKCommandTrackArgumentCustomDataKey;
 
-@interface TEALWatchKitConstants : NSObject
+/**
+ *  These constants used between the TEALWKDelegate and TEALWKExtension classes.
+ */
+@interface TEALWKConstants : NSObject
 
 @end

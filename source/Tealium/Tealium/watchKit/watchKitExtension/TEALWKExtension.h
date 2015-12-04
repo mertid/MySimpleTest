@@ -7,23 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TEALConfiguration.h"
+#import "TEALWKExtensionConfiguration.h"
 
-@interface TealiumWKExtension : NSObject
+/**
+ *  Add this class to your Watch App Extension only.
+ */
+@interface TEALWKExtension : NSObject
 
 # pragma mark - Setup / Configuration
 
 /**
- *  Starts an instance of the TealiumWKExtension.
+ *  Starts an instance of the TEALWKExtension.
  *
  *  @param key A unique string identifier for the target matching Tealium instance.
- *  @param configuration A TEALConfiguration object that contains the target account-profile-env settings.
+ *  @param configuration A TEALWKExtensionConfiguration object that contains the target account-profile-env settings.
  *
- *  @return TealiumWKExtension instance that matches a Tealium instance with the given configuration
+ *  @return TEALWKExtension instance that matches a Tealium instance with the given configuration
  *
  *  @warning *Note:* Only the account-profile-env options will be used, all other configuration options will be ignored.
  */
-+ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration * _Nullable)configuration;
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALWKExtensionConfiguration * _Nullable)configuration;
 
 
 #pragma mark - Instance Management
@@ -31,7 +34,7 @@
  *
  *  @param key NSString identifier for the library instance.
  *
- *  @return An instance of the TealiumWKExtension for calling methods.
+ *  @return An instance of the TEALWKExtension for calling methods.
  */
 + (_Nullable instancetype) instanceForKey:(NSString * _Nonnull)key;
 

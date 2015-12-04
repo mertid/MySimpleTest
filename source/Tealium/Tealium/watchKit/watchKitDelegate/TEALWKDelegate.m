@@ -6,22 +6,22 @@
 //  Copyright © 2015 Apple Inc. All rights reserved.
 //
 
-#import "Tealium+WatchKit.h"
-#import "TEALWatchKitConstants.h"
+#import "TEALWKDelegate.h"
+#import "TEALWKConstants.h"
 
 typedef void (^tealiumEndBGTask)();
 
-@implementation Tealium(WatchKit)
+@implementation TEALWKDelegate
 
 #pragma mark - WC SESSION DELEGATE
 
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message{
++ (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message{
     
     [self session:session didReceiveMessage:message replyHandler:nil];
     
 }
 
-- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler{
++ (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler{
     
     // Only 2 commands from the Watch are currently supported - target methods will bail early if payload argument is empty
     [self processEventCallFromPayload:message[TEALWKCommandTrackEventKey]];
@@ -41,7 +41,7 @@ typedef void (^tealiumEndBGTask)();
     replyHandler(@{@"Confirmation" : @"Tealium extension call was received."});
 }
 
-- (tealiumEndBGTask) endBlock {
++ (tealiumEndBGTask) endBlock {
     
     UIApplication *application = [UIApplication sharedApplication];
     
@@ -60,7 +60,7 @@ typedef void (^tealiumEndBGTask)();
     return endBlock;
 }
 
-- (void) processEventCallFromPayload:(NSDictionary *)payload {
++ (void) processEventCallFromPayload:(NSDictionary *)payload {
     
     // Only process if payload available
     if (!payload) { return; };
@@ -74,7 +74,7 @@ typedef void (^tealiumEndBGTask)();
     
 }
 
-- (void) processViewCallFromPayload:(NSDictionary *)payload {
++ (void) processViewCallFromPayload:(NSDictionary *)payload {
     
     // Only process if payload available
     if (!payload) { return; };

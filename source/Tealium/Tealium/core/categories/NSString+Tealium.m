@@ -16,8 +16,6 @@
 }
 
 + (NSString *) teal_descriptionForObject:(NSObject *)object description:(NSString *)description fromDictionary:(NSDictionary *)dictionary{
-
-    // TODO: alphabetize
     
     // Creates a description string from key values from dictionary
 

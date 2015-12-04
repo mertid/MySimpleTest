@@ -6,7 +6,7 @@
 //  Copyright © 2015 Apple Inc. All rights reserved.
 //
 
-#import "TEALWatchKitConstants.h"
+#import "TEALWKConstants.h"
 
 NSString * const TEALWKCommandTrackEventKey = @"com.tealium.track.event";
 NSString * const TEALWKCommandTrackViewKey = @"com.tealium.track.view";
@@ -14,6 +14,6 @@ NSString * const TEALWKCommandTrackArgumentInstanceIDKey = @"instanceid";
 NSString * const TEALWKCommandTrackArgumentTitleKey = @"title";
 NSString * const TEALWKCommandTrackArgumentCustomDataKey = @"customdata";
 
-@implementation TEALWatchKitConstants
+@implementation TEALWKConstants
 
 @end
