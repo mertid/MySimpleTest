@@ -10,9 +10,7 @@
 
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
-#import "Tealium+WatchKit.h"
 #import "TealiumDelegate.h"
-
 #import "TEALConfiguration.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDispatch.h"
@@ -22,6 +20,8 @@
 #import "TEALVisitorProfileCurrentVisit.h"
 
 
+@import WatchConnectivity;
+
 /*
  *  Using an abstract class like this is the recommended best practice for 
  *  utilizing analytics or other third party libraries requiring an event 
@@ -29,18 +29,52 @@
  */
 @interface TealiumHelper : NSObject<TealiumDelegate>
 
-+ (void) startTracking;
-
+/**
+ *  Triggers an event tracking call - lazy loads the library upon first call.
+ *
+ *  @param title Any NSString identifier for the event.
+ *  @param data An NSDictionary of additional data for Tealium mapping.
+ *
+ */
 + (void) trackEventWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)data;
 
+/**
+ *  Triggers a view tracking call - lazy loads the library upon first call.
+ *
+ *  @param title Any NSString identifier for the event.
+ *  @param data An NSDictionary of additional data for Tealium mapping.
+ *
+ */
 + (void) trackViewWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)data;
 
+/**
+ *  Disable all 3rd party libraries.
+ */
 + (void) stopTracking;
 
-+ (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number;
+//  EXAMPLE CUSTOM METHODS - demonstrating options capable by utilizing Tealium APIs
 
+/**
+ *  Keeps a persistent, running tally for a given key.
+ *
+ *  @param key An NSString identifier for the value to increment.
+ *  @param number Int value to increment last saved value by.
+ */
++ (void) incrementLifetimeValueForKey:(NSString * _Nonnull)key amount:(int)number;
+
+/**
+ *  Turn on a remote command block that can be triggered when certain conditions are met - configured in the TIQ Dashboard.
+ */
 + (void) enableRemoteCommandBlock;
 
-+ (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * __nonnull))replyHandler;
+/**
+ *  Forwarding call to be placed in the matching WCSessionDelegate method session:didReceiveMessage:replyHandler:.
+ *
+ *  @param session WCSession object that received the target message.
+ *  @param message NSDictionary containing the message.
+ *  @param replyHandler Completion block for optionally returning response.
+ *
+ */
++ (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nullable void (^)(NSDictionary<NSString *,id> * _Nullable responseMessage))replyHandler;
 
 @end

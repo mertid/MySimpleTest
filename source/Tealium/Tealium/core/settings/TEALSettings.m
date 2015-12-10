@@ -20,8 +20,8 @@
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *privatePublishSettings;
-@property (nonatomic, strong) NSString *privateCollectDispatchURLString;
-@property (nonatomic, strong) NSString *privateS2SLegacyDispatchURLString;
+@property (nonatomic, strong) NSString *defaultCollectDispatchURLString;
+@property (nonatomic, strong) NSString *defaultS2SLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
 @property (nonatomic, strong) NSURL *audienceStreamProfileURL;
@@ -33,48 +33,62 @@
 
 @implementation TEALSettings
 
+
+static NSString * defaultCollectDispatchURLString = nil;
+static NSString * defaultLegacyS2SDispatchURLString = nil;
+
 #pragma mark - CLASS METHODS
 
 + (NSString *) defaultCollectDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
-    NSString *urlPrefix = @"https";
-    
-    if ([settings useHTTP]) {
-        urlPrefix = @"http";
+    if (!defaultCollectDispatchURLString){
+        
+        NSString *urlPrefix = @"https";
+        
+        if ([settings useHTTP]) {
+            urlPrefix = @"http";
+        }
+      
+        NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
+        
+        NSMutableDictionary *params = [NSMutableDictionary new];
+        
+        params[TEALCollectKey_Account]   = [settings account];
+        params[TEALCollectKey_Profile]   = [settings asProfile];
+        params[TEALCollectKey_VisitorID] = [settings visitorIDCopy];
+        
+        if (settings.traceID) {
+            params[TEALCollectKey_TraceID] = settings.traceID;
+        }
+        
+        NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+        
+        defaultCollectDispatchURLString = [baseURLString stringByAppendingString:queryString];
     }
-  
-    NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
     
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    
-    params[TEALCollectKey_Account]   = [settings account];
-    params[TEALCollectKey_Profile]   = [settings asProfile];
-    params[TEALCollectKey_VisitorID] = [settings visitorIDCopy];
-    
-    if (settings.traceID) {
-        params[TEALCollectKey_TraceID] = settings.traceID;
-    }
-    
-    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
-    
-    return [baseURLString stringByAppendingString:queryString];
+    return defaultCollectDispatchURLString;
 }
 
 + (NSString *) defaultS2SLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
-    NSString *urlPrefix = @"https";
-    
-    if ([settings useHTTP]) {
-        urlPrefix = @"http";
+    if (!defaultLegacyS2SDispatchURLString){
+        NSString *urlPrefix = @"https";
+        
+        if ([settings useHTTP]) {
+            urlPrefix = @"http";
+        }
+        
+        NSString *account = [settings account];
+        NSString *profile = [settings asProfile];
+        NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
+        
+        NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
+        
+        defaultLegacyS2SDispatchURLString = baseURLString;
     }
-    
-    NSString *account = [settings account];
-    NSString *profile = [settings asProfile];
-    NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
 
-    NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
+    return defaultLegacyS2SDispatchURLString;
 
-    return baseURLString;
 }
 
 + (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
@@ -306,18 +320,27 @@
 }
 
 - (NSString *) collectDispatchURLString {
-    if (!self.privateCollectDispatchURLString) {
-        self.privateCollectDispatchURLString = [TEALSettings defaultCollectDispatchURLStringFromConfiguration:self];
+    
+    NSString *overrideDispatchString = self.configuration.overrideCollectDispatchURL;
+
+    if (overrideDispatchString){
+        return overrideDispatchString;
+    } else {
+        return [TEALSettings defaultCollectDispatchURLStringFromConfiguration:self];
     }
-    return self.privateCollectDispatchURLString;
+    
 }
 
 - (NSString *) s2SLegacyDispatchURLString {
     
-    if (!self.privateS2SLegacyDispatchURLString){
-        self.privateS2SLegacyDispatchURLString = [TEALSettings defaultS2SLegacyDispatchURLStringFromConfiguration:self];
+    NSString *overrideDispatchString = self.configuration.overrideS2SLegacyDispatchURL;
+    
+    if (overrideDispatchString){
+        return overrideDispatchString;
+    } else {
+        return [TEALSettings defaultS2SLegacyDispatchURLStringFromConfiguration:self];
     }
-    return self.privateS2SLegacyDispatchURLString;
+
 }
 
 - (NSString *) configurationDescription {

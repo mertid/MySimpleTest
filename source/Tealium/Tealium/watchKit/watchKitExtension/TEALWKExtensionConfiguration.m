@@ -12,9 +12,7 @@
 
 #pragma mark - PUBLIC CLASS
 
-+ (instancetype) configurationWithAccount:(NSString *)accountName
-                                  profile:(NSString *)profileName
-                              environment:(NSString *)environmentName{
++ (instancetype) configuration{
     
     TEALWKExtensionConfiguration *configuration = [[TEALWKExtensionConfiguration alloc] init];
     
@@ -22,29 +20,10 @@
         return nil;
     }
     
-    // Default configuration
-    configuration.accountName       = [accountName lowercaseString];
-    configuration.profileName       = [profileName lowercaseString];
-    configuration.environmentName   = [environmentName lowercaseString];
+    configuration.offlineDispatchQueueSize = 100;
+    configuration.logLevel = TEALWKLogLevelNone;
     
     return configuration;
-}
-
-+ (BOOL) isValidConfiguration:(TEALWKExtensionConfiguration *)configuration {
-    if (!configuration.accountName) return NO;
-    if (!configuration.profileName) return NO;
-    if (!configuration.environmentName) return NO;
-    
-    NSString *accountSpacesRemoved = [configuration.accountName stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([accountSpacesRemoved isEqualToString:@""]) return NO;
-    
-    NSString *profileSpacesRemoved = [configuration.profileName stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([profileSpacesRemoved isEqualToString:@""]) return NO;
-    
-    NSString *environmentSpacesRemoved = [configuration.environmentName stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([environmentSpacesRemoved isEqualToString:@""]) return NO;
-    
-    return YES;
 }
 
 #pragma mark - PRIVATE INSTANCE
@@ -53,11 +32,10 @@
     
     NSString *title = @"Tealium Watch Kit Extension Configuration";
     
+    NSString *offlineSizeAsString = [NSString stringWithFormat:@"%lu", (unsigned long)self.offlineDispatchQueueSize];
+    
     NSDictionary *descriptionData = @{
-                                      @"instance id":self.instanceID? self.instanceID:@"",
-                                      @"account - name":self.accountName? self.accountName:@"",
-                                      @"account - profile":self.profileName? self.profileName:@"",
-                                      @"account - target environment":self.environmentName? self.environmentName:@""
+                                      @"offline dispatch queue size":offlineSizeAsString
                                       };
     
     

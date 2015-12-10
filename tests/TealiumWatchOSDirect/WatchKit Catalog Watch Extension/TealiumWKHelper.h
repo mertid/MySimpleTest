@@ -6,24 +6,41 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@import WatchConnectivity;
+#import "TEALWKExtension.h"
 
 /*
  *  Using an abstract class like this is the recommended best practice for 
  *  utilizing analytics or other third party libraries requiring an event 
  *  trigger with optional data.
  */
-@interface TealiumWKHelper : NSObject<WCSessionDelegate>
+@interface TealiumWKHelper : NSObject <TEALWKExtensionDelegate>
 
-+ (void) startTracking;
+/**
+ *  Maps to Tealium's trackEventWithTitle:dataSources: call.
+ *
+ *  @param title An NSString identifier for the view change event.
+ *  @param customDataSources Optional Dictionary of additional data to send with call.
+ */
++ (void) trackEventWithTitle:(NSString *)title
+                 dataSources:(NSDictionary *)customDataSources;
 
-+ (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data;
+/**
+ *  Maps to Tealium's trackViewWithTitle:dataSources: call.
+ *  
+ *  @param title An NSString identifier for the view change event.
+ *  @param customDataSources Optional Dictionary of additional data to send with call.
+ */
++ (void) trackViewWithTitle:(NSString *)title
+                dataSources:(NSDictionary *)customDataSources;
 
-+ (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)data;
 
-+ (void) stopTracking;
-
-//+ (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number;
+/**
+ *  Optionally set a delegate for the extension to monitor track call success, queuing
+ *  or failure
+ *
+ *  @param delegate An object conforming to at least one of the optional 
+ *  TEALWKExtensionDelegate methods
+ */
++ (void) setDelegate:(id<TEALWKExtensionDelegate>)delegate;
 
 @end

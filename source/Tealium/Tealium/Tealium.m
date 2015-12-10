@@ -110,10 +110,14 @@ __strong static NSDictionary *staticAllInstances = nil;
         
     NSDictionary *universalInfo = [self universalTrackDataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
-    
+
+    // TimestampDataSources supports override by client data sources for key TEALDataSourceKey_TimestampUnix
+    NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:clientDataSources[TEALDataSourceKey_TimestampUnix]]:@{};
+
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     universalInfo? universalInfo:@{},
                                                                                     captureTimeDataSources? captureTimeDataSources:@{},
+                                                                                    timestampDataSources,
                                                                                     clientDataSources? clientDataSources:@{}
                                                                                     ]];
     
@@ -156,11 +160,11 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (NSDictionary *) universalTrackDataSources {
     
     NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
-    NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:[NSDate date]]:@{};
+//    NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:[NSDate date]]:@{};
     NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     persistentDataSources? persistentDataSources:@{},
-                                                                                    timestampDataSources,
+//                                                                                    timestampDataSources,
                                                                                     volatileDataSources? volatileDataSources:@{}
                                                                                     ]];
     

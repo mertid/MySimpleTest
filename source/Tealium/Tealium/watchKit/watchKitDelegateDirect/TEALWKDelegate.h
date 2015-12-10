@@ -6,7 +6,8 @@
 //  Copyright © 2015 Apple Inc. All rights reserved.
 //
 
-@import Foundation;
+#import "Tealium.h"
+
 @import WatchConnectivity;
 
 /**

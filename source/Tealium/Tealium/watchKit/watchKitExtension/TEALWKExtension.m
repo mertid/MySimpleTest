@@ -7,39 +7,21 @@
 //
 
 #import "TEALWKExtension.h"
-#import "TEALWKConstants.h"
-
-
-typedef NS_ENUM(NSUInteger, TEALWKLogLevel){
-    /**
-     *  Nothing is logged to the console, this is the default.
-     */
-    TEALWKLogLevelNone = 0,
-    /**
-     *  Only errors reported.
-     */
-    TEALWKLogLevelProd,
-    /**
-     *  Provides warnings and errors only.
-     */
-    TEALWKLogLevelQA,
-    /**
-     *  Most verbose - Useful for debugging and verification during development.
-     */
-    TEALWKLogLevelDev
-    
-    
-};
-
+#import "TEALWKExtensionQueue.h"
 
 @import WatchConnectivity;
+@import WatchKit;
+
+NSString * const TEALWKTimestampOverrideKey = @"timestamp_unix";
 
 /**
  *  Multiton object to support multiple instances of Tealium
  */
 @interface TEALWKExtension()
 
+@property (nonatomic, strong) NSString *instanceID;
 @property (nonatomic, strong) TEALWKExtensionConfiguration *configuration;
+@property (nonatomic, strong) TEALWKExtensionQueue *queue;
 
 @end
 
@@ -49,16 +31,13 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC APIs
 
-+ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALWKExtensionConfiguration * _Nullable)configuration{
-    
-    
-    // check WKConnectivity
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALWKExtensionConfiguration * _Nonnull)configuration{
     
     return [self newInstanceForKey:key configuration:configuration completion:^(BOOL success, NSError * _Nullable error) {
         
         if (error){
          
-            NSLog(@"Tealium Watch Kit: Error initializing instance %@: %@", key, error);
+            NSLog(@"%s: Error initializing instance %@: %@", __FUNCTION__, key, error);
         
         }
         
@@ -84,59 +63,36 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     staticAllInstances = newInstances;
     
-    
 }
 
 
 - (void) trackEventWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources{
     
-    if (!customDataSources) customDataSources = @{};
-    
-    __block typeof(self) __weak weakSelf = self;
+    if (!self.instanceID){ return; }
 
-    [[WCSession defaultSession] sendMessage:@{
-                                              TEALWKCommandTrackEventKey:@{
-                                                      TEALWKCommandTrackArgumentInstanceIDKey:self.configuration.instanceID,
-                                                      TEALWKCommandTrackArgumentTitleKey:title,
-                                                      TEALWKCommandTrackArgumentCustomDataKey:customDataSources}
-                                              }
-       replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
-        
-           [weakSelf logMessage:[NSString stringWithFormat:@"Track view titled: %@: %@", title, replyMessage] level:TEALWKLogLevelQA];
-           
-       } errorHandler:^(NSError * _Nonnull error) {
-           
-           [weakSelf logMessage:[NSString stringWithFormat:@"Error Tracking view titled: %@: %@", title, error] level:TEALWKLogLevelQA];
-        
-    }];
+    NSString * trackType = TEALWKCommandTrackValueEvent;
     
-        NSLog(@"%s event title: %@ \n customDataSources; %@", __FUNCTION__, title, customDataSources);
+    NSDictionary *payload = [self packagePayloadFromType:trackType
+                                                  title:title
+                                            dataSources:customDataSources];
+    
+    [self trackWithMessagePayload:payload];
+    
 }
 
 - (void) trackViewWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources{
     
-    if (!customDataSources) customDataSources = @{};
-    
-    __block typeof(self) __weak weakSelf = self;
+    if (!self.instanceID){ return; }
 
-    [[WCSession defaultSession] sendMessage:@{
-                                              TEALWKCommandTrackViewKey:@{
-                                                      TEALWKCommandTrackArgumentInstanceIDKey:self.configuration.instanceID,
-                                                      TEALWKCommandTrackArgumentTitleKey:title,
-                                                      TEALWKCommandTrackArgumentCustomDataKey:customDataSources}
-                                              }
-       replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
-           
-           [weakSelf logMessage:[NSString stringWithFormat:@"Track view titled: %@: %@", title, replyMessage] level:TEALWKLogLevelQA];
-           
-       } errorHandler:^(NSError * _Nonnull error) {
+    NSString * trackType = TEALWKCommandTrackValueView;
     
-           [weakSelf logMessage:[NSString stringWithFormat:@"Error Tracking view titled: %@:%@", title, error] level:TEALWKLogLevelQA];
-           
-       }];
+    NSDictionary *payload = [self packagePayloadFromType:trackType
+                                                   title:title
+                                             dataSources:customDataSources];
+    
+    [self trackWithMessagePayload:payload];
     
 }
-
 
 
 #pragma mark - PRIVATE / INTERNAL APIs
@@ -145,61 +101,41 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALWKExtensionConfiguration *)configuration
                         completion:(void(^)(BOOL success, NSError *error))completion{
 
-    BOOL success = NO;
     NSError *error = nil;
     TEALWKExtension *instance = nil;
     
-    configuration.instanceID = key;
+    instance = [[TEALWKExtension alloc] initPrivateInstanceWithConfiguration:configuration];
     
-    if (![TEALWKExtensionConfiguration isValidConfiguration:configuration]){
+    [instance setInstanceID:key];
+    
+    if (!instance){
         
+        NSString *reason = [NSString stringWithFormat:@"Instance could not be started with given configuration: %@", configuration];
+
         NSDictionary *errorInfo = @{
                                     NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize new TEALWKExtension instance.", @""),
-                                    NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Invalid Configuration passed to init method.", @""),
+                                    NSLocalizedFailureReasonErrorKey: reason,
                                     NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check configuration.", @"")
                                     };
         
         error = [NSError errorWithDomain:@"com.tealium.watchkit.error"
                                     code:400
                                 userInfo:errorInfo];
-    
-    }
-    
-    if (!error){
         
-        instance = [[TEALWKExtension alloc] initPrivateInstanceWithConfiguration:configuration];
+    } else {
     
-    }
-    
-    if (!error){
-        
-        if (!instance){
-            
-            NSString *reason = [NSString stringWithFormat:@"Instance could not be started with given configuration: %@", configuration];
+        [instance logMessage:[configuration description] level:TEALWKLogLevelQA];
 
-            NSDictionary *errorInfo = @{
-                                        NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize new TEALWKExtension instance.", @""),
-                                        NSLocalizedFailureReasonErrorKey: reason,
-                                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check configuration.", @"")
-                                        };
-            
-            error = [NSError errorWithDomain:@"com.tealium.watchkit.error"
-                                        code:400
-                                    userInfo:errorInfo];
-            
-        } else {
-            
-            success = YES;
-            
-        }
-    }
+        [instance logMessage:[self description] level:TEALWKLogLevelQA];
+        
+        [self addInstance:instance key:key];
     
+    }
+
     if (completion) {
-        completion(success, error);
+        completion(instance, error);
     }
     
-    [self addInstance:instance key:key];
-
     return instance;
     
 }
@@ -221,6 +157,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     if (self) {
         _configuration = configuration;
+        _queue = [[TEALWKExtensionQueue alloc] init];
     }
     
     return self;
@@ -232,7 +169,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     TEALWKLogLevel currentLevel = [self currentLogLevel];
     
     if (level <= currentLevel){
-            NSLog(@"Tealium Watch Kit: %s: %@", __FUNCTION__, message);
+            NSLog(@"%@", message);
     }
     
 }
@@ -240,18 +177,163 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (TEALWKLogLevel) currentLogLevel{
     
-    NSString *log = self.configuration.environmentName;
+    return self.configuration.logLevel;
     
-    if ([@"dev" isEqualToString:[log lowercaseString]]){
-        return TEALWKLogLevelDev;
+}
+
+
+- (BOOL) isReachable {
+    
+    WCSession *session = [WCSession defaultSession];
+    
+    return session.reachable;
+    
+}
+
+- (NSDictionary *) packagePayloadFromType:(NSString *)type
+                                    title:(NSString *)title
+                              dataSources:(NSDictionary *)customDataSources {
+    
+    if (!customDataSources) customDataSources = @{};
+    
+    NSDictionary * expandedCustomDataSources = [self customDataSourcesWithTimestamp:customDataSources];
+    
+    NSDictionary * payload = @{
+                               TEALWKCommandTrackKey:@{
+                                       TEALWKCommandTrackTypeKey:type,
+                                       TEALWKCommandTrackArgumentInstanceIDKey:self.instanceID,
+                                       TEALWKCommandTrackArgumentTitleKey:title,
+                                       TEALWKCommandTrackArgumentCustomDataKey:expandedCustomDataSources}
+                               };
+    
+    return payload;
+    
+}
+
+- (void) trackWithMessagePayload:(NSDictionary *)payload{
+    
+    [self.queue queueCallPayload:payload];
+    
+    if (![self isReachable]){
+        
+        NSString *message = [NSString stringWithFormat:@"Host application not reachable. Saving queued calls: %@", self.queue.currentQueue];
+        
+        [self logMessage:message level:TEALWKLogLevelDev];
+                
+        if (self.delegate) {
+            [self.delegate tealiumExtensionDidQueueTrackCall:payload[TEALWKCommandTrackKey] currentQueueCount:[[self.queue currentQueue] count]];
+        }
+        
+        return;
     }
-    if ([@"qa" isEqualToString:[log lowercaseString]]){
-        return  TEALWKLogLevelQA;
+    
+    [self sendQueue];
+    
+}
+
+- (NSDictionary *) customDataSourcesWithTimestamp:(NSDictionary *)dataSources{
+    
+    // Adds timestamp unix to the data sources which will override the
+    // timestamp calculations on the host app's Tealium library instance
+    
+    NSMutableDictionary *newDataSources = [NSMutableDictionary dictionary];
+    
+    [newDataSources addEntriesFromDictionary:dataSources];
+    
+    newDataSources[TEALWKTimestampOverrideKey] = [self timestampNowAsString];
+    
+    return [NSDictionary dictionaryWithDictionary:newDataSources];
+    
+}
+
+- (NSString *) timestampNowAsString {
+    
+    NSTimeInterval interval = [[NSDate date] timeIntervalSince1970];
+    
+    NSString *intervalString = [NSString stringWithFormat:@"%f", interval];
+    
+    return intervalString;
+    
+}
+
+- (void) sendQueue {
+    
+    for (NSDictionary *payload in [self.queue currentQueue]){
+        
+        [self sendPayload:payload];
+    
+        // Iterating through a copy so we can safely remove calls as we process them
+        [self.queue removeFirstCall];
     }
-    if ([@"prod" isEqualToString:[log lowercaseString]]){
-        return TEALWKLogLevelProd;
+    
+}
+
+- (void) sendPayload:(NSDictionary *)payload {
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [[WCSession defaultSession] sendMessage:payload
+           replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
+               
+                   [weakSelf logMessage:[NSString stringWithFormat:@"Track message sent to host app: %@ reply: %@", payload, replyMessage]
+                                  level:TEALWKLogLevelQA];
+                   
+                   if (weakSelf.delegate){
+                       
+                       [weakSelf.delegate tealiumExtensionDidHandoffTrackCall:payload[TEALWKCommandTrackKey]];
+                   }
+               
+               
+           } errorHandler:^(NSError * _Nonnull error) {
+               
+               
+               [weakSelf logMessage:[NSString stringWithFormat:@"Error with track message to host app: %@: error: %@", payload, error]
+                              level:TEALWKLogLevelQA];
+               
+               if (weakSelf.delegate){
+                   
+                   [weakSelf.delegate tealiumExtensionTrackCall:payload[TEALWKCommandTrackKey] didEncounterError:error];
+                   
+               }
+               
+               // Requeue if there was a problem
+               [self.queue queueCallPayload:payload];
+               
+               
+           }];
+    
+}
+
+- (NSString *) description {
+    
+    NSString *title = @"Tealium Watch Kit Extension";
+    
+    NSString *instanceID = self.instanceID? self.instanceID : @"(unknown)";
+    
+    NSDictionary *descriptionData = @{
+                                      @"instance ID": instanceID
+                                      };
+    
+    
+    NSString *displayClass              = NSStringFromClass([self class]);
+    
+    NSMutableString *descriptionString = [NSMutableString stringWithString:[NSString stringWithFormat:@"\r\r === %@ === \r", displayClass]];
+    
+    if (title){
+        [descriptionString appendString:[NSString stringWithFormat:@"( %@ )\r", title]];
     }
-    return TEALWKLogLevelNone;
+    
+    NSArray *keys = [[descriptionData allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    for (NSString *key in keys){
+        NSString *keyValue = descriptionData[key];
+        if (keyValue) {
+            [descriptionString appendString:[NSString stringWithFormat:@"%@:%@ \r", key, keyValue]];
+        }
+    }
+    
+    [descriptionString appendString:@"\r"];
+    
+    return [NSString stringWithString:descriptionString];
     
 }
 

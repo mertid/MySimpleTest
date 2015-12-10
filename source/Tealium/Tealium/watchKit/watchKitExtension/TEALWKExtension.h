@@ -8,11 +8,53 @@
 
 #import <Foundation/Foundation.h>
 #import "TEALWKExtensionConfiguration.h"
+#import "TEALWKConstants.h"
+
+@protocol TEALWKExtensionDelegate <NSObject>
+
+@optional
 
 /**
- *  Add this class to your Watch App Extension only.
+ *  Called when the watch is offline / not connected to it's host device.
+ *
+ *  @param trackData An NSDictionary of metadata and simple datasources for further
+ *      processing by the Tealium Library in the host app.
+ *  @param count The current queue count that includes this queued call.
+ */
+- (void) tealiumExtensionDidQueueTrackCall:(NSDictionary * _Nonnull)trackData currentQueueCount:(NSUInteger)count;
+
+/**
+ *  Called when the extension has passed a watch track event to the Tealium Library
+ *      in the host app.
+ *
+ *  @param trackData An NSDictionary of metadata and simple datasources for further
+ *      processing by the Tealium Library in the host app.
+ */
+- (void) tealiumExtensionDidHandoffTrackCall:(NSDictionary * _Nonnull)trackData;
+
+/**
+ *  Called when the Tealium Extension encouters an issue.
+ *
+ *  @param trackData An NSDictionary of metadata and simple datasources for further
+ *      processing by the Tealium Library in the host app.
+ *  @param error NSError with details of any problems encountered by the extension
+ */
+- (void) tealiumExtensionTrackCall:(NSDictionary * _Nonnull)trackData didEncounterError:(NSError * _Nullable)error;
+
+@end
+
+/**
+ *
+ *  Add this class to your Watch App Extension. 
+ *
+ *  On Host app, implementation requirements:
+ *      - Tealium Library 5.x
+ *      - TEALWKDelegate classes or framework
+ *
  */
 @interface TEALWKExtension : NSObject
+
+@property (nonatomic, weak) id<TEALWKExtensionDelegate> delegate;
 
 # pragma mark - Setup / Configuration
 
@@ -26,7 +68,7 @@
  *
  *  @warning *Note:* Only the account-profile-env options will be used, all other configuration options will be ignored.
  */
-+ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALWKExtensionConfiguration * _Nullable)configuration;
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALWKExtensionConfiguration * _Nonnull)configuration;
 
 
 #pragma mark - Instance Management
@@ -69,9 +111,6 @@
  *  an array of strings.
  */
 - (void) trackViewWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources;
-
-
-
 
 
 @end

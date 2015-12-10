@@ -8,6 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef NS_ENUM(NSUInteger, TEALWKLogLevel){
+    /**
+     *  Nothing is logged to the console, this is the default.
+     */
+    TEALWKLogLevelNone = 0,
+    /**
+     *  Only errors reported.
+     */
+    TEALWKLogLevelProd,
+    /**
+     *  Provides warnings and errors only.
+     */
+    TEALWKLogLevelQA,
+    /**
+     *  Most verbose - Useful for debugging and verification during development.
+     */
+    TEALWKLogLevelDev
+    
+};
+
 /**
  *  This is a lighter-weight version of the TEALConfiguration object meant
     specifically for use in a watchOS extension. Create an instance of this class
@@ -16,51 +37,24 @@
 @interface TEALWKExtensionConfiguration : NSObject
 
 /**
- *  Tealium iQ account name
+ *  The number of track events to store when the host iOS device in not reachable.
+ *
+ *  Default - 100
  */
-@property (nonatomic, copy) NSString *accountName;
+@property (nonatomic) NSUInteger offlineDispatchQueueSize;
 
 /**
- *  Tealium iQ profile name, this should be the TiQ profile where the mobile publish settings have been configured for Tealium collect.
+ *  Level of console log output to produce.
  *
- *  Note: This is usually not the same profile used for Collect which defaults to "main"
+ *  Default - TEALWKLogLevelNone
  */
-@property (nonatomic, copy) NSString *profileName;
-
-/**
- *  Tealium iQ evnvironment name.
- *
- *  @example dev/qa/prod
- */
-@property (nonatomic, copy) NSString *environmentName;
-
-/**
- *  The instance id assigned to the library instance associated with this configuration.
- *
- *  @param instanceID NSString identifier
- */
-@property (nonatomic) NSString *instanceID;
+@property (nonatomic) TEALWKLogLevel logLevel;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
  *
- *  @param accountName     String of TiQ / AudienceStream account name
- *  @param profileName     String of TiQ Profile Name
- *  @param environmentName String
- *
  *  @return Valid configuration instance to pass to the enableWithConfiguration: method.
  */
-+ (instancetype) configurationWithAccount:(NSString *)accountName
-                                  profile:(NSString *)profileName
-                              environment:(NSString *)environmentName;
-
-/**
- *  Checks to see if configuration is populated with the minimum required properties.
- *
- *  @param configuration TEALConfiguration to check.
- *
- *  @return Boolean of whether the argument configuration is valid.
- */
-+ (BOOL) isValidConfiguration:(TEALWKExtensionConfiguration *)configuration;
++ (instancetype) configuration;
 
 @end

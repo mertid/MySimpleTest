@@ -8,11 +8,15 @@
 
 #import "TEALWKConstants.h"
 
-NSString * const TEALWKCommandTrackEventKey = @"com.tealium.track.event";
-NSString * const TEALWKCommandTrackViewKey = @"com.tealium.track.view";
+NSString * const TEALWKCommandResponseKey = @"Tealium Response";
+NSString * const TEALWKCommandTrackKey = @"com.tealium.watchkit.track";
+NSString * const TEALWKCommandTrackTypeKey = @"type";
 NSString * const TEALWKCommandTrackArgumentInstanceIDKey = @"instanceid";
 NSString * const TEALWKCommandTrackArgumentTitleKey = @"title";
 NSString * const TEALWKCommandTrackArgumentCustomDataKey = @"customdata";
+
+NSString * const TEALWKCommandTrackValueEvent = @"event";
+NSString * const TEALWKCommandTrackValueView = @"view";
 
 @implementation TEALWKConstants
 

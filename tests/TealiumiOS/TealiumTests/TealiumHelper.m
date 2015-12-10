@@ -7,7 +7,9 @@
 //
 
 #import "TealiumHelper.h"
+#import "TEALWKDelegate.h"
 
+// We only need one instance to demo
 NSString *const TEALIUM_INSTANCE_ID = @"1";
 
 @implementation TealiumHelper
@@ -25,6 +27,11 @@ static TealiumHelper * _sharedInstance;
 
 + (void) startTracking {
 
+    Tealium *instance = [Tealium instanceForKey:TEALIUM_INSTANCE_ID];
+    
+    if (instance){
+        return;
+    }
     
     // Configure Tealium
     
@@ -34,12 +41,9 @@ static TealiumHelper * _sharedInstance;
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
-    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/qa6/tealiummobile/demo/dev/mobile.html";
-
-//    configuration.overridePublishSettingsURL = @"https://raw.githubusercontent.com/wiki/tealium/android-library/mps-collect.js";
-
-//    configuration.overridePublishSettingsURL = @"https://raw.githubusercontent.com/wiki/tealium/android-library/mps-tag_management.js";
-
+//    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/qa6/tealiummobile/demo/dev/mobile.html";
+//
+//    configuration.overrideCollectDispatchURL = @"http://requestb.in/sv3jg3sv";
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
@@ -49,11 +53,15 @@ static TealiumHelper * _sharedInstance;
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
     
+    [self startTracking];
+    
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] trackEventWithTitle:title dataSources:data];
 }
 
 + (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
     
+    [self startTracking];
+
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] trackViewWithTitle:title dataSources:data];
 }
 
@@ -97,11 +105,15 @@ static TealiumHelper * _sharedInstance;
 #pragma mark - WATCHKIT RESPONSE HANDLING
 
 
-+ (void)session:(nonnull WCSession *)session didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message replyHandler:(nonnull void (^)(NSDictionary<NSString *,id> * __nonnull))replyHandler {
++ (void)session:(nonnull WCSession *)session
+didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message
+   replyHandler:(nullable void (^)(NSDictionary<NSString *,id> * _Nullable responseMessage))replyHandler {
     
-    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] session:session didReceiveMessage:message replyHandler:replyHandler];
+    // Alternatively TEALWKDelegate could be imported and used directly by the class originally calling this method.
+    
+    [TEALWKDelegate session:session didReceiveMessage:message replyHandler:replyHandler];
+    
 }
-
 
 
 @end

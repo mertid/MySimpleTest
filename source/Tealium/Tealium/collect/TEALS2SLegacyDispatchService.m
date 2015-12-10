@@ -21,7 +21,6 @@
 @property (nonatomic, weak) TEALURLSessionManager *sessionManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus status;
 
-
 @end
 
 @implementation TEALS2SLegacyDispatchService
@@ -91,8 +90,6 @@
     
     NSString *fullURLString = [NSString stringWithFormat:@"%@%@", originURLString, encodedDataQueryString];
     
-//    NSString *encodedURLString = [fullURLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
-    
     NSURL *url = [NSURL URLWithString:fullURLString];
     
     // Create new request
@@ -123,7 +120,6 @@
     
     mDict[@"cp.utag_main_v_id"] = self.visitorID;
     mDict[@"dom.domain"] = @"tealium.com";
-//    mDict[@"dom.pathname"] = @"/test";
     mDict[@"resolution"] = @"3x2";
     
     NSDictionary *dataForJson = @{@"data":[NSDictionary dictionaryWithDictionary:mDict]};

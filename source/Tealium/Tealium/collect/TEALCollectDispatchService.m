@@ -71,10 +71,7 @@
     
     NSError *error = nil;
     
-    NSString *payload    = [TEALNetworkHelpers urlParamStringFromDictionary:dispatch.payload];
-
-    NSString *urlString = [baseURLString stringByAppendingFormat:@"&%@", payload];
-    
+    NSString *urlString = [TEALNetworkHelpers appendUrlParamString:baseURLString withDictionary:dispatch.payload];
     
     if (!urlString && completion) {
         completion(TEALDispatchStatusFailed, dispatch, error);

@@ -10,6 +10,6 @@
 
 @interface TEALTimestampDataSources : NSObject
 
-+ (NSDictionary *) dataSourcesForDate:(NSDate *)date;
++ (NSDictionary * _Nonnull) dataSourcesForDate:(id _Nullable)date;
 
 @end

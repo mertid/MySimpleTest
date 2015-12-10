@@ -33,6 +33,10 @@
     
     NSString *stringToAppend = [TEALNetworkHelpers urlParamStringFromDictionary:data];
     
+    if (![urlString containsString:@"?"]){
+        urlString = [urlString stringByAppendingString:@"?"];
+    }
+    
     return [urlString stringByAppendingFormat:@"&%@", stringToAppend];
 }
 

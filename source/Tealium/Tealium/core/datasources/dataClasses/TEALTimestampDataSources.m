@@ -11,8 +11,21 @@
 
 @implementation TEALTimestampDataSources
 
-+ (NSDictionary *) dataSourcesForDate:(NSDate *)date {
++ (NSDictionary *) dataSourcesForDate:(id)date {
 
+    if ([date isKindOfClass:[NSString class]]){
+        double interval = [date doubleValue];
+        date = [NSDate dateWithTimeIntervalSince1970:interval];
+    }
+    
+    if (![date isKindOfClass:[NSDate class]]){
+        date = nil;
+    }
+    
+    if (!date){
+        date =[NSDate date];
+    }
+    
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
     
     dataSources[TEALDataSourceKey_Timestamp] = [TEALTimestampDataSources stringOfTimestampAsISOFrom:date];

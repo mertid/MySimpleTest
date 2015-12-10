@@ -10,7 +10,7 @@
 #import "AAPLElementRowController.h"
 #import "TealiumWKHelper.h"
 
-@interface AAPLInterfaceController()
+@interface AAPLInterfaceController() <TEALWKExtensionDelegate>
 
 @property (weak, nonatomic) IBOutlet WKInterfaceTable *interfaceTable;
 
@@ -35,10 +35,10 @@
         self.elementsList = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AppData" ofType:@"plist"]];
         
         [self loadTableRows];
-        
-        [TealiumWKHelper startTracking];
-        
+                
         [TealiumWKHelper trackEventWithTitle:@"watchLaunch" dataSources:nil];
+        
+        [TealiumWKHelper setDelegate:self];
     }
 
     return self;
@@ -52,7 +52,7 @@
 - (void)willActivate {
     // This method is called when the controller is about to be visible to the wearer.
     
-    [TealiumWKHelper trackEventWithTitle:@"wakeWatch" dataSources:nil];
+//    [TealiumWKHelper trackEventWithTitle:@"wakeWatch" dataSources:nil];
 
     NSLog(@"%@ will activate", self);
 }
@@ -60,7 +60,7 @@
 - (void)didDeactivate {
     // This method is called when the controller is no longer visible.
     
-    [TealiumWKHelper trackEventWithTitle:@"watchSleep" dataSources:nil];
+//    [TealiumWKHelper trackEventWithTitle:@"watchSleep" dataSources:nil];
 
     NSLog(@"%@ did deactivate", self);
 }
@@ -98,5 +98,53 @@
         [elementRow.elementLabel setText:rowData[@"label"]];
     }];
 }
+
+- (void) dislayAlertWithTitle:(NSString *)title message:(NSString *)message {
+    
+    WKAlertAction *action = [WKAlertAction actionWithTitle:@"Cancel"
+                                                     style:WKAlertActionStyleDefault
+                                                   handler:^{
+                                                       
+                                                       // any additional handling here
+                                                       
+                                                   }];
+    
+    [self presentAlertControllerWithTitle:title
+message:message
+preferredStyle:WKAlertControllerStyleAlert
+                                  actions:@[action]];
+    
+}
+
+#pragma mark - TEALIUM EXTENSION DELEGATE
+
+/*
+ *  Example use of Tealium Extension delegate methods
+ */
+
+- (void) tealiumExtensionDidHandoffTrackCall:(NSDictionary *)trackData {
+    
+    [self dislayAlertWithTitle:@"Tealium Track"
+                       message:[trackData description]];
+    
+}
+
+- (void) tealiumExtensionDidQueueTrackCall:(NSDictionary *)trackData
+                         currentQueueCount:(NSUInteger)count{
+    
+    NSString *message = [NSString stringWithFormat:@"Queue count:%u", count];
+    
+    [self dislayAlertWithTitle:@"Tealium Queue"
+                       message:message];
+    
+}
+
+- (void) tealiumExtensionTrackCall:(NSDictionary *)trackData didEncounterError:(NSError *)error {
+    
+    [self dislayAlertWithTitle:@"Tealium Error"
+                       message:error.localizedDescription];
+    
+}
+
 
 @end

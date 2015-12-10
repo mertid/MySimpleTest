@@ -30,7 +30,4 @@
                 targetQueue:(dispatch_queue_t _Nonnull)queue
                       block:(void (^ _Nonnull)(TEALRemoteCommandResponse * _Nullable response))responseBlock;
 
-
-- (void) integrateWithFramework:(id)framework;
-
 @end

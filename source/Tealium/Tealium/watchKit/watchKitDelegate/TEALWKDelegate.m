@@ -6,8 +6,10 @@
 //  Copyright © 2015 Apple Inc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "TEALWKDelegate.h"
 #import "TEALWKConstants.h"
+#import "TEALError.h"
 
 typedef void (^tealiumEndBGTask)();
 
@@ -23,9 +25,7 @@ typedef void (^tealiumEndBGTask)();
 
 + (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler{
     
-    // Only 2 commands from the Watch are currently supported - target methods will bail early if payload argument is empty
-    [self processEventCallFromPayload:message[TEALWKCommandTrackEventKey]];
-    [self processViewCallFromPayload:message[TEALWKCommandTrackViewKey]];
+    [self processTrackCallFromPayload:message[TEALWKCommandTrackKey] reply:replyHandler];
     
     // Create background processing block with end callback
     tealiumEndBGTask endBlock = [self endBlock];
@@ -60,33 +60,82 @@ typedef void (^tealiumEndBGTask)();
     return endBlock;
 }
 
-+ (void) processEventCallFromPayload:(NSDictionary *)payload {
++ (void) processTrackCallFromPayload:(NSDictionary *)payload reply:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler{
     
-    // Only process if payload available
-    if (!payload) { return; };
-    if (![payload isKindOfClass:[NSDictionary class]]) { return; }
+    // Little dense because we're using runtime methods to check and run
+    // Tealium track calls so we can avoid importing them from this module
     
+    // Bail out checks
+    NSError *error = nil;
+    
+    if (!payload) {
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Track call failed.", @"")
+                                  reason:NSLocalizedString(@"No arguments for call passed.", @"")
+                              suggestion:NSLocalizedString(@"Check origin track call in Extension.", @"")];
+    }
+    if (!error &&
+        ![payload isKindOfClass:[NSDictionary class]]) {
+        
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Track call failed.", @"")
+                                  reason:NSLocalizedString(@"Arguments not passed in dictionary form.", @"")
+                              suggestion:NSLocalizedString(@"Check data format of origin track call in Extension.", @"")];
+    }
+    
+    // Call Tealium using runtime methods so we don't have to include / embed
+    Class Tealium = NSClassFromString(@"Tealium");
+    if (!Tealium){
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Track call failed.", @"")
+                                  reason:NSLocalizedString(@"Tealium Library not available.", @"")
+                              suggestion:NSLocalizedString(@"Check that the Tealium framework has been added.", @"")];
+    }
+    
+    if (error){
+        if (replyHandler){
+            replyHandler(@{@"Error":error});
+        }
+        return;
+    }
+    
+    // Get target Tealium instance
     NSString *instanceID = payload[TEALWKCommandTrackArgumentInstanceIDKey];
+    id tealiumInstance;
+    
+    SEL aSelector = NSSelectorFromString(@"instanceForKey:");
+    IMP impInstance = [Tealium methodForSelector:aSelector];
+    NSString * (*funcInstance)(id, SEL, NSString *key) = (void *)impInstance; // add arguments after SEL if needed
+    tealiumInstance = funcInstance(Tealium, aSelector, instanceID); // add arguments after selectorCarrierName if needed
+    
+    if (!tealiumInstance){
+        return;
+    }
+    
+    // Extract arguments
     NSString *title = payload[TEALWKCommandTrackArgumentTitleKey];
     NSDictionary *dataSources = payload[TEALWKCommandTrackArgumentCustomDataKey];
+    NSString *type = payload[TEALWKCommandTrackTypeKey];
     
-    [[Tealium instanceForKey:instanceID] trackEventWithTitle:title dataSources:dataSources];
+    // Tealium Track call using runtime
+    id call;
+    SEL trackSelector;
+    
+    if ([type isEqualToString:TEALWKCommandTrackValueView]){
+        
+        trackSelector = NSSelectorFromString(@"trackViewWithTitle:dataSources:");
+
+        
+    } else {
+        
+        trackSelector = NSSelectorFromString(@"trackEventWithTitle:dataSources:");
+
+    }
+    
+    IMP impTrack = [tealiumInstance methodForSelector:trackSelector];
+    NSString * (*funcTrack)(id, SEL, NSString *title, NSDictionary *data) = (void *)impTrack; // add arguments after SEL if needed
+    call = funcTrack(tealiumInstance, trackSelector, title, dataSources); // add arguments after selectorCarrierName if needed
     
 }
-
-+ (void) processViewCallFromPayload:(NSDictionary *)payload {
-    
-    // Only process if payload available
-    if (!payload) { return; };
-    if (![payload isKindOfClass:[NSDictionary class]]) { return; }
-    
-    NSString *instanceID = payload[TEALWKCommandTrackArgumentInstanceIDKey];
-    NSString *title = payload[TEALWKCommandTrackArgumentTitleKey];
-    NSDictionary *dataSources = payload[TEALWKCommandTrackArgumentCustomDataKey];
-    
-    [[Tealium instanceForKey:instanceID] trackViewWithTitle:title dataSources:dataSources];
-    
-}
-
 
 @end

@@ -153,6 +153,13 @@
 			remoteGlobalIDString = 37A75AD01B57109E00E6E9E2;
 			remoteInfo = TealiumTests;
 		};
+		710DE4721C15EA0400FC3691 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37A75AFA1B57168900E6E9E2 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 710DE4421C15DA1D00FC3691;
+			remoteInfo = TealiumWATCHOS;
+		};
 		7188671C1BFE4DAB008E1165 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 37A75AC91B57109E00E6E9E2 /* Project object */;
@@ -623,6 +630,7 @@
 			children = (
 				71F0F59B1BF3FAF200C9B50F /* TealiumIOS.framework */,
 				71E9DE491BDA9F0800011633 /* TealiumTVOS.framework */,
+				710DE4731C15EA0400FC3691 /* TealiumWATCHOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1207,6 +1215,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		710DE4731C15EA0400FC3691 /* TealiumWATCHOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TealiumWATCHOS.framework;
+			remoteRef = 710DE4721C15EA0400FC3691 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		71E9DE491BDA9F0800011633 /* TealiumTVOS.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;

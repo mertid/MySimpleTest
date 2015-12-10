@@ -8,14 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const TEALWKCommandTrackEventKey;
-extern NSString * const TEALWKCommandTrackViewKey;
+extern NSString * const TEALWKCommandResponseKey;
+extern NSString * const TEALWKCommandTrackKey;
+extern NSString * const TEALWKCommandTrackTypeKey;
 extern NSString * const TEALWKCommandTrackArgumentInstanceIDKey;
 extern NSString * const TEALWKCommandTrackArgumentTitleKey;
 extern NSString * const TEALWKCommandTrackArgumentCustomDataKey;
 
+extern NSString * const TEALWKCommandTrackValueEvent;
+extern NSString * const TEALWKCommandTrackValueView;
+
 /**
- *  These constants used between the TEALWKDelegate and TEALWKExtension classes.
+ *  These constants used between the TEALWKDelegate and TEALWKExtension classes
+ *  to coordinate data transfer to host Tealium Library.
  */
 @interface TEALWKConstants : NSObject
 
