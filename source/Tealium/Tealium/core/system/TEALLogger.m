@@ -41,7 +41,7 @@
     return level;
 }
 
-+ (NSString *) logLevelStringFromLogLevel:(TEALLogLevel) logLevel {
++ (NSString *) stringFromLogLevel:(TEALLogLevel) logLevel {
     
     NSString *string = nil;
     switch (logLevel) {
@@ -82,10 +82,6 @@
     self.isDisabled = YES;
     
 }
-
-//- (void) updateLogLevel:(TEALLogLevel)logLevel {
-//    self.logLevel = logLevel;
-//}
 
 - (void) updateLogLevel:(NSString *)logLevelString {
     
@@ -139,24 +135,28 @@
 
 - (void) logVerbosity:(TEALLogLevel)logLevel message:(NSString *) message{
         
-    BOOL shouldLog = NO;
-    switch (logLevel) {
-        case TEALLogLevelProd:
-            shouldLog = (self.logLevel >= TEALLogLevelProd);
-            break;
-        case TEALLogLevelQA:
-            shouldLog = (self.logLevel >= TEALLogLevelQA);
-            break;
-        case TEALLogLevelDev:
-            shouldLog = (self.logLevel >= TEALLogLevelDev);
-            break;
-        default:
-            break;
-    }
+//    BOOL shouldLog = NO;
+//    switch (logLevel) {
+//        case TEALLogLevelProd:
+//            shouldLog = (self.logLevel >= TEALLogLevelProd);
+//            break;
+//        case TEALLogLevelQA:
+//            shouldLog = (self.logLevel >= TEALLogLevelQA);
+//            break;
+//        case TEALLogLevelDev:
+//            shouldLog = (self.logLevel >= TEALLogLevelDev);
+//            break;
+//        default:
+//            break;
+//    }
+//    
+//    if (shouldLog == YES && message) {
+//    
+//        NSLog(@"%@%@", self.messageHeader, message);
+//    }
     
-    if (shouldLog == YES && message) {
-    
-        NSLog(@"%@%@", self.messageHeader, message);
+    if (self.logLevel <= logLevel){
+            NSLog(@"%@%@", self.messageHeader, message);
     }
 }
 

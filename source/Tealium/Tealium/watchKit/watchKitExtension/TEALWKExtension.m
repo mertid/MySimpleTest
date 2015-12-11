@@ -7,7 +7,11 @@
 //
 
 #import "TEALWKExtension.h"
-#import "TEALWKExtensionQueue.h"
+//#import "TEALWKExtensionQueue.h"
+#import "TEALDataSourceConstants.h"
+#import "TEALDataQueue.h"
+#import "TEALLogger.h"
+#import "TEALOperationManager.h"
 
 @import WatchConnectivity;
 @import WatchKit;
@@ -21,7 +25,9 @@ NSString * const TEALWKTimestampOverrideKey = @"timestamp_unix";
 
 @property (nonatomic, strong) NSString *instanceID;
 @property (nonatomic, strong) TEALWKExtensionConfiguration *configuration;
-@property (nonatomic, strong) TEALWKExtensionQueue *queue;
+@property TEALDataQueue *queue;
+@property TEALLogger *logger;
+@property TEALOperationManager *operationManager;
 
 @end
 
@@ -62,9 +68,20 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
     
     staticAllInstances = newInstances;
-    
+        
 }
 
+- (void) destroy {
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+       
+        [TEALWKExtension destroyInstanceForKey:weakSelf.instanceID];
+        
+    }];
+    
+}
 
 - (void) trackEventWithTitle:(NSString * _Nonnull)title dataSources:(NSDictionary * _Nullable)customDataSources{
     
@@ -76,7 +93,13 @@ __strong static NSDictionary *staticAllInstances = nil;
                                                   title:title
                                             dataSources:customDataSources];
     
-    [self trackWithMessagePayload:payload];
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+        
+        [weakSelf trackWithMessagePayload:payload];
+
+    }];
     
 }
 
@@ -90,7 +113,14 @@ __strong static NSDictionary *staticAllInstances = nil;
                                                    title:title
                                              dataSources:customDataSources];
     
-    [self trackWithMessagePayload:payload];
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+      
+        [weakSelf trackWithMessagePayload:payload];
+        
+    }];
+
     
 }
 
@@ -101,40 +131,47 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALWKExtensionConfiguration *)configuration
                         completion:(void(^)(BOOL success, NSError *error))completion{
 
-    NSError *error = nil;
+    
+    
     TEALWKExtension *instance = nil;
     
-    instance = [[TEALWKExtension alloc] initPrivateInstanceWithConfiguration:configuration];
+    instance = [[TEALWKExtension alloc] initPrivateInstanceWithInstanceID:key
+                                                            configuration:configuration];
     
-    [instance setInstanceID:key];
+//    __block __weak TEALWKExtension *weakInstance = instance;
+//    [instance.operationManager addOperationWithBlock:^{
     
-    if (!instance){
-        
-        NSString *reason = [NSString stringWithFormat:@"Instance could not be started with given configuration: %@", configuration];
+        NSError *error = nil;
 
-        NSDictionary *errorInfo = @{
-                                    NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize new TEALWKExtension instance.", @""),
-                                    NSLocalizedFailureReasonErrorKey: reason,
-                                    NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check configuration.", @"")
-                                    };
+        if (!instance){
+            
+            NSString *reason = [NSString stringWithFormat:@"Instance could not be started with given configuration: %@", configuration];
+            
+            NSDictionary *errorInfo = @{
+                                        NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize new TEALWKExtension instance.", @""),
+                                        NSLocalizedFailureReasonErrorKey: reason,
+                                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check configuration.", @"")
+                                        };
+            
+            error = [NSError errorWithDomain:@"com.tealium.watchkit.error"
+                                        code:400
+                                    userInfo:errorInfo];
+            
+        } else {
+            
+            [instance.logger logQA:[configuration description]];
+            
+            [instance.logger logQA:[instance description]];
+            
+            [self addInstance:instance key:key];
+            
+        }
         
-        error = [NSError errorWithDomain:@"com.tealium.watchkit.error"
-                                    code:400
-                                userInfo:errorInfo];
+        if (completion) {
+            completion(instance, error);
+        }
         
-    } else {
-    
-        [instance logMessage:[configuration description] level:TEALWKLogLevelQA];
-
-        [instance logMessage:[self description] level:TEALWKLogLevelQA];
-        
-        [self addInstance:instance key:key];
-    
-    }
-
-    if (completion) {
-        completion(instance, error);
-    }
+//    }];
     
     return instance;
     
@@ -151,36 +188,22 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (instancetype) initPrivateInstanceWithConfiguration:(TEALWKExtensionConfiguration *)configuration {
+- (instancetype) initPrivateInstanceWithInstanceID:(NSString *)instanceID
+                                     configuration:(TEALWKExtensionConfiguration *)configuration {
     
     self = [super init];
     
     if (self) {
         _configuration = configuration;
-        _queue = [[TEALWKExtensionQueue alloc] init];
+        _logger = [[TEALLogger alloc] initWithInstanceID:instanceID];
+        _instanceID = instanceID;
+        _operationManager   = [[TEALOperationManager alloc] initWithInstanceID:instanceID];
+        _queue = [TEALDataQueue queueWithCapacity:100];
     }
     
     return self;
     
 }
-
-- (void) logMessage:(NSString *)message level:(TEALWKLogLevel)level {
-    
-    TEALWKLogLevel currentLevel = [self currentLogLevel];
-    
-    if (level <= currentLevel){
-            NSLog(@"%@", message);
-    }
-    
-}
-
-
-- (TEALWKLogLevel) currentLogLevel{
-    
-    return self.configuration.logLevel;
-    
-}
-
 
 - (BOOL) isReachable {
     
@@ -194,16 +217,25 @@ __strong static NSDictionary *staticAllInstances = nil;
                                     title:(NSString *)title
                               dataSources:(NSDictionary *)customDataSources {
     
-    if (!customDataSources) customDataSources = @{};
     
-    NSDictionary * expandedCustomDataSources = [self customDataSourcesWithTimestamp:customDataSources];
+    NSMutableDictionary *expandedCustomDataSources = [NSMutableDictionary dictionary];
+    
+    if (!customDataSources) customDataSources = @{};
+
+    [expandedCustomDataSources addEntriesFromDictionary:customDataSources];
+    
+    [expandedCustomDataSources addEntriesFromDictionary:[self timestampOverrideDataSources]];
+    
+    [expandedCustomDataSources addEntriesFromDictionary:[self wasQueueOverrideDataSources]];
+
+    NSDictionary *payloadDataSources = [NSDictionary dictionaryWithDictionary:expandedCustomDataSources];
     
     NSDictionary * payload = @{
                                TEALWKCommandTrackKey:@{
-                                       TEALWKCommandTrackTypeKey:type,
+                                       TEALWKCommandTrackArgumentTypeKey:type,
                                        TEALWKCommandTrackArgumentInstanceIDKey:self.instanceID,
                                        TEALWKCommandTrackArgumentTitleKey:title,
-                                       TEALWKCommandTrackArgumentCustomDataKey:expandedCustomDataSources}
+                                       TEALWKCommandTrackArgumentCustomDataKey:payloadDataSources}
                                };
     
     return payload;
@@ -212,37 +244,58 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackWithMessagePayload:(NSDictionary *)payload{
     
-    [self.queue queueCallPayload:payload];
+#warning Todo more optimal way to check and log reachability
     
-    if (![self isReachable]){
+    NSString *wasQueued = payload[TEALDataSourceKey_WasQueued];
+    
+    if ([TEALDataSourceValue_True isEqualToString:wasQueued]){
         
-        NSString *message = [NSString stringWithFormat:@"Host application not reachable. Saving queued calls: %@", self.queue.currentQueue];
-        
-        [self logMessage:message level:TEALWKLogLevelDev];
-                
-        if (self.delegate) {
-            [self.delegate tealiumExtensionDidQueueTrackCall:payload[TEALWKCommandTrackKey] currentQueueCount:[[self.queue currentQueue] count]];
-        }
+        [self reportUnreachable:payload];
         
         return;
     }
+    
+    [self.queue enqueueObject:payload];
     
     [self sendQueue];
     
 }
 
-- (NSDictionary *) customDataSourcesWithTimestamp:(NSDictionary *)dataSources{
+- (void) reportUnreachable:(NSDictionary *) payload {
+    
+    NSString *message = [NSString stringWithFormat:@"Host application not reachable. Saving queued calls: %@", [self.queue allQueuedObjects]];
+    
+    [self.logger logDev:message];
+    
+    if (self.delegate) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+        [self.delegate tealiumExtensionDidQueueTrackCall:payload[TEALWKCommandTrackKey] currentQueueCount:[self.queue count]];
+
+        });
+    
+    }
+    
+}
+
+- (NSDictionary *) wasQueueOverrideDataSources {
+    
+    NSString *wasQueued = TEALDataSourceValue_False;
+    
+    if (![[WCSession defaultSession] isReachable]){
+        wasQueued = TEALDataSourceValue_True;
+    }
+    
+    return @{TEALDataSourceKey_WasQueued:wasQueued};
+}
+
+- (NSDictionary *) timestampOverrideDataSources{
     
     // Adds timestamp unix to the data sources which will override the
     // timestamp calculations on the host app's Tealium library instance
     
-    NSMutableDictionary *newDataSources = [NSMutableDictionary dictionary];
-    
-    [newDataSources addEntriesFromDictionary:dataSources];
-    
-    newDataSources[TEALWKTimestampOverrideKey] = [self timestampNowAsString];
-    
-    return [NSDictionary dictionaryWithDictionary:newDataSources];
+    return @{TEALDataSourceKey_TimestampUnix: [self timestampNowAsString]};
     
 }
 
@@ -258,12 +311,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) sendQueue {
     
-    for (NSDictionary *payload in [self.queue currentQueue]){
+    for (NSDictionary *payload in [[self.queue allQueuedObjects] copy]){
+        
+        [self.queue dequeueFirstObject];
         
         [self sendPayload:payload];
     
-        // Iterating through a copy so we can safely remove calls as we process them
-        [self.queue removeFirstCall];
     }
     
 }
@@ -275,32 +328,38 @@ __strong static NSDictionary *staticAllInstances = nil;
     [[WCSession defaultSession] sendMessage:payload
            replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                
-                   [weakSelf logMessage:[NSString stringWithFormat:@"Track message sent to host app: %@ reply: %@", payload, replyMessage]
-                                  level:TEALWKLogLevelQA];
-                   
-                   if (weakSelf.delegate){
-                       
-                       [weakSelf.delegate tealiumExtensionDidHandoffTrackCall:payload[TEALWKCommandTrackKey]];
-                   }
                
-               
-           } errorHandler:^(NSError * _Nonnull error) {
-               
-               
-               [weakSelf logMessage:[NSString stringWithFormat:@"Error with track message to host app: %@: error: %@", payload, error]
-                              level:TEALWKLogLevelQA];
+               [weakSelf.logger logQA:[NSString stringWithFormat:@"Track message sent to host app: %@ reply: %@", payload, replyMessage]];
                
                if (weakSelf.delegate){
                    
-                   [weakSelf.delegate tealiumExtensionTrackCall:payload[TEALWKCommandTrackKey] didEncounterError:error];
-                   
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       
+                       [weakSelf.delegate tealiumExtensionDidHandoffTrackCall:payload[TEALWKCommandTrackKey]];
+
+                   });
                }
+            
+           
+       } errorHandler:^(NSError * _Nonnull error) {
+           
+           [weakSelf.logger logQA:[NSString stringWithFormat:@"Error with track message to host app: %@: error: %@", payload, error]];
+           
+           if (weakSelf.delegate){
                
-               // Requeue if there was a problem
-               [self.queue queueCallPayload:payload];
+               dispatch_async(dispatch_get_main_queue(), ^{
+
+               [weakSelf.delegate tealiumExtensionTrackCall:payload[TEALWKCommandTrackKey] didEncounterError:error];
                
-               
-           }];
+               });
+           }
+           
+#warning Possibility of enqueue and deque happening out of order from sendQueue command?
+           
+           // Requeue if there was a problem
+           [self.queue enqueueObjectToFirstPosition:payload];
+           
+       }];
     
 }
 
@@ -310,8 +369,11 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSString *instanceID = self.instanceID? self.instanceID : @"(unknown)";
     
+    NSString *delegate = self.delegate? [self.delegate description] : @"(none assigned)";
+    
     NSDictionary *descriptionData = @{
-                                      @"instance ID": instanceID
+                                      @"instance ID": instanceID,
+                                      @"delegate" : delegate
                                       };
     
     

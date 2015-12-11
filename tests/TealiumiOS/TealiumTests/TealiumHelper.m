@@ -7,7 +7,6 @@
 //
 
 #import "TealiumHelper.h"
-#import "TEALWKDelegate.h"
 
 // We only need one instance to demo
 NSString *const TEALIUM_INSTANCE_ID = @"1";
@@ -109,11 +108,14 @@ static TealiumHelper * _sharedInstance;
 didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message
    replyHandler:(nullable void (^)(NSDictionary<NSString *,id> * _Nullable responseMessage))replyHandler {
     
-    // Alternatively TEALWKDelegate could be imported and used directly by the class originally calling this method.
+    // Process only calls for messages targeting available Tealium instances
+    if (![Tealium instanceAvailableForMessage:message]){
+        return;
+    }
     
-    [TEALWKDelegate session:session didReceiveMessage:message replyHandler:replyHandler];
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] session:session didReceiveMessage:message replyHandler:replyHandler];
+        
     
 }
-
 
 @end

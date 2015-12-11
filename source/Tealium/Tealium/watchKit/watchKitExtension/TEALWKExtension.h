@@ -9,39 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TEALWKExtensionConfiguration.h"
 #import "TEALWKConstants.h"
-
-@protocol TEALWKExtensionDelegate <NSObject>
-
-@optional
-
-/**
- *  Called when the watch is offline / not connected to it's host device.
- *
- *  @param trackData An NSDictionary of metadata and simple datasources for further
- *      processing by the Tealium Library in the host app.
- *  @param count The current queue count that includes this queued call.
- */
-- (void) tealiumExtensionDidQueueTrackCall:(NSDictionary * _Nonnull)trackData currentQueueCount:(NSUInteger)count;
-
-/**
- *  Called when the extension has passed a watch track event to the Tealium Library
- *      in the host app.
- *
- *  @param trackData An NSDictionary of metadata and simple datasources for further
- *      processing by the Tealium Library in the host app.
- */
-- (void) tealiumExtensionDidHandoffTrackCall:(NSDictionary * _Nonnull)trackData;
-
-/**
- *  Called when the Tealium Extension encouters an issue.
- *
- *  @param trackData An NSDictionary of metadata and simple datasources for further
- *      processing by the Tealium Library in the host app.
- *  @param error NSError with details of any problems encountered by the extension
- */
-- (void) tealiumExtensionTrackCall:(NSDictionary * _Nonnull)trackData didEncounterError:(NSError * _Nullable)error;
-
-@end
+#import "TEALWKExtensionDelegate.h"
 
 /**
  *
@@ -74,18 +42,17 @@
 #pragma mark - Instance Management
 /**
  *
- *  @param key NSString identifier for the library instance.
+ *  @param key NSString identifier for the library extension instance.
  *
  *  @return An instance of the TEALWKExtension for calling methods.
  */
 + (_Nullable instancetype) instanceForKey:(NSString * _Nonnull)key;
 
 /**
- *  Removes and nils out an instance of the library with the given key.
+ *  Removes and nils out an instance of the extension library. Thread-safe.
  *
- *  @param key NSString identifier for the library instance to remove.
  */
-+ (void) destroyInstanceForKey:(NSString * _Nonnull)key;
+- (void) destroy;
 
 
 # pragma mark - Track Data
@@ -93,6 +60,7 @@
 /**
  *  Sends an event to Collect.  Event are packaged with any custom key/value
  *  data sources passed in along with the default datasources provided by the library.
+ *  Thread-safe.
  *
  *  @param title String title of event
  *  @param customDataSources Dictionary of custom datasources (key/value pairs)
@@ -104,6 +72,7 @@
 /**
  *  Sends a view to Collect.  Views are packaged with any custom key/value data
  *  sources passed in along with the default datasources provided by the library.
+ *  Thread-safe.
  *
  *  @param title String title of view
  *  @param customDataSources Dictionary of custom datasources (key/value pairs)

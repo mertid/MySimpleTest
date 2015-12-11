@@ -12,10 +12,10 @@
 // iOS
 #ifdef TEAL_TARGET_IOS
 
-#define TEAL_TARGET TEAL_TARGET_IOS
+#define TEAL_TARGET_A TEAL_TARGET_IOS
 #define STRINGIZE(x) #x
 #define STRINGIZE2(x) STRINGIZE(x)
-#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET)
+#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET_A)
 
 #define TEALPlatform @"iOS"
 
@@ -25,24 +25,23 @@
 // tvOS
 #ifdef TEAL_TARGET_TVOS
 
-#define TEAL_TARGET TEAL_TARGET_TVOS
+#define TEAL_TARGET_B TEAL_TARGET_TVOS
 #define STRINGIZE(x) #x
 #define STRINGIZE2(x) STRINGIZE(x)
-#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET)
+#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET_B)
 
 #define TEALPlatform @"tvOS"
 
 #endif
 
 
-
 // watchOS
 #ifdef TEAL_TARGET_WATCHOS
 
-#define TEAL_TARGET TEAL_TARGET_TVOS
+#define TEAL_TARGET_C TEAL_TARGET_WATCHOS
 #define STRINGIZE(x) #x
 #define STRINGIZE2(x) STRINGIZE(x)
-#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET)
+#define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET_C)
 
 #define TEALPlatform @"watchOS"
 

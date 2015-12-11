@@ -8,27 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-typedef NS_ENUM(NSUInteger, TEALWKLogLevel){
-    /**
-     *  Nothing is logged to the console, this is the default.
-     */
-    TEALWKLogLevelNone = 0,
-    /**
-     *  Only errors reported.
-     */
-    TEALWKLogLevelProd,
-    /**
-     *  Provides warnings and errors only.
-     */
-    TEALWKLogLevelQA,
-    /**
-     *  Most verbose - Useful for debugging and verification during development.
-     */
-    TEALWKLogLevelDev
-    
-};
-
 /**
  *  This is a lighter-weight version of the TEALConfiguration object meant
     specifically for use in a watchOS extension. Create an instance of this class
@@ -42,13 +21,6 @@ typedef NS_ENUM(NSUInteger, TEALWKLogLevel){
  *  Default - 100
  */
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
-
-/**
- *  Level of console log output to produce.
- *
- *  Default - TEALWKLogLevelNone
- */
-@property (nonatomic) TEALWKLogLevel logLevel;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used

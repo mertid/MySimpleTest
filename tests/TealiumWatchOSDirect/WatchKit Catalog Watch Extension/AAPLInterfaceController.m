@@ -35,10 +35,13 @@
         self.elementsList = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AppData" ofType:@"plist"]];
         
         [self loadTableRows];
-                
-        [TealiumWKHelper trackEventWithTitle:@"watchLaunch" dataSources:nil];
+        
+        [TealiumWKHelper startTracking];
         
         [TealiumWKHelper setDelegate:self];
+
+        [TealiumWKHelper trackEventWithTitle:@"watchLaunch" dataSources:nil];
+        
     }
 
     return self;
@@ -84,6 +87,14 @@
     NSString *nextInterface = rowData[@"controllerIdentifier"];
     
     [TealiumWKHelper trackEventWithTitle:@"interfaceSelection" dataSources:@{@"nextInterface":nextInterface}];
+    
+//    NSString *hostReachableWhenProcessed = [[WCSession defaultSession] isReachable]? @"YES":@"NO";
+//    
+//    [TealiumWKHelper directURLCallTestWithArguments:@{
+//                                                      @"nextInterface":nextInterface,
+//                                                      @"hostDeviceReachable":hostReachableWhenProcessed,
+//                                                      @"timestamp":[NSDate date]
+//                                                      }];
     
     [self pushControllerWithName:rowData[@"controllerIdentifier"] context:nil];
 }
@@ -142,9 +153,7 @@ preferredStyle:WKAlertControllerStyleAlert
 - (void) tealiumExtensionTrackCall:(NSDictionary *)trackData didEncounterError:(NSError *)error {
     
     [self dislayAlertWithTitle:@"Tealium Error"
-                       message:error.localizedDescription];
+                       message:error.description];
     
 }
-
-
 @end

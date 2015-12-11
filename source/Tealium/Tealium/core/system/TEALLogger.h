@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 
 + (TEALLogLevel) logLevelFromString:(NSString*)string;
 
-+ (NSString *) logLevelStringFromLogLevel:(TEALLogLevel) logLevel;
++ (NSString *) stringFromLogLevel:(TEALLogLevel) logLevel;
 
 - (instancetype) initWithInstanceID:(NSString *)instanceID;
 

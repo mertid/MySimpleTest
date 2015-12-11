@@ -200,6 +200,9 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
             [self.delegate dispatchManagerdDidPurgeDispatch:dequeuedObject];
         }];
     }
+    
+#warning This method does not actually purget anything!
+    
 }
 
 - (void) runQueuedDispatches {
@@ -271,7 +274,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         return;
     }
     
-    TEALDispatch *dispatch = [self.processingQueue dequeueObject];
+    TEALDispatch *dispatch = [self.processingQueue dequeueFirstObject];
     
     if (!dispatch) {
         if (completion) {

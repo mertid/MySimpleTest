@@ -10,6 +10,7 @@
 
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
+#import "Tealium+WatchKit.h"
 #import "TealiumDelegate.h"
 #import "TEALConfiguration.h"
 #import "TEALDataSourceConstants.h"
@@ -20,14 +21,12 @@
 #import "TEALVisitorProfileCurrentVisit.h"
 
 
-@import WatchConnectivity;
-
 /*
  *  Using an abstract class like this is the recommended best practice for 
  *  utilizing analytics or other third party libraries requiring an event 
  *  trigger with optional data.
  */
-@interface TealiumHelper : NSObject<TealiumDelegate>
+@interface TealiumHelper : NSObject<TealiumDelegate, NSURLSessionDelegate>
 
 /**
  *  Triggers an event tracking call - lazy loads the library upon first call.

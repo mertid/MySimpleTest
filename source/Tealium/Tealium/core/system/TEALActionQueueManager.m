@@ -40,7 +40,7 @@
     @synchronized(self) {
         while ([self.queuedActions count]) {
             
-            TEALVoidBlock block = [self.queuedActions dequeueObject];
+            TEALVoidBlock block = [self.queuedActions dequeueFirstObject];
             block();
         }
     }

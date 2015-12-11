@@ -10,7 +10,7 @@
 
 extern NSString * const TEALWKCommandResponseKey;
 extern NSString * const TEALWKCommandTrackKey;
-extern NSString * const TEALWKCommandTrackTypeKey;
+extern NSString * const TEALWKCommandTrackArgumentTypeKey;
 extern NSString * const TEALWKCommandTrackArgumentInstanceIDKey;
 extern NSString * const TEALWKCommandTrackArgumentTitleKey;
 extern NSString * const TEALWKCommandTrackArgumentCustomDataKey;

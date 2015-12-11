@@ -26,6 +26,7 @@ NSString * const TEALWKSuiteName = @"com.tealium.watchkit";
     
     return self;
 }
+
 - (void) queueCallPayload:(NSDictionary *)payload  {
     
     @synchronized(self) {
@@ -76,19 +77,6 @@ NSString * const TEALWKSuiteName = @"com.tealium.watchkit";
         self.privateQueue = [NSArray array];
         
     }
-}
-
-static NSUserDefaults * tealiumDefault;
-
-+ (NSUserDefaults *) tealiumWKUserDefault {
-    
-    if (!tealiumDefault){
-        
-        tealiumDefault = [[NSUserDefaults alloc] initWithSuiteName:TEALWKSuiteName];
-        
-    }
-    
-    return tealiumDefault;
 }
 
 @end

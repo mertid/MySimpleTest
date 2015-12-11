@@ -7,6 +7,13 @@
 //
 
 #import "TEALWKExtensionConfiguration.h"
+#import "TEALLogger.h"
+
+@interface TEALWKExtensionConfiguration()
+
+@property TEALLogLevel logLevel;
+
+@end
 
 @implementation TEALWKExtensionConfiguration
 
@@ -21,7 +28,7 @@
     }
     
     configuration.offlineDispatchQueueSize = 100;
-    configuration.logLevel = TEALWKLogLevelNone;
+    configuration.logLevel = TEALLogLevelDev;
     
     return configuration;
 }
@@ -35,7 +42,9 @@
     NSString *offlineSizeAsString = [NSString stringWithFormat:@"%lu", (unsigned long)self.offlineDispatchQueueSize];
     
     NSDictionary *descriptionData = @{
-                                      @"offline dispatch queue size":offlineSizeAsString
+                                      @"offline dispatch queue size":offlineSizeAsString,
+                                      @"log level":[TEALLogger stringFromLogLevel:self.logLevel]
+                                      
                                       };
     
     

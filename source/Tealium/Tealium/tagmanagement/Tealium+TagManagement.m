@@ -26,9 +26,7 @@
 
 #pragma mark - PUBLIC INSTANCE
 
-#warning Move to private?
 - (UIWebView *) webView {
-    
     
     TEALTagDispatchService *currentService = [self currentTagDispatchService];
     
@@ -50,10 +48,6 @@
 
     
 }
-
-//- (void) integrateWithFramework:(id)framework {
-//    
-//}
 
 #pragma mark - PRIVATE INSTANCE
 

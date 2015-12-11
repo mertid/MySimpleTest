@@ -10,7 +10,7 @@
 
 NSString * const TEALWKCommandResponseKey = @"Tealium Response";
 NSString * const TEALWKCommandTrackKey = @"com.tealium.watchkit.track";
-NSString * const TEALWKCommandTrackTypeKey = @"type";
+NSString * const TEALWKCommandTrackArgumentTypeKey = @"type";
 NSString * const TEALWKCommandTrackArgumentInstanceIDKey = @"instanceid";
 NSString * const TEALWKCommandTrackArgumentTitleKey = @"title";
 NSString * const TEALWKCommandTrackArgumentCustomDataKey = @"customdata";

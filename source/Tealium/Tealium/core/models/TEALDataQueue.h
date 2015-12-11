@@ -18,7 +18,7 @@
 
 - (id) enqueueObjectToFirstPosition:(id)obj;
 
-- (id) dequeueObject;
+- (id) dequeueFirstObject;
 
 - (NSUInteger) count;
 

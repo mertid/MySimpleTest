@@ -31,7 +31,7 @@ typedef void (^tealiumEndBGTask)();
         return;
     }
     
-    [self processTrackCallFromPayload:message[TEALWKCommandTrackKey]];
+    [self processTrackCallFromPayload:tealiumPayload];
     
     // Create background processing block with end callback
     tealiumEndBGTask endBlock = [self endBlock];
@@ -74,7 +74,7 @@ typedef void (^tealiumEndBGTask)();
     if (!payload) { return; };
     if (![payload isKindOfClass:[NSDictionary class]]) { return; }
     
-    NSString *type = payload[TEALWKCommandTrackTypeKey];
+    NSString *type = payload[TEALWKCommandTrackArgumentTypeKey];
     
     if ([type isEqualToString:TEALWKCommandTrackValueView]){
         [self processViewCallFromPayload:payload];

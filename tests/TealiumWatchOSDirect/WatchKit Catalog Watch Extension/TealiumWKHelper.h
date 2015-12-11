@@ -13,7 +13,14 @@
  *  utilizing analytics or other third party libraries requiring an event 
  *  trigger with optional data.
  */
-@interface TealiumWKHelper : NSObject <TEALWKExtensionDelegate>
+@interface TealiumWKHelper : NSObject <TEALWKExtensionDelegate, NSURLSessionDelegate>
+
+
+/**
+ *
+ */
++ (void) startTracking;
+
 
 /**
  *  Maps to Tealium's trackEventWithTitle:dataSources: call.
@@ -42,5 +49,8 @@
  *  TEALWKExtensionDelegate methods
  */
 + (void) setDelegate:(id<TEALWKExtensionDelegate>)delegate;
+
+
++ (void) directURLCallTestWithArguments:(NSDictionary *)arguments;
 
 @end

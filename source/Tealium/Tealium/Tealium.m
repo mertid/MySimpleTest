@@ -310,7 +310,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [weakInstance.operationManager addOperationWithBlock:^{
         
-        [weakInstance privateInstanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+        [weakInstance finalizeWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
             
             if (success) {
                 
@@ -367,7 +367,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     return nil;
 }
 
-- (void) privateInstanceWithConfiguration:(TEALConfiguration *)configuration
+- (void) finalizeWithConfiguration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)setupCompletion {
     
     BOOL success = NO;
@@ -398,7 +398,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.logger updateLogLevel:[self.settings logLevelString]];
     
-    [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[self.logger currentLogLevel]]]];
+    [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
     
     if (!error &&
         !self.logger) {
@@ -757,7 +757,7 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             [weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]];
             
-            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger logLevelStringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
             
             [weakSelf updateModules];
             

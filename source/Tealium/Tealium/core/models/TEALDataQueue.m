@@ -88,7 +88,7 @@
     return dequeuedObject;
 }
 
-- (id) dequeueObject {
+- (id) dequeueFirstObject {
     
     id firstObj = [self.dataQueue firstObject];
     
@@ -153,7 +153,7 @@
     
     for (NSUInteger xi = 0; xi < numberOfObjects; xi++) {
         
-        id dequeuedObj = [self dequeueObject];
+        id dequeuedObj = [self dequeueFirstObject];
         
         if (block) {
             block( dequeuedObj );
