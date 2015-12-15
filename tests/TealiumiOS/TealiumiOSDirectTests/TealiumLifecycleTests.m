@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TEALLifecycle+PrivateTestHeader.h"
 #import "TEALXMLParser.h"
-#import <Tealium/TEALDataSourceConstants.h>
+#import "TEALDataSourceConstants.h"
 
 @interface TealiumLifecycleTests : XCTestCase
 

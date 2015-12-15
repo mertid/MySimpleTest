@@ -37,6 +37,6 @@
  *      processing by the Tealium Library in the host app.
  *  @param error NSError with details of any problems encountered by the extension
  */
-- (void) tealiumExtensionTrackCall:(NSDictionary * _Nonnull)trackData didEncounterError:(NSError * _Nullable)error;
+- (void) tealiumExtensionTrackCall:(NSDictionary * _Nullable)trackData didEncounterError:(NSError * _Nonnull)error;
 
 @end

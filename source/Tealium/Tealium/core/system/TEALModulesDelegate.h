@@ -34,6 +34,7 @@
 - (void) disableMobileCompanion;
 - (void) disableRemoteCommands;
 
+- (void) updateWatchKitPublishSettings;
 - (void) revealMobileCompanion;
 - (void) fetchVisitorProfile;
 

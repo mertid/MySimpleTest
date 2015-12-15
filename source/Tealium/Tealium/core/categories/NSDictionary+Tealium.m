@@ -13,7 +13,9 @@
 @implementation NSDictionary (Tealium)
 
 - (NSDictionary *) teal_stringifiedDictionary {
-     
+    
+#warning This is causing crashes
+    
     NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
     
     NSArray *allKeys = [self allKeys];

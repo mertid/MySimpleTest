@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Tealium/Tealium.h>
-#import <Tealium/Tealium+Collect.h>
-#import <Tealium/TEALConfiguration.h>
+#import "Tealium+Collect.h"
+#import "TEALConfiguration+PrivateHeader.h"
 #import "Tealium+PrivateTestHeader.h"
+#import "TEALSettings.h"
 
 @interface TealiumCollectTests : XCTestCase
 

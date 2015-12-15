@@ -17,7 +17,6 @@
  *
  *  On Host app, implementation requirements:
  *      - Tealium Library 5.x
- *      - TEALWKDelegate classes or framework
  *
  */
 @interface TEALWKExtension : NSObject

@@ -9,13 +9,13 @@
 #import <XCTest/XCTest.h>
 #import "TEALDataSourceConstants.h"
 #import "Tealium+PrivateHeader.h"
-#import "TEALWKDelegate+PrivateHeader.h"
 #import "TEALWKConstants.h"
+#import "TEALVersion.h"
 
 @interface TEALWKDelegateTests : XCTestCase <TealiumDelegate>
 
-@property BOOL queuedDispatchReceived;
-@property BOOL dispatchSent;
+@property BOOL didQueueDispatch;
+@property BOOL didSendDispatch;
 @property Tealium *tealium;
 
 @end
@@ -28,23 +28,16 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"no-tags"
-                                                                environment:@"dev"];
-    
-    self.tealium = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID
-                                configuration:config];
-    
-    [self.tealium setDelegate:self];
-    
-    self.queuedDispatchReceived = NO;
-    self.dispatchSent = NO;
+    [self tealiumInstanceWithConfig:[self configThatShouldQueue]];
+
+    self.didQueueDispatch = NO;
+    self.didSendDispatch = NO;
 }
 
 - (void)tearDown {
 
-    self.queuedDispatchReceived = NO;
-    self.dispatchSent = NO;
+    self.didQueueDispatch = NO;
+    self.didSendDispatch = NO;
     
     [Tealium destroyInstanceForKey:TEALIUM_INSTANCE_ID];
     
@@ -52,33 +45,41 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+//- (void)testExample {
+//    // This is an example of a functional test case.
+//    // Use XCTAssert and related functions to verify your tests produce the correct results.
+//}
+//
+//- (void)testPerformanceExample {
+//    // This is an example of a performance test case.
+//    [self measureBlock:^{
+//        // Put the code you want to measure the time of here.
+//    }];
+//}
+
+- (TEALConfiguration*) configThatShouldQueue {
+    
+    return [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                profile:@"no-tags"
+                                            environment:@"dev"];
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (Tealium*) tealiumInstanceWithConfig:(TEALConfiguration *)config {
+    
+    Tealium *tealium = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID
+                                configuration:config];
+    
+    [tealium setDelegate:self];
+    
+    return tealium;
+    
 }
 
 - (void) testCallReceived {
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"TestCallExpectation"];
-    
     [self sendTestCall];
-    
-    if (self.queuedDispatchReceived){
-        [expectation fulfill];
-    }
-    
-    [self waitForExpectationsWithTimeout:3.0
-handler:^(NSError * _Nullable error) {
-    
-}];
-    
+
+    XCTAssertTrue(self.didQueueDispatch, @"WatchKit Extension emulated call did not result in a queued dispatch.");
     
 }
 
@@ -105,7 +106,6 @@ handler:^(NSError * _Nullable error) {
                                       }
                               };
     
-    
     [TEALWKDelegate processTrackCallFromPayload:payload];
     
 }
@@ -114,13 +114,16 @@ handler:^(NSError * _Nullable error) {
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
-    self.queuedDispatchReceived = YES;
-    
+    NSLog(@"%s ", __FUNCTION__);
+
+    self.didQueueDispatch = YES;
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     
-    self.dispatchSent = YES;
+    NSLog(@"%s ", __FUNCTION__);
+    
+    self.didSendDispatch = YES;
     
 }
 

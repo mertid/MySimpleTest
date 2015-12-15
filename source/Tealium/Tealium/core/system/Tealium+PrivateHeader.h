@@ -9,6 +9,7 @@
 #ifndef Tealium_Tealium_PrivateHeader_h
 #define Tealium_Tealium_PrivateHeader_h
 
+#import "Tealium.h"
 #import "TEALDataSources.h"
 #import "TEALLogger.h"
 #import "TEALOperationManager.h"

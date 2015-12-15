@@ -201,7 +201,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         }];
     }
     
-#warning This method does not actually purget anything!
+#warning This method does not actually purge anything!
     
 }
 

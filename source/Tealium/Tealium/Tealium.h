@@ -33,7 +33,7 @@
  *
  *  @param configuration TEALConfiguration instance with valid Account/Profile/Enviroment properties.
  */
-+ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration * _Nullable)configuration;
++ (_Nullable instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration * _Nonnull)configuration;
 
 
 #pragma mark - Instance Management

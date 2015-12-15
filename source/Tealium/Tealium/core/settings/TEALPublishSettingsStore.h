@@ -13,6 +13,7 @@
 @interface TEALPublishSettingsStore : NSObject
 
 + (TEALPublishSettings *) unarchivePublishSettingsForInstanceID:(NSString *)instanceID;
+
 + (void) archivePublishSettings:(TEALPublishSettings *)settings;
 
 @end

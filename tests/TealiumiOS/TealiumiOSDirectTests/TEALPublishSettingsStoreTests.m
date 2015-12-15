@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <Tealium/TEALPublishSettings.h>
-#import <Tealium/TEALPublishSettingsStore.h>
-#import <Tealium/TEALOperationManager.h>
-#import <Tealium/TEALURLSessionManager.h>
-#import <Tealium/TEALConfiguration.h>
+#import "TEALPublishSettings.h"
+#import "TEALPublishSettingsStore.h"
+#import "TEALOperationManager.h"
+#import "TEALURLSessionManager.h"
+#import "TEALConfiguration.h"
 
 @interface TEALPublishSettingsStoreTests : XCTestCase
 
@@ -25,12 +25,14 @@
 
 @end
 
+NSString * const TEAL_INSTANCE_ID = @"test";
+
 @implementation TEALPublishSettingsStoreTests
 
 - (void)setUp {
     [super setUp];
     
-    self.operationManager = [TEALOperationManager new];
+    self.operationManager = [[TEALOperationManager alloc] initWithInstanceID:TEAL_INSTANCE_ID];
     
     self.urlSessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
     
@@ -56,13 +58,13 @@
 
 - (void) testArchiving {
     
-    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:@"testURLString"];
+    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:TEAL_INSTANCE_ID];
     
     [TEALPublishSettingsStore archivePublishSettings:settings];
     
-    TEALPublishSettings *unarchivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:settings.url];
+    TEALPublishSettings *unarchivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:TEAL_INSTANCE_ID];
     
-    XCTAssertTrue([settings isEqual:unarchivedSettings], @"Problem archiving / unarchiving test publish settings");
+    XCTAssertTrue([settings isEqualToPublishSettings:unarchivedSettings], @"Problem archiving / unarchiving test publish settings");
 
 }
 

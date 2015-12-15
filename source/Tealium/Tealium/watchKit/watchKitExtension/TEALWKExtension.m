@@ -7,11 +7,11 @@
 //
 
 #import "TEALWKExtension.h"
-//#import "TEALWKExtensionQueue.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataQueue.h"
 #import "TEALLogger.h"
 #import "TEALOperationManager.h"
+#import "TEALError.h"
 
 @import WatchConnectivity;
 @import WatchKit;
@@ -205,6 +205,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+- (void) fetchNewPublishSettingsFromHost {
+    
+}
+
 - (BOOL) isReachable {
     
     WCSession *session = [WCSession defaultSession];
@@ -310,6 +314,22 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) sendQueue {
+    
+    if (![WCSession isSupported]){
+        
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Send queue call failed.", @"")
+                                  reason:NSLocalizedString(@"WCSession not currently supported", @"")
+                              suggestion:NSLocalizedString(@"Enable or ignore on devices that do not support watch connectivity.", @"")];
+        
+        if (self.delegate){
+            
+            [self.delegate tealiumExtensionTrackCall:nil didEncounterError:error];
+            
+        }
+        
+        return;
+    }
     
     for (NSDictionary *payload in [[self.queue allQueuedObjects] copy]){
         

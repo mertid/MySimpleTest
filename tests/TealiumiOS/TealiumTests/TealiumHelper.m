@@ -17,6 +17,8 @@ static TealiumHelper * _sharedInstance;
 
 + (instancetype) sharedInstance {
     
+    if ([self isTesting]){ return nil; }
+
     if (!_sharedInstance){
         _sharedInstance = [[TealiumHelper alloc] init];
     }
@@ -26,6 +28,8 @@ static TealiumHelper * _sharedInstance;
 
 + (void) startTracking {
 
+    if ([self isTesting]){ return; }
+    
     Tealium *instance = [Tealium instanceForKey:TEALIUM_INSTANCE_ID];
     
     if (instance){
@@ -52,20 +56,22 @@ static TealiumHelper * _sharedInstance;
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
     
-    [self startTracking];
-    
+    if ([self isTesting]){ return; }
+
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] trackEventWithTitle:title dataSources:data];
 }
 
 + (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
     
-    [self startTracking];
+    if ([self isTesting]){ return; }
 
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] trackViewWithTitle:title dataSources:data];
 }
 
 + (void) stopTracking{
     
+    if ([self isTesting]){ return; }
+
     [Tealium destroyInstanceForKey:TEALIUM_INSTANCE_ID];
     
 }
@@ -75,6 +81,8 @@ static TealiumHelper * _sharedInstance;
 
 + (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number{
     
+    if ([self isTesting]){ return; }
+
     NSDictionary *persistentData = [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] persistentDataSourcesCopy];
     
     int oldNumber = [persistentData[key] intValue];
@@ -88,6 +96,8 @@ static TealiumHelper * _sharedInstance;
 }
 
 + (void) enableRemoteCommandBlock {
+
+    if ([self isTesting]){ return; }
 
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addRemoteCommandId:@"testCommand"
         description:@"An example remote command block"
@@ -103,11 +113,12 @@ static TealiumHelper * _sharedInstance;
 
 #pragma mark - WATCHKIT RESPONSE HANDLING
 
-
 + (void)session:(nonnull WCSession *)session
 didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message
    replyHandler:(nullable void (^)(NSDictionary<NSString *,id> * _Nullable responseMessage))replyHandler {
     
+    if ([self isTesting]){ return; }
+
     // Process only calls for messages targeting available Tealium instances
     if (![Tealium instanceAvailableForMessage:message]){
         return;
@@ -118,4 +129,12 @@ didReceiveMessage:(nonnull NSDictionary<NSString *,id> *)message
     
 }
 
+#pragma mark - TESTIG
+
++ (BOOL) isTesting
+{
+    // Make sure target test arguments has this value added to it's Environment variables
+    NSDictionary* environment = [[NSProcessInfo processInfo] environment];
+    return [environment objectForKey:@"TESTING"] != nil;
+}
 @end

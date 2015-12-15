@@ -12,7 +12,7 @@
 
 #endif /* TEALLifecycle_PrivateTestHeader_h */
 
-#import <Tealium/TEALLifecycle.h>
+#import "TEALLifecycle.h"
 
 @interface TEALLifecycle (PrivateTestHeader)
 

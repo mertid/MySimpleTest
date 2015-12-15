@@ -29,6 +29,11 @@
 @interface TealiumHelper : NSObject<TealiumDelegate, NSURLSessionDelegate>
 
 /**
+ *  Startup the Tealium instance (and any other third party analytics libraries)
+ */
++ (void) startTracking;
+
+/**
  *  Triggers an event tracking call - lazy loads the library upon first call.
  *
  *  @param title Any NSString identifier for the event.

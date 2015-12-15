@@ -15,8 +15,6 @@
 		7108F2FD1C0F779D00F0D469 /* TEALLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 712A94EE1BFFCBAB00171939 /* TEALLogger.m */; };
 		7108F2FE1C0F7B8500F0D469 /* TEALError.m in Sources */ = {isa = PBXBuildFile; fileRef = 712A94E91BFFCBAB00171939 /* TEALError.m */; };
 		7108F3021C0F7FA700F0D469 /* TealiumWKHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7108F3011C0F7FA700F0D469 /* TealiumWKHelper.m */; };
-		710AC4D91C1895BF00B15B50 /* TEALWKExtensionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 710AC4D81C1895BF00B15B50 /* TEALWKExtensionQueue.m */; };
-		710AC4DA1C1899B400B15B50 /* TEALWKExtensionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 710AC4D81C1895BF00B15B50 /* TEALWKExtensionQueue.m */; };
 		710DE4371C15C7CB00FC3691 /* TEALWKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DE42E1C15C7CB00FC3691 /* TEALWKConstants.m */; };
 		710DE4391C15C7CB00FC3691 /* TEALWKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DE4341C15C7CB00FC3691 /* TEALWKExtension.m */; };
 		710DE43A1C15C7CB00FC3691 /* TEALWKExtensionConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 710DE4361C15C7CB00FC3691 /* TEALWKExtensionConfiguration.m */; };
@@ -204,16 +202,12 @@
 		167B09BF1B55BA7000B65A8A /* Ski1.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ski1.m4v; sourceTree = "<group>"; };
 		7108F3001C0F7FA700F0D469 /* TealiumWKHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumWKHelper.h; sourceTree = "<group>"; };
 		7108F3011C0F7FA700F0D469 /* TealiumWKHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumWKHelper.m; sourceTree = "<group>"; };
-		710AC4D71C1895BF00B15B50 /* TEALWKExtensionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKExtensionQueue.h; sourceTree = "<group>"; };
-		710AC4D81C1895BF00B15B50 /* TEALWKExtensionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKExtensionQueue.m; sourceTree = "<group>"; };
 		710DE42D1C15C7CB00FC3691 /* TEALWKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKConstants.h; sourceTree = "<group>"; };
 		710DE42E1C15C7CB00FC3691 /* TEALWKConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKConstants.m; sourceTree = "<group>"; };
 		710DE4331C15C7CB00FC3691 /* TEALWKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKExtension.h; sourceTree = "<group>"; };
 		710DE4341C15C7CB00FC3691 /* TEALWKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKExtension.m; sourceTree = "<group>"; };
 		710DE4351C15C7CB00FC3691 /* TEALWKExtensionConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKExtensionConfiguration.h; sourceTree = "<group>"; };
 		710DE4361C15C7CB00FC3691 /* TEALWKExtensionConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKExtensionConfiguration.m; sourceTree = "<group>"; };
-		710DE4F91C163B6700FC3691 /* TEALWKDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKDelegate.h; sourceTree = "<group>"; };
-		710DE4FA1C163B6700FC3691 /* TEALWKDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKDelegate.m; sourceTree = "<group>"; };
 		712A94631BFFC98400171939 /* TealiumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TealiumHelper.h; path = ../../TealiumiOS/TealiumTests/TealiumHelper.h; sourceTree = "<group>"; };
 		712A94641BFFC98400171939 /* TealiumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TealiumHelper.m; path = ../../TealiumiOS/TealiumTests/TealiumHelper.m; sourceTree = "<group>"; };
 		712A94861BFFCBAB00171939 /* TEALVisitorProfile+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALVisitorProfile+PrivateHeader.h"; sourceTree = "<group>"; };
@@ -349,7 +343,6 @@
 		713EE8BA1C1A22240076871D /* WatchKitCatalogTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WatchKitCatalogTests.m; sourceTree = "<group>"; };
 		713EE8BC1C1A22240076871D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		713EE8C21C1A22440076871D /* TEALWKDelegateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKDelegateTests.m; sourceTree = "<group>"; };
-		713EE8F01C1A29600076871D /* TEALWKDelegate+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALWKDelegate+PrivateHeader.h"; sourceTree = "<group>"; };
 		71D557691C10BABD005BFFB4 /* TEALReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachability.h; sourceTree = "<group>"; };
 		71D5576A1C10BABD005BFFB4 /* TEALReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachability.m; sourceTree = "<group>"; };
 		71F9C9B21C1B353D007A68BC /* TEALWKExtensionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKExtensionDelegate.h; sourceTree = "<group>"; };
@@ -460,7 +453,6 @@
 				710DE42E1C15C7CB00FC3691 /* TEALWKConstants.m */,
 				71F9C9B31C1B43B0007A68BC /* Tealium+WatchKit.h */,
 				71F9C9B41C1B43B0007A68BC /* Tealium+WatchKit.m */,
-				710DE4F81C163B6700FC3691 /* watchKitDelegateDirect */,
 				710DE4321C15C7CB00FC3691 /* watchKitExtension */,
 			);
 			path = watchKit;
@@ -474,20 +466,8 @@
 				710DE4341C15C7CB00FC3691 /* TEALWKExtension.m */,
 				710DE4351C15C7CB00FC3691 /* TEALWKExtensionConfiguration.h */,
 				710DE4361C15C7CB00FC3691 /* TEALWKExtensionConfiguration.m */,
-				710AC4D71C1895BF00B15B50 /* TEALWKExtensionQueue.h */,
-				710AC4D81C1895BF00B15B50 /* TEALWKExtensionQueue.m */,
 			);
 			path = watchKitExtension;
-			sourceTree = "<group>";
-		};
-		710DE4F81C163B6700FC3691 /* watchKitDelegateDirect */ = {
-			isa = PBXGroup;
-			children = (
-				713EE8F01C1A29600076871D /* TEALWKDelegate+PrivateHeader.h */,
-				710DE4F91C163B6700FC3691 /* TEALWKDelegate.h */,
-				710DE4FA1C163B6700FC3691 /* TEALWKDelegate.m */,
-			);
-			path = watchKitDelegateDirect;
 			sourceTree = "<group>";
 		};
 		712A94671BFFCBAB00171939 /* Tealium Direct */ = {
@@ -1176,7 +1156,6 @@
 				712A955E1BFFCBAB00171939 /* Tealium+Collect.m in Sources */,
 				712A95C41BFFCBAB00171939 /* TEALRemoteCommandResponse.m in Sources */,
 				712A95981BFFCBAB00171939 /* TEALLogger.m in Sources */,
-				710AC4DA1C1899B400B15B50 /* TEALWKExtensionQueue.m in Sources */,
 				712A959C1BFFCBAB00171939 /* TEALOperationManager.m in Sources */,
 				712A95C21BFFCBAB00171939 /* TEALRemoteCommandManager.m in Sources */,
 				71F9C9B51C1B43B0007A68BC /* Tealium+WatchKit.m in Sources */,
@@ -1213,7 +1192,6 @@
 				CB2699401A3668D400D75212 /* AAPLTableDetailController.m in Sources */,
 				7108F2FD1C0F779D00F0D469 /* TEALLogger.m in Sources */,
 				CB2699331A36689B00D75212 /* AAPLControllerDetailController.m in Sources */,
-				710AC4D91C1895BF00B15B50 /* TEALWKExtensionQueue.m in Sources */,
 				CB26992B1A36689B00D75212 /* AAPLButtonDetailController.m in Sources */,
 				7121F04D1C0E59FA006E14DD /* TEALConfiguration.m in Sources */,
 				CB2699411A3668D400D75212 /* AAPLTableRowController.m in Sources */,
@@ -1261,6 +1239,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"TEAL_TARGET_IOS=\"5.0.0\"",
+				);
 				HEADER_SEARCH_PATHS = "/Users/jasonkoo/Jason/tealium-apple-builder/source/Tealium/Tealium/watchKit";
 				INFOPLIST_FILE = WatchKitCatalogTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
@@ -1278,6 +1261,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_IOS=\"5.0.0\"";
 				HEADER_SEARCH_PATHS = "/Users/jasonkoo/Jason/tealium-apple-builder/source/Tealium/Tealium/watchKit";
 				INFOPLIST_FILE = WatchKitCatalogTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;

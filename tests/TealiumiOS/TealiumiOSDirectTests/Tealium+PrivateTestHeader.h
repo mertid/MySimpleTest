@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import <Tealium/Tealium.h>
-#import <Tealium/TEALSettings.h>
-#import <Tealium/TEALDispatchManager.h>
-#import <Tealium/TEALURLSessionManager.h>
-#import <Tealium/TEALVisitorProfileStore.h>
+#import "Tealium.h"
+#import "TEALSettings+PrivateHeader.h"
+#import "TEALDispatchManager.h"
+#import "TEALURLSessionManager.h"
+#import "TEALVisitorProfileStore.h"
 
 @interface Tealium (PrivateTest)
 

@@ -16,26 +16,37 @@
 
 @end
 
+NSString * const TEALPublishSettingsStoreKey = @"com.tealium.publishsettingsstore";
+
 @implementation TEALPublishSettingsStore
 
 #pragma mark - PUBLIC CLASS
 
 + (TEALPublishSettings *) unarchivePublishSettingsForInstanceID:(NSString *)instanceID {
     
-    NSData *settingsData = [[NSUserDefaults standardUserDefaults] objectForKey:instanceID];
+    NSDictionary *publishSettings = [[NSUserDefaults standardUserDefaults] objectForKey:TEALPublishSettingsStoreKey];
     
-    id settings = nil;
-    
-    if (!settingsData){
+    if (!publishSettings){
+        
         return nil;
+        
     }
     
-    settings = [NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
+    NSData *settingsData = publishSettings[instanceID];
     
-    if (![settings isKindOfClass:([TEALPublishSettings class])]){
+    if (!settingsData){
         
         return nil;
     }
+    
+    id settings = nil;
+    
+    settings = (TEALPublishSettings*)[NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
+    
+//    if (![settings isKindOfClass:[TEALPublishSettings class]]){
+//        
+//        return nil;
+//    }
     
     return settings;
     
@@ -50,9 +61,25 @@
     
     NSData *settingsData = [NSKeyedArchiver archivedDataWithRootObject:settings];
     
-    [[NSUserDefaults standardUserDefaults] setObject:settingsData
-                                              forKey:settings.url];
+    NSDictionary *newPublishSettings = [self newPublishSettingsWithData:settingsData
+                                                                 forKey:settings.url];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:newPublishSettings
+                                              forKey:TEALPublishSettingsStoreKey];
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSDictionary *) newPublishSettingsWithData:(NSData *)data forKey:(NSString*)key{
+    
+    NSDictionary *publishSettings = [[NSUserDefaults standardUserDefaults] objectForKey:TEALPublishSettingsStoreKey];
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    [mDict addEntriesFromDictionary:publishSettings];
+    mDict[key] = data;
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
+    
 }
 
 @end

@@ -9,9 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <Tealium/Tealium.h>
-#import <Tealium/TEALSettings.h>
 #import "Tealium+PrivateTestHeader.h"
+#import "TEALSettings.h"
 
 @interface TealiumConfigurationsTests : XCTestCase
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Tealium/TEALLifecycle.h>
+#import "TEALLifecycle+PrivateTestHeader.h"
 
 typedef void (^LifecycleCallback)(NSDate *eventDate, NSDictionary *lifecycleEvent, BOOL finished);
 

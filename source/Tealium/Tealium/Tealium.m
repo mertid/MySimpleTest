@@ -249,44 +249,8 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)completion{
     
-    configuration.instanceID  = key;
-
-    __block NSError *newInstanceError = nil;
-    
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
-        
-        if (error) {
-            
-            newInstanceError = error;
-            
-        }
-        
-    }];
-    
-    
-#warning Flip to do a bail out check first - return false if no instance?
-    
-    if (instance){
-        
-        [Tealium addInstance:instance key:key];
-        
-    } else {
-        newInstanceError = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
-                                  reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
-                              suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
-    }
-    
-    if (completion) completion(true, newInstanceError);
-    
-    return instance;
-    
-}
-
-
-+ (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
-    
-    // TODO: Optimize this method
+    // Bail out check
+    NSError *error = nil;
     
     if (![TEALConfiguration isValidConfiguration:configuration]) {
         
@@ -298,11 +262,39 @@ __strong static NSDictionary *staticAllInstances = nil;
                                        suggestion:@"Check the account, profile and environment options."];
         
         
-        if (completion) {
-            completion(NO, error);
-        }
+        if (completion) { completion(NO, error);}
+        
         return nil;
     }
+    
+    configuration.instanceID  = key;
+    
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *instanceError) {
+        
+        if (completion) completion(true, instanceError);
+        
+    }];
+    
+    if (!instance) {
+        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                        description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
+                                             reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
+                                         suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
+        
+        if (completion) { completion(NO, error);}
+        
+        return nil;
+    }
+    
+    [Tealium addInstance:instance key:key];
+    
+    return instance;
+    
+}
+
+
++ (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
     
     Tealium *instance = [[Tealium alloc] initPrivateWithInstanceID:configuration.instanceID];
     
@@ -356,6 +348,9 @@ __strong static NSDictionary *staticAllInstances = nil;
         _urlSessionManager  = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
         _delegateManager    = [[TEALDelegateManager alloc] init];
+        _dispatchManager = [TEALDispatchManager dispatchManagerWithInstanceID:instanceID
+                                                                    Configuration:self
+                                                                         delegate:self];
     }
     
     return self;
@@ -478,9 +473,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) enableCore {
-    self.dispatchManager = [TEALDispatchManager dispatchManagerWithInstanceID:self.settings.instanceID
-                                                                Configuration:self
-                                                                     delegate:self];
+
     [self setupSettingsReachabilityCallbacks];
 }
 
@@ -570,6 +563,11 @@ __strong static NSDictionary *staticAllInstances = nil;
         }
     }
     
+    // WatchKit
+    
+    
+    // TODO - For 5.1 release
+    
     // Mobile Companion
     if ([self.settings mobileCompanionEnabled]) {
         if ([self.modulesDelegate respondsToSelector:@selector(enableMobileCompanion)]) {
@@ -651,13 +649,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
 }
-
-//- (void) setActiveViewController:(UIViewController *)viewController {
-//
-//    [self.logger logDev:@"Current View Controller is now: %@", viewController];
-//    
-//    self.privateActiveViewController = viewController;
-//}
 
 - (void) trackDispatch:(TEALDispatch *) dispatch {
     
@@ -866,6 +857,14 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+
+//- (void) setActiveViewController:(UIViewController *)viewController {
+//
+//    [self.logger logDev:@"Current View Controller is now: %@", viewController];
+//
+//    self.privateActiveViewController = viewController;
+//}
+//
 //- (UIViewController *) activeViewController {
 //    
 //    return self.privateActiveViewController;

@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Tealium/Tealium.h>
+
+#import "Tealium+PrivateTestHeader.h"
 
 @interface TealiumDelegateTestObject : NSObject <TealiumDelegate>
 

@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <Tealium/Tealium.h>
-#import <Tealium/TEALSettings.h>
 #import "Tealium+PrivateTestHeader.h"
-#import <Tealium/TEALDispatch.h>
+#import "TEALSettings.h"
+#import "TEALDispatch+PrivateHeader.h"
 
 @interface TealiumDispatchTests : XCTestCase
 
@@ -26,13 +25,23 @@
 - (void)setUp {
     [super setUp];
     
+    XCTestExpectation *expectation = [self expectationWithDescription:@"setup"];
     
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                              profile:@"demo"
                                                          environment:@"dev"];
     
-    self.library = [Tealium  newInstanceForKey:@"testInstance" configuration:self.configuration];
+    self.library = [Tealium  newInstanceForKey:@"testInstance" configuration:self.configuration completion:^(BOOL success, NSError * _Nullable error) {
+        
+        if (success){
+            [expectation fulfill];
+        }
+        
+    }];
 
+    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)tearDown {
@@ -70,7 +79,7 @@
 //    }];
 //}
 
-- (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
+- (void) tesetFetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
     self.library.enabled = YES;
     
@@ -96,17 +105,19 @@
         
         XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
         [finished fulfill];
+        
     };
     
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                 withPayload:@{@"test_key":@"test_value"}];
+    
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
     
     
     
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
         NSLog(@"%s error:%@", __FUNCTION__, error);
     }];
     

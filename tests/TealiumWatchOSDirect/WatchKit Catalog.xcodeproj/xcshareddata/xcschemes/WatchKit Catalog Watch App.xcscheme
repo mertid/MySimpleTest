@@ -65,6 +65,11 @@
                BlueprintName = "WatchKitCatalogTests"
                ReferencedContainer = "container:WatchKit Catalog.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "WatchKitCatalogTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Tealium/TEALDatasources.h>
+#import "TEALDataSources.h"
 
 @interface TEALDatasourcesTests : XCTestCase
 

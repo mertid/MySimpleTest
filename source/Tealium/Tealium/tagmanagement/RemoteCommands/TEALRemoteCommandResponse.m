@@ -6,9 +6,7 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TEALRemoteCommandResponse.h"
 #import "TEALRemoteCommandResponse+PrivateHeader.h"
-#import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandErrors.h"
 #import "TEALRemoteCommandConstants+PrivateHeader.h"
 

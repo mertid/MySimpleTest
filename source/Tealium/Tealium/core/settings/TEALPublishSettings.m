@@ -262,20 +262,6 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     return self;
 }
 
-//- (instancetype) initWithRawPublishSettings:(NSDictionary *)rawPublishSettings{
-//    
-//    self = [super init];
-//    
-//    if (self) {
-//        
-//        [self updateWithRawSettings:rawPublishSettings];
-//        
-//    }
-//    
-//    return self;
-//}
-
-
 - (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
     
     NSDictionary *settings = rawPublishSettings[self.publishSettingsVersion];
@@ -313,7 +299,11 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     if (self.minutesBetweenRefresh != otherPublishSettings.minutesBetweenRefresh) return NO;
     if (self.numberOfDaysDispatchesAreValid != otherPublishSettings.numberOfDaysDispatchesAreValid) return NO;
     if (self.offlineDispatchQueueSize != otherPublishSettings.offlineDispatchQueueSize) return NO;
-    if (![self.overrideLogLevel isEqualToString:otherPublishSettings.overrideLogLevel]) return NO;
+    
+    // isEqualToString returns NO if both strings are nil - should return YES for our use
+    if ((self.overrideLogLevel && otherPublishSettings.overrideLogLevel) &&
+        ![self.overrideLogLevel isEqualToString:otherPublishSettings.overrideLogLevel]) return NO;
+    
     if (self.status != otherPublishSettings.status) return NO;
     if (![self.url isEqualToString:otherPublishSettings.url]) return NO;
 

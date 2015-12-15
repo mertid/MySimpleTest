@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Tealium/Tealium.h>
-#import <Tealium/Tealium+TagManagement.h>
+#import "Tealium.h"
+#import "Tealium+TagManagement.h"
 #import "Tealium+PrivateTestHeader.h"
 #import "TEALSettings+PrivateHeader.h"
 #import "TealiumDelegateTestObject.h"
@@ -19,7 +19,7 @@
 @property (nonatomic) BOOL shouldQueue;
 @property (nonatomic) BOOL shouldDrop;
 @property (nonatomic, strong) Tealium *tealium;
-@property (nonatomic, strong) XCTestExpectation *testExpectation;
+//@property (nonatomic, strong) XCTestExpectation *testExpectation;
 
 @end
 
@@ -29,7 +29,7 @@
     [super setUp];
     self.tealium = [Tealium newInstanceForKey:@"testInstance"
                                 configuration:[self defaultConfig]];
-    self.testExpectation = [self expectationWithDescription:@"testExpectation"];
+//    self.testExpectation = [self expectationWithDescription:@"testExpectation"];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -38,7 +38,7 @@
     self.shouldDrop = NO;
     self.shouldQueue = NO;
     [Tealium destroyInstanceForKey:@"testInstance"];
-    self.testExpectation = nil;
+//    self.testExpectation = nil;
     [super tearDown];
 }
 
@@ -47,8 +47,9 @@
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
-    config.autotrackingUIEventsEnabled = NO;
-    config.autotrackingViewsEnabled = NO;
+    
+//    config.autotrackingUIEventsEnabled = NO;
+//    config.autotrackingViewsEnabled = NO;
     
     return config;
 }
@@ -280,12 +281,12 @@
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-    config.autotrackingCrashesEnabled = YES;
-    config.autotrackingDeviceInfoEnabled = YES;
-    config.autotrackingIvarsEnabled = YES;
-    config.autotrackingLifecycleEnabled = YES;
-    config.autotrackingUIEventsEnabled = YES;
-    config.autotrackingViewsEnabled = YES;
+//    config.autotrackingCrashesEnabled = YES;
+//    config.autotrackingDeviceInfoEnabled = YES;
+//    config.autotrackingIvarsEnabled = YES;
+//    config.autotrackingLifecycleEnabled = YES;
+//    config.autotrackingUIEventsEnabled = YES;
+//    config.autotrackingViewsEnabled = YES;
     
     Tealium *instance = [Tealium newInstanceForKey:@"volatileTest" configuration:config];
     
@@ -357,9 +358,9 @@
 
 - (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
     
-    if (self.testExpectation){
-        [self.testExpectation fulfill];
-    }
+//    if (self.testExpectation){
+//        [self.testExpectation fulfill];
+//    }
     
     return self.shouldDrop;
 }

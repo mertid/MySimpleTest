@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <Tealium/TEALConfiguration.h>
-#import <Tealium/TEALSettings.h>
+#import "TEALConfiguration+PrivateHeader.h"
+
+#import "TEALSettings+PrivateHeader.h"
 
 @interface TEALSettingsTests : XCTestCase
 
@@ -34,7 +35,7 @@
 
 #pragma mark - CONFIGURATIONS
 
-- (void) testDispatchURLString {
+- (void) testDefaultDispatchURLString {
     
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                               profile:@"demo"
@@ -42,13 +43,14 @@
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
     
-    NSString *defaultURLString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main&tealium_vid=";
+    NSString *defaultURLString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main";
     
     XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:defaultURLString], @"Default dispatch URL string unexpected: %@", [self.settings collectDispatchURLString]);
+    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:defaultURLString], @"Default dispatch URL returned unexpected string: %@", [self.settings collectDispatchURLString]);
 }
 
 - (void) testDispatchURLStringOverride {
+    
     NSString *urlString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main&tealium_vid=";
 
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
