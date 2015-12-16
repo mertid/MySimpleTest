@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TEALLogger.h"
 
 /**
  *  This is a lighter-weight version of the TEALConfiguration object meant
@@ -23,10 +24,18 @@
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
 
 /**
+ *  Tealium log level to use with the extension only.  Default none.
+ */
+@property TEALLogLevel logLevel;
+
+
+/**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
  *
  *  @return Valid configuration instance to pass to the enableWithConfiguration: method.
  */
 + (instancetype) configuration;
+
+
 
 @end

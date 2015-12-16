@@ -107,13 +107,25 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
-        
-    NSDictionary *universalInfo = [self universalTrackDataSources];
-    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeEvent title:title];
+    
+    [self trackDispatch:TEALDispatchTypeEvent title:title dataSources:clientDataSources];
+    
+}
 
+- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+    
+    [self trackDispatch:TEALDispatchTypeView title:title dataSources:clientDataSources];
+    
+}
+
+- (void) trackDispatch:(TEALDispatchType)type title:(NSString *)title dataSources:(NSDictionary *) clientDataSources {
+    
     // TimestampDataSources supports override by client data sources for key TEALDataSourceKey_TimestampUnix
     NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:clientDataSources[TEALDataSourceKey_TimestampUnix]]:@{};
-
+    
+    NSDictionary *universalInfo = [self universalTrackDataSources];
+    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
+    
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     universalInfo? universalInfo:@{},
                                                                                     captureTimeDataSources? captureTimeDataSources:@{},
@@ -121,50 +133,24 @@ __strong static NSDictionary *staticAllInstances = nil;
                                                                                     clientDataSources? clientDataSources:@{}
                                                                                     ]];
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:compositeDataSources];
-
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:compositeDataSources];
+    
     __weak Tealium *weakSelf = self;
     
-    [weakSelf.operationManager addOperationWithBlock:^{
-       
-        [weakSelf trackDispatch:dispatch];
-
-    }];
-    
-}
-
-- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
-    
-    NSDictionary *universalDataSources = [self universalTrackDataSources];
-    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:TEALDispatchTypeView title:title];
-    
-    NSMutableArray *dataToComposite = [NSMutableArray array];
-    
-    if (universalDataSources)   [dataToComposite addObject:universalDataSources];
-    if (captureTimeDataSources) [dataToComposite addObject:captureTimeDataSources];
-    if (clientDataSources)      [dataToComposite addObject:clientDataSources];
-
-    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:dataToComposite];
-    
-    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:compositeDataSources];
-
-    __weak Tealium *weakSelf = self;
-
     [weakSelf.operationManager addOperationWithBlock:^{
         
         [weakSelf trackDispatch:dispatch];
         
     }];
+
 }
 
 - (NSDictionary *) universalTrackDataSources {
     
     NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
-//    NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:[NSDate date]]:@{};
     NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
     NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
                                                                                     persistentDataSources? persistentDataSources:@{},
-//                                                                                    timestampDataSources,
                                                                                     volatileDataSources? volatileDataSources:@{}
                                                                                     ]];
     
@@ -271,7 +257,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *instanceError) {
         
-        if (completion) completion(true, instanceError);
+        if (completion) completion(success, instanceError);
         
     }];
     
@@ -846,6 +832,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (NSString *) description {
     
     NSString *version = TEALLibraryVersion;
+    
+    
     NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", self.settings.account, self.settings.tiqProfile, self.settings.environment];
     
     return [NSString stringWithFormat:@"TEALIUM %@: instance:%@: ", version, accountProfileEnvironment];

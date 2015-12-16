@@ -13,7 +13,7 @@
  *  utilizing analytics or other third party libraries requiring an event 
  *  trigger with optional data.
  */
-@interface TealiumWKHelper : NSObject <TEALWKExtensionDelegate, NSURLSessionDelegate>
+@interface TealiumWKHelper : NSObject <NSURLSessionDelegate>
 
 
 /**
@@ -40,17 +40,5 @@
 + (void) trackViewWithTitle:(NSString *)title
                 dataSources:(NSDictionary *)customDataSources;
 
-
-/**
- *  Optionally set a delegate for the extension to monitor track call success, queuing
- *  or failure
- *
- *  @param delegate An object conforming to at least one of the optional 
- *  TEALWKExtensionDelegate methods
- */
-+ (void) setDelegate:(id<TEALWKExtensionDelegate>)delegate;
-
-
-+ (void) directURLCallTestWithArguments:(NSDictionary *)arguments;
 
 @end

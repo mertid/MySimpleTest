@@ -10,7 +10,7 @@
 #import "AAPLElementRowController.h"
 #import "TealiumWKHelper.h"
 
-@interface AAPLInterfaceController() <TEALWKExtensionDelegate>
+@interface AAPLInterfaceController()
 
 @property (weak, nonatomic) IBOutlet WKInterfaceTable *interfaceTable;
 
@@ -38,8 +38,6 @@
         
         [TealiumWKHelper startTracking];
         
-        [TealiumWKHelper setDelegate:self];
-
         [TealiumWKHelper trackEventWithTitle:@"watchLaunch" dataSources:nil];
         
     }

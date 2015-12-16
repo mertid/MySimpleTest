@@ -42,12 +42,6 @@ static TealiumWKHelper * _sharedInstance;
     [[TEALWKExtension instanceForKey:TEALIUM_INSTANCE_ID] trackViewWithTitle:title dataSources:data];
 }
 
-+ (void) setDelegate:(id<TEALWKExtensionDelegate>)delegate {
-    
-    [[TEALWKExtension instanceForKey:TEALIUM_INSTANCE_ID] setDelegate:delegate];
-    
-}
-
 #pragma mark - PRIVATE
 
 + (instancetype) sharedInstance {

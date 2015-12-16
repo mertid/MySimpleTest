@@ -5,10 +5,12 @@
 //  Created by Jason Koo on 12/10/15.
 //  Copyright © 2015 Apple Inc. All rights reserved.
 //
+//  Test the Tealium+WatchKit Category - formerlly and independent class
 
 #import <XCTest/XCTest.h>
-#import "TEALDataSourceConstants.h"
+#import "Tealium+WatchKit.h"
 #import "Tealium+PrivateHeader.h"
+#import "TEALDataSourceConstants.h"
 #import "TEALWKConstants.h"
 #import "TEALVersion.h"
 
@@ -24,11 +26,13 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
 
 @implementation TEALWKDelegateTests
 
+#pragma mark - SETUP
+
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    [self tealiumInstanceWithConfig:[self configThatShouldQueue]];
+    self.tealium = [self tealiumInstanceWithConfig:[self configThatShouldQueue]];
 
     self.didQueueDispatch = NO;
     self.didSendDispatch = NO;
@@ -45,18 +49,6 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
     [super tearDown];
 }
 
-//- (void)testExample {
-//    // This is an example of a functional test case.
-//    // Use XCTAssert and related functions to verify your tests produce the correct results.
-//}
-//
-//- (void)testPerformanceExample {
-//    // This is an example of a performance test case.
-//    [self measureBlock:^{
-//        // Put the code you want to measure the time of here.
-//    }];
-//}
-
 - (TEALConfiguration*) configThatShouldQueue {
     
     return [TEALConfiguration configurationWithAccount:@"tealiummobile"
@@ -66,8 +58,17 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
 
 - (Tealium*) tealiumInstanceWithConfig:(TEALConfiguration *)config {
     
+    XCTestExpectation *expectation = [self expectationWithDescription:@"tealiumInit"];
+    
     Tealium *tealium = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID
-                                configuration:config];
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                    
+                                       [expectation fulfill];
+                                           
+                                   }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     [tealium setDelegate:self];
     
@@ -75,15 +76,11 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
     
 }
 
+#pragma mark - TESTS
+
 - (void) testCallReceived {
     
-    [self sendTestCall];
-
-    XCTAssertTrue(self.didQueueDispatch, @"WatchKit Extension emulated call did not result in a queued dispatch.");
-    
-}
-
-- (void) sendTestCall {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testCall"];
     
     NSString *title = @"testCall";
     
@@ -97,7 +94,7 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
                                  TEALDataSourceKey_TimestampUnix : nowString
                                  };
     
-    NSDictionary *payload = @{
+    __block NSDictionary *payload = @{
                               TEALWKCommandTrackKey:@{
                                       TEALWKCommandTrackArgumentTitleKey: title,
                                       TEALWKCommandTrackArgumentTypeKey: eventType,
@@ -106,7 +103,42 @@ NSString * const TEALIUM_INSTANCE_ID = @"1";
                                       }
                               };
     
-    [TEALWKDelegate processTrackCallFromPayload:payload];
+    __block NSDictionary *incorrectTargetPayload = @{
+                                                     @"wakkaWakka":@{
+                                                             TEALWKCommandTrackArgumentTitleKey: title,
+                                                             TEALWKCommandTrackArgumentTypeKey: eventType,
+                                                             TEALWKCommandTrackArgumentInstanceIDKey: TEALIUM_INSTANCE_ID,
+                                                             TEALWKCommandTrackArgumentCustomDataKey: customData
+                                                             }
+                                                     };
+    
+    __block NSDictionary *incorrectPayloadContent = @{
+                                                     TEALWKCommandTrackKey:@{
+                                                             TEALWKCommandTrackArgumentTitleKey: @"someOtherTitle",
+                                                             TEALWKCommandTrackArgumentTypeKey: eventType,
+                                                             TEALWKCommandTrackArgumentInstanceIDKey: TEALIUM_INSTANCE_ID,
+                                                             TEALWKCommandTrackArgumentCustomDataKey: customData
+                                                             }
+                                                     };
+    
+    [self.tealium session:[WCSession defaultSession] didReceiveMessage:payload replyHandler:^(NSDictionary<NSString *,id> *replyMessage) {
+        
+        [expectation fulfill];
+        
+        NSLog(@"%s replyMessage:%@", __FUNCTION__, replyMessage);
+        
+        NSDictionary *responseMessagePayload = replyMessage[@"message"];
+        
+        XCTAssert([payload isEqualToDictionary:responseMessagePayload], @"Message payload returned did not match payload sent.");
+        XCTAssert(![incorrectTargetPayload isEqualToDictionary:responseMessagePayload], @"Message payload returned a payload with incorrect tealium message key.");
+        XCTAssert(![incorrectPayloadContent isEqualToDictionary:responseMessagePayload], @"Message payload returned did not match payload sent.");
+
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    XCTAssertTrue(self.didQueueDispatch, @"WatchKit Extension emulated call did not result in a queued dispatch.");
     
 }
 

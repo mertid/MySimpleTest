@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "TEALWKExtensionConfiguration.h"
 #import "TEALWKConstants.h"
-#import "TEALWKExtensionDelegate.h"
 
 /**
  *
@@ -21,7 +20,6 @@
  */
 @interface TEALWKExtension : NSObject
 
-@property (nonatomic, weak) id<TEALWKExtensionDelegate> delegate;
 
 # pragma mark - Setup / Configuration
 

@@ -7,11 +7,8 @@
 //
 
 #import "TEALWKExtensionConfiguration.h"
-#import "TEALLogger.h"
 
 @interface TEALWKExtensionConfiguration()
-
-@property TEALLogLevel logLevel;
 
 @end
 
@@ -28,7 +25,7 @@
     }
     
     configuration.offlineDispatchQueueSize = 100;
-    configuration.logLevel = TEALLogLevelDev;
+    configuration.logLevel = TEALLogLevelNone;
     
     return configuration;
 }

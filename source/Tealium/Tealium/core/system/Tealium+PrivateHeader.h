@@ -19,28 +19,28 @@
 
 @interface Tealium (Private)
 
-@property (nonatomic, strong) TEALDataSources *dataSources;
-@property (nonatomic, strong) TEALDispatchManager *dispatchManager;
-@property (nonatomic, strong) TEALLogger *logger;
-@property (nonatomic, strong) TEALOperationManager *operationManager;
-@property (nonatomic, strong) TEALSettings *settings;
-@property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
+@property (nonatomic, strong) TEALDataSources * _Nonnull dataSources;
+@property (nonatomic, strong) TEALDispatchManager * _Nonnull dispatchManager;
+@property (nonatomic, strong) TEALLogger * _Nonnull logger;
+@property (nonatomic, strong) TEALOperationManager * _Nonnull operationManager;
+@property (nonatomic, strong) TEALSettings * _Nonnull settings;
+@property (nonatomic, strong) TEALURLSessionManager *_Nonnull urlSessionManager;
 @property (nonatomic, weak) id<TealiumDelegate> delegate;
 
-+ (NSDictionary *) allInstances;
++ (instancetype _Nullable) newInstanceForKey:(NSString * _Nonnull)key
+                               configuration:(TEALConfiguration * _Nonnull)configuration
+                                  completion:(TEALBooleanCompletionBlock _Nullable)completion;
 
-- (void) addModuleData:(NSDictionary *) dictionary;
-- (void) removeModuleDataForKey:(NSString *)key;
++ (NSDictionary * _Nonnull) allInstances;
 
-- (NSArray *) currentDispatchServices;
-- (void) setCurrentDispatchServices:(NSArray *)newServices;
-- (void) addNewDispatchService:(id)newService;
+- (void) addModuleData:(NSDictionary * _Nonnull) dictionary;
+- (void) removeModuleDataForKey:(NSString * _Nonnull)key;
 
-- (NSDictionary *) moduleDataCopy;
+- (NSArray * _Nonnull) currentDispatchServices;
+- (void) setCurrentDispatchServices:(NSArray * _Nonnull)newServices;
+- (void) addNewDispatchService:(id _Nonnull)newService;
 
-//- (void) setActiveViewController:(UIViewController *)viewController;
-//
-//- (UIViewController *) activeViewController;
+- (NSDictionary * _Nonnull) moduleDataCopy;
 
 @end
 

@@ -34,7 +34,8 @@
 /**
  *  Dispatches passing the tealium:shouldDropDispatch: delegate method can be
  *      queued / saved by this method.  Also supercedes any remote publish setting
- *      batching and offline options.
+ *      batching and offline options. Must include logic to return NO or dispatches
+ *      will never be sent.
  *
  *  @param tealium The Tealium instance requesting confirmation
  *  @param dispatch The dispatch in question. Property and payload data manipulated

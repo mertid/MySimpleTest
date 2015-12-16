@@ -81,6 +81,8 @@
 		715B6DAB1BF5209D00C4CD9C /* Tealium+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 715B6D581BF5209D00C4CD9C /* Tealium+TagManagement.m */; };
 		715B6DAC1BF5209D00C4CD9C /* TEALTagDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 715B6D5A1BF5209D00C4CD9C /* TEALTagDispatchService.m */; };
 		715B6DAD1BF5209D00C4CD9C /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 715B6D5C1BF5209D00C4CD9C /* Tealium.m */; };
+		7184FAA71C20B9C800D5EABB /* TEALWKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C6488D1C205CF800043F36 /* TEALWKExtension.m */; };
+		7184FAAD1C20B9CD00D5EABB /* TEALWKExtensionConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C6488F1C205CF800043F36 /* TEALWKExtensionConfiguration.m */; };
 		7188671A1BFE4DAB008E1165 /* TealiumiOSDirectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718867191BFE4DAB008E1165 /* TealiumiOSDirectTests.m */; };
 		71A3B8C31C0E087E002C1028 /* TEALReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 712932351C0D0ED000A128C5 /* TEALReachabilityManager.m */; };
 		71A3B8C41C0E087E002C1028 /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7129322E1C0D0CF700A128C5 /* TEALReachability.m */; };
@@ -1438,11 +1440,13 @@
 				715B6D901BF5209D00C4CD9C /* TEALActionQueueManager.m in Sources */,
 				715B6D911BF5209D00C4CD9C /* TEALDelegateManager.m in Sources */,
 				715B6D801BF5209D00C4CD9C /* TEALTimestampDataSources.m in Sources */,
+				7184FAAD1C20B9CD00D5EABB /* TEALWKExtensionConfiguration.m in Sources */,
 				715B6DAA1BF5209D00C4CD9C /* TEALRemoteCommandResponse.m in Sources */,
 				715B6D6C1BF5209D00C4CD9C /* TEALVisitorProfileAudienceAttribute.m in Sources */,
 				715B6C861BF5206B00C4CD9C /* ShowViewTableViewCell.m in Sources */,
 				715B6D861BF5209D00C4CD9C /* TEALDispatchManager.m in Sources */,
 				71C648C91C2062AD00043F36 /* Tealium+WatchKit.m in Sources */,
+				7184FAA71C20B9C800D5EABB /* TEALWKExtension.m in Sources */,
 				71C648CA1C2062AD00043F36 /* TEALWKConstants.m in Sources */,
 				715B6C871BF5206B00C4CD9C /* AppDelegate.m in Sources */,
 				715B6D751BF5209D00C4CD9C /* TEALVisitorProfileStore.m in Sources */,

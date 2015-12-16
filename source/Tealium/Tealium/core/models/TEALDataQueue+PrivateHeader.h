@@ -6,6 +6,8 @@
 //
 //
 
+#import "TEALDataQueue.h"
+
 @interface TEALDataQueue (Private)
 
 @property (nonatomic, strong) NSMutableArray *dataQueue;
