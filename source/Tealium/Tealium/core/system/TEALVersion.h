@@ -8,7 +8,6 @@
 // Use the stringizing operator # to make a C string out of the symbol. However, due to a quirk of the preprocessor, you need to use two extra layers of macros:
 // - Adam Rosenfield
 
-
 // iOS
 #ifdef TEAL_TARGET_IOS
 
@@ -17,6 +16,7 @@
 #define STRINGIZE2(x) STRINGIZE(x)
 #define TEALLibraryVersion @ STRINGIZE2(TEAL_TARGET_A)
 
+// Find a better way to do this
 #define TEALPlatform @"iOS"
 
 #endif

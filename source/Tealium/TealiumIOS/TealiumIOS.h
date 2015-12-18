@@ -18,6 +18,7 @@ FOUNDATION_EXPORT const unsigned char TealiumIOSVersionString[];
 #import <TealiumIOS/Tealium.h>
 #import <TealiumIOS/Tealium+Collect.h>
 #import <TealiumIOS/Tealium+TagManagement.h>
+#import <TealiumIOS/Tealium+WatchKit.h>
 #import <TealiumIOS/TealiumDelegate.h>
 
 #import <TealiumIOS/TEALConfiguration.h>

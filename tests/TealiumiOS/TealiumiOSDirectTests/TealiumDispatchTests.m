@@ -20,28 +20,13 @@
 
 @end
 
+NSString * const TEAL_DISPATCH_TEST_INSTANCE_ID = @"testInstance";
+
 @implementation TealiumDispatchTests
 
 - (void)setUp {
     [super setUp];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"setup"];
-    
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                             profile:@"demo"
-                                                         environment:@"dev"];
-    
-    self.library = [Tealium  newInstanceForKey:@"testInstance" configuration:self.configuration completion:^(BOOL success, NSError * _Nullable error) {
-        
-        if (success){
-            [expectation fulfill];
-        }
-        
-    }];
-
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
-        
-    }];
 }
 
 - (void)tearDown {
@@ -51,35 +36,43 @@
 }
 
 
-//- (void)testPerformanceExample {
-//    // This is an example of a performance test case.
-//    [self measureBlock:^{
-//        // Put the code you want to measure the time of here.
-//    }];
-//}
-
 #pragma mark - Helpers
 
-//- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
-//    
-//    if (!config) {
-//        config = self.configuration;
-//    }
-//
-//    XCTestExpectation *finishedLoadingExpectation = [self expectationWithDescription:@"finishLoading"];
-//    
-//    self.library = [Tealium newInstanceForKey:@"test" configuration:config];
-//    [self.library instanceWithConfiguration:config
-//                          completion:^(BOOL success, NSError *error) {
-//                              [finishedLoadingExpectation fulfill];
-//                          }];
-//    
-//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
-//            NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//}
+- (TEALConfiguration *) liveConfig {
+    
+    return [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                               profile:@"demo"
+                                           environment:@"dev"];
+}
 
-- (void) tesetFetchRemoteSettingsWithSettings:(TEALSettings *)settings {
+- (TEALConfiguration *) nonExistentConfig {
+    
+    return [TEALConfiguration configurationWithAccount:@"what"
+                                               profile:@"who"
+                                           environment:@"wow"];
+    
+}
+
+- (void) useLiveLibraryInstance {
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
+
+    self.library = [Tealium newInstanceForKey:TEAL_DISPATCH_TEST_INSTANCE_ID
+                                configuration:[self liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       if (error){
+                                           NSLog(@"%s error:%@", __FUNCTION__, error);
+                                       }
+                                       
+                                       [expectation fulfill];
+                                       
+                                   }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testFetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
     self.library.enabled = YES;
     
@@ -99,13 +92,16 @@
 
 - (void) testEventDispatch {
     
-    XCTestExpectation *finished = [self expectationWithDescription:@"finishedEventDispatch"];
+    [self useLiveLibraryInstance];
 
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
-        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-        [finished fulfill];
+        if (error){
+            NSLog(@"%s error:%@", __FUNCTION__, error);
+        }
         
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+
     };
     
     
@@ -116,93 +112,29 @@
                               completionBlock:completion];
     
     
-    
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-        NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
-    
 }
-
-//- (void) testEventDispatchDataSources {
-//    [self enableLibraryWithConfiguration:nil];
-//    
-//    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        
-//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-//    };
-//    
-//    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-//                                                withPayload:nil];
-//    [self.library.dispatchManager addDispatch:dispatch
-//                              completionBlock:completion];
-//    
-//    
-//    XCTestExpectation *finished = [self expectationWithDescription:@"finished"];
-//    
-//    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        [finished fulfill];
-//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-//    };
-//    
-//    
-//    [self.library.dispatchManager addDispatch:dispatch
-//                              completionBlock:completion];
-//    
-//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
-//        NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//}
-
-//- (void) testEventDispatchQueued {
-//    [self enableLibraryWithConfiguration:nil];
-//    
-//    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        
-//        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-//    };
-//    
-//    TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-//                                                withPayload:@{@"test_key":@"test_value"}];
-//    [self.library.dispatchManager addDispatch:dispatch
-//                              completionBlock:completion];
-//    
-//    
-//    self.library.settingsStore.currentSettings.dispatchSize = 5;
-//    
-//    completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
-//        
-//        XCTAssertEqual(status, TEALDispatchStatusQueued, @"Dispatch: %@, should have been queued", dispatch);
-//    };
-//    
-//    for (NSInteger xi = 0; xi < 5; xi ++) {
-//        
-//        TEALDispatch *dispatch = [TEALDispatch dispatchForEvent:TEALEventTypeLink
-//                                                    withPayload:@{@"test_key":@"test_value"}];
-//        [self.library.dispatchManager addDispatch:dispatch
-//                                  completionBlock:completion];
-//    }
-//}
 
 - (void) testViewDispatch {
     
+    [self useLiveLibraryInstance];
     
-    XCTestExpectation *finished = [self expectationWithDescription:@"finishedViewDispatch"];
-
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
+        if (error){
+            NSLog(@"%s error:%@", __FUNCTION__, error);
+        }
+        
         XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
-        [finished fulfill];
+        
     };
     
+    
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeView
-                                                withPayload:@{@"test_key":@"test_value"}];
+                                               withPayload:@{@"test_key":@"test_value"}];
+    
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
     
-    
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
-        NSLog(@"%s error:%@", __FUNCTION__, error);
-    }];
     
 }
 

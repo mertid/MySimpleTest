@@ -108,30 +108,30 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    [self trackDispatch:TEALDispatchTypeEvent title:title dataSources:clientDataSources];
+    [self trackDispatchOfType:TEALDispatchTypeEvent
+                        title:title
+                  dataSources:clientDataSources
+                   completion:nil];
     
 }
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    [self trackDispatch:TEALDispatchTypeView title:title dataSources:clientDataSources];
+    [self trackDispatchOfType:TEALDispatchTypeView
+                        title:title
+                  dataSources:clientDataSources
+                   completion:nil];
     
 }
 
-- (void) trackDispatch:(TEALDispatchType)type title:(NSString *)title dataSources:(NSDictionary *) clientDataSources {
+- (void) trackDispatchOfType:(TEALDispatchType)type
+                 title:(NSString *)title
+           dataSources:(NSDictionary *) clientDataSources
+            completion:(TEALDispatchBlock)completion{
     
-    // TimestampDataSources supports override by client data sources for key TEALDataSourceKey_TimestampUnix
-    NSDictionary *timestampDataSources = [self.settings autotrackingTimestampInfoEnabled]? [TEALTimestampDataSources dataSourcesForDate:clientDataSources[TEALDataSourceKey_TimestampUnix]]:@{};
-    
-    NSDictionary *universalInfo = [self universalTrackDataSources];
-    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
-    
-    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-                                                                                    universalInfo? universalInfo:@{},
-                                                                                    captureTimeDataSources? captureTimeDataSources:@{},
-                                                                                    timestampDataSources,
-                                                                                    clientDataSources? clientDataSources:@{}
-                                                                                    ]];
+    NSDictionary *compositeDataSources = [self finalDispatchDataSourcesForDispatchType:type
+                                                                                 title:title
+                                                                           dataSources:clientDataSources];
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:compositeDataSources];
     
@@ -139,10 +139,40 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        [weakSelf trackDispatch:dispatch];
+        [weakSelf trackDispatch:dispatch completion:completion];
         
     }];
 
+}
+
+- (NSDictionary *) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
+                                                     title:(NSString *)title
+                                               dataSources:(NSDictionary *)dataSources {
+#warning add Platform key!
+    
+    NSDictionary *timestampDataSources = [self timestampDataSourcesForDataSources:dataSources];
+    NSDictionary *universalInfo = [self universalTrackDataSources];
+    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
+    
+    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
+                                                                                    universalInfo? universalInfo:@{},
+                                                                                    captureTimeDataSources? captureTimeDataSources:@{},
+                                                                                    timestampDataSources,
+                                                                                    dataSources? dataSources:@{}
+                                                                                    ]];
+    
+    
+    return compositeDataSources;
+}
+
+- (NSDictionary *) timestampDataSourcesForDataSources:(NSDictionary *)dataSources {
+    
+    if ([self.settings autotrackingTimestampInfoEnabled]) {
+        NSString *dateString = dataSources[TEALDataSourceKey_TimestampUnix];
+        return [TEALTimestampDataSources dataSourcesForDate:dateString];
+    }
+    
+    return @{};
 }
 
 - (NSDictionary *) universalTrackDataSources {
@@ -201,6 +231,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.operationManager addOperationWithBlock:^{
         [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:keys];
+        
     }];
 }
 
@@ -636,19 +667,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) trackDispatch:(TEALDispatch *) dispatch {
-    
-    if (![self.settings publishSettings]){
-        
-        
-    }
+- (void) trackDispatch:(TEALDispatch *) dispatch completion:(TEALDispatchBlock)completion {
     
     [self.dispatchManager addDispatch:dispatch
-                      completionBlock:^(TEALDispatchStatus status, TEALDispatch *dispatchReturned, NSError *error) {
-
-          // Stub for any additional processing
-          
-      }];
+                      completionBlock:completion];
     
 }
 

@@ -5,6 +5,7 @@
 //  Created by George Webster on 6/4/15.
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
+//  USE Tealium+PrivateHeader instead
 
 #import "Tealium.h"
 #import "TEALSettings+PrivateHeader.h"

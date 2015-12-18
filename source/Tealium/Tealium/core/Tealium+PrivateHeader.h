@@ -42,6 +42,11 @@
 
 - (NSDictionary * _Nonnull) moduleDataCopy;
 
+- (NSDictionary * _Nonnull) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
+                                                              title:(NSString *)title
+                                                        dataSources:(NSDictionary *)dataSources;
+- (void) trackDispatch:(TEALDispatch *) dispatch completion:(TEALDispatchBlock)completion;
+
 @end
 
 #endif

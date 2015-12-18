@@ -44,19 +44,27 @@ static double deviceBatteryLevel;
     
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
 
+#ifndef TEAL_TARGET_TVOS
     NSString *batteryLevel = [self batteryLevelAsPercentString];
     NSString *batteryIsCharging = [self batteryIsChargingAsString];
-    NSString *orientation = [self currentOrientation];
-    NSString *resolution = [self resolution];
-    
-    NSString *systemVersion;
-    
-#ifndef TEAL_TARGET_WATCHOS
-    systemVersion = [[UIDevice currentDevice] systemVersion];
-#endif
-    
     if (batteryLevel)       mDict[TEALDataSourceKey_DeviceBatteryLevel] = batteryLevel;
     if (batteryIsCharging)  mDict[TEALDataSourceKey_DeviceIsCharging] = batteryIsCharging;
+#endif
+    
+#ifndef TEAL_TARGET_WATCHOS
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    if (systemVersion){
+        
+        mDict[TEALDataSourceKey_DeviceOSVersion] = systemVersion;
+        
+        // DEPRECATE after 5.0
+        mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
+    }
+#endif
+    
+    NSString *orientation = [self currentOrientation];
+    NSString *resolution = [self resolution];
+
     if (resolution)         mDict[TEALDataSourceKey_DeviceResolution] = resolution;
 
     if (orientation) {
@@ -66,13 +74,6 @@ static double deviceBatteryLevel;
         // DEPRECATE after 5.0
         mDict[TEALDataSourceKey_Orientation] = orientation;
         
-    }
-    if (systemVersion){
-        
-        mDict[TEALDataSourceKey_DeviceOSVersion] = systemVersion;
-        
-        // DEPRECATE after 5.0
-        mDict[TEALDataSourceKey_SystemVersion] = systemVersion;
     }
     
     return [NSDictionary dictionaryWithDictionary:mDict];

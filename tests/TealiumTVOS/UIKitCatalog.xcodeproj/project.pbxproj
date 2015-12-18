@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		717CCD121BFB9B670023A3C1 /* TealiumHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */; };
+		7184FABC1C220A2400D5EABB /* UIKitCatalogDirectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7184FABB1C220A2400D5EABB /* UIKitCatalogDirectTests.m */; };
 		71A0E6A21BFB9AE2002F43E8 /* TealiumHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */; };
 		71D084BD1BDBCC3C0059FB7C /* MenuSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5728BCB1B7AD4170052954A /* MenuSplitViewController.swift */; };
 		71D084BE1BDBCC3C0059FB7C /* ButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A935511B738C7B00439392 /* ButtonsViewController.swift */; };
@@ -234,19 +235,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7184FAC51C220A2400D5EABB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 710DE4421C15DA1D00FC3691;
+			remoteInfo = TealiumWATCHOSExtension;
+		};
 		71D084BB1BDBCC3C0059FB7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B5A9352D1B738BDC00439392 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = B5391A701B7D37BF0033BAF8;
 			remoteInfo = "UIKitCatalog Extension";
-		};
-		71E9DD5E1BDA7FAE00011633 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 37A759F11B56F70E00E6E9E2;
-			remoteInfo = Tealium;
 		};
 		71F0F24A1BF3961700C9B50F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -266,14 +267,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 71F0F3C31BF3979E00C9B50F;
+			remoteGlobalIDString = 717CCE1E1BFBD67C0023A3C1;
 			remoteInfo = TealiumTVOS;
 		};
 		71F0F5881BF3CA9500C9B50F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 71E9DD581BDA7FAE00011633 /* Tealium.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 71F0F3C31BF3979E00C9B50F;
+			remoteGlobalIDString = 717CCE1E1BFBD67C0023A3C1;
 			remoteInfo = TealiumTVOS;
 		};
 /* End PBXContainerItemProxy section */
@@ -304,6 +305,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7184FAB91C220A2400D5EABB /* UIKitCatalogDirectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitCatalogDirectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7184FABB1C220A2400D5EABB /* UIKitCatalogDirectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitCatalogDirectTests.m; sourceTree = "<group>"; };
+		7184FABD1C220A2400D5EABB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71A0E6A11BFB9AE2002F43E8 /* TealiumHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TealiumHelper.swift; sourceTree = "<group>"; };
 		71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitCatalogDirect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D0850D1BDBCC3D0059FB7C /* UIKitCatalog copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog copy-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-ios/tests/TealiumTVOS/UIKitCatalog copy-Info.plist"; sourceTree = "<absolute>"; };
@@ -565,6 +569,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7184FAB61C220A2400D5EABB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D084D81BDBCC3C0059FB7C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -591,6 +602,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7184FABA1C220A2400D5EABB /* UIKitCatalogDirectTests */ = {
+			isa = PBXGroup;
+			children = (
+				7184FABB1C220A2400D5EABB /* UIKitCatalogDirectTests.m */,
+				7184FABD1C220A2400D5EABB /* Info.plist */,
+			);
+			path = UIKitCatalogDirectTests;
+			sourceTree = "<group>";
+		};
 		71E9D9FF1BDA7E6600011633 /* Tealium Source Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,9 +622,9 @@
 		71E9DD591BDA7FAE00011633 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				71E9DD5F1BDA7FAE00011633 /* libTealium.a */,
 				71F0F24B1BF3961700C9B50F /* TealiumIOS.framework */,
 				71F0F4551BF3A13A00C9B50F /* TealiumTVOS.framework */,
+				7184FAC61C220A2400D5EABB /* TealiumWATCHOSExtension.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1059,6 +1079,7 @@
 				B5A935371B738BDC00439392 /* UIKitCatalog */,
 				B5391A731B7D37BF0033BAF8 /* UIKitCatalog Extension */,
 				B54796C41B85313600EC48F3 /* Resources */,
+				7184FABA1C220A2400D5EABB /* UIKitCatalogDirectTests */,
 				B5391A5F1B7D37870033BAF8 /* Frameworks */,
 				B5A935361B738BDC00439392 /* Products */,
 				71D0850D1BDBCC3D0059FB7C /* UIKitCatalog copy-Info.plist */,
@@ -1071,6 +1092,7 @@
 				B5A935351B738BDC00439392 /* UIKitCatalog.app */,
 				B5391A711B7D37BF0033BAF8 /* UIKitCatalog Extension.appex */,
 				71D085071BDBCC3C0059FB7C /* UIKitCatalogDirect.app */,
+				7184FAB91C220A2400D5EABB /* UIKitCatalogDirectTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1133,6 +1155,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7184FAB81C220A2400D5EABB /* UIKitCatalogDirectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7184FAC71C220A2400D5EABB /* Build configuration list for PBXNativeTarget "UIKitCatalogDirectTests" */;
+			buildPhases = (
+				7184FAB51C220A2400D5EABB /* Sources */,
+				7184FAB61C220A2400D5EABB /* Frameworks */,
+				7184FAB71C220A2400D5EABB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UIKitCatalogDirectTests;
+			productName = UIKitCatalogDirectTests;
+			productReference = 7184FAB91C220A2400D5EABB /* UIKitCatalogDirectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		71D084B71BDBCC3C0059FB7C /* UIKitCatalogDirect */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 71D085041BDBCC3C0059FB7C /* Build configuration list for PBXNativeTarget "UIKitCatalogDirect" */;
@@ -1199,6 +1238,9 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
+					7184FAB81C220A2400D5EABB = {
+						CreatedOnToolsVersion = 7.1;
+					};
 					B5391A701B7D37BF0033BAF8 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = XC939GDC9P;
@@ -1230,16 +1272,17 @@
 				B5A935341B738BDC00439392 /* UIKitCatalog */,
 				B5391A701B7D37BF0033BAF8 /* UIKitCatalog Extension */,
 				71D084B71BDBCC3C0059FB7C /* UIKitCatalogDirect */,
+				7184FAB81C220A2400D5EABB /* UIKitCatalogDirectTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		71E9DD5F1BDA7FAE00011633 /* libTealium.a */ = {
+		7184FAC61C220A2400D5EABB /* TealiumWATCHOSExtension.framework */ = {
 			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libTealium.a;
-			remoteRef = 71E9DD5E1BDA7FAE00011633 /* PBXContainerItemProxy */;
+			fileType = wrapper.framework;
+			path = TealiumWATCHOSExtension.framework;
+			remoteRef = 7184FAC51C220A2400D5EABB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		71F0F24B1BF3961700C9B50F /* TealiumIOS.framework */ = {
@@ -1259,6 +1302,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7184FAB71C220A2400D5EABB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D084D91BDBCC3C0059FB7C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1395,6 +1445,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7184FAB51C220A2400D5EABB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7184FABC1C220A2400D5EABB /* UIKitCatalogDirectTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		71D084BC1BDBCC3C0059FB7C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1596,6 +1654,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7184FABE1C220A2400D5EABB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = UIKitCatalogDirectTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tealium.UIKitCatalogDirectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7184FABF1C220A2400D5EABB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = UIKitCatalogDirectTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tealium.UIKitCatalogDirectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 		71D085051BDBCC3C0059FB7C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1772,6 +1856,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7184FAC71C220A2400D5EABB /* Build configuration list for PBXNativeTarget "UIKitCatalogDirectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7184FABE1C220A2400D5EABB /* Debug */,
+				7184FABF1C220A2400D5EABB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		71D085041BDBCC3C0059FB7C /* Build configuration list for PBXNativeTarget "UIKitCatalogDirect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

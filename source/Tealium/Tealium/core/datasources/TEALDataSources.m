@@ -120,6 +120,8 @@
     
 }
 
+// Hardcoded platform data
+
 static NSDictionary *staticCompileTimeDataSources;
 + (NSDictionary *) tealiumInfoDataSources {
     
@@ -129,13 +131,15 @@ static NSDictionary *staticCompileTimeDataSources;
         
         mDict[TEALDataSourceKey_LibraryVersion] = TEALLibraryVersion;
         
-#ifdef TARGET_TEAL_TVOS
-        mDict[TEALDataSourceKey_Platform] = @"tvOS";
+#ifdef TEAL_TARGET_TVOS
+        mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_TvOS;
+        mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_TV;
 #endif
-#ifdef TARGET_TEAL_IOS
-        mDict[TEALDataSourceKey_Platform] = @"iOS";
+        
+#ifdef TEAL_TARGET_IOS
+        mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_IOS;
+        mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Mobile;
 #endif
-        mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Origin;
 
         staticCompileTimeDataSources = [NSDictionary dictionaryWithDictionary:mDict];
     }
@@ -143,6 +147,8 @@ static NSDictionary *staticCompileTimeDataSources;
     return staticCompileTimeDataSources;
     
 }
+
+
 
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj {
     

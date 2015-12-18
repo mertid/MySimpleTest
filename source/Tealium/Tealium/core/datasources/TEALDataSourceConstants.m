@@ -104,16 +104,22 @@ NSString * const TEALDataSourceValue_Exception          = @"exception";
 NSString * const TEALDataSourceValue_ExceptionCaught    = @"caught";
 NSString * const TEALDataSourceValue_ExceptionUncaught  = @"uncaught";
 NSString * const TEALDataSourceValue_False              = @"false";
+NSString * const TEALDataSourceValue_IOS                = @"iOS";
 NSString * const TEALDataSourceValue_LifecycleLaunch    = @"launch";
 NSString * const TEALDataSourceValue_LifecycleWake      = @"wake";
 NSString * const TEALDataSourceValue_LifecycleSleep     = @"sleep";
 NSString * const TEALDataSourceValue_LifecycleTerminate = @"terminate";
 NSString * const TEALDataSourceValue_Link               = @"link";
-NSString * const TEALDataSourceValue_Origin             = @"mobile";
+NSString * const TEALDataSourceValue_Mobile             = @"mobile";
+//NSString * const TEALDataSourceValue_Origin             = @"mobile";
 NSString * const TEALDataSourceValue_Pagetype           = @"mobile_view";
 NSString * const TEALDataSourceValue_True               = @"true";
+NSString * const TEALDataSourceValue_TV                 = @"tv";
+NSString * const TEALDataSourceValue_TvOS               = @"tvOS";
 NSString * const TEALDataSourceValue_View               = @"view";
 NSString * const TEALDataSourceValue_Unknown            = @"unknown";
+NSString * const TEALDataSourceValue_WatchOS            = @"watchOS";
+NSString * const TEALDataSourceValue_Wearable           = @"wearable";
 
 
 #pragma mark - AudienceStream API Keys

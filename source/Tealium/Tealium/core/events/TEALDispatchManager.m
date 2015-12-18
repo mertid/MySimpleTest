@@ -107,6 +107,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     NSUInteger batchSize    = [self.configuration dispatchBatchSize];
     NSUInteger queueCount   = [self.queuedDispatches count];
     
+#warning Need a better way to log reason for batching / queueing
+    
     BOOL shouldBatch = batchSize > 1;
     
     if (!shouldBatch && queueCount == 0) {

@@ -8,17 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "Tealium.h"
-#import "Tealium+TagManagement.h"
-#import "Tealium+PrivateTestHeader.h"
+//#import "Tealium.h"
+//#import "Tealium+TagManagement.h"
+#import "Tealium+PrivateHeader.h"
+//#import "Tealium+PrivateTestHeader.h"
 #import "TEALSettings+PrivateHeader.h"
 #import "TealiumDelegateTestObject.h"
+
+NSString * const TEAL_TEALIUM_TEST_INSTANCE_ID = @"testTealium";
 
 @interface TealiumTests : XCTestCase <TealiumDelegate>
 
 @property (nonatomic) BOOL shouldQueue;
 @property (nonatomic) BOOL shouldDrop;
-@property (nonatomic, strong) Tealium *tealium;
+@property (nonatomic, strong) Tealium *library;
 //@property (nonatomic, strong) XCTestExpectation *testExpectation;
 
 @end
@@ -27,18 +30,15 @@
 
 - (void)setUp {
     [super setUp];
-    self.tealium = [Tealium newInstanceForKey:@"testInstance"
-                                configuration:[self defaultConfig]];
-//    self.testExpectation = [self expectationWithDescription:@"testExpectation"];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     self.shouldDrop = NO;
     self.shouldQueue = NO;
-    [Tealium destroyInstanceForKey:@"testInstance"];
-//    self.testExpectation = nil;
+    self.library = nil;
+    
     [super tearDown];
 }
 
@@ -48,12 +48,45 @@
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-//    config.autotrackingUIEventsEnabled = NO;
-//    config.autotrackingViewsEnabled = NO;
-    
     return config;
 }
 
+#pragma mark - HELPERS
+    
+- (TEALConfiguration *) liveConfig {
+    
+    return [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                               profile:@"demo"
+                                           environment:@"dev"];
+}
+
+- (TEALConfiguration *) nonExistentConfig {
+    
+    return [TEALConfiguration configurationWithAccount:@"what"
+                                               profile:@"who"
+                                           environment:@"wow"];
+    
+}
+
+- (void) useLiveLibraryInstance {
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
+    
+    self.library = [Tealium newInstanceForKey:TEAL_TEALIUM_TEST_INSTANCE_ID
+                                configuration:[self liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       if (error){
+                                           NSLog(@"%s error:%@", __FUNCTION__, error);
+                                       }
+                                       
+                                       [expectation fulfill];
+                                       
+                                   }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+    
 #pragma mark - PUBLIC APIs TESTS
 
 #pragma mark - Lifecycle Tests
@@ -221,151 +254,57 @@
 
 - (void) testSetAndRemoveDelegate {
     
-    [self.tealium setDelegate:self];
+    [self useLiveLibraryInstance];
     
-    XCTAssertTrue([self.tealium delegate] == self, @"Delegate did not set to test object.");
+    [self.library setDelegate:self];
     
-    [self.tealium setDelegate:nil];
+    XCTAssertTrue([self.library delegate] == self, @"Delegate did not set to test object.");
     
-    XCTAssertFalse([self.tealium delegate], @"Delegate did not clear.");
+    [self.library setDelegate:nil];
+    
+    XCTAssertFalse([self.library delegate], @"Delegate did not clear.");
 }
 
 - (void) testUnimplementedDelegateMethods {
     
+    [self useLiveLibraryInstance];
+    
     TealiumDelegateTestObject *testDelegate = [TealiumDelegateTestObject new];
     
-    [self.tealium setDelegate:testDelegate];
+    [self.library setDelegate:testDelegate];
     
-    [self.tealium trackEventWithTitle:@"testCall" dataSources:nil];
+    [self.library trackEventWithTitle:@"testCall" dataSources:nil];
     
-    id <TealiumDelegate> delegate = [self.tealium delegate];
+    id <TealiumDelegate> delegate = [self.library delegate];
     
     XCTAssertTrue(delegate == testDelegate, @"testDelegate did not take.");
     
     // This will cause a crash if the optional delegates are not trully optional
 }
 
-#pragma mark - TRACK Tests
-
-- (void) testTrackEvents {
-    
-#warning TODO
-    // no title no data
-    
-    // title no data
-    
-    // title + data
-    
-    // no title + data
-    
-}
-
-- (void) testTrackViews {
-    
-#warning TODO
-    // no title no data
-    
-    // title no data
-    
-    // title + data
-    
-    // no title + data
-}
-
-#pragma mark - Volatile Data Sources
-
-- (void) testKeyCheckOfVolatileDataSourcesCopy {
-    
-    
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-//    config.autotrackingCrashesEnabled = YES;
-//    config.autotrackingDeviceInfoEnabled = YES;
-//    config.autotrackingIvarsEnabled = YES;
-//    config.autotrackingLifecycleEnabled = YES;
-//    config.autotrackingUIEventsEnabled = YES;
-//    config.autotrackingViewsEnabled = YES;
-    
-    Tealium *instance = [Tealium newInstanceForKey:@"volatileTest" configuration:config];
-    
-    NSDictionary *dataSources = [instance volatileDataSourcesCopy];
-    
-        NSLog(@"%s dataSources: \n%@", __FUNCTION__, dataSources);
-    
-#warning CHECK dataSources for expected keys + values
-
-    
-}
-
-//- (void) testAddSingleVolatileDataSource {
-//    
-//#warning REWRITE to check an immediate track call instead.
-//
-//    Tealium *instance = self.tealium;
-//    
-//    [instance setDelegate:self];
-//    
-//    self.shouldDrop = YES;
-//    
-//    NSString *key = @"testKey";
-//    NSString *value = @"testValue";
-//    
-//    [instance addVolatileDataSources:@{key:value}];
-//    
-//    [instance trackEventWithTitle:@"testEvent" dataSources:nil];
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:nil];
-//    
-//    NSDictionary *volatileDataSources = [instance volatileDataSourcesCopy];
-//    
-//    XCTAssertTrue([volatileDataSources[key] isEqualToString:value],
-//                  @"addVolatile dataSource failed.");
-//    
-//}
-
-
-#pragma mark - Persistent Data Sources
-
-- (void) testPersistentDataSourcesCopy {
-    
-#warning TODO
-    
-}
-
-- (void) testAddPersistentDataSources {
-    
-#warning TODO
-    
-}
-
-- (void) testRemovePersistentDataSources {
-    
-#warning TODO
-    
-}
 
 #pragma mark - LIBRARY DELEGATES
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
+        NSLog(@"%s ", __FUNCTION__);
 }
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     
+        NSLog(@"%s <# message #>", __FUNCTION__);
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
-    
-//    if (self.testExpectation){
-//        [self.testExpectation fulfill];
-//    }
+
+        NSLog(@"%s ", __FUNCTION__);
     
     return self.shouldDrop;
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldQueueDispatch:(TEALDispatch *)dispatch {
+    
+        NSLog(@"%s ", __FUNCTION__);
     
     return self.shouldQueue;
 }

@@ -19,5 +19,6 @@ FOUNDATION_EXPORT const unsigned char TealiumWATCHOSVersionString[];
 #import <TealiumWATCHOS/TEALWKExtension.h>
 #import <TealiumWATCHOS/TEALWKExtensionConfiguration.h>
 #import <TealiumWATCHOS/TEALWKConstants.h>
+#import <TealiumWATCHOS/TEALLogger.h>
 
 

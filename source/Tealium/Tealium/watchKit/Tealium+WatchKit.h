@@ -35,6 +35,9 @@
 /**
  *  Called on the delegate of the receiver. Will be called on startup if the
  incoming message caused the receiver to launch.
+ *
+ *  @param session WCSession responding.
+ *  @param message Message from Watch Extension.
  */
 - (void)session:(WCSession *)session
 didReceiveMessage:(NSDictionary<NSString *, id> *)message;
@@ -44,7 +47,9 @@ didReceiveMessage:(NSDictionary<NSString *, id> *)message;
  expects a reply. Will be called on startup if the incoming message caused the
  receiver to launch.
  *
- *  @param
+ *  @param session WCSession responding.
+ *  @param message Message from Watch Extension.
+ *  @param replyHandler Block responding.
  */
 - (void)session:(WCSession *)session
 didReceiveMessage:(NSDictionary<NSString *, id> *)message

@@ -7,8 +7,9 @@
 //
 
 #import "Tealium+WatchKit.h"
-#import "TEALWKConstants.h"
+#import "TEALDataSourceConstants.h"
 #import "TEALError.h"
+#import "TEALWKConstants.h"
 
 typedef void (^tealiumEndBGTask)();
 
@@ -22,7 +23,11 @@ typedef void (^tealiumEndBGTask)();
     
     Tealium *instance = [Tealium instanceForKey:targetInstanceID];
     
-    return instance;
+    if ( instance){
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 #pragma mark - WC SESSION DELEGATE
@@ -45,7 +50,9 @@ typedef void (^tealiumEndBGTask)();
     
     NSError *error = nil;
     
-    [self processTrackCallFromPayload:tealiumPayload error:error];
+    NSDictionary *finalPaylod = [self finalPayloadFromRawPayload:tealiumPayload];
+    
+    [self processTrackCallFromPayload:finalPaylod error:error];
     
     // Create background processing block with end callback
     tealiumEndBGTask endBlock = [self endBlock];
@@ -69,6 +76,20 @@ typedef void (^tealiumEndBGTask)();
                    @"message":message});
     }
 }
+
+- (NSDictionary *) finalPayloadFromRawPayload:(NSDictionary *)payload {
+
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
+    mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_WatchOS;
+    mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Wearable;
+    
+    [mDict addEntriesFromDictionary:payload];
+
+    return [NSDictionary dictionaryWithDictionary:mDict];
+    
+}
+
 
 - (tealiumEndBGTask) endBlock {
     

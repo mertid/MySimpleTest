@@ -100,19 +100,25 @@ extern NSString * const TEALDataSourceValue_ConnectionCellular;
 extern NSString * const TEALDataSourceValue_ConnectionWifi;
 extern NSString * const TEALDataSourceValue_EventName;
 extern NSString * const TEALDataSourceValue_False;
+extern NSString * const TEALDataSourceValue_IOS;
 extern NSString * const TEALDataSourceValue_LifecycleLaunch;
 extern NSString * const TEALDataSourceValue_LifecycleWake;
 extern NSString * const TEALDataSourceValue_LifecycleSleep;
 extern NSString * const TEALDataSourceValue_LifecycleTerminate;
 extern NSString * const TEALDataSourceValue_Link;
-extern NSString * const TEALDataSourceValue_Origin;
+//extern NSString * const TEALDataSourceValue_Origin;
+extern NSString * const TEALDataSourceValue_Mobile;
 extern NSString * const TEALDataSourceValue_Pagetype;
 extern NSString * const TEALDataSourceValue_True;
+extern NSString * const TEALDataSourceValue_TV;
+extern NSString * const TEALDataSourceValue_TvOS;
 extern NSString * const TEALDataSourceValue_View;
 extern NSString * const TEALDataSourceValue_Exception;
 extern NSString * const TEALDataSourceValue_ExceptionCaught;
 extern NSString * const TEALDataSourceValue_ExceptionUncaught;
 extern NSString * const TEALDataSourceValue_Unknown;
+extern NSString * const TEALDataSourceValue_WatchOS;
+extern NSString * const TEALDataSourceValue_Wearable;
 
 
 #pragma mark - Collect API Keys
