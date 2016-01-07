@@ -258,6 +258,8 @@
 		71BB34021C29CA3A0075689C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC13AE01933D95700915353 /* Main.storyboard */; };
 		71BB34031C29CA3A0075689C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C805721B1A7BDE00C110F1 /* Search.storyboard */; };
 		71D61A9D1C28B62200F298AE /* __x_FrameworkUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D61A9C1C28B62200F298AE /* __x_FrameworkUITests.m */; };
+		71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */ = {isa = PBXBuildFile; fileRef = 71DC9BCE1C3F168E0038855D /* ios_data_sources.json */; };
+		71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */ = {isa = PBXBuildFile; fileRef = 71DC9BCE1C3F168E0038855D /* ios_data_sources.json */; };
 		B5C300DF1B0FC4F1003B05A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */; };
 		B5C805741B1A7BDE00C110F1 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C805721B1A7BDE00C110F1 /* Search.storyboard */; };
 		B5E280FA1B1D03F800920B27 /* AAPLStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E280F91B1D03F800920B27 /* AAPLStackViewController.m */; };
@@ -553,6 +555,7 @@
 		71D61A9A1C28B62200F298AE /* 5.x+FrameworkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "5.x+FrameworkUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D61A9C1C28B62200F298AE /* __x_FrameworkUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = __x_FrameworkUITests.m; sourceTree = "<group>"; };
 		71D61A9E1C28B62200F298AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71DC9BCE1C3F168E0038855D /* ios_data_sources.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ios_data_sources.json; sourceTree = "<group>"; };
 		B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5C805731B1A7BDE00C110F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Search.storyboard; sourceTree = "<group>"; };
 		B5E280F81B1D03F800920B27 /* AAPLStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLStackViewController.h; sourceTree = "<group>"; };
@@ -808,6 +811,7 @@
 			children = (
 				710E1C1F1C29ABD7007BABF7 /* autotracking */,
 				710E1C211C29ABD7007BABF7 /* classes */,
+				71DC9BCD1C3F168E0038855D /* DataSources */,
 				710E1C351C29ABD7007BABF7 /* helpers */,
 				710E1C391C29ABD7007BABF7 /* mps */,
 				710E1C3E1C29ABD7007BABF7 /* README.md */,
@@ -1217,6 +1221,14 @@
 			path = "5.x+FrameworkUITests";
 			sourceTree = "<group>";
 		};
+		71DC9BCD1C3F168E0038855D /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				71DC9BCE1C3F168E0038855D /* ios_data_sources.json */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1426,6 +1438,7 @@
 			files = (
 				710E1C501C29ABD7007BABF7 /* tagmanagement_OFF.html in Resources */,
 				710E1C511C29ABD7007BABF7 /* tagmanagement_ON.html in Resources */,
+				71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */,
 				710E1C4F1C29ABD7007BABF7 /* audiencestream_ON.html in Resources */,
 				710E1C4E1C29ABD7007BABF7 /* audiencestream_OFF.html in Resources */,
 				710E1C3F1C29ABD7007BABF7 /* lifecycle_events.xml in Resources */,
@@ -1580,6 +1593,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */,
 				712BAEFD1C29BCBD007767CD /* TEALConfigurationTests.m in Sources */,
 				712BAEFE1C29BCBD007767CD /* TEALDatasourcesTests.m in Sources */,
 				712BAEFF1C29BCBD007767CD /* TEALDispatchTests.m in Sources */,

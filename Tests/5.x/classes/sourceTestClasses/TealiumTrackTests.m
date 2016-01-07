@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import <Foundation/Foundation.h>
 #import "TEALTestHelper.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings+PrivateHeader.h"
@@ -19,6 +20,9 @@
 @property Tealium *library;
 
 @end
+
+
+NSString * const versionToTest = @"5.0.0";
 
 @implementation TealiumTrackTests
 
@@ -36,28 +40,24 @@
 
 #pragma mark - HELPERS
 
-//- (void) useLiveLibraryInstance {
-//    
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
-//    
-//    self.library = [Tealium newInstanceForKey:TEAL_TEALIUMTRACK_TEST_INSTANCE_ID
-//                                configuration:[self liveConfig]
-//                                   completion:^(BOOL success, NSError * _Nullable error) {
-//                                       
-//                                       if (error){
-//                                           NSLog(@"%s error:%@", __FUNCTION__, error);
-//                                       }
-//                                       
-//                                       [expectation fulfill];
-//                                       
-//                                   }];
-//    
-//    [self waitForExpectationsWithTimeout:2.0 handler:nil];
-//}
+- (void) startLiveConfigLibrary {
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+
+}
 
 #pragma mark - TESTS
 
-- (void) testTrackEventsNoTitleNoData {
+- (void) testTrackEventWithTitleAndData {
     
     __block BOOL isReady = NO;
     
@@ -83,6 +83,7 @@
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                withPayload:testDataSources];
     
+    // Title + testData
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                          
@@ -92,26 +93,13 @@
                          
                          XCTAssert([dispatchData[TEAL_TEST_DATASOURCE_KEY] isEqualToString:TEAL_TEST_DATASOURCE_STRING_VALUE], @"Incorrect test value in payload.");
                          
+                         XCTAssert([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
+                         
                      }];
     
-#warning TODO
-    // no title no data
-    
-    // title no data
-    
-    // title + data
-    
-    // no title + data
-    
-    XCTFail(@"Incomplete Test");
-    
 }
 
-- (void) testTrackEventNoTitleWithData {
-    
-}
-
-- (void) testTrackEventWithTitleAndData {
+- (void) testTrackEventNoTitleNoData {
     
     __block BOOL isReady = NO;
     
@@ -125,66 +113,133 @@
                                    }];
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
+                                               withPayload:nil];
+    
+    // Title + testData
+    [self.library trackDispatch:dispatch
+                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+                         
+                         XCTAssert(!error, @"Error in track call detected");
+                         
+                         NSDictionary *dispatchData = returnDispatch.payload;
+                         
+                         XCTAssert(!dispatchData[TEAL_TEST_DATASOURCE_KEY], @"Test value in payload when none should have been.");
+                         
+                         XCTAssert(!dispatchData[TEALDataSourceKey_EventTitle], "Title found when none should have been.");
+                         
+                     }];
+    
+}
+
+
+- (void) testTrackViews {
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
 
     
-    NSString *testTitle = @"testEventTitle";
+    NSString *testTitle = @"testViewTitle";
     
     NSDictionary *testDataSources = @{
-                                      TEALDataSourceKey_EventTitle: testTitle,
-                                      @"testKey":@"testValue"
+                                      TEALDataSourceKey_ViewTitle: testTitle,
+                                      TEAL_TEST_DATASOURCE_KEY: TEAL_TEST_DATASOURCE_STRING_VALUE
                                       };
     
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                withPayload:testDataSources];
     
     [self.library trackDispatch:dispatch
-                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+                         
+                         
+                         XCTAssert(!error, @"Error in track call detected");
+                         
+                         NSDictionary *dispatchData = returnDispatch.payload;
+                         
+                         XCTAssert([dispatchData[TEAL_TEST_DATASOURCE_KEY] isEqualToString:TEAL_TEST_DATASOURCE_STRING_VALUE], @"Incorrect test value in payload.");
+                         
+                         XCTAssert([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
                          
                      }];
     
 }
 
-- (void)testTrackEventWithTitleNoData {
+- (NSDictionary *)dataSourcesForCurrentVersion{
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources" ofType:@"json"];
     
-}
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    
+    if (!data) {
+        XCTFail("Could not retrieve ios_data_sources.json file.");
+        return nil;
+    }
+    
+    NSError *error = nil;
+    
+    id content = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    
+    if (![content isKindOfClass:[NSDictionary class]]){
+        XCTFail("ios_data_sources.json not of correct dictionary format, error: %@", error);
+        return nil;
+    }
+    
+    NSDictionary *requiredDataSources = (NSDictionary*)content;
+    
+    return requiredDataSources[versionToTest];
 
-- (void) testTrackViews {
-    
-#warning TODO
-    // no title no data
-    
-    // title no data
-    
-    // title + data
-    
-    // no title + data
-    
-    XCTFail(@"Incomplete Test");
-    
 }
-
 
 - (void) testFinalDispatchDataSourcesForEvents {
     
-    // Create json file with all expected datasource keys
+    [self startLiveConfigLibrary];
+    
+    NSDictionary *requiredEventDataSources = [self dataSourcesForCurrentVersion][@"event"];
     
     // make a call to finalDispatchDataSources
+    NSDictionary *dispatchData = [self.library finalDispatchDataSourcesForDispatchType:TEALDispatchTypeEvent title:@"test" dataSources:nil];
     
-    // check data sources from resulting dict against test json file keys
+    NSArray *requiredKeys = [requiredEventDataSources allKeys];
     
-    XCTAssert("Complete test");
+    for (NSString *key in requiredKeys) {
+        
+        NSString *dispatchValue = dispatchData[key];
+        
+        XCTAssert(dispatchValue, "Key-value missing from dispatch data: %@", key);
+        
+    }
     
 }
 
 - (void) testFinalDispatchDataSourcesForViews {
     
-    // Create json file with all expected datasource keys
+    [self startLiveConfigLibrary];
+    
+    NSDictionary *requiredEventDataSources = [self dataSourcesForCurrentVersion][@"view"];
     
     // make a call to finalDispatchDataSources
+    NSDictionary *dispatchData = [self.library finalDispatchDataSourcesForDispatchType:TEALDispatchTypeView title:@"test" dataSources:nil];
     
-    // check data sources from resulting dict against test json file keys
+    NSArray *requiredKeys = [requiredEventDataSources allKeys];
     
-    XCTAssert("Complete test");
+    for (NSString *key in requiredKeys) {
+        
+        NSString *dispatchValue = dispatchData[key];
+        
+        XCTAssert(dispatchValue, "Key-value missing from dispatch data: %@", key);
+        
+    }
     
 }
 
