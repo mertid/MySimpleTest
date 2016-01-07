@@ -120,6 +120,21 @@
     
 }
 
+//+ (NSDictionary *) queueDataSources:(NSDictionary *)existingPayload {
+//    
+//    if (existingPayload[TEALDataSourceKey_WasQueued]){
+//        return @{TEALDataSourceKey_WasQueued : existingPayload[TEALDataSourceKey_WasQueued]};
+//    }
+//    
+//    NSString *wasQueued = TEALDataSourceValue_False;
+//    
+//    if (![self isReachable]){
+//        wasQueued = TEALDataSourceValue_True;
+//    }
+//    
+//    return @{TEALDataSourceKey_WasQueued:wasQueued};
+//}
+
 // Hardcoded platform data
 
 static NSDictionary *staticCompileTimeDataSources;

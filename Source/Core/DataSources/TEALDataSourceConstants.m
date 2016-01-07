@@ -21,7 +21,7 @@ NSString * const TEALDataSourceKey_ApplicationRDNS      = @"app_rdns";
 NSString * const TEALDataSourceKey_ApplicationVersion   = @"app_version";
 NSString * const TEALDataSourceKey_AssociatedViewTitle  = @"associated_screen_title";
 NSString * const TEALDataSourceKey_Autotracked          = @"autotracked";
-NSString * const TEALDataSourceKey_CallType             = @"callType";
+NSString * const TEALDataSourceKey_CallType             = @"call_type";
 
 NSString * const TEALDataSourceKey_Carrier              = @"carrier";
 NSString * const TEALDataSourceKey_CarrierISO           = @"carrier_iso";

@@ -38,15 +38,6 @@
     [super tearDown];
 }
 
-//- (TEALConfiguration *) defaultConfig {
-//    
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                        profile:@"demo"
-//                    environment:@"dev"];
-//    
-//    return config;
-//}
-
 #pragma mark - HELPERS
 
 - (void) useLiveLibraryInstance {
@@ -253,7 +244,7 @@
     
 }
 
-#pragma mark - Delegate Tests
+#pragma mark - DELEGATE TESTS
 
 - (void) testSetAndRemoveDelegate {
     

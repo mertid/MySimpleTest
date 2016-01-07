@@ -164,4 +164,28 @@
 }
 
 
+- (void) testFinalDispatchDataSourcesForEvents {
+    
+    // Create json file with all expected datasource keys
+    
+    // make a call to finalDispatchDataSources
+    
+    // check data sources from resulting dict against test json file keys
+    
+    XCTAssert("Complete test");
+    
+}
+
+- (void) testFinalDispatchDataSourcesForViews {
+    
+    // Create json file with all expected datasource keys
+    
+    // make a call to finalDispatchDataSources
+    
+    // check data sources from resulting dict against test json file keys
+    
+    XCTAssert("Complete test");
+    
+}
+
 @end
