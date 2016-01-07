@@ -28,7 +28,6 @@
 
 - (void) tearDown {
     
-//    [[Tealium sharedInstance] disable];
     self.library = nil;
     self.configuration = nil;
     

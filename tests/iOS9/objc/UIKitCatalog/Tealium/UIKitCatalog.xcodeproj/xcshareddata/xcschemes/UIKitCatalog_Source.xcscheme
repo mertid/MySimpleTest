@@ -40,6 +40,18 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "TealiumConfigurationsTests/testAnything">
+               </Test>
+               <Test
+                  Identifier = "TealiumDataManagmentTests/testAddAndRemoveVolatileDataSource">
+               </Test>
+               <Test
+                  Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
+               </Test>
+               <Test
+                  Identifier = "TealiumTrackTests/testTrackViews">
+               </Test>
+               <Test
                   Identifier = "__x_FrameworkUITests">
                </Test>
             </SkippedTests>

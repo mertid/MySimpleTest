@@ -11,15 +11,15 @@
 #pragma mark - Configuration Types
 
 /**
- *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested from AudienceStream
+ *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested
  */
 typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
     /**
-     *  On request only, will only poll AudienceStream with the fetchVisitorProfileWithCompletion: method
+     *  On request only, will only poll with the fetchVisitorProfileWithCompletion: method
      */
     TEALVisitorProfilePollingFrequencyOnRequest = 1,
     /**
-     *  After each event (sendEventWithData: or sendViewWithData:) an updated visitor profile will be requested.
+     *  After each track event (trackEventWithTitle:dataSources: or trackViewWithTitle:dataSources:) an updated visitor profile will be requested.
      */
     TEALVisitorProfilePollingFrequencyAfterEveryEvent
 };

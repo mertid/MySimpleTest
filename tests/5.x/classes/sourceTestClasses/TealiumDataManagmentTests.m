@@ -34,6 +34,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
     
+    __block BOOL fullfilled = NO;
+    
     self.library = [Tealium newInstanceForKey:self.description
                                 configuration:[TEALTestHelper liveConfig]
                                    completion:^(BOOL success, NSError * _Nullable error) {
@@ -42,7 +44,10 @@
                                            NSLog(@"%s error:%@", __FUNCTION__, error);
                                        }
                                        
-                                       [expectation fulfill];
+                                       if (!fullfilled){
+                                           [expectation fulfill];
+                                           fullfilled = YES;
+                                        }
                                        
                                    }];
     
