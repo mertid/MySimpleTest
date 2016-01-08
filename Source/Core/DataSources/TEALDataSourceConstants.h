@@ -106,7 +106,6 @@ extern NSString * const TEALDataSourceValue_LifecycleWake;
 extern NSString * const TEALDataSourceValue_LifecycleSleep;
 extern NSString * const TEALDataSourceValue_LifecycleTerminate;
 extern NSString * const TEALDataSourceValue_Link;
-//extern NSString * const TEALDataSourceValue_Origin;
 extern NSString * const TEALDataSourceValue_Mobile;
 extern NSString * const TEALDataSourceValue_Pagetype;
 extern NSString * const TEALDataSourceValue_True;

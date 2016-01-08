@@ -145,35 +145,14 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 }
 
-//- (NSDictionary *) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
-//                                                     title:(NSString *)title
-//                                               dataSources:(NSDictionary *)dataSources {
-//#warning add Platform key!
-//    
-//    NSDictionary *timestampDataSources = [self timestampDataSourcesForDataSources:dataSources];
-//    NSDictionary *universalInfo = [self universalTrackDataSources];
-//    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
-//    
-//    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-//                                                                                    universalInfo? universalInfo:@{},
-//                                                                                    captureTimeDataSources? captureTimeDataSources:@{},
-//                                                                                    timestampDataSources,
-//                                                                                    dataSources? dataSources:@{}
-//                                                                                    ]];
-//    
-//    
-//    return compositeDataSources;
-//}
-
 - (NSDictionary *) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
                                                      title:(NSString *)title
                                                dataSources:(NSDictionary *)dataSources {
-#warning add Platform key!
     
-    // Configurable Options
+    // Configurable / Variable Options
     NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
-    NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources];
+    NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources:dataSources];
     NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
     
     // Non-configurable Options

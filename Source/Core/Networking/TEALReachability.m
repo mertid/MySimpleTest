@@ -453,14 +453,49 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 #pragma mark - TEALIUM
 
-- (NSDictionary *)connectionDataSources {
+- (NSDictionary *) reachabilityDataSources:(NSDictionary *)clientDataSources {
+    
+    NSString * connectionValue = [self connectionDataSourceValue];
+    NSString * wasQueuedValue = [self wasQueuedDataSourceValue:clientDataSources];
+    
+    if (wasQueuedValue){
+        return @{
+                 TEALDataSourceKey_ConnectionType: connectionValue,
+                 TEALDataSourceKey_WasQueued: wasQueuedValue
+                 };
+    }
+    
+    return @{
+             TEALDataSourceKey_ConnectionType: connectionValue
+             };
+}
+
+- (NSString *)connectionDataSourceValue {
     
     NSString *connectionType = nil;
     if ([self isReachableViaWiFi]) connectionType = TEALDataSourceValue_ConnectionWifi;
     if ([self isReachableViaWWAN]) connectionType = TEALDataSourceValue_ConnectionCellular;
     
-    if (connectionType) return @{TEALDataSourceKey_ConnectionType:connectionType};
-    return @{};
+    return connectionType;
+    
+}
+
+- (NSString *)wasQueuedDataSourceValue: (NSDictionary *) clientDataSources {
+    
+    if (clientDataSources[TEALDataSourceKey_WasQueued]) {
+        
+        // Client data sources are always added at the end, so we're going
+        // to for go a response here and simply use the client data instead.
+        return nil;
+    }
+    
+    NSString * value = TEALDataSourceValue_False;
+    
+    if ([self currentReachabilityStatus] == TEALNetworkStatusNotReachable) {
+        value = TEALDataSourceValue_True;
+    }
+    
+    return value;
     
 }
 

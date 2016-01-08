@@ -121,11 +121,10 @@
     
 }
 
-- (NSDictionary *) reachabilityDataSources {
-    // Currently just returning connection data sources if available
+- (NSDictionary *) reachabilityDataSources: (NSDictionary *) clientDataSources {
     
 #ifndef TEAL_TARGET_WATCHOS
-    return [self.reachability connectionDataSources];
+    return [self.reachability reachabilityDataSources:clientDataSources];
 #endif
     return @{};
 
