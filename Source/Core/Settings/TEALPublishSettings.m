@@ -44,6 +44,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
 @interface TEALPublishSettings()
 
 @property (nonatomic, strong) NSDictionary *privateRawPublishSettings;
+@property (nonatomic) NSString * privateOverrideLogLevel;
+
 
 @end
 
@@ -252,7 +254,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         _minutesBetweenRefresh          = 1.0;
         _numberOfDaysDispatchesAreValid = -1.0;
         _offlineDispatchQueueSize       = 100; // -1 is supposed to be inf. but yeah thats alot
-        _overrideLogLevel               = nil;
+        _privateOverrideLogLevel               = nil;
         
         _status                         = TEALPublishSettingsStatusDefault;
         _url                            = url;
@@ -301,8 +303,8 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     if (self.offlineDispatchQueueSize != otherPublishSettings.offlineDispatchQueueSize) return NO;
     
     // isEqualToString returns NO if both strings are nil - should return YES for our use
-    if ((self.overrideLogLevel && otherPublishSettings.overrideLogLevel) &&
-        ![self.overrideLogLevel isEqualToString:otherPublishSettings.overrideLogLevel]) return NO;
+    if ((self.privateOverrideLogLevel && otherPublishSettings.privateOverrideLogLevel) &&
+        ![self.privateOverrideLogLevel isEqualToString:otherPublishSettings.privateOverrideLogLevel]) return NO;
     
     if (self.status != otherPublishSettings.status) return NO;
     if (![self.url isEqualToString:otherPublishSettings.url]) return NO;
@@ -331,6 +333,17 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     [TEALPublishSettingsStore archivePublishSettings:self];
     
 }
+
+- (NSString *) overrideLogLevel {
+    
+    if (!self.privateOverrideLogLevel){
+        return nil;
+    }
+    
+    return self.privateOverrideLogLevel;
+    
+}
+
 
 #pragma mark - PRIVATE
 
@@ -366,7 +379,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
         
         _minutesBetweenRefresh          = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyMinutesBetweenRefresh];
         _numberOfDaysDispatchesAreValid = [aDecoder decodeDoubleForKey:TEALPublishSettingKeyDispatchExpiration];
-        _overrideLogLevel = [aDecoder decodeObjectForKey:TEALPublishSettingKeyOverrideLog];
+        _privateOverrideLogLevel = [aDecoder decodeObjectForKey:TEALPublishSettingKeyOverrideLog];
         _url                            = [aDecoder decodeObjectOfClass:[NSString class] forKey:TEALPublishSettingKeyUrl];
 
         TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
@@ -405,7 +418,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     [aCoder encodeBool:self.disableCrashAutotracking forKey:TEALPublishSettingKeyDisableCrashAutotracking];
     [aCoder encodeBool:self.disableMobileCompanion forKey:TEALPublishSettingKeyDisableMobileCompanion];
     
-    [aCoder encodeObject:self.overrideLogLevel forKey:TEALPublishSettingKeyOverrideLog];
+    [aCoder encodeObject:self.privateOverrideLogLevel forKey:TEALPublishSettingKeyOverrideLog];
     
 }
 
@@ -520,7 +533,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
     }
     
     if (overrideLog) {
-        self.overrideLogLevel = overrideLog;
+        self.privateOverrideLogLevel = overrideLog;
     }
     
     self.status = TEALPublishSettingsStatusLoadedRemote;
@@ -543,7 +556,7 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                             @"enable Collect":[NSString teal_stringFromBool:self.enableCollect],
                                             @"enable S2S Legacy":[NSString teal_stringFromBool:self.enableS2SLegacy],
                                             @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement],
-                                            @"override log level":[NSString teal_dictionarySafeString:self.overrideLogLevel]
+                                            @"override log level":[NSString teal_dictionarySafeString:self.privateOverrideLogLevel]
                                             };
     
     NSString *description = [NSString stringWithFormat:@"Remote settings from %@", [TEALPublishSettings statusStringFromPublishSettingStatusType:self.status]];

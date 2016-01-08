@@ -419,11 +419,11 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     // Init logger
-    self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
+    self.logger = [[TEALLogger alloc] initWithInstanceID:self.settings.instanceID];
     
-    [self.logger updateLogLevel:[self.settings logLevelString]];
-    
-    [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
+    if ([self.logger updateLogLevel:[self.settings logLevelString]]){
+        [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
+    }
     
     if (!error &&
         !self.logger) {
@@ -767,9 +767,11 @@ __strong static NSDictionary *staticAllInstances = nil;
             
             [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
             
-            [weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]];
+            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
             
-            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+            
+            }
             
             [weakSelf updateModules];
             

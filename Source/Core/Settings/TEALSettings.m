@@ -378,13 +378,12 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
 
 - (NSString *) logLevelString {
     
-    NSString *finalLogLevelString = [self publishSettings].overrideLogLevel;
-    
+    NSString * finalLogLevelString = self.configuration.environmentName;
+
     if (!finalLogLevelString){
         
-        // Automatic off of env setting
-        finalLogLevelString = self.configuration.environmentName;
-        
+        finalLogLevelString = [[self publishSettings] overrideLogLevel];
+
     }
     
     return finalLogLevelString;

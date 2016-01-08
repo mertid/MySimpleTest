@@ -42,7 +42,6 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) NSUInteger dispatchSize; // batching
 @property (nonatomic) NSUInteger offlineDispatchQueueSize;
 @property (nonatomic) NSString * _Nonnull publishSettingsVersion;
-@property (nonatomic) NSString * _Nullable overrideLogLevel;
 @property (nonatomic) double minutesBetweenRefresh;
 @property (nonatomic) double numberOfDaysDispatchesAreValid;
 @property (nonatomic) BOOL enableLowBatterySuppress;
@@ -72,5 +71,6 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings * _Nonnull)otherPublishSettings;
 - (BOOL) areNewRawPublishSettings:(NSDictionary * _Nonnull)rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
+- (NSString * _Nullable) overrideLogLevel;
 
 @end

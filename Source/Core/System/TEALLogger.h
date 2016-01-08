@@ -35,23 +35,23 @@ typedef NS_ENUM(NSUInteger, TEALLogLevel){
 
 @interface TEALLogger : NSObject
 
-+ (TEALLogLevel) logLevelFromString:(NSString*)string;
++ (TEALLogLevel) logLevelFromString:(NSString* _Nonnull)string;
 
-+ (NSString *) stringFromLogLevel:(TEALLogLevel) logLevel;
++ (NSString * _Nonnull) stringFromLogLevel:(TEALLogLevel) logLevel;
 
-- (instancetype) initWithInstanceID:(NSString *)instanceID;
+- (instancetype _Nonnull) initWithInstanceID:(NSString * _Nonnull)instanceID;
 
 - (void) enable;
 
 - (void) disable;
 
-- (void) updateLogLevel:(NSString *)logLevelString;
+- (BOOL) updateLogLevel:(NSString * _Nullable)logLevelString;
 
-- (void) logProd:(NSString *) format, ...;
+- (void) logProd:(NSString * _Nonnull) format, ...;
 
-- (void) logQA:(NSString *) format, ...;
+- (void) logQA:(NSString * _Nonnull) format, ...;
 
-- (void) logDev:(NSString *) format, ...;
+- (void) logDev:(NSString * _Nonnull) format, ...;
 
 - (TEALLogLevel) currentLogLevel;
 

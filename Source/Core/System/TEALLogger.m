@@ -83,9 +83,22 @@
     
 }
 
-- (void) updateLogLevel:(NSString *)logLevelString {
+- (BOOL) updateLogLevel:(NSString *)logLevelString {
     
-    self.logLevel = [TEALLogger logLevelFromString:logLevelString];
+    if (!logLevelString ||
+        ![logLevelString isKindOfClass:[NSString class]]){
+        return NO;
+    }
+    
+    TEALLogLevel newLevel = [TEALLogger logLevelFromString:logLevelString];
+    
+    if (self.logLevel == newLevel){
+        return NO;
+    }
+    
+    self.logLevel = newLevel;
+    
+    return YES;
 }
 
 - (void) logProd:(NSString *) format, ... {
@@ -134,28 +147,8 @@
 }
 
 - (void) logVerbosity:(TEALLogLevel)logLevel message:(NSString *) message{
-        
-//    BOOL shouldLog = NO;
-//    switch (logLevel) {
-//        case TEALLogLevelProd:
-//            shouldLog = (self.logLevel >= TEALLogLevelProd);
-//            break;
-//        case TEALLogLevelQA:
-//            shouldLog = (self.logLevel >= TEALLogLevelQA);
-//            break;
-//        case TEALLogLevelDev:
-//            shouldLog = (self.logLevel >= TEALLogLevelDev);
-//            break;
-//        default:
-//            break;
-//    }
-//    
-//    if (shouldLog == YES && message) {
-//    
-//        NSLog(@"%@%@", self.messageHeader, message);
-//    }
     
-    if (self.logLevel <= logLevel){
+    if (self.logLevel >= logLevel){
             NSLog(@"%@%@", self.messageHeader, message);
     }
 }
