@@ -68,6 +68,13 @@
  */
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch;
 
+/**
+ *  Notification that new remote publish settings have been received and processed.
+ *
+ *  @param tealium The Tealium instance with new publish settings.
+ */
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium;
+
 /*
  *  If Tag Management dispatch service is enabled, passes pointer to it's UIWebView
  *  that hosts UTAG.js

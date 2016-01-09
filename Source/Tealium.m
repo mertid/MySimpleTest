@@ -69,6 +69,25 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
++ (instancetype) newInstanceForKey:(NSString * _Nonnull)key
+                          delegate:(id<TealiumDelegate>)delegate
+                     configuration:(TEALConfiguration *)configuration {
+    
+    return [Tealium newInstanceForKey:key
+                        configuration:configuration
+                             delegate:delegate
+                           completion:^(BOOL success, NSError * _Nullable error) {
+                               
+                               if (error) {
+                                   
+                                   NSLog(@"Problem initializing Tealium instance: %@ error:%@",
+                                         key, error);
+                               }
+                               
+                           }];
+    
+}
+
 + (instancetype) instanceForKey:(NSString * _Nonnull)key {
     
     Tealium *instance = staticAllInstances[key];
@@ -279,6 +298,60 @@ __strong static NSDictionary *staticAllInstances = nil;
                      configuration:(TEALConfiguration *)configuration
                         completion:(TEALBooleanCompletionBlock)completion{
     
+    return [self newInstanceForKey:key
+                     configuration:configuration
+                          delegate:nil
+                        completion:completion];
+    
+//    // Bail out check
+//    NSError *error = nil;
+//    
+//    if (![TEALConfiguration isValidConfiguration:configuration]) {
+//        
+//        // Check configuration
+//        
+//        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+//                                      description:@"Could not initialize instance."
+//                                           reason:@"Invalid Configuration."
+//                                       suggestion:@"Check the account, profile and environment options."];
+//        
+//        
+//        if (completion) { completion(NO, error);}
+//        
+//        return nil;
+//    }
+//    
+//    configuration.instanceID  = key;
+//    
+//    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *instanceError) {
+//            
+//        completion(success, instanceError);
+//        
+//    }];
+//    
+//    if (!instance) {
+//        
+//        error = [TEALError errorWithCode:TEALErrorCodeFailure
+//                                        description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
+//                                             reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
+//                                         suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
+//        
+//        if (completion) { completion(NO, error);}
+//        
+//        return nil;
+//    }
+//    
+//    [Tealium addInstance:instance key:key];
+//    
+//    return instance;
+    
+}
+
++ (instancetype) newInstanceForKey:(NSString * _Nonnull)key
+                     configuration:(TEALConfiguration *)configuration
+                          delegate:(id<TealiumDelegate>)delegate
+                        completion:(TEALBooleanCompletionBlock)completion{
+    
     // Bail out check
     NSError *error = nil;
     
@@ -299,18 +372,23 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     configuration.instanceID  = key;
     
-    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *instanceError) {
-            
-        completion(success, instanceError);
+    Tealium *instance = [Tealium instanceWithConfiguration:configuration
+                                                  delegate:delegate
+                                                completion:^(BOOL success, NSError *instanceError) {
+        
+        if (completion){
+            completion(success, instanceError);
+        }
         
     }];
     
+    // Unlikely error
     if (!instance) {
         
         error = [TEALError errorWithCode:TEALErrorCodeFailure
-                                        description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
-                                             reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
-                                         suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
+                             description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
+                                  reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
         
         if (completion) { completion(NO, error);}
         
@@ -326,7 +404,45 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration completion:(TEALBooleanCompletionBlock _Nullable) completion{
     
+    return [self instanceWithConfiguration:configuration
+                                  delegate:nil
+                                completion:completion];
+    
+//    Tealium *instance = [[Tealium alloc] initPrivateWithInstanceID:configuration.instanceID];
+//    
+//    __weak Tealium *weakInstance = instance;
+//    
+//    [weakInstance.operationManager addOperationWithBlock:^{
+//        
+//        [weakInstance finalizeWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+//            
+//            if (success) {
+//                
+//                [weakInstance.dispatchManager runQueuedDispatches];
+//                
+//            } else {
+//                
+//                [weakInstance disable];
+//                
+//            }
+//            
+//            if (completion) completion(success, error);
+//        }];
+//        
+//    }];
+//    
+//    return instance;
+}
+
++ (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration
+                                  delegate:(id<TealiumDelegate>)delegate
+                                completion:(TEALBooleanCompletionBlock _Nullable) completion{
+    
     Tealium *instance = [[Tealium alloc] initPrivateWithInstanceID:configuration.instanceID];
+    
+    if (delegate){
+        instance.delegate = delegate;
+    }
     
     __weak Tealium *weakInstance = instance;
     
@@ -750,45 +866,71 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock)completion {
+
+    if (!self.settings) {
+        
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Failed to fetch new publish settings", @"")
+                                  reason:NSLocalizedString(@"Settings object not yet ready.", @"")
+                              suggestion:NSLocalizedString(@"Wait for next fetch opportunity", @"")];
+        
+        if (completion){
+            completion(NO, error);
+        }
+        
+        return;
+    }
     
-    __weak Tealium *weakSelf = self;
-
-    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-       
-        if (error){
-            [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
-                                      [error localizedDescription],
-                                      [error localizedFailureReason],
-                                      [error localizedRecoverySuggestion]
-                                      ]];
-        }
-        
-        if (success){
-            
-            [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-            
-            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-            
-                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-            
-            }
-            
-            [weakSelf updateModules];
-            
-            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-                        
-            [weakSelf.dispatchManager runQueuedDispatches];
-
-        }
-        
-        if ([weakSelf.settings libraryShouldDisable]){
-            
-            [weakSelf disable];
-            
-            return;
-        }
-        
-    }];
+    [self.settings fetchNewRawPublishSettingsWithCompletion:completion];
+    
+//    __weak Tealium *weakSelf = self;
+//
+//    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+//       
+//        if (error){
+//            [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+//                                      [error localizedDescription],
+//                                      [error localizedFailureReason],
+//                                      [error localizedRecoverySuggestion]
+//                                      ]];
+//            
+//        }
+//        
+//        if (success){
+//            
+//            [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+//            
+//            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
+//            
+//                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+//            
+//            }
+//            
+//            [weakSelf updateModules];
+//            
+//            if (weakSelf.delegate) {
+//                [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
+//            }
+//            
+//            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+//                        
+//            [weakSelf.dispatchManager runQueuedDispatches];
+//
+//        }
+//        
+//        if (completion){
+//            completion(success, error);
+//        }
+//        
+//        if ([weakSelf.settings libraryShouldDisable]){
+//            
+//            [weakSelf disable];
+//            
+//            return;
+//        }
+//
+//        
+//    }];
     
 }
 
@@ -809,7 +951,47 @@ __strong static NSDictionary *staticAllInstances = nil;
           
             [weakSelf.logger logDev:@"Network found."];
             
-            [weakSelf fetchNewSettingsWithCompletion:nil];
+            [weakSelf fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+                
+                if (error){
+                    [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                                              [error localizedDescription],
+                                              [error localizedFailureReason],
+                                              [error localizedRecoverySuggestion]
+                                              ]];
+                    
+                }
+                
+                if (success){
+                    
+                    [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+                    
+                    if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
+                        
+                        [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+                        
+                    }
+                    
+                    [weakSelf updateModules];
+                    
+                    if (weakSelf.delegate) {
+                        [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
+                    }
+                    
+                    [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+                    
+                    [weakSelf.dispatchManager runQueuedDispatches];
+                    
+                }
+                
+                if ([weakSelf.settings libraryShouldDisable]){
+                    
+                    [weakSelf disable];
+                    
+                    return;
+                }
+                
+            }];
             
         } else {
             
@@ -819,20 +1001,6 @@ __strong static NSDictionary *staticAllInstances = nil;
         
     }];
     
-//    self.urlSessionManager.reachability.reachableBlock = ^(TEALReachabilityManager *reachability) {
-//        
-//        [weakSelf.logger logDev:@"Network found."];
-//        
-//        [weakSelf fetchNewSettingsWithCompletion:nil];
-//        
-//    };
-//    
-//    // When unreachable
-//    self.urlSessionManager.reachability.unreachableBlock = ^(TEALReachabilityManager *reachability) {
-//        
-//        [weakSelf.logger logDev:@"Network unreachable."];
-//
-//    };
 }
 
 - (BOOL) networkReadyForDispatch {

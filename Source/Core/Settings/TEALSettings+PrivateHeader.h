@@ -10,8 +10,11 @@
 #define TEALSettings_PrivateHeader_h
 
 #import "TEALSettings.h"
+#import "TEALPublishSettings.h"
 
 @interface TEALSettings (Private)
+
+@property (nonatomic, strong) TEALPublishSettings *privatePublishSettings;
 
 - (BOOL) autotrackingApplicationInfoEnabled;
 - (BOOL) autotrackingCarrierInfoEnabled;

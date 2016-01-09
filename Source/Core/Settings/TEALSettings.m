@@ -441,7 +441,9 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
                               suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
         
     }
-    if (!self.configuration){
+    
+    if (!preFetchError &&
+        !self.configuration){
         preFetchError = [TEALError errorWithCode:TEALErrorCodeException
                              description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
                                   reason:NSLocalizedString(@"No configuration available.", @"")
@@ -449,7 +451,8 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     }
     
     double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:now];
-    if (minutesToNextFetch > 0.0) {
+    if (!preFetchError &&
+        minutesToNextFetch > 0.0) {
         
         NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
         preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
@@ -478,11 +481,22 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         NSDictionary *parsedData = nil;
 
         TEALPublishSettings *publishSettings = [weakSelf publishSettings];
+                        
+        if ([response respondsToSelector:@selector(statusCode)]){
+            
+            if (response.statusCode != 200){
+                
+                error = connectionError;
 
+            }
+                                    
+        }
+                                
         // For future MPS config location - currently ignoring any error from this
         parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
                                 
-        if (!parsedData){
+        if (!error &&
+            !parsedData){
          
             // Fallback to current mobile.html MPS var
             parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:&error];

@@ -18,6 +18,7 @@
 
 @property (nonatomic) BOOL shouldQueue;
 @property (nonatomic) BOOL shouldDrop;
+@property (nonatomic) BOOL didUpdate;
 @property (nonatomic, strong) Tealium *library;
 
 @end
@@ -27,25 +28,26 @@
 - (void)setUp {
     [super setUp];
     
+    self.shouldDrop = NO;
+    self.shouldQueue = NO;
+    self.didUpdate = NO;
+    self.library = nil;
+    
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    self.shouldDrop = NO;
-    self.shouldQueue = NO;
-    self.library = nil;
-    
     [super tearDown];
 }
 
 #pragma mark - HELPERS
 
-- (void) useLiveLibraryInstance {
+- (void) useLibraryInstanceWithConfig:(TEALConfiguration *)config {
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
     
     self.library = [Tealium newInstanceForKey:self.description
-                                configuration:[TEALTestHelper liveConfig]
+                                configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
                                        if (error){
@@ -56,13 +58,17 @@
                                        
                                    }];
     
+    self.library.delegate = self;
+    
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
-    
+
+
 #pragma mark - PUBLIC APIs TESTS
 
 - (void) testCreateInstanceWithMissingConfigurationData {
     
+    // All empty
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
                                                                     profile:nil
                                                                 environment:nil];
@@ -70,72 +76,89 @@
     Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
     
     XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationMissingAccountInfo {
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
+    
+    // Account empty
+    TEALConfiguration *configB = [TEALConfiguration configurationWithAccount:nil
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    Tealium *instanceB = [Tealium newInstanceForKey:@"failTest" configuration:configB];
     
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationMissingProfileInfo {
+    XCTAssertFalse(instanceB, @"Missing account Configuration initialized library instance.");
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+    TEALConfiguration *configB2 = [TEALConfiguration configurationWithAccount:@""
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    Tealium *instanceB2 = [Tealium newInstanceForKey:@"failTest" configuration:configB2];
+    
+    XCTAssertFalse(instanceB2, @"Nil account Configuration initialized library instance.");
+    
+    
+    // Profile empty
+    TEALConfiguration *configC = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:nil
                                                                 environment:@"dev"];
     
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    Tealium *instanceC = [Tealium newInstanceForKey:@"failTest" configuration:configC];
     
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationMissingEnvInfo {
+    XCTAssertFalse(instanceC, @"Missing profile Configuration initialized library instance.");
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:nil];
     
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
-    
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationBlankAccountInfo {
-    
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@""
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
-    
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationBlankProfileInfo {
-    
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+    TEALConfiguration *configC2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@" "
                                                                 environment:@"dev"];
     
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    Tealium *instanceC2 = [Tealium newInstanceForKey:@"failTest" configuration:configC2];
     
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-}
-
-- (void) testCreateInstanceWithConfigurationBlankEnvInfo {
+    XCTAssertFalse(instanceC2, @"Blank profile Configuration initialized library instance.");
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+    
+    
+    // Environment empty
+    TEALConfiguration *configD = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:nil];
+    
+    Tealium *instanceD = [Tealium newInstanceForKey:@"failTest" configuration:configD];
+    
+    XCTAssertFalse(instanceD, @"Missing environment Configuration initialized library instance.");
+    
+    TEALConfiguration *configD2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"   "];
     
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    Tealium *instanceD2 = [Tealium newInstanceForKey:@"failTest" configuration:configD2];
     
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+    XCTAssertFalse(instanceD2, @"blank environment Configuration initialized library instance.");
+}
+
+- (void) testCreateInvalidInstance {
+    
+    XCTestExpectation *e = [self expectationWithDescription:@"invalidInstance"];
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"does-not-exist"
+                                                                environment:@"dev"];
+    
+    self.library = [Tealium newInstanceForKey:@"failTest"
+                                configuration:config
+                                   completion:nil];
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        
+        XCTAssert(!success, "Valid mobile.html returned when none should have.");
+        
+        [e fulfill];
+        
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0
+                                 handler:nil];
+    
 }
 
 - (void) testCreateSingleInstance {
@@ -248,7 +271,7 @@
 
 - (void) testSetAndRemoveDelegate {
     
-    [self useLiveLibraryInstance];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
     
     [self.library setDelegate:self];
     
@@ -261,7 +284,7 @@
 
 - (void) testUnimplementedDelegateMethods {
     
-    [self useLiveLibraryInstance];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
     
     TealiumDelegateTestObject *testDelegate = [TealiumDelegateTestObject new];
     
@@ -276,6 +299,66 @@
     // This will cause a crash if the optional delegates are not trully optional
 }
 
+- (void) testSuccessfulDidUpdatePublishSettings {
+    
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
+
+    XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        XCTAssertTrue(success, "Valid mobile.html did not return as expected.");
+        
+        [fetchExpectation fulfill];
+        
+    }];
+    
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    XCTAssert(self.didUpdate, "No update found");
+    
+}
+
+- (void) testFailingDidUpdatePublishSettings {
+    
+    XCTestExpectation * expectation = [self expectationWithDescription:@"failPublishTest"];
+    
+    XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
+
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"ios-no-mls-no-mps"
+                                                                environment:@"dev"];
+    
+    self.library = [Tealium newInstanceForKey:@"failSettingsTest"
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                            
+        XCTAssert(success, "Test configuration did not start a valid tealium instance");
+        
+        [expectation fulfill];
+        
+    }];
+    
+    self.library.delegate = self;
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        
+        XCTAssert(!success, "Invalid mobile.html returned non-existent account-profile.");
+        
+        XCTAssert(error, "Error expected was not received.");
+
+        [fetchExpectation fulfill];
+        
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    XCTAssert(!self.didUpdate, "No update found");
+}
+
 
 #pragma mark - LIBRARY DELEGATES
 
@@ -286,7 +369,7 @@
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     
-        NSLog(@"%s <# message #>", __FUNCTION__);
+        NSLog(@"%s ", __FUNCTION__);
 }
 
 - (BOOL) tealium:(Tealium *)tealium shouldDropDispatch:(TEALDispatch *)dispatch {
@@ -303,6 +386,12 @@
     return self.shouldQueue;
 }
 
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium {
+    
+    NSLog(@"%s ", __FUNCTION__);
+    
+    self.didUpdate = YES;
+}
 
 #pragma mark - WebView Tests
 

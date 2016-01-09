@@ -121,6 +121,8 @@
 		712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */; };
 		712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */; };
 		712BAF361C29BED4007767CD /* UIKitCatalogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */; };
+		71760D5C1C40745D00FBCA29 /* no_mps.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5B1C40745D00FBCA29 /* no_mps.html */; };
+		71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */; };
 		718546DD1C2876C4009CF93E /* SourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546DC1C2876C4009CF93E /* SourceTests.m */; };
 		718546EB1C2876D5009CF93E /* FrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546EA1C2876D5009CF93E /* FrameworkTests.m */; };
 		71854A481C287CD0009CF93E /* AAPLSearchShowResultsInSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E8CF103196DBE6800420B6B /* AAPLSearchShowResultsInSourceViewController.m */; };
@@ -540,6 +542,8 @@
 		712BAF331C29BED4007767CD /* UIKitCatalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitCatalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitCatalogUITests.m; sourceTree = "<group>"; };
 		712BAF371C29BED4007767CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71760D5B1C40745D00FBCA29 /* no_mps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_mps.html; sourceTree = "<group>"; };
+		71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = mps_5_no_minutes_between_refresh.html; sourceTree = "<group>"; };
 		718546DA1C2876C3009CF93E /* 5.x_SourceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 5.x_SourceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718546DC1C2876C4009CF93E /* SourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceTests.m; sourceTree = "<group>"; };
 		718546DE1C2876C4009CF93E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -856,6 +860,8 @@
 		710E1C391C29ABD7007BABF7 /* mps */ = {
 			isa = PBXGroup;
 			children = (
+				71760D5B1C40745D00FBCA29 /* no_mps.html */,
+				71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */,
 				710E1C3A1C29ABD7007BABF7 /* audiencestream_OFF.html */,
 				710E1C3B1C29ABD7007BABF7 /* audiencestream_ON.html */,
 				710E1C3C1C29ABD7007BABF7 /* tagmanagement_OFF.html */,
@@ -1439,9 +1445,11 @@
 				710E1C501C29ABD7007BABF7 /* tagmanagement_OFF.html in Resources */,
 				710E1C511C29ABD7007BABF7 /* tagmanagement_ON.html in Resources */,
 				71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */,
+				71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */,
 				710E1C4F1C29ABD7007BABF7 /* audiencestream_ON.html in Resources */,
 				710E1C4E1C29ABD7007BABF7 /* audiencestream_OFF.html in Resources */,
 				710E1C3F1C29ABD7007BABF7 /* lifecycle_events.xml in Resources */,
+				71760D5C1C40745D00FBCA29 /* no_mps.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

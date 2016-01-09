@@ -56,6 +56,7 @@
         dispatch_async(targetQueue, ^{
             
             completion( (NSHTTPURLResponse *)response, data, error );
+            
         });
     };
     

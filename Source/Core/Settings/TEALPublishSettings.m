@@ -136,12 +136,10 @@ NSString * const TEALPublishSettingKeyDisableMobileCompanion = @"disable_mobilec
                                                     range:NSMakeRange(0, scriptContents.length)];
     
     if (mpsRangeStart.location == NSNotFound) {
-        
-        //        TEAL_logDev(@"mobile publish settings not found! old mobile library extension is not supported.  ");
-        
+                
         *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                               description:@"Mobile publish settings not found."
-                                   reason:@"No Mobile publish settings not found while parsing mobile.html"
+                                   reason:@"No publish settings found after parsing mobile.html"
                                suggestion:@"Please enable mobile publish settings in Tealium iQ."];
         
         return nil;

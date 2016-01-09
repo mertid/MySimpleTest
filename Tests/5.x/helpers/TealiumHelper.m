@@ -40,7 +40,7 @@ static TealiumHelper * _sharedInstance;
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                            profile:@"demo"
-                       environment:@"dev"];
+                       environment:@"prod"];
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
@@ -72,6 +72,13 @@ static TealiumHelper * _sharedInstance;
     
 }
 
+#pragma mark - TEALIUM DELEGATES
+
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium {
+    
+        NSLog(@"%s: tealium instance: %@", __FUNCTION__, tealium);
+    
+}
 
 #pragma mark - EXAMPLE METHODS USING OTHER TEALIUM APIS
 

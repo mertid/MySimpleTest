@@ -18,6 +18,7 @@
 + (NSArray *) defaultEventDataSourceKeys;
 + (TEALConfiguration *) liveConfig;
 + (TEALConfiguration *) nonExistentConfig;
++ (TEALConfiguration *) validConfigWithNoMPS;
 
 #warning add a library class start method
 

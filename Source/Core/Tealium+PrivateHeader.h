@@ -31,6 +31,11 @@
                                configuration:(TEALConfiguration * _Nonnull)configuration
                                   completion:(TEALBooleanCompletionBlock _Nullable)completion;
 
++ (instancetype _Nullable) newInstanceForKey:(NSString * _Nonnull)key
+                               configuration:(TEALConfiguration * _Nonnull)configuration
+                                    delegate:(id<TealiumDelegate> _Nullable)delegate
+                                  completion:(TEALBooleanCompletionBlock _Nullable)completion;
+
 + (NSDictionary * _Nonnull) allInstances;
 
 - (void) addModuleData:(NSDictionary * _Nonnull) dictionary;
