@@ -10,19 +10,19 @@
 
 #pragma mark - Configuration Types
 
-/**
- *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested
- */
-typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
-    /**
-     *  On request only, will only poll with the fetchVisitorProfileWithCompletion: method
-     */
-    TEALVisitorProfilePollingFrequencyOnRequest = 1,
-    /**
-     *  After each track event (trackEventWithTitle:dataSources: or trackViewWithTitle:dataSources:) an updated visitor profile will be requested.
-     */
-    TEALVisitorProfilePollingFrequencyAfterEveryEvent
-};
+///**
+// *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested
+// */
+//typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
+//    /**
+//     *  On request only, will only poll with the fetchVisitorProfileWithCompletion: method
+//     */
+//    TEALVisitorProfilePollingFrequencyOnRequest = 1,
+//    /**
+//     *  After each track event (trackEventWithTitle:dataSources: or trackViewWithTitle:dataSources:) an updated visitor profile will be requested.
+//     */
+//    TEALVisitorProfilePollingFrequencyAfterEveryEvent
+//};
 
 
 /**
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
  *  @default TEALVisitorProfilePollingFrequencyAfterEveryEvent
  *  @see TEALVisitorProfilePollingFrequency
  */
-@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
+//@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
 
 /**
  *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"
@@ -94,7 +94,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 /**
  *  If assigned, will replace the destination endpoint for S2S Legacy dispatch calls.
  */
-@property (nonatomic) NSString *overrideS2SLegacyDispatchURL;
+//@property (nonatomic) NSString *overrideS2SLegacyDispatchURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used

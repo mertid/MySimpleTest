@@ -664,28 +664,35 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     
     // Collect
-    if ([self.settings collectEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableCollect)]) {
-            [self.modulesDelegate enableCollect];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableCollect)]) {
-            [self.modulesDelegate disableCollect];
-        }
+    if ([self.modulesDelegate respondsToSelector:@selector(updateCollect)]){
+        [self.modulesDelegate updateCollect];
     }
     
+//    if ([self.settings collectEnabled]){
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableCollect)]) {
+//            [self.modulesDelegate enableCollect];
+//        }
+//    } else {
+//        if ([self.modulesDelegate respondsToSelector:@selector(disableCollect)]) {
+//            [self.modulesDelegate disableCollect];
+//        }
+//    }
+    
     // S2S Legacy
-    if ([self.settings s2SLegacyEnabled]){
-        
-        if ([self.modulesDelegate respondsToSelector:@selector(enableS2SLegacy)]){
-            [self.modulesDelegate enableS2SLegacy];
-        }
-        
-    } else {
-        if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
-            [self.modulesDelegate disableS2SLegacy];
-        }
+    if ([self.modulesDelegate respondsToSelector:@selector(updateS2SLegacy)]){
+        [self.modulesDelegate updateS2SLegacy];
     }
+//    if ([self.settings s2SLegacyEnabled]){
+//        
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableS2SLegacy)]){
+//            [self.modulesDelegate enableS2SLegacy];
+//        }
+//        
+//    } else {
+//        if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
+//            [self.modulesDelegate disableS2SLegacy];
+//        }
+//    }
     
     // UIEvents
     if ([self.settings autotrackingUIEventsEnabled]) {
@@ -1032,8 +1039,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-
-
 - (NSString *) description {
     
     NSString *version = TEALLibraryVersion;
@@ -1154,10 +1159,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch {
     
-    if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
-        if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfile)]){
-            [self.modulesDelegate fetchVisitorProfile];
-        }
+    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
+        [self.modulesDelegate fetchVisitorProfileAfterEvent];
     }
     
     [self.delegateManager tealium:self didSendDispatch:dispatch];
@@ -1224,10 +1227,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
     
-    if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
-        if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfile)]){
-            [self.modulesDelegate fetchVisitorProfile];
-        }
+    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
+        [self.modulesDelegate fetchVisitorProfileAfterEvent];
     }
     
     [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];

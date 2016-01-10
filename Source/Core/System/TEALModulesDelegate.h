@@ -14,8 +14,11 @@
 
 @optional
 
-- (void) enableCollect;
-- (void) enableS2SLegacy;
+- (void) updateCollect;
+- (void) updateS2SLegacy;
+
+//- (void) enableCollect;
+//- (void) enableS2SLegacy;
 - (void) enableTagManagement;
 - (void) enableAutotrackingCrashes;
 - (void) enableAutotrackingLifecycle;
@@ -36,7 +39,7 @@
 
 - (void) updateWatchKitPublishSettings;
 - (void) revealMobileCompanion;
-- (void) fetchVisitorProfile;
+- (void) fetchVisitorProfileAfterEvent;
 
 
 @end

@@ -26,8 +26,6 @@
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) autotrackingCrashesEnabled;
-- (BOOL) collectEnabled;
-- (BOOL) s2SLegacyEnabled;
 - (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) remoteCommandsEnabled;
@@ -50,14 +48,12 @@
 - (NSString * _Nonnull) logLevelString;
 - (NSUInteger) offlineDispatchQueueSize;
 
-//- (NSString * _Nullable) collectDispatchURLString;
-
-- (NSString * _Nullable) s2SLegacyDispatchURLString;
 - (NSString * _Nullable) configurationDescription;
 - (NSString * _Nullable) publishSettingsDescription;
 - (NSString * _Nullable) publishSettingsURLString;
 - (NSString * _Nullable) publishURLString;
-- (NSUInteger) pollingFrequency;
+
+#warning move to collect module
 - (NSURL * _Nullable) profileURL;
 - (NSURL * _Nullable) profileDefinitionsURL;
 

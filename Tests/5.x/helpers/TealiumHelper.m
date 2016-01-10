@@ -42,7 +42,9 @@ static TealiumHelper * _sharedInstance;
                            profile:@"demo"
                        environment:@"dev"];
     
-    configuration.overrideCollectDispatchURL = @"https://test.overide.com";
+//    configuration.overrideCollectDispatchURL = @"https://test.overide.com";
+    
+//    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     

@@ -52,7 +52,7 @@
     configuration.profileName       = [profileName lowercaseString];
     configuration.environmentName   = [environmentName lowercaseString];
     configuration.useHTTP           = NO;
-    configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyOnRequest;
+//    configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;
@@ -68,7 +68,7 @@
     configuration.overridePublishSettingsVersion = nil;
     configuration.overridePublishURL = nil;
 //    configuration.overrideCollectDispatchURL = nil;
-    configuration.overrideS2SLegacyDispatchURL = nil;
+//    configuration.overrideS2SLegacyDispatchURL = nil;
 //    configuration.moduleData = [NSMutableDictionary new];
     
     NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];
@@ -159,7 +159,7 @@
               @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
               @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
               @"use http":[NSString teal_stringFromBool:self.useHTTP],
-              @"polling frequency":@(self.pollingFrequency),
+//              @"polling frequency":@(self.pollingFrequency),
               //                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
               //                                          @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
               //                                          @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
@@ -172,7 +172,7 @@
               @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
               @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
 //              @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],
-              @"override s2s legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL],
+//              @"override s2s legacy dispatch url":[NSString teal_dictionarySafeString:self.overrideS2SLegacyDispatchURL],
               
               };
     

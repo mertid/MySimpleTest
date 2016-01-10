@@ -10,6 +10,14 @@
 
 @interface TEALSettings (Collect)
 
+- (BOOL) collectEnabled;
+
+- (BOOL) s2SLegacyEnabled;
+
+- (NSUInteger) pollingFrequency;
+
 - (NSString * _Nullable) collectDispatchURLString;
+
+- (NSString * _Nullable) s2SLegacyDispatchURLString;
 
 @end

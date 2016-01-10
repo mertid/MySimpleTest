@@ -15,7 +15,22 @@
 
 static NSString * defaultCollectDispatchURLString = nil;
 
+static NSString * defaultLegacyS2SDispatchURLString = nil;
+
 @implementation TEALSettings (Collect)
+
+#pragma mark - PUBLIC
+
+- (BOOL) collectEnabled {
+    
+    return [self publishSettings].enableCollect;
+    
+}
+
+- (BOOL) s2SLegacyEnabled {
+    
+    return [self publishSettings].enableS2SLegacy;
+}
 
 - (NSString *) collectDispatchURLString {
     
@@ -28,6 +43,25 @@ static NSString * defaultCollectDispatchURLString = nil;
     }
     
 }
+
+- (NSUInteger) pollingFrequency {
+    return self.configuration.pollingFrequency;
+}
+
+
+- (NSString *) s2SLegacyDispatchURLString {
+    
+    NSString *overrideDispatchString = self.configuration.overrideS2SLegacyDispatchURL;
+    
+    if (overrideDispatchString){
+        return overrideDispatchString;
+    } else {
+        return [TEALSettings defaultS2SLegacyDispatchURLStringFromConfiguration:self];
+    }
+    
+}
+
+#pragma mark - PRIVATE
 
 + (NSString *) defaultCollectDispatchURLStringFromConfiguration:(TEALSettings *)settings {
     
@@ -57,6 +91,29 @@ static NSString * defaultCollectDispatchURLString = nil;
     }
     
     return defaultCollectDispatchURLString;
+}
+
+
++ (NSString *) defaultS2SLegacyDispatchURLStringFromConfiguration:(TEALSettings *)settings {
+    
+    if (!defaultLegacyS2SDispatchURLString){
+        NSString *urlPrefix = @"https";
+        
+        if ([settings useHTTP]) {
+            urlPrefix = @"http";
+        }
+        
+        NSString *account = [settings account];
+        NSString *profile = [settings asProfile];
+        NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
+        
+        NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
+        
+        defaultLegacyS2SDispatchURLString = baseURLString;
+    }
+    
+    return defaultLegacyS2SDispatchURLString;
+    
 }
 
 @end
