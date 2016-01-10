@@ -13,7 +13,13 @@ NSString * const TEALCollectOverrideDispatchURLKey = @"com.tealium.collect.overr
 NSString * const TEALS2SOverrideDispatchURLKey = @"com.tealium.s2s.override.dispatchURL";
 NSString * const TEALCollectPollingFrequencyKey = @"com.tealium.collect.polling.frequency";
 
+NSString * const TEALCollectProfileURLKey = @"";
+NSString * const TEALCollectProfileDefinitionsURLKey = @"";
+NSString * const TEALTraceIDKey = @"com.tealium.traceid";
+
 @implementation TEALConfiguration (Collect)
+
+#pragma mark - GETTERS
 
 - (NSString *) overrideCollectDispatchURL {
     
@@ -31,7 +37,7 @@ NSString * const TEALCollectPollingFrequencyKey = @"com.tealium.collect.polling.
     
 }
 
-- (TEALVisitorProfilePollingFrequency) pollingFrequency {
+- (TEALVisitorProfilePollingFrequency) collectPollingFrequency {
     
     NSDictionary *moduleData =  [self moduleData];
     
@@ -45,6 +51,30 @@ NSString * const TEALCollectPollingFrequencyKey = @"com.tealium.collect.polling.
     return [frequencyNumber integerValue];
 }
 
+- (NSString * _Nullable) overrideCollectProfileURL {
+    
+    // TODO:
+    
+    return nil;
+}
+
+- (NSString * _Nullable) overrideCollectProfileDefinitionsURL {
+    
+    // TODO:
+    
+    return nil;
+}
+
+- (NSString * _Nullable) traceID {
+    
+    NSDictionary *moduleData =  [self moduleData];
+    
+    return [moduleData[TEALTraceIDKey] copy];
+    
+}
+
+
+#pragma mark - SETTERS
 
 - (void) setOverrideCollectDispatchURL:(NSString *) overrideURL{
     
@@ -61,7 +91,7 @@ NSString * const TEALCollectPollingFrequencyKey = @"com.tealium.collect.polling.
     
 }
 
-- (void) setPollingFrequency:(TEALVisitorProfilePollingFrequency)frequency {
+- (void) setCollectPollingFrequency:(TEALVisitorProfilePollingFrequency)frequency {
     
     NSNumber *frequencyAsNumber = [NSNumber numberWithInteger:frequency];
     
@@ -73,5 +103,22 @@ NSString * const TEALCollectPollingFrequencyKey = @"com.tealium.collect.polling.
     
 }
 
+- (void) setCollectProfileURL:(NSURL *)overrideURL {
+    
+    // TODO:
+    
+}
+
+- (void) setCollectProfileDefinitionsURL:(NSURL *)overrideURL {
+    
+    // TODO:
+    
+}
+
+- (void) setTraceID:(NSString *)traceID {
+    
+    [self setModuleObject:traceID forKey:TEALTraceIDKey];
+    
+}
 
 @end

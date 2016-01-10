@@ -20,13 +20,8 @@
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *privatePublishSettings;
-//@property (nonatomic, strong) NSString *defaultCollectDispatchURLString;
-//@property (nonatomic, strong) NSString *defaultS2SLegacyDispatchURLString;
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
-#warning Move these to collect module
-@property (nonatomic, strong) NSURL *audienceStreamProfileURL;
-@property (nonatomic, strong) NSURL *audienceStreamProfileDefinitionsURL;
 @property (nonatomic, strong) NSDate *lastFetch;
 @property (nonatomic, weak) NSString *visitorID;
 
@@ -76,46 +71,46 @@
             configuration.environmentName];
 }
 
-+ (NSURL *) profileURLFromSettings:(TEALSettings *)settings {
-    
-    if (![settings isValid]) {
-        return nil;
-    }
-    
-    NSString *urlPrefix = @"https:";
-    
-    if ([settings useHTTP]) {
-        urlPrefix = @"http:";
-    }
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/%@/%@/%@",
-                           urlPrefix,
-                           settings.account,
-                           settings.asProfile,
-                           [settings visitorIDCopy]];
-    
-    return [NSURL URLWithString:urlString];
-}
-
-+ (NSURL *) profileDefinitionsURLFromSettings:(TEALSettings *)settings {
-    
-    if (![settings isValid]) {
-        return nil;
-    }
-    
-    NSString *urlPrefix = @"https:";
-    
-    if ([settings useHTTP]) {
-        urlPrefix = @"http:";
-    }
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
-                           urlPrefix,
-                           [settings account],
-                           [settings asProfile]];
-    
-    return [NSURL URLWithString:urlString];
-}
+//+ (NSURL *) profileURLFromSettings:(TEALSettings *)settings {
+//    
+//    if (![settings isValid]) {
+//        return nil;
+//    }
+//    
+//    NSString *urlPrefix = @"https:";
+//    
+//    if ([settings useHTTP]) {
+//        urlPrefix = @"http:";
+//    }
+//    
+//    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/%@/%@/%@",
+//                           urlPrefix,
+//                           settings.account,
+//                           settings.asProfile,
+//                           [settings visitorIDCopy]];
+//    
+//    return [NSURL URLWithString:urlString];
+//}
+//
+//+ (NSURL *) profileDefinitionsURLFromSettings:(TEALSettings *)settings {
+//    
+//    if (![settings isValid]) {
+//        return nil;
+//    }
+//    
+//    NSString *urlPrefix = @"https:";
+//    
+//    if ([settings useHTTP]) {
+//        urlPrefix = @"http:";
+//    }
+//    
+//    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
+//                           urlPrefix,
+//                           [settings account],
+//                           [settings asProfile]];
+//    
+//    return [NSURL URLWithString:urlString];
+//}
 
 #pragma mark - PUBLIC METHODS
 
@@ -274,13 +269,6 @@
     return self.tiqPublishURLString;
 }
 
-//- (NSString *) visitorIDCopy {
-//    if (!self.visitorID) {
-//        return @"";
-//    }
-//    return [self.visitorID copy];
-//}
-
 - (NSUInteger) dispatchSize {
     return [self publishSettings].dispatchSize;
 }
@@ -303,25 +291,6 @@
     return [self publishSettings].offlineDispatchQueueSize;
 }
 
-//- (NSUInteger) pollingFrequency {
-//    return self.configuration.pollingFrequency;
-//}
-
-- (NSURL *) profileURL {
-    if (!self.audienceStreamProfileURL) {
-        self.audienceStreamProfileURL = [TEALSettings profileURLFromSettings:self];
-    }
-    return self.audienceStreamProfileURL;
-}
-
-- (NSURL *) profileDefinitionsURL {
-    if (!self.audienceStreamProfileDefinitionsURL) {
-        self.audienceStreamProfileDefinitionsURL = [TEALSettings profileDefinitionsURLFromSettings:self];
-    }
-    return self.audienceStreamProfileDefinitionsURL;
-}
-
-
 - (NSURLRequest *) publishSettingsRequest {
     
     NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
@@ -332,7 +301,6 @@
     
     return request;
 }
-
 
 - (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
     

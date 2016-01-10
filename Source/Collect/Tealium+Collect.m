@@ -32,7 +32,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         return nil;
     }
     
-    return [self.settings profileURL];
+    return [self.settings collectProfileURLForVisitorID:[[self dataSources] visitorIDCopy]];
 }
 
 - (NSURL *) profileDefinitionURL {
@@ -41,7 +41,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         return nil;
     }
     
-    return [self.settings profileDefinitionsURL];
+    return [self.settings collectProfileDefinitionsURL];
 }
 
 - (NSString *) visitorIDCopy {
@@ -223,7 +223,9 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
     
-    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:[self.settings collectDispatchURLString] sessionManager:self.urlSessionManager];
+    NSString *collectDispatchString = [self.settings collectDispatchURLStringForVisitorID:[[self dataSources] visitorIDCopy]];
+    
+    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:collectDispatchString sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     
@@ -252,7 +254,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
     
     TEALS2SLegacyDispatchService *dispatchService = [[TEALS2SLegacyDispatchService alloc] initWithDispatchURLString:[self.settings s2SLegacyDispatchURLString]
-                                                                                              visitorID:[self.settings visitorIDCopy] sessionManager:self.urlSessionManager];
+                                                                                              visitorID:[self.dataSources visitorIDCopy] sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     
@@ -272,7 +274,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) fetchVisitorProfileAfterEvent {
     
-    if ([self.settings pollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
+    if ([self.settings collectPollingFrequency] == TEALVisitorProfilePollingFrequencyAfterEveryEvent) {
 
         [self fetchVisitorProfile];
     
@@ -333,7 +335,11 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     if ([profileStoreRaw isKindOfClass:([TEALVisitorProfileStore class])]){
         profileStore = profileStoreRaw;
     } else {
-        profileStore = [[TEALVisitorProfileStore alloc] initWithVisitorID:self.settings.visitorIDCopy profileURL:self.settings.profileURL profileDefinitionURL:self.settings.profileDefinitionsURL urlSessionManager:self.urlSessionManager];
+        
+        NSString *visitorID = [[self dataSources] visitorIDCopy];
+        NSURL *profileURL = [self.settings collectProfileURLForVisitorID:visitorID];
+        
+        profileStore = [[TEALVisitorProfileStore alloc] initWithVisitorID:self.dataSources.visitorIDCopy profileURL:profileURL profileDefinitionURL:self.settings.collectProfileDefinitionsURL urlSessionManager:self.urlSessionManager];
         objc_setAssociatedObject(self, TEALKVOAutotrackCollectProfileStore, profileStore, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     

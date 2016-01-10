@@ -1072,7 +1072,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
     
     TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
+//    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
     settings.urlSessionManager = self.urlSessionManager;
     
     return settings;

@@ -15,8 +15,6 @@
 @interface TEALSettings : NSObject
 
 @property (weak) TEALURLSessionManager *urlSessionManager;
-@property (weak) NSString *traceID;
-@property (weak) NSString *visitorIDCopy;
 
 - (instancetype _Nullable) initWithConfiguration:(TEALConfiguration * _Nonnull)configuration;
 
@@ -52,10 +50,6 @@
 - (NSString * _Nullable) publishSettingsDescription;
 - (NSString * _Nullable) publishSettingsURLString;
 - (NSString * _Nullable) publishURLString;
-
-#warning move to collect module
-- (NSURL * _Nullable) profileURL;
-- (NSURL * _Nullable) profileDefinitionsURL;
 
 - (TEALPublishSettings * _Nonnull) publishSettings;
 

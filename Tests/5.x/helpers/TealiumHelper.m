@@ -46,7 +46,7 @@ static TealiumHelper * _sharedInstance;
     
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
-    configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
+    configuration.collectPollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     

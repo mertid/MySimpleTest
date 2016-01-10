@@ -125,6 +125,8 @@
 		71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */; };
 		71760D611C421D7800FBCA29 /* TEALConfiguration+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D601C421D7800FBCA29 /* TEALConfiguration+Collect.m */; };
 		71760D641C42255D00FBCA29 /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D631C42255D00FBCA29 /* TEALSettings+Collect.m */; };
+		71760D671C42C83700FBCA29 /* TEALConfiguration+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D661C42C83700FBCA29 /* TEALConfiguration+TagManagement.m */; };
+		71760D6A1C42C84800FBCA29 /* TEALSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D691C42C84800FBCA29 /* TEALSettings+TagManagement.m */; };
 		718546DD1C2876C4009CF93E /* SourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546DC1C2876C4009CF93E /* SourceTests.m */; };
 		718546EB1C2876D5009CF93E /* FrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546EA1C2876D5009CF93E /* FrameworkTests.m */; };
 		71854A481C287CD0009CF93E /* AAPLSearchShowResultsInSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E8CF103196DBE6800420B6B /* AAPLSearchShowResultsInSourceViewController.m */; };
@@ -550,6 +552,10 @@
 		71760D601C421D7800FBCA29 /* TEALConfiguration+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALConfiguration+Collect.m"; path = "../../Source/Collect/TEALConfiguration+Collect.m"; sourceTree = "<group>"; };
 		71760D621C42255C00FBCA29 /* TEALSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALSettings+Collect.h"; path = "../../Source/Collect/TEALSettings+Collect.h"; sourceTree = "<group>"; };
 		71760D631C42255D00FBCA29 /* TEALSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALSettings+Collect.m"; path = "../../Source/Collect/TEALSettings+Collect.m"; sourceTree = "<group>"; };
+		71760D651C42C83700FBCA29 /* TEALConfiguration+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALConfiguration+TagManagement.h"; path = "../../Source/TagManagement/TEALConfiguration+TagManagement.h"; sourceTree = "<group>"; };
+		71760D661C42C83700FBCA29 /* TEALConfiguration+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALConfiguration+TagManagement.m"; path = "../../Source/TagManagement/TEALConfiguration+TagManagement.m"; sourceTree = "<group>"; };
+		71760D681C42C84800FBCA29 /* TEALSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALSettings+TagManagement.h"; path = "../../Source/TagManagement/TEALSettings+TagManagement.h"; sourceTree = "<group>"; };
+		71760D691C42C84800FBCA29 /* TEALSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALSettings+TagManagement.m"; path = "../../Source/TagManagement/TEALSettings+TagManagement.m"; sourceTree = "<group>"; };
 		718546DA1C2876C3009CF93E /* 5.x_SourceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 5.x_SourceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718546DC1C2876C4009CF93E /* SourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceTests.m; sourceTree = "<group>"; };
 		718546DE1C2876C4009CF93E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1112,6 +1118,10 @@
 				710E1D181C29ABF6007BABF7 /* Tealium+TagManagement.m */,
 				710E1D191C29ABF6007BABF7 /* TEALTagDispatchService.h */,
 				710E1D1A1C29ABF6007BABF7 /* TEALTagDispatchService.m */,
+				71760D651C42C83700FBCA29 /* TEALConfiguration+TagManagement.h */,
+				71760D661C42C83700FBCA29 /* TEALConfiguration+TagManagement.m */,
+				71760D681C42C84800FBCA29 /* TEALSettings+TagManagement.h */,
+				71760D691C42C84800FBCA29 /* TEALSettings+TagManagement.m */,
 			);
 			path = tagmanagement;
 			sourceTree = "<group>";
@@ -1520,6 +1530,7 @@
 				710E1D6E1C29ABF6007BABF7 /* TEALDeviceDataSources.m in Sources */,
 				710E1D9E1C29ABF6007BABF7 /* TEALSimpleNetworkManager.m in Sources */,
 				710E1DA01C29ABF6007BABF7 /* TEALSystemHelpers.m in Sources */,
+				71760D671C42C83700FBCA29 /* TEALConfiguration+TagManagement.m in Sources */,
 				710E1D6A1C29ABF6007BABF7 /* UIImage+Tealium.m in Sources */,
 				710E1D681C29ABF6007BABF7 /* NSString+Tealium.m in Sources */,
 				3EE0A033196DDDF70059F740 /* AAPLSearchPresentOverNavigationBarViewController.m in Sources */,
@@ -1541,6 +1552,7 @@
 				710E1DD01C29ABF6007BABF7 /* TEALWKExtension.m in Sources */,
 				710E1D7A1C29ABF6007BABF7 /* TEALDispatch.m in Sources */,
 				710E1D901C29ABF6007BABF7 /* TEALDataStore.m in Sources */,
+				71760D6A1C42C84800FBCA29 /* TEALSettings+TagManagement.m in Sources */,
 				535682AF18F3670300BAAD62 /* AAPLDefaultSearchBarViewController.m in Sources */,
 				710E1D641C29ABF6007BABF7 /* NSDictionary+Tealium.m in Sources */,
 				710E1DCA1C29ABF6007BABF7 /* Tealium.m in Sources */,

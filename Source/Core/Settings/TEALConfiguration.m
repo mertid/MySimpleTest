@@ -29,7 +29,6 @@
 @property (nonatomic) BOOL autotrackingUIEventsEnabled;
 @property (nonatomic) BOOL autotrackingViewsEnabled;
 @property (nonatomic) BOOL mobileCompanionEnabled;
-//@property (nonatomic) NSString *privateInstanceID;
 
 @end
 
@@ -52,7 +51,6 @@
     configuration.profileName       = [profileName lowercaseString];
     configuration.environmentName   = [environmentName lowercaseString];
     configuration.useHTTP           = NO;
-//    configuration.pollingFrequency  = TEALVisitorProfilePollingFrequencyOnRequest;
     configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;
@@ -67,9 +65,6 @@
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishSettingsVersion = nil;
     configuration.overridePublishURL = nil;
-//    configuration.overrideCollectDispatchURL = nil;
-//    configuration.overrideS2SLegacyDispatchURL = nil;
-//    configuration.moduleData = [NSMutableDictionary new];
     
     NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];
     const char * queueName = [fullQueueName UTF8String];

@@ -71,15 +71,6 @@
  */
 @property (nonatomic) BOOL useHTTP;
 
-/**
- *  Frequency at which visitor profile should be polled.  
- *  By default after each sendEventWithData: and sendViewWithData: call an updated visitor profile will be requested.
- *  If set to on request, the library will only requery the profile when asked for using fetchVisitorProfileWithCompletion:
- *
- *  @default TEALVisitorProfilePollingFrequencyAfterEveryEvent
- *  @see TEALVisitorProfilePollingFrequency
- */
-//@property (nonatomic) TEALVisitorProfilePollingFrequency pollingFrequency;
 
 /**
  *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"
@@ -90,11 +81,6 @@
  *  If assigned, will replace the default address used to retrieve the tag management UTAG.js file.  Example - "https://my.domain.com/app/mobile.html"
  */
 @property (nonatomic) NSString *overridePublishURL;
-
-/**
- *  If assigned, will replace the destination endpoint for S2S Legacy dispatch calls.
- */
-//@property (nonatomic) NSString *overrideS2SLegacyDispatchURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
