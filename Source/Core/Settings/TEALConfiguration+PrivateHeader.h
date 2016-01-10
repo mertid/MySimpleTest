@@ -43,6 +43,20 @@
 
 @property (nonatomic) NSString *overridePublishSettingsVersion;
 
+
+- (NSMutableDictionary *) moduleData;
+- (NSMutableDictionary *) moduleDescriptionData;
+
+
+- (id) moduleObjectForKey:(id<NSCopying, NSSecureCoding>)key;
+
+- (void) setModuleObject:(id<NSCopying, NSSecureCoding>)object
+                  forKey:(id<NSCopying, NSSecureCoding>)aKey;
+
+- (void) setModuleDescription:(NSString *) description
+                       forKey:(NSString *)aKey;
+
+
 @end
 
 #endif

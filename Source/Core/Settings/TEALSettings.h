@@ -50,7 +50,8 @@
 - (NSString * _Nonnull) logLevelString;
 - (NSUInteger) offlineDispatchQueueSize;
 
-- (NSString * _Nullable) collectDispatchURLString;
+//- (NSString * _Nullable) collectDispatchURLString;
+
 - (NSString * _Nullable) s2SLegacyDispatchURLString;
 - (NSString * _Nullable) configurationDescription;
 - (NSString * _Nullable) publishSettingsDescription;

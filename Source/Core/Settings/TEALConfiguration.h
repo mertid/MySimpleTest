@@ -92,11 +92,6 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
 @property (nonatomic) NSString *overridePublishURL;
 
 /**
- *  If assigned, will replace the destination endpoint for Collect dispatch calls.
- */
-@property (nonatomic) NSString *overrideCollectDispatchURL;
-
-/**
  *  If assigned, will replace the destination endpoint for S2S Legacy dispatch calls.
  */
 @property (nonatomic) NSString *overrideS2SLegacyDispatchURL;

@@ -40,7 +40,9 @@ static TealiumHelper * _sharedInstance;
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                            profile:@"demo"
-                       environment:@"prod"];
+                       environment:@"dev"];
+    
+    configuration.overrideCollectDispatchURL = @"https://test.overide.com";
     
     configuration.pollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     

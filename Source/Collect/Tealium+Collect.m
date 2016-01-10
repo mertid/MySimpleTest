@@ -14,6 +14,7 @@
 #import "TEALCollectDispatchService.h"
 #import "TEALS2SLegacyDispatchService.h"
 #import "TEALS2SLegacyDispatchService.h"
+#import "TEALSettings+Collect.h"
 #import "TEALError.h"
 #import "NSArray+Tealium.h"
 #import <objc/runtime.h>

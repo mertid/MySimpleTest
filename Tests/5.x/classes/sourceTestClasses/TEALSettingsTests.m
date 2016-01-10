@@ -35,34 +35,34 @@
 
 #pragma mark - CONFIGURATIONS
 
-- (void) testDefaultDispatchURLString {
-    
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                              profile:@"demo"
-                                                          environment:@"dev"];
-    
-    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-    
-    NSString *defaultURLString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main";
-    
-    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:defaultURLString], @"Default dispatch URL returned unexpected string: %@", [self.settings collectDispatchURLString]);
-}
+//- (void) testDefaultDispatchURLString {
+//    
+//    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                              profile:@"demo"
+//                                                          environment:@"dev"];
+//    
+//    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+//    
+//    NSString *defaultURLString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main";
+//    
+//    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
+//    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:defaultURLString], @"Default dispatch URL returned unexpected string: %@", [self.settings collectDispatchURLString]);
+//}
 
-- (void) testDispatchURLStringOverride {
-    
-    NSString *urlString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main&tealium_vid=";
-
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                             profile:@"demo"
-                                                         environment:@"dev"];
-    self.configuration.overrideCollectDispatchURL = urlString;
-    
-    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-    
-    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:urlString], @"Override dispatch URL string not as expected: %@", [self.settings collectDispatchURLString]);
-}
+//- (void) testDispatchURLStringOverride {
+//    
+//    NSString *urlString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main&tealium_vid=";
+//
+//    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                             profile:@"demo"
+//                                                         environment:@"dev"];
+//    self.configuration.overrideCollectDispatchURL = urlString;
+//    
+//    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+//    
+//    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
+//    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:urlString], @"Override dispatch URL string not as expected: %@", [self.settings collectDispatchURLString]);
+//}
 
 - (void) testDefaultPublishURL {
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
