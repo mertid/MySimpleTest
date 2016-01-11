@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                           profile:@"ios"
+                           profile:@"demo"
                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://test.overide.com";
@@ -47,6 +47,8 @@ static TealiumHelper * _sharedInstance;
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
 //    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/utag/tealiummobile/ios/dev/mobile.html";
+    
+    configuration.remoteCommandsEnabled = YES;
     
     configuration.collectPollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     

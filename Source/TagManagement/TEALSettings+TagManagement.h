@@ -10,8 +10,10 @@
 
 @interface TEALSettings (TagManagement)
 
-//- (BOOL) tagManagementEnabled;
-//
-//- (NSString * _Nullable) publishURLString;
+- (BOOL) tagManagementEnabled;
+
+- (BOOL) remoteCommandsEnabled;
+
+- (NSString * _Nullable) tagManagementPublishURLString;
 
 @end

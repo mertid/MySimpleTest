@@ -437,9 +437,6 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
             @"number of day dispatches valid":[NSString stringWithFormat:@"%f",(double)self.numberOfDaysDispatchesAreValid],
             @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
             @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
-//            @"enable Collect":[NSString teal_stringFromBool:self.enableCollect],
-//            @"enable S2S Legacy":[NSString teal_stringFromBool:self.enableS2SLegacy],
-//            @"enable Tag Management":[NSString teal_stringFromBool:self.enableTagManagement],
             @"override log level":[NSString teal_dictionarySafeString:[self overrideLogLevel]]
             };
 }

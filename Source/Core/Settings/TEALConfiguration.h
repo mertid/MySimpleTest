@@ -62,7 +62,7 @@
  *
  *  @default YES
  */
-@property (nonatomic) BOOL remoteCommandsEnabled;
+//@property (nonatomic) BOOL remoteCommandsEnabled;
 
 /**
  *  Flag when on will send all data for HTTP.  Suggested to be used in development only!

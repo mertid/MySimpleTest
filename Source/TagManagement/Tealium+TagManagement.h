@@ -12,6 +12,8 @@
 
 #import "Tealium.h"
 #import "TEALRemoteCommandResponse.h"
+#import "TEALConfiguration+TagManagement.h"
+#import "TEALSettings+TagManagement.h"
 
 @interface Tealium (TagManagement)
 

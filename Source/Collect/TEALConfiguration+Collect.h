@@ -79,5 +79,5 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
  *  @param completion Optional completion block to return once trace id has been set
  */
 - (void) setTraceID:(NSString * _Nullable)traceID
-         completion:(void(^ _Nullable)(BOOL successful, NSError *error))completion;
+         completion:(void(^ _Nullable)(BOOL successful, NSError * _Nullable error))completion;
 @end

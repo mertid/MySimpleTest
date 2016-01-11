@@ -17,6 +17,7 @@
 #import "TEALTagDispatchService.h"
 #import "TEALRemoteCommandConstants.h"
 #import "TEALRemoteCommandManager.h"
+#import "TEALSettings+TagManagement.h"
 
 @interface Tealium() <TEALTagDispatchServiceDelegate>
 
@@ -50,6 +51,29 @@
 }
 
 #pragma mark - PRIVATE INSTANCE
+
+- (void) updateTagManagement {
+    
+    if ([self.settings tagManagementEnabled]){
+        
+        [self enableTagManagement];
+        
+        if ([self.settings remoteCommandsEnabled]){
+            
+            [self enableRemoteCommands];
+            
+        } else {
+            
+            [self disableRemoteCommands];
+            
+        }
+        
+    } else {
+        [self disableTagManagement];
+        [self disableRemoteCommands];
+    }
+    
+}
 
 - (void) enableTagManagement {
     
@@ -121,7 +145,7 @@
             }
             
             TEALTagDispatchService *aService = obj;
-            if ([aService.publishURLStringCopy isEqualToString:self.settings.publishURLString]){
+            if ([aService.publishURLStringCopy isEqualToString:[self.settings tagManagementPublishURLString]]){
                 targetService = aService;
                 *stop = YES;
             }
@@ -134,7 +158,7 @@
 
 - (TEALTagDispatchService *) newTagDispatchService {
     
-    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:self.settings.publishURLString operationManager:self.operationManager];
+    TEALTagDispatchService *tagService = [[TEALTagDispatchService alloc] initWithPublishURLString:[self.settings tagManagementPublishURLString] operationManager:self.operationManager];
     
     [tagService setDelegate:self];
     

@@ -26,9 +26,7 @@
 - (BOOL) autotrackingCrashesEnabled;
 - (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
-- (BOOL) remoteCommandsEnabled;
 - (BOOL) isValid;
-- (BOOL) tagManagementEnabled;
 - (BOOL) useHTTP;
 - (BOOL) wifiOnlySending;
 - (BOOL) goodBatteryLevelOnlySending;
@@ -49,7 +47,6 @@
 - (NSString * _Nullable) configurationDescription;
 - (NSString * _Nullable) publishSettingsDescription;
 - (NSString * _Nullable) publishSettingsURLString;
-- (NSString * _Nullable) publishURLString;
 
 - (TEALPublishSettings * _Nonnull) publishSettings;
 

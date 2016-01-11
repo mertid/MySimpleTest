@@ -635,38 +635,31 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     self.modulesDelegate = self;
     
-    // Lifecycle
-    if ([self.settings autotrackingLifecycleEnabled]){
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]) {
-            [self.modulesDelegate enableAutotrackingLifecycle];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
-            [self.modulesDelegate disableAutotrackingLifecycle];
-        }
+    // Tag Management
+    if ([self.modulesDelegate respondsToSelector:@selector(updateTagManagement)]){
+        [self.modulesDelegate updateTagManagement];
     }
     
-    // Tag Management
-    if ([self.settings tagManagementEnabled]){
-        
-        if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]) {
-            [self.modulesDelegate enableTagManagement];
-        }
-        
-        if ([self.settings remoteCommandsEnabled]){
-            if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]) {
-                [self.modulesDelegate enableRemoteCommands];
-            }
-        } else {
-            if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
-                [self.modulesDelegate disableRemoteCommands];
-            }
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableTagMangement)]) {
-            [self.modulesDelegate disableTagMangement];
-        }
-    }
+//    if ([self.settings tagManagementEnabled]){
+//        
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableTagManagement)]) {
+//            [self.modulesDelegate enableTagManagement];
+//        }
+//        
+//        if ([self.settings remoteCommandsEnabled]){
+//            if ([self.modulesDelegate respondsToSelector:@selector(enableRemoteCommands)]) {
+//                [self.modulesDelegate enableRemoteCommands];
+//            }
+//        } else {
+//            if ([self.modulesDelegate respondsToSelector:@selector(disableRemoteCommands)]) {
+//                [self.modulesDelegate disableRemoteCommands];
+//            }
+//        }
+//    } else {
+//        if ([self.modulesDelegate respondsToSelector:@selector(disableTagMangement)]) {
+//            [self.modulesDelegate disableTagMangement];
+//        }
+//    }
     
     
     // Collect
@@ -674,80 +667,72 @@ __strong static NSDictionary *staticAllInstances = nil;
         [self.modulesDelegate updateCollect];
     }
     
-//    if ([self.settings collectEnabled]){
-//        if ([self.modulesDelegate respondsToSelector:@selector(enableCollect)]) {
-//            [self.modulesDelegate enableCollect];
-//        }
-//    } else {
-//        if ([self.modulesDelegate respondsToSelector:@selector(disableCollect)]) {
-//            [self.modulesDelegate disableCollect];
-//        }
-//    }
-    
     // S2S Legacy
     if ([self.modulesDelegate respondsToSelector:@selector(updateS2SLegacy)]){
         [self.modulesDelegate updateS2SLegacy];
     }
-//    if ([self.settings s2SLegacyEnabled]){
-//        
-//        if ([self.modulesDelegate respondsToSelector:@selector(enableS2SLegacy)]){
-//            [self.modulesDelegate enableS2SLegacy];
-//        }
-//        
-//    } else {
-//        if (([self.modulesDelegate respondsToSelector:@selector(disableS2SLegacy)])){
-//            [self.modulesDelegate disableS2SLegacy];
-//        }
-//    }
     
-    // UIEvents
-    if ([self.settings autotrackingUIEventsEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]) {
-            [self.modulesDelegate enableAutotrackingUIEvents];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingUIEvents)]) {
-            [self.modulesDelegate disableAutotrackingUIEvents];
-        }
-    }
-    
-    // Views
-    if ([self.settings autotrackingViewsEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]) {
-            [self.modulesDelegate enableAutotrackingViews];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingViews)]) {
-            [self.modulesDelegate disableAutotrackingViews];
-        }
-    }
+
     
     // WatchKit
     
     
     // TODO - For 5.1 release
     
-    // Mobile Companion
-    if ([self.settings mobileCompanionEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableMobileCompanion)]) {
-            [self.modulesDelegate enableMobileCompanion];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
-            [self.modulesDelegate disableMobileCompanion];
-        }
-    }
+    // Lifecycle
+    //    if ([self.settings autotrackingLifecycleEnabled]){
+    //        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingLifecycle)]) {
+    //            [self.modulesDelegate enableAutotrackingLifecycle];
+    //        }
+    //    } else {
+    //        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingLifecycle)]) {
+    //            [self.modulesDelegate disableAutotrackingLifecycle];
+    //        }
+    //    }
     
-    // Crashes
-    if ([self.settings autotrackingCrashesEnabled]) {
-        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
-            [self.modulesDelegate enableAutotrackingCrashes];
-        }
-    } else {
-        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]) {
-            [self.modulesDelegate disableAutotrackingCrashes];
-        }
-    }
+    // UIEvents
+    //    if ([self.settings autotrackingUIEventsEnabled]) {
+    //        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingUIEvents)]) {
+    //            [self.modulesDelegate enableAutotrackingUIEvents];
+    //        }
+    //    } else {
+    //        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingUIEvents)]) {
+    //            [self.modulesDelegate disableAutotrackingUIEvents];
+    //        }
+    //    }
+    
+    // Views
+    //    if ([self.settings autotrackingViewsEnabled]) {
+    //        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingViews)]) {
+    //            [self.modulesDelegate enableAutotrackingViews];
+    //        }
+    //    } else {
+    //        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingViews)]) {
+    //            [self.modulesDelegate disableAutotrackingViews];
+    //        }
+    //    }
+    
+    // Mobile Companion
+//    if ([self.settings mobileCompanionEnabled]) {
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableMobileCompanion)]) {
+//            [self.modulesDelegate enableMobileCompanion];
+//        }
+//    } else {
+//        if ([self.modulesDelegate respondsToSelector:@selector(disableMobileCompanion)]) {
+//            [self.modulesDelegate disableMobileCompanion];
+//        }
+//    }
+//    
+//    // Crashes
+//    if ([self.settings autotrackingCrashesEnabled]) {
+//        if ([self.modulesDelegate respondsToSelector:@selector(enableAutotrackingCrashes)]) {
+//            [self.modulesDelegate enableAutotrackingCrashes];
+//        }
+//    } else {
+//        if ([self.modulesDelegate respondsToSelector:@selector(disableAutotrackingCrashes)]) {
+//            [self.modulesDelegate disableAutotrackingCrashes];
+//        }
+//    }
     
 }
 

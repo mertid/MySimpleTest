@@ -7,37 +7,48 @@
 //
 
 #import "TEALSettings+TagManagement.h"
+#import "TEALSettings+PrivateHeader.h"
+#import "TEALPublishSettings+TagManagement.h"
+#import "TEALConfiguration+TagManagement.h"
 
 @implementation TEALSettings (TagManagement)
 
-//- (BOOL) tagManagementEnabled {
-//    
-//    return [self publishSettings].enableTagManagement;
-//
-//}
-//
-//- (NSString * _Nullable) publishURLString {
-//
-//}
-//
-//+ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
-//    
-//    if ([configuration overridePublishURL]) {
-//        return configuration.overridePublishURL;
-//    }
-//    
-//    // Default
-//    NSString *urlPrefix = @"https:";
-//    
-//    if (configuration.useHTTP) {
-//        urlPrefix = @"http:";
-//    }
-//    
-//    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
-//            urlPrefix,
-//            configuration.accountName,
-//            configuration.profileName,
-//            configuration.environmentName];
-//}
+- (BOOL) tagManagementEnabled {
+    
+    return [[self publishSettings] enableTagManagement];
+
+}
+
+- (BOOL) remoteCommandsEnabled {
+    
+    return [[self configuration] remoteCommandsEnabled];
+}
+
+
+- (NSString * _Nullable) tagManagementPublishURLString {
+    
+    return [TEALSettings publishURLFromConfiguration:self.configuration];
+    
+}
+
++ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
+    
+    if ([configuration overridePublishURL]) {
+        return configuration.overridePublishURL;
+    }
+    
+    // Default
+    NSString *urlPrefix = @"https:";
+    
+    if (configuration.useHTTP) {
+        urlPrefix = @"http:";
+    }
+    
+    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+            urlPrefix,
+            configuration.accountName,
+            configuration.profileName,
+            configuration.environmentName];
+}
 
 @end

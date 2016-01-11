@@ -61,7 +61,7 @@
     configuration.autotrackingViewsEnabled = YES;
     configuration.autotrackingCrashesEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
-    configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
+//    configuration.remoteCommandsEnabled = YES;  // Only enables if TagManagement is turned on
     configuration.overridePublishSettingsURL = nil;
     configuration.overridePublishSettingsVersion = nil;
     configuration.overridePublishURL = nil;
@@ -191,7 +191,7 @@
               //                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
               //                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
               //                                          @"override mps publish settings version":[NSString teal_dictionarySafeString:self.overridePublishSettingsVersion],
-              @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
+//              @"remote commands enabled":[NSString teal_stringFromBool:self.remoteCommandsEnabled],
               @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
               @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
 //              @"override dispatch url":[NSString teal_dictionarySafeString:self.overrideCollectDispatchURL],

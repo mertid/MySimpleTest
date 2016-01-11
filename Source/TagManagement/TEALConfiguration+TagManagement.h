@@ -10,9 +10,17 @@
 
 @interface TEALConfiguration (TagManagement)
 
-- (NSString *) overrideTagManagementPublishURL;
+/**
+ *  Read-only flag for remote commands triggerablilty status.
+ *
+ *  @default YES
+ */
+- (BOOL) remoteCommandsEnabled;
 
-- (void) setOverrideTagManagementPublishURL:(NSString *)publishURL;
+- (NSString * _Nullable) overrideTagManagementPublishURL;
 
+- (void) setOverrideTagManagementPublishURL:(NSString * _Nonnull)publishURL;
+
+- (void) setRemoteCommandsEnabled:(BOOL)enabled;
 
 @end

@@ -23,7 +23,6 @@
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
 @property (nonatomic, strong) NSDate *lastFetch;
-//@property (nonatomic, weak) NSString *visitorID;
 
 @end
 
@@ -70,47 +69,6 @@
             configuration.profileName,
             configuration.environmentName];
 }
-
-//+ (NSURL *) profileURLFromSettings:(TEALSettings *)settings {
-//    
-//    if (![settings isValid]) {
-//        return nil;
-//    }
-//    
-//    NSString *urlPrefix = @"https:";
-//    
-//    if ([settings useHTTP]) {
-//        urlPrefix = @"http:";
-//    }
-//    
-//    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/%@/%@/%@",
-//                           urlPrefix,
-//                           settings.account,
-//                           settings.asProfile,
-//                           [settings visitorIDCopy]];
-//    
-//    return [NSURL URLWithString:urlString];
-//}
-//
-//+ (NSURL *) profileDefinitionsURLFromSettings:(TEALSettings *)settings {
-//    
-//    if (![settings isValid]) {
-//        return nil;
-//    }
-//    
-//    NSString *urlPrefix = @"https:";
-//    
-//    if ([settings useHTTP]) {
-//        urlPrefix = @"http:";
-//    }
-//    
-//    NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
-//                           urlPrefix,
-//                           [settings account],
-//                           [settings asProfile]];
-//    
-//    return [NSURL URLWithString:urlString];
-//}
 
 #pragma mark - PUBLIC METHODS
 
@@ -182,19 +140,9 @@
     return false;
 }
 
-- (BOOL) remoteCommandsEnabled {
-    return self.configuration.remoteCommandsEnabled;
-}
-
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] &&
             [self publishSettings].status != TEALPublishSettingsStatusDisable);
-}
-
-- (BOOL) tagManagementEnabled {
-
-    return false;
-//    return [self publishSettings].enableTagManagement;
 }
 
 - (BOOL) useHTTP {
