@@ -240,6 +240,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 //    return compositeDataSources;
 //}
 
+- (NSDictionary *) volatileDataSourcesCopy {
+    
+    return [[self.dataSources clientVolatileDataSources] copy];
+    
+}
+
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
     
     __block typeof(self) __weak weakSelf = self;

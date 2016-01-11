@@ -126,6 +126,7 @@
 		716746971C4334E1001A27D8 /* s2s_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716746951C4334E1001A27D8 /* s2s_OFF.html */; };
 		716746981C4334E1001A27D8 /* s2s_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716746961C4334E1001A27D8 /* s2s_ON.html */; };
 		7167469C1C433F2B001A27D8 /* collect_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 7167469B1C433F2B001A27D8 /* collect_ON.json */; };
+		7167469E1C437247001A27D8 /* TEALPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7167469D1C437247001A27D8 /* TEALPublishSettingsTests.m */; };
 		71760D5C1C40745D00FBCA29 /* no_mps.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5B1C40745D00FBCA29 /* no_mps.html */; };
 		71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */; };
 		71760D611C421D7800FBCA29 /* TEALConfiguration+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D601C421D7800FBCA29 /* TEALConfiguration+Collect.m */; };
@@ -558,6 +559,7 @@
 		716746951C4334E1001A27D8 /* s2s_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = s2s_OFF.html; path = ../../../tests/5.x/mps/s2s_OFF.html; sourceTree = "<group>"; };
 		716746961C4334E1001A27D8 /* s2s_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = s2s_ON.html; path = ../../../tests/5.x/mps/s2s_ON.html; sourceTree = "<group>"; };
 		7167469B1C433F2B001A27D8 /* collect_ON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = collect_ON.json; sourceTree = "<group>"; };
+		7167469D1C437247001A27D8 /* TEALPublishSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TEALPublishSettingsTests.m; path = ../../../../../5.x/classes/sourceTestClasses/TEALPublishSettingsTests.m; sourceTree = "<group>"; };
 		71760D5B1C40745D00FBCA29 /* no_mps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_mps.html; sourceTree = "<group>"; };
 		71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = mps_5_no_minutes_between_refresh.html; sourceTree = "<group>"; };
 		71760D5F1C421D7800FBCA29 /* TEALConfiguration+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALConfiguration+Collect.h"; path = "../../Source/Collect/TEALConfiguration+Collect.h"; sourceTree = "<group>"; };
@@ -1231,6 +1233,7 @@
 		718546DB1C2876C3009CF93E /* SourceTests */ = {
 			isa = PBXGroup;
 			children = (
+				7167469D1C437247001A27D8 /* TEALPublishSettingsTests.m */,
 				718546DC1C2876C4009CF93E /* SourceTests.m */,
 				718546DE1C2876C4009CF93E /* Info.plist */,
 			);
@@ -1672,6 +1675,7 @@
 				712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */,
 				712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */,
 				712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */,
+				7167469E1C437247001A27D8 /* TEALPublishSettingsTests.m in Sources */,
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

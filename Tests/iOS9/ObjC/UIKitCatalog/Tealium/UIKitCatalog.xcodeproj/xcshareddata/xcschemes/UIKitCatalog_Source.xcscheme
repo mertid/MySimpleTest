@@ -43,9 +43,6 @@
                   Identifier = "TealiumConfigurationsTests/testAnything">
                </Test>
                <Test
-                  Identifier = "TealiumDataManagmentTests/testAddAndRemoveVolatileDataSource">
-               </Test>
-               <Test
                   Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
                </Test>
                <Test
