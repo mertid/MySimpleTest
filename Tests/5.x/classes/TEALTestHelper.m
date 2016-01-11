@@ -125,4 +125,47 @@
     
 }
 
++ (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename{
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:filename ofType:@"html"];
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL exists = [fileManager fileExistsAtPath:path];
+        
+    NSAssert(exists, @"Test file %@ does not exist at path:%@", filename, path);
+    
+    
+    // Need a working config, but account-profile doesn't matter as we'll be overriding
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    config.overridePublishSettingsURL = path;
+    
+    return config;
+    
+}
+
++ (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename{
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:filename ofType:@"json"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL exists = [fileManager fileExistsAtPath:path];
+    
+    NSAssert(exists, @"Test file %@ does not exist at path:%@", filename, path);
+    
+    
+    // Need a working config, but account-profile doesn't matter as we'll be overriding
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    config.overridePublishSettingsURL = path;
+    
+    return config;
+    
+}
 @end

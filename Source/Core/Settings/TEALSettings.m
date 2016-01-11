@@ -23,7 +23,7 @@
 @property (nonatomic, strong) NSString *mobilePublishSettingsURLString;
 @property (nonatomic, strong) NSString *tiqPublishURLString;
 @property (nonatomic, strong) NSDate *lastFetch;
-@property (nonatomic, weak) NSString *visitorID;
+//@property (nonatomic, weak) NSString *visitorID;
 
 @end
 
@@ -131,52 +131,46 @@
 
 - (BOOL) autotrackingApplicationInfoEnabled {
     
-    if ([self publishSettings].disableApplicationInfoAutotracking) return NO;
-    return self.configuration.autotrackingApplicationInfoEnabled;
+    return true;
 }
 
 - (BOOL) autotrackingCarrierInfoEnabled {
     
-    if ([self publishSettings].disableCarrierInfoAutotracking) return NO;
-    return self.configuration.autotrackingCarrierInfoEnabled;
+    return true;
+    
 }
 
 - (BOOL) autotrackingDeviceInfoEnabled {
     
-    if ([self publishSettings].disableDeviceInfoAutotracking) return NO;
-    return self.configuration.autotrackingDeviceInfoEnabled;
+    return true;
+    
+//    if ([self publishSettings].disableDeviceInfoAutotracking) return NO;
+//    return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
         
-    if ([self publishSettings].disableiVarAutotracking) return NO;
-    return self.configuration.autotrackingIvarsEnabled;
+    return false;
 }
 
 - (BOOL) autotrackingLifecycleEnabled {
-    if ([self publishSettings].disableLifecycleAutotracking) return NO;
-    return self.configuration.autotrackingLifecycleEnabled;
+    return false;
 }
 
 - (BOOL) autotrackingTimestampInfoEnabled {
-        
-    if ([self publishSettings].disableTimestampAutotracking) return NO;
-    return self.configuration.autotrackingTimestampInfoEnabled;
+    return true;
 }
 
 - (BOOL) autotrackingUIEventsEnabled {
-    if ([self publishSettings].disableUIEventAutotracking) return NO;
-    return self.configuration.autotrackingUIEventsEnabled;
+    return false;
 }
 
 - (BOOL) autotrackingViewsEnabled {
-    if ([self publishSettings].disableViewAutotracking) return NO;
-    return self.configuration.autotrackingViewsEnabled;
+    return false;
 }
 
 - (BOOL) autotrackingCrashesEnabled {
-    if ([self publishSettings].disableCrashAutotracking) return NO;
-    return self.configuration.autotrackingCrashesEnabled;
+    return false;
 }
 
 - (BOOL) libraryShouldDisable {
@@ -185,8 +179,7 @@
 }
 
 - (BOOL) mobileCompanionEnabled {
-    if ([self publishSettings].disableMobileCompanion) return NO;
-    return self.configuration.mobileCompanionEnabled;
+    return false;
 }
 
 - (BOOL) remoteCommandsEnabled {
@@ -200,7 +193,8 @@
 
 - (BOOL) tagManagementEnabled {
 
-    return [self publishSettings].enableTagManagement;
+    return false;
+//    return [self publishSettings].enableTagManagement;
 }
 
 - (BOOL) useHTTP {
@@ -209,12 +203,12 @@
 
 - (BOOL) wifiOnlySending {
     
-    return [self publishSettings].enableSendWifiOnly;
+    return [[self publishSettings] enableSendWifiOnly];
 }
 
 - (BOOL) goodBatteryLevelOnlySending {
     
-    return ![self publishSettings].enableLowBatterySuppress;
+    return ![[self publishSettings] enableLowBatterySuppress];
 }
 
 - (BOOL) isDefaultPublishSettings {
@@ -224,7 +218,7 @@
 }
 
 - (double) daysDispatchesValid {
-    return [self publishSettings].numberOfDaysDispatchesAreValid;
+    return [[self publishSettings] numberOfDaysDispatchesAreValid];
 }
 
 - (NSString *) account {
@@ -288,7 +282,7 @@
 }
 
 - (NSUInteger) offlineDispatchQueueSize {
-    return [self publishSettings].offlineDispatchQueueSize;
+    return [[self publishSettings] offlineDispatchQueueSize];
 }
 
 - (NSURLRequest *) publishSettingsRequest {
@@ -458,9 +452,9 @@
     NSString *override = self.configuration.overridePublishSettingsVersion;
     
     if (override){
-        settings.publishSettingsVersion = override;
+        settings.targetVersion = override;
     } else {
-        settings.publishSettingsVersion = TEALDefaultPublishVersion;
+        settings.targetVersion = TEALDefaultPublishVersion;
     }
     
     self.privatePublishSettings = settings;

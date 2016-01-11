@@ -11,6 +11,7 @@
 #import "TEALConfiguration+Collect.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALNetworkHelpers.h"
+#import "TEALPublishSettings+Collect.h"
 
 
 static NSString * defaultCollectDispatchURLString = nil;
@@ -23,13 +24,13 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
 
 - (BOOL) collectEnabled {
     
-    return [self publishSettings].enableCollect;
+    return [[self publishSettings] enableCollect];
     
 }
 
 - (BOOL) s2SLegacyEnabled {
     
-    return [self publishSettings].enableS2SLegacy;
+    return [[self publishSettings] enableS2SLegacy];
 }
 
 - (NSString *) collectDispatchURLStringForVisitorID:(NSString *)visitorID {

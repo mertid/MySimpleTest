@@ -256,6 +256,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     
     NSUInteger processingCount = [self.processingQueue count];
 
+#warning Do not notify delegate if count is 0
+    
     [self.delegate dispatchManagerdWillRunDispatchQueueWithCount:processingCount];
     
     [self recursivelyDispatchWithCompletion:^{

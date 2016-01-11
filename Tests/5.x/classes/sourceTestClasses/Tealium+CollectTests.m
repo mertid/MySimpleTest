@@ -69,6 +69,43 @@
 
 #pragma mark TESTS
 
+- (void) testCollectEnabledByPublishSettings {
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"html"];
+
+    XCTAssertTrue(path, @"Path confirmation to test file failed:%@", path);
+    
+    NSString *pathJSON = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"json"];
+    
+    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);
+ 
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"collectEnable"];
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+       
+        XCTAssertTrue(success, @"Unable to fetch remote test settings:%@", error);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    XCTAssertTrue([self.library.settings collectEnabled], @"Collect was not enabled by remote publish settings.");
+    
+    
+}
+
+//- (void) testCollectDisabledByPublishSettings {
+// 
+//    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestHTMLFilename:@"collect_OFF"
+//                                                                          testClass:self]];
+//    
+//    XCTAssertFalse([self.library.settings collectEnabled], @"Collect service should not have been enabled per test remote publish setting.");
+//}
+
 - (void) testTrace {
     
 #warning Check to see if test passes upon initial load
@@ -98,6 +135,8 @@
     [self.library joinTraceWithToken:token
                           completion:^(BOOL success, NSError * _Nullable error) {
         
+        XCTAssertTrue(success, @"Unexpected error in joinging trace:%@", error);
+                              
         isReady = YES;
         
     }];

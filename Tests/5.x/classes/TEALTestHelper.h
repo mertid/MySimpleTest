@@ -19,6 +19,9 @@
 + (TEALConfiguration *) liveConfig;
 + (TEALConfiguration *) nonExistentConfig;
 + (TEALConfiguration *) validConfigWithNoMPS;
++ (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename;
++ (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename;
+
 
 #warning add a library class start method
 

@@ -1221,7 +1221,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count {
     
     [self.logger logDev:[NSString stringWithFormat:@"Will dispatch queue with %lu dispatches.", (unsigned long)count]];
-
     
 }
 

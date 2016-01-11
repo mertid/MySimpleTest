@@ -35,7 +35,7 @@
 /**
  *  Trace id currently active - if set. Calls current Configurations traceID.
  */
-- (NSString *) traceID;
+- (NSString * _Nullable) traceID;
 
 /**
  *  Current destination URL endpoint for collect dispatches.
@@ -44,7 +44,7 @@
  *
  *  @return NSString String representation of the target URL.
  */
-- (NSString * _Nullable) collectDispatchURLStringForVisitorID:(NSString *)visitorID;
+- (NSString * _Nullable) collectDispatchURLStringForVisitorID:(NSString * _Nonnull)visitorID;
 
 /**
  *  Current destination URL endpoint for s2s legacy dispatches.
@@ -56,7 +56,7 @@
 /**
  *  The url used to retrieve the collect profile for AudienceStream, if service is running.
  */
-- (NSURL * _Nullable) collectProfileURLForVisitorID:(NSString *)visitorID;
+- (NSURL * _Nullable) collectProfileURLForVisitorID:(NSString * _Nonnull)visitorID;
 
 /**
  *  The url used to retrieve the collect profile definitions for AudienceStream, if service is running.
@@ -68,6 +68,6 @@
  *
  *  @param traceID String identifier of trace to use.
  */
-- (void) setTraceID:(NSString *)traceID;
+- (void) setTraceID:(NSString * _Nonnull)traceID;
 
 @end

@@ -9,9 +9,11 @@
 #import "TEALSettings+TagManagement.h"
 
 @implementation TEALSettings (TagManagement)
-//
+
 //- (BOOL) tagManagementEnabled {
 //    
+//    return [self publishSettings].enableTagManagement;
+//
 //}
 //
 //- (NSString * _Nullable) publishURLString {

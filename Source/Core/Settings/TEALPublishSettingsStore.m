@@ -61,6 +61,12 @@ NSString * const TEALPublishSettingsStoreKey = @"com.tealium.publishsettingsstor
     
     NSData *settingsData = [NSKeyedArchiver archivedDataWithRootObject:settings];
     
+    if (!settings.url) {
+     
+        return;
+        
+    }
+    
     NSDictionary *newPublishSettings = [self newPublishSettingsWithData:settingsData
                                                                  forKey:settings.url];
     
@@ -75,7 +81,9 @@ NSString * const TEALPublishSettingsStoreKey = @"com.tealium.publishsettingsstor
     NSDictionary *publishSettings = [[NSUserDefaults standardUserDefaults] objectForKey:TEALPublishSettingsStoreKey];
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    
     [mDict addEntriesFromDictionary:publishSettings];
+    
     mDict[key] = data;
     
     return [NSDictionary dictionaryWithDictionary:mDict];

@@ -87,7 +87,7 @@ NSString * const versionToTest = @"5.0.0";
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                          
-                         XCTAssert(!error, @"Error in track call detected");
+                         XCTAssert(!error, @"Error in track call detected:%@", error);
                          
                          NSDictionary *dispatchData = returnDispatch.payload;
                          
@@ -122,7 +122,7 @@ NSString * const versionToTest = @"5.0.0";
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                          
-                         XCTAssert(!error, @"Error in track call detected");
+                         XCTAssert(!error, @"Error in track call detected:%@", error);
                          
                          NSDictionary *dispatchData = returnDispatch.payload;
                          

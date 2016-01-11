@@ -37,30 +37,51 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
-@property (nonatomic) TEALPublishSettingsStatus status;
-@property (nonatomic) NSString * _Nonnull url;
-@property (nonatomic) NSUInteger dispatchSize; // batching
-@property (nonatomic) NSUInteger offlineDispatchQueueSize;
-@property (nonatomic) NSString * _Nonnull publishSettingsVersion;
-@property (nonatomic) double minutesBetweenRefresh;
-@property (nonatomic) double numberOfDaysDispatchesAreValid;
-@property (nonatomic) BOOL enableLowBatterySuppress;
-@property (nonatomic) BOOL enableSendWifiOnly;
-@property (nonatomic) BOOL enableCollect;
-@property (nonatomic) BOOL enableS2SLegacy;
-@property (nonatomic) BOOL enableTagManagement;
+#warning REFACTOR - only property we're going to use is privateRawPublishSettings - everything else will be accessor methods
 
-@property (nonatomic) BOOL disableLibrary;
-@property (nonatomic) BOOL disableApplicationInfoAutotracking;
-@property (nonatomic) BOOL disableCarrierInfoAutotracking;
-@property (nonatomic) BOOL disableCrashAutotracking;
-@property (nonatomic) BOOL disableDeviceInfoAutotracking;
-@property (nonatomic) BOOL disableUIEventAutotracking;
-@property (nonatomic) BOOL disableViewAutotracking;
-@property (nonatomic) BOOL disableiVarAutotracking;
-@property (nonatomic) BOOL disableLifecycleAutotracking;
-@property (nonatomic) BOOL disableTimestampAutotracking;
-@property (nonatomic) BOOL disableMobileCompanion;
+@property (nonatomic) TEALPublishSettingsStatus status;
+@property (nonatomic) NSString * _Nonnull targetVersion;
+@property (nonatomic) NSString * _Nonnull url;
+
+- (BOOL) enableLowBatterySuppress;
+
+- (BOOL) enableSendWifiOnly;
+
+- (BOOL) disableLibrary;
+
+- (double) minutesBetweenRefresh;
+
+- (double) numberOfDaysDispatchesAreValid;
+
+- (NSString * _Nullable) overrideLogLevel;
+
+- (NSUInteger) dispatchSize;
+
+- (NSUInteger) offlineDispatchQueueSize;
+
+//@property (nonatomic) NSString * _Nonnull url;
+//@property (nonatomic) NSUInteger dispatchSize; // batching
+//@property (nonatomic) NSUInteger offlineDispatchQueueSize;
+//@property (nonatomic) NSString * _Nonnull publishSettingsVersion;
+//@property (nonatomic) double minutesBetweenRefresh;
+//@property (nonatomic) double numberOfDaysDispatchesAreValid;
+//@property (nonatomic) BOOL enableLowBatterySuppress;
+//@property (nonatomic) BOOL enableSendWifiOnly;
+////@property (nonatomic) BOOL enableCollect;
+////@property (nonatomic) BOOL enableS2SLegacy;
+//@property (nonatomic) BOOL enableTagManagement;
+//
+//@property (nonatomic) BOOL disableLibrary;
+//@property (nonatomic) BOOL disableApplicationInfoAutotracking;
+//@property (nonatomic) BOOL disableCarrierInfoAutotracking;
+//@property (nonatomic) BOOL disableCrashAutotracking;
+//@property (nonatomic) BOOL disableDeviceInfoAutotracking;
+//@property (nonatomic) BOOL disableUIEventAutotracking;
+//@property (nonatomic) BOOL disableViewAutotracking;
+//@property (nonatomic) BOOL disableiVarAutotracking;
+//@property (nonatomic) BOOL disableLifecycleAutotracking;
+//@property (nonatomic) BOOL disableTimestampAutotracking;
+//@property (nonatomic) BOOL disableMobileCompanion;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 + (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data error:(NSError * _Nullable __autoreleasing * _Nullable)error;
@@ -68,9 +89,9 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 - (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
 
 - (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary * _Nonnull) rawPublishSettings;
+
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings * _Nonnull)otherPublishSettings;
 - (BOOL) areNewRawPublishSettings:(NSDictionary * _Nonnull)rawPublishSettings;
 - (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
-- (NSString * _Nullable) overrideLogLevel;
 
 @end
