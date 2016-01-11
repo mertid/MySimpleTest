@@ -43,6 +43,7 @@
 
 @property (nonatomic) NSString *overridePublishSettingsVersion;
 
+- (NSString *) publishSettingsURL;
 
 - (NSMutableDictionary *) moduleData;
 - (NSMutableDictionary *) moduleDescriptionData;

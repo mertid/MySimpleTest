@@ -13,13 +13,13 @@
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
 
-@interface TealiumCollectTests : XCTestCase
+@interface Tealium_CollectTests : XCTestCase
 
 @property (nonatomic, strong) Tealium *library;
 
 @end
 
-@implementation TealiumCollectTests
+@implementation Tealium_CollectTests
 
 - (void)setUp {
     [super setUp];

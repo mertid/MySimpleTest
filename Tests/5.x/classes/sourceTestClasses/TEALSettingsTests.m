@@ -12,6 +12,8 @@
 
 #import "TEALSettings+PrivateHeader.h"
 
+#import "TEALTestHelper.h"
+
 @interface TEALSettingsTests : XCTestCase
 
 @property (nonatomic, strong) TEALSettings *settings;
@@ -34,6 +36,39 @@
 }
 
 #pragma mark - CONFIGURATIONS
+
+
+- (void) testDefaultPublishSettingsURL {
+
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                              profile:@"demo"
+                                                          environment:@"dev"];
+
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+
+    NSString *publishURLString = [self.settings publishSettingsURLString] ;
+    NSString *defaultURLString = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?";
+
+    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
+    
+    XCTAssertTrue([publishURLString isEqualToString:defaultURLString], @"Default publish settings URL %@ did not equal default string expected:%@", publishURLString, defaultURLString);
+}
+
+
+- (void) testOverridePublishSettingsURL {
+    
+    NSString *overrideURL = @"https://www.google.com";
+    
+    self.configuration = [TEALTestHelper configWithOverridePublishSetting:overrideURL];
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+    
+    NSString * publishSettingsURLString = [self.settings publishSettingsURLString];
+    
+    XCTAssertTrue([publishSettingsURLString isEqualToString:overrideURL], @"Override url %@ did not set settings publishSettingsURLString:%@.", overrideURL, publishSettingsURLString);
+
+    
+}
 
 //- (void) testDefaultDispatchURLString {
 //    
@@ -64,30 +99,7 @@
 //    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:urlString], @"Override dispatch URL string not as expected: %@", [self.settings collectDispatchURLString]);
 //}
 
-- (void) testDefaultPublishURL {
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                             profile:@"demo"
-                                                         environment:@"dev"];
-    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-    
-    NSString *defaultURLString = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?";
-    
-    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-    XCTAssertTrue([[self.settings publishURLString] isEqualToString:defaultURLString], @"Default publish URL string unexpected: %@", [self.settings publishURLString]);
-}
 
-- (void) testOverridePublishURL {
-    NSString *urlString = @"https://tags.tiqcdn.com/utag/tealiumx/demo/dev/mobile.html?";
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                             profile:@"demo"
-                                                         environment:@"dev"];
-    self.configuration.overridePublishURL = urlString;
-    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-    
-    
-    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-    XCTAssertTrue([[self.settings publishURLString] isEqualToString:urlString], @"Default publish URL string unexpected: %@", [self.settings publishURLString]);
-}
 
 
 #pragma mark - PUBLISH SETTINGS

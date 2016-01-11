@@ -28,47 +28,26 @@
 
 @implementation TEALSettings
 
-#pragma mark - CLASS METHODS
 
-+ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
-        
-    if (configuration.overridePublishSettingsURL) {
-        return configuration.overridePublishSettingsURL;
-    }
-    
-    // Default
-    NSString *urlPrefix = @"https:";
-    
-    if (configuration.useHTTP) {
-        urlPrefix = @"http:";
-    }
-    
-    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
-            urlPrefix,
-            configuration.accountName,
-            configuration.profileName,
-            configuration.environmentName];
-}
-
-+ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
-    
-    if (configuration.overridePublishURL) {
-        return configuration.overridePublishURL;
-    }
-    
-    // Default
-    NSString *urlPrefix = @"https:";
-    
-    if (configuration.useHTTP) {
-        urlPrefix = @"http:";
-    }
-    
-    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
-            urlPrefix,
-            configuration.accountName,
-            configuration.profileName,
-            configuration.environmentName];
-}
+//+ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
+//    
+//    if (configuration.overridePublishURL) {
+//        return configuration.overridePublishURL;
+//    }
+//    
+//    // Default
+//    NSString *urlPrefix = @"https:";
+//    
+//    if (configuration.useHTTP) {
+//        urlPrefix = @"http:";
+//    }
+//    
+//    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+//            urlPrefix,
+//            configuration.accountName,
+//            configuration.profileName,
+//            configuration.environmentName];
+//}
 
 #pragma mark - PUBLIC METHODS
 
@@ -199,14 +178,15 @@
 
 - (NSString *) publishSettingsURLString {
     if (!self.mobilePublishSettingsURLString){
-        self.mobilePublishSettingsURLString = [[self publishSettings] url];
+        
+        self.mobilePublishSettingsURLString = [self.configuration publishSettingsURL];
     }
     return self.mobilePublishSettingsURLString;
 }
 
 - (NSString *) publishURLString {
     if (!self.tiqPublishURLString){
-        self.tiqPublishURLString = [TEALSettings publishURLFromConfiguration:self.configuration];
+        self.tiqPublishURLString = [self.configuration publishSettingsURL];
     }
     return self.tiqPublishURLString;
 }
@@ -235,7 +215,7 @@
 
 - (NSURLRequest *) publishSettingsRequest {
     
-    NSString *baseURL = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+    NSString *baseURL = [self.configuration publishSettingsURL];
     NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
     NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
     NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
@@ -341,7 +321,7 @@
         if (!error &&
             !publishSettings){
             
-            NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+            NSString *urlString = [self.configuration publishSettingsURL];
             
             NSString *errorReaseon = [NSString stringWithFormat:@"Could not init publish settings with url: %@", urlString];
             
@@ -394,7 +374,7 @@
     
     // Will load archive if available
     
-    NSString *urlString = [TEALSettings publishSettingsURLFromConfiguration:self.configuration];
+    NSString *urlString = [self.configuration publishSettingsURL];
     
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     NSString *override = self.configuration.overridePublishSettingsVersion;

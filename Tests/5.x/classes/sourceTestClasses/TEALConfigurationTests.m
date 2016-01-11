@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
+#import "TEALTestHelper.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
 
@@ -34,11 +35,70 @@
     [super tearDown];
 }
 
+- (void) testIsValidConfiguration {
+    
+    // All empty
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
+                                                                    profile:nil
+                                                                environment:nil];
+    
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:config], @"Invalid Configuration initialized instance.");
+    
+    
+    // Account empty
+    TEALConfiguration *configB = [TEALConfiguration configurationWithAccount:nil
+                                                                     profile:@"demo"
+                                                                 environment:@"dev"];
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configB], @"Missing account Configuration initialized instance.");
+    
+    TEALConfiguration *configB2 = [TEALConfiguration configurationWithAccount:@""
+                                                                      profile:@"demo"
+                                                                  environment:@"dev"];
+    
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configB2], @"Nil account Configuration initialized instance.");
+    
+    
+    // Profile empty
+    TEALConfiguration *configC = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                     profile:nil
+                                                                 environment:@"dev"];
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configC], @"Missing profile Configuration initialized instance.");
+    
+    
+    TEALConfiguration *configC2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                      profile:@" "
+                                                                  environment:@"dev"];
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configC2], @"Blank profile Configuration initialized instance.");
+    
+    
+    // Environment empty
+    TEALConfiguration *configD = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                     profile:@"demo"
+                                                                 environment:nil];
+    
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configD], @"Missing environment Configuration initialized instance.");
+    
+    TEALConfiguration *configD2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                      profile:@"demo"
+                                                                  environment:@"   "];
+    
+    XCTAssertFalse([TEALConfiguration isValidConfiguration:configD2], @"blank environment Configuration initialized instance.");
+    
+    
+}
+
+
 #pragma mark - Helpers
 
 //- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
-//    
-//    
+//
+//
 //    if (!config) {
 //        config = self.configuration;
 //    }
@@ -59,10 +119,6 @@
 //
 //#pragma mark - ACCOUNT PROFILE ENV TESTS
 //
-
-- (void) testAnything {
-    XCTFail(@"No tests actually implemented yet");
-}
 
 //- (void) testNilAccount {
 //    

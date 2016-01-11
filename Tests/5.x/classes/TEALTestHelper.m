@@ -93,33 +93,45 @@
     
 }
 
-+ (TEALConfiguration *) validConfigWithNoMPS {
-    
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"no_mps" ofType:@"html"];
-    
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    NSString *encoded = [path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-    
-    return config;
-    
-}
+//+ (TEALConfiguration *) validConfigWithNoMPS {
+//    
+//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"no_mps" ofType:@"html"];
+//    
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"demo"
+//                                                                environment:@"dev"];
+//    
+//    NSString *encoded = [path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    
+//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+//    
+//    return config;
+//    
+//}
 
-+ (TEALConfiguration *) validConfigWithMPS5 {
-    
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mps_5_no_minutes_between_refresh" ofType:@"html"];
+//+ (TEALConfiguration *) validConfigWithMPS5 {
+//    
+//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"mps_5_no_minutes_between_refresh" ofType:@"html"];
+//    
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"demo"
+//                                                                environment:@"dev"];
+//    
+//    NSString *encoded = [path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    
+//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+//    
+//    return config;
+//    
+//}
+
++ (TEALConfiguration *) configWithOverridePublishSetting:(NSString *)overrideURL {
     
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-    NSString *encoded = [path stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
+    config.overridePublishSettingsURL = overrideURL;
     
     return config;
     

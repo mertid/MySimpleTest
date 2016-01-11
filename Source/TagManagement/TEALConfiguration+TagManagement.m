@@ -14,11 +14,29 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
 
 @implementation TEALConfiguration (TagManagement)
 
+#pragma mark - PUBLIC
+
 - (BOOL) remoteCommandsEnabled {
     
     NSDictionary *moduleData =  [self moduleData];
     
-    return [moduleData[TEALRemoteCommandsEnableKey] boolValue];
+    id enable = moduleData[TEALRemoteCommandsEnableKey];
+                 
+    if (!enable ||
+        ![enable respondsToSelector:@selector(boolValue)]){
+        
+        // Default
+        return YES;
+        
+    }
+    
+    return  [enable boolValue];
+}
+
+- (NSString *) tagManagementPublishURL {
+    
+    return [TEALConfiguration publishURLFromConfiguration:self];
+    
 }
 
 - (NSString *) overrideTagManagementPublishURL {
@@ -50,5 +68,28 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
     
 }
 
+#pragma mark - PRIVATE
+
++ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
+    
+    NSString *override = [configuration overridePublishURL];
+    
+    if (override) {
+        return override;
+    }
+    
+    // Default
+    NSString *urlPrefix = @"https:";
+    
+    if (configuration.useHTTP) {
+        urlPrefix = @"http:";
+    }
+    
+    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+            urlPrefix,
+            configuration.accountName,
+            configuration.profileName,
+            configuration.environmentName];
+}
 
 @end

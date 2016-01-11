@@ -18,7 +18,7 @@
 + (NSArray *) defaultEventDataSourceKeys;
 + (TEALConfiguration *) liveConfig;
 + (TEALConfiguration *) nonExistentConfig;
-+ (TEALConfiguration *) validConfigWithNoMPS;
++ (TEALConfiguration *) configWithOverridePublishSetting:(NSString *)overrideURL;
 + (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename;
 + (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename;
 
