@@ -173,8 +173,8 @@
       instance1 = [Tealium newInstanceForKey:@"instance1" configuration:[TEALTestHelper liveConfig] completion:^(BOOL success, NSError * _Nullable error) {
           
           if (!alreadyInitialized){
-              [expectation fulfill];
               alreadyInitialized = YES;
+              [expectation fulfill];
           }
           
           XCTAssert(success, @"Single instance test failed.");

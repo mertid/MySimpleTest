@@ -68,6 +68,7 @@
  *
  *  @param traceID String identifier of trace to use.
  */
-- (void) setTraceID:(NSString * _Nonnull)traceID;
+- (void) setTraceID:(NSString * _Nullable)traceID
+completion:(void(^)(BOOL success, NSError * _Nullable error))completion;
 
 @end

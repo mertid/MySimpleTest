@@ -80,9 +80,9 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     return [TEALSettings defaultProfileDefinitionsURLFromSettings:self];
 }
 
-- (void) setTraceID:(NSString *)traceID {
+- (void) setTraceID:(NSString * _Nullable)traceID completion:(void(^)(BOOL success, NSError * _Nullable error))completion {
     
-    [self.configuration setTraceID:traceID];
+    [self.configuration setTraceID:traceID completion:completion];
 
 }
 

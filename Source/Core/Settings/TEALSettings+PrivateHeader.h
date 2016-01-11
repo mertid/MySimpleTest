@@ -12,6 +12,7 @@
 #import "TEALSettings.h"
 #import "TEALConfiguration.h"
 #import "TEALPublishSettings.h"
+#import "TEALBlocks.h"
 
 @interface TEALSettings (Private)
 

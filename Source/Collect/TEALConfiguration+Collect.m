@@ -78,14 +78,18 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
 
 - (void) setOverrideCollectDispatchURL:(NSString *) overrideURL{
     
-    [self setModuleObject:overrideURL forKey:TEALCollectOverrideDispatchURLKey];
+    [self setModuleObject:overrideURL
+                   forKey:TEALCollectOverrideDispatchURLKey
+               completion:nil];
     
     [self setModuleDescription:overrideURL forKey:@"override collect dispatch url"];
 }
 
 - (void) setOverrideS2SLegacyDispatchURL:(NSString *)overrideURL {
     
-    [self setModuleObject:overrideURL forKey:TEALS2SOverrideDispatchURLKey];
+    [self setModuleObject:overrideURL
+                   forKey:TEALS2SOverrideDispatchURLKey
+               completion:nil];
     
     [self setModuleDescription:overrideURL forKey:@"override s2s dispatch url"];
     
@@ -97,7 +101,9 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     
     NSString *frequencyAsString = [NSString stringWithFormat:@"%i", frequency];
     
-    [self setModuleObject:frequencyAsNumber forKey:TEALCollectPollingFrequencyKey];
+    [self setModuleObject:frequencyAsNumber
+                   forKey:TEALCollectPollingFrequencyKey
+               completion:nil];
     
     [self setModuleDescription:frequencyAsString forKey:@"polling frequency"];
     
@@ -115,9 +121,16 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     
 }
 
-- (void) setTraceID:(NSString *)traceID {
+- (void) setTraceID:(NSString *)traceID
+         completion:(void(^)(BOOL successful, NSError *error))completion{
     
-    [self setModuleObject:traceID forKey:TEALTraceIDKey];
+    if (!traceID){
+        [self removeModuleObjectForKey:TEALTraceIDKey
+                            completion:completion];
+    }
+    [self setModuleObject:traceID
+                   forKey:TEALTraceIDKey
+               completion:completion];
     
 }
 

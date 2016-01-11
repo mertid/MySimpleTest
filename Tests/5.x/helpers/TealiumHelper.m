@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                           profile:@"demo"
+                           profile:@"ios"
                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://test.overide.com";

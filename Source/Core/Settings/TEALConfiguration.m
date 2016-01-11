@@ -116,11 +116,29 @@
 }
 
 - (void) setModuleObject:(id<NSCopying, NSSecureCoding>)object
-                  forKey:(id<NSCopying, NSSecureCoding>)aKey {
+                  forKey:(id<NSCopying, NSSecureCoding>)aKey
+              completion:(void(^)(BOOL successful, NSError *error))completion {
     
     dispatch_barrier_async(self.queue, ^{
         
         [self moduleData][aKey] = object;
+        
+        if (completion){
+            completion(true, nil);
+        }
+    });
+}
+
+- (void) removeModuleObjectForKey:(id<NSCopying, NSSecureCoding>)aKey
+                       completion:(void(^)(BOOL successful, NSError *error))completion{
+    
+    dispatch_barrier_async(self.queue, ^{
+        
+        [[self moduleData] removeObjectForKey:aKey];
+        
+        if (completion){
+            completion(true, nil);
+        }
         
     });
 }
@@ -143,6 +161,16 @@
         
     });
 }
+
+- (void) removeModuleDescriptionForKey:(id<NSCopying, NSSecureCoding>)aKey {
+    
+    dispatch_barrier_async(self.queue, ^{
+        
+        [[self moduleDescriptionData] removeObjectForKey:aKey];
+        
+    });
+}
+
 
 #pragma mark - PRIVATE INSTANCE
 

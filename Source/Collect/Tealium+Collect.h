@@ -69,7 +69,7 @@
  *  
  *  @param completion An optional completion block.
  */
-- (void) leaveTraceWithCompletion:(void(^ _Nullable)(BOOL success))completion;
+- (void) leaveTraceWithCompletion:(void(^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 
 @end

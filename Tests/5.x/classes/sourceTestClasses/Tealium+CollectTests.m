@@ -79,6 +79,8 @@
     
     XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);
  
+    
+    
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"collectEnable"];
@@ -106,9 +108,7 @@
 //    XCTAssertFalse([self.library.settings collectEnabled], @"Collect service should not have been enabled per test remote publish setting.");
 //}
 
-- (void) testTrace {
-    
-#warning Check to see if test passes upon initial load
+- (void) testJoinAndLeaveTrace {
     
     __block BOOL isReady = NO;
     
@@ -135,7 +135,7 @@
     [self.library joinTraceWithToken:token
                           completion:^(BOOL success, NSError * _Nullable error) {
         
-        XCTAssertTrue(success, @"Unexpected error in joinging trace:%@", error);
+        XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
                               
         isReady = YES;
         
@@ -143,14 +143,15 @@
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
 
+    NSString *traceId = [settings traceID];
     
-    XCTAssertTrue([settings traceID], @"TraceID datasource:%@ should have a value.", [settings traceID]);
+    XCTAssertTrue(traceId, @"TraceID should have a value - %@ found.", traceId);
     
-    XCTAssertTrue([[settings traceID] isEqualToString:token], @"TraceID datasource value: %@ should be same as token passed in: %@", settings.traceID, token);
+    XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
     
     isReady = NO;
     
-    [self.library leaveTraceWithCompletion:^(BOOL success) {
+    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
         
         isReady = YES;
         

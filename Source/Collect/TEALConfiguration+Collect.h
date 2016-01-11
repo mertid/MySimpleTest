@@ -76,6 +76,8 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
  *  Add a trace ID to collect dispatches to enable call monitoring.
  *
  *  @param traceID String identifier for trace instance to use.
+ *  @param completion Optional completion block to return once trace id has been set
  */
-- (void) setTraceID:(NSString * _Nonnull)traceID;
+- (void) setTraceID:(NSString * _Nullable)traceID
+         completion:(void(^ _Nullable)(BOOL successful, NSError *error))completion;
 @end

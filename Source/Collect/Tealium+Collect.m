@@ -115,7 +115,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 }
 
 - (void) joinTraceWithToken:(NSString * _Nonnull)token
-                 completion:(TEALBooleanCompletionBlock)completion {
+                 completion:(void(^)(BOOL successful, NSError *error))completion {
     
     NSError *error = nil;
     
@@ -143,20 +143,18 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        weakSelf.settings.traceID = token;
-        
-        if (completion) completion(true, nil);
+        [weakSelf.settings setTraceID:token completion:completion];
         
     }];
     
 }
 
-- (void) leaveTraceWithCompletion:(TEALBooleanBlock)completion {
+- (void) leaveTraceWithCompletion:(void(^)(BOOL successful, NSError *error))completion {
     
     
     if (![self isCollectEnabled]) {
         if (completion){
-            completion(FALSE);
+            completion(false, nil);
         }
         return;
     }
@@ -165,11 +163,7 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        weakSelf.settings.traceID = nil;
-        
-        if (completion){
-            completion(TRUE);
-        }
+        [weakSelf.settings setTraceID:nil completion:completion];
         
     }];
     

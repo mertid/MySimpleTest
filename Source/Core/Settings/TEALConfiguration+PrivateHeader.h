@@ -47,14 +47,20 @@
 - (NSMutableDictionary *) moduleData;
 - (NSMutableDictionary *) moduleDescriptionData;
 
-
 - (id) moduleObjectForKey:(id<NSCopying, NSSecureCoding>)key;
 
 - (void) setModuleObject:(id<NSCopying, NSSecureCoding>)object
-                  forKey:(id<NSCopying, NSSecureCoding>)aKey;
+                  forKey:(id<NSCopying, NSSecureCoding>)aKey
+              completion:(void(^)(BOOL successful, NSError * error))completion;
 
 - (void) setModuleDescription:(NSString *) description
                        forKey:(NSString *)aKey;
+
+- (void) removeModuleObjectForKey:(id<NSCopying, NSSecureCoding>)aKey
+                       completion:(void(^)(BOOL successful, NSError * error))completion;
+    
+- (void) removeModuleDescriptionForKey:(id<NSCopying, NSSecureCoding>)aKey;
+
 
 
 @end

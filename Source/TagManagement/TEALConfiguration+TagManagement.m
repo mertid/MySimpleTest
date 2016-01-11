@@ -23,7 +23,9 @@ NSString * const TEALTagManagementOverridePublishURLKey = @"com.tealium.tagmanag
 
 - (void) setOverrideTagManagementPublishURL:(NSString *)publishURL {
     
-    [self setModuleObject:publishURL forKey:TEALTagManagementOverridePublishURLKey];
+    [self setModuleObject:publishURL
+                   forKey:TEALTagManagementOverridePublishURLKey
+               completion:nil];
     
     [self setModuleDescription:publishURL forKey:@"override tag management publish url"];
     
