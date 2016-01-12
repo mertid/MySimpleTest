@@ -1068,10 +1068,19 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     BOOL shouldDispatch = YES;
     
-    if (!self.settings ||
-        ![self networkReadyForDispatch] ||
-        [self suppressForWifiOnly] ||
-        [self suppressForBetterBatteryLevels]){
+    if (!self.settings){
+        
+        shouldDispatch = NO;
+    }
+    if (![self networkReadyForDispatch]){
+        
+        shouldDispatch = NO;
+    }
+    if ([self suppressForWifiOnly]){
+        
+        shouldDispatch = NO;
+    }
+    if ([self suppressForBetterBatteryLevels]){
         
         shouldDispatch = NO;
     }

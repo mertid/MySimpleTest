@@ -202,7 +202,7 @@
     
     NSDictionary *testDataSources = [self stringDataSources];
     
-    [self waitFor:&isReady timeout:1.0];
+    [self waitFor:&isReady timeout:0.5];
     
     isReady = NO;
 
@@ -210,7 +210,7 @@
     
     // There will be a short delay here on this thread as the above method is
     // sent to the end of the Tealium BG serial queue
-    [self waitFor:&isReady timeout:1.0];
+    [self waitFor:&isReady timeout:0.5];
     
     NSDictionary *dataSourcesRetrieved = [instance volatileDataSourcesCopy];
     
@@ -221,7 +221,7 @@
     [instance removeVolatileDataSourcesForKeys:@[TEAL_TEST_DATASOURCE_KEY]];
     
     // No callback to flip the flag, so we'll always timeout
-    [self waitFor:&isReady timeout:1.0];
+    [self waitFor:&isReady timeout:0.5];
     
     // There will be a short delay here on this thread as the above method is
     // sent to the end of the Tealium BG serial queue

@@ -44,6 +44,8 @@
 
 - (void) useLibraryInstanceWithConfig:(TEALConfiguration *)config {
     
+    [Tealium destroyInstanceForKey:self.description];
+    
     XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
     
     self.library = [Tealium newInstanceForKey:self.description
@@ -68,6 +70,8 @@
 
 - (void) testCreateInstanceWithMissingConfigurationData {
     
+    [Tealium destroyInstanceForKey:@"failTest"];
+
     // All empty
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
                                                                     profile:nil
@@ -136,6 +140,8 @@
 
 - (void) testCreateInvalidInstance {
     
+    [Tealium destroyInstanceForKey:@"failTest"];
+
     XCTestExpectation *e = [self expectationWithDescription:@"invalidInstance"];
     
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
@@ -163,6 +169,8 @@
 
 - (void) testCreateSingleInstance {
     
+    [Tealium destroyInstanceForKey:@"instance1"];
+
     XCTestExpectation *expectation = [self expectationWithDescription:@"singleInstance"];
     
     __block Tealium *instance1;
@@ -194,6 +202,11 @@
 
 #warning Update to use the completion blocks
     
+    [Tealium destroyInstanceForKey:@"instance1"];
+    [Tealium destroyInstanceForKey:@"instance2"];
+    [Tealium destroyInstanceForKey:@"instance3"];
+
+    
     TEALConfiguration *config1 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
@@ -224,6 +237,8 @@
 
 - (void) testDestroyInstance {
 
+    [Tealium destroyInstanceForKey:@"instanceD"];
+
     [Tealium newInstanceForKey:@"instanceD" configuration:[TEALTestHelper liveConfig]];
     
     [Tealium destroyInstanceForKey:@"instanceD"];
@@ -233,6 +248,10 @@
 }
 
 - (void) testDestroyOneInstanceAmongMany {
+    
+    [Tealium destroyInstanceForKey:@"testDisableInstance"];
+    [Tealium destroyInstanceForKey:@"instance1"];
+    [Tealium destroyInstanceForKey:@"instance2"];
     
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
@@ -301,13 +320,17 @@
 
 - (void) testSuccessfulDidUpdatePublishSettings {
     
-    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]];
 
     XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
     
     [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         
         XCTAssertTrue(success, "Valid mobile.html did not return as expected.");
+        
+        if (success){
+            [self.library.delegate tealiumInstanceDidUpdatePublishSettings:self.library];
+        }
         
         [fetchExpectation fulfill];
         
@@ -316,11 +339,13 @@
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
-    XCTAssert(self.didUpdate, "No update found");
+    XCTAssertTrue(self.didUpdate, "No update found");
     
 }
 
 - (void) testFailingDidUpdatePublishSettings {
+    
+    [Tealium destroyInstanceForKey:@"failSettingsTest"];
     
     XCTestExpectation * expectation = [self expectationWithDescription:@"failPublishTest"];
     
@@ -334,7 +359,7 @@
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                             
-        XCTAssert(success, "Test configuration did not start a valid tealium instance");
+        XCTAssertTrue(success, "Test configuration did not start a valid tealium instance");
         
         [expectation fulfill];
         
@@ -345,9 +370,9 @@
     [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         
         
-        XCTAssert(!success, "Invalid mobile.html returned non-existent account-profile.");
+        XCTAssertTrue(!success, "Invalid mobile.html returned non-existent account-profile.");
         
-        XCTAssert(error, "Error expected was not received.");
+        XCTAssertTrue(error, "Error expected was not received.");
 
         [fetchExpectation fulfill];
         
@@ -356,7 +381,7 @@
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
-    XCTAssert(!self.didUpdate, "No update found");
+    XCTAssertTrue(!self.didUpdate, "No update found");
 }
 
 

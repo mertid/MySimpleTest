@@ -124,8 +124,16 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     // Can update to mark was_queued, but never unset in case it was set by client
     //  or other service.
     
-    if (!sendNow){
+    if (sendNow == YES){
         
+        dispatch.assignedBlock = completionBlock;
+        
+        [self runQueuedDispatches];
+        
+    } else {
+
+        [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
+
         [dispatch queue:YES];
         
         [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
@@ -136,62 +144,57 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
             completionBlock(TEALDispatchStatusQueued, dispatch, nil);
         }
         
-    } else {
-    
-        dispatch.assignedBlock = completionBlock;
-    
-        [self runQueuedDispatches];
     }
     
     [self.delegate dispatchManagerDidUpdateDispatchQueues];
 }
 
-- (void) queueDispatch:(TEALDispatch *)dispatch
-  sendImmediatelyAfter:(BOOL)send {
+//- (void) queueDispatch:(TEALDispatch *)dispatch
+//  sendImmediatelyAfter:(BOOL)send {
+//
+//    if (!send){
+//        
+//        [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
+//        
+//        [dispatch queue:YES];
+//        
+//        [self.queuedDispatches enqueueObject:dispatch];
+//        
+//        [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
+//        
+//        [self archiveDispatchQueue];
+//    
+//    } else {
+//        
+//        [dispatch queue:NO];
+//        
+//        [self.queuedDispatches enqueueObject:dispatch];
+//
+//    }
+//    
+//}
 
-    if (!send){
-        
-        [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
-        
-        [dispatch queue:YES];
-        
-        [self.queuedDispatches enqueueObject:dispatch];
-        
-        [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
-        
-        [self archiveDispatchQueue];
+- (void) enqueueDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
     
-    } else {
-        
-        [dispatch queue:NO];
-        
-        [self.queuedDispatches enqueueObject:dispatch];
-
+    [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
+    
+    [dispatch queue:YES];
+    
+    TEALDispatch *dequeued = [self.queuedDispatches enqueueObject:dispatch];
+    
+    if (dequeued) {
+        [self attemptDispatch:dequeued
+              completionBlock:nil];
     }
     
+    [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
+    
+    [self archiveDispatchQueue];
+    
+    if (completionBlock) {
+        completionBlock(TEALDispatchStatusQueued, dispatch, nil);
+    }
 }
-
-//- (void) enqueueDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
-//    
-//    [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
-//    
-//    [dispatch queue:YES];
-//    
-//    TEALDispatch *dequeued = [self.queuedDispatches enqueueObject:dispatch];
-//    
-//    if (dequeued) {
-//        [self attemptDispatch:dequeued
-//              completionBlock:nil];
-//    }
-//    
-//    [self.delegate dispatchManagerDidEnqueueDispatch:dispatch];
-//    
-//    [self archiveDispatchQueue];
-//    
-//    if (completionBlock) {
-//        completionBlock(TEALDispatchStatusQueued, dispatch, nil);
-//    }
-//}
 
 - (void) requeueDispatch:(TEALDispatch *)dispatch {
     
@@ -248,15 +251,17 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (BOOL) shouldBeginQueueTraversal {
     
-    NSUInteger batchSize    = [self.configuration dispatchBatchSize];
-    NSUInteger queuedCount = [self.queuedDispatches count];
-
-    if (queuedCount <= batchSize) {
+    NSUInteger batchSize = [self.configuration dispatchBatchSize];
+    NSUInteger queuedCount = [[self queuedDispatches] count];
+    
+    if (batchSize > queuedCount) {
         
         return NO;
+        
     }
     
     if (self.delegate &&
+        [self.delegate respondsToSelector:@selector(dispatchManagerShouldDispatch)] &&
         ![self.delegate dispatchManagerShouldDispatch]) {
         
         return NO;

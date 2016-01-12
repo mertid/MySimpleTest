@@ -41,6 +41,8 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
+    [Tealium destroyInstanceForKey:self.description];
+    
     if (!config) {
         config = [TEALTestHelper liveConfig];
     }
@@ -51,6 +53,8 @@
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
+                                       XCTAssertTrue(success, @"Library failed to finish initializing - error:%@", error);
+
                                        isReady = YES;
                                        
                                    }];
@@ -66,6 +70,9 @@
         isReady = YES;
         
     }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+
     
 }
 
@@ -128,6 +135,8 @@
 //}
 
 - (void) testJoinAndLeaveTrace {
+    
+    [Tealium destroyInstanceForKey:self.description];
     
     __block BOOL isReady = NO;
     
@@ -192,64 +201,47 @@
     
     self.library.delegate = self;
     
-    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:nil];
     
     XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
     
-    __block BOOL fulfilledAlready = NO;
+    __block int finishedDispatches = 0;
     
-    __block typeof(self) __weak weakSelf = self;
+    __block int batchLimit = 5;
     
     // Manually set to match batch_size in above json file
-    for (int i = 0; i < 5; i++) {
+    for (__block int i = 0; i < batchLimit; i++) {
         
+        TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:@{@"iteration":@(i)}];
+
         [self.library trackDispatch:dispatch
                          completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                              
-                             XCTAssert(!error, @"Error in track call detected:%@", error);
-                             
-                             XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
-                             
-                             
-                             if (weakSelf.queueCount >= 5 &&
-                                 fulfilledAlready == NO){
-                                 
-                                 fulfilledAlready = YES;
-                                 
-                                 [batchExpectation fulfill];
-                             }
-
-                        }];
+             XCTAssert(!error, @"Error in track call detected:%@", error);
+             
+             finishedDispatches++;
+             
+             if (finishedDispatches < batchLimit ){
+                 XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
+             }
+             
+             if (finishedDispatches == batchLimit ){
+                 
+                 [batchExpectation fulfill];
+                 
+             }
+             
+         }];
+        
     }
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
-    XCTAssertTrue(self.queueCount == 5, @"5 events did not trigger - events triggered:%i", self.queueCount);
+    // will send upon 5th dispatch
+    XCTAssertTrue(self.queueCount == 4, @"5 events did not trigger - events triggered:%i", self.queueCount);
     
-    fulfilledAlready = NO;
-    
-    XCTestExpectation *lastCallExpectation = [self expectationWithDescription:@"batch"];
-    
-    [self.library trackDispatch:dispatch
-                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
-                         
-                         XCTAssert(!error, @"Error in track call detected:%@", error);
-                         
-                         XCTAssertTrue(status == 1, @"Dispatch was not sent as expected:%@", returnDispatch);
-                         
-                         if (!fulfilledAlready){
-                             
-                             fulfilledAlready = YES;
-                             [lastCallExpectation fulfill];
-                             
-                         }
-                     }];
-    
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
- 
-    // Shouldn't the total sent count be 6?
-    
-    XCTAssertTrue(self.sentCount == 1, @"Sent call not confirmed from delegate.");
+    // all 5 should be sent
+    XCTAssertTrue(self.sentCount == 5, @"Sent call not confirmed from delegate.");
+
 }
 
 

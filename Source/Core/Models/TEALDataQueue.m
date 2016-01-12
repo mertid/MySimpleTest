@@ -10,7 +10,7 @@
 
 @interface TEALDataQueue ()
 
-@property (nonatomic, strong) NSMutableArray *dataQueue;
+@property (nonatomic, strong) NSMutableArray *privateDataQueue;
 
 @property (nonatomic) NSUInteger capacity;
 
@@ -36,27 +36,29 @@
 
 - (NSMutableArray *) dataQueue {
     
-    if (!_dataQueue) {
-        _dataQueue = [NSMutableArray array];
+    if (!self.privateDataQueue) {
+        self.privateDataQueue = [NSMutableArray arrayWithCapacity:self.capacity];
     }
-    return _dataQueue;
+    return self.privateDataQueue;
 }
 
 - (id) enqueueObject:(id)obj {
     
     if (!self.capacity) {
+        
         return obj;
     }
     
     __block id dequeuedObject = nil;
     
-    NSMutableArray *dataQueue = self.dataQueue;
+    NSMutableArray *dataQueue = [self dataQueue];
     
     if (dataQueue.count == self.capacity) {
 
         [self dequeueNumberOfObjects:1 withBlock:^(id dObj) {
             
             dequeuedObject = dObj;
+            
         }];
     }
     
@@ -100,7 +102,9 @@
 }
 
 - (NSUInteger) count {
-    return [self.dataQueue count];
+    
+    return [[self dataQueue] count];
+    
 }
 
 

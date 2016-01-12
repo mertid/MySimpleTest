@@ -14,7 +14,7 @@
 #import "TEALSettings.h"
 #import "TEALDispatch+PrivateHeader.h"
 
-@interface TealiumDispatchTests : XCTestCase
+@interface TealiumDispatchTests : XCTestCase <TealiumDelegate>
 
 @property (strong) Tealium *library;
 @property TEALConfiguration *configuration;
@@ -36,7 +36,7 @@
 }
 
 
-#pragma mark - Helpers
+#pragma mark - HELPERS
 
 - (void) useLiveLibraryInstance {
     
@@ -77,14 +77,16 @@
 }
 
 
-#pragma mark - Dispatch
+#pragma mark - DISPATCH
 
-- (void) testEventDispatch {
+- (void) testEventDispatchSendNow {
     
+    [Tealium destroyInstanceForKey:self.description];
+
     __block BOOL isReady = NO;
     
     self.library = [Tealium newInstanceForKey:self.description
-                                configuration:[TEALTestHelper liveConfig]
+                                configuration:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]
                                    completion:^(BOOL success, NSError * _Nullable error) {
         
         
@@ -118,9 +120,22 @@
     }];
 }
 
-- (void) testViewDispatch {
+- (void) testViewDispatchSendNow {
     
-    [self useLiveLibraryInstance];
+    [Tealium destroyInstanceForKey:self.description];
+
+    __block BOOL isReady = NO;
+        
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
