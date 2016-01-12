@@ -45,7 +45,7 @@
 
     XCTAssertTrue(self.publishSettings, @"publishSettings did not init");
     
-    XCTAssertTrue([self.publishSettings.url isEqualToString:urlString], @"url property did not return expected value.");
+    XCTAssertTrue([self.publishSettings.url isEqualToString:urlString], @"url property did not return expected value - publishSetting:%@ testURLString:%@", [self.publishSettings url], urlString);
     
 }
 
@@ -107,7 +107,9 @@
     
     self.publishSettings.targetVersion = targetVersion;
     
-    [self.publishSettings updateWithRawSettings:mpsData];
+    [self.publishSettings updateWithMatchingVersionSettings:mpsData[@"5"]];
+    
+//    [self.publishSettings updateWithRawSettings:mpsData];
     
     NSDictionary *privatePublishData = self.publishSettings.privatePublishSettingsData;
     

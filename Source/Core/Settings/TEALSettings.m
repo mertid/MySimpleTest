@@ -28,27 +28,6 @@
 
 @implementation TEALSettings
 
-
-//+ (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
-//    
-//    if (configuration.overridePublishURL) {
-//        return configuration.overridePublishURL;
-//    }
-//    
-//    // Default
-//    NSString *urlPrefix = @"https:";
-//    
-//    if (configuration.useHTTP) {
-//        urlPrefix = @"http:";
-//    }
-//    
-//    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
-//            urlPrefix,
-//            configuration.accountName,
-//            configuration.profileName,
-//            configuration.environmentName];
-//}
-
 #pragma mark - PUBLIC METHODS
 
 - (instancetype) initWithConfiguration:(TEALConfiguration *)configuration {
@@ -135,7 +114,9 @@
 
 - (BOOL) goodBatteryLevelOnlySending {
     
-    return ![[self publishSettings] enableLowBatterySuppress];
+    BOOL response = [[self publishSettings] enableLowBatterySuppress];
+    
+    return response;
 }
 
 - (BOOL) isDefaultPublishSettings {
@@ -146,6 +127,12 @@
 
 - (double) daysDispatchesValid {
     return [[self publishSettings] numberOfDaysDispatchesAreValid];
+}
+
+- (double) minutesBetweenRefresh {
+    
+    return [[self publishSettings] minutesBetweenRefresh];
+    
 }
 
 - (NSString *) account {
@@ -261,6 +248,16 @@
         
     }
     
+    if (!preFetchError &&
+        !self.urlSessionManager){
+        
+        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Can not fetch at this time", @"")
+                                  reason:NSLocalizedString(@"TEALURLSessionManager not yet assigned to settings", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Mobile engineering", @"")];
+        
+    }
+    
     if (preFetchError){
         if (completion){
             completion (NO, preFetchError);
@@ -272,9 +269,14 @@
     self.lastFetch = now;
     __block typeof(self) __weak weakSelf = self;
 
+    
+
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
+                                
+//        NSLog(@"%s request:%@ response:%@ error:%@", __FUNCTION__, request, response, connectionError);
+                                
         NSError *error = nil;
                   
         NSDictionary *parsedData = nil;
@@ -291,8 +293,10 @@
                                     
         }
                                 
-        // For future MPS config location - currently ignoring any error from this
-        parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
+        if (!error){
+            // For future MPS config location - currently ignoring any error from this
+            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
+        }
                                 
         if (!error &&
             !parsedData){
@@ -301,9 +305,21 @@
             parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:&error];
             
         }
-            
+                                
         if (!error &&
-            ![publishSettings correctMPSVersionRawPublishSettings:parsedData]) {
+            !parsedData){
+            
+            error = [TEALError errorWithCode:TEALErrorCodeException
+                                 description:NSLocalizedString(@"Failed to fetch new publish settings", @"")
+                                      reason:NSLocalizedString(@"Unable to parse json or html data from request target", @"")
+                                  suggestion:NSLocalizedString(@"Check account/profile or overridePublishSettingsURL", @"")];
+            
+        }
+            
+        NSDictionary *matchingPublishSettings = [publishSettings currentPublishSettingsFromRawPublishSettings:parsedData];
+                                
+        if (!error &&
+            !matchingPublishSettings) {
             
             // No MPS Settings for current library version
             error = [TEALError errorWithCode:TEALErrorCodeNoContent
@@ -341,9 +357,9 @@
         }
             
         // Init or Update Publish Settings
-        if ([publishSettings areNewRawPublishSettings:parsedData]){
+        if ([publishSettings areNewMatchingVersionPublishSettings:matchingPublishSettings]){
 
-            [publishSettings updateWithRawSettings:parsedData];
+            [publishSettings updateWithMatchingVersionSettings:matchingPublishSettings];
             
         }
         
@@ -377,13 +393,14 @@
     NSString *urlString = [self.configuration publishSettingsURL];
     
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
-    NSString *override = self.configuration.overridePublishSettingsVersion;
     
-    if (override){
-        settings.targetVersion = override;
-    } else {
+//    NSString *override = self.configuration.overridePublishSettingsVersion;
+//    
+//    if (override){
+//        settings.targetVersion = override;
+//    } else {
         settings.targetVersion = TEALDefaultPublishVersion;
-    }
+//    }
     
     self.privatePublishSettings = settings;
     
@@ -398,6 +415,12 @@
     double timeRemaining = self.publishSettings.minutesBetweenRefresh - currentTimeElapsed;
     
     return timeRemaining;
+    
+}
+
+- (NSString *) description {
+    
+    return [NSString stringWithFormat:@"%@%@", self.configuration, self.publishSettings];
     
 }
 

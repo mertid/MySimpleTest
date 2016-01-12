@@ -33,6 +33,7 @@
 - (BOOL) isDefaultPublishSettings;
 
 - (double) daysDispatchesValid;
+- (double) minutesBetweenRefresh;
 
 - (NSString * _Nonnull) account;
 - (NSString * _Nonnull) asProfile;

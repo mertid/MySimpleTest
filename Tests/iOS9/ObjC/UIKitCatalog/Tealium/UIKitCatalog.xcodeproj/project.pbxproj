@@ -121,6 +121,7 @@
 		712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */; };
 		712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */; };
 		712BAF361C29BED4007767CD /* UIKitCatalogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */; };
+		7155B5DC1C4419A50091FC1B /* batch_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 7155B5DB1C4419A50091FC1B /* batch_5.json */; };
 		716746931C433461001A27D8 /* collect_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716746911C433461001A27D8 /* collect_OFF.html */; };
 		716746941C433461001A27D8 /* collect_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716746921C433461001A27D8 /* collect_ON.html */; };
 		716746971C4334E1001A27D8 /* s2s_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716746951C4334E1001A27D8 /* s2s_OFF.html */; };
@@ -128,10 +129,9 @@
 		7167469C1C433F2B001A27D8 /* collect_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 7167469B1C433F2B001A27D8 /* collect_ON.json */; };
 		7167469E1C437247001A27D8 /* TEALPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7167469D1C437247001A27D8 /* TEALPublishSettingsTests.m */; };
 		716746A11C438145001A27D8 /* TEALPublishSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 716746A01C438145001A27D8 /* TEALPublishSettings+TagManagement.m */; };
-		716746A21C44054A001A27D8 /* TEALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CC91C29ABF5007BABF7 /* TEALConfiguration.m */; };
 		716746A41C440796001A27D8 /* Tealium+TagManagmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716746A31C440796001A27D8 /* Tealium+TagManagmentTests.m */; };
 		71760D5C1C40745D00FBCA29 /* no_mps.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5B1C40745D00FBCA29 /* no_mps.html */; };
-		71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */; };
+		71760D5E1C4076C600FBCA29 /* no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 71760D5D1C4076C600FBCA29 /* no_minutes_between_refresh.html */; };
 		71760D611C421D7800FBCA29 /* TEALConfiguration+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D601C421D7800FBCA29 /* TEALConfiguration+Collect.m */; };
 		71760D641C42255D00FBCA29 /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D631C42255D00FBCA29 /* TEALSettings+Collect.m */; };
 		71760D671C42C83700FBCA29 /* TEALConfiguration+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71760D661C42C83700FBCA29 /* TEALConfiguration+TagManagement.m */; };
@@ -557,6 +557,7 @@
 		712BAF331C29BED4007767CD /* UIKitCatalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitCatalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitCatalogUITests.m; sourceTree = "<group>"; };
 		712BAF371C29BED4007767CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7155B5DB1C4419A50091FC1B /* batch_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = batch_5.json; path = ../../../tests/5.x/mps/batch_5.json; sourceTree = "<group>"; };
 		716746911C433461001A27D8 /* collect_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = collect_OFF.html; path = ../../../tests/5.x/mps/collect_OFF.html; sourceTree = "<group>"; };
 		716746921C433461001A27D8 /* collect_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = collect_ON.html; path = ../../../tests/5.x/mps/collect_ON.html; sourceTree = "<group>"; };
 		716746951C4334E1001A27D8 /* s2s_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = s2s_OFF.html; path = ../../../tests/5.x/mps/s2s_OFF.html; sourceTree = "<group>"; };
@@ -567,7 +568,7 @@
 		716746A01C438145001A27D8 /* TEALPublishSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALPublishSettings+TagManagement.m"; path = "../../Source/TagManagement/TEALPublishSettings+TagManagement.m"; sourceTree = "<group>"; };
 		716746A31C440796001A27D8 /* Tealium+TagManagmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Tealium+TagManagmentTests.m"; path = "../../../../../5.x/classes/sourceTestClasses/Tealium+TagManagmentTests.m"; sourceTree = "<group>"; };
 		71760D5B1C40745D00FBCA29 /* no_mps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_mps.html; sourceTree = "<group>"; };
-		71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = mps_5_no_minutes_between_refresh.html; sourceTree = "<group>"; };
+		71760D5D1C4076C600FBCA29 /* no_minutes_between_refresh.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_minutes_between_refresh.html; sourceTree = "<group>"; };
 		71760D5F1C421D7800FBCA29 /* TEALConfiguration+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALConfiguration+Collect.h"; path = "../../Source/Collect/TEALConfiguration+Collect.h"; sourceTree = "<group>"; };
 		71760D601C421D7800FBCA29 /* TEALConfiguration+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALConfiguration+Collect.m"; path = "../../Source/Collect/TEALConfiguration+Collect.m"; sourceTree = "<group>"; };
 		71760D621C42255C00FBCA29 /* TEALSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALSettings+Collect.h"; path = "../../Source/Collect/TEALSettings+Collect.h"; sourceTree = "<group>"; };
@@ -898,7 +899,7 @@
 			isa = PBXGroup;
 			children = (
 				71760D5B1C40745D00FBCA29 /* no_mps.html */,
-				71760D5D1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html */,
+				71760D5D1C4076C600FBCA29 /* no_minutes_between_refresh.html */,
 				710E1C3A1C29ABD7007BABF7 /* audiencestream_OFF.html */,
 				710E1C3B1C29ABD7007BABF7 /* audiencestream_ON.html */,
 				716746911C433461001A27D8 /* collect_OFF.html */,
@@ -908,6 +909,7 @@
 				710E1C3C1C29ABD7007BABF7 /* tagmanagement_OFF.html */,
 				710E1C3D1C29ABD7007BABF7 /* tagmanagement_ON.html */,
 				7167469B1C433F2B001A27D8 /* collect_ON.json */,
+				7155B5DB1C4419A50091FC1B /* batch_5.json */,
 			);
 			path = mps;
 			sourceTree = "<group>";
@@ -1508,7 +1510,8 @@
 				710E1C511C29ABD7007BABF7 /* tagmanagement_ON.html in Resources */,
 				71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */,
 				716746981C4334E1001A27D8 /* s2s_ON.html in Resources */,
-				71760D5E1C4076C600FBCA29 /* mps_5_no_minutes_between_refresh.html in Resources */,
+				71760D5E1C4076C600FBCA29 /* no_minutes_between_refresh.html in Resources */,
+				7155B5DC1C4419A50091FC1B /* batch_5.json in Resources */,
 				710E1C4F1C29ABD7007BABF7 /* audiencestream_ON.html in Resources */,
 				710E1C4E1C29ABD7007BABF7 /* audiencestream_OFF.html in Resources */,
 				710E1C3F1C29ABD7007BABF7 /* lifecycle_events.xml in Resources */,
@@ -1685,7 +1688,6 @@
 				712BAF051C29BCBD007767CD /* TEALSettingsTests.m in Sources */,
 				712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */,
 				712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */,
-				716746A21C44054A001A27D8 /* TEALConfiguration.m in Sources */,
 				712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */,
 				7167469E1C437247001A27D8 /* TEALPublishSettingsTests.m in Sources */,
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,

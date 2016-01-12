@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class TEALDispatch;
+#import "TEALDispatch.h"
 
-#import "TEALDispatchConstants.h"
+//#import "TEALDispatchConstants.h"
 
 typedef NS_ENUM(NSUInteger, TEALDispatchNetworkServiceStatus){
     TEALDispatchNetworkServiceStatusUnknown = 0,

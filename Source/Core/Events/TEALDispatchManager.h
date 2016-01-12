@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #import "TEALDataQueue.h"
-#import "TEALDispatchConstants.h"
+#import "TEALDispatch.h"
+//#import "TEALDispatchConstants.h"
 #import "TEALSystemProtocols.h"
 
 @class TEALDispatchManager;

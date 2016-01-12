@@ -60,12 +60,16 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 - (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
 
-- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary * _Nonnull) rawPublishSettings;
+- (NSDictionary * _Nullable) currentPublishSettingsFromRawPublishSettings:(NSDictionary * _Nullable) rawPublishSettings;
+
+//- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary * _Nonnull) rawPublishSettings;
 
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings * _Nonnull)otherPublishSettings;
 
-- (BOOL) areNewRawPublishSettings:(NSDictionary * _Nonnull)rawPublishSettings;
+- (BOOL) areNewMatchingVersionPublishSettings:(NSDictionary * _Nonnull)publishSetting;
 
-- (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
+- (void) updateWithMatchingVersionSettings:(NSDictionary * _Nonnull)publishSettings;
+
+//- (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
 
 @end

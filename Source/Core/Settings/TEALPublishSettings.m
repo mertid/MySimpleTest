@@ -188,7 +188,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     TEALPublishSettings *archivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:url];
     
-    if ([archivedSettings  isKindOfClass:[TEALPublishSettings class]]){
+    if ([archivedSettings isKindOfClass:[TEALPublishSettings class]]){
         
         return archivedSettings;
 
@@ -213,24 +213,30 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     return self;
 }
 
-- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
+- (NSDictionary *) currentPublishSettingsFromRawPublishSettings:(NSDictionary *) rawPublishSettings {
     
-    NSDictionary *settings = rawPublishSettings[self.targetVersion];
-    
-    if (!settings) {
-        return NO;
-    }
-    
-    return YES;
+    return rawPublishSettings[self.targetVersion];
+
 }
+
+//- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
+//    
+//    NSDictionary *settings = rawPublishSettings[self.targetVersion];
+//    
+//    if (!settings) {
+//        return NO;
+//    }
+//    
+//    return YES;
+//}
 
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings {
     
     if (![[self publishSettingsData] isEqualToDictionary:[otherPublishSettings publishSettingsData]]) return NO;
-    
-    if (self.status != otherPublishSettings.status) return NO;
-    
-    if (![self.url isEqualToString:otherPublishSettings.url]) return NO;
+        
+    if (self.url &&
+        otherPublishSettings.url &&
+        ![self.url isEqualToString:otherPublishSettings.url]) return NO;
     
     if (![[self moduleDescriptionData] isEqualToDictionary:[otherPublishSettings moduleDescriptionData]]){
         return NO;
@@ -239,32 +245,41 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     return YES;
 }
 
-- (BOOL) areNewRawPublishSettings:(NSDictionary *)rawPublishSettings {
+- (BOOL) areNewMatchingVersionPublishSettings:(NSDictionary *)publishSetting {
     
-    return ![rawPublishSettings isEqualToDictionary:self.privatePublishSettingsData];
+    return ![publishSetting isEqualToDictionary:self.privatePublishSettingsData];
    
 }
 
-- (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings {
+- (void) updateWithMatchingVersionSettings:(NSDictionary *)publishSettings {
     
-    NSDictionary *settings = rawPublishSettings[self.targetVersion];
+    [self importLocalSettingsFromMatchingVersionSettings:publishSettings];
     
-    if (!settings) {
-        return;
-    }
-    
-    [self importLocalSettingsFromRawSettings:settings];
-
     [TEALPublishSettingsStore archivePublishSettings:self];
     
 }
 
+//- (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings {
+//    
+//    NSDictionary *settings = rawPublishSettings[self.targetVersion];
+//    
+//    if (!settings) {
+//        return;
+//    }
+//    
+//    [self importLocalSettingsFromRawSettings:settings];
+//
+//    [TEALPublishSettingsStore archivePublishSettings:self];
+//    
+//}
+
 - (BOOL) enableLowBatterySuppress {
     
-    NSNumber *number = [self publishSettingsData][TEALPublishSettingKeyLowBatteryMode];
+    NSString *number = [self publishSettingsData][TEALPublishSettingKeyLowBatteryMode];
     
-    if (![number respondsToSelector:@selector(boolValue)]){
-        return NO;
+    if (!number ||
+        ![number respondsToSelector:@selector(boolValue)]){
+        return false;
     }
     
     return [number boolValue];
@@ -325,6 +340,10 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
         return nil;
     }
     
+    if ([string isEqualToString:@""]){
+        return nil;
+    }
+    
     return [string lowercaseString];
 
 }
@@ -373,6 +392,9 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
         if (status == TEALPublishSettingsStatusLoadedRemote) {
             status = TEALPublishSettingsStatusLoadedArchive;
         }
+        
+        _url = [aDecoder decodeObjectForKey:@"url"];
+        
         _status = status;
     }
     
@@ -393,6 +415,8 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 - (void) encodeWithCoder:(NSCoder *)aCoder {
     
     [aCoder encodeInteger:self.status forKey:@"status"];
+    
+    [aCoder encodeObject:self.url forKey:@"url"];
     
     [aCoder encodeObject:self.targetVersion forKey:@"targetVersion"];
     
@@ -416,7 +440,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
              };
 }
 
-- (void) importLocalSettingsFromRawSettings:(NSDictionary *)settings {
+- (void) importLocalSettingsFromMatchingVersionSettings:(NSDictionary *)settings {
     
     self.privatePublishSettingsData = [NSMutableDictionary dictionaryWithDictionary:settings];
     

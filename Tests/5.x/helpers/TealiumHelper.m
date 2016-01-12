@@ -46,7 +46,9 @@ static TealiumHelper * _sharedInstance;
     
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
-    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/utag/tealiummobile/ios/dev/mobile.html";
+//    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/utag/tealiummobile/ios/dev/mobile.html";
+    
+//    configuration.overridePublishSettingsURL = @"https://chadhartman.github.io/tealium-ios/mps_collect_batch.json";
     
     configuration.remoteCommandsEnabled = YES;
     

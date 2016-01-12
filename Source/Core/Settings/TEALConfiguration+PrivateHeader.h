@@ -41,7 +41,7 @@
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
 
-@property (nonatomic) NSString *overridePublishSettingsVersion;
+//@property (nonatomic) NSString *overridePublishSettingsVersion;
 
 - (NSString *) publishSettingsURL;
 

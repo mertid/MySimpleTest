@@ -12,10 +12,13 @@
 #import "Tealium+Collect.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
+#import "TEALDispatch+PrivateHeader.h"
 
-@interface Tealium_CollectTests : XCTestCase
+@interface Tealium_CollectTests : XCTestCase <TealiumDelegate>
 
 @property (nonatomic, strong) Tealium *library;
+@property int queueCount;
+@property int sentCount;
 
 @end
 
@@ -28,6 +31,9 @@
 
 - (void)tearDown {
     self.library = nil;
+    self.queueCount = 0;
+    self.sentCount = 0;
+    
     [super tearDown];
 }
 
@@ -50,7 +56,20 @@
                                    }];
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    
+    isReady = NO;
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        XCTAssertTrue(success, @"Library failed to fetch test settings - error:%@", error);
+        
+        isReady = YES;
+        
+    }];
+    
 }
+
+
 
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
@@ -67,7 +86,7 @@
 }
 
 
-#pragma mark TESTS
+#pragma mark API TESTS
 
 - (void) testCollectEnabledByPublishSettings {
     
@@ -161,6 +180,90 @@
     
     XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
     
+}
+
+#pragma mark - TRACK TESTS
+
+// Track calls require a dispatch service to run, so we're adding track tests to each of the dispatch service modules
+
+- (void) testTrackBatchedEvent {
+
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"batch_5"]];
+    
+    self.library.delegate = self;
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:nil];
+    
+    XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
+    
+    __block BOOL fulfilledAlready = NO;
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    // Manually set to match batch_size in above json file
+    for (int i = 0; i < 5; i++) {
+        
+        [self.library trackDispatch:dispatch
+                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+                             
+                             XCTAssert(!error, @"Error in track call detected:%@", error);
+                             
+                             XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
+                             
+                             
+                             if (weakSelf.queueCount >= 5 &&
+                                 fulfilledAlready == NO){
+                                 
+                                 fulfilledAlready = YES;
+                                 
+                                 [batchExpectation fulfill];
+                             }
+
+                        }];
+    }
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    XCTAssertTrue(self.queueCount == 5, @"5 events did not trigger - events triggered:%i", self.queueCount);
+    
+    fulfilledAlready = NO;
+    
+    XCTestExpectation *lastCallExpectation = [self expectationWithDescription:@"batch"];
+    
+    [self.library trackDispatch:dispatch
+                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+                         
+                         XCTAssert(!error, @"Error in track call detected:%@", error);
+                         
+                         XCTAssertTrue(status == 1, @"Dispatch was not sent as expected:%@", returnDispatch);
+                         
+                         if (!fulfilledAlready){
+                             
+                             fulfilledAlready = YES;
+                             [lastCallExpectation fulfill];
+                             
+                         }
+                     }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+ 
+    // Shouldn't the total sent count be 6?
+    
+    XCTAssertTrue(self.sentCount == 1, @"Sent call not confirmed from delegate.");
+}
+
+
+#pragma mark - TEALIUM DELEGATE
+
+- (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
+    
+    self.queueCount++;
+    
+}
+
+- (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
+    
+    self.sentCount++;
 }
 
 //- (void) testConfigurationPollingFrequency {

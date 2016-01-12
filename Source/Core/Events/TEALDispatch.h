@@ -27,13 +27,42 @@ typedef NS_ENUM(NSUInteger, TEALDispatchType) {
 };
 
 /**
+ *  Dispatch Status Types
+ */
+typedef NS_ENUM(NSUInteger, TEALDispatchStatus) {
+    /**
+     *  Status not known.
+     */
+    TEALDispatchStatusUnknown = 0,
+    /**
+     *  Delivered dispatch.
+     */
+    TEALDispatchStatusSent,
+    /**
+     *  Was saved.
+     */
+    TEALDispatchStatusQueued,
+    /**
+     *  Destruction requested.
+     */
+    TEALDispatchStatusShouldDestroy,
+    /**
+     *  Other failure.
+     */
+    TEALDispatchStatusFailed
+};
+
+
+/**
  *  Constants for the two most common dispatch types
  *
  */
-extern NSString * const TEALDispatchTypeLinkStringValue; // string actual - "link"
-extern NSString * const TEALDispatchTypeViewStringValue; // string actual - "view"
+extern NSString * _Nonnull const TEALDispatchTypeLinkStringValue; // string actual - "link"
+extern NSString * _Nonnull const TEALDispatchTypeViewStringValue; // string actual - "view"
 
 @interface TEALDispatch : NSObject <NSCoding>
+
+typedef void (^TEALDispatchBlock)(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error);
 
 /**
  *  Type of dispatch, either 'link' or 'view'
@@ -41,15 +70,21 @@ extern NSString * const TEALDispatchTypeViewStringValue; // string actual - "vie
 @property (nonatomic) TEALDispatchType dispatchType;
 
 /**
+ *  Optional block assigned to dispatch that can be triggered upon dispatch or queuing of dispatch
+ *
+ */
+@property (nonatomic, strong) TEALDispatchBlock _Nullable assignedBlock;
+
+/**
  *  Name of the dispatch service used to deliver track call.
  *
  */
-@property (nonatomic, strong) NSString *dispatchServiceName;
+@property (nonatomic, strong) NSString * _Nullable dispatchServiceName;
 
 /**
  *  The populated datasources available for mapping with the dispatch.
  */
-@property (nonatomic, strong) NSDictionary *payload;
+@property (nonatomic, strong) NSDictionary * _Nonnull payload;
 
 /**
  *  Time in Unix epoch of when the dispatch origin track call was called. 

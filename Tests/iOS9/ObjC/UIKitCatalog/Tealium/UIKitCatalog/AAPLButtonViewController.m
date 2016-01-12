@@ -102,6 +102,9 @@
 
 - (void)buttonClicked:(UIButton *)button {
     NSLog(@"A button was clicked: %@.", button);
+    
+    [TealiumHelper trackEventWithTitle:@"buttonTapped" dataSources:nil];
+    
 }
 
 @end

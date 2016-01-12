@@ -15,7 +15,7 @@
 @property (nonatomic) BOOL autotrackingApplicationInfoEnabled;
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
-@property (nonatomic) NSString *overridePublishSettingsVersion;
+//@property (nonatomic) NSString *overridePublishSettingsVersion;
 @property (nonatomic) NSMutableDictionary *privateModuleData;
 @property (nonatomic) NSMutableDictionary *privateModuleDescriptionData;
 @property (nonatomic) dispatch_queue_t queue;
@@ -62,7 +62,7 @@
     configuration.autotrackingCrashesEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
     configuration.overridePublishSettingsURL = nil;
-    configuration.overridePublishSettingsVersion = nil;
+//    configuration.overridePublishSettingsVersion = nil;
     configuration.overridePublishURL = nil;
     
     NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];

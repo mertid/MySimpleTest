@@ -881,55 +881,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.settings fetchNewRawPublishSettingsWithCompletion:completion];
     
-//    __weak Tealium *weakSelf = self;
-//
-//    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-//       
-//        if (error){
-//            [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
-//                                      [error localizedDescription],
-//                                      [error localizedFailureReason],
-//                                      [error localizedRecoverySuggestion]
-//                                      ]];
-//            
-//        }
-//        
-//        if (success){
-//            
-//            [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-//            
-//            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-//            
-//                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-//            
-//            }
-//            
-//            [weakSelf updateModules];
-//            
-//            if (weakSelf.delegate) {
-//                [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
-//            }
-//            
-//            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-//                        
-//            [weakSelf.dispatchManager runQueuedDispatches];
-//
-//        }
-//        
-//        if (completion){
-//            completion(success, error);
-//        }
-//        
-//        if ([weakSelf.settings libraryShouldDisable]){
-//            
-//            [weakSelf disable];
-//            
-//            return;
-//        }
-//
-//        
-//    }];
-    
 }
 
 - (void) setupSettingsReachabilityCallbacks {
@@ -972,7 +923,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                     
                     [weakSelf updateModules];
                     
-                    if (weakSelf.delegate) {
+                    if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
                         [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
                     }
                     
@@ -1169,6 +1120,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch {
     
     [self.delegateManager tealium:self didQueueDispatch:dispatch];
+    
     [self logDispatch:dispatch status:TEALDispatchStatusQueued error:nil];
     
 }

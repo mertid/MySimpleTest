@@ -46,7 +46,7 @@
                   Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
                </Test>
                <Test
-                  Identifier = "TealiumTrackTests/testTrackViews">
+                  Identifier = "Tealium_CollectTests/testCollectEnabledByPublishSettings">
                </Test>
                <Test
                   Identifier = "__x_FrameworkUITests">

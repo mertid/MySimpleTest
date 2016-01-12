@@ -64,7 +64,7 @@ NSString * const TEAL_INSTANCE_ID = @"test";
     
     TEALPublishSettings *unarchivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:TEAL_INSTANCE_ID];
     
-    XCTAssertTrue([settings isEqualToPublishSettings:unarchivedSettings], @"Problem archiving / unarchiving test publish settings");
+    XCTAssertTrue([settings isEqualToPublishSettings:unarchivedSettings], @"Problem archiving / unarchiving test publish settings - initial:%@ unarchived:%@", settings, unarchivedSettings);
 
 }
 

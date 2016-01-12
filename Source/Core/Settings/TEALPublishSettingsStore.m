@@ -43,10 +43,10 @@ NSString * const TEALPublishSettingsStoreKey = @"com.tealium.publishsettingsstor
     
     settings = (TEALPublishSettings*)[NSKeyedUnarchiver unarchiveObjectWithData:settingsData];
     
-//    if (![settings isKindOfClass:[TEALPublishSettings class]]){
-//        
-//        return nil;
-//    }
+    if (![settings isKindOfClass:[TEALPublishSettings class]]){
+        
+        return nil;
+    }
     
     return settings;
     
