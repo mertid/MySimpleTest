@@ -168,6 +168,8 @@ __strong static NSDictionary *staticAllInstances = nil;
                                                      title:(NSString *)title
                                                dataSources:(NSDictionary *)dataSources {
     
+    NSMutableDictionary *compositeDictionary = [NSMutableDictionary new];
+    
     // Configurable / Variable Options
     NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
@@ -180,19 +182,29 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSDictionary *timestampDataSources = [self timestampDataSourcesForDataSources:dataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
     
-    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-                                                                                    applicationInfo,
-                                                                                    carrierInfo,
-                                                                                    connectionInfo,
-                                                                                    deviceInfo,
-                                                                                    tealiumInfo,
-                                                                                    persistentDataSources,
-                                                                                    timestampDataSources,
-                                                                                    captureTimeDataSources
-                                                                                    ]];
+    [compositeDictionary addEntriesFromDictionary:applicationInfo];
+    [compositeDictionary addEntriesFromDictionary:carrierInfo];
+    [compositeDictionary addEntriesFromDictionary:connectionInfo];
+    [compositeDictionary addEntriesFromDictionary:deviceInfo];
+//    [compositeDictionary addEntriesFromDictionary:tealiumInfo];
+    [compositeDictionary addEntriesFromDictionary:persistentDataSources];
+    [compositeDictionary addEntriesFromDictionary:timestampDataSources];
+    [compositeDictionary addEntriesFromDictionary:captureTimeDataSources];
+    [compositeDictionary addEntriesFromDictionary:dataSources];
+    
+//    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
+//                                                                                    applicationInfo,
+//                                                                                    carrierInfo,
+//                                                                                    connectionInfo,
+//                                                                                    deviceInfo,
+//                                                                                    tealiumInfo,
+//                                                                                    persistentDataSources,
+//                                                                                    timestampDataSources,
+//                                                                                    captureTimeDataSources
+//                                                                                    ]];
     
     
-    return compositeDataSources;
+    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
 }
 
 - (NSDictionary *) timestampDataSourcesForDataSources:(NSDictionary *)dataSources {
@@ -204,41 +216,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     return @{};
 }
-
-//- (NSDictionary *) universalTrackDataSources {
-//    
-//    NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
-//    NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
-//    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-//                                                                                    persistentDataSources? persistentDataSources:@{},
-//                                                                                    volatileDataSources? volatileDataSources:@{}
-//                                                                                    ]];
-//    
-//    return compositeDataSources;
-//    
-//}
-
-//- (NSDictionary *) volatileDataSourcesCopy {
-//    
-//    NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
-//    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
-//    NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources];
-//    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
-//    NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
-//    
-//    NSDictionary *clientVolatileInfo = [self.dataSources clientVolatileDataSources];
-//    
-//    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-//                                                                                    applicationInfo,
-//                                                                                    carrierInfo,
-//                                                                                    connectionInfo,
-//                                                                                    deviceInfo,
-//                                                                                    tealiumInfo? tealiumInfo:@{},
-//                                                                                    clientVolatileInfo? clientVolatileInfo:@{},
-//                                                                                    ]];
-//    
-//    return compositeDataSources;
-//}
 
 - (NSDictionary *) volatileDataSourcesCopy {
     
@@ -309,48 +286,6 @@ __strong static NSDictionary *staticAllInstances = nil;
                           delegate:nil
                         completion:completion];
     
-//    // Bail out check
-//    NSError *error = nil;
-//    
-//    if (![TEALConfiguration isValidConfiguration:configuration]) {
-//        
-//        // Check configuration
-//        
-//        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-//                                      description:@"Could not initialize instance."
-//                                           reason:@"Invalid Configuration."
-//                                       suggestion:@"Check the account, profile and environment options."];
-//        
-//        
-//        if (completion) { completion(NO, error);}
-//        
-//        return nil;
-//    }
-//    
-//    configuration.instanceID  = key;
-//    
-//    Tealium *instance = [Tealium instanceWithConfiguration:configuration completion:^(BOOL success, NSError *instanceError) {
-//            
-//        completion(success, instanceError);
-//        
-//    }];
-//    
-//    if (!instance) {
-//        
-//        error = [TEALError errorWithCode:TEALErrorCodeFailure
-//                                        description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
-//                                             reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
-//                                         suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
-//        
-//        if (completion) { completion(NO, error);}
-//        
-//        return nil;
-//    }
-//    
-//    [Tealium addInstance:instance key:key];
-//    
-//    return instance;
-    
 }
 
 + (instancetype) newInstanceForKey:(NSString * _Nonnull)key
@@ -413,31 +348,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     return [self instanceWithConfiguration:configuration
                                   delegate:nil
                                 completion:completion];
-    
-//    Tealium *instance = [[Tealium alloc] initPrivateWithInstanceID:configuration.instanceID];
-//    
-//    __weak Tealium *weakInstance = instance;
-//    
-//    [weakInstance.operationManager addOperationWithBlock:^{
-//        
-//        [weakInstance finalizeWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
-//            
-//            if (success) {
-//                
-//                [weakInstance.dispatchManager runQueuedDispatches];
-//                
-//            } else {
-//                
-//                [weakInstance disable];
-//                
-//            }
-//            
-//            if (completion) completion(success, error);
-//        }];
-//        
-//    }];
-//    
-//    return instance;
 }
 
 + (instancetype) instanceWithConfiguration:(TEALConfiguration * _Nonnull)configuration
@@ -997,24 +907,9 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-
-//- (void) setActiveViewController:(UIViewController *)viewController {
-//
-//    [self.logger logDev:@"Current View Controller is now: %@", viewController];
-//
-//    self.privateActiveViewController = viewController;
-//}
-//
-//- (UIViewController *) activeViewController {
-//    
-//    return self.privateActiveViewController;
-//    
-//}
-
 - (TEALSettings *) settingsFromConfiguration:(TEALConfiguration *) configuration {
     
     TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:configuration];
-//    settings.visitorIDCopy = [self.dataSources visitorIDCopy];
     settings.urlSessionManager = self.urlSessionManager;
     
     return settings;

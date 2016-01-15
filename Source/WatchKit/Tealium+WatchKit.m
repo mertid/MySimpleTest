@@ -51,7 +51,7 @@ typedef void (^tealiumEndBGTask)();
     NSError *error = nil;
     
     NSDictionary *finalPaylod = [self finalPayloadFromRawPayload:tealiumPayload];
-    
+        
     [self processTrackCallFromPayload:finalPaylod error:error];
     
     // Create background processing block with end callback
@@ -79,14 +79,18 @@ typedef void (^tealiumEndBGTask)();
 
 - (NSDictionary *) finalPayloadFromRawPayload:(NSDictionary *)payload {
 
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *originalPayload = [NSMutableDictionary dictionaryWithDictionary:payload];
     
-    mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_WatchOS;
-    mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Wearable;
+    NSDictionary *existingCustomDataPayload = payload[TEALWKCommandTrackArgumentCustomDataKey];
     
-    [mDict addEntriesFromDictionary:payload];
-
-    return [NSDictionary dictionaryWithDictionary:mDict];
+    NSMutableDictionary *newCustomDataPayload = [NSMutableDictionary dictionaryWithDictionary:existingCustomDataPayload];
+    
+    newCustomDataPayload[TEALDataSourceKey_Platform] = TEALDataSourceValue_WatchOS;
+    newCustomDataPayload[TEALDataSourceKey_Origin] = TEALDataSourceValue_Wearable;
+    
+    originalPayload[TEALWKCommandTrackArgumentCustomDataKey] = newCustomDataPayload;
+    
+    return [NSDictionary dictionaryWithDictionary:originalPayload];
     
 }
 

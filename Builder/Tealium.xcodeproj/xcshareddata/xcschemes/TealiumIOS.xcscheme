@@ -34,20 +34,6 @@
                ReferencedContainer = "container:Tealium.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7198AEF31C120D75003F85F0"
-               BuildableName = "TealiumWatchOSOpenSource&#10;"
-               BlueprintName = "TealiumWatchOSOpenSource&#10;"
-               ReferencedContainer = "container:Tealium.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

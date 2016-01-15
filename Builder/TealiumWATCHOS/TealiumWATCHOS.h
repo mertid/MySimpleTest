@@ -16,9 +16,9 @@ FOUNDATION_EXPORT const unsigned char TealiumWATCHOSVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <TealiumWATCHOS/PublicHeader.h>
 
-#import <TealiumWATCHOS/TEALWKExtension.h>
-#import <TealiumWATCHOS/TEALWKExtensionConfiguration.h>
-#import <TealiumWATCHOS/TEALWKConstants.h>
-#import <TealiumWATCHOS/TEALLogger.h>
+#import <TealiumWATCHOSExtension/TEALWKExtension.h>
+#import <TealiumWATCHOSExtension/TEALWKExtensionConfiguration.h>
+#import <TealiumWATCHOSExtension/TEALWKConstants.h>
+#import <TealiumWATCHOSExtension/TEALLogger.h>
 
 
