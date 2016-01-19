@@ -41,7 +41,7 @@
 
 + (BOOL) deviceIsCharging;
 
-- (NSString *) applicationUUID;
+- (NSString *) uuid;
 
 - (NSString *) visitorIDCopy;
 

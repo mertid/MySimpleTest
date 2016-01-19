@@ -261,6 +261,19 @@ static NSDictionary *staticCompileTimeDataSources;
 - (NSDictionary *) persistentDataSourcesCopy {
     
     NSDictionary *copy = [[self instanceStore] dataSourcesCopy];
+
+    // Add UUID here if not already available
+    NSString *uuid = copy[TEALDataSourceKey_UUID];
+    
+    if (!uuid){
+        
+        NSMutableDictionary *mutableCopy = [NSMutableDictionary dictionaryWithDictionary:[[self instanceStore] dataSourcesCopy]];
+        mutableCopy[TEALDataSourceKey_UUID] = [self uuid];
+        
+        copy = [NSDictionary dictionaryWithDictionary:mutableCopy];
+        
+    }
+    
     return copy;
 }
 
@@ -291,18 +304,22 @@ static NSDictionary *staticCompileTimeDataSources;
     
 }
 
-- (NSString *) applicationUUID {
+#warning should return immediately in addition to the adding of it
+
+- (NSString *) uuid {
     
-    NSString *applicationUUID = [self instanceStore].dataSourcesCopy[TEALDataSourceKey_UUID];
+    NSString *uuid = [self instanceStore].dataSourcesCopy[TEALDataSourceKey_UUID];
     
-    if (!applicationUUID) {
-        applicationUUID = [[NSUUID UUID] UUIDString];
+    if (!uuid) {
+        uuid = [[NSUUID UUID] UUIDString];
         
-        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID:applicationUUID}];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID:uuid}];
     }
     
-    return applicationUUID;
+    return uuid;
 }
+
+#warning move this to collect module
 
 - (NSString *) visitorIDCopy {
     
@@ -310,7 +327,7 @@ static NSDictionary *staticCompileTimeDataSources;
     
     if (!visitorID) {
 
-        NSString *uuid = [self applicationUUID];
+        NSString *uuid = [self uuid];
         
         if (![uuid isKindOfClass:([NSString class])]) {
             return nil;

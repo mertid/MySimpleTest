@@ -50,7 +50,7 @@
     
     [self measureBlock:^{
         
-         uuid = [self.dataSources applicationUUID];
+         uuid = [self.dataSources uuid];
         
     }];
     

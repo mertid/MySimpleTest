@@ -14,8 +14,6 @@
 #import "TEALDataSourceConstants.h"
 #import "TEALVersion.h"
 
-NSString * const kTEALApplicationUUIDKey = @"com.tealium.applicationUUID";
-
 @implementation TEALSystemHelpers
 
 + (NSDictionary*) compositeDictionaries:(NSArray*)dictionaries {

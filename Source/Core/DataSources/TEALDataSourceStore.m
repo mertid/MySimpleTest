@@ -19,7 +19,7 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
 
 @property (nonatomic, strong) dispatch_queue_t queue;
 
-@property (nonatomic, strong) NSMutableDictionary *dataSources;
+@property (nonatomic, strong) NSMutableDictionary *privateDataSources;
 
 @property (nonatomic, strong) NSString *instanceID;
 
@@ -43,12 +43,22 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
         const char * queueName = [fullQueueName UTF8String];
 
         _queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-        _dataSources = [[NSMutableDictionary alloc] init];
         _instanceID = instanceID;
         [self unarchiveWithStorageKey:instanceID];
     }
     return self;
 }
+
+- (NSMutableDictionary *) dataSources {
+    
+    if (!self.privateDataSources){
+        self.privateDataSources = [NSMutableDictionary new];
+    }
+    
+    return self.privateDataSources;
+    
+}
+
 
 - (id) objectForKey:(id<NSCopying, NSSecureCoding>)key {
     
