@@ -268,7 +268,6 @@
     // Perform request
     self.lastFetch = now;
     __block typeof(self) __weak weakSelf = self;
-
     
 
     [self.urlSessionManager performRequest:request
@@ -357,18 +356,29 @@
         }
             
         // Init or Update Publish Settings
-        if ([publishSettings areNewMatchingVersionPublishSettings:matchingPublishSettings]){
+                                
+        BOOL newPublishSettings = [publishSettings areNewMatchingVersionPublishSettings:matchingPublishSettings];
+
+        if (newPublishSettings){
 
             [publishSettings updateWithMatchingVersionSettings:matchingPublishSettings];
             
         }
         
-        // Return successful completion if new settings found or if exsisting okay
+        // Return successful completion if new settings found
         if (completion) {
-            completion( YES, error);
+            completion( newPublishSettings, error);
         }
         
     }];
+    
+}
+
+
+- (void) fetchNewRawPublishSettings:(NSURLRequest*) request
+                         completion:(TEALBooleanCompletionBlock)completion{
+    
+#warning Immplement
     
 }
 

@@ -850,24 +850,35 @@ __strong static NSDictionary *staticAllInstances = nil;
                 if (success){
                     
                     [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+                
+                }
+                
+                if (!success &&
+                    !error){
                     
-                    if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-                        
-                        [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-                        
-                    }
+                    [weakSelf.logger logDev:@"No changes in current Remote Publish Settings from server."];
+
+                }
+                
+                // if !success then we're using archived or default version
+                
+                if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
                     
-                    [weakSelf updateModules];
-                    
-                    if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
-                        [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
-                    }
-                    
-                    [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-                    
-                    [weakSelf.dispatchManager runQueuedDispatches];
+                    [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
                     
                 }
+                
+                [weakSelf updateModules];
+                
+                if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
+                    [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
+                }
+                
+                [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+                
+                [weakSelf.dispatchManager runQueuedDispatches];
+                    
+                
                 
                 if ([weakSelf.settings libraryShouldDisable]){
                     
