@@ -23,6 +23,12 @@
     splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
     [TealiumHelper startTracking];
+
+    
+//    Tealium *tealiumInstance1 = [Tealium instanceForKey:@"1"];
+//    
+//    [tealiumInstance1 addVolatileDataSources:@{@"zzz":@"testValue"}];
+
     
     [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
     

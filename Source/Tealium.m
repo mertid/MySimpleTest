@@ -167,10 +167,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (NSDictionary *) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
                                                      title:(NSString *)title
                                                dataSources:(NSDictionary *)dataSources {
-    
-    NSMutableDictionary *compositeDictionary = [NSMutableDictionary new];
-    
-    // Configurable / Variable Options
+        
+    // Configurable Options
     NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
     NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
     NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources:dataSources];
@@ -179,32 +177,27 @@ __strong static NSDictionary *staticAllInstances = nil;
     // Non-configurable Options
     NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
     NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
+    NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
     NSDictionary *timestampDataSources = [self timestampDataSourcesForDataSources:dataSources];
     NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
+    NSDictionary *clientDataSources = dataSources? dataSources: @{};
     
-    [compositeDictionary addEntriesFromDictionary:applicationInfo];
-    [compositeDictionary addEntriesFromDictionary:carrierInfo];
-    [compositeDictionary addEntriesFromDictionary:connectionInfo];
-    [compositeDictionary addEntriesFromDictionary:deviceInfo];
-//    [compositeDictionary addEntriesFromDictionary:tealiumInfo];
-    [compositeDictionary addEntriesFromDictionary:persistentDataSources];
-    [compositeDictionary addEntriesFromDictionary:timestampDataSources];
-    [compositeDictionary addEntriesFromDictionary:captureTimeDataSources];
-    [compositeDictionary addEntriesFromDictionary:dataSources];
-    
-//    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-//                                                                                    applicationInfo,
-//                                                                                    carrierInfo,
-//                                                                                    connectionInfo,
-//                                                                                    deviceInfo,
-//                                                                                    tealiumInfo,
-//                                                                                    persistentDataSources,
-//                                                                                    timestampDataSources,
-//                                                                                    captureTimeDataSources
-//                                                                                    ]];
+    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
+                                                                                    applicationInfo,
+                                                                                    carrierInfo,
+                                                                                    connectionInfo,
+                                                                                    deviceInfo,
+                                                                                    tealiumInfo,
+                                                                                    timestampDataSources,
+                                                                                    captureTimeDataSources,
+                                                                                    persistentDataSources,
+                                                                                    volatileDataSources,
+                                                                                    clientDataSources
+                                                                                    ]];
     
     
-    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
+    
+    return compositeDataSources;
 }
 
 - (NSDictionary *) timestampDataSourcesForDataSources:(NSDictionary *)dataSources {
@@ -225,6 +218,37 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
     
+    
+    NSError *error = nil;
+    
+    [self addVolatileDataSources:additionalDataSources error:error];
+    
+    if (error){
+        [self.logger logQA:@"%@", error];
+    }
+}
+
+- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources error:(NSError * __autoreleasing)error {
+    
+    
+    if (!self.dataSources){
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
+                                  reason:NSLocalizedString(@"DataSources object not yet ready.", @"")
+                              suggestion:NSLocalizedString(@"Try again later.", @"")];
+        
+        return;
+    }
+    
+    if (!self.operationManager){
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
+                                  reason:NSLocalizedString(@"Operation Manager not yet ready.", @"")
+                              suggestion:NSLocalizedString(@"Try again later.", @"")];
+        
+        return;
+    }
+    
     __block typeof(self) __weak weakSelf = self;
     
     [self.operationManager addOperationWithBlock:^{
@@ -232,6 +256,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         [[weakSelf.dataSources clientVolatileDataSources] addEntriesFromDictionary:[additionalDataSources copy]];
         
     }];
+    
 }
 
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
@@ -432,6 +457,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     // Init data sources
     self.dataSources = [[TEALDataSources alloc]initWithInstanceID:configuration.instanceID];
+    
     if (!error &&
         !self.dataSources) {
         error =[TEALError errorWithCode:TEALErrorCodeFailure
@@ -1078,7 +1104,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
-
 }
 
 #pragma mark - TEALDISPATCHMANAGER CONFIGURATION

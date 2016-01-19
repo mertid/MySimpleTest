@@ -202,7 +202,7 @@
     
     NSDictionary *testDataSources = [self stringDataSources];
     
-    [self waitFor:&isReady timeout:0.5];
+    [self waitFor:&isReady timeout:1.0];
     
     isReady = NO;
 
@@ -210,9 +210,11 @@
     
     // There will be a short delay here on this thread as the above method is
     // sent to the end of the Tealium BG serial queue
-    [self waitFor:&isReady timeout:0.5];
+    [self waitFor:&isReady timeout:1.0];
     
     NSDictionary *dataSourcesRetrieved = [instance volatileDataSourcesCopy];
+    
+    XCTAssertTrue(dataSourcesRetrieved[TEAL_TEST_DATASOURCE_KEY], @"volatile data was not added.");
     
     XCTAssertTrue([dataSourcesRetrieved[TEAL_TEST_DATASOURCE_KEY] isEqualToString:TEAL_TEST_DATASOURCE_STRING_VALUE], @"volatile data was not added.");
     

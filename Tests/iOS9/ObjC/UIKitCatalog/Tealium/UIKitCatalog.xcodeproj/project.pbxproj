@@ -557,6 +557,7 @@
 		712BAF331C29BED4007767CD /* UIKitCatalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitCatalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitCatalogUITests.m; sourceTree = "<group>"; };
 		712BAF371C29BED4007767CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7134F0181C4EB746006AACEF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		7155B5DB1C4419A50091FC1B /* batch_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = batch_5.json; path = ../../../tests/5.x/mps/batch_5.json; sourceTree = "<group>"; };
 		716746911C433461001A27D8 /* collect_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = collect_OFF.html; path = ../../../tests/5.x/mps/collect_OFF.html; sourceTree = "<group>"; };
 		716746921C433461001A27D8 /* collect_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = collect_ON.html; path = ../../../tests/5.x/mps/collect_ON.html; sourceTree = "<group>"; };
@@ -762,6 +763,7 @@
 		5356823C18F3656900BAAD62 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7134F0181C4EB746006AACEF /* CoreTelephony.framework */,
 				710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */,
 				5356823D18F3656900BAAD62 /* Foundation.framework */,
 				5356823F18F3656900BAAD62 /* CoreGraphics.framework */,

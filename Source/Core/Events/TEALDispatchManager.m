@@ -366,7 +366,9 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         }
 
         NSUInteger remainingCount = [self.queuedDispatches count];
-        [self.delegate dispatchManagerdDidRunDispatchQueueWithCount:remainingCount];
+        if (count > 0){
+            [self.delegate dispatchManagerdDidRunDispatchQueueWithCount:remainingCount];
+        }
     }
     self.processingQueue = nil;
 }

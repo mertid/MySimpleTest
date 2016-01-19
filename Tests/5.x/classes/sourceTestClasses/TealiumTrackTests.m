@@ -80,9 +80,9 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-#pragma mark - TESTS
+#pragma mark - DISPATCH TESTS
 
-- (void) testTrackEventWithTitleAndData {
+- (void) testTrackEventDispatchWithTitleAndData {
     
     __block BOOL isReady = NO;
     
@@ -133,7 +133,7 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-- (void) testTrackEventNoTitleNoData {
+- (void) testTrackEventDispatchNoTitleNoData {
     
     __block BOOL isReady = NO;
     
@@ -171,6 +171,215 @@ NSString * const versionToTest = @"5.0.0";
  
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
 
+}
+
+#pragma mark - TRACK + DISPATCH TESTS
+
+- (void) testTrackEventNoTitleWithDataOverwritingAllStandardDataSources {
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    NSDictionary *payload = [self overrwriteDataSources];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    
+    [self.library trackDispatchOfType:TEALDispatchTypeEvent
+                                title:@"blah"
+                          dataSources:payload
+                           completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+                               XCTAssert(!error, @"Error in track call detected:%@", error);
+                               
+                               NSDictionary *dispatchData = dispatch.payload;
+                               
+                               NSArray *keys = [dispatchData allKeys];
+                               
+                               for (NSString *key in keys){
+                                   
+                                   NSString *value = dispatchData[key];
+                                   
+                                   XCTAssertTrue([value isEqualToString:payload[key]], @"Value for key %@ was not overwritten: overwrite payload: %@:  dispatchDataReceived:%@", key, payload, dispatchData);
+                                   
+                               }
+                               
+                               [expectation fulfill];
+                               
+                           }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+}
+
+- (void) testTrackEventWithVolatileData {
+    
+    __block BOOL isReady = NO;
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    NSString *testKey = @"testKey";
+    NSString *testValue = @"testValue";
+    
+    [self.library addVolatileDataSources:@{testKey:testValue}];
+    
+    NSString *testTitle = @"button_press";
+    
+    NSDictionary *testDataSources = @{
+                                      TEALDataSourceKey_EventTitle: testTitle,
+                                      @"intensity": @">9000"
+                                      };
+    
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    
+    // Title + testData
+    [self.library trackDispatchOfType:TEALDispatchTypeEvent
+                                title:testTitle
+                          dataSources:testDataSources
+                           completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+                               NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
+                               
+                               XCTAssert(!error, @"Error in track call detected:%@", error);
+                               
+                               NSDictionary *dispatchData = dispatch.payload;
+                               
+                               XCTAssertTrue([dispatchData[@"intensity"] isEqualToString:@">9000"], @"Incorrect test value in payload.");
+                               
+                               XCTAssertTrue([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
+                               
+                               XCTAssertTrue([dispatchData[testKey] isEqualToString:testValue], @"volatile data sources {%@:%@} was not added to dispatch: %@", testKey, testValue, dispatchData);
+                               
+                               [expectation fulfill];
+                               
+                           }];
+    
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+}
+
+- (void) testTrackEventWithPersistentData {
+    
+    __block BOOL isReady = NO;
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    NSString *testKey = @"testKey";
+    NSString *testValue = @"testValue";
+    
+    [self.library addPersistentDataSources:@{testKey:testValue}];
+    
+    NSString *testTitle = @"button_press";
+    
+    NSDictionary *testDataSources = @{
+                                      TEALDataSourceKey_EventTitle: testTitle,
+                                      @"intensity": @">9000"
+                                      };
+    
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    
+    [self.library trackDispatchOfType:TEALDispatchTypeEvent
+                                title:testTitle
+                          dataSources:testDataSources
+                           completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+                               NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
+                               
+                               XCTAssert(!error, @"Error in track call detected:%@", error);
+                               
+                               NSDictionary *dispatchData = dispatch.payload;
+                               
+                               XCTAssertTrue([dispatchData[@"intensity"] isEqualToString:@">9000"], @"Incorrect test value in payload.");
+                               
+                               XCTAssertTrue([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
+                               
+                               XCTAssertTrue([dispatchData[testKey] isEqualToString:testValue], @"persistent data sources {%@:%@} was not added to dispatch: %@", testKey, testValue, dispatchData);
+                               
+                               [expectation fulfill];
+                               
+                           }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+}
+
+- (NSDictionary *) overrwriteDataSources {
+    
+    NSString *value = @"overwriteValue";
+    
+    NSDictionary *testDataSources = @{
+                                      TEALDataSourceKey_ApplicationName: value,
+                                      TEALDataSourceKey_ApplicationRDNS: value,
+                                      TEALDataSourceKey_ApplicationVersion: value,
+                                      TEALDataSourceKey_CallType: value,
+                                      TEALDataSourceKey_Carrier: value,
+                                      TEALDataSourceKey_CarrierISO: value,
+                                      TEALDataSourceKey_CarrierMCC: value,
+                                      TEALDataSourceKey_CarrierMNC: value,
+                                      TEALDataSourceKey_ConnectionType: value,
+                                      TEALDataSourceKey_Device: value,
+                                      TEALDataSourceKey_DeviceArchitecture: value,
+                                      TEALDataSourceKey_DeviceBatteryLevel: value,
+                                      TEALDataSourceKey_DeviceCPUType: value,
+                                      TEALDataSourceKey_DeviceIsCharging: value,
+                                      TEALDataSourceKey_DeviceLanguage: value,
+                                      TEALDataSourceKey_DeviceOrientation: value,
+                                      TEALDataSourceKey_DeviceOSVersion: value,
+                                      TEALDataSourceKey_DeviceResolution: value,
+                                      TEALDataSourceKey_LibraryVersion: value,
+                                      TEALDataSourceKey_EventTitle: value,
+                                      TEALDataSourceKey_Orientation: value,
+                                      TEALDataSourceKey_Origin: value,
+                                      TEALDataSourceKey_SystemVersion: value,
+                                      TEALDataSourceKey_EventName: value,
+                                      TEALDataSourceKey_Pagetype: value,
+                                      TEALDataSourceKey_Platform: value,
+                                      TEALDataSourceKey_ViewTitle: value,
+                                      TEALDataSourceKey_Timestamp: value,
+                                      TEALDataSourceKey_TimestampLocal: value,
+                                      TEALDataSourceKey_TimestampOffset: value,
+                                      TEALDataSourceKey_TimestampUnix: value,
+                                      TEALDataSourceKey_UUID: value,
+                                      TEALDataSourceKey_VisitorID: value,
+                                      TEALDataSourceKey_WasQueued: value
+                                      };
+    
+    return testDataSources;
+    
 }
 
 //- (void) testTrackBatchedEvent {
@@ -303,7 +512,7 @@ NSString * const versionToTest = @"5.0.0";
 
 }
 
-- (void) testFinalDispatchDataSourcesForEvents {
+- (void) testFinalDispatchDataSourceKeysForEvents {
     
     [self startLiveConfigLibrary];
     
@@ -313,6 +522,8 @@ NSString * const versionToTest = @"5.0.0";
     NSDictionary *dispatchData = [self.library finalDispatchDataSourcesForDispatchType:TEALDispatchTypeEvent title:@"test" dataSources:nil];
     
     NSArray *requiredKeys = [requiredEventDataSources allKeys];
+    
+    // NOTE: Carrier info ONLY available if CoreTelephony.framework was added to project
     
     for (NSString *key in requiredKeys) {
         
@@ -324,7 +535,7 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-- (void) testFinalDispatchDataSourcesForViews {
+- (void) testFinalDispatchDataSourceKeysForViews {
     
     [self startLiveConfigLibrary];
     
@@ -335,6 +546,8 @@ NSString * const versionToTest = @"5.0.0";
     
     NSArray *requiredKeys = [requiredEventDataSources allKeys];
     
+    // NOTE: Carrier info ONLY available if CoreTelephony.framework was added to project
+
     for (NSString *key in requiredKeys) {
         
         NSString *dispatchValue = dispatchData[key];

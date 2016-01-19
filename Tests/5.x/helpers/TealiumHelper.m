@@ -57,7 +57,7 @@ static TealiumHelper * _sharedInstance;
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
-    
+        
 }
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
