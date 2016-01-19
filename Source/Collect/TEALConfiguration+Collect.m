@@ -39,12 +39,15 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
 
 - (TEALVisitorProfilePollingFrequency) collectPollingFrequency {
     
-    NSDictionary *moduleData =  [self moduleData];
+    NSMutableDictionary *moduleData =  [self moduleData];
     
-    NSNumber *frequencyNumber = [moduleData[TEALCollectOverrideDispatchURLKey] copy];
+    NSNumber *frequencyNumber = [moduleData[TEALCollectPollingFrequencyKey] copy];
     
     if (!frequencyNumber){
+        
         // Default option
+        moduleData[TEALCollectPollingFrequencyKey] = @(TEALVisitorProfilePollingFrequencyOnRequest);
+        
         return TEALVisitorProfilePollingFrequencyOnRequest;
     }
     
@@ -99,13 +102,32 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     
     NSNumber *frequencyAsNumber = [NSNumber numberWithInteger:frequency];
     
-    NSString *frequencyAsString = [NSString stringWithFormat:@"%i", frequency];
+    NSString *frequencyAsString = [self pollingFrequencyAsString:frequency];
     
     [self setModuleObject:frequencyAsNumber
                    forKey:TEALCollectPollingFrequencyKey
                completion:nil];
     
     [self setModuleDescription:frequencyAsString forKey:@"polling frequency"];
+    
+}
+
+- (NSString *) pollingFrequencyAsString:(TEALVisitorProfilePollingFrequency)frequency {
+    
+    NSString *string = nil;
+    
+    switch (frequency) {
+        case TEALVisitorProfilePollingFrequencyOnRequest:
+            string = @"On Request";
+            break;
+        case TEALVisitorProfilePollingFrequencyAfterEveryEvent:
+            string = @"Every Event";
+        default:
+            string = @"(unknown)";
+            break;
+    }
+    
+    return string;
     
 }
 

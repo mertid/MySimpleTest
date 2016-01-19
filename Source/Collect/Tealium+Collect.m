@@ -143,6 +143,8 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
+        [weakSelf.logger logDev:@"Joining trace id:%@", token];
+        
         [weakSelf.settings setTraceID:token completion:completion];
         
     }];

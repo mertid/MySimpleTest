@@ -32,7 +32,7 @@
     
     [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
     
-    [TealiumHelper incrementLifetimeValueForKey:@"launch" amount:1];
+    [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
     
     return YES;
 }
@@ -41,7 +41,7 @@
     
     [TealiumHelper trackEventWithTitle:@"sleep" dataSources:nil];
     
-    [TealiumHelper incrementLifetimeValueForKey:@"sleep" amount:1];
+    [TealiumHelper incrementLifetimeValueForKey:@"sleeps" amount:1];
 
 }
 
@@ -49,7 +49,7 @@
 
     [TealiumHelper trackEventWithTitle:@"wake" dataSources:nil];
     
-    [TealiumHelper incrementLifetimeValueForKey:@"wake" amount:1];
+    [TealiumHelper incrementLifetimeValueForKey:@"wakes" amount:1];
 
 }
 #pragma mark - UISplitViewControllerDelegate

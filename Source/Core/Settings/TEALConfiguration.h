@@ -10,21 +10,6 @@
 
 #pragma mark - Configuration Types
 
-///**
-// *  Unsigned integer value that controls the frequency at which the user's visitor profile is requested
-// */
-//typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
-//    /**
-//     *  On request only, will only poll with the fetchVisitorProfileWithCompletion: method
-//     */
-//    TEALVisitorProfilePollingFrequencyOnRequest = 1,
-//    /**
-//     *  After each track event (trackEventWithTitle:dataSources: or trackViewWithTitle:dataSources:) an updated visitor profile will be requested.
-//     */
-//    TEALVisitorProfilePollingFrequencyAfterEveryEvent
-//};
-
-
 /**
  *  Configuration Class for the Tealium Mobile Library
  *  An instance of this is passed to Tealium enableWithConfiguration: to start the Collect Library

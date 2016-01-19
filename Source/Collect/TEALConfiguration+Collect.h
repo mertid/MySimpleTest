@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, TEALVisitorProfilePollingFrequency){
     /**
      *  On request only, will only poll with the fetchVisitorProfileWithCompletion: method
      */
-    TEALVisitorProfilePollingFrequencyOnRequest = 1,
+    TEALVisitorProfilePollingFrequencyOnRequest = 0,
     /**
      *  After each track event (trackEventWithTitle:dataSources: or trackViewWithTitle:dataSources:) an updated visitor profile will be requested.
      */
