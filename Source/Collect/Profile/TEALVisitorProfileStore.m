@@ -18,10 +18,10 @@
 
 @interface TEALVisitorProfileStore ()
 
-@property (nonatomic, strong) TEALVisitorProfile *currentProfile;
-@property (weak, nonatomic) NSString *visitorID;
-@property (weak, nonatomic) NSURL *profileURL;
-@property (weak, nonatomic) NSURL *profileDefinitionURL;
+@property (strong, nonatomic) TEALVisitorProfile *currentProfile;
+@property (strong, nonatomic) NSString *visitorID;
+@property (strong, nonatomic) NSURL *profileURL;
+@property (strong, nonatomic) NSURL *profileDefinitionURL;
 @property (weak, nonatomic) TEALURLSessionManager *sessionManager;
 
 @end
@@ -48,12 +48,23 @@
 }
 
 - (void) fetchProfileWithCompletion:(TEALVisitorProfileCompletionBlock)completion {
-
-    if (!self.sessionManager || !self.profileURL) {
+    
+    if (!self.sessionManager) {
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Profile request unsuccessful"
-                                           reason:@"properties urlSessionManager: TEALURLSessionManager and/or profileURL: NSURL are missing"
-                                       suggestion:@"ensure the urlSessionManager and/or profileURL properties has been set with a valid object"];
+                                      description:@"Profile request unsuccessful."
+                                           reason:@"SessionManager not ready."
+                                       suggestion:@"Ensure urlSessionManager property has been set with a valid object."];
+        
+        completion( nil, error );
+        
+        return;
+    }
+
+    if (!self.profileURL) {
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                                      description:@"Profile request unsuccessful."
+                                           reason:@"profileURL property missing."
+                                       suggestion:@"Ensure the profileURL properties has been set with a valid object."];
         
         completion( nil, error );
         
@@ -66,9 +77,9 @@
     if (!request) {
         
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Profile request unsuccessful"
+                                      description:@"Profile request unsuccessful."
                                            reason:[NSString stringWithFormat:@"Failed to generate valid request from URL: %@", profileURL]
-                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
+                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration."];
         completion( nil, error ) ;
         return;
     }
@@ -76,8 +87,8 @@
     if (![self.sessionManager.reachabilityManager isReachable]) {
         
         NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                                      description:@"Profile Request Failed"
-                                           reason:@"Network Connection Unavailable"
+                                      description:@"Profile Request Failed."
+                                           reason:@"Network Connection Unavailable."
                                        suggestion:@""];
         completion( nil, error );
         
@@ -105,9 +116,9 @@
 
     if (!self.sessionManager || !self.profileDefinitionURL) {
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Profile request unsuccessful"
-                                           reason:@"properties urlSessionManager: TEALURLSessionManager and/or profileDefinitionURL: NSURL are missing"
-                                       suggestion:@"ensure the urlSessionManager and/or profileDefinitionURL properties has been set with a valid object"];
+                                      description:@"Profile request unsuccessful."
+                                           reason:@"properties urlSessionManager: TEALURLSessionManager and/or profileDefinitionURL: NSURL are missing."
+                                       suggestion:@"ensure the urlSessionManager and/or profileDefinitionURL properties has been set with a valid object."];
         
         completion( nil, error );
         
@@ -121,9 +132,9 @@
     if (!request) {
         
         NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Profile request unsuccessful"
+                                      description:@"Profile request unsuccessful."
                                            reason:[NSString stringWithFormat:@"Failed to generate valid request from URL: %@", profileDefinitionURL]
-                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration"];
+                                       suggestion:@"Check the Account/Profile/Enviroment values in your configuration."];
 
         completion( nil, error) ;
         return;

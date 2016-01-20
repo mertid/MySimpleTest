@@ -34,6 +34,8 @@
     [super viewDidAppear:animated];
     
     [TealiumHelper trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
+    
+
 }
 
 

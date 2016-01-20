@@ -57,7 +57,14 @@ static TealiumHelper * _sharedInstance;
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
+    
+    [tealiumInstance1 joinTraceWithToken:@"08250" completion:nil];
+    
+    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
         
+            NSLog(@"%s profile:%@ error:%@", __FUNCTION__, profile, error);
+        
+    }];
 }
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {

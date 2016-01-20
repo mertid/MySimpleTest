@@ -103,26 +103,11 @@
     
     NSString *pathJSON = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"json"];
     
-    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);
- 
-    
+    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);    
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"collectEnable"];
-    
-    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-       
-        XCTAssertTrue(success, @"Unable to fetch remote test settings:%@", error);
-        
-        [expectation fulfill];
-        
-    }];
-    
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
-    
     XCTAssertTrue([self.library.settings collectEnabled], @"Collect was not enabled by remote publish settings.");
-    
     
 }
 

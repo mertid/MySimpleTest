@@ -32,7 +32,11 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         return nil;
     }
     
-    return [self.settings collectProfileURLForVisitorID:[[self dataSources] visitorIDCopy]];
+    NSString *urlString = [[self dataSources] visitorIDCopy];
+    
+    NSURL *url = [self.settings collectProfileURLForVisitorID:urlString];
+    
+    return url;
 }
 
 - (NSURL *) profileDefinitionURL {
@@ -91,14 +95,17 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
             
             return;
         }
+
         
-        TEALVisitorProfileCompletionBlock storeCompletion = ^(TEALVisitorProfile *profile, NSError *error) {
-            
+        [[weakSelf profileStore] fetchProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
+           
             if (profile) {
                 
                 [weakSelf collect_setCachedProfile:profile];
                 
-                completion(weakSelf.collect_cachedProfile, nil);
+                if (completion){
+                    completion(weakSelf.collect_cachedProfile, nil);
+                }
                 
             } else {
                 
@@ -107,9 +114,8 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
                 [weakSelf.logger logDev:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
                 
             }
-        };
-        
-        [[weakSelf profileStore] fetchProfileWithCompletion:storeCompletion];
+            
+        }];
         
     }];
 }
@@ -170,10 +176,6 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     }];
     
 }
-
-//- (BOOL) collect_isEnabled {
-//    return [self.settings collectEnabled];
-//}
 
 #pragma mark - MODULES DELEGATE
 
@@ -328,15 +330,20 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     TEALVisitorProfileStore *profileStore;
     
     id profileStoreRaw = objc_getAssociatedObject(self, TEALKVOAutotrackCollectProfileStore);
+    
     if ([profileStoreRaw isKindOfClass:([TEALVisitorProfileStore class])]){
+        
         profileStore = profileStoreRaw;
+        
     } else {
         
-        NSString *visitorID = [[self dataSources] visitorIDCopy];
-        NSURL *profileURL = [self.settings collectProfileURLForVisitorID:visitorID];
+        profileStore = [[TEALVisitorProfileStore alloc] initWithVisitorID:self.dataSources.visitorIDCopy
+                                                               profileURL:[self profileURL]
+                                                     profileDefinitionURL:self.settings.collectProfileDefinitionsURL
+                                                        urlSessionManager:self.urlSessionManager];
         
-        profileStore = [[TEALVisitorProfileStore alloc] initWithVisitorID:self.dataSources.visitorIDCopy profileURL:profileURL profileDefinitionURL:self.settings.collectProfileDefinitionsURL urlSessionManager:self.urlSessionManager];
         objc_setAssociatedObject(self, TEALKVOAutotrackCollectProfileStore, profileStore, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
     }
     
     return profileStore;
