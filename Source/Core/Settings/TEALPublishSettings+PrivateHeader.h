@@ -22,10 +22,6 @@
 - (void) setModuleObject:(id<NSCopying, NSSecureCoding>)object
                   forKey:(id<NSCopying, NSSecureCoding>)aKey;
 
-- (NSMutableDictionary *) moduleDescriptionData;
-
-- (void) setModuleDescription:(NSString *) description
-                       forKey:(NSString *)aKey;
 
 @end
 

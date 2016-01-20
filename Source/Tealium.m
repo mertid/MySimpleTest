@@ -98,6 +98,10 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (void) destroyInstanceForKey:(NSString * _Nonnull)key {
     
+    Tealium *instance = staticAllInstances[key];
+    
+    [instance.settings purgeAllArchives];
+    
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
     
     [mDict removeObjectForKey:key];
@@ -318,6 +322,14 @@ __strong static NSDictionary *staticAllInstances = nil;
                           delegate:(id<TealiumDelegate>)delegate
                         completion:(TEALBooleanCompletionBlock)completion{
     
+    /*
+     *  Key - Used to identify a unique Tealium instance from all others in the 
+     *  multiton. The instance itself and all components do NOT need to know this
+     *  key.  Instead, the configuration option creates an instanceID from the
+     *  account-profile-env settings that is used separate storage files and queues
+     *  from other Tealium instances.
+    */
+    
     // Bail out check
     NSError *error = nil;
     
@@ -335,8 +347,6 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         return nil;
     }
-    
-    configuration.instanceID  = key;
     
     Tealium *instance = [Tealium instanceWithConfiguration:configuration
                                                   delegate:delegate
@@ -477,7 +487,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     // Init logger
-    self.logger = [[TEALLogger alloc] initWithInstanceID:self.settings.instanceID];
+    self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
     
     if ([self.logger updateLogLevel:[self.settings logLevelString]]){
         [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];

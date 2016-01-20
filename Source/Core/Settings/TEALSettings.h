@@ -39,7 +39,6 @@
 - (NSString * _Nonnull) asProfile;
 - (NSString * _Nonnull) tiqProfile;
 - (NSString * _Nonnull) environment;
-- (NSString * _Nonnull) instanceID;
 
 - (NSUInteger) dispatchSize;
 - (NSString * _Nonnull) logLevelString;
@@ -59,5 +58,10 @@
  *      in settings found.
  */
 - (void) fetchNewRawPublishSettingsWithCompletion:(void (^ _Nonnull)(BOOL success, NSError * _Nullable error))completion;
+
+/**
+ *  Removes all publish settings from archive.
+ */
+- (void) purgeAllArchives;
 
 @end

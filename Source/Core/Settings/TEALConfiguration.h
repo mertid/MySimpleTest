@@ -19,28 +19,21 @@
 /**
  *  Tealium iQ account name
  */
-@property (nonatomic, copy) NSString *accountName;
+@property (nonatomic, copy) NSString * _Nonnull accountName;
 
 /**
  *  Tealium iQ profile name, this should be the TiQ profile where the mobile publish settings have been configured for Tealium collect.
  *
  *  Note: This is usually not the same profile used for Collect which defaults to "main"
  */
-@property (nonatomic, copy) NSString *profileName;
+@property (nonatomic, copy) NSString * _Nonnull profileName;
 
 /**
  *  Tealium iQ evnvironment name.
  *
  *  @example dev/qa/prod
  */
-@property (nonatomic, copy) NSString *environmentName;
-
-/**
- *  The instance id assigned to the library instance associated with this configuration.
- *
- *  @param instanceID NSString identifier
- */
-@property (nonatomic) NSString *instanceID;
+@property (nonatomic, copy) NSString * _Nonnull environmentName;
 
 /**
  *  Flag when on will send all data for HTTP.  Suggested to be used in development only!
@@ -53,12 +46,12 @@
 /**
  *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"
  */
-@property (nonatomic) NSString *overridePublishSettingsURL;
+@property (nonatomic) NSString * _Nullable overridePublishSettingsURL;
 
 /**
  *  If assigned, will replace the default address used to retrieve the tag management UTAG.js file.  Example - "https://my.domain.com/app/mobile.html"
  */
-@property (nonatomic) NSString *overridePublishURL;
+@property (nonatomic) NSString * _Nullable overridePublishURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used
@@ -67,11 +60,11 @@
  *  @param profileName     String of TiQ Profile Name
  *  @param environmentName String
  *
- *  @return Valid configuration instance to pass to the enableWithConfiguration: method.
+ *  @returns Valid configuration instance to pass to the enableWithConfiguration: method.
  */
-+ (instancetype) configurationWithAccount:(NSString *)accountName
-                                  profile:(NSString *)profileName
-                              environment:(NSString *)environmentName;
++ (instancetype _Nullable) configurationWithAccount:(NSString * _Nonnull)accountName
+                                            profile:(NSString * _Nonnull)profileName
+                                        environment:(NSString * _Nonnull)environmentName;
 
 /**
  *  Checks to see if configuration is populated with the minimum required properties.
@@ -80,6 +73,13 @@
  *
  *  @return Boolean of whether the argument configuration is valid.
  */
-+ (BOOL) isValidConfiguration:(TEALConfiguration *)configuration;
++ (BOOL) isValidConfiguration:(TEALConfiguration * _Nonnull)configuration;
+
+/**
+ *  A unique identifier generated from the account-profile-environment.
+ *
+ *  @returns instanceID NSString identifier
+ */
+- (NSString * _Nonnull)instanceID;
 
 @end

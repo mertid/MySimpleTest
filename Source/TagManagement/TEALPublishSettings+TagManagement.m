@@ -18,9 +18,7 @@
     NSString *tagMangement = self.privatePublishSettingsData[TEALPublishSettingKeyTagManagementEnable];
     
     BOOL enable = [tagMangement boolValue];
-    
-    [self setModuleDescription:[NSString teal_stringFromBool:enable] forKey:@"enable Tag Management"];
-    
+        
     return enable;
     
 }

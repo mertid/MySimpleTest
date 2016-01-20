@@ -20,8 +20,8 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 @interface TEALPublishSettings()
 
 @property (nonatomic) NSMutableDictionary *privatePublishSettingsData;
-@property (nonatomic) NSMutableDictionary *privateModuleDescriptionData;
 @property (nonatomic) dispatch_queue_t privateQueue;
+@property (nonatomic) NSString *instanceID;
 
 @end
 
@@ -156,26 +156,31 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     return [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:instanceID];
 }
 
++ (TEALPublishSettings * _Nonnull) defaultPublishSettingsForURLString:(NSString * _Nonnull)url {
+    
+    TEALPublishSettings *defaultPublishSettings = [[TEALPublishSettings alloc] initDefaultSettingsForURLString:url];
+    
+    return defaultPublishSettings;
+}
+
 #pragma mark - PRIVATE CLASS
 
-+ (NSString *) statusStringFromPublishSettingStatusType:(TEALPublishSettingsStatus) status {
++ (NSDictionary *) defaultPublishSettingsData {
     
-    NSString *statusString = nil;
-    switch (status) {
-        case TEALPublishSettingsStatusLoadedArchive:
-            statusString = NSLocalizedString(@"archive", @"Publish Setting Archive String");
-            break;
-        case TEALPublishSettingsStatusLoadedRemote:
-            statusString = NSLocalizedString(@"remote", @"Publish Setting Remote String");
-            break;
-        case TEALPublishSettingsStatusDisable:
-            statusString = NSLocalizedString(@"disable", @"Publish Setting Disable String");
-            break;
-        default:
-            statusString = NSLocalizedString(@"default", @"Publish Setting Default String");
-            break;
-    }
-    return statusString;
+    return @{
+             TEALPublishSettingKeyDispatchExpiration : @(-1),
+             TEALPublishSettingKeyDispatchSize : @(1),
+             TEALPublishSettingKeyIsEnabled : @(1),
+             TEALPublishSettingKeyMinutesBetweenRefresh : @(0.0),
+             TEALPublishSettingKeyLowBatteryMode : @(1),
+             TEALPublishSettingKeyOfflineDispatchSize : @(100),
+             TEALPublishSettingKeyTagManagementEnable : @(0),
+             TEALPublishSettingKeyWifiOnlyMode : @(0)
+             };
+}
+
++ (BOOL) supportsSecureCoding {
+    return YES;
 }
 
 #pragma mark - PUBLIC
@@ -194,7 +199,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
     } else {
         
-        return [self initDefaultSettingsForURLString:url];
+        return [TEALPublishSettings defaultPublishSettingsForURLString:url];
         
     }
 }
@@ -205,7 +210,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     if (self) {
         
-        _privatePublishSettingsData = [NSMutableDictionary dictionaryWithDictionary:[self defaultPublishSettings]];
+        _privatePublishSettingsData = [NSMutableDictionary dictionaryWithDictionary:[TEALPublishSettings defaultPublishSettingsData]];
         _status                         = TEALPublishSettingsStatusDefault;
         _url                            = url;
         
@@ -219,17 +224,6 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
 }
 
-//- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary *) rawPublishSettings {
-//    
-//    NSDictionary *settings = rawPublishSettings[self.targetVersion];
-//    
-//    if (!settings) {
-//        return NO;
-//    }
-//    
-//    return YES;
-//}
-
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings {
     
     if (![[self publishSettingsData] isEqualToDictionary:[otherPublishSettings publishSettingsData]]) return NO;
@@ -238,16 +232,12 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
         otherPublishSettings.url &&
         ![self.url isEqualToString:otherPublishSettings.url]) return NO;
     
-    if (![[self moduleDescriptionData] isEqualToDictionary:[otherPublishSettings moduleDescriptionData]]){
-        return NO;
-    }
-    
     return YES;
 }
 
-- (BOOL) areNewMatchingVersionPublishSettings:(NSDictionary *)publishSetting {
+- (BOOL) isEqualToRawPublishSettings:(NSDictionary *)publishSetting {
     
-    return ![publishSetting isEqualToDictionary:self.privatePublishSettingsData];
+    return [publishSetting isEqualToDictionary:self.privatePublishSettingsData];
    
 }
 
@@ -258,20 +248,6 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     [TEALPublishSettingsStore archivePublishSettings:self];
     
 }
-
-//- (void) updateWithRawSettings:(NSDictionary *)rawPublishSettings {
-//    
-//    NSDictionary *settings = rawPublishSettings[self.targetVersion];
-//    
-//    if (!settings) {
-//        return;
-//    }
-//    
-//    [self importLocalSettingsFromRawSettings:settings];
-//
-//    [TEALPublishSettingsStore archivePublishSettings:self];
-//    
-//}
 
 - (BOOL) enableLowBatterySuppress {
     
@@ -371,19 +347,20 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
 }
 
-#pragma mark - PRIVATE
-
-+ (BOOL) supportsSecureCoding {
-    return YES;
+- (void) purgeAllArchives {
+    
+    [TEALPublishSettingsStore purgeAllPublishSettings];
+    
 }
+
+#pragma mark - PRIVATE
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {
     
     self = [self init];
     
     if (self) {
-        _privateModuleDescriptionData = [aDecoder decodeObjectForKey:TEALPublishSettingKeyModuleDescriptionData];
-
+        
         _privatePublishSettingsData = [aDecoder decodeObjectForKey:TEALPublishSettingKeyData];
         
         _targetVersion = [aDecoder decodeObjectForKey:@"version"];
@@ -421,23 +398,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     [aCoder encodeObject:self.targetVersion forKey:@"targetVersion"];
     
     [aCoder encodeObject:[self publishSettingsData] forKey:TEALPublishSettingKeyData];
-    
-    [aCoder encodeObject:self.privateModuleDescriptionData forKey:TEALPublishSettingKeyModuleDescriptionData];
-    
-}
-
-- (NSDictionary *) defaultPublishSettings {
-    
-    return @{
-             TEALPublishSettingKeyDispatchExpiration : @(-1),
-             TEALPublishSettingKeyDispatchSize : @(1),
-             TEALPublishSettingKeyIsEnabled : @(1),
-             TEALPublishSettingKeyMinutesBetweenRefresh : @(0.0),
-             TEALPublishSettingKeyLowBatteryMode : @(1),
-             TEALPublishSettingKeyOfflineDispatchSize : @(100),
-             TEALPublishSettingKeyTagManagementEnable : @(0),
-             TEALPublishSettingKeyWifiOnlyMode : @(0)
-             };
+        
 }
 
 - (void) importLocalSettingsFromMatchingVersionSettings:(NSDictionary *)settings {
@@ -448,41 +409,41 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
 }
 
-- (NSDictionary *) baseDescriptionData {
+- (NSString *) statusAsString {
     
-    return @{
-            @"status":[NSString stringWithFormat:@"%lu", (unsigned long)self.status],
-            @"libray enabled":[NSString teal_stringFromBool:![self disableLibrary]],
-            @"url":[NSString teal_dictionarySafeString:self.url],
-            @"mps version":[NSString teal_dictionarySafeString:self.targetVersion],
-            @"dispatch size":[NSString stringWithFormat:@"%i", (int)[self dispatchSize]],
-            @"offline dispatch size":[NSString stringWithFormat:@"%i", (int)[self offlineDispatchQueueSize]],
-            @"minutes between refresh":[NSString stringWithFormat:@"%f", (double)self.minutesBetweenRefresh],
-            @"number of day dispatches valid":[NSString stringWithFormat:@"%f",(double)self.numberOfDaysDispatchesAreValid],
-            @"battery save mode":[NSString teal_stringFromBool:self.enableLowBatterySuppress],
-            @"wifi only mode":[NSString teal_stringFromBool:self.enableSendWifiOnly],
-            @"override log level":[NSString teal_dictionarySafeString:[self overrideLogLevel]]
-            };
-}
-
-- (NSDictionary *) finalDescriptionData {
+    NSString *statusString = nil;
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[self baseDescriptionData]];
-    
-    [mDict addEntriesFromDictionary:[self moduleDescriptionData]];
-    
-    return [NSDictionary dictionaryWithDictionary:mDict];
-    
+    switch (self.status) {
+        case TEALPublishSettingsStatusLoadedArchive:
+            statusString = NSLocalizedString(@"archive", @"Publish Setting Archive String");
+            break;
+        case TEALPublishSettingsStatusLoadedRemote:
+            statusString = NSLocalizedString(@"remote", @"Publish Setting Remote String");
+            break;
+        case TEALPublishSettingsStatusDisable:
+            statusString = NSLocalizedString(@"disable", @"Publish Setting Disable String");
+            break;
+        default:
+            statusString = NSLocalizedString(@"default", @"Publish Setting Default String");
+            break;
+    }
+    return statusString;
 }
 
 - (NSString *) description {
     
-    NSDictionary *descriptionData = [self finalDescriptionData];
+    NSMutableDictionary *description = [NSMutableDictionary dictionaryWithDictionary:[[self publishSettingsData] copy]];
     
-    NSString *description = [NSString stringWithFormat:@"Remote settings from %@", [TEALPublishSettings statusStringFromPublishSettingStatusType:self.status]];
+    description[@"mps version"] = [NSString teal_dictionarySafeString:self.targetVersion];
+    description[@"url"] = [NSString teal_dictionarySafeString:self.url];
     
-    return [NSString teal_descriptionForObject:self description:description fromDictionary:descriptionData];
+    NSString *descriptionHeader = [NSString stringWithFormat:@"Remote settings from %@", [self statusAsString]];
+
+    NSString *descriptionString = [NSString teal_descriptionForObject:self
+                                                          description:descriptionHeader
+                                                       fromDictionary:description];
     
+    return descriptionString;
 }
 
 #pragma mark - MODULE DATA
@@ -518,23 +479,5 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     });
 }
 
-- (NSMutableDictionary *) moduleDescriptionData {
-    
-    if (!self.privateModuleDescriptionData) {
-        self.privateModuleDescriptionData = [NSMutableDictionary new];
-    }
-    
-    return self.privateModuleDescriptionData;
-}
-
-- (void) setModuleDescription:(NSString *) description
-                       forKey:(NSString *)aKey {
-    
-    dispatch_barrier_async([self queue], ^{
-        
-        [self moduleDescriptionData][aKey] = description;
-        
-    });
-}
 
 @end

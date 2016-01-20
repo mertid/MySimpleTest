@@ -16,6 +16,7 @@
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
 //@property (nonatomic) NSString *overridePublishSettingsVersion;
+@property (nonatomic) NSString *privateInstanceID;
 @property (nonatomic) NSMutableDictionary *privateModuleData;
 @property (nonatomic) NSMutableDictionary *privateModuleDescriptionData;
 @property (nonatomic) dispatch_queue_t queue;
@@ -89,7 +90,16 @@
     return YES;
 }
 
+#pragma mark - PUBLIC INSTANCE
 
+- (NSString * _Nonnull)instanceID {
+    
+    if (!self.privateInstanceID){
+        self.privateInstanceID = [NSString stringWithFormat:@"%@.%@.%@", self.accountName, self.profileName, self.environmentName];
+    }
+    return self.privateInstanceID;
+    
+}
 
 
 #pragma mark - MODULE DATA

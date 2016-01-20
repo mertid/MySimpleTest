@@ -34,6 +34,7 @@
 
 - (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys;
 
+- (void) purgePersistentDataSources;
 
 // HELPERS
 

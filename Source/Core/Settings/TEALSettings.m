@@ -151,16 +151,12 @@
     return self.configuration.environmentName;
 }
 
-- (NSString *) instanceID {
-    return self.configuration.instanceID;
-}
-
 - (NSString *) configurationDescription {
     return self.configuration.description;
 }
 
 - (NSString *) publishSettingsDescription {
-    return [self publishSettings].description;
+    return [[self publishSettings] description];
 }
 
 - (NSString *) publishSettingsURLString {
@@ -357,7 +353,7 @@
             
         // Init or Update Publish Settings
                                 
-        BOOL newPublishSettings = [publishSettings areNewMatchingVersionPublishSettings:matchingPublishSettings];
+        BOOL newPublishSettings = ![publishSettings isEqualToRawPublishSettings:matchingPublishSettings];
 
         if (newPublishSettings){
 
@@ -380,6 +376,11 @@
     
 #warning Immplement
     
+}
+
+- (void) purgeAllArchives {
+    
+    [[self publishSettings] purgeAllArchives];
 }
 
 

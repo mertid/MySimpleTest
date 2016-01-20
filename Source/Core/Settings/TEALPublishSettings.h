@@ -36,6 +36,18 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) NSString * _Nonnull targetVersion;
 @property (nonatomic) NSString * _Nonnull url;
 
++ (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data
+                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
++ (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data
+                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
++ (TEALPublishSettings * _Nonnull) defaultPublishSettingsForURLString:(NSString * _Nonnull)url;
+
+- (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
+
+- (NSDictionary * _Nullable) currentPublishSettingsFromRawPublishSettings:(NSDictionary * _Nullable) rawPublishSettings;
+
 - (BOOL) enableLowBatterySuppress;
 
 - (BOOL) enableSendWifiOnly;
@@ -52,24 +64,12 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 - (NSUInteger) offlineDispatchQueueSize;
 
-+ (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data
-                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-
-+ (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data
-                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-
-- (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
-
-- (NSDictionary * _Nullable) currentPublishSettingsFromRawPublishSettings:(NSDictionary * _Nullable) rawPublishSettings;
-
-//- (BOOL) correctMPSVersionRawPublishSettings:(NSDictionary * _Nonnull) rawPublishSettings;
-
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings * _Nonnull)otherPublishSettings;
 
-- (BOOL) areNewMatchingVersionPublishSettings:(NSDictionary * _Nonnull)publishSetting;
+- (BOOL) isEqualToRawPublishSettings:(NSDictionary * _Nonnull)publishSetting;
 
 - (void) updateWithMatchingVersionSettings:(NSDictionary * _Nonnull)publishSettings;
 
-//- (void) updateWithRawSettings:(NSDictionary * _Nonnull)rawPublishSettings;
+- (void) purgeAllArchives;
 
 @end

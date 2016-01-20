@@ -321,7 +321,7 @@
 - (void) testSuccessfulDidUpdatePublishSettings {
     
     [self useLibraryInstanceWithConfig:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]];
-
+    
     XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
     
     [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {

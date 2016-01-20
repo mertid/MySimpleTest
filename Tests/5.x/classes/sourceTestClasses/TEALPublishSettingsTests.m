@@ -129,6 +129,60 @@
 
 }
 
+- (void) testArchiving {
+    
+    NSString *settings1 = @"settings1";
+    
+    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+
+    [settings updateWithMatchingVersionSettings:[self sampleSettings]];
+    
+    NSString *settings2 = @"settings2";
+    
+    TEALPublishSettings *altSettings = [[TEALPublishSettings alloc] initWithURLString:settings2];
+    
+    XCTAssertTrue(![settings isEqualToPublishSettings:altSettings], @"Should not have matched - settings:%@  altSettings:%@", settings, altSettings);
+    
+    TEALPublishSettings *retrievedSettings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+    
+    XCTAssertTrue([settings isEqualToPublishSettings:retrievedSettings], @"Settings:%@ was not equal to Unarchived settings:%@", settings, retrievedSettings);
+    
+}
+
+- (void) testPurgeArchive {
+    
+    NSString *settings1 = @"settings1";
+    
+    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+    
+    [settings updateWithMatchingVersionSettings:[self sampleSettings]];
+    
+    [settings purgeAllArchives];
+    
+    TEALPublishSettings *defaultSettings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+    
+    XCTAssertTrue([defaultSettings isEqualToPublishSettings:[TEALPublishSettings defaultPublishSettingsForURLString:settings1]], @"settings did not purge as expected.");
+    
+}
+
+- (NSDictionary *) sampleSettings {
+    
+    return @{
+             @"_is_enabled":@"true",
+             @"battery_saver":@"true",
+             @"dispatch_expiration":@"-1",
+             @"enable_collect":@"true",
+             @"enable_s2s_legacy":@"false",
+             @"enable_tag_management":@"false",
+             @"event_batch_size":@"1",
+             @"minutes_between_refresh":@"0.0",
+             @"offline_dispatch_limit":@"100",
+             @"override_log":@"",
+             @"wifi_only_sending":@"false"
+             };
+    
+}
+
 #warning Add test to provide mock responses to fetchPublishSettingsCommand
 
 //- (void)testExample {

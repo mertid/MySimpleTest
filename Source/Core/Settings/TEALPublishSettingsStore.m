@@ -90,4 +90,29 @@ NSString * const TEALPublishSettingsStoreKey = @"com.tealium.publishsettingsstor
     
 }
 
++ (void) purgePublishSettingsForInstanceID:(NSString *)instanceID {
+    
+    NSDictionary *allPublishSettings = [[NSUserDefaults standardUserDefaults] objectForKey:TEALPublishSettingsStoreKey];
+    
+    NSMutableDictionary *newAllPublishSettings = [NSMutableDictionary new];
+    
+    [newAllPublishSettings addEntriesFromDictionary:allPublishSettings];
+    
+    [newAllPublishSettings removeObjectForKey:instanceID];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:newAllPublishSettings
+                                              forKey:TEALPublishSettingsStoreKey];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+}
+
++ (void) purgeAllPublishSettings {
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TEALPublishSettingsStoreKey];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+}
+
 @end

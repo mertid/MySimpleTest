@@ -291,6 +291,12 @@ static NSDictionary *staticCompileTimeDataSources;
     }];
 }
 
+- (void) purgePersistentDataSources {
+    
+    [[self instanceStore] removeAllDataSources];
+    
+}
+
 #pragma mark - PUBLIC HELPERS
 
 + (double) deviceBatteryLevel {

@@ -28,4 +28,6 @@
 
 - (void) removeDataSourceForKey:(NSString *)dataSourceKey;
 
+- (void) removeAllDataSources;
+
 @end

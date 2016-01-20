@@ -65,7 +65,7 @@
     
     [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         
-        XCTAssertTrue(success, @"Library failed to fetch test settings - error:%@", error);
+        XCTAssertTrue(!error, @"Library failed to fetch test settings - error:%@", error);
         
         isReady = YES;
         

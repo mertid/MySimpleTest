@@ -108,6 +108,14 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
     [self archiveWithStorageKey:self.instanceID];
 }
 
+- (void) removeAllDataSources {
+
+    [[self dataSources] removeAllObjects];
+    
+    [self archiveWithStorageKey:self.instanceID];
+    
+}
+
 #pragma mark - I/O
 
 - (BOOL) unarchiveWithStorageKey:(NSString *)key {

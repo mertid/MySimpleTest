@@ -84,6 +84,8 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) testTrackEventDispatchWithTitleAndData {
     
+    [Tealium destroyInstanceForKey:self.description];
+    
     __block BOOL isReady = NO;
     
     TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
@@ -112,6 +114,8 @@ NSString * const versionToTest = @"5.0.0";
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
     
+    __block BOOL alreadyFulfilled = NO;
+    
     // Title + testData
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
@@ -126,7 +130,10 @@ NSString * const versionToTest = @"5.0.0";
                          
                          XCTAssert([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
                          
-                         [expectation fulfill];
+                         if (!alreadyFulfilled){
+                             alreadyFulfilled = YES;
+                             [expectation fulfill];
+                         }
                      }];
     
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
@@ -154,6 +161,8 @@ NSString * const versionToTest = @"5.0.0";
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
 
+    __block BOOL alreadyFulfilled = NO;
+    
     // Title + testData
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
@@ -166,7 +175,10 @@ NSString * const versionToTest = @"5.0.0";
                          
                          XCTAssert(!dispatchData[TEALDataSourceKey_EventTitle], "Title found when none should have been.");
                          
-                         [expectation fulfill];
+                         if (!alreadyFulfilled){
+                             alreadyFulfilled = YES;
+                             [expectation fulfill];
+                         }
                      }];
  
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
@@ -176,6 +188,8 @@ NSString * const versionToTest = @"5.0.0";
 #pragma mark - TRACK + DISPATCH TESTS
 
 - (void) testTrackEventNoTitleWithDataOverwritingAllStandardDataSources {
+    
+    [Tealium destroyInstanceForKey:self.description];
     
     __block BOOL isReady = NO;
     
@@ -189,6 +203,8 @@ NSString * const versionToTest = @"5.0.0";
                                    }];
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    [self.library.dataSources purgePersistentDataSources];
     
     NSDictionary *payload = [self overrwriteDataSources];
     
@@ -312,6 +328,8 @@ NSString * const versionToTest = @"5.0.0";
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
     
+    __block BOOL alreadyFulfilled = NO;
+    
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
                                 title:testTitle
                           dataSources:testDataSources
@@ -329,7 +347,10 @@ NSString * const versionToTest = @"5.0.0";
                                
                                XCTAssertTrue([dispatchData[testKey] isEqualToString:testValue], @"persistent data sources {%@:%@} was not added to dispatch: %@", testKey, testValue, dispatchData);
                                
-                               [expectation fulfill];
+                               if (!alreadyFulfilled){
+                                   alreadyFulfilled = YES;
+                                   [expectation fulfill];
+                               }
                                
                            }];
     

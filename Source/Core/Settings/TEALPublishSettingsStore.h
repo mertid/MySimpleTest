@@ -16,4 +16,8 @@
 
 + (void) archivePublishSettings:(TEALPublishSettings *)settings;
 
++ (void) purgePublishSettingsForInstanceID:(NSString *)instanceID;
+
++ (void) purgeAllPublishSettings;
+
 @end
