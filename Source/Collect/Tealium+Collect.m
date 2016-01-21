@@ -223,7 +223,8 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     NSString *collectDispatchString = [self.settings collectDispatchURLStringForVisitorID:[[self dataSources] visitorIDCopy]];
     
-    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:collectDispatchString sessionManager:self.urlSessionManager];
+    TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:collectDispatchString
+                                                                                                 sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     

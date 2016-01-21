@@ -42,8 +42,10 @@ static TealiumHelper * _sharedInstance;
                                                                            profile:@"demo"
                                                                        environment:@"dev"];
     
-//    configuration.overrideCollectDispatchURL = @"https://test.overide.com";
-    
+    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
+
+//    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main";
+
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
 //    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/utag/tealiummobile/ios/dev/mobile.html";

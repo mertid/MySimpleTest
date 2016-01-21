@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "TEALTestHelper.h"
 #import "Tealium+Collect.h"
+#import "TEALConfiguration+Collect.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
 #import "TEALDispatch+PrivateHeader.h"
@@ -92,6 +93,45 @@
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
 }
 
+#pragma mark - CONFIGURATION TESTS
+
+- (void) testOverrideCollectDispatchURLWithVisitorID {
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
+    
+    NSString *checkString= @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid=83D8F6217A29466EBEEF4E97C5D9ADDF";
+
+    config.overrideCollectDispatchURL = checkString;
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    NSString *visitorID = [self.library.dataSources visitorIDCopy];
+
+    NSString *finalString = [self.library.settings collectDispatchURLStringForVisitorID:visitorID];
+    
+    XCTAssertTrue([checkString isEqualToString:finalString], @"final dispatch url string:%@ did not match check string:%@", finalString, checkString);
+    
+}
+
+- (void) testOverrideCollectDispatchURLWithNOVisitorID {
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
+    
+    config.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    NSString *visitorID = [self.library.dataSources visitorIDCopy];
+    
+    NSString *finalString = [self.library.settings collectDispatchURLStringForVisitorID:visitorID];
+    
+    NSMutableString *checkStringBase = [NSMutableString stringWithFormat:@"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid="];
+    
+    NSString *checkString = [checkStringBase stringByAppendingString:visitorID];
+    
+    XCTAssertTrue([checkString isEqualToString:finalString], @"final dispatch url string:%@ did not match check string:%@", finalString, checkString);
+    
+}
 
 #pragma mark API TESTS
 
@@ -103,21 +143,13 @@
     
     NSString *pathJSON = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"json"];
     
-    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);    
+    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
     XCTAssertTrue([self.library.settings collectEnabled], @"Collect was not enabled by remote publish settings.");
     
 }
-
-//- (void) testCollectDisabledByPublishSettings {
-// 
-//    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestHTMLFilename:@"collect_OFF"
-//                                                                          testClass:self]];
-//    
-//    XCTAssertFalse([self.library.settings collectEnabled], @"Collect service should not have been enabled per test remote publish setting.");
-//}
 
 - (void) testJoinAndLeaveTrace {
     

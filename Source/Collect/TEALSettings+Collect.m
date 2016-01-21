@@ -36,13 +36,38 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
 - (NSString *) collectDispatchURLStringForVisitorID:(NSString *)visitorID {
     
     NSString *overrideDispatchString = [self.configuration overrideCollectDispatchURL];
-    
+        
     if (overrideDispatchString){
-        return overrideDispatchString;
+        
+        return [self finalOverrideCollectDispatchURLStringFrom:overrideDispatchString
+                                                     visitorID:visitorID];
+        
     } else {
+        
         return [TEALSettings defaultCollectDispatchURLStringFromConfiguration:self
                                                                     visitorID:visitorID];
     }
+    
+}
+
+- (NSString *) finalOverrideCollectDispatchURLStringFrom:(NSString *)baseOverride
+                                               visitorID:(NSString *)visitorID {
+
+    NSDictionary *paramKeys = [TEALNetworkHelpers dictionaryFromUrlParamString:baseOverride];
+    
+    id existingVisitorVID = paramKeys[@"tealium_vid"];
+    
+    NSString *finalString = baseOverride;
+    
+    if (!existingVisitorVID){
+        
+        NSDictionary *appendData = @{@"tealium_vid":visitorID};
+    
+        finalString = [TEALNetworkHelpers appendUrlParamString:baseOverride withDictionary:appendData];
+
+    }
+    
+    return finalString;
     
 }
 

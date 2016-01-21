@@ -1,0 +1,53 @@
+{ 
+    "metrics" : { 
+        "5117" : 6.0 , 
+        "22" : 6.0
+    } , 
+    "dates" : { 
+        "last_visit_start_ts" : 1420223771043
+    } , 
+    "properties" : { 
+        "visitor_id" : "014aabdc8801000046512cc2abc70c077003e06f0093c" , 
+        "17" : "http://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html" , 
+        "account" : "tealiummobile" , 
+        "5123" : "set" , 
+        "profile" : "demo"
+    } , 
+    "flags" : { 
+        "5115" : true
+    } , 
+    "replaces" : [ ] , 
+    "creation_ts" : 1420223770000 , 
+    "_id" : "014aabdc8801000046512cc2abc70c077003e06f0093c" , 
+    "secondary_ids" : { } , 
+    "_secondary_ids" : [ ] , 
+    "current_visit" : { 
+        "metrics" : { 
+            "7" : 6.0
+        } , 
+        "dates" : { 
+            "last_event_ts" : 1420225387000
+        } , 
+        "properties" : { 
+            "48" : "Chrome" , 
+            "45" : "Mac OS X" , 
+            "44" : "Chrome" , 
+            "47" : "browser" , 
+            "46" : "Mac desktop"
+        } , 
+        "flags" : { } , 
+        "creation_ts" : 1420223770000 , 
+        "_id" : "8f792139b13432cc1ab0569622302d71fa41cb9b10f41d6f69095637ae5df7cd" , 
+        "_dc_ttl_" : 1800000 , 
+        "total_event_count" : 12 , 
+        "events_compressed" : false
+    } , 
+    "new_visitor" : true , 
+    "bulk_import_data" : [ ] , 
+    "badges" : { 
+        "5113" : true // will never be false
+    } , 
+    "audiences" : { 
+        "tealiummobile_demo_101" : "Sample Audience"
+    }
+}
