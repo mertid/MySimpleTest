@@ -90,7 +90,6 @@
 		710E1D981C29ABF6007BABF7 /* TEALLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CDD1C29ABF5007BABF7 /* TEALLogger.m */; };
 		710E1D9A1C29ABF6007BABF7 /* TEALNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE01C29ABF5007BABF7 /* TEALNotifications.m */; };
 		710E1D9C1C29ABF6007BABF7 /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE21C29ABF5007BABF7 /* TEALOperationManager.m */; };
-		710E1D9E1C29ABF6007BABF7 /* TEALSimpleNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE41C29ABF5007BABF7 /* TEALSimpleNetworkManager.m */; };
 		710E1DA01C29ABF6007BABF7 /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE61C29ABF5007BABF7 /* TEALSystemHelpers.m */; };
 		710E1DBC1C29ABF6007BABF7 /* TEALRemoteCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1D0C1C29ABF6007BABF7 /* TEALRemoteCommand.m */; };
 		710E1DBE1C29ABF6007BABF7 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1D0E1C29ABF6007BABF7 /* TEALRemoteCommandConstants+PrivateHeader.m */; };
@@ -187,7 +186,6 @@
 		71BB33A81C29CA3A0075689C /* AAPLDatePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5356828418F3670300BAAD62 /* AAPLDatePickerController.m */; };
 		71BB33A91C29CA3A0075689C /* TEALApplicationDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CA31C29ABF5007BABF7 /* TEALApplicationDataSources.m */; };
 		71BB33AA1C29CA3A0075689C /* TEALDeviceDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CA51C29ABF5007BABF7 /* TEALDeviceDataSources.m */; };
-		71BB33AB1C29CA3A0075689C /* TEALSimpleNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE41C29ABF5007BABF7 /* TEALSimpleNetworkManager.m */; };
 		71BB33AC1C29CA3A0075689C /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1CE61C29ABF5007BABF7 /* TEALSystemHelpers.m */; };
 		71BB33AD1C29CA3A0075689C /* UIImage+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C9F1C29ABF5007BABF7 /* UIImage+Tealium.m */; };
 		71BB33AE1C29CA3A0075689C /* NSString+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C9D1C29ABF5007BABF7 /* NSString+Tealium.m */; };
@@ -505,8 +503,6 @@
 		710E1CE01C29ABF5007BABF7 /* TEALNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNotifications.m; sourceTree = "<group>"; };
 		710E1CE11C29ABF5007BABF7 /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
 		710E1CE21C29ABF5007BABF7 /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
-		710E1CE31C29ABF5007BABF7 /* TEALSimpleNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSimpleNetworkManager.h; sourceTree = "<group>"; };
-		710E1CE41C29ABF5007BABF7 /* TEALSimpleNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSimpleNetworkManager.m; sourceTree = "<group>"; };
 		710E1CE51C29ABF5007BABF7 /* TEALSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemHelpers.h; sourceTree = "<group>"; };
 		710E1CE61C29ABF5007BABF7 /* TEALSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSystemHelpers.m; sourceTree = "<group>"; };
 		710E1CE71C29ABF5007BABF7 /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
@@ -1137,8 +1133,6 @@
 				710E1CE01C29ABF5007BABF7 /* TEALNotifications.m */,
 				710E1CE11C29ABF5007BABF7 /* TEALOperationManager.h */,
 				710E1CE21C29ABF5007BABF7 /* TEALOperationManager.m */,
-				710E1CE31C29ABF5007BABF7 /* TEALSimpleNetworkManager.h */,
-				710E1CE41C29ABF5007BABF7 /* TEALSimpleNetworkManager.m */,
 				710E1CE51C29ABF5007BABF7 /* TEALSystemHelpers.h */,
 				710E1CE61C29ABF5007BABF7 /* TEALSystemHelpers.m */,
 				710E1CE71C29ABF5007BABF7 /* TEALSystemProtocols.h */,
@@ -1576,7 +1570,6 @@
 				535682AE18F3670300BAAD62 /* AAPLDatePickerController.m in Sources */,
 				710E1D6C1C29ABF6007BABF7 /* TEALApplicationDataSources.m in Sources */,
 				710E1D6E1C29ABF6007BABF7 /* TEALDeviceDataSources.m in Sources */,
-				710E1D9E1C29ABF6007BABF7 /* TEALSimpleNetworkManager.m in Sources */,
 				710E1DA01C29ABF6007BABF7 /* TEALSystemHelpers.m in Sources */,
 				71760D671C42C83700FBCA29 /* TEALConfiguration+TagManagement.m in Sources */,
 				71760D6E1C42E1FC00FBCA29 /* TEALPublishSettings+Collect.m in Sources */,
@@ -1752,7 +1745,6 @@
 				71BB33A81C29CA3A0075689C /* AAPLDatePickerController.m in Sources */,
 				71BB33A91C29CA3A0075689C /* TEALApplicationDataSources.m in Sources */,
 				71BB33AA1C29CA3A0075689C /* TEALDeviceDataSources.m in Sources */,
-				71BB33AB1C29CA3A0075689C /* TEALSimpleNetworkManager.m in Sources */,
 				71BB33AC1C29CA3A0075689C /* TEALSystemHelpers.m in Sources */,
 				71BB33AD1C29CA3A0075689C /* UIImage+Tealium.m in Sources */,
 				71BB33AE1C29CA3A0075689C /* NSString+Tealium.m in Sources */,
