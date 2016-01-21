@@ -17,14 +17,3 @@ typedef NS_ENUM(NSUInteger, TEALRemoteResponseErrors) {
     TEALRemoteResponseErrorHttp_NoMethodType,
     TEALRemoteResponseErrorHttp_NoTargetUrl
 };
-
-#warning MERGE with TEALError codes?
-
-typedef NS_ENUM(NSInteger, TealiumResponseCodes){
-    TealiumRC_Unknown   = 0,
-    TealiumRC_Success   = 200,
-    TealiumRC_NoContent = 204,
-    TealiumRC_Malformed = 400,
-    TealiumRC_Failure   = 404,  // command not found
-    TealiumRC_Exception = 555
-};

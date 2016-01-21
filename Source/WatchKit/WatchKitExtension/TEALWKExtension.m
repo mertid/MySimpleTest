@@ -267,9 +267,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 - (void) trackWithMessagePayload:(NSDictionary *)payload
                       completion:(SuccessBlock)completion{
-    
-#warning Todo more optimal way to check and log reachability
-    
+        
     NSString *wasQueued = payload[TEALDataSourceKey_WasQueued];
     
     if ([TEALDataSourceValue_True isEqualToString:wasQueued]){

@@ -204,7 +204,7 @@
         
         // send no command response
         
-        response.status = TealiumRC_Failure;
+        response.status = TEALErrorCodeFailure;
         response.body   = @"Command Not Found";
         
         success = NO;
@@ -308,7 +308,7 @@
                                }
                                if (connectionError){
                                    [tResponse setError:connectionError];
-                                   [tResponse setStatus:TealiumRC_Exception];
+                                   [tResponse setStatus:TEALErrorCodeException];
                                }
                                if (responseBlock) responseBlock(tResponse);
                            }];

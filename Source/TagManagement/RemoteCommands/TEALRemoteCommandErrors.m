@@ -8,6 +8,7 @@
 //  REPLACE WITH TEALERROR
 
 #import "TEALRemoteCommandErrors.h"
+#import "TEALError.h"
 
 @implementation TEALRemoteCommandErrors
 
@@ -24,7 +25,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Make sure all call was properly constructed.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Malformed
+                                        code:TEALErrorCodeMalformed
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorMissingCommand:
@@ -34,7 +35,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"addRemoteCommandId:description:targetQueue:block: method was not invoked for this command id prior to remote trigger.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Failure
+                                        code:TEALErrorCodeFailure
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorMissingCommandId:
@@ -44,7 +45,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a command id when invoking addRemoteCommandId:description:targetQueue:block:", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Failure
+                                        code:TEALErrorCodeFailure
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorMissingCommandBlock:
@@ -54,7 +55,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a block when invoking addRemoteCommandId:description:targetQueue:block:", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Failure
+                                        code:TEALErrorCodeFailure
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorHttp_NoMethodType:
@@ -64,7 +65,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Make sure all data in remote api call is properly filled.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Exception
+                                        code:TEALErrorCodeException
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorHttp_NoTargetUrl:
@@ -74,7 +75,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Make sure all data in remote api call is properly filled.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Exception
+                                        code:TEALErrorCodeException
                                     userInfo:userInfo];
             break;
         case TEALRemoteResponseErrorMissingRequest:
@@ -84,7 +85,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Check Tag Bridge call was properly constructed.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Exception
+                                        code:TEALErrorCodeException
                                     userInfo:userInfo];
             break;
         default:
@@ -94,7 +95,7 @@
                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Contact your Tealium representative to debug.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
-                                        code:TealiumRC_Failure
+                                        code:TEALErrorCodeFailure
                                     userInfo:userInfo];
             break;
     }

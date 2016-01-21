@@ -60,7 +60,7 @@
     NSError *error = nil;
     
     NSDictionary *mpsData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data
-                                                                             error:&error];
+                                                                             error:error];
 
     NSDictionary *manualCopy = @{
         @"5": @{
@@ -99,7 +99,7 @@
     NSError *error = nil;
     
     NSDictionary *mpsData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data
-                                                                             error:&error];
+                                                                             error:error];
     
     XCTAssertTrue(!error, @"Error detected:%@", error);
     
