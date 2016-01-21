@@ -267,10 +267,13 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) disableCollect {
     
-    [self removeDispatchService:[self currentCollectDispatchService]];
+    TEALCollectDispatchService *service = [self currentCollectDispatchService];
     
-    [self.logger logDev:@"Collect disabled."];
-
+    if (service){
+        [self removeDispatchService:service];
+        
+        [self.logger logDev:@"Collect disabled."];
+    }
 }
 
 - (TEALS2SLegacyDispatchService *) currentS2SLegacyDispatchService {
@@ -327,10 +330,14 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) disableS2SLegacy {
     
-    [self removeDispatchService:[self currentS2SLegacyDispatchService]];
+    TEALS2SLegacyDispatchService *service = [self currentS2SLegacyDispatchService];
     
-    [self.logger logDev:@"S2S enabled."];
-
+    if (service){
+        [self removeDispatchService:service];
+        
+        [self.logger logDev:@"S2S Legacy disabled."];
+        
+    }
 }
 
 - (void) fetchVisitorProfileAfterEvent {

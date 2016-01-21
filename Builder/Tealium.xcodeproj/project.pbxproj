@@ -277,10 +277,6 @@
 		71F0A2871C286450003B55DD /* TEALOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1431C28644E003B55DD /* TEALOperationManager.h */; };
 		71F0A2881C286450003B55DD /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1441C28644E003B55DD /* TEALOperationManager.m */; };
 		71F0A2891C286450003B55DD /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1441C28644E003B55DD /* TEALOperationManager.m */; };
-		71F0A28A1C286450003B55DD /* TEALSimpleNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1451C28644E003B55DD /* TEALSimpleNetworkManager.h */; };
-		71F0A28B1C286450003B55DD /* TEALSimpleNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1451C28644E003B55DD /* TEALSimpleNetworkManager.h */; };
-		71F0A28C1C286450003B55DD /* TEALSimpleNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1461C28644E003B55DD /* TEALSimpleNetworkManager.m */; };
-		71F0A28D1C286450003B55DD /* TEALSimpleNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1461C28644E003B55DD /* TEALSimpleNetworkManager.m */; };
 		71F0A28E1C286450003B55DD /* TEALSystemHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1471C28644E003B55DD /* TEALSystemHelpers.h */; };
 		71F0A28F1C286450003B55DD /* TEALSystemHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1471C28644E003B55DD /* TEALSystemHelpers.h */; };
 		71F0A2901C286450003B55DD /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1481C28644E003B55DD /* TEALSystemHelpers.m */; };
@@ -454,8 +450,6 @@
 		71F0A1421C28644E003B55DD /* TEALNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNotifications.m; sourceTree = "<group>"; };
 		71F0A1431C28644E003B55DD /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
 		71F0A1441C28644E003B55DD /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
-		71F0A1451C28644E003B55DD /* TEALSimpleNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSimpleNetworkManager.h; sourceTree = "<group>"; };
-		71F0A1461C28644E003B55DD /* TEALSimpleNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSimpleNetworkManager.m; sourceTree = "<group>"; };
 		71F0A1471C28644E003B55DD /* TEALSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemHelpers.h; sourceTree = "<group>"; };
 		71F0A1481C28644E003B55DD /* TEALSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSystemHelpers.m; sourceTree = "<group>"; };
 		71F0A1491C28644E003B55DD /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
@@ -791,8 +785,6 @@
 				71F0A1421C28644E003B55DD /* TEALNotifications.m */,
 				71F0A1431C28644E003B55DD /* TEALOperationManager.h */,
 				71F0A1441C28644E003B55DD /* TEALOperationManager.m */,
-				71F0A1451C28644E003B55DD /* TEALSimpleNetworkManager.h */,
-				71F0A1461C28644E003B55DD /* TEALSimpleNetworkManager.m */,
 				71F0A1471C28644E003B55DD /* TEALSystemHelpers.h */,
 				71F0A1481C28644E003B55DD /* TEALSystemHelpers.m */,
 				71F0A1491C28644E003B55DD /* TEALSystemProtocols.h */,
@@ -945,7 +937,6 @@
 				71F0A2051C28644F003B55DD /* NSObject+Tealium.h in Headers */,
 				71F0A1DF1C28644F003B55DD /* TEALVisitorProfileMetricAttribute.h in Headers */,
 				71F0A2711C286450003B55DD /* TEALDelegateManager.h in Headers */,
-				71F0A28B1C286450003B55DD /* TEALSimpleNetworkManager.h in Headers */,
 				71F0A1E31C28644F003B55DD /* TEALVisitorProfilePropertyAttribute.h in Headers */,
 				71F0A1D71C28644F003B55DD /* TEALVisitorProfileDateAttribute.h in Headers */,
 				71F0A2371C28644F003B55DD /* TEALDispatchManager.h in Headers */,
@@ -1034,7 +1025,6 @@
 				71F0A2D41C286451003B55DD /* TEALRemoteCommandConstants+PrivateHeader.h in Headers */,
 				71F0A1DE1C28644F003B55DD /* TEALVisitorProfileMetricAttribute.h in Headers */,
 				71F0A2701C286450003B55DD /* TEALDelegateManager.h in Headers */,
-				71F0A28A1C286450003B55DD /* TEALSimpleNetworkManager.h in Headers */,
 				71F0A1E21C28644F003B55DD /* TEALVisitorProfilePropertyAttribute.h in Headers */,
 				71F0A1D61C28644F003B55DD /* TEALVisitorProfileDateAttribute.h in Headers */,
 				71F0A2361C28644F003B55DD /* TEALDispatchManager.h in Headers */,
@@ -1305,7 +1295,6 @@
 				71F0A27F1C286450003B55DD /* TEALLogger.m in Sources */,
 				71E3BA4F1C44ED9C0027FC8D /* TEALConfiguration+Collect.m in Sources */,
 				71F0A1FF1C28644F003B55DD /* NSArray+Tealium.m in Sources */,
-				71F0A28D1C286450003B55DD /* TEALSimpleNetworkManager.m in Sources */,
 				71F0A2491C286450003B55DD /* TEALReachability.m in Sources */,
 				71F0A22D1C28644F003B55DD /* TEALSharedDataSources.m in Sources */,
 				71F0A1D11C28644F003B55DD /* TEALVisitorProfileBaseAttribute.m in Sources */,
@@ -1362,7 +1351,6 @@
 				71F0A1E01C28644F003B55DD /* TEALVisitorProfileMetricAttribute.m in Sources */,
 				71F0A27E1C286450003B55DD /* TEALLogger.m in Sources */,
 				71F0A1FE1C28644F003B55DD /* NSArray+Tealium.m in Sources */,
-				71F0A28C1C286450003B55DD /* TEALSimpleNetworkManager.m in Sources */,
 				71E3BA401C44ED660027FC8D /* TEALPublishSettings+Collect.m in Sources */,
 				71F0A2481C286450003B55DD /* TEALReachability.m in Sources */,
 				71F0A22C1C28644F003B55DD /* TEALSharedDataSources.m in Sources */,

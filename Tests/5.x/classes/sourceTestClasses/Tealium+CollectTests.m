@@ -206,6 +206,12 @@
     
     [self enableLibraryWithConfiguration:config];
     
+    __block isNeverReady = NO;
+    
+    // Adding in a little time buffer to let module spin up
+    
+    [TEALTestHelper waitFor:&isNeverReady timeout:0.5];
+    
     XCTAssertTrue([self.library.settings s2SLegacyEnabled],@"S2S disabled when should have been enabled");
     
     NSArray *dispatchServices = [self.library currentDispatchServices];
