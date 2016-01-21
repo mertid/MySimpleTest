@@ -103,10 +103,6 @@
             [self publishSettings].status != TEALPublishSettingsStatusDisable);
 }
 
-- (BOOL) useHTTP {
-    return self.configuration.useHTTP;
-}
-
 - (BOOL) wifiOnlySending {
     
     return [[self publishSettings] enableSendWifiOnly];

@@ -35,13 +35,6 @@
  */
 @property (nonatomic, copy) NSString * _Nonnull environmentName;
 
-/**
- *  Flag when on will send all data for HTTP.  Suggested to be used in development only!
- *
- *  @default NO
- */
-@property (nonatomic) BOOL useHTTP;
-
 
 /**
  *  If assigned, will replace the default mobile publish setting source location with an alternate address. Example - "https://my.domain.com/app/publish.html"

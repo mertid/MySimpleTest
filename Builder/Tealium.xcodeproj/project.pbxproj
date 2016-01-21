@@ -313,7 +313,6 @@
 		71F0A2F11C286452003B55DD /* Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A17D1C28644E003B55DD /* Tealium.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F0A2F21C286452003B55DD /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A17E1C28644E003B55DD /* Tealium.m */; };
 		71F0A2F31C286452003B55DD /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A17E1C28644E003B55DD /* Tealium.m */; };
-		71F0A2F41C286452003B55DD /* TealiumIOSBridgingHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A17F1C28644E003B55DD /* TealiumIOSBridgingHeader.h */; };
 		71F0A2F81C286452003B55DD /* Tealium+WatchKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1821C28644E003B55DD /* Tealium+WatchKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F0A2F91C286452003B55DD /* Tealium+WatchKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0A1821C28644E003B55DD /* Tealium+WatchKit.h */; };
 		71F0A2FA1C286452003B55DD /* Tealium+WatchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F0A1831C28644E003B55DD /* Tealium+WatchKit.m */; };
@@ -481,8 +480,6 @@
 		71F0A17C1C28644E003B55DD /* TEALTagDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchService.m; sourceTree = "<group>"; };
 		71F0A17D1C28644E003B55DD /* Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tealium.h; sourceTree = "<group>"; };
 		71F0A17E1C28644E003B55DD /* Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium.m; sourceTree = "<group>"; };
-		71F0A17F1C28644E003B55DD /* TealiumIOSBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumIOSBridgingHeader.h; sourceTree = "<group>"; };
-		71F0A1801C28644E003B55DD /* TealiumTVOSBridgingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumTVOSBridgingHeader.h; sourceTree = "<group>"; };
 		71F0A1821C28644E003B55DD /* Tealium+WatchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+WatchKit.h"; sourceTree = "<group>"; };
 		71F0A1831C28644E003B55DD /* Tealium+WatchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+WatchKit.m"; sourceTree = "<group>"; };
 		71F0A1841C28644E003B55DD /* TEALWKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKConstants.h; sourceTree = "<group>"; };
@@ -569,8 +566,6 @@
 				71F0A1811C28644E003B55DD /* WatchKit */,
 				71F0A17D1C28644E003B55DD /* Tealium.h */,
 				71F0A17E1C28644E003B55DD /* Tealium.m */,
-				71F0A17F1C28644E003B55DD /* TealiumIOSBridgingHeader.h */,
-				71F0A1801C28644E003B55DD /* TealiumTVOSBridgingHeader.h */,
 			);
 			name = Source;
 			path = ../source;
@@ -1006,7 +1001,6 @@
 				71F0A2961C286450003B55DD /* Tealium+PrivateHeader.h in Headers */,
 				71F0A1CE1C28644F003B55DD /* TEALVisitorProfileBaseAttribute.h in Headers */,
 				71F0A2E21C286451003B55DD /* TEALRemoteCommandResponse+PrivateHeader.h in Headers */,
-				71F0A2F41C286452003B55DD /* TealiumIOSBridgingHeader.h in Headers */,
 				71F0A2341C28644F003B55DD /* TEALDispatchConstants.h in Headers */,
 				71F0A2581C286450003B55DD /* TEALPublishSettings.h in Headers */,
 				71E3BA4B1C44ED900027FC8D /* TEALPublishSettings+TagManagement.h in Headers */,

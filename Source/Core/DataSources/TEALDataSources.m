@@ -310,8 +310,6 @@ static NSDictionary *staticCompileTimeDataSources;
     
 }
 
-#warning should return immediately in addition to the adding of it
-
 - (NSString *) uuid {
     
     NSString *uuid = [self instanceStore].dataSourcesCopy[TEALDataSourceKey_UUID];

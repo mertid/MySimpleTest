@@ -51,7 +51,6 @@
     configuration.accountName       = [accountName lowercaseString];
     configuration.profileName       = [profileName lowercaseString];
     configuration.environmentName   = [environmentName lowercaseString];
-    configuration.useHTTP           = NO;
     configuration.autotrackingApplicationInfoEnabled = YES;
     configuration.autotrackingCarrierInfoEnabled = YES;
     configuration.autotrackingDeviceInfoEnabled = YES;
@@ -191,10 +190,6 @@
     // Default
     NSString *urlPrefix = @"https:";
     
-    if (configuration.useHTTP) {
-        urlPrefix = @"http:";
-    }
-    
     return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
             urlPrefix,
             configuration.accountName,
@@ -217,7 +212,7 @@
               @"account - name":[NSString teal_dictionarySafeString:self.accountName],
               @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
               @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
-              @"use http":[NSString teal_stringFromBool:self.useHTTP],
+//              @"use http":[NSString teal_stringFromBool:self.useHTTP],
 //              @"polling frequency":@(self.pollingFrequency),
               //                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
               //                                          @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],

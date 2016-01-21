@@ -27,7 +27,6 @@
 - (BOOL) libraryShouldDisable;
 - (BOOL) mobileCompanionEnabled;
 - (BOOL) isValid;
-- (BOOL) useHTTP;
 - (BOOL) wifiOnlySending;
 - (BOOL) goodBatteryLevelOnlySending;
 - (BOOL) isDefaultPublishSettings;

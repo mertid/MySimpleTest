@@ -81,10 +81,6 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
     // Default
     NSString *urlPrefix = @"https:";
     
-    if (configuration.useHTTP) {
-        urlPrefix = @"http:";
-    }
-    
     return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
             urlPrefix,
             configuration.accountName,

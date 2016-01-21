@@ -120,10 +120,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         
         NSString *urlPrefix = @"https";
         
-        if ([settings useHTTP]) {
-            urlPrefix = @"http";
-        }
-        
         NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
         
         NSMutableDictionary *params = [NSMutableDictionary new];
@@ -150,10 +146,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     if (!defaultLegacyS2SDispatchURLString){
         NSString *urlPrefix = @"https";
         
-        if ([settings useHTTP]) {
-            urlPrefix = @"http";
-        }
-        
         NSString *account = [settings account];
         NSString *profile = [settings asProfile];
         NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
@@ -176,10 +168,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     
     NSString *urlPrefix = @"https:";
     
-    if ([settings useHTTP]) {
-        urlPrefix = @"http:";
-    }
-    
     NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/%@/%@/%@",
                            urlPrefix,
                            settings.account,
@@ -196,10 +184,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     }
     
     NSString *urlPrefix = @"https:";
-    
-    if ([settings useHTTP]) {
-        urlPrefix = @"http:";
-    }
     
     NSString *urlString = [NSString stringWithFormat:@"%@//visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/%@",
                            urlPrefix,
