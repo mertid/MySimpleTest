@@ -265,9 +265,7 @@
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
-                                
-//        NSLog(@"%s request:%@ response:%@ error:%@", __FUNCTION__, request, response, connectionError);
-                                
+                                                                
         NSError *error = nil;
                   
         NSDictionary *parsedData = nil;
@@ -293,7 +291,7 @@
             !parsedData){
          
             // Fallback to current mobile.html MPS var
-            parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:&error];
+            parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:error];
             
         }
                                 

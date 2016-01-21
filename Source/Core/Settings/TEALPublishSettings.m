@@ -30,9 +30,13 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
 #pragma mark - PUBLIC CLASS
 
-+ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError * __autoreleasing *)error {
++ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError  * __autoreleasing _Nullable)error {
     
     if (!data){
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Publish Settings from JSON file failed.", @"")
+                                  reason:NSLocalizedString(@"Data argument missing.", @"")
+                              suggestion:NSLocalizedString(@"Double check sourse JSON file.", @"")];
         return nil;
     }
     
@@ -40,7 +44,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     resultDictionary = [NSJSONSerialization JSONObjectWithData:data
                                                        options:NSJSONReadingAllowFragments
-                                                          error:error];
+                                                          error:&error];
     
     if (!resultDictionary ||
         resultDictionary == nil){
@@ -52,9 +56,13 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
 }
 
-+ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError **)error {
++ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError * __autoreleasing _Nullable)error {
     
     if (!data){
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Publish Settings from HTML file failed.", @"")
+                                  reason:NSLocalizedString(@"Data argument missing.", @"")
+                              suggestion:NSLocalizedString(@"Double check sourse JSON file.", @"")];
         return nil;
     }
     
@@ -71,7 +79,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:&regexError];
     if (!regex) {
-        *error = regexError;
+        error = regexError;
         return nil;
     }
     
@@ -82,27 +90,20 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
                               range:NSMakeRange(0, dataString.length)
                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
                              
-#warning Re-enable logging of some sort
-                             
 #warning this script will break if an additional var is added by the publishing engine
-                             
-                             if (result) {
-                                 //TEAL_logDev(@"text checking result: %@", result);
-                             }
                              
                              if (result.range.location != NSNotFound) {
                                  scriptContents = [dataString substringWithRange:result.range];
-                                 
-                                 if (scriptContents) {
-                                     //TEAL_logDev(@"scriptContents: %@", scriptContents);
-                                 }
                                  
                                  *stop = YES;
                              }
                          }];
     
     if (!scriptContents) {
-        
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Publish Settings from HTML file failed.", @"")
+                                  reason:NSLocalizedString(@"Contents not found.", @"")
+                              suggestion:NSLocalizedString(@"Double check sourse HTML file.", @"")];
         return nil;
     }
     
@@ -112,10 +113,10 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     if (mpsRangeStart.location == NSNotFound) {
                 
-        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-                              description:@"Mobile publish settings not found."
-                                   reason:@"No publish settings found after parsing mobile.html"
-                               suggestion:@"Please enable mobile publish settings in Tealium iQ."];
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:@"Mobile publish settings not found."
+                                  reason:@"No publish settings found after parsing mobile.html"
+                              suggestion:@"Please enable mobile publish settings in Tealium iQ."];
         
         return nil;
     }
@@ -127,6 +128,10 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
                                                   range:NSMakeRange(startIndex, endLength)];
     
     if (mpsRangeEnd.location == NSNotFound) {
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:@"Mobile publish settings not found."
+                                  reason:@"End of publish settings data not found after parsing mobile.html"
+                              suggestion:@"Please enable mobile publish settings in Tealium iQ."];
         return nil;
     }
     
@@ -145,7 +150,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
                                                          error:&jsonError];
     
     if (!resultDictionary) {
-        *error = jsonError;
+        error = jsonError;
         return nil;
     }
     

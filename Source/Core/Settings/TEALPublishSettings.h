@@ -37,10 +37,10 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @property (nonatomic) NSString * _Nonnull url;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data
-                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+                                                         error:(NSError * __autoreleasing _Nullable)error;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data
-                                                         error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+                                                         error:(NSError * __autoreleasing _Nullable)error;
 
 + (TEALPublishSettings * _Nonnull) defaultPublishSettingsForURLString:(NSString * _Nonnull)url;
 
