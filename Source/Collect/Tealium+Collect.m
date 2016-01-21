@@ -203,13 +203,42 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 #pragma mark - PRIVATE
 
+- (TEALCollectDispatchService *) currentCollectDispatchService {
+    
+    __block TEALCollectDispatchService *targetService = nil;
+    
+    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    
+    if (dispatchServices) {
+        
+        [dispatchServices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if (![obj isMemberOfClass:([TEALCollectDispatchService class])]){
+                return;
+            }
+            
+            TEALCollectDispatchService *aService = obj;
+            
+            NSString *visitorID = [[self dataSources]visitorIDCopy];
+            
+            NSString *collectDispatchURLString = [self.settings collectDispatchURLStringForVisitorID:visitorID];
+            
+            if ([aService.dispatchURLStringCopy isEqualToString:collectDispatchURLString]){
+                targetService = aService;
+                *stop = YES;
+            }
+            
+        }];
+    }
+    
+    return targetService;
+}
+
 - (BOOL) isCollectEnabled {
 
     return [self.settings collectEnabled];
     
 }
-
-
 
 - (void) enableCollect {
     
@@ -238,8 +267,39 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) disableCollect {
     
-#warning TODO
+    [self removeDispatchService:[self currentCollectDispatchService]];
     
+    [self.logger logDev:@"Collect disabled."];
+
+}
+
+- (TEALS2SLegacyDispatchService *) currentS2SLegacyDispatchService {
+    
+    __block TEALS2SLegacyDispatchService *targetService = nil;
+    
+    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    
+    if (dispatchServices) {
+        
+        [dispatchServices enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if (![obj isMemberOfClass:([TEALS2SLegacyDispatchService class])]){
+                return;
+            }
+            
+            TEALS2SLegacyDispatchService *aService = obj;
+            
+            NSString *dispatchURLString = [self.settings s2SLegacyDispatchURLString];
+            
+            if ([aService.dispatchURLStringCopy isEqualToString:dispatchURLString]){
+                targetService = aService;
+                *stop = YES;
+            }
+            
+        }];
+    }
+    
+    return targetService;
 }
 
 - (void) enableS2SLegacy {
@@ -267,8 +327,10 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) disableS2SLegacy {
     
-#warning TODO
+    [self removeDispatchService:[self currentS2SLegacyDispatchService]];
     
+    [self.logger logDev:@"S2S enabled."];
+
 }
 
 - (void) fetchVisitorProfileAfterEvent {
@@ -349,22 +411,5 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     
     return profileStore;
 }
-
-
-//- (void) leaveTrace {
-//    
-//    if (![self collect_isEnabled]) {
-//        return;
-//    }
-//    
-//    __weak Tealium *weakSelf = self;
-//    
-//    [weakSelf.operationManager addOperationWithBlock:^{
-//        
-//        weakSelf.settings.traceID = nil;
-//    }];
-//    
-//}
-
 
 @end

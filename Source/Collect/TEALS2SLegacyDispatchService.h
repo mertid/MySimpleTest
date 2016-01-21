@@ -16,8 +16,10 @@
 
 @interface TEALS2SLegacyDispatchService : NSObject <TEALDispatchService>
 
-- (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString
-                                 visitorID:(NSString *)visitorID
-                            sessionManager:(TEALURLSessionManager *)sessionManager;
+- (instancetype _Nullable) initWithDispatchURLString:(NSString * _Nonnull)dispatchURLString
+                                           visitorID:(NSString * _Nonnull)visitorID
+                                      sessionManager:(TEALURLSessionManager * _Nonnull)sessionManager;
+
+- (NSString * _Nullable) dispatchURLStringCopy;
 
 @end

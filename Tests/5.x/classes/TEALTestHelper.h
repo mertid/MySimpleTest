@@ -21,8 +21,6 @@
 + (TEALConfiguration *) configWithOverridePublishSetting:(NSString *)overrideURL;
 + (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename;
 + (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename;
-
-
-#warning add a library class start method
++ (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs;
 
 @end

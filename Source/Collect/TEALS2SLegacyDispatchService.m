@@ -19,7 +19,7 @@
 @property (nonatomic, weak) NSString *dispatchURLString;
 @property (nonatomic, strong) NSString *visitorID;
 @property (nonatomic, weak) TEALURLSessionManager *sessionManager;
-@property (nonatomic) TEALDispatchNetworkServiceStatus status;
+@property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
 
 @end
 
@@ -37,6 +37,14 @@
     return self;
 }
 
+- (NSString *) dispatchURLStringCopy {
+    
+    return [self.dispatchURLString copy];
+    
+}
+
+#pragma mark - PRIVATE
+
 - (BOOL) isReady {
     
     if (!self.dispatchURLString || !self.sessionManager) {
@@ -46,10 +54,9 @@
     return YES;
 }
 
-#pragma mark - PRIVATE
 
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<TEALS2SLegacyDispatchService dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)self.status];
+    return [NSString stringWithFormat:@"<TEALS2SLegacyDispatchService dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)[self status]];
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
@@ -143,7 +150,7 @@
 }
 
 - (TEALDispatchNetworkServiceStatus) status{
-    return self.status;
+    return self.privateStatus;
 }
 
 @end

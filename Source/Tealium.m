@@ -990,11 +990,36 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSArray *dispatchServices = [[self currentDispatchServices] copy];
     
-    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
+    __block NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
     
     [newServices addObject:newService];
     
-    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+        
+        [weakSelf setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
+
+    }];
+    
+    
+}
+
+- (void) removeDispatchService:(id)service {
+    
+    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    
+    __block NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
+    
+    [newServices removeObject:service];
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+        
+        [weakSelf setCurrentDispatchServices:dispatchServices];
+        
+    }];
     
 }
 

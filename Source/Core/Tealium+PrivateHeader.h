@@ -44,6 +44,7 @@
 - (NSArray * _Nonnull) currentDispatchServices;
 - (void) setCurrentDispatchServices:(NSArray * _Nonnull)newServices;
 - (void) addNewDispatchService:(id _Nonnull)newService;
+- (void) removeDispatchService:(id _Nonnull)service;
 
 - (NSDictionary * _Nonnull) moduleDataCopy;
 

@@ -16,11 +16,13 @@
 
 @property (nonatomic, weak) NSString *dispatchURLString;
 @property (nonatomic, weak) TEALURLSessionManager *sessionManager;
-@property (nonatomic) TEALDispatchNetworkServiceStatus status;
+@property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
 
 @end
 
 @implementation TEALCollectDispatchService
+
+#pragma mark - PUBLIC
 
 - (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString sessionManager:(TEALURLSessionManager *)sessionManager {
     self = [super init];
@@ -31,6 +33,15 @@
     return self;
 }
 
+
+- (NSString *) dispatchURLStringCopy {
+    
+    return  [self.dispatchURLString copy];
+    
+}
+
+#pragma mark - PRIVATE
+
 - (BOOL) isReady {
     
     if (!self.dispatchURLString || !self.sessionManager) {
@@ -40,10 +51,8 @@
     return YES;
 }
 
-#pragma mark - PRIVATE
-
 - (NSString *) description {
-    return [NSString stringWithFormat:@"<TEALCollectDispatch Service dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)self.status];
+    return [NSString stringWithFormat:@"<TEALCollectDispatch Service dispatchURL:%@ status:%lu>", self.dispatchURLString, (unsigned long)[self status]];
 }
 
 #pragma mark - TEALNETWORKSERVICE DELEGATES
@@ -107,7 +116,7 @@
 }
 
 - (TEALDispatchNetworkServiceStatus) status{
-    return self.status;
+    return self.privateStatus;
 }
 
 @end

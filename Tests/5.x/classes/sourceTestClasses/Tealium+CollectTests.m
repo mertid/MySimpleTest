@@ -14,6 +14,8 @@
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
 #import "TEALDispatch+PrivateHeader.h"
+#import "TEALCollectDispatchService.h"
+#import "TEALS2SLegacyDispatchService.h"
 
 @interface Tealium_CollectTests : XCTestCase <TealiumDelegate>
 
@@ -77,6 +79,31 @@
     
 }
 
+- (BOOL) collectDispatchServiceInArray:(NSArray*)array {
+    
+    for (id dispatchService in array){
+        
+        if ([dispatchService isKindOfClass:[TEALCollectDispatchService class]]){
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
+
+- (BOOL) s2SLegacyDispatchServiceInArray:(NSArray*)array {
+    
+    for (id dispatchService in array){
+        
+        if ([dispatchService isKindOfClass:[TEALS2SLegacyDispatchService class]]){
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
 
 
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
@@ -147,8 +174,57 @@
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
+    __block isNeverReady = NO;
+    
+    // Adding in a little time buffer to let module spin up
+    
+    [TEALTestHelper waitFor:&isNeverReady timeout:0.5];
+    
     XCTAssertTrue([self.library.settings collectEnabled], @"Collect was not enabled by remote publish settings.");
     
+    NSArray *dispatchServices = [self.library currentDispatchServices];
+
+    XCTAssertTrue([self collectDispatchServiceInArray:dispatchServices], @"Collect dispatch service NOT found in:%@", dispatchServices);
+}
+
+- (void) testCollectDisableByPublishSettings {
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"collect_OFF"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    XCTAssertTrue(![self.library.settings collectEnabled],@"Collect enabled when should have been disabled");
+    
+    NSArray *dispatchServices = [self.library currentDispatchServices];
+    
+    XCTAssertTrue(![self collectDispatchServiceInArray:dispatchServices], @"Collect dispatch service found in:%@", dispatchServices);
+}
+
+- (void) testS2SEnableByPublishSettings {
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"s2s_ON"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    XCTAssertTrue([self.library.settings s2SLegacyEnabled],@"S2S disabled when should have been enabled");
+    
+    NSArray *dispatchServices = [self.library currentDispatchServices];
+    
+    XCTAssertTrue([self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S Legacy dispatch service NOT found in:%@", dispatchServices);
+    
+}
+
+- (void) testS2SDisableByPublishSettings {
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"s2s_OFF"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    XCTAssertTrue(![self.library.settings s2SLegacyEnabled],@"S2S Legacy enabled when should have been disabled");
+    
+    NSArray *dispatchServices = [self.library currentDispatchServices];
+    
+    XCTAssertTrue(![self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S Legacy dispatch service found in:%@", dispatchServices);
 }
 
 - (void) testJoinAndLeaveTrace {

@@ -16,6 +16,8 @@
 
 @interface TEALCollectDispatchService : NSObject <TEALDispatchService>
 
-- (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString sessionManager:(TEALURLSessionManager *)sessionManager;
+- (instancetype _Nullable) initWithDispatchURLString:(NSString * _Nonnull)dispatchURLString sessionManager:(TEALURLSessionManager * _Nonnull)sessionManager;
+
+- (NSString * _Nonnull) dispatchURLStringCopy;
 
 @end
