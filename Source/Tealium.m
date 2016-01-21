@@ -1004,26 +1004,36 @@ __strong static NSDictionary *staticAllInstances = nil;
  // TODO: handle wifi only, low battery and other settings
  // ~commHandlers big if else checks
 
-#warning Add error argument for additional info
-
-- (BOOL) dispatchManagerShouldDispatch {
+- (BOOL) dispatchManagerShouldDispatch:(NSError *__autoreleasing _Nullable)error {
     
     BOOL shouldDispatch = YES;
     
     if (!self.settings){
-        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"Settings not ready.", @"")
+                              suggestion:NSLocalizedString(@"Wait.", @"")];
         shouldDispatch = NO;
     }
     if (![self networkReadyForDispatch]){
-        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"Network not ready.", @"")
+                              suggestion:NSLocalizedString(@"Check network access.", @"")];
         shouldDispatch = NO;
     }
     if ([self suppressForWifiOnly]){
-        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"Suppressing calls until WIFI available.", @"")
+                              suggestion:NSLocalizedString(@"Check network access.", @"")];
         shouldDispatch = NO;
     }
     if ([self suppressForBetterBatteryLevels]){
-        
+        error = [TEALError errorWithCode:TEALErrorCodeFailure
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"Suppressing for better battery levels.", @"")
+                              suggestion:NSLocalizedString(@"Charge device.", @"")];
         shouldDispatch = NO;
     }
     

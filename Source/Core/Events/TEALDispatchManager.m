@@ -261,8 +261,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     }
     
     if (self.delegate &&
-        [self.delegate respondsToSelector:@selector(dispatchManagerShouldDispatch)] &&
-        ![self.delegate dispatchManagerShouldDispatch]) {
+        [self.delegate respondsToSelector:@selector(dispatchManagerShouldDispatch:)] &&
+        ![self.delegate dispatchManagerShouldDispatch:nil]) {
         
         return NO;
     }

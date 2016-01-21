@@ -10,7 +10,6 @@
 
 #import "TEALDataQueue.h"
 #import "TEALDispatch.h"
-//#import "TEALDispatchConstants.h"
 #import "TEALSystemProtocols.h"
 
 @class TEALDispatchManager;
@@ -22,7 +21,7 @@
         requestsDispatch:(TEALDispatch * _Nonnull)dispatch
          completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
-- (BOOL) dispatchManagerShouldDispatch;
+- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing _Nullable)error;
 
 - (void) dispatchManagerDidSendDispatch:(TEALDispatch * _Nonnull)dispatch;
 
