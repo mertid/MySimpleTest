@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"tagbridge"
                                                                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
@@ -60,13 +60,13 @@ static TealiumHelper * _sharedInstance;
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
     
-    [tealiumInstance1 joinTraceWithToken:@"08250" completion:nil];
+//    [tealiumInstance1 joinTraceWithToken:@"08250" completion:nil];
     
-    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
-        
-            NSLog(@"%s profile:%@ error:%@", __FUNCTION__, profile, error);
-        
-    }];
+//    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
+//        
+//            NSLog(@"%s profile:%@ error:%@", __FUNCTION__, profile, error);
+//        
+//    }];
 }
 
 + (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)data {
@@ -121,11 +121,12 @@ static TealiumHelper * _sharedInstance;
 
     if ([self isTesting]){ return; }
 
-    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addRemoteCommandId:@"testCommand"
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addRemoteCommandId:@"logger"
         description:@"An example remote command block"
         targetQueue:dispatch_get_main_queue()
         block:^(TEALRemoteCommandResponse * _Nullable response) {
         
+        NSLog(@"%s response: %@", __FUNCTION__, response);
         // Put any code here that can execute on the main thread - ie content
         // modification, A/B testing, etc.
         

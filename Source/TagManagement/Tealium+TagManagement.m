@@ -36,15 +36,51 @@
 }
 
 - (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
- 
+    
+    TEALTagDispatchService *service = [self currentTagDispatchService];
+
+    __block typeof(self) __weak weakSelf = self;
+
+    if (!service){
+        
+        [weakSelf.logger logDev:@"Could not add Remote Command %@ at this time - Tag Management Service not yet ready.", name];
+
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [weakSelf addRemoteCommandId:name
+                             description:description
+                             targetQueue:queue
+                                   block:responseBlock];
+        });
+        return;
+    }
+    
+    __block TEALRemoteCommandManager *remoteCommandManager = [service remoteCommandManager];
+    
+    if (!remoteCommandManager){
+        
+        [weakSelf.logger logDev:@"Could not add Remote Command %@ at this time - Remote Command Manager not ready", name];
+        
+        [weakSelf addRemoteCommandId:name
+                         description:description
+                         targetQueue:queue
+                               block:responseBlock];
+        
+        return;
+        
+    }
+
     [self.operationManager addOperationWithBlock:^{
-       
-        TEALTagDispatchService *service = [self currentTagDispatchService];
-                
-        [[service remoteCommandManager] addRemoteCommandId:name
-                                               description:description
-                                               targetQueue:queue
-                                                     block:responseBlock];
+        
+        BOOL added = [remoteCommandManager addRemoteCommandId:name
+                                                  description:description
+                                                  targetQueue:queue
+                                                        block:responseBlock];
+        
+        if (added){
+            [weakSelf.logger logDev:@"Added remote command %@.", name];
+        }
     }];
 
     
@@ -101,11 +137,23 @@
         
     [service.remoteCommandManager enable];
     
+    if (![service.remoteCommandManager isEnabled]){
+        
+//        [self.logger logDev:@"Could not enable remote commands - check that Tag Management services enabled."];
+        
+        return;
+    }
+    
     [self.logger logDev:@"Remote Commands enabled."];
 
+    __block typeof(self) __weak weakSelf = self;
+    
     [service.remoteCommandManager addReservedCommands:^(BOOL successful) {
+        
         if (successful) {
-            [self.logger logDev:@"Reserved Remote Commands enabled."];
+        
+            [weakSelf.logger logDev:@"Reserved Remote Commands enabled."];
+            
         }
     }];
     
@@ -186,7 +234,7 @@
 
 - (void) tagDispatchServiceWebView:(UIWebView*)webView processedCommandResponse:(TEALRemoteCommandResponse *)response{
     
-    [self.logger logDev:@"Processed remote command: %@", response];
+    [self.logger logDev:@"Processed remote command: %@ - payload: %@", response, response.requestPayload];
     
 }
 

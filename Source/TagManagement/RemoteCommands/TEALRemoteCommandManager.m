@@ -73,9 +73,11 @@
 }
 
 - (void) enable {
+    
     if (!self.ivarIsEnabled) {
         self.ivarIsEnabled = YES;
     }
+    
 }
 
 - (void) disable {
@@ -154,8 +156,10 @@
     [mDict addEntriesFromDictionary:newCommand];
     NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
     
+    __block typeof(self) __weak weakSelf = self;
+
     [self.operationManager addOperationWithBlock:^{
-        self.commands = newCommands;
+        weakSelf.commands = newCommands;
     }];
 }
 
@@ -179,40 +183,72 @@
 
 #pragma mark - TRIGGER REMOTE COMMANDS
 
-- (BOOL) triggerCommandWithResponse:(TEALRemoteCommandResponse*)response responseBlock:(TEALRemoteCommandResponseBlock)responseBlock {
+- (void) triggerCommandWithResponse:(TEALRemoteCommandResponse*)response responseBlock:(TEALRemoteCommandResponseBlock)responseBlock {
     
     __block TEALRemoteCommand *command = [self commands][response.commandId];
+    
+    if (!command){
+        
+        __block typeof(self) __weak weakSelf = self;
+        
+        // will attempt one re-try
+        if (response.status != TEALErrorCodeFailure){
+            
 
-    dispatch_queue_t queue = command.queue;
-    
-    BOOL success = NO;
-    
-    // Execute the command block to the target queue
-    if (queue){
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                [weakSelf triggerCommandWithResponse:response
+                                       responseBlock:responseBlock];
+                
+            });
+            
+        }
         
-        // Trigger the dispatch
-        dispatch_async(queue, ^{
-            TEALRemoteCommandResponseBlock blockActual = command.responseBlock;
-            if (blockActual) blockActual(response);
-            if (responseBlock)responseBlock(response);
-        });
-        
-        success = YES;
-    } else {
-        
-        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommand response:response identifier:nil responseBlock:responseBlock];
+        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommand
+                                    response:response
+                                  identifier:nil
+                               responseBlock:responseBlock];
         
         // send no command response
         
         response.status = TEALErrorCodeFailure;
-        response.body   = @"Command Not Found";
+        response.body   = @"Command Not Found.";
         
-        success = NO;
+        [weakSelf tealiumRemoteCommandResponseRequestsSend:response];
+
+        return;
     }
+    
+    dispatch_queue_t queue = command.queue;
+    
+    if (!queue){
+        
+        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommand
+                                    response:response
+                                  identifier:nil
+                               responseBlock:responseBlock];
+        
+        response.status = TEALErrorCodeException;
+        response.body   = @"Command Queue No Longer available.";
+        
+        return;
+    }
+
+    // Execute the command block to the target queue
+    
+    response.status = TEALErrorCodeSuccess;
+
+    // Trigger the dispatch
+    dispatch_async(queue, ^{
+        
+        TEALRemoteCommandResponseBlock blockActual = command.responseBlock;
+        if (blockActual) blockActual(response);
+        if (responseBlock)responseBlock(response);
+        
+    });
     
     [self tealiumRemoteCommandResponseRequestsSend:response];
     
-    return success;
 }
 
 #pragma mark - RESERVED COMMANDS

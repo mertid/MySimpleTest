@@ -49,6 +49,12 @@
         return obj;
     }
     
+    if (!obj){
+        
+        return nil;
+        
+    }
+    
     __block id dequeuedObject = nil;
     
     NSMutableArray *dataQueue = [self dataQueue];

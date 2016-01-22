@@ -29,6 +29,7 @@
 //    
 //    [tealiumInstance1 addVolatileDataSources:@{@"zzz":@"testValue"}];
 
+    [TealiumHelper enableRemoteCommandBlock];
     
     [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
     
