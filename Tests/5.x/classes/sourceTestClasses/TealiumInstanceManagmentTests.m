@@ -14,7 +14,7 @@
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings+PrivateHeader.h"
 
-@interface TealiumTests : XCTestCase <TealiumDelegate>
+@interface TealiumPublicAPITests : XCTestCase <TealiumDelegate>
 
 @property (nonatomic) BOOL shouldQueue;
 @property (nonatomic) BOOL shouldDrop;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation TealiumTests
+@implementation TealiumPublicAPITests
 
 - (void)setUp {
     [super setUp];
@@ -65,78 +65,65 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-
-#pragma mark - PUBLIC APIs TESTS
-
-- (void) testCreateInstanceWithMissingConfigurationData {
+- (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs {
+    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:timeoutSecs];
     
-    [Tealium destroyInstanceForKey:@"failTest"];
-
-    // All empty
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
-                                                                    profile:nil
-                                                                environment:nil];
-    
-    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
-    
-    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
-    
-    
-    // Account empty
-    TEALConfiguration *configB = [TEALConfiguration configurationWithAccount:nil
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    Tealium *instanceB = [Tealium newInstanceForKey:@"failTest" configuration:configB];
-    
-    XCTAssertFalse(instanceB, @"Missing account Configuration initialized library instance.");
-    
-    TEALConfiguration *configB2 = [TEALConfiguration configurationWithAccount:@""
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    Tealium *instanceB2 = [Tealium newInstanceForKey:@"failTest" configuration:configB2];
-    
-    XCTAssertFalse(instanceB2, @"Nil account Configuration initialized library instance.");
-    
-    
-    // Profile empty
-    TEALConfiguration *configC = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:nil
-                                                                environment:@"dev"];
-    
-    Tealium *instanceC = [Tealium newInstanceForKey:@"failTest" configuration:configC];
-    
-    XCTAssertFalse(instanceC, @"Missing profile Configuration initialized library instance.");
-    
-    
-    TEALConfiguration *configC2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@" "
-                                                                environment:@"dev"];
-    
-    Tealium *instanceC2 = [Tealium newInstanceForKey:@"failTest" configuration:configC2];
-    
-    XCTAssertFalse(instanceC2, @"Blank profile Configuration initialized library instance.");
-    
-    
-    
-    // Environment empty
-    TEALConfiguration *configD = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:nil];
-    
-    Tealium *instanceD = [Tealium newInstanceForKey:@"failTest" configuration:configD];
-    
-    XCTAssertFalse(instanceD, @"Missing environment Configuration initialized library instance.");
-    
-    TEALConfiguration *configD2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"   "];
-    
-    Tealium *instanceD2 = [Tealium newInstanceForKey:@"failTest" configuration:configD2];
-    
-    XCTAssertFalse(instanceD2, @"blank environment Configuration initialized library instance.");
+    do {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:timeoutDate];
+        if ([timeoutDate timeIntervalSinceNow] < 0.0) {
+            break;
+        }
+    }
+    while (!*flag);
+    return *flag;
 }
+
+- (NSDictionary *) stringDataSources {
+    
+    NSString *testKey = TEAL_TEST_DATASOURCE_KEY;
+    NSString *testValue = TEAL_TEST_DATASOURCE_STRING_VALUE;
+    
+    NSDictionary *testDataSources = @{
+                                      testKey : testValue
+                                      };
+    return testDataSources;
+    
+}
+
+
+- (NSDictionary *) mixedDataSources {
+    
+    NSString *testKey = TEAL_TEST_DATASOURCE_KEY;
+    NSString *testValue = TEAL_TEST_DATASOURCE_STRING_VALUE;
+    
+    NSString * testNumberKey = @"testNumberKey";
+    NSNumber * testNumber = @1234;
+    
+    NSDictionary *testDataSources = @{
+                                      testKey : testValue,
+                                      testNumberKey : testNumber
+                                      };
+    return testDataSources;
+}
+
+
+- (NSDictionary *) dataSourcesWithTimestampUnixOverride {
+    
+    
+    NSString *testKey = TEAL_TEST_DATASOURCE_KEY;
+    NSString *testValue = TEAL_TEST_DATASOURCE_STRING_VALUE;
+    
+    NSDictionary *testDataSources = @{
+                                      testKey : testValue,
+                                      TEALDataSourceKey_TimestampUnix : @0
+                                      
+                                      };
+    return testDataSources;
+    
+    
+}
+
+#pragma mark - newInstanceForKey:configuration: TESTS
 
 - (void) testCreateInvalidInstance {
     
@@ -198,6 +185,8 @@
     XCTAssertTrue(instance1, @"Instance1 was not initialized.");
 }
 
+#pragma mark - instanceForKey: TESTS
+
 - (void) testCreateMultipleInstances {
 
 #warning Update to use the completion blocks
@@ -234,6 +223,8 @@
     XCTAssertTrue(instance3, @"Instance3 was not initialized.");
     
 }
+
+#pragma mark - destoryInstanceForKey: TESTS
 
 - (void) testDestroyInstance {
 
@@ -286,7 +277,7 @@
     
 }
 
-#pragma mark - DELEGATE TESTS
+#pragma mark - delegate & setDelegate: TESTS
 
 - (void) testSetAndRemoveDelegate {
     
@@ -382,6 +373,97 @@
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
     XCTAssertTrue(!self.didUpdate, "No update found");
+}
+
+#pragma mark - trackEventWithTitle:dataSources & trackViewWithTitle:dataSources: TESTS
+
+// Track events + views are tested in specific dispatch services
+
+#pragma mark - volatileDataSourcesCopy & addVolatileDataSources: & removeVolatileDataSourcesForKeys: TESTS
+
+- (void) testAddAndRemoveVolatileDataSource {
+    
+    __block BOOL isReady = NO;
+    
+    Tealium *instance = [Tealium newInstanceForKey:self.description
+                                     configuration:[TEALTestHelper liveConfig]
+                                        completion:^(BOOL success, NSError * _Nullable error) {
+                                            
+                                            if (error){
+                                                NSLog(@"%s error:%@", __FUNCTION__, error);
+                                            }
+                                            
+                                            isReady = YES;
+                                            
+                                        }];
+    
+    NSDictionary *testDataSources = [self stringDataSources];
+    
+    [self waitFor:&isReady timeout:1.0];
+    
+    isReady = NO;
+    
+    [instance addVolatileDataSources:testDataSources];
+    
+    // There will be a short delay here on this thread as the above method is
+    // sent to the end of the Tealium BG serial queue
+    [self waitFor:&isReady timeout:1.0];
+    
+    NSDictionary *dataSourcesRetrieved = [instance volatileDataSourcesCopy];
+    
+    XCTAssertTrue(dataSourcesRetrieved[TEAL_TEST_DATASOURCE_KEY], @"volatile data was not added.");
+    
+    XCTAssertTrue([dataSourcesRetrieved[TEAL_TEST_DATASOURCE_KEY] isEqualToString:TEAL_TEST_DATASOURCE_STRING_VALUE], @"volatile data was not added.");
+    
+    XCTAssertTrue([dataSourcesRetrieved isEqualToDictionary:testDataSources], @"volatile data sources %@ did not match test data sources: %@", dataSourcesRetrieved, testDataSources);
+    
+    [instance removeVolatileDataSourcesForKeys:@[TEAL_TEST_DATASOURCE_KEY]];
+    
+    // No callback to flip the flag, so we'll always timeout
+    [self waitFor:&isReady timeout:0.5];
+    
+    // There will be a short delay here on this thread as the above method is
+    // sent to the end of the Tealium BG serial queue
+    
+    XCTAssertTrue(![instance volatileDataSourcesCopy][TEAL_TEST_DATASOURCE_KEY], @"volatile data was not removed.");
+    
+    XCTAssertTrue([dataSourcesRetrieved isEqualToDictionary:testDataSources], @"volatile data sources %@ did not match test data sources: %@", dataSourcesRetrieved, testDataSources);
+    
+}
+
+#pragma mark - persistentDataSourcesCopy & addPersistentDataSources: & removePersistentDataSourcesForKeys: TESTS
+
+- (void) testAddAndRemovePersistentDataSources {
+    
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
+    
+    NSDictionary *testData = [self stringDataSources];
+    
+    [self.library addPersistentDataSources:testData];
+    
+    __block BOOL isAddReady = NO;
+    
+    // No callback to flip the flag, so we'll always timeout
+    
+    [self waitFor:&isAddReady timeout:1.0];
+    
+    NSDictionary *dataSourcesRetrieved = [self.library persistentDataSourcesCopy];
+    
+    XCTAssertTrue([dataSourcesRetrieved[TEAL_TEST_DATASOURCE_KEY] isEqualToString:TEAL_TEST_DATASOURCE_STRING_VALUE], @"persistent data was not added.");
+    
+    [self.library removePersistentDataSourcesForKeys:@[TEAL_TEST_DATASOURCE_KEY]];
+    
+    __block BOOL isRemoveReady = NO;
+    
+    // No callback to flip the flag, so we'll always timeout
+    
+    [self waitFor:&isRemoveReady timeout:1.0];
+    
+    // There will be a short delay here on this thread as the above method is
+    // sent to the end of the Tealium BG serial queue
+    
+    XCTAssertTrue(![self.library persistentDataSourcesCopy][TEAL_TEST_DATASOURCE_KEY], @"volatile data was not removed.");
+    
 }
 
 

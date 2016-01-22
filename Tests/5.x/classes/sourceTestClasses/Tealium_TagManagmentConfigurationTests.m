@@ -11,14 +11,14 @@
 #import "Tealium+TagManagement.h"
 
 
-@interface Tealium_TagManagmentTests : XCTestCase
+@interface Tealium_TagManagmentConfigurationTests : XCTestCase
 
 @property TEALConfiguration *configuration;
 @property TEALSettings *settings;
 
 @end
 
-@implementation Tealium_TagManagmentTests
+@implementation Tealium_TagManagmentConfigurationTests
 
 - (void)setUp {
     [super setUp];

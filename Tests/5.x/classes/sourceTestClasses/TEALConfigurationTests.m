@@ -94,6 +94,77 @@
 }
 
 
+- (void) testCreateInstanceWithMissingConfigurationData {
+    
+    [Tealium destroyInstanceForKey:@"failTest"];
+    
+    // All empty
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:nil
+                                                                    profile:nil
+                                                                environment:nil];
+    
+    Tealium *instance = [Tealium newInstanceForKey:@"failTest" configuration:config];
+    
+    XCTAssertFalse(instance, @"Invalid Configuration initialized library instance.");
+    
+    
+    // Account empty
+    TEALConfiguration *configB = [TEALConfiguration configurationWithAccount:nil
+                                                                     profile:@"demo"
+                                                                 environment:@"dev"];
+    
+    Tealium *instanceB = [Tealium newInstanceForKey:@"failTest" configuration:configB];
+    
+    XCTAssertFalse(instanceB, @"Missing account Configuration initialized library instance.");
+    
+    TEALConfiguration *configB2 = [TEALConfiguration configurationWithAccount:@""
+                                                                      profile:@"demo"
+                                                                  environment:@"dev"];
+    
+    Tealium *instanceB2 = [Tealium newInstanceForKey:@"failTest" configuration:configB2];
+    
+    XCTAssertFalse(instanceB2, @"Nil account Configuration initialized library instance.");
+    
+    
+    // Profile empty
+    TEALConfiguration *configC = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                     profile:nil
+                                                                 environment:@"dev"];
+    
+    Tealium *instanceC = [Tealium newInstanceForKey:@"failTest" configuration:configC];
+    
+    XCTAssertFalse(instanceC, @"Missing profile Configuration initialized library instance.");
+    
+    
+    TEALConfiguration *configC2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                      profile:@" "
+                                                                  environment:@"dev"];
+    
+    Tealium *instanceC2 = [Tealium newInstanceForKey:@"failTest" configuration:configC2];
+    
+    XCTAssertFalse(instanceC2, @"Blank profile Configuration initialized library instance.");
+    
+    
+    
+    // Environment empty
+    TEALConfiguration *configD = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                     profile:@"demo"
+                                                                 environment:nil];
+    
+    Tealium *instanceD = [Tealium newInstanceForKey:@"failTest" configuration:configD];
+    
+    XCTAssertFalse(instanceD, @"Missing environment Configuration initialized library instance.");
+    
+    TEALConfiguration *configD2 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                      profile:@"demo"
+                                                                  environment:@"   "];
+    
+    Tealium *instanceD2 = [Tealium newInstanceForKey:@"failTest" configuration:configD2];
+    
+    XCTAssertFalse(instanceD2, @"blank environment Configuration initialized library instance.");
+}
+
+
 #pragma mark - Helpers
 
 //- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {

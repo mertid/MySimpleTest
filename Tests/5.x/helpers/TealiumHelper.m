@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"tagbridge"
+                                                                           profile:@"demo"
                                                                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
@@ -48,7 +48,7 @@ static TealiumHelper * _sharedInstance;
 
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
-//    configuration.overridePublishSettingsURL = @"https://tags.tiqcdn.com/utag/tealiummobile/ios/dev/mobile.html";
+//    configuration.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_dispatchers_ON.json";
     
 //    configuration.overridePublishSettingsURL = @"https://chadhartman.github.io/tealium-ios/mps_collect_batch.json";
     

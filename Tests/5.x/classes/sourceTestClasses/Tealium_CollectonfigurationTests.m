@@ -17,7 +17,7 @@
 #import "TEALCollectDispatchService.h"
 #import "TEALS2SLegacyDispatchService.h"
 
-@interface Tealium_CollectTests : XCTestCase <TealiumDelegate>
+@interface Tealium_CollectConfigurationTests : XCTestCase <TealiumDelegate>
 
 @property (nonatomic, strong) Tealium *library;
 @property int queueCount;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation Tealium_CollectTests
+@implementation Tealium_CollectConfigurationTests
 
 - (void)setUp {
     [super setUp];
@@ -105,7 +105,6 @@
     return false;
 }
 
-
 - (void) fetchRemoteSettingsWithSettings:(TEALSettings *)settings {
     
     __block BOOL isReady = NO;
@@ -160,7 +159,7 @@
     
 }
 
-#pragma mark API TESTS
+#pragma mark - GENERAL TESTS
 
 - (void) testCollectEnabledByPublishSettings {
     
@@ -233,62 +232,62 @@
     XCTAssertTrue(![self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S Legacy dispatch service found in:%@", dispatchServices);
 }
 
-- (void) testJoinAndLeaveTrace {
-    
-    [Tealium destroyInstanceForKey:self.description];
-    
-    __block BOOL isReady = NO;
-    
-    self.library = [Tealium newInstanceForKey:self.description
-                                configuration:[TEALTestHelper liveConfig]
-                                   completion:^(BOOL success, NSError * _Nullable error) {
-      
-
-        isReady = YES;
-        
-    }];
-
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-
-    
-    NSString *token = @"A1B2C3";
-    
-    TEALSettings *settings = [self.library settings];
-    
-    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
-    
-    isReady = NO;
-
-    [self.library joinTraceWithToken:token
-                          completion:^(BOOL success, NSError * _Nullable error) {
-        
-        XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
-                              
-        isReady = YES;
-        
-    }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-
-    NSString *traceId = [settings traceID];
-    
-    XCTAssertTrue(traceId, @"TraceID should have a value - %@ found.", traceId);
-    
-    XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
-    
-    isReady = NO;
-    
-    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
-        
-        isReady = YES;
-        
-    }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-    
-    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
-    
-}
+//- (void) testJoinAndLeaveTrace {
+//    
+//    [Tealium destroyInstanceForKey:self.description];
+//    
+//    __block BOOL isReady = NO;
+//    
+//    self.library = [Tealium newInstanceForKey:self.description
+//                                configuration:[TEALTestHelper liveConfig]
+//                                   completion:^(BOOL success, NSError * _Nullable error) {
+//      
+//
+//        isReady = YES;
+//        
+//    }];
+//
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+//
+//    
+//    NSString *token = @"A1B2C3";
+//    
+//    TEALSettings *settings = [self.library settings];
+//    
+//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
+//    
+//    isReady = NO;
+//
+//    [self.library joinTraceWithToken:token
+//                          completion:^(BOOL success, NSError * _Nullable error) {
+//        
+//        XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
+//                              
+//        isReady = YES;
+//        
+//    }];
+//    
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+//
+//    NSString *traceId = [settings traceID];
+//    
+//    XCTAssertTrue(traceId, @"TraceID should have a value - %@ found.", traceId);
+//    
+//    XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
+//    
+//    isReady = NO;
+//    
+//    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
+//        
+//        isReady = YES;
+//        
+//    }];
+//    
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+//    
+//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
+//    
+//}
 
 #pragma mark - TRACK TESTS
 
