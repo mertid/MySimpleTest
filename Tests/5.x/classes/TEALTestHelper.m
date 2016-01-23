@@ -78,6 +78,51 @@
     
 }
 
++ (NSDictionary *) overwriteDataSources {
+    
+    NSString *value = @"overwriteValue";
+    
+    NSDictionary *testDataSources = @{
+                                      TEALDataSourceKey_ApplicationName: value,
+                                      TEALDataSourceKey_ApplicationRDNS: value,
+                                      TEALDataSourceKey_ApplicationVersion: value,
+                                      TEALDataSourceKey_CallType: value,
+                                      TEALDataSourceKey_Carrier: value,
+                                      TEALDataSourceKey_CarrierISO: value,
+                                      TEALDataSourceKey_CarrierMCC: value,
+                                      TEALDataSourceKey_CarrierMNC: value,
+                                      TEALDataSourceKey_ConnectionType: value,
+                                      TEALDataSourceKey_Device: value,
+                                      TEALDataSourceKey_DeviceArchitecture: value,
+                                      TEALDataSourceKey_DeviceBatteryLevel: value,
+                                      TEALDataSourceKey_DeviceCPUType: value,
+                                      TEALDataSourceKey_DeviceIsCharging: value,
+                                      TEALDataSourceKey_DeviceLanguage: value,
+                                      TEALDataSourceKey_DeviceOrientation: value,
+                                      TEALDataSourceKey_DeviceOSVersion: value,
+                                      TEALDataSourceKey_DeviceResolution: value,
+                                      TEALDataSourceKey_LibraryVersion: value,
+                                      TEALDataSourceKey_EventTitle: value,
+                                      TEALDataSourceKey_Orientation: value,
+                                      TEALDataSourceKey_Origin: value,
+                                      TEALDataSourceKey_SystemVersion: value,
+                                      TEALDataSourceKey_EventName: value,
+                                      TEALDataSourceKey_Pagetype: value,
+                                      TEALDataSourceKey_Platform: value,
+                                      TEALDataSourceKey_ViewTitle: value,
+                                      TEALDataSourceKey_Timestamp: value,
+                                      TEALDataSourceKey_TimestampLocal: value,
+                                      TEALDataSourceKey_TimestampOffset: value,
+                                      TEALDataSourceKey_TimestampUnix: value,
+                                      TEALDataSourceKey_UUID: value,
+                                      TEALDataSourceKey_VisitorID: value,
+                                      TEALDataSourceKey_WasQueued: value
+                                      };
+    
+    return testDataSources;
+    
+}
+
 + (TEALConfiguration *) liveConfig {
     
     return [TEALConfiguration configurationWithAccount:@"tealiummobile"

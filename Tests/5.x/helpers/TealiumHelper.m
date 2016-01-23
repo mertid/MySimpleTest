@@ -60,6 +60,9 @@ static TealiumHelper * _sharedInstance;
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
     
+    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
+                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
+    
 //    [tealiumInstance1 joinTraceWithToken:@"08250" completion:nil];
     
 //    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {

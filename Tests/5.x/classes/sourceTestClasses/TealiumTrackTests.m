@@ -206,7 +206,7 @@ NSString * const versionToTest = @"5.0.0";
     
     [self.library.dataSources purgePersistentDataSources];
     
-    NSDictionary *payload = [self overrwriteDataSources];
+    NSDictionary *payload = [TEALTestHelper overwriteDataSources];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
     
@@ -296,6 +296,74 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
+- (void) testTrackEventWithOverwriteVolatileData {
+    
+    __block BOOL isReady = NO;
+    
+    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    NSDictionary * overwriteData = [TEALTestHelper overwriteDataSources];
+
+    [self.library addVolatileDataSources:overwriteData];
+    
+    NSString *testTitle = @"button_press";
+    
+    NSDictionary *testDataSources = @{
+                                      TEALDataSourceKey_EventTitle: testTitle,
+                                      };
+    
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    
+    // Title + testData
+    [self.library trackDispatchOfType:TEALDispatchTypeEvent
+                                title:testTitle
+                          dataSources:testDataSources
+                           completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+           NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
+           
+           XCTAssert(!error, @"Error in track call detected:%@", error);
+           
+           NSDictionary *dispatchData = dispatch.payload;
+           
+           NSArray *keys = [dispatchData allKeys];
+           
+           for (NSString *key in keys){
+               
+               if ([key isEqualToString:TEALDataSourceKey_EventTitle]){
+                   
+                  XCTAssertTrue([dispatchData[key] isEqualToString:testTitle], "Incorrect title processed.");
+                   
+               } else {
+                   
+               NSString *value = dispatchData[key];
+               
+               XCTAssertTrue([value isEqualToString:overwriteData[key]], @"Value for key %@ was not overwritten: overwrite payload: %@:  dispatchDataReceived:%@", key, overwriteData, dispatchData);
+               }
+               
+           }
+           
+           [expectation fulfill];
+           
+       }];
+    
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+}
+
 - (void) testTrackEventWithPersistentData {
     
     __block BOOL isReady = NO;
@@ -358,50 +426,50 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-- (NSDictionary *) overrwriteDataSources {
-    
-    NSString *value = @"overwriteValue";
-    
-    NSDictionary *testDataSources = @{
-                                      TEALDataSourceKey_ApplicationName: value,
-                                      TEALDataSourceKey_ApplicationRDNS: value,
-                                      TEALDataSourceKey_ApplicationVersion: value,
-                                      TEALDataSourceKey_CallType: value,
-                                      TEALDataSourceKey_Carrier: value,
-                                      TEALDataSourceKey_CarrierISO: value,
-                                      TEALDataSourceKey_CarrierMCC: value,
-                                      TEALDataSourceKey_CarrierMNC: value,
-                                      TEALDataSourceKey_ConnectionType: value,
-                                      TEALDataSourceKey_Device: value,
-                                      TEALDataSourceKey_DeviceArchitecture: value,
-                                      TEALDataSourceKey_DeviceBatteryLevel: value,
-                                      TEALDataSourceKey_DeviceCPUType: value,
-                                      TEALDataSourceKey_DeviceIsCharging: value,
-                                      TEALDataSourceKey_DeviceLanguage: value,
-                                      TEALDataSourceKey_DeviceOrientation: value,
-                                      TEALDataSourceKey_DeviceOSVersion: value,
-                                      TEALDataSourceKey_DeviceResolution: value,
-                                      TEALDataSourceKey_LibraryVersion: value,
-                                      TEALDataSourceKey_EventTitle: value,
-                                      TEALDataSourceKey_Orientation: value,
-                                      TEALDataSourceKey_Origin: value,
-                                      TEALDataSourceKey_SystemVersion: value,
-                                      TEALDataSourceKey_EventName: value,
-                                      TEALDataSourceKey_Pagetype: value,
-                                      TEALDataSourceKey_Platform: value,
-                                      TEALDataSourceKey_ViewTitle: value,
-                                      TEALDataSourceKey_Timestamp: value,
-                                      TEALDataSourceKey_TimestampLocal: value,
-                                      TEALDataSourceKey_TimestampOffset: value,
-                                      TEALDataSourceKey_TimestampUnix: value,
-                                      TEALDataSourceKey_UUID: value,
-                                      TEALDataSourceKey_VisitorID: value,
-                                      TEALDataSourceKey_WasQueued: value
-                                      };
-    
-    return testDataSources;
-    
-}
+//- (NSDictionary *) overrwriteDataSources {
+//    
+//    NSString *value = @"overwriteValue";
+//    
+//    NSDictionary *testDataSources = @{
+//                                      TEALDataSourceKey_ApplicationName: value,
+//                                      TEALDataSourceKey_ApplicationRDNS: value,
+//                                      TEALDataSourceKey_ApplicationVersion: value,
+//                                      TEALDataSourceKey_CallType: value,
+//                                      TEALDataSourceKey_Carrier: value,
+//                                      TEALDataSourceKey_CarrierISO: value,
+//                                      TEALDataSourceKey_CarrierMCC: value,
+//                                      TEALDataSourceKey_CarrierMNC: value,
+//                                      TEALDataSourceKey_ConnectionType: value,
+//                                      TEALDataSourceKey_Device: value,
+//                                      TEALDataSourceKey_DeviceArchitecture: value,
+//                                      TEALDataSourceKey_DeviceBatteryLevel: value,
+//                                      TEALDataSourceKey_DeviceCPUType: value,
+//                                      TEALDataSourceKey_DeviceIsCharging: value,
+//                                      TEALDataSourceKey_DeviceLanguage: value,
+//                                      TEALDataSourceKey_DeviceOrientation: value,
+//                                      TEALDataSourceKey_DeviceOSVersion: value,
+//                                      TEALDataSourceKey_DeviceResolution: value,
+//                                      TEALDataSourceKey_LibraryVersion: value,
+//                                      TEALDataSourceKey_EventTitle: value,
+//                                      TEALDataSourceKey_Orientation: value,
+//                                      TEALDataSourceKey_Origin: value,
+//                                      TEALDataSourceKey_SystemVersion: value,
+//                                      TEALDataSourceKey_EventName: value,
+//                                      TEALDataSourceKey_Pagetype: value,
+//                                      TEALDataSourceKey_Platform: value,
+//                                      TEALDataSourceKey_ViewTitle: value,
+//                                      TEALDataSourceKey_Timestamp: value,
+//                                      TEALDataSourceKey_TimestampLocal: value,
+//                                      TEALDataSourceKey_TimestampOffset: value,
+//                                      TEALDataSourceKey_TimestampUnix: value,
+//                                      TEALDataSourceKey_UUID: value,
+//                                      TEALDataSourceKey_VisitorID: value,
+//                                      TEALDataSourceKey_WasQueued: value
+//                                      };
+//    
+//    return testDataSources;
+//    
+//}
 
 //- (void) testTrackBatchedEvent {
 // 

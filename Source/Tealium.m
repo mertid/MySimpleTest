@@ -131,20 +131,20 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    [self trackDispatchOfType:TEALDispatchTypeEvent
-                        title:title
-                  dataSources:clientDataSources
-                   completion:nil];
+        [self trackDispatchOfType:TEALDispatchTypeEvent
+                            title:title
+                      dataSources:clientDataSources
+                       completion:nil];
     
 }
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
     
-    [self trackDispatchOfType:TEALDispatchTypeView
-                        title:title
-                  dataSources:clientDataSources
-                   completion:nil];
-    
+        [self trackDispatchOfType:TEALDispatchTypeView
+                            title:title
+                      dataSources:clientDataSources
+                       completion:nil];
+            
 }
 
 - (void) trackDispatchOfType:(TEALDispatchType)type
@@ -152,15 +152,15 @@ __strong static NSDictionary *staticAllInstances = nil;
            dataSources:(NSDictionary *) clientDataSources
             completion:(TEALDispatchBlock)completion{
     
-    NSDictionary *compositeDataSources = [self finalDispatchDataSourcesForDispatchType:type
-                                                                                 title:title
-                                                                           dataSources:clientDataSources];
-    
-    TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:compositeDataSources];
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
+    [self.operationManager addOperationWithBlock:^{
+        
+        NSDictionary *compositeDataSources = [self finalDispatchDataSourcesForDispatchType:type
+                                                                                     title:title
+                                                                               dataSources:clientDataSources];
+        
+        TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:compositeDataSources];
+        
+        __weak Tealium *weakSelf = self;
         
         [weakSelf trackDispatch:dispatch completion:completion];
         

@@ -16,6 +16,7 @@
 
 + (NSArray *) defaultViewDataSourceKeys;
 + (NSArray *) defaultEventDataSourceKeys;
++ (NSDictionary *) overwriteDataSources;
 + (TEALConfiguration *) liveConfig;
 + (TEALConfiguration *) nonExistentConfig;
 + (TEALConfiguration *) configWithOverridePublishSetting:(NSString *)overrideURL;
