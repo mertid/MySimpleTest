@@ -71,6 +71,8 @@
 
 - (void) testMPSDictionaryFromJSONFile {
     
+    // Test files need to be added in Test target's Build Phases: Copy Bundle Resources
+    
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];

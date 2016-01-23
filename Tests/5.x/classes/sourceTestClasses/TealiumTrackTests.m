@@ -426,113 +426,6 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-//- (NSDictionary *) overrwriteDataSources {
-//    
-//    NSString *value = @"overwriteValue";
-//    
-//    NSDictionary *testDataSources = @{
-//                                      TEALDataSourceKey_ApplicationName: value,
-//                                      TEALDataSourceKey_ApplicationRDNS: value,
-//                                      TEALDataSourceKey_ApplicationVersion: value,
-//                                      TEALDataSourceKey_CallType: value,
-//                                      TEALDataSourceKey_Carrier: value,
-//                                      TEALDataSourceKey_CarrierISO: value,
-//                                      TEALDataSourceKey_CarrierMCC: value,
-//                                      TEALDataSourceKey_CarrierMNC: value,
-//                                      TEALDataSourceKey_ConnectionType: value,
-//                                      TEALDataSourceKey_Device: value,
-//                                      TEALDataSourceKey_DeviceArchitecture: value,
-//                                      TEALDataSourceKey_DeviceBatteryLevel: value,
-//                                      TEALDataSourceKey_DeviceCPUType: value,
-//                                      TEALDataSourceKey_DeviceIsCharging: value,
-//                                      TEALDataSourceKey_DeviceLanguage: value,
-//                                      TEALDataSourceKey_DeviceOrientation: value,
-//                                      TEALDataSourceKey_DeviceOSVersion: value,
-//                                      TEALDataSourceKey_DeviceResolution: value,
-//                                      TEALDataSourceKey_LibraryVersion: value,
-//                                      TEALDataSourceKey_EventTitle: value,
-//                                      TEALDataSourceKey_Orientation: value,
-//                                      TEALDataSourceKey_Origin: value,
-//                                      TEALDataSourceKey_SystemVersion: value,
-//                                      TEALDataSourceKey_EventName: value,
-//                                      TEALDataSourceKey_Pagetype: value,
-//                                      TEALDataSourceKey_Platform: value,
-//                                      TEALDataSourceKey_ViewTitle: value,
-//                                      TEALDataSourceKey_Timestamp: value,
-//                                      TEALDataSourceKey_TimestampLocal: value,
-//                                      TEALDataSourceKey_TimestampOffset: value,
-//                                      TEALDataSourceKey_TimestampUnix: value,
-//                                      TEALDataSourceKey_UUID: value,
-//                                      TEALDataSourceKey_VisitorID: value,
-//                                      TEALDataSourceKey_WasQueued: value
-//                                      };
-//    
-//    return testDataSources;
-//    
-//}
-
-//- (void) testTrackBatchedEvent {
-// 
-//    [self startLiveConfigWithBatchLibrary];
-//    
-//    self.library.delegate = self;
-//
-//    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:nil];
-//    
-//    XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
-//    
-//    __block BOOL fulfilledAlready = NO;
-//    
-//    __block typeof(self) __weak weakSelf = self;
-//
-//    for (int i = 0; i < 5; i++) {
-//        
-//        [self.library trackDispatch:dispatch
-//                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
-//                             
-//                             XCTAssert(!error, @"Error in track call detected:%@", error);
-//                             
-//                             XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
-//                             
-//                             if (weakSelf.count >= 5 &&
-//                                 fulfilledAlready == NO){
-//                                 fulfilledAlready = YES;
-//                                 
-//                                 [batchExpectation fulfill];
-//                             }
-//                         }];
-//        
-//    }
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:nil];
-//    
-//    
-//    XCTAssertTrue(self.count == 5, @"5 events did not trigger");
-//    
-//    fulfilledAlready = NO;
-//    
-//    XCTestExpectation *lastCallExpectation = [self expectationWithDescription:@"batch"];
-//
-//    [self.library trackDispatch:dispatch
-//                     completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
-//                         
-//                         XCTAssert(!error, @"Error in track call detected:%@", error);
-//                         
-//                         XCTAssertTrue(status == 1, @"Dispatch was not sent as expected:%@", returnDispatch);
-//                         
-//                         if (!fulfilledAlready){
-//                             
-//                             fulfilledAlready = YES;
-//                             [lastCallExpectation fulfill];
-//                             
-//                         }
-//                     }];
-//    
-//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
-//    
-//}
-
-
 - (void) testTrackViews {
     
     __block BOOL isReady = NO;
@@ -577,6 +470,9 @@ NSString * const versionToTest = @"5.0.0";
 }
 
 - (NSDictionary *)dataSourcesForCurrentVersion{
+    
+    // ios_data_sources.json needs to be added to Test Target's Build Phases: Copy Bundle Resources
+    
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources" ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];

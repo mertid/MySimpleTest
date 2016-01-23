@@ -6,21 +6,21 @@
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
-#import "TealiumHelper.h"
+#import "TealiumHelper_Source.h"
 
 // We only need one instance to demo
 NSString *const TEALIUM_INSTANCE_ID = @"1";
 
-@implementation TealiumHelper
+@implementation TealiumHelper_Source
 
-static TealiumHelper * _sharedInstance;
+static TealiumHelper_Source * _sharedInstance;
 
 + (instancetype) sharedInstance {
     
     if ([self isTesting]){ return nil; }
 
     if (!_sharedInstance){
-        _sharedInstance = [[TealiumHelper alloc] init];
+        _sharedInstance = [[TealiumHelper_Source alloc] init];
     }
     
     return _sharedInstance;
@@ -58,7 +58,7 @@ static TealiumHelper * _sharedInstance;
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
-    [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
+    [tealiumInstance1 setDelegate:[TealiumHelper_Source sharedInstance]];
     
     [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
                                                TEALDataSourceKey_Platform:@"mySoapBox"}];

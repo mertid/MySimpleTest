@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TEALLifecycle+PrivateTestHeader.h"
-
-typedef void (^LifecycleCallback)(NSDate *eventDate, NSDictionary *lifecycleEvent, BOOL finished);
+//#import "TEALLifecycle+PrivateTestHeader.h"
+//
+//typedef void (^LifecycleCallback)(NSDate *eventDate, NSDictionary *lifecycleEvent, BOOL finished);
 
 @interface TEALXMLParser : NSObject <NSXMLParserDelegate>
 
-- (id) initWithCompletion:(LifecycleCallback) block;
+//- (id) initWithCompletion:(LifecycleCallback) block;
 
 @end
