@@ -44,7 +44,7 @@
 /**
  *  If assigned, will replace the default address used to retrieve the tag management UTAG.js file.  Example - "https://my.domain.com/app/mobile.html"
  */
-@property (nonatomic) NSString * _Nullable overridePublishURL;
+@property (nonatomic) NSString * _Nullable overrideTagManagementURL;
 
 /**
  *  Creates a default configration instance for a given account / profile / environment combination.  The TiQ information is used to fetch the profile's mobile publish settings used

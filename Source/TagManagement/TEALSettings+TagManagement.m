@@ -33,8 +33,8 @@
 
 + (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
     
-    if ([configuration overridePublishURL]) {
-        return configuration.overridePublishURL;
+    if ([configuration overrideTagManagementURL]) {
+        return configuration.overrideTagManagementURL;
     }
     
     // Default

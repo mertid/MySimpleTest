@@ -63,7 +63,7 @@
     configuration.mobileCompanionEnabled = YES;
     configuration.overridePublishSettingsURL = nil;
 //    configuration.overridePublishSettingsVersion = nil;
-    configuration.overridePublishURL = nil;
+    configuration.overrideTagManagementURL = nil;
     
     NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];
     const char * queueName = [fullQueueName UTF8String];
@@ -223,7 +223,7 @@
               //                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
               //                                          @"override mps publish settings version":[NSString teal_dictionarySafeString:self.overridePublishSettingsVersion],
               @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
-              @"override publish url":[NSString teal_dictionarySafeString:self.overridePublishURL],
+              @"override publish url":[NSString teal_dictionarySafeString:self.overrideTagManagementURL],
               
               };
     

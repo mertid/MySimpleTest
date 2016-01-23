@@ -9,7 +9,7 @@
 #import "TEALConfiguration+TagManagement.h"
 #import "TEALConfiguration+PrivateHeader.h"
 
-NSString * const TEALTagManagementOverridePublishURLKey = @"com.tealium.tagmanagement.override.publishurl";
+NSString * const TEALTagManagementOverrideTagManagementURLKey = @"com.tealium.tagmanagement.override.publishurl";
 NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enable";
 
 @implementation TEALConfiguration (TagManagement)
@@ -43,14 +43,14 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
     
     NSDictionary *moduleData =  [self moduleData];
     
-    return [moduleData[TEALTagManagementOverridePublishURLKey] copy];
+    return [moduleData[TEALTagManagementOverrideTagManagementURLKey] copy];
     
 }
 
 - (void) setOverrideTagManagementPublishURL:(NSString *)publishURL {
     
     [self setModuleObject:publishURL
-                   forKey:TEALTagManagementOverridePublishURLKey
+                   forKey:TEALTagManagementOverrideTagManagementURLKey
                completion:nil];
     
     [self setModuleDescription:publishURL forKey:@"override tag management publish url"];
@@ -72,7 +72,7 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
 
 + (NSString *) publishURLFromConfiguration:(TEALConfiguration *)configuration {
     
-    NSString *override = [configuration overridePublishURL];
+    NSString *override = [configuration overrideTagManagementURL];
     
     if (override) {
         return override;

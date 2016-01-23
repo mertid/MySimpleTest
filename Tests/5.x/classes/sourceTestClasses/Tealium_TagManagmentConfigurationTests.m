@@ -50,12 +50,12 @@
     XCTAssertTrue([publishURLString isEqualToString:defaultURLString], @"Default publish URL string unexpected: %@", publishURLString);
 }
 
-- (void) testOverridePublishURL {
+- (void) testOverrideTagManagementURL {
     NSString *urlString = @"https://tags.tiqcdn.com/utag/tealiumx/demo/dev/mobile.html?";
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                              profile:@"demo"
                                                          environment:@"dev"];
-    self.configuration.overridePublishURL = urlString;
+    self.configuration.overrideTagManagementURL = urlString;
     self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
     
     

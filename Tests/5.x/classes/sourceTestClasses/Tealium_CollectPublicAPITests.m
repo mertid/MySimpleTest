@@ -32,6 +32,42 @@
     [super tearDown];
 }
 
+- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
+    
+    [Tealium destroyInstanceForKey:self.description];
+    
+    if (!config) {
+        config = [TEALTestHelper liveConfig];
+    }
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       XCTAssertTrue(success, @"Library failed to finish initializing - error:%@", error);
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    
+    isReady = NO;
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        XCTAssertTrue(!error, @"Library failed to fetch test settings - error:%@", error);
+        
+        isReady = YES;
+        
+    }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    
+}
+
 #pragma mark - PUBLIC API TESTS
 
 - (void) testProfileURL {
