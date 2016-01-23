@@ -37,6 +37,26 @@
     
 }
 
+- (NSDictionary *) sampleSettings {
+    
+    return @{
+             @"_is_enabled":@"true",
+             @"battery_saver":@"true",
+             @"dispatch_expiration":@"-1",
+             @"enable_collect":@"true",
+             @"enable_s2s_legacy":@"false",
+             @"enable_tag_management":@"false",
+             @"event_batch_size":@"1",
+             @"minutes_between_refresh":@"0.0",
+             @"offline_dispatch_limit":@"100",
+             @"override_log":@"",
+             @"wifi_only_sending":@"false"
+             };
+    
+}
+
+#pragma mark - TESTS
+
 - (void) testInitWithURL {
     
     NSString *urlString = @"https://www.google.com";
@@ -157,7 +177,7 @@
     
     [settings updateWithMatchingVersionSettings:[self sampleSettings]];
     
-    [settings purgeAllArchives];
+    [TEALPublishSettings purgeAllArchives];
     
     TEALPublishSettings *defaultSettings = [[TEALPublishSettings alloc] initWithURLString:settings1];
     
@@ -165,23 +185,7 @@
     
 }
 
-- (NSDictionary *) sampleSettings {
-    
-    return @{
-             @"_is_enabled":@"true",
-             @"battery_saver":@"true",
-             @"dispatch_expiration":@"-1",
-             @"enable_collect":@"true",
-             @"enable_s2s_legacy":@"false",
-             @"enable_tag_management":@"false",
-             @"event_batch_size":@"1",
-             @"minutes_between_refresh":@"0.0",
-             @"offline_dispatch_limit":@"100",
-             @"override_log":@"",
-             @"wifi_only_sending":@"false"
-             };
-    
-}
+
 
 #warning Add test to provide mock responses to fetchPublishSettingsCommand
 

@@ -352,7 +352,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
 }
 
-- (void) purgeAllArchives {
++ (void) purgeAllArchives {
     
     [TEALPublishSettingsStore purgeAllPublishSettings];
     

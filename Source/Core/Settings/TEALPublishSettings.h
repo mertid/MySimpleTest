@@ -70,6 +70,6 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 
 - (void) updateWithMatchingVersionSettings:(NSDictionary * _Nonnull)publishSettings;
 
-- (void) purgeAllArchives;
++ (void) purgeAllArchives;
 
 @end

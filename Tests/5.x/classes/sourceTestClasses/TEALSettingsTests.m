@@ -39,7 +39,6 @@
 
 #pragma mark - CONFIGURATIONS
 
-
 - (void) testDefaultPublishSettingsURL {
 
     self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
@@ -55,7 +54,6 @@
     
     XCTAssertTrue([publishURLString isEqualToString:defaultURLString], @"Default publish settings URL %@ did not equal default string expected:%@", publishURLString, defaultURLString);
 }
-
 
 - (void) testOverridePublishSettingsURLString {
     
@@ -138,12 +136,79 @@
     
 }
 
+#pragma mark - REMOTE PUBLISH SETTINGS
+
+- (void) testOverrideLogSettingsSILENT {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"override_log_SILENT"];
+    
+    [self fetchNewSettingsWithConfig:self.configuration];
+    
+    NSString *logLevelString = [self.settings logLevelString];
+    
+    XCTAssertTrue([logLevelString isEqualToString:@"silent"], @"Incorrect log level found: %@", logLevelString);
+
+}
+
+- (void) testOverrideLogSettingsPROD {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"override_log_PROD"];
+    
+    [self fetchNewSettingsWithConfig:self.configuration];
+    
+    NSString *logLevelString = [self.settings logLevelString];
+    
+    XCTAssertTrue([logLevelString isEqualToString:@"prod"], @"Incorrect log level found: %@", logLevelString);
+    
+}
+
+- (void) testOverrideLogSettingsQA {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"override_log_QA"];
+    
+    [self fetchNewSettingsWithConfig:self.configuration];
+    
+    NSString *logLevelString = [self.settings logLevelString];
+    
+    XCTAssertTrue([logLevelString isEqualToString:@"qa"], @"Incorrect log level found: %@", logLevelString);
+    
+}
+
+- (void) testOverrideLogSettingsDEV {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"override_log_DEV"];
+    
+    [self fetchNewSettingsWithConfig:self.configuration];
+    
+    NSString *logLevelString = [self.settings logLevelString];
+    
+    XCTAssertTrue([logLevelString isEqualToString:@"dev"], @"Incorrect log level found: %@", logLevelString);
+    
+}
+
+- (void) testOverrideLogSettingsUNSET {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"override_log_EMPTY"];
+    
+    [self fetchNewSettingsWithConfig:self.configuration];
+    
+    NSString *logLevelString = [self.settings logLevelString];
+    
+    // Should equal the config settings
+    XCTAssertTrue([logLevelString isEqualToString:@"dev"], @"Incorrect log level found: %@", logLevelString);
+    
+}
+
+#pragma mark - HELPERS
+
 - (void) fetchNewSettingsWithConfig:(TEALConfiguration*) config {
     
     TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
     
+    [TEALPublishSettings purgeAllArchives];
+
     self.settings = [[TEALSettings alloc] initWithConfiguration:config];
-    
+
     self.settings.urlSessionManager = sessionManager;
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
@@ -220,36 +285,6 @@
 
     
 }
-
-//- (void) testDefaultDispatchURLString {
-//    
-//    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                              profile:@"demo"
-//                                                          environment:@"dev"];
-//    
-//    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-//    
-//    NSString *defaultURLString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main";
-//    
-//    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-//    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:defaultURLString], @"Default dispatch URL returned unexpected string: %@", [self.settings collectDispatchURLString]);
-//}
-
-//- (void) testDispatchURLStringOverride {
-//    
-//    NSString *urlString = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile&tealium_profile=main&tealium_vid=";
-//
-//    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                             profile:@"demo"
-//                                                         environment:@"dev"];
-//    self.configuration.overrideCollectDispatchURL = urlString;
-//    
-//    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-//    
-//    XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
-//    XCTAssertTrue([[self.settings collectDispatchURLString] isEqualToString:urlString], @"Override dispatch URL string not as expected: %@", [self.settings collectDispatchURLString]);
-//}
-
 
 
 

@@ -489,10 +489,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     // Init logger
     self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
     
-    if ([self.logger updateLogLevel:[self.settings logLevelString]]){
-        [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
-    }
-    
+    [self updateCore];
+
     if (!error &&
         !self.logger) {
         
@@ -573,6 +571,15 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) enableCore {
 
     [self setupSettingsReachabilityCallbacks];
+    
+    
+}
+
+- (void) updateCore {
+    
+    if ([self.logger updateLogLevel:[self.settings logLevelString]]){
+        [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
+    }
 }
 
 - (void) updateModules {
@@ -878,6 +885,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                     
                 }
                 
+                [weakSelf updateCore];
                 [weakSelf updateModules];
                 
                 if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {

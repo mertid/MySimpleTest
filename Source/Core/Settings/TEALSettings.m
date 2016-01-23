@@ -176,15 +176,20 @@
 
 - (NSString *) logLevelString {
     
-    NSString * finalLogLevelString = self.configuration.environmentName;
+    NSString * logLevel = [[self publishSettings] overrideLogLevel];
 
-    if (!finalLogLevelString){
+    NSArray* words = [logLevel componentsSeparatedByCharactersInSet :[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSString* logLevelClean = [words componentsJoinedByString:@""];
+    
+    if (!logLevelClean ||
+        [logLevelClean isEqualToString:@""]){
         
-        finalLogLevelString = [[self publishSettings] overrideLogLevel];
+        logLevel = self.configuration.environmentName;
 
     }
     
-    return finalLogLevelString;
+    return logLevel;
     
 }
 
@@ -374,7 +379,7 @@
 
 - (void) purgeAllArchives {
     
-    [[self publishSettings] purgeAllArchives];
+    [TEALPublishSettings purgeAllArchives];
 }
 
 
