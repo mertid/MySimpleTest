@@ -190,11 +190,6 @@
 
 
 #warning Add test to provide mock responses to fetchPublishSettingsCommand
-- (void) testFetchNewRemoteSettings {
-
-    XCTFail(@"");
-    
-}
 
 //- (void) testFetchRemoteSettingsWithSettings {
 //    

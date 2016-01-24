@@ -199,6 +199,73 @@
     
 }
 
+#pragma mark - FETCH TESTS
+
+- (void) testFetchNewRemoteSettings {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    config.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_options_ON.json";
+    
+    TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
+    
+    [TEALPublishSettings purgeAllArchives];
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:config];
+    
+    self.settings.urlSessionManager = sessionManager;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
+    
+    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
+        
+        XCTAssertTrue(!error, @"Error detected: %@", error);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    
+}
+
+- (void) testFetchNonExistentRemoteSettings {
+    
+    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    config.overridePublishSettingsURL = @"https://tealium.com/this_page_does_not_exists";
+    
+    TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
+    
+    [TEALPublishSettings purgeAllArchives];
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:config];
+    
+    self.settings.urlSessionManager = sessionManager;
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
+    
+    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
+        
+        XCTAssertTrue(!success, @"Succeeded in fetching new setting when failure expected.");
+        
+        XCTAssertTrue(error, @"No error detected when one was expected: %@", error);
+        
+        [expectation fulfill];
+        
+    }];
+    
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    
+}
 #pragma mark - HELPERS
 
 - (void) fetchNewSettingsWithConfig:(TEALConfiguration*) config {

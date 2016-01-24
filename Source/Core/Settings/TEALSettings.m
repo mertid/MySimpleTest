@@ -284,10 +284,19 @@
         if (!error &&
             [response respondsToSelector:@selector(statusCode)]){
             
-            if (response.statusCode != 200){
+            NSInteger statusCode = response.statusCode;
+            
+            if (statusCode != 200){
                 
-                error = connectionError;
+                NSString *reason = [NSString stringWithFormat:@"Unexpected response code recieved: %ld", (long)statusCode];
+                
+                error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                     description:NSLocalizedString(@"Failed to fetch new publish settings.", @"")
+                                          reason:reason
+                                      suggestion:NSLocalizedString(@"Make certain that the account-profile from TIQ has the Mobile Publish Settings enabled OR that the overridePublishURL configuration option is valid.", @"")];
+                
 
+                
             }
                                     
         }
