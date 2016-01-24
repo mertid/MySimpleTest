@@ -275,9 +275,14 @@
                   
         NSDictionary *parsedData = nil;
 
-        TEALPublishSettings *publishSettings = [weakSelf publishSettings];
-                        
-        if ([response respondsToSelector:@selector(statusCode)]){
+        TEALPublishSettings *publishSettings = nil;
+                      
+        if (connectionError) {
+            error = connectionError;
+        }
+                                
+        if (!error &&
+            [response respondsToSelector:@selector(statusCode)]){
             
             if (response.statusCode != 200){
                 
@@ -285,6 +290,10 @@
 
             }
                                     
+        }
+                                
+        if (!error){
+            publishSettings = [weakSelf publishSettings];;
         }
                                 
         if (!error){
@@ -320,11 +329,6 @@
                                  description:NSLocalizedString(@"No mobile publish settings for current library version found.", @"")
                                       reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
                                   suggestion:NSLocalizedString(@"Activate the correct Mobile Publish Setting version in TIQ, re-publish, or update library.", @"")];
-        }
-    
-        if (!error &&
-            connectionError) {
-            error = connectionError;
         }
         
                                 

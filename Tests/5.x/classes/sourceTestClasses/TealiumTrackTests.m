@@ -18,7 +18,7 @@
 @interface TealiumTrackTests : XCTestCase <TealiumDelegate>
 
 @property Tealium *library;
-@property int count;
+@property int queueCount;
 
 @end
 
@@ -35,12 +35,33 @@ NSString * const versionToTest = @"5.0.0";
 - (void)tearDown {
 
     self.library = nil;
-    self.count = 0;
+    self.queueCount = 0;
     
     [super tearDown];
 }
 
 #pragma mark - HELPERS
+
+- (void) useLiveLibraryInstanceWithConfig:(TEALConfiguration*)config {
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:config
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       XCTAssertTrue(!error, @"Error detected: %@", error);
+                                       
+                                       isReady = YES;
+                                       
+                                       
+                                   }];
+    
+    [self.library setDelegate:self];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+}
 
 - (void) startLiveConfigLibrary {
     __block BOOL isReady = NO;
@@ -72,11 +93,45 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
+- (NSDictionary *)dataSourcesForCurrentVersion{
+    
+    // ios_data_sources.json needs to be added to Test Target's Build Phases: Copy Bundle Resources
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources" ofType:@"json"];
+    
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    
+    if (!data) {
+        XCTFail("Could not retrieve ios_data_sources.json file.");
+        return nil;
+    }
+    
+    NSError *error = nil;
+    
+    id content = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    
+    if (![content isKindOfClass:[NSDictionary class]]){
+        XCTFail("ios_data_sources.json not of correct dictionary format, error: %@", error);
+        return nil;
+    }
+    
+    NSDictionary *requiredDataSources = (NSDictionary*)content;
+    
+    return requiredDataSources[versionToTest];
+    
+}
+
 #pragma mark - TEALIUM DELEGATE
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
-    self.count ++;
+    self.queueCount ++;
+    
+    NSLog(@"%s queue count:%d", __FUNCTION__, self.queueCount);
+    
+}
+
+- (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     
 }
 
@@ -185,7 +240,7 @@ NSString * const versionToTest = @"5.0.0";
 
 }
 
-#pragma mark - TRACK + DISPATCH TESTS
+#pragma mark - TRACK TESTS
 
 - (void) testTrackEventNoTitleWithDataOverwritingAllStandardDataSources {
     
@@ -469,33 +524,114 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
-- (NSDictionary *)dataSourcesForCurrentVersion{
-    
-    // ios_data_sources.json needs to be added to Test Target's Build Phases: Copy Bundle Resources
-    
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources" ofType:@"json"];
-    
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    
-    if (!data) {
-        XCTFail("Could not retrieve ios_data_sources.json file.");
-        return nil;
-    }
-    
-    NSError *error = nil;
-    
-    id content = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    
-    if (![content isKindOfClass:[NSDictionary class]]){
-        XCTFail("ios_data_sources.json not of correct dictionary format, error: %@", error);
-        return nil;
-    }
-    
-    NSDictionary *requiredDataSources = (NSDictionary*)content;
-    
-    return requiredDataSources[versionToTest];
+#pragma mark - DISPATCH TESTS
 
+- (void) testEventDispatchSendNow {
+    
+    [Tealium destroyInstanceForKey:self.description];
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    
+    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        if (error){
+            NSLog(@"%s error:%@", __FUNCTION__, error);
+        }
+        
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+        
+    };
+    
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
+                                               withPayload:@{@"test_key":@"test_value"}];
+    
+    [self measureBlock:^{
+        
+        
+        [self.library.dispatchManager addDispatch:dispatch
+                                  completionBlock:completion];
+        
+    }];
 }
+
+- (void) testViewDispatchSendNow {
+    
+    [Tealium destroyInstanceForKey:self.description];
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        if (error){
+            NSLog(@"%s error:%@", __FUNCTION__, error);
+        }
+        
+        XCTAssertEqual(status, TEALDispatchStatusSent, @"Dispatch: %@, should have been sent", dispatch);
+        
+    };
+    
+    
+    TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeView
+                                               withPayload:@{@"test_key":@"test_value"}];
+    
+    [self.library.dispatchManager addDispatch:dispatch
+                              completionBlock:completion];
+    
+    
+}
+
+- (void) testEventDispatchWithNoDispatchServices {
+    
+    [self useLiveLibraryInstanceWithConfig:[TEALTestHelper configFromTestJSONFile:@"all_options_OFF"]];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"no_dispatchers"];
+    
+    __block BOOL alreadyFulfilled = NO;
+    
+    [self.library trackDispatchOfType:TEALDispatchTypeEvent
+                                title:@"test"
+                          dataSources:@{}
+                           completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+                               XCTAssert(status == TEALDispatchStatusQueued, @"Track call was not queued as expected - status:%lul error:%@", (unsigned long)status, error);
+                               
+                               if (!alreadyFulfilled){
+                                   alreadyFulfilled = YES;
+                                   [expectation fulfill];
+                               }
+                               
+                           }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+   XCTAssertTrue(self.queueCount == 1, @"Queue count not expected - expected 1, got %i", self.queueCount);
+}
+
+#pragma mark - DISPATCH DATASOURCE TESTS
 
 - (void) testFinalDispatchDataSourceKeysForEvents {
     

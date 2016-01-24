@@ -109,7 +109,6 @@
 		712BAF361C29BED4007767CD /* UIKitCatalogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */; };
 		715C4A111C52EB6A006B39EF /* TEALConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */; };
 		715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */; };
-		715C4A131C52EB6A006B39EF /* TEALDispatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A071C52EB6A006B39EF /* TEALDispatchTests.m */; };
 		715C4A141C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */; };
 		715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */; };
 		715C4A161C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */; };
@@ -558,7 +557,6 @@
 		7134F0181C4EB746006AACEF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfigurationTests.m; sourceTree = "<group>"; };
 		715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDatasourcesTests.m; sourceTree = "<group>"; };
-		715C4A071C52EB6A006B39EF /* TEALDispatchTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatchTests.m; sourceTree = "<group>"; };
 		715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectonfigurationTests.m; sourceTree = "<group>"; };
 		715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectPublicAPITests.m; sourceTree = "<group>"; };
 		715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagementPublicAPITests.m; sourceTree = "<group>"; };
@@ -1236,7 +1234,6 @@
 			children = (
 				715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */,
 				715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */,
-				715C4A071C52EB6A006B39EF /* TEALDispatchTests.m */,
 				715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */,
 				715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */,
 				715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */,
@@ -1762,7 +1759,6 @@
 				715C4A181C52EB6A006B39EF /* TealiumInstanceManagmentTests.m in Sources */,
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,
 				715C4A1B1C52EB6A006B39EF /* TEALPublishSettingsTests.m in Sources */,
-				715C4A131C52EB6A006B39EF /* TEALDispatchTests.m in Sources */,
 				715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

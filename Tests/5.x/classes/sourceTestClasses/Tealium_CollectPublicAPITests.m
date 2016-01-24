@@ -116,42 +116,23 @@
     
     NSString *token = @"A1B2C3";
     
-    TEALSettings *settings = [self.library settings];
+    NSString *startTraceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
     
-    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
+    XCTAssertTrue(startTraceID == nil, @"TraceID datasource should start empty");
     
     [self.library joinTraceWithToken:token];
-//    isReady = NO;
-//    
-//    [self.library joinTraceWithToken:token
-//                          completion:^(BOOL success, NSError * _Nullable error) {
-//                              
-//                              XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
-//                              
-//                              isReady = YES;
-//                              
-//                          }];
-//    
-//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
-    NSString *traceId = [settings traceID];
+    NSString *traceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
     
-    XCTAssertTrue(traceId, @"TraceID should have a value - %@ found.", traceId);
+    XCTAssertTrue(traceID, @"TraceID should have a value - %@ found.", traceID);
     
-    XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
+    XCTAssertTrue([traceID isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceID, token);
     
     [self.library leaveTrace];
-//    isReady = NO;
-//    
-//    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
-//        
-//        isReady = YES;
-//        
-//    }];
-//    
-//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-    
-    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
+
+    NSString *postTraceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
+
+    XCTAssertTrue(postTraceID == nil, @"TraceID datasource :%@ should now be nil", postTraceID);
     
 }
 

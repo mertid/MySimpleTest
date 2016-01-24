@@ -1005,6 +1005,13 @@ __strong static NSDictionary *staticAllInstances = nil;
                               suggestion:NSLocalizedString(@"Charge device.", @"")];
         shouldDispatch = NO;
     }
+    if ([self dispatchNetworkServices]==0){
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"No network dispatch services available", @"")
+                              suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings.", @"")];
+        shouldDispatch = NO;
+    }
     
     return shouldDispatch;
 }

@@ -190,6 +190,32 @@
 
 
 #warning Add test to provide mock responses to fetchPublishSettingsCommand
+- (void) testFetchNewRemoteSettings {
+
+    XCTFail(@"");
+    
+}
+
+//- (void) testFetchRemoteSettingsWithSettings {
+//    
+//    NSString *settings1 = @"settings1";
+//    
+//    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+//    
+//    [settings updateWithMatchingVersionSettings:[self sampleSettings]];
+//    
+//    XCTestExpectation *finishedFetching = [self expectationWithDescription:@"finishFetching"];
+//    
+//    [settings fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+//        
+//        [finishedFetching fulfill];
+//        
+//    }];
+//    
+//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
+//        NSLog(@"%s error:%@", __FUNCTION__, error);
+//    }];
+//}
 
 //- (void)testExample {
 //    // This is an example of a functional test case.
