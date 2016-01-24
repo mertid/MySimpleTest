@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"tagbridge"
                                                                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
@@ -52,7 +52,7 @@ static TealiumHelper * _sharedInstance;
     
 //    configuration.overridePublishSettingsURL = @"https://chadhartman.github.io/tealium-ios/mps_collect_batch.json";
     
-    configuration.remoteCommandsEnabled = YES;
+    configuration.remoteCommandsEnabled = NO;
     
     configuration.collectPollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
@@ -60,10 +60,8 @@ static TealiumHelper * _sharedInstance;
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
     
-    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
-                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
-    
-//    [tealiumInstance1 joinTraceWithToken:@"08250" completion:nil];
+//    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
+//                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
     
 //    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
 //        
@@ -92,6 +90,17 @@ static TealiumHelper * _sharedInstance;
 
     [Tealium destroyInstanceForKey:TEALIUM_INSTANCE_ID];
     
+}
+
++ (void) joinTrace:(NSString * _Nonnull) traceID {
+    
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] joinTraceWithToken:traceID];
+
+}
+
++ (void) leaveTrace {
+ 
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] leaveTrace];
 }
 
 #pragma mark - TEALIUM DELEGATES

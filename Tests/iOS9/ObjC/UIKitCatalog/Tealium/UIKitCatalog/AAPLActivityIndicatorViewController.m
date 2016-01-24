@@ -35,6 +35,7 @@
     
     [TealiumHelper trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
     
+    [TealiumHelper joinTrace:@"00864"];
 
 }
 

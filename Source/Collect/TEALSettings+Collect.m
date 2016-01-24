@@ -75,11 +75,11 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     return self.configuration.collectPollingFrequency;
 }
 
-- (NSString *) traceID {
-    
-    return [self.configuration traceID];
-    
-}
+//- (NSString *) traceID {
+//    
+//    return [self.configuration traceID];
+//    
+//}
 
 
 - (NSString *) s2SLegacyDispatchURLString {
@@ -105,11 +105,11 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     return [TEALSettings defaultProfileDefinitionsURLFromSettings:self];
 }
 
-- (void) setTraceID:(NSString * _Nullable)traceID completion:(void(^)(BOOL success, NSError * _Nullable error))completion {
-    
-    [self.configuration setTraceID:traceID completion:completion];
-
-}
+//- (void) setTraceID:(NSString * _Nullable)traceID completion:(void(^)(BOOL success, NSError * _Nullable error))completion {
+//    
+//    [self.configuration setTraceID:traceID completion:completion];
+//
+//}
 
 #pragma mark - PRIVATE
 
@@ -127,10 +127,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         params[TEALCollectKey_Account]   = [settings account];
         params[TEALCollectKey_Profile]   = [settings asProfile];
         params[TEALCollectKey_VisitorID] = visitorID;
-        
-        if ([settings traceID]) {
-            params[TEALCollectKey_TraceID] = [settings traceID];
-        }
         
         NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
         

@@ -47,6 +47,8 @@ typedef NS_ENUM(NSInteger, AAPLAlertControllerActionSheetRow) {
     [super viewDidAppear:animated];
     
     [TealiumHelper trackViewWithTitle:NSStringFromClass([self class]) dataSources:nil];
+    
+    [TealiumHelper leaveTrace];
 }
 
 #pragma mark - UIAlertControllerStyleAlert Style Alerts

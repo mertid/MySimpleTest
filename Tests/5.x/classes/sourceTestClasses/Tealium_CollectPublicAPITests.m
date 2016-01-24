@@ -96,6 +96,8 @@
 
 - (void) testJoinAndLeaveTrace {
     
+    // Only tests if trace token set
+    
     [Tealium destroyInstanceForKey:self.description];
     
     __block BOOL isReady = NO;
@@ -118,18 +120,19 @@
     
     XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
     
-    isReady = NO;
-    
-    [self.library joinTraceWithToken:token
-                          completion:^(BOOL success, NSError * _Nullable error) {
-                              
-                              XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
-                              
-                              isReady = YES;
-                              
-                          }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    [self.library joinTraceWithToken:token];
+//    isReady = NO;
+//    
+//    [self.library joinTraceWithToken:token
+//                          completion:^(BOOL success, NSError * _Nullable error) {
+//                              
+//                              XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
+//                              
+//                              isReady = YES;
+//                              
+//                          }];
+//    
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
     NSString *traceId = [settings traceID];
     
@@ -137,15 +140,16 @@
     
     XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
     
-    isReady = NO;
-    
-    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
-        
-        isReady = YES;
-        
-    }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    [self.library leaveTrace];
+//    isReady = NO;
+//    
+//    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
+//        
+//        isReady = YES;
+//        
+//    }];
+//    
+//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
     XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
     

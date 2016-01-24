@@ -120,62 +120,62 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
     }];
 }
 
-- (void) joinTraceWithToken:(NSString * _Nonnull)token
-                 completion:(void(^)(BOOL successful, NSError *error))completion {
-    
-    NSError *error = nil;
-    
-    if (![self isCollectEnabled]) {
-        
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Join trace call failed.", @"")
-                                  reason:NSLocalizedString(@"Collect not enabled.", @"")
-                              suggestion:NSLocalizedString(@"Enable Collect service.", @"")];
-        
-    }   else if (!token || ![token length]) {
-        
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Join trace call failed.", @"")
-                                  reason:NSLocalizedString(@"No token passed into joinTraceWithToken: call", @"")
-                              suggestion:NSLocalizedString(@"Add a token.", @"")];
-    }
-    
-    if (completion && error){
-        completion(false, error);
-        return;
-    }
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        
-        [weakSelf.logger logDev:@"Joining trace id:%@", token];
-        
-        [weakSelf.settings setTraceID:token completion:completion];
-        
-    }];
-    
-}
-
-- (void) leaveTraceWithCompletion:(void(^)(BOOL successful, NSError *error))completion {
-    
-    
-    if (![self isCollectEnabled]) {
-        if (completion){
-            completion(false, nil);
-        }
-        return;
-    }
-    
-    __weak Tealium *weakSelf = self;
-    
-    [weakSelf.operationManager addOperationWithBlock:^{
-        
-        [weakSelf.settings setTraceID:nil completion:completion];
-        
-    }];
-    
-}
+//- (void) joinTraceWithToken:(NSString * _Nonnull)token
+//                 completion:(void(^)(BOOL successful, NSError *error))completion {
+//    
+//    NSError *error = nil;
+//    
+//    if (![self isCollectEnabled]) {
+//        
+//        error = [TEALError errorWithCode:TEALErrorCodeFailure
+//                             description:NSLocalizedString(@"Join trace call failed.", @"")
+//                                  reason:NSLocalizedString(@"Collect not enabled.", @"")
+//                              suggestion:NSLocalizedString(@"Enable Collect service.", @"")];
+//        
+//    }   else if (!token || ![token length]) {
+//        
+//        error = [TEALError errorWithCode:TEALErrorCodeFailure
+//                             description:NSLocalizedString(@"Join trace call failed.", @"")
+//                                  reason:NSLocalizedString(@"No token passed into joinTraceWithToken: call", @"")
+//                              suggestion:NSLocalizedString(@"Add a token.", @"")];
+//    }
+//    
+//    if (completion && error){
+//        completion(false, error);
+//        return;
+//    }
+//    
+//    __weak Tealium *weakSelf = self;
+//    
+//    [weakSelf.operationManager addOperationWithBlock:^{
+//        
+//        [weakSelf.logger logDev:@"Joining trace id:%@", token];
+//        
+//        [weakSelf.settings setTraceID:token completion:completion];
+//        
+//    }];
+//    
+//}
+//
+//- (void) leaveTraceWithCompletion:(void(^)(BOOL successful, NSError *error))completion {
+//    
+//    
+//    if (![self isCollectEnabled]) {
+//        if (completion){
+//            completion(false, nil);
+//        }
+//        return;
+//    }
+//    
+//    __weak Tealium *weakSelf = self;
+//    
+//    [weakSelf.operationManager addOperationWithBlock:^{
+//        
+//        [weakSelf.settings setTraceID:nil completion:completion];
+//        
+//    }];
+//    
+//}
 
 #pragma mark - MODULES DELEGATE
 

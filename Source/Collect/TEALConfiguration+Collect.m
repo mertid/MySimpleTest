@@ -69,13 +69,13 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     return nil;
 }
 
-- (NSString * _Nullable) traceID {
-    
-    NSDictionary *moduleData =  [self moduleData];
-    
-    return [moduleData[TEALTraceIDKey] copy];
-    
-}
+//- (NSString * _Nullable) traceID {
+//    
+//    NSDictionary *moduleData =  [self moduleData];
+//    
+//    return [moduleData[TEALTraceIDKey] copy];
+//    
+//}
 
 
 #pragma mark - SETTERS
@@ -144,17 +144,17 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     
 }
 
-- (void) setTraceID:(NSString *)traceID
-         completion:(void(^)(BOOL successful, NSError *error))completion{
-    
-    if (!traceID){
-        [self removeModuleObjectForKey:TEALTraceIDKey
-                            completion:completion];
-    }
-    [self setModuleObject:traceID
-                   forKey:TEALTraceIDKey
-               completion:completion];
-    
-}
+//- (void) setTraceID:(NSString *)traceID
+//         completion:(void(^)(BOOL successful, NSError *error))completion{
+//    
+//    if (!traceID){
+//        [self removeModuleObjectForKey:TEALTraceIDKey
+//                            completion:completion];
+//    }
+//    [self setModuleObject:traceID
+//                   forKey:TEALTraceIDKey
+//               completion:completion];
+//    
+//}
 
 @end

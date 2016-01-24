@@ -19,6 +19,7 @@
 @property (nonatomic) NSString *privateInstanceID;
 @property (nonatomic) NSMutableDictionary *privateModuleData;
 @property (nonatomic) NSMutableDictionary *privateModuleDescriptionData;
+//@property () NSString *privateTraceID;
 @property (nonatomic) dispatch_queue_t queue;
 
 
@@ -100,6 +101,17 @@
     
 }
 
+//- (NSString * _Nullable) traceID {
+//    
+//    return self.privateTraceID;
+//    
+//}
+//
+//- (void) setTraceID:(NSString *)traceID {
+//    
+//    self.privateTraceID = traceID;
+//    
+//}
 
 #pragma mark - MODULE DATA
 - (NSMutableDictionary *) moduleData {

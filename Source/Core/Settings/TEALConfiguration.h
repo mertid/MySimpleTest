@@ -75,4 +75,20 @@
  */
 - (NSString * _Nonnull)instanceID;
 
+///**
+// *  AudienceStream Trace ID - If set
+// *
+// *  @return NSString String trace id that should match an active AudienceStream trace.
+// */
+//- (NSString * _Nullable) traceID;
+
+///**
+// *  Add a trace ID to Collect or TagManagement (with Collect Tag) dispatches to 
+// *  enable call monitoring. This trace ID does NOT persist.
+// *
+// *  @param traceID String identifier for trace instance to use.
+// *  @param completion Optional completion block to return once trace id has been set
+// */
+//- (void) setTraceID:(NSString * _Nullable)traceID;
+
 @end

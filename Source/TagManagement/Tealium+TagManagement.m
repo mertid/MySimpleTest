@@ -37,6 +37,11 @@
 
 - (void) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
     
+    
+    if (![self.settings tagManagementEnabled]){
+        return;
+    }
+    
     TEALTagDispatchService *service = [self currentTagDispatchService];
 
     __block typeof(self) __weak weakSelf = self;

@@ -59,6 +59,13 @@
 - (void) fetchNewRawPublishSettingsWithCompletion:(void (^ _Nonnull)(BOOL success, NSError * _Nullable error))completion;
 
 /**
+ *  Set current trace id.  Calls current Configurations setTraceID.
+ *
+ *  @param traceID String identifier of trace to use.
+ */
+//- (void) setTraceID:(NSString * _Nullable)traceID;
+
+/**
  *  Removes all publish settings from archive.
  */
 - (void) purgeAllArchives;

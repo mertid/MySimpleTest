@@ -377,6 +377,12 @@
     
 }
 
+//- (void) setTraceID:(NSString * _Nullable)traceID {
+//    
+//    [self.configuration setTraceID:traceID];
+//    
+//}
+
 - (void) purgeAllArchives {
     
     [TEALPublishSettings purgeAllArchives];

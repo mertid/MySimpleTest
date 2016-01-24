@@ -84,6 +84,7 @@ extern NSString * const TEALDataSourceKey_TimestampLocal;
 extern NSString * const TEALDataSourceKey_TimestampOffset;
 extern NSString * const TEALDataSourceKey_TimestampUnix;
 extern NSString * const TEALDataSourceKey_TealiumID;
+extern NSString * const TEALDataSourceKey_TraceID;
 extern NSString * const TEALDataSourceKey_UUID;
 extern NSString * const TEALDataSourceKey_ViewTitle;
 extern NSString * const TEALDataSourceKey_ViewHeight;

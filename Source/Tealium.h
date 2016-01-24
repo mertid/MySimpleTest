@@ -147,6 +147,20 @@
  */
 - (void) removePersistentDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys;
 
+#pragma mark - VERIFICATION
 
+/**
+ *  Joins an AudienceStream trace if either the Collect or TagManagement service are enabled.
+ *
+ *  @param token String value should match the code provided via the AudienceStream web UI.
+ */
+- (void) joinTraceWithToken:(NSString * _Nonnull)token;
+
+/**
+ *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
+ *
+ *  @param completion An optional completion block.
+ */
+- (void) leaveTrace;
 
 @end

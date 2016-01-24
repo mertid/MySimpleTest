@@ -55,21 +55,21 @@
 - (void) fetchVisitorProfileWithCompletion:(void (^ _Nullable)(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error))completion;
 
 
-/**
- *  Joins an AudienceStream trace.
- *
- *  @param token String value should match the code provided via the AudienceStream web UI.
- *  @param completion An optional completion block.
- */
-- (void) joinTraceWithToken:(NSString * _Nonnull)token
-                 completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
-
-/**
- *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
- *  
- *  @param completion An optional completion block.
- */
-- (void) leaveTraceWithCompletion:(void(^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+///**
+// *  Joins an AudienceStream trace.
+// *
+// *  @param token String value should match the code provided via the AudienceStream web UI.
+// *  @param completion An optional completion block.
+// */
+//- (void) joinTraceWithToken:(NSString * _Nonnull)token
+//                 completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+//
+///**
+// *  Stops sending trace data for the provided token in the joinTraceWithToken: method.
+// *  
+// *  @param completion An optional completion block.
+// */
+//- (void) leaveTraceWithCompletion:(void(^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 
 @end

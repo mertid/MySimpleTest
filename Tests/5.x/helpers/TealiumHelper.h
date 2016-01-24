@@ -61,6 +61,10 @@
  */
 + (void) enableRemoteCommandBlock;
 
++ (void) joinTrace:(NSString * _Nonnull) traceID;
+
++ (void) leaveTrace;
+
 /**
  *  Forwarding call to be placed in the matching WCSessionDelegate method session:didReceiveMessage:replyHandler:.
  *

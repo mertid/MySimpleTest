@@ -29,6 +29,8 @@
 
 @end
 
+static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
+
 @implementation TEALTagDispatchService
 
 #pragma mark - PUBLIC INSTANCE
@@ -93,16 +95,19 @@
 
 - (void) sendDispatch:(TEALDispatch *)dispatch completion:(TEALDispatchBlock)completion{
     
+    [self processTraceFromDispatch:dispatch];
+    
     NSString *utagString = [self utagCommandFromDispatch:dispatch completion:completion];
+    
     if (!utagString) return;
     
-    __block __weak UIWebView *weakWebView = self.webView;
     __block NSString *result = nil;
     
-    __weak TEALTagDispatchService *weakSelf = self;
+    __block __weak TEALTagDispatchService *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        result = [weakWebView stringByEvaluatingJavaScriptFromString:utagString];
+        
+        result = [weakSelf.webView stringByEvaluatingJavaScriptFromString:utagString];
         
         [weakSelf.operationManager addOperationWithBlock:^{
             
@@ -263,6 +268,97 @@
     
     return command;
     
+}
+
+#pragma mark - TRACE
+
+- (void) processTraceFromDispatch:(TEALDispatch*)dispatch {
+    
+    NSString *traceID = dispatch.payload[TEALDataSourceKey_TraceID];
+    
+    NSHTTPCookie *exsistingCookie = [self traceCookieInCookieStorage];
+    
+    if (traceID) {
+        
+        // Add trace cookie
+        if (!exsistingCookie){
+            
+            NSHTTPCookie *traceCookie = [self newTraceCookieWithTraceID:traceID];
+            
+            [self addTraceCookie:traceCookie];
+            
+        }
+        
+    } else {
+        
+        // Remove trace cookie
+        if (exsistingCookie){
+            [self removeTraceCookie:exsistingCookie];
+        }
+        
+    }
+}
+
+- (NSHTTPCookie*) traceCookieInCookieStorage{
+    NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (NSHTTPCookie *cookieV in [cookieJar cookies]) {
+        if ([[[cookieV name]lowercaseString] isEqualToString:Tealium_TraceIdCookieKey]) return cookieV;
+    }
+    return nil;
+}
+
+- (NSHTTPCookie*) newTraceCookieWithTraceID:(NSString*)traceId{
+    // This is registering as a first party cookie
+    // set Expiration to 12 hours
+    NSString *maxAgeInSeconds = [NSString stringWithFormat:@"%i", 3600*12];
+    NSHTTPCookie *cookie = [[NSHTTPCookie alloc] initWithProperties:@{NSHTTPCookieName:@"trace_id",
+                                                                      NSHTTPCookieValue:traceId,
+                                                                      NSHTTPCookieVersion:@"0",
+                                                                      NSHTTPCookiePath:@"/",
+                                                                      NSHTTPCookieDiscard:@"true",
+                                                                      NSHTTPCookieDomain:@".tiqcdn.com",
+                                                                      NSHTTPCookieOriginURL:@"",
+                                                                      NSHTTPCookieMaximumAge:maxAgeInSeconds,
+                                                                      }];
+    return cookie;
+}
+
+- (void) addTraceCookie:(NSHTTPCookie*)cookie{
+    
+    // set new cookie
+    NSHTTPCookieAcceptPolicy policy = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookieAcceptPolicy];
+    if (policy == NSHTTPCookieAcceptPolicyNever){
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyNever];
+    } else {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    }
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [weakSelf.webView reload];
+        
+    });
+
+}
+
+- (void) removeTraceCookie:(NSHTTPCookie *)cookie{
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+    
+    __block typeof(self) __weak weakSelf = self;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [weakSelf.webView stringByEvaluatingJavaScriptFromString:@"utag.track('kill_visitor_session', { event: 'kill_visitor_session', 'cp.trace_id' : utag.data['cp.trace_id'] });"];
+        
+        [weakSelf.webView reload];
+
+    });
+
 }
 
 #pragma mark - HELPERS

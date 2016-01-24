@@ -86,6 +86,7 @@ NSString * const TEALDataSourceKey_TimestampLocal       = @"timestamp_local";
 NSString * const TEALDataSourceKey_TimestampOffset      = @"timestamp_offset";
 NSString * const TEALDataSourceKey_TimestampUnix        = @"timestamp_unix";
 NSString * const TEALDataSourceKey_TealiumID            = @"tealium_id";
+NSString * const TEALDataSourceKey_TraceID              = @"tealium_trace_id";
 NSString * const TEALDataSourceKey_UUID                 = @"uuid";
 NSString * const TEALDataSourceKey_ViewTitle            = @"screen_title";
 NSString * const TEALDataSourceKey_ViewHeight           = @"view_height";
