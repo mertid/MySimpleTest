@@ -173,7 +173,7 @@
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
-    __block isNeverReady = NO;
+    __block BOOL isNeverReady = NO;
     
     // Adding in a little time buffer to let module spin up
     
@@ -205,7 +205,7 @@
     
     [self enableLibraryWithConfiguration:config];
     
-    __block isNeverReady = NO;
+    __block BOOL isNeverReady = NO;
     
     // Adding in a little time buffer to let module spin up
     
