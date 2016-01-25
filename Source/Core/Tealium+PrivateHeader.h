@@ -46,6 +46,11 @@
 - (void) addNewDispatchService:(id _Nonnull)newService;
 - (void) removeDispatchService:(id _Nonnull)service;
 
+- (void) addVolatileDataSources:(NSDictionary * _Nonnull)additionalDataSources
+                     completion:(TEALBooleanCompletionBlock _Nullable)completion;
+- (void) removeVolatileDataSourcesForKeys:(NSArray * _Nonnull)dataSourceKeys
+                               completion:(TEALBooleanCompletionBlock _Nullable)completion;
+
 - (NSDictionary * _Nonnull) moduleDataCopy;
 
 - (NSDictionary * _Nonnull) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type

@@ -72,24 +72,55 @@
 
 - (void) testProfileURL {
     
-        XCTFail(@"not yet implemented");
+    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    NSString *profileURL = [[self.library profileURL] absoluteString];
+    NSString *expectedURLString = [NSString stringWithFormat:@"https://visitor-service.tealiumiq.com/%@/main/%@", config.accountName, [self.library visitorIDCopy]];
+    
+    XCTAssertTrue([profileURL isEqualToString:expectedURLString], @"profileURL: %@ did not match expected url: %@", profileURL, expectedURLString);
     
 }
 
 - (void) testProfileDefinitionURL {
     
-        XCTFail(@"not yet implemented");
+    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    NSString *profileDefintionsURL = [[self.library profileDefinitionURL] absoluteString];
+    NSString *expectedURLString = [NSString stringWithFormat:@"https://visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/main", config.accountName];
+    
+    XCTAssertTrue([profileDefintionsURL isEqualToString:expectedURLString], @"profileDefinitionURL: %@ did not match expected url: %@", profileDefintionsURL, expectedURLString);
+    
 }
 
-- (void) testCachedVisitorProfileCopy {
+- (void) testFetchVisitorProfileWithCompletionAndCachedVisitorProfile {
     
-        XCTFail(@"not yet implemented");
-}
+    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
+    
+    [self enableLibraryWithConfiguration:config];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"fetchVisitorProfile"];
 
-- (void) testFetchVisitorProfileWithCompletion {
+    [self.library fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
+        
+        NSLog(@"%s:profile:%@, error:%@", __FUNCTION__, profile, error);
+        
+        XCTAssertTrue(profile, @"No profile returned.");
+
+        XCTAssertTrue(!error, @"Error detected: %@.", error);
+        
+        [expectation fulfill];
+        
+    }];
     
-        XCTFail(@"not yet implemented");
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
     
+    TEALVisitorProfile *cachedProfile = [self.library cachedVisitorProfileCopy];
+    
+    XCTAssertTrue(cachedProfile, "No cached profile found.");
 }
 
 #pragma mark - joinTraceWithToken:completion & leaveTrace TESTS
@@ -103,9 +134,8 @@
     __block BOOL isReady = NO;
     
     self.library = [Tealium newInstanceForKey:self.description
-                                configuration:[TEALTestHelper liveConfig]
+                                configuration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]
                                    completion:^(BOOL success, NSError * _Nullable error) {
-                                       
                                        
                                        isReady = YES;
                                        
@@ -113,22 +143,49 @@
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
-    
     NSString *token = @"A1B2C3";
     
     NSString *startTraceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
     
     XCTAssertTrue(startTraceID == nil, @"TraceID datasource should start empty");
     
-    [self.library joinTraceWithToken:token];
+    __block NSString * traceID = nil;
     
-    NSString *traceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
+    __block typeof(self) __weak weakSelf = self;
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"setTraceID"];
     
-    XCTAssertTrue(traceID, @"TraceID should have a value - %@ found.", traceID);
+    // Same as - [self.library joinTraceWithToken:token];
+    [self.library addVolatileDataSources:@{TEALDataSourceKey_TraceID:token} completion:^(BOOL success, NSError * _Nullable error) {
+        
+        XCTAssertTrue(success, @"Unexpected error:%@", error);
+        
+        traceID = [weakSelf.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
+
+        XCTAssertTrue(traceID, @"TraceID should have a value - %@ found.", traceID);
+        
+        XCTAssertTrue([traceID isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceID, token);
+        
+        [expectation fulfill];
+        
+    }];
+
+
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
-    XCTAssertTrue([traceID isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceID, token);
+    isReady = NO;
     
-    [self.library leaveTrace];
+    // Same as - [self.library leaveTrace];
+    [self.library removeVolatileDataSourcesForKeys:@[TEALDataSourceKey_TraceID]
+                                        completion:^(BOOL success, NSError * _Nullable error) {
+                                            
+                                            XCTAssertTrue(success, @"Unexpected error: %@", error);
+                                            
+                                            isReady = YES;
+                                            
+                                        }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
 
     NSString *postTraceID = [self.library volatileDataSourcesCopy][TEALDataSourceKey_TraceID];
 

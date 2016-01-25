@@ -18,12 +18,16 @@
 @interface Tealium (Collect)
 
 /**
- *  TODO
+ *  The visitor profile url associated with the current user.
+ *
+ *  @returns NSURL An optional NSURL object.
  */
 - (NSURL * _Nullable) profileURL;
 
 /**
- *  TODO
+ *  Where Collect will retrieve profile definitions.
+ *
+ *  @returns NSURL An optional NSURL object.
  */
 - (NSURL * _Nullable) profileDefinitionURL;
 

@@ -222,68 +222,36 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
     
-    
     NSError *error = nil;
     
-    [self addVolatileDataSources:additionalDataSources error:error];
+    __block typeof(self) __weak weakSelf = self;
+
+    __block NSDictionary *dataSources = [additionalDataSources copy];
+    
+    [self addVolatileDataSources:dataSources
+                      completion:^(BOOL success, NSError * _Nullable error) {
+        
+              [weakSelf.logger logDev:@"Volatile DataSources added: %@", dataSources];
+
+    }];
     
     if (error){
         [self.logger logQA:@"%@", error];
     }
 }
 
-- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources error:(NSError * __autoreleasing)error {
-    
-    
-    if (!self.dataSources){
-        error = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
-                                  reason:NSLocalizedString(@"DataSources object not yet ready.", @"")
-                              suggestion:NSLocalizedString(@"Try again later.", @"")];
-        
-        return;
-    }
-    
-    if (!self.operationManager){
-        error = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
-                                  reason:NSLocalizedString(@"Operation Manager not yet ready.", @"")
-                              suggestion:NSLocalizedString(@"Try again later.", @"")];
-        
-        return;
-    }
-    
-    __block typeof(self) __weak weakSelf = self;
-    
-    __block NSDictionary *additionalDataSourcesCopy = [additionalDataSources copy];
-    
-    [self.operationManager addOperationWithBlock:^{
-        
-        [[weakSelf.dataSources clientVolatileDataSources] addEntriesFromDictionary:additionalDataSourcesCopy];
-        
-        [weakSelf.logger logDev:@"Volatile DataSources added: %@", additionalDataSourcesCopy];
-        
-    }];
-    
-}
 
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
-    if (![dataSourceKeys isKindOfClass:([NSArray class])]) {
-        [self.logger logProd:@"Non-array passed into argument of removeVolatileDataSourcesForKey: method."];
-        return;
-        
-    }
     __block typeof(self) __weak weakSelf = self;
-    
-    __block NSArray *keys = [dataSourceKeys copy];
-    
-    [self.operationManager addOperationWithBlock:^{
-        
-        [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:keys];
-        [weakSelf.logger logDev:@"Volatile Data Sources removed with keys: %@", keys];
-        
+
+    [self removeVolatileDataSourcesForKeys:dataSourceKeys
+                                completion:^(BOOL success, NSError * _Nullable error) {
+                                   
+        [weakSelf.logger logDev:@"Unable to remove volatile data sources. Error: %@", error];
+                                    
     }];
+    
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {
@@ -320,6 +288,79 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self removeVolatileDataSourcesForKeys:@[TEALDataSourceKey_TraceID]];
     
+}
+
+#pragma mark - PRIVATE INSTANCE METHODS
+
+- (void) addVolatileDataSources:(NSDictionary *)additionalDataSources
+                     completion:(TEALBooleanCompletionBlock)completion{
+    
+    NSError *error = nil;
+    
+    if (!self.dataSources){
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
+                                  reason:NSLocalizedString(@"DataSources object not yet ready.", @"")
+                              suggestion:NSLocalizedString(@"Try again later.", @"")];
+        
+        if (completion) completion(NO, error);
+        
+        return;
+    }
+    
+    if (!self.operationManager){
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
+                                  reason:NSLocalizedString(@"Operation Manager not yet ready.", @"")
+                              suggestion:NSLocalizedString(@"Try again later.", @"")];
+        
+        if (completion) completion(NO, error);
+        
+        return;
+    }
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    __block NSDictionary *additionalDataSourcesCopy = [additionalDataSources copy];
+    
+    [self.operationManager addOperationWithBlock:^{
+        
+        [[weakSelf.dataSources clientVolatileDataSources] addEntriesFromDictionary:additionalDataSourcesCopy];
+        
+        if (completion) completion(YES, nil);
+        
+    }];
+    
+}
+
+
+- (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys
+                               completion:(TEALBooleanCompletionBlock)completion {
+    
+    if (![dataSourceKeys isKindOfClass:([NSArray class])]) {
+        
+        NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                      description:NSLocalizedString(@"Could not remove volatile data source(s)", @"")
+                                           reason:NSLocalizedString(@"Array not passed into removeVolatileDataSourcesForKeys call.", @"")
+                                       suggestion:NSLocalizedString(@"Check removeVolatileDataSourcesForKeys: arguments.", @"")];
+        
+        if (completion) completion(NO, error);
+        return;
+        
+    }
+    __block typeof(self) __weak weakSelf = self;
+    
+    __block NSArray *keys = [dataSourceKeys copy];
+    
+    [self.operationManager addOperationWithBlock:^{
+        
+        [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:keys];
+        
+        [weakSelf.logger logDev:@"Volatile Data Sources removed with keys: %@", keys];
+        
+        if (completion) completion(YES, nil);
+        
+    }];
 }
 
 #pragma mark - PRIVATE CLASS METHODS
