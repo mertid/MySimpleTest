@@ -104,6 +104,8 @@
     [service.webView stringByEvaluatingJavaScriptFromString:@"window.open('tealium://logger?request=' + encodeURIComponent(JSON.stringify({config : {response_id : \"testCommand\"},payload : {testKey : \"testValue\"}})), '_self');"];
     
     
+    // TODO: Need a better way of waiting for the Tag Management module
+    
     // Include wait time from above for Tag Management enablement
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     

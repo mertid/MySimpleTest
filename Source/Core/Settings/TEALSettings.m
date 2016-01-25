@@ -382,7 +382,6 @@
     
 }
 
-
 - (void) fetchNewRawPublishSettings:(NSURLRequest*) request
                          completion:(TEALBooleanCompletionBlock)completion{
     
@@ -390,17 +389,10 @@
     
 }
 
-//- (void) setTraceID:(NSString * _Nullable)traceID {
-//    
-//    [self.configuration setTraceID:traceID];
-//    
-//}
-
 - (void) purgeAllArchives {
     
     [TEALPublishSettings purgeAllArchives];
 }
-
 
 #pragma mark - PRIVATE
 

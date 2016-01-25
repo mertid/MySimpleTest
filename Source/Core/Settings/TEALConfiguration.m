@@ -101,18 +101,6 @@
     
 }
 
-//- (NSString * _Nullable) traceID {
-//    
-//    return self.privateTraceID;
-//    
-//}
-//
-//- (void) setTraceID:(NSString *)traceID {
-//    
-//    self.privateTraceID = traceID;
-//    
-//}
-
 #pragma mark - MODULE DATA
 - (NSMutableDictionary *) moduleData {
     
@@ -224,16 +212,6 @@
               @"account - name":[NSString teal_dictionarySafeString:self.accountName],
               @"account - profile":[NSString teal_dictionarySafeString:self.profileName],
               @"account - target environment":[NSString teal_dictionarySafeString:self.environmentName],
-//              @"use http":[NSString teal_stringFromBool:self.useHTTP],
-//              @"polling frequency":@(self.pollingFrequency),
-              //                                          @"autotracking device info enabled":[NSString teal_stringFromBool:self.autotrackingDeviceInfoEnabled],
-              //                                          @"autotracking ivars enabled":[NSString teal_stringFromBool:self.autotrackingIvarsEnabled],
-              //                                          @"autotracking lifecycle enabled":[NSString teal_stringFromBool:self.autotrackingLifecycleEnabled],
-              //                                          @"autotracking ui events enabled":[NSString teal_stringFromBool:self.autotrackingUIEventsEnabled],
-              //                                          @"autotracking views enabled":[NSString teal_stringFromBool:self.autotrackingViewsEnabled],
-              //                                          @"crash tracking enabled":[NSString teal_stringFromBool:self.autotrackingCrashesEnabled],
-              //                                          @"mobile companion enabled":[NSString teal_stringFromBool:self.mobileCompanionEnabled],
-              //                                          @"override mps publish settings version":[NSString teal_dictionarySafeString:self.overridePublishSettingsVersion],
               @"override publish settings url":[NSString teal_dictionarySafeString:self.overridePublishSettingsURL],
               @"override publish url":[NSString teal_dictionarySafeString:self.overrideTagManagementURL],
               

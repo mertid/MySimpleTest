@@ -63,12 +63,4 @@
  */
 - (NSURL * _Nullable) collectProfileDefinitionsURL;
 
-///**
-// *  Set current trace id.  Calls current Configurations setTraceID.
-// *
-// *  @param traceID String identifier of trace to use.
-// */
-//- (void) setTraceID:(NSString * _Nullable)traceID
-//completion:(void(^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
-
 @end

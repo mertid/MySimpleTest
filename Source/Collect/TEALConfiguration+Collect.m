@@ -69,15 +69,6 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     return nil;
 }
 
-//- (NSString * _Nullable) traceID {
-//    
-//    NSDictionary *moduleData =  [self moduleData];
-//    
-//    return [moduleData[TEALTraceIDKey] copy];
-//    
-//}
-
-
 #pragma mark - SETTERS
 
 - (void) setOverrideCollectDispatchURL:(NSString *) overrideURL{
@@ -143,18 +134,5 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     // TODO:
     
 }
-
-//- (void) setTraceID:(NSString *)traceID
-//         completion:(void(^)(BOOL successful, NSError *error))completion{
-//    
-//    if (!traceID){
-//        [self removeModuleObjectForKey:TEALTraceIDKey
-//                            completion:completion];
-//    }
-//    [self setModuleObject:traceID
-//                   forKey:TEALTraceIDKey
-//               completion:completion];
-//    
-//}
 
 @end

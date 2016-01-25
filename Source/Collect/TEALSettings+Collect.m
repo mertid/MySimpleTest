@@ -75,13 +75,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     return self.configuration.collectPollingFrequency;
 }
 
-//- (NSString *) traceID {
-//    
-//    return [self.configuration traceID];
-//    
-//}
-
-
 - (NSString *) s2SLegacyDispatchURLString {
     
     NSString *overrideDispatchString = self.configuration.overrideS2SLegacyDispatchURL;
@@ -104,12 +97,6 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
     
     return [TEALSettings defaultProfileDefinitionsURLFromSettings:self];
 }
-
-//- (void) setTraceID:(NSString * _Nullable)traceID completion:(void(^)(BOOL success, NSError * _Nullable error))completion {
-//    
-//    [self.configuration setTraceID:traceID completion:completion];
-//
-//}
 
 #pragma mark - PRIVATE
 
