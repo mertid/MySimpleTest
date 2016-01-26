@@ -29,11 +29,13 @@
 //    
 //    [tealiumInstance1 addVolatileDataSources:@{@"zzz":@"testValue"}];
 
-    [TealiumHelper enableRemoteCommandBlock];
     
     [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
     
     [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
+    
+    [TealiumHelper enableRemoteCommandBlock];
+
     
     return YES;
 }

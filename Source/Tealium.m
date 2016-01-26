@@ -41,7 +41,6 @@
 @property (nonatomic, strong) TEALDispatchManager *dispatchManager;
 @property (nonatomic, strong) TEALSettings *settings;
 @property (nonatomic, weak) id<TEALModulesDelegate> modulesDelegate;
-//@property (nonatomic, weak) UIViewController *privateActiveViewController;
 
 @property (nonatomic, strong) NSDictionary *moduleData;
 

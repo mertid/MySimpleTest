@@ -14,14 +14,12 @@
 #import "TEALLogger.h"
 #import "TEALDispatch.h"
 #import "TEALOperationManager.h"
-#import "TEALRemoteCommandManager.h"
 #import "NSDictionary+Tealium.h"
 
 @import Security;
 
-@interface TEALTagDispatchService() <UIWebViewDelegate, TEALRemoteCommandManagerDelegate>
+@interface TEALTagDispatchService() <UIWebViewDelegate>
 
-@property (nonatomic, strong) TEALRemoteCommandManager *currentRemoteCommandManager;
 @property (nonatomic, weak) NSString *publishURLString;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
@@ -35,15 +33,16 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
 
 #pragma mark - PUBLIC INSTANCE
 
-- (instancetype) initWithPublishURLString:(NSString *)urlString operationManager:(TEALOperationManager *)operationManager {
+- (instancetype) initWithPublishURLString:(NSString *)urlString
+                         operationManager:(TEALOperationManager *)operationManager {
     
     self = [super init];
     if (self) {
         
         _publishURLString = urlString;
         _operationManager = operationManager;
-        _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
-        [_currentRemoteCommandManager setDelegate:self];
+//        _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
+//        [_currentRemoteCommandManager setDelegate:self];
         
     }
     
@@ -57,10 +56,6 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
 
 - (void) setStatus:(TEALDispatchNetworkServiceStatus) status {
     self.privateStatus = status;
-}
-
-- (TEALRemoteCommandManager *) remoteCommandManager {
-    return self.currentRemoteCommandManager;
 }
 
 - (NSString *) name {
@@ -118,7 +113,7 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
                 }
                 return;
             } else {
-                NSError *error = [TEALError errorWithCode:TEALRemoteResponseErrorMalformedURL
+                NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
                                               description:@"Dispatch was unsuccessful"
                                                    reason:[NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload]
                                                suggestion:@"Check TIQ settings and that mobile.html has published correctly."];
@@ -135,23 +130,11 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
 #pragma mark - UIWEBVIEW DELEGATE
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    
-    if ([[self remoteCommandManager] isEnabled]) {
-    
-        __block typeof(self) __weak weakSelf = self;
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self.remoteCommandManager processRequest:request
-                                    completionHandler:^(TEALRemoteCommandResponse *response) {
-                                        
-                                        [weakSelf reportWebView:webView
-                                                commandResponse:response];
-                                        
-                                    }];
-            
-        });
-
+    if (self.delegate){
+        
+        return [self.delegate tagDispatchServiceShouldPermitRequest:request webView:webView];
+        
     }
     
     return YES;
@@ -186,35 +169,6 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     
     // TODO: retry later?
 
-}
-
-#pragma mark - TEAL REMOTE COMMAND DELEGATE 
-
-- (void) tagRemoteCommandManagerRequestsCommandToWebView:(NSString *)command {
-    
-    __block typeof(self) __weak weakSelf = self;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
-        
-        if ([[init lowercaseString] isEqualToString:@"false"]){
-            
-            if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:encounteredError:)]) {
-                
-                NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@", command];
-                NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                                     description:errorDescription
-                                          reason:NSLocalizedString(@"Command did not execute.", @"")
-                                      suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
-                
-                [self reportWebView:weakSelf.webView
-                              error:error];
-
-            }
-
-        }
-    });
 }
 
 #pragma mark - UTAG
@@ -361,26 +315,4 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
 
 }
 
-#pragma mark - HELPERS
-
-- (void) reportWebView:(id)webView error:(NSError *) error {
-    
-    if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:encounteredError:)]){
-        
-        [self.delegate tagDispatchServiceWebView:webView
-                                encounteredError:error];
-        
-    }
-    
-}
-
-- (void) reportWebView:(id)webView commandResponse:(TEALRemoteCommandResponse*)response {
-    
-    if ([self.delegate respondsToSelector:@selector(tagDispatchServiceWebView:processedCommandResponse:)]){
-        
-        [self.delegate tagDispatchServiceWebView:webView
-                        processedCommandResponse:response];
-        
-    }
-}
 @end

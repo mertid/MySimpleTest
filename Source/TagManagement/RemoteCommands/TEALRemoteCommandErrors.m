@@ -12,7 +12,10 @@
 
 @implementation TEALRemoteCommandErrors
 
-+ (void) returnError:(TEALRemoteResponseErrors)errorType response:(TEALRemoteCommandResponse*)response identifier:(NSString*)identifier responseBlock:(TEALRemoteCommandResponseBlock)responseBlock {
++ (void) returnError:(TEALRemoteResponseErrors)errorType
+            response:(TEALRemoteCommandResponse*)response
+          identifier:(NSString*)identifier
+       responseBlock:(TEALRemoteCommandResponseBlock)responseBlock {
 
     NSDictionary *userInfo = nil;
     NSError *error = nil;
@@ -32,7 +35,7 @@
             userInfo = @{
                          NSLocalizedDescriptionKey: NSLocalizedString(@"Remote command unsuccessful.", nil),
                          NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Matching command id %@ not found in library.", response.commandId],
-                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"addRemoteCommandId:description:targetQueue:block: method was not invoked for this command id prior to remote trigger.", nil)
+                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"addRemoteCommandID:description:targetQueue:block: method was not invoked for this command id prior to remote trigger.", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
                                         code:TEALErrorCodeFailure
@@ -40,9 +43,9 @@
             break;
         case TEALRemoteResponseErrorMissingCommandId:
             userInfo = @{
-                         NSLocalizedDescriptionKey: NSLocalizedString(@"addRemoteCommandId:description:targetQueue:block: unsuccessful.", nil),
-                         NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Command id argument missing from addRemoteCommandId:description:targetQueue:block: method call."],
-                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a command id when invoking addRemoteCommandId:description:targetQueue:block:", nil)
+                         NSLocalizedDescriptionKey: NSLocalizedString(@"addRemoteCommandID:description:targetQueue:block: unsuccessful.", nil),
+                         NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Command id argument missing from addRemoteCommandID:description:targetQueue:block: method call."],
+                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a command id when invoking addRemoteCommandID:description:targetQueue:block:", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
                                         code:TEALErrorCodeFailure
@@ -50,9 +53,9 @@
             break;
         case TEALRemoteResponseErrorMissingCommandBlock:
             userInfo = @{
-                         NSLocalizedDescriptionKey: NSLocalizedString(@"addRemoteCommandId:description:targetQueue:block: unsuccessful.", nil),
-                         NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Response block argument missing from addRemoteCommandId:description:targetQueue:block: method call for command id %@", identifier],
-                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a block when invoking addRemoteCommandId:description:targetQueue:block:", nil)
+                         NSLocalizedDescriptionKey: NSLocalizedString(@"addRemoteCommandID:description:targetQueue:block: unsuccessful.", nil),
+                         NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:@"Response block argument missing from addRemoteCommandID:description:targetQueue:block: method call for command id %@", identifier],
+                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Be sure to assign a block when invoking addRemoteCommandID:description:targetQueue:block:", nil)
                          };
             error = [NSError errorWithDomain:@"Tealium"
                                         code:TEALErrorCodeFailure

@@ -119,6 +119,8 @@
 		715C4A1B1C52EB6A006B39EF /* TEALPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0F1C52EB6A006B39EF /* TEALPublishSettingsTests.m */; };
 		715C4A1C1C52EB6A006B39EF /* TEALSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A101C52EB6A006B39EF /* TEALSettingsTests.m */; };
 		716746A11C438145001A27D8 /* TEALPublishSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 716746A01C438145001A27D8 /* TEALPublishSettings+TagManagement.m */; };
+		716AD98A1C56D558007D7E7C /* TEALRemoteCommandManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */; };
+		716AD98C1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */; };
 		716CC9C41C53513500510B21 /* audiencestream_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9A91C53513500510B21 /* audiencestream_OFF.html */; };
 		716CC9C51C53513500510B21 /* audiencestream_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AA1C53513500510B21 /* audiencestream_ON.html */; };
 		716CC9C61C53513500510B21 /* collect_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AB1C53513500510B21 /* collect_OFF.html */; };
@@ -568,6 +570,9 @@
 		715C4A101C52EB6A006B39EF /* TEALSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsTests.m; sourceTree = "<group>"; };
 		7167469F1C438145001A27D8 /* TEALPublishSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TEALPublishSettings+TagManagement.h"; path = "../../Source/TagManagement/TEALPublishSettings+TagManagement.h"; sourceTree = "<group>"; };
 		716746A01C438145001A27D8 /* TEALPublishSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TEALPublishSettings+TagManagement.m"; path = "../../Source/TagManagement/TEALPublishSettings+TagManagement.m"; sourceTree = "<group>"; };
+		716AD9881C569FAE007D7E7C /* Tealium+TagManagement+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Tealium+TagManagement+PrivateHeader.h"; path = "../../Source/TagManagement/Tealium+TagManagement+PrivateHeader.h"; sourceTree = "<group>"; };
+		716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManagerTests.m; sourceTree = "<group>"; };
+		716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchServiceTests.m; sourceTree = "<group>"; };
 		716CC9A91C53513500510B21 /* audiencestream_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = audiencestream_OFF.html; sourceTree = "<group>"; };
 		716CC9AA1C53513500510B21 /* audiencestream_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = audiencestream_ON.html; sourceTree = "<group>"; };
 		716CC9AB1C53513500510B21 /* collect_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = collect_OFF.html; sourceTree = "<group>"; };
@@ -1156,6 +1161,7 @@
 			isa = PBXGroup;
 			children = (
 				710E1D0A1C29ABF5007BABF7 /* RemoteCommands */,
+				716AD9881C569FAE007D7E7C /* Tealium+TagManagement+PrivateHeader.h */,
 				710E1D171C29ABF6007BABF7 /* Tealium+TagManagement.h */,
 				710E1D181C29ABF6007BABF7 /* Tealium+TagManagement.m */,
 				710E1D191C29ABF6007BABF7 /* TEALTagDispatchService.h */,
@@ -1232,6 +1238,8 @@
 		715C4A041C52EB6A006B39EF /* sourceTestClasses */ = {
 			isa = PBXGroup;
 			children = (
+				716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */,
+				716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */,
 				715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */,
 				715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */,
 				715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */,
@@ -1744,6 +1752,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				716AD98C1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m in Sources */,
 				715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */,
 				71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */,
 				712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */,
@@ -1760,6 +1769,7 @@
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,
 				715C4A1B1C52EB6A006B39EF /* TEALPublishSettingsTests.m in Sources */,
 				715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */,
+				716AD98A1C56D558007D7E7C /* TEALRemoteCommandManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

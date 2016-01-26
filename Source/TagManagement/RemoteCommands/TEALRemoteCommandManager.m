@@ -17,7 +17,6 @@
 @interface TEALRemoteCommandManager()
 
 @property (nonatomic) BOOL ivarIsEnabled;
-@property (nonatomic, strong) NSDictionary *commands;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
 
 @end
@@ -44,31 +43,26 @@
     
 #warning RESERVED COMMANDS NOT WORKING
     
-    BOOL loadedHTTPCommand =
-    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandHTTP
-                 description:@"Processes tag created HTTP calls"
+    __block BOOL loadedHTTPCommand = NO;
+    
+    [self addRemoteCommandID:TEALKeyTagRemoteReservedCommandHTTP
+                 description:@"Process tag created HTTP calls."
                  targetQueue:self.operationManager.underlyingQueue
-                       block:^(TEALRemoteCommandResponse*response) {
-                           
-                           if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
-                               [responseB send];
-                           }];
-                           
-                       }];
-
-    // For 5.1
-//    __block TEALOperationManager *blockOperationManager = self.operationManager;
-//    BOOL loadedMobileCompanionCommand =
-//    [self addRemoteCommandId:TEALKeyTagRemoteReservedCommandMobileCompanion
-//                 description:@"Remote unlock Mobile Companion"
-//                 targetQueue:self.operationManager.underlyingQueue
-//                       block:^(TEALRemoteCommandResponse*response) {
-//                           
-//                           [[NSNotificationCenter defaultCenter] postNotificationName:@"com.tealium.mobilecompanion.reveal" object:blockOperationManager];
-//                       }];
-    
-    if (successBlock) successBlock(loadedHTTPCommand);
-    
+               responseBlock:^(TEALRemoteCommandResponse *response) {
+                   
+                   if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
+                       [responseB send];
+                   }];
+                   
+               } completion:^(BOOL success, NSError * _Nullable error) {
+                  
+                   loadedHTTPCommand = success;
+                   
+                   if (loadedHTTPCommand  &&
+                       successBlock){
+                       successBlock(YES);
+                   }
+               }];
     
 }
 
@@ -90,61 +84,161 @@
     return self.ivarIsEnabled;
 }
 
-- (void) processRequest:(NSURLRequest*)request completionHandler:(TEALRemoteCommandResponseBlock)responseBlock {
+- (void) processCommandString:(NSString *)commandString
+                responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
+                   completion:(TEALBooleanCompletionBlock)completion {
     
-    if (!self.ivarIsEnabled) {
-        if (responseBlock) {
-            responseBlock(nil);
+    NSError *error;
+    
+    NSString *commandID = [TEALRemoteCommandManager commandIDFromCommandString:commandString];
+    if (!commandID){
+        
+        NSString *reason = [NSString stringWithFormat:@"Command ID Missing from command string: %@", commandString];
+        
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Could not process command.", @"")
+                                  reason:reason
+                              suggestion:NSLocalizedString(@"Check Tag Bridge Tag in TIQ", @"")];
+        
+        if (completion){
+            completion(NO, error);
         }
         return;
     }
     
-    NSString *requestString = request.URL.absoluteString;
+    NSDictionary *requestData = [TEALRemoteCommandManager requestDataFromCommandString:commandString error:error];
+    if (!requestData ||
+        error){
+        
+        if (completion){
+            completion(NO, error);
+        }
+        return;
+    }
     
-    // Called by CommHandler to process a Tag Bridge
-    TEALRemoteCommandResponse *response = [[TEALRemoteCommandResponse alloc] initWithURLString:requestString completionHandler:responseBlock];
+    NSDictionary *payload = [TEALRemoteCommandManager payloadFromRequestData:requestData error:error];
+    if (!payload ||
+        error){
+        
+        if (completion){
+            completion(NO, error);
+        }
+        return;
+    }
     
+    // Optional
+    NSString *responseID = [TEALRemoteCommandManager responseIDFromRequestData:requestData error:error];
+    
+    TEALRemoteCommandResponse *response = [[TEALRemoteCommandResponse alloc] init];
+    if (!response){
+        
+        NSString *description = [NSString stringWithFormat:@"Could not process command from: %@", commandString];
+        
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:description
+                                  reason:NSLocalizedString(@"Could not init a response object", @"")
+                              suggestion:NSLocalizedString(@"Consult Tealium Engineering - processCommandString:responseBlock:completion:", @"")];
+        
+        if (completion){
+            completion(NO, error);
+        }
+        return;
+    }
+    
+    // Final response setup
+    response.status = 0;
+    response.commandId = commandID;
+    response.requestPayload = payload;
+    response.responseId = responseID;
+    response.commandId = commandID;
     [response setDelegate:self];
     
-    if (response){
-        [self triggerCommandWithResponse:response responseBlock:responseBlock];
-    }
-    else if (responseBlock) {
-        responseBlock(nil);
-    }
+    [self triggerCommandWithResponse:response
+                       responseBlock:responseBlock
+                          completion:completion];
 }
 
-- (BOOL) addRemoteCommandId:(NSString*)name description:(NSString*)description targetQueue:(dispatch_queue_t)queue block:(TEALRemoteCommandResponseBlock)responseBlock {
+- (void) addRemoteCommandID:(NSString*)commandID
+                description:(NSString*)description
+                targetQueue:(dispatch_queue_t)queue
+              responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
+                 completion:(TEALBooleanCompletionBlock)completion {
     
-    //
-    // name - (command id) required
-    // description - optional
-    // queue - required
-    // responseBlock - required
+    NSError *error = nil;
     
-    if (!name || name == nil){
-        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommandId response:nil identifier:nil responseBlock:responseBlock];
-        return NO;
+    if (!self.isEnabled){
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Could not add remote command.", @"")
+                                  reason:NSLocalizedString(@"Remote Command Manager not enabled.", @"")
+                              suggestion:NSLocalizedString(@"Make sure Tag Management is enabled in Publish settings & Remote Commands are enabled in configuration object.", @"")];
+        if (completion){
+            completion(NO, error);
+        }
+        return;
     }
-    if (!responseBlock || responseBlock == nil){
-        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommandBlock response:nil identifier:name responseBlock:nil];
-        return NO;
+    
+    if (!commandID){
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Could not add remote command.", @"")
+                                  reason:NSLocalizedString(@"Call missing command id argument.", @"")
+                              suggestion:NSLocalizedString(@"Add id argument to addRemoteCommandID:description:targetQueue:responseBlock: call.", @"")];
+        if (completion){
+            completion(NO, error);
+        }
     }
     
-    TEALRemoteCommand *command = self.commands[name];
+    if (!responseBlock){
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:NSLocalizedString(@"Could not add remote command.", @"")
+                                  reason:NSLocalizedString(@"Call missing Response block argument.", @"")
+                              suggestion:NSLocalizedString(@"Add responseBlock argument to addRemoteCommandID:description:targetQueue:responseBlock: call.", @"")];
+        if (completion){
+            completion(NO, error);
+        }
+    }
+    
+    TEALRemoteCommand *command = self.commands[commandID];
     
     if (!command) {
         command = [[TEALRemoteCommand alloc] init];
     }
     
-    command.commandID = name;
+    // command id - required
+    // description - optional
+    // queue - required
+    // responseBlock - required
+    
+    command.commandID = commandID;
     command.commandDescription = description;
     command.responseBlock = responseBlock;
     command.queue = queue;
     
-    [self addNewCommands:@{name:command}];
+    [self addNewCommands:@{commandID:command}];
     
-    return YES;
+    if (completion){
+        completion(YES, nil);
+    }
+    
+}
+
+- (void) removeRemoteCommandID:(NSString *)name
+                    completion:(TEALBooleanCompletionBlock)completion {
+    
+    NSDictionary *commands = [self.commands copy];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
+    
+    [mDict removeObjectForKey:name];
+    
+    NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.operationManager addOperationWithBlock:^{
+        
+        weakSelf.commands = newCommands;
+        if (completion) completion(YES, nil);
+        
+    }];
 }
 
 #pragma mark - PRIVATE INSTANCE
@@ -163,6 +257,144 @@
     }];
 }
 
+#pragma mark - PUBLIC CLASS
+
++ (NSString *) commandStringFromURLString:(NSString *)urlString
+                                    error:(NSError * __autoreleasing)error{
+    
+    // Stripping the tealium:// prefix from request url
+    
+    NSString * cleanedString = [urlString stringByRemovingPercentEncoding];
+    
+    if ([cleanedString rangeOfString:@"tealium://"].location == NSNotFound){
+        
+        NSString *description = [NSString stringWithFormat:@"No Tag Bridge command info from url string: %@", urlString];
+        
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:description
+                                  reason:NSLocalizedString(@"tealium:// prefix missing", @"")
+                              suggestion:NSLocalizedString(@"No corrections - this is not a Tag Bridge command.", @"")];
+        return nil;
+        
+    }
+    
+    // Focus on data after id prefix
+    NSString *extractedUrlString = [cleanedString stringByReplacingOccurrencesOfString:@"tealium://" withString:@""];
+    
+    if (!extractedUrlString){
+        
+        NSString *description = [NSString stringWithFormat:@"No Tag Bridge command info from url string: %@", urlString];
+        
+        error = [TEALError errorWithCode:TEALErrorCodeMalformed
+                             description:description
+                                  reason:NSLocalizedString(@"No data after tealium:// prefix.", @"")
+                              suggestion:NSLocalizedString(@"Malformed Tag Bridge Command from UTAG.", @"")];
+        return nil;
+    }
+    
+    return extractedUrlString;
+    
+}
+
++ (NSString *) commandIDFromCommandString:(NSString *)commandString {
+    
+    NSRange commandIdRange = [commandString rangeOfString:@"?"];
+    
+    NSUInteger commandIdindex = commandIdRange.location;
+    
+    NSString *commandId = [commandString substringToIndex:commandIdindex];
+    
+    return commandId;
+    
+}
+
++ (NSDictionary *) requestDataFromCommandString:(NSString *)commandString
+                                      error:(NSError * __autoreleasing)error{
+
+    
+    // Extract Request Data after the command id + ?
+    
+    // skip over command id + ? + request=
+    NSRange startRange = [commandString rangeOfString:@"="];
+
+    NSUInteger startIndex = startRange.location + 1;
+    
+    NSString *argString = [commandString substringFromIndex:startIndex];
+    
+    id jsonObj;
+    
+    if (argString && argString.length > 0){
+        
+        NSData *jsonData = [argString dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSError *jsonError;
+        
+        jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
+        
+        if (jsonError){
+            error = jsonError;
+            return nil;
+        }
+    }
+    
+    NSDictionary *requestDict = jsonObj;
+    
+    if (!requestDict) {
+        
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"Could not extract payload from Tag Bridge command string.", @"")
+                                  reason:NSLocalizedString(@"Could not parse data to JSON.", @"")
+                              suggestion:NSLocalizedString(@"Check command string from template.", @"")];
+        
+        return nil;
+    }
+    
+    return requestDict;
+    
+}
+
++ (NSString *) responseIDFromRequestData:(NSDictionary *)requestData
+                                   error:(NSError * __autoreleasing)error {
+    
+    NSDictionary *config = requestData[TEALKeyTagRemoteCommandConfig];
+
+    if (!config){
+        error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                             description:NSLocalizedString(@"Could not retrieve response id from request data.", @"")
+                                  reason:NSLocalizedString(@"Config data not found.", @"")
+                              suggestion:NSLocalizedString(@"Check Tag Bridge Tag Template.", @"")];
+        return nil;
+    }
+    
+    NSString *responseID = config[TEALKeyTagRemoteCommandResponseId];
+    
+    if (!responseID){
+        error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                             description:NSLocalizedString(@"Could not retrieve response id from request data.", @"")
+                                  reason:NSLocalizedString(@"Config data did not contain response id.", @"")
+                              suggestion:NSLocalizedString(@"Check Tag Bridge Tag Template.", @"")];
+        return nil;
+    }
+    
+    return responseID;
+    
+}
+
++ (NSDictionary *) payloadFromRequestData:(NSDictionary*)requestData
+                                    error:(NSError * __autoreleasing)error{
+    
+    NSDictionary *payload = requestData[TEALKeyTagRemoteCommandPayload];
+    
+    if (!payload){
+        error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                             description:NSLocalizedString(@"No Payload in request data.", @"")
+                                  reason:NSLocalizedString(@"No Payload found.", @"")
+                              suggestion:NSLocalizedString(@"Check mapping to Tag Bridge Tag.", @"")];
+        return nil;
+    }
+
+    return payload;
+}
 
 #pragma mark - TAG REMOTE COMMAND RESPONSE DELEGATE
 
@@ -183,67 +415,47 @@
 
 #pragma mark - TRIGGER REMOTE COMMANDS
 
-- (void) triggerCommandWithResponse:(TEALRemoteCommandResponse*)response responseBlock:(TEALRemoteCommandResponseBlock)responseBlock {
+- (void) triggerCommandWithResponse:(TEALRemoteCommandResponse*)response
+                      responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
+                         completion:(TEALBooleanCompletionBlock)completion{
+
+    NSError *error = nil;
     
     __block TEALRemoteCommand *command = [self commands][response.commandId];
-    
+
     if (!command){
         
-        __block typeof(self) __weak weakSelf = self;
+        NSString *description = [NSString stringWithFormat:@"Could not trigger command id: %@", response.commandId];
         
-        // will attempt one re-try
-        if (response.status != TEALErrorCodeFailure){
-            
-
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                
-                [weakSelf triggerCommandWithResponse:response
-                                       responseBlock:responseBlock];
-                
-            });
-            
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:description
+                                  reason:NSLocalizedString(@"Command block not yet added via the addRemoteCommandID:description:targetQueue:responseBlock: method.", @"")
+                              suggestion:NSLocalizedString(@"Adjust timing of command in TIQ or add remote command block earlier.", @"")];
+        
+        if (completion){
+            completion(NO, error);
         }
-        
-        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommand
-                                    response:response
-                                  identifier:nil
-                               responseBlock:responseBlock];
-        
-        // send no command response
-        
-        response.status = TEALErrorCodeFailure;
-        response.body   = @"Command Not Found.";
-        
-        [weakSelf tealiumRemoteCommandResponseRequestsSend:response];
-
         return;
     }
     
     dispatch_queue_t queue = command.queue;
-    
+
+    // If no queue was provided in addRemoteCommandID... method, default to main thread
     if (!queue){
         
-        [TEALRemoteCommandErrors returnError:TEALRemoteResponseErrorMissingCommand
-                                    response:response
-                                  identifier:nil
-                               responseBlock:responseBlock];
+        queue = dispatch_get_main_queue();
         
-        response.status = TEALErrorCodeException;
-        response.body   = @"Command Queue No Longer available.";
-        
-        return;
     }
-
-    // Execute the command block to the target queue
     
     response.status = TEALErrorCodeSuccess;
-
+    
     // Trigger the dispatch
     dispatch_async(queue, ^{
         
         TEALRemoteCommandResponseBlock blockActual = command.responseBlock;
         if (blockActual) blockActual(response);
         if (responseBlock)responseBlock(response);
+        if (completion)completion(YES, nil);
         
     });
     

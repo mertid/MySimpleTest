@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
     
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"tagbridge"
                                                                        environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
@@ -52,9 +52,9 @@ static TealiumHelper * _sharedInstance;
     
 //    configuration.overridePublishSettingsURL = @"https://chadhartman.github.io/tealium-ios/mps_collect_batch.json";
     
-    configuration.overridePublishSettingsURL = @"https://www.tealium.com/this_page_does_not_exists";
+//    configuration.overridePublishSettingsURL = @"https://www.tealium.com/this_page_does_not_exists";
     
-    configuration.remoteCommandsEnabled = NO;
+//    configuration.remoteCommandsEnabled = YES;
     
     configuration.collectPollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
@@ -135,10 +135,11 @@ static TealiumHelper * _sharedInstance;
 
     if ([self isTesting]){ return; }
 
-    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addRemoteCommandId:@"logger"
-        description:@"An example remote command block"
-        targetQueue:dispatch_get_main_queue()
-        block:^(TEALRemoteCommandResponse * _Nullable response) {
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
+     addRemoteCommandID:@"logger"
+     description:@"An example remote command block"
+     targetQueue:dispatch_get_main_queue()
+     responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
         
         NSLog(@"%s response: %@", __FUNCTION__, response);
         // Put any code here that can execute on the main thread - ie content

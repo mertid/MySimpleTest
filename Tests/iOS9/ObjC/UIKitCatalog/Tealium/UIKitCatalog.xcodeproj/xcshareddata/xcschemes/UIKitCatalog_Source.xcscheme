@@ -40,10 +40,16 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "TEALRemoteCommandManagerTests/testTriggerRemoteCommand">
+               </Test>
+               <Test
                   Identifier = "TealiumConfigurationsTests/testAnything">
                </Test>
                <Test
                   Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
+               </Test>
+               <Test
+                  Identifier = "Tealium_TagManagementPublicAPITests/testAddAndExecuteRemoteCommandBlock">
                </Test>
                <Test
                   Identifier = "__x_FrameworkUITests">
