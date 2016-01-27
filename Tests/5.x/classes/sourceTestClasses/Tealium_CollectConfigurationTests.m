@@ -161,30 +161,23 @@
 
 #pragma mark - GENERAL TESTS
 
-- (void) testCollectEnabledByPublishSettings {
+- (void) testCollectEnabledByPublishSettingsAlt {
     
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"html"];
-
-    XCTAssertTrue(path, @"Path confirmation to test file failed:%@", path);
-    
-    NSString *pathJSON = [[NSBundle bundleForClass:[self class]] pathForResource:@"collect_ON" ofType:@"json"];
-    
-    XCTAssertTrue(pathJSON, @"Path confirmation to test file failed:%@", pathJSON);
-    
-    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
     
     __block BOOL isNeverReady = NO;
     
     // Adding in a little time buffer to let module spin up
     
-    [TEALTestHelper waitFor:&isNeverReady timeout:0.5];
+    [TEALTestHelper waitFor:&isNeverReady timeout:1.0];
     
     XCTAssertTrue([self.library.settings collectEnabled], @"Collect was not enabled by remote publish settings.");
     
     NSArray *dispatchServices = [self.library currentDispatchServices];
-
+    
     XCTAssertTrue([self collectDispatchServiceInArray:dispatchServices], @"Collect dispatch service NOT found in:%@", dispatchServices);
 }
+
 
 - (void) testCollectDisableByPublishSettings {
     
@@ -199,24 +192,21 @@
     XCTAssertTrue(![self collectDispatchServiceInArray:dispatchServices], @"Collect dispatch service found in:%@", dispatchServices);
 }
 
-- (void) testS2SEnableByPublishSettings {
+- (void) testS2SEnabledByPublishSettings {
     
-    TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"s2s_ON"];
-    
-    [self enableLibraryWithConfiguration:config];
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
     
     __block BOOL isNeverReady = NO;
     
     // Adding in a little time buffer to let module spin up
     
-    [TEALTestHelper waitFor:&isNeverReady timeout:0.5];
+    [TEALTestHelper waitFor:&isNeverReady timeout:1.0];
     
-    XCTAssertTrue([self.library.settings s2SLegacyEnabled],@"S2S disabled when should have been enabled");
+    XCTAssertTrue([self.library.settings s2SLegacyEnabled], @"S2S was not enabled by remote publish settings.");
     
     NSArray *dispatchServices = [self.library currentDispatchServices];
     
-    XCTAssertTrue([self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S Legacy dispatch service NOT found in:%@", dispatchServices);
-    
+    XCTAssertTrue([self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S dispatch service NOT found in:%@", dispatchServices);
 }
 
 - (void) testS2SDisableByPublishSettings {
@@ -293,53 +283,99 @@
 
 // Track calls require a dispatch service to run, so we're adding track tests to each of the dispatch service modules
 
-- (void) testTrackBatchedEvent {
+//- (void) testTrackBatchedEvent {
+//
+//    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"batch_5"]];
+//    
+//    self.library.delegate = self;
+//    
+//    
+//    XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
+//    
+//    __block int finishedDispatches = 0;
+//    
+//    __block int batchLimit = 5;
+//    
+//    // Manually set to match batch_size in above json file
+//    for (__block int i = 0; i < batchLimit; i++) {
+//        
+//        TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:@{@"iteration":@(i)}];
+//
+//        [self.library trackDispatch:dispatch
+//                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+//                             
+//             XCTAssert(!error, @"Error in track call detected:%@", error);
+//             
+//             finishedDispatches++;
+//             
+//             if (finishedDispatches < batchLimit ){
+//                 XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
+//             }
+//             
+//             if (finishedDispatches == batchLimit ){
+//                 
+//                 [batchExpectation fulfill];
+//                 
+//             }
+//             
+//         }];
+//        
+//    }
+//    
+//    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+//    
+//    // will send upon 5th dispatch
+//    XCTAssertTrue(self.queueCount == batchLimit - 1, @"4 events did not queue prior to trigger - events triggered:%i", self.queueCount);
+//    
+//    // all 5 should be sent
+//    XCTAssertTrue(self.sentCount == batchLimit, @"5 sent calls did not trigger - events detected: %i", self.sentCount);
+//
+//}
 
+- (void) testTrackBatchEvents {
+    
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"batch_5"]];
     
     self.library.delegate = self;
     
+    XCTestExpectation *e = [self expectationWithDescription:@"queueBatches"];
+    XCTestExpectation *eSent = [self expectationWithDescription:@"sendBatches"];
     
-    XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
-    
-    __block int finishedDispatches = 0;
-    
+    __block int finishedAddingDispatches = 0;
     __block int batchLimit = 5;
+    __block NSError *dispatchError;
     
-    // Manually set to match batch_size in above json file
-    for (__block int i = 0; i < batchLimit; i++) {
+    for (int i = 0; i < batchLimit; i++) {
         
         TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:@{@"iteration":@(i)}];
-
-        [self.library trackDispatch:dispatch
-                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
-                             
-             XCTAssert(!error, @"Error in track call detected:%@", error);
-             
-             finishedDispatches++;
-             
-             if (finishedDispatches < batchLimit ){
-                 XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
-             }
-             
-             if (finishedDispatches == batchLimit ){
-                 
-                 [batchExpectation fulfill];
-                 
-             }
-             
-         }];
         
+        [self.library trackDispatch:dispatch
+                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                             
+                             dispatchError = error;
+                             
+                             finishedAddingDispatches++;
+                             
+                             if (finishedAddingDispatches >= batchLimit){
+                                 
+                                [e fulfill];
+                             }
+                             
+                             if (finishedAddingDispatches >= (batchLimit * 2)){
+                                 
+                                 [eSent fulfill];
+                             }
+                             
+                         }];
     }
     
-    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    // will send upon 5th dispatch
-    XCTAssertTrue(self.queueCount == 4, @"5 events did not trigger - events triggered:%i", self.queueCount);
+    XCTAssertTrue(self.queueCount == batchLimit - 1, @"4 events did not queue - instead: %i", self.queueCount);
     
-    // all 5 should be sent
-    XCTAssertTrue(self.sentCount == 5, @"Sent call not confirmed from delegate.");
-
+    XCTAssertTrue(self.sentCount == batchLimit, @"5 events did not send - instead: %i", self.sentCount);
+    
+    
 }
 
 

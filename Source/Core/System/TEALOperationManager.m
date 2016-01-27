@@ -47,7 +47,7 @@ NSString * const TEALOperationManagerIOBaseQueueName = @"com.tealium.operations.
 }
 
 - (void) addOperationWithBlock:(TEALVoidBlock)block {
-    
+#warning Fork 
     dispatch_async(self.serialQueue, block);
 }
 

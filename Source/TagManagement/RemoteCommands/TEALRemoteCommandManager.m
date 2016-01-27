@@ -37,34 +37,72 @@
     
 }
 
-- (void) addReservedCommands:(TEALBooleanBlock)successBlock {
-    
-    __block typeof(self) __weak weakSelf = self;
-    
-#warning RESERVED COMMANDS NOT WORKING
-    
-    __block BOOL loadedHTTPCommand = NO;
-    
-    [self addRemoteCommandID:TEALKeyTagRemoteReservedCommandHTTP
-                 description:@"Process tag created HTTP calls."
-                 targetQueue:self.operationManager.underlyingQueue
-               responseBlock:^(TEALRemoteCommandResponse *response) {
-                   
-                   if (!response.error)[weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
-                       [responseB send];
-                   }];
-                   
-               } completion:^(BOOL success, NSError * _Nullable error) {
-                  
-                   loadedHTTPCommand = success;
-                   
-                   if (loadedHTTPCommand  &&
-                       successBlock){
-                       successBlock(YES);
-                   }
-               }];
-    
-}
+//- (void) addReservedCommands:(TEALBooleanCompletionBlock)completion {
+//    
+//    __block typeof(self) __weak weakSelf = self;
+//    
+//#warning RESERVED COMMANDS NOT WORKING
+//        
+//    [self addRemoteCommandID:TEALKeyTagRemoteReservedCommandHTTP
+//                 description:@"Process tag created HTTP calls."
+//                 targetQueue:self.operationManager.underlyingQueue
+//               responseBlock:^(TEALRemoteCommandResponse *response) {
+//                   
+//                   if (response.error){
+//                       if (weakSelf.delegate){
+//                           [weakSelf.delegate remoteCommandManagerReportedError:response.error];
+//                       }
+//                       return;
+//                   }
+//                   
+//                   [weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
+//                       [responseB send];
+//                   }];
+//                   
+//               } completion:completion];
+//    
+//}
+
+//- (void) addReservedCommands:(TEALBooleanBlock)successBlock {
+//    
+//    __block typeof(self) __weak weakSelf = self;
+//    
+//#warning RESERVED COMMANDS NOT WORKING
+//    
+//    __block BOOL loadedHTTPCommand = NO;
+//    
+//    [self addRemoteCommandID:TEALKeyTagRemoteReservedCommandHTTP
+//                 description:@"Process tag created HTTP calls."
+//                 targetQueue:self.operationManager.underlyingQueue
+//               responseBlock:^(TEALRemoteCommandResponse *response) {
+//                   
+//                   if (response.error){
+//                       if (weakSelf.delegate){
+//                           [weakSelf.delegate remoteCommandManagerReportedError:response.error];
+//                       }
+//                       return;
+//                   }
+//                   
+//                   [weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
+//                       [responseB send];
+//                   }];
+//                   
+//               } completion:^(BOOL success, NSError * _Nullable error) {
+//                  
+//                   loadedHTTPCommand = success;
+//                   
+//                   if (loadedHTTPCommand  &&
+//                       successBlock){
+//                       successBlock(YES);
+//                   }
+//                   
+//                   if (weakSelf.delegate &&
+//                       error){
+//                       [weakSelf.delegate remoteCommandManagerReportedError:error];
+//                   }
+//               }];
+//    
+//}
 
 - (void) enable {
     
@@ -408,7 +446,7 @@
                                  ", response.commandId, response.responseId, (long)response.status, response.body];
     
     if (self.delegate) {
-        [self.delegate tagRemoteCommandManagerRequestsCommandToWebView:callBackCommand];
+        [self.delegate remoteCommandManagerRequestsCommandToWebView:callBackCommand];
     }
     
 }
@@ -465,7 +503,7 @@
 
 #pragma mark - RESERVED COMMANDS
 
-- (void) executeHTTPCommandWithResponse:(TEALRemoteCommandResponse*)oResponse completionBlock:(TEALRemoteCommandResponseBlock)oResponseBlock{
++ (void) executeHTTPCommandWithResponse:(TEALRemoteCommandResponse*)oResponse completionBlock:(TEALRemoteCommandResponseBlock)oResponseBlock{
     
     // TODO: Optimize this block to use &error as in the authenticate check below
     
@@ -564,7 +602,7 @@
 
 #pragma mark - HELPERS
 
-- (NSString*) urlString:(NSString*)urlString
++ (NSString*) urlString:(NSString*)urlString
 withAuthentificationFrom:(NSDictionary*)authentification
                   error:(NSError * __autoreleasing *)error{
     
@@ -602,7 +640,7 @@ withAuthentificationFrom:(NSDictionary*)authentification
     return urlString;
 }
 
-- (NSString*) urlString:(NSString*)urlString withParametersFrom:(NSDictionary*)parameters{
++ (NSString*) urlString:(NSString*)urlString withParametersFrom:(NSDictionary*)parameters{
     
     // Failure will return original urlString passed in.
     
@@ -627,7 +665,7 @@ withAuthentificationFrom:(NSDictionary*)authentification
     return newUrlString;
 }
 
-- (NSMutableURLRequest*) request:(NSMutableURLRequest*)request withHeadersFrom:(NSDictionary*)headers{
++ (NSMutableURLRequest*) request:(NSMutableURLRequest*)request withHeadersFrom:(NSDictionary*)headers{
     
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([obj isKindOfClass:[NSString class]]){
@@ -637,7 +675,7 @@ withAuthentificationFrom:(NSDictionary*)authentification
     return request;
 }
 
-- (NSMutableURLRequest*) request:(NSMutableURLRequest*)request withBody:(id)body{
++ (NSMutableURLRequest*) request:(NSMutableURLRequest*)request withBody:(id)body{
     
     if (body){
         NSData *jsonData = nil;

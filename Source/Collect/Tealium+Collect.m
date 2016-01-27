@@ -191,20 +191,13 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         return;
     }
     
-    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
-    
     NSString *collectDispatchString = [self.settings collectDispatchURLStringForVisitorID:[[self dataSources] visitorIDCopy]];
     
     TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:collectDispatchString
                                                                                                  sessionManager:self.urlSessionManager];
-    
     [dispatchService setup];
     
-    [newServices addObject:dispatchService];
-    
-    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
-    
-    [self.logger logDev:@"Collect enabled."];
+    [self addNewDispatchService:dispatchService];
 
 }
 
@@ -256,18 +249,12 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         return;
     }
     
-    NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchNetworkServices];
-    
     TEALS2SLegacyDispatchService *dispatchService = [[TEALS2SLegacyDispatchService alloc] initWithDispatchURLString:[self.settings s2SLegacyDispatchURLString]
                                                                                               visitorID:[self.dataSources visitorIDCopy] sessionManager:self.urlSessionManager];
     
     [dispatchService setup];
     
-    [newServices addObject:dispatchService];
-    
-    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
-    
-    [self.logger logDev:@"S2S Legacy enabled."];
+    [self addNewDispatchService:dispatchService];
     
 }
 

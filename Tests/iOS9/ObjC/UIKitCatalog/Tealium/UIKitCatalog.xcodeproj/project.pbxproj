@@ -41,6 +41,8 @@
 		535682BE18F3670300BAAD62 /* AAPLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A418F3670300BAAD62 /* AAPLWebViewController.m */; };
 		535682BF18F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */; };
 		53874F9918F36B1800510922 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53874F9718F36B1800510922 /* Localizable.strings */; };
+		7104CF0F1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */; };
+		7104CF111C584D95008AA63E /* ajaxHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = 7104CF101C584D95008AA63E /* ajaxHandler.js */; };
 		710E1C3F1C29ABD7007BABF7 /* lifecycle_events.xml in Resources */ = {isa = PBXBuildFile; fileRef = 710E1C201C29ABD7007BABF7 /* lifecycle_events.xml */; };
 		710E1D461C29ABF6007BABF7 /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C781C29ABF5007BABF7 /* TEALVisitorProfile.m */; };
 		710E1D481C29ABF6007BABF7 /* TEALVisitorProfileAudienceAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C7A1C29ABF5007BABF7 /* TEALVisitorProfileAudienceAttribute.m */; };
@@ -109,7 +111,6 @@
 		712BAF361C29BED4007767CD /* UIKitCatalogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */; };
 		715C4A111C52EB6A006B39EF /* TEALConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */; };
 		715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */; };
-		715C4A141C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */; };
 		715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */; };
 		715C4A161C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */; };
 		715C4A171C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */; };
@@ -407,6 +408,8 @@
 		535682A518F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AAPLApplicationSpecific.h"; sourceTree = "<group>"; };
 		535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AAPLApplicationSpecific.m"; sourceTree = "<group>"; };
 		53874F9818F36B1800510922 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectConfigurationTests.m; sourceTree = "<group>"; };
+		7104CF101C584D95008AA63E /* ajaxHandler.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ajaxHandler.js; path = ../../Source/TagManagement/ajaxHandler.js; sourceTree = "<group>"; };
 		710E1C201C29ABD7007BABF7 /* lifecycle_events.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = lifecycle_events.xml; sourceTree = "<group>"; };
 		710E1C2E1C29ABD7007BABF7 /* TealiumDelegateTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegateTestObject.h; sourceTree = "<group>"; };
 		710E1C2F1C29ABD7007BABF7 /* TealiumDelegateTestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumDelegateTestObject.m; sourceTree = "<group>"; };
@@ -559,7 +562,6 @@
 		7134F0181C4EB746006AACEF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfigurationTests.m; sourceTree = "<group>"; };
 		715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDatasourcesTests.m; sourceTree = "<group>"; };
-		715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectonfigurationTests.m; sourceTree = "<group>"; };
 		715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectPublicAPITests.m; sourceTree = "<group>"; };
 		715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagementPublicAPITests.m; sourceTree = "<group>"; };
 		715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagmentConfigurationTests.m; sourceTree = "<group>"; };
@@ -1160,6 +1162,7 @@
 		710E1D091C29ABF5007BABF7 /* tagmanagement */ = {
 			isa = PBXGroup;
 			children = (
+				7104CF101C584D95008AA63E /* ajaxHandler.js */,
 				710E1D0A1C29ABF5007BABF7 /* RemoteCommands */,
 				716AD9881C569FAE007D7E7C /* Tealium+TagManagement+PrivateHeader.h */,
 				710E1D171C29ABF6007BABF7 /* Tealium+TagManagement.h */,
@@ -1242,7 +1245,7 @@
 				716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */,
 				715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */,
 				715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */,
-				715C4A081C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m */,
+				7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */,
 				715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */,
 				715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */,
 				715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */,
@@ -1550,6 +1553,7 @@
 				53874F9918F36B1800510922 /* Localizable.strings in Resources */,
 				B5C300DF1B0FC4F1003B05A0 /* LaunchScreen.storyboard in Resources */,
 				5356825918F3656900BAAD62 /* Images.xcassets in Resources */,
+				7104CF111C584D95008AA63E /* ajaxHandler.js in Resources */,
 				3EC13ADE1933D95700915353 /* Main.storyboard in Resources */,
 				B5C805741B1A7BDE00C110F1 /* Search.storyboard in Resources */,
 			);
@@ -1760,10 +1764,10 @@
 				712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */,
 				715C4A171C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m in Sources */,
 				715C4A1C1C52EB6A006B39EF /* TEALSettingsTests.m in Sources */,
-				715C4A141C52EB6A006B39EF /* Tealium_CollectonfigurationTests.m in Sources */,
 				715C4A111C52EB6A006B39EF /* TEALConfigurationTests.m in Sources */,
 				715C4A1A1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m in Sources */,
 				715C4A161C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m in Sources */,
+				7104CF0F1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m in Sources */,
 				715C4A191C52EB6A006B39EF /* TealiumTrackTests.m in Sources */,
 				715C4A181C52EB6A006B39EF /* TealiumInstanceManagmentTests.m in Sources */,
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,

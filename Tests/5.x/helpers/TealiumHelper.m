@@ -37,10 +37,14 @@ static TealiumHelper * _sharedInstance;
     }
     
     // Configure Tealium
-    
+
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                            profile:@"tagbridge"
                                                                        environment:@"dev"];
+    
+//    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
+//                                                                           profile:@"mobile"
+//                                                                       environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
 
@@ -62,6 +66,8 @@ static TealiumHelper * _sharedInstance;
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
     
+    [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
+                                               @"link_id":@"tagbridge"}];
 //    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
 //                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
     

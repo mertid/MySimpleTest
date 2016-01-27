@@ -59,9 +59,7 @@
 - (BOOL) autotrackingDeviceInfoEnabled {
     
     return true;
-    
-//    if ([self publishSettings].disableDeviceInfoAutotracking) return NO;
-//    return self.configuration.autotrackingDeviceInfoEnabled;
+
 }
 
 - (BOOL) autotrackingIvarsEnabled {
@@ -305,10 +303,7 @@
             publishSettings = [weakSelf publishSettings];;
         }
                                 
-        if (!error){
-            // For future MPS config location - currently ignoring any error from this
-            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
-        }
+        // Extract MPS from URL source
                                 
         if (!error &&
             !parsedData){
@@ -316,6 +311,12 @@
             // Fallback to current mobile.html MPS var
             parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:error];
             
+        }
+                                
+        if (!error &&
+            !parsedData){
+            // For future MPS config location - currently ignoring any error from this
+            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
         }
                                 
         if (!error &&
@@ -382,12 +383,12 @@
     
 }
 
-- (void) fetchNewRawPublishSettings:(NSURLRequest*) request
-                         completion:(TEALBooleanCompletionBlock)completion{
-    
-#warning Immplement
-    
-}
+//- (void) fetchNewRawPublishSettings:(NSURLRequest*) request
+//                         completion:(TEALBooleanCompletionBlock)completion{
+//    
+//#warning Immplement
+//    
+//}
 
 - (void) purgeAllArchives {
     

@@ -150,6 +150,9 @@
     XCTestExpectation *expectationCallSent = [self expectationWithDescription:@"remoteCommandExecute"];
     XCTestExpectation *expectationRemoval = [self expectationWithDescription:@"remoteCommandRemove"];
 
+    // Let modules spin up
+    __block BOOL waiting = NO;
+    [TEALTestHelper waitFor:&waiting timeout:1.0];
     
     __block typeof(self) __weak weakSelf = self;
     __block TEALRemoteCommandResponse *weakResponse = nil;

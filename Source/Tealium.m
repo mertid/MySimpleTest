@@ -949,18 +949,13 @@ __strong static NSDictionary *staticAllInstances = nil;
 #pragma mark - DISPATCH SERVICES
 
 - (NSArray *) currentDispatchServices {
-    
-    NSArray *array = nil;
-    
+
     if (!self.dispatchNetworkServices) {
-        
-        array = [[NSArray alloc] init];
-        
-    } else {
-        array = self.dispatchNetworkServices;
+        self.dispatchNetworkServices = [[NSArray alloc] init];
     }
     
-    return array;
+    return self.dispatchNetworkServices;
+
 }
 
 - (void) setCurrentDispatchServices:(NSArray *)newServices {
@@ -970,22 +965,22 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) addNewDispatchService:(id)newService {
+- (void) addNewDispatchService:(id<TEALDispatchService>)newService {
     
-    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    NSArray *dispatchServices = [self currentDispatchServices];
+    
+    if ([dispatchServices containsObject:newService]){
+        return;
+    }
     
     __block NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
     
     [newServices addObject:newService];
     
-    __block typeof(self) __weak weakSelf = self;
+    [self.logger logQA:@"Dispatch Service added: %@", [newService name]];
 
-    [self.operationManager addOperationWithBlock:^{
-        
-        [weakSelf setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
+    [self setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
 
-    }];
-    
     
 }
 
@@ -1045,12 +1040,16 @@ __strong static NSDictionary *staticAllInstances = nil;
                               suggestion:NSLocalizedString(@"Charge device.", @"")];
         shouldDispatch = NO;
     }
-    if ([self dispatchNetworkServices]==0){
+    if ([self currentDispatchServices].count == 0){
         error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"No network dispatch services available", @"")
                               suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings.", @"")];
         shouldDispatch = NO;
+    }
+    
+    if (!shouldDispatch){
+        [self.logger logDev:@"Dispatch Manager call suppressed at this time: %@", error];
     }
     
     return shouldDispatch;

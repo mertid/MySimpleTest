@@ -15,7 +15,8 @@
 
 @protocol TEALRemoteCommandManagerDelegate <NSObject>
 
-- (void) tagRemoteCommandManagerRequestsCommandToWebView:(NSString *)command;
+- (void) remoteCommandManagerRequestsCommandToWebView:(NSString *)command;
+- (void) remoteCommandManagerReportedError:(NSError *)error;
 
 @end
 
@@ -30,9 +31,13 @@
 
 + (NSString *) commandIDFromCommandString:(NSString *)commandString;
 
++ (void) executeHTTPCommandWithResponse:(TEALRemoteCommandResponse*)oResponse completionBlock:(TEALRemoteCommandResponseBlock)oResponseBlock;
+
 - (instancetype) initWithOperationManager:(TEALOperationManager*)manager;
 
-- (void) addReservedCommands:(TEALBooleanBlock)successBlock;
+//- (void) addReservedCommands:(TEALBooleanCompletionBlock)completion;
+
+//- (void) addReservedCommands:(TEALBooleanBlock)successBlock;
 
 - (void) enable;
 

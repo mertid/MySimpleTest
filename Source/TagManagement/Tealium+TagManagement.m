@@ -15,7 +15,7 @@
 #import "TEALModulesDelegate.h"
 #import "TEALNetworkHelpers.h"
 #import "TEALTagDispatchService.h"
-#import "TEALRemoteCommandConstants.h"
+#import "TEALRemoteCommandConstants+PrivateHeader.h"
 #import "TEALRemoteCommandManager.h"
 #import "TEALSettings+TagManagement.h"
 #import "TEALError.h"
@@ -105,15 +105,10 @@
     }
 
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
-//    [tagService.remoteCommandManager enable];
     
     if (!tagService){
         tagService = [self newTagDispatchService];
         [self addNewDispatchService:tagService];
-    }
-        
-    if (tagService) {
-        [self.logger logDev:@"TagManagement enabled."];
     }
 
 }
@@ -139,47 +134,73 @@
     
     [self.logger logDev:@"Remote Commands enabled."];
 
-    __block typeof(self) __weak weakSelf = self;
+//    __block typeof(self) __weak weakSelf = self;
     
-    [[self remoteCommandManager] addReservedCommands:^(BOOL successful) {
-        
-        if (successful) {
-            
-            [weakSelf.logger logDev:@"Reserved Remote Commands enabled."];
-            
-        }
-    }];
+    [self addReservedCommands];
     
-//    [service.remoteCommandManager addReservedCommands:^(BOOL successful) {
+//    [[self remoteCommandManager] addReservedCommands:^(BOOL success, NSError * _Nullable error) {
 //        
-//        if (successful) {
-//        
-//            [weakSelf.logger logDev:@"Reserved Remote Commands enabled."];
+//        if (!success ||
+//            error){
+//            
+//            [weakSelf.logger logDev:@"Problem adding reserved commands: logged error:%@", error];
+//            return;
 //            
 //        }
+//        
+//        [weakSelf.logger logDev:@"Added Reserved Remote Commands."];
+//
 //    }];
+
     
 }
 
 - (void) disableTagManagement {
 
-    
-//    TEALTagDispatchService *service = [self currentTagDispatchService];
-    
     [self removeDispatchService:[self currentTagDispatchService]];
-    
-//    [service.remoteCommandManager disable];
-    
     
 }
 
 - (void) disableRemoteCommands {
     
-//    TEALTagDispatchService *service = [self currentTagDispatchService];
-//
-//    [service.remoteCommandManager disable];
-    
     [[self remoteCommandManager] disable];
+    
+}
+
+- (void) addReservedCommands {
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self addRemoteCommandID:TEALKeyTagRemoteReservedCommandHTTP
+                 description:@"Process tag created HTTP calls."
+                 targetQueue:self.operationManager.underlyingQueue
+               responseBlock:^(TEALRemoteCommandResponse *response) {
+                   
+                   if (response.error){
+                       [weakSelf.logger logDev:@"Problem executing reserved remote command: %@ - response: %@", TEALKeyTagRemoteReservedCommandHTTP, response];
+                       return;
+                   }
+                   
+                   [TEALRemoteCommandManager executeHTTPCommandWithResponse:response
+                                                            completionBlock:^(TEALRemoteCommandResponse *response) {
+                                                                
+                                                                [response send];
+                                                            }];
+                   
+//                   [weakSelf executeHTTPCommandWithResponse:response completionBlock:^(TEALRemoteCommandResponse *responseB) {
+//                       [responseB send];
+//                   }];
+                   
+               } completion:^(BOOL success, NSError * _Nullable error) {
+                   
+                   if (success){
+                       [weakSelf.logger logDev:@"Added reserved remote command for id: %@", TEALKeyTagRemoteReservedCommandHTTP];
+                   }
+                   if (error){
+                       [weakSelf.logger logDev:@"Error adding remote command block %@: %@", TEALKeyTagRemoteReservedCommandHTTP, error];
+                   }
+               }];
+    
 }
 
 - (void) addRemoteCommandID:(NSString*)name
@@ -309,7 +330,7 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
 
 #pragma mark - REMOTE COMMAND MANAGER DELEGATE
 
-- (void) tagRemoteCommandManagerRequestsCommandToWebView:(NSString *)command {
+- (void) remoteCommandManagerRequestsCommandToWebView:(NSString *)command {
     
     __block typeof(self) __weak weakSelf = self;
     
@@ -330,6 +351,11 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     });
 }
 
+- (void) remoteCommandManagerReportedError:(NSError *)error {
+    
+    [self.logger logDev:@"Remote command error: %@", error];
+    
+}
 #pragma mark - TEAL TAG DISPATCH SERVICE DELEGATE
 
 - (BOOL) tagDispatchServiceShouldPermitRequest:(NSURLRequest *)request
@@ -354,6 +380,7 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     [self.remoteCommandManager processCommandString:commandString
                                       responseBlock:^(TEALRemoteCommandResponse *response) {
                                           
+                                          
                                           [weakSelf.logger logDev:@"Processed command: %@ - response: %@", commandString, response];
                                         
                                           
@@ -369,12 +396,32 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     return NO;
 }
 
+- (void) tagDispatchServiceWKWebViewReady:(id)wkWebView {
+
+    [self.logger logDev:@"WKWebView ready: %@", wkWebView];
+    
+    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
+        
+        [self.delegate tealium:self webViewIsReady:wkWebView];
+    }
+    
+}
+
+- (void) tagDispatchServiceWKWebViewCallback:(NSString *)message {
+    
+    [self.logger logDev:@"WKWebView callback message: %@", message];
+
+}
+
 - (void) tagDispatchServiceWebViewReady:(UIWebView *)webView {
     
     if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
         
         [self.delegate tealium:self webViewIsReady:webView];
     }
+    
+    [self.logger logDev:@"UIWebView ready: %@", webView];
+
 }
 
 - (void) tagDispatchServiceWebView:(UIWebView*)webView encounteredError:(NSError *)error {

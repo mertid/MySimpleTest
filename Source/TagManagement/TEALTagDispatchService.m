@@ -18,7 +18,7 @@
 
 @import Security;
 
-@interface TEALTagDispatchService() <UIWebViewDelegate>
+@interface TEALTagDispatchService() <UIWebViewDelegate, WKScriptMessageHandler, WKNavigationDelegate>
 
 @property (nonatomic, weak) NSString *publishURLString;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
@@ -69,11 +69,30 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:urlString];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        weakSelf.webView.delegate = weakSelf;
-        [weakSelf.webView loadRequest:request];
+//        weakSelf.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+//        weakSelf.webView.delegate = weakSelf;
+//        [weakSelf.webView loadRequest:request];
+        
+        WKWebViewConfiguration *wkConfig = [[WKWebViewConfiguration alloc] init];
+        wkConfig.allowsAirPlayForMediaPlayback = NO;
+        wkConfig.allowsInlineMediaPlayback = NO;
+        wkConfig.allowsPictureInPictureMediaPlayback = NO;
+        
+        [self addUserScriptToUserContentController:wkConfig.userContentController];
+        
+        weakSelf.wkWebView = [[WKWebView alloc] initWithFrame:CGRectZero
+                                                configuration:wkConfig];
+        weakSelf.wkWebView.navigationDelegate = self;
+        [weakSelf.wkWebView loadRequest:request];
         
     });
+}
+
+- (void) addUserScriptToUserContentController:(WKUserContentController *) userContentController{
+    NSString *jsHandler = [NSString stringWithContentsOfURL:[[NSBundle mainBundle]URLForResource:@"ajaxHandler" withExtension:@"js"] encoding:NSUTF8StringEncoding error:NULL];
+    WKUserScript *ajaxHandler = [[WKUserScript alloc]initWithSource:jsHandler injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
+    [userContentController addScriptMessageHandler:self name:@"callbackHandler"];
+    [userContentController addUserScript:ajaxHandler];
 }
 
 #pragma mark - PRIVATE INSTANCE
@@ -125,6 +144,45 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
         }];
     });
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [weakSelf.wkWebView evaluateJavaScript:utagString
+                             completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+        
+             if (error){
+                 if (completion){
+                     completion(TEALDispatchStatusFailed, dispatch, error);
+                     return;
+                 }
+             }
+                 
+             if (completion) {
+                 completion(TEALDispatchStatusSent, dispatch, nil);
+             }
+             return;
+ 
+        }];
+        
+    });
+    
+}
+
+#pragma mark - WKUSERCONTENTCONTROLLER DELEGATE
+
+- (void) userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    
+    if (self.delegate){
+        [self.delegate tagDispatchServiceWKWebViewCallback:message.body];
+    }
+}
+
+#pragma mark - WKNAVIGATION DELEGATE
+
+- (void) webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    
+    if (self.delegate){
+        [self.delegate tagDispatchServiceWKWebViewReady:webView];
+    }
 }
 
 #pragma mark - UIWEBVIEW DELEGATE

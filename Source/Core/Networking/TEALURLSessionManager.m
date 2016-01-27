@@ -26,6 +26,8 @@
     
     if (!configuration) {
         configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        configuration.URLCache = nil;
+        configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     }
     
 #ifndef TEAL_TARGET_WATCHOS
@@ -39,6 +41,7 @@
     _urlSession = [NSURLSession sessionWithConfiguration:configuration
                                                 delegate:self
                                            delegateQueue:_sessionQueue];
+    
     return self;
 }
 
@@ -59,6 +62,7 @@
             
         });
     };
+    
     
     NSURLSessionTask *task = [self.urlSession dataTaskWithRequest:request
                                                 completionHandler:taskCompletion];

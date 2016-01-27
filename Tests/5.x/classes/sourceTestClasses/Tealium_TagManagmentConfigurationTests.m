@@ -119,7 +119,7 @@
     
     // Adding in a little time buffer to let module spin up
     
-    [TEALTestHelper waitFor:&isNeverReady timeout:0.5];
+    [TEALTestHelper waitFor:&isNeverReady timeout:1.0];
     
     XCTAssertTrue([self.library.settings tagManagementEnabled], @"Tag Management was not enabled by remote publish settings.");
     

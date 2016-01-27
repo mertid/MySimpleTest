@@ -113,7 +113,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     return self.privateQueuedDispatches;
 }
 
-- (void) addDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
+- (void) addDispatch:(TEALDispatch *)dispatch
+     completionBlock:(TEALDispatchBlock)completionBlock {
     
     [self purgeStaleDispatches];
     
@@ -124,14 +125,16 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     // Can update to mark was_queued, but never unset in case it was set by client
     //  or other service.
     
+    dispatch.assignedBlock = completionBlock;
+
     if (sendNow == YES){
-        
-        dispatch.assignedBlock = completionBlock;
         
         [self runQueuedDispatches];
         
     } else {
 
+        // Why so much to enqueue?
+        
         [self.delegate dispatchManagerWillEnqueueDispatch:dispatch];
 
         [dispatch queue:YES];
@@ -307,6 +310,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) recursivelyDispatchWithCompletion:(TEALVoidBlock)completion {
 
+    // Stop if empty as well
     if (!self.processingQueue) {
         if (completion) {
             completion();
@@ -375,6 +379,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) attemptDispatch:(TEALDispatch *)dispatch completionBlock:(TEALDispatchBlock)completionBlock {
     
+    // Please optimize this is terrible
+    
     NSError *error = [self.configuration errorSendingDispatch:dispatch];
     
     if (error){
@@ -397,14 +403,18 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         return;
     }
     
+    __block typeof(self) __weak weakSelf = self;
+    
+    // Pass dispatch to dispatch managers for delivery
+    
     [self.delegate dispatchManager:self
                   requestsDispatch:dispatch
                    completionBlock:^(TEALDispatchStatus status, TEALDispatch *returnDispatch, NSError *error) {
                     
                        if (status == TEALDispatchStatusSent &&
-                           self.delegate) {
+                           weakSelf.delegate) {
                            
-                           [self.delegate dispatchManagerDidSendDispatch:returnDispatch];
+                           [weakSelf.delegate dispatchManagerDidSendDispatch:returnDispatch];
                            
                        }
                        

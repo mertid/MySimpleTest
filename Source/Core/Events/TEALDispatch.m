@@ -50,6 +50,12 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
     
     [mDict addEntriesFromDictionary:self.payload];
     
+    // DO NOT change queue data source if already set
+    if (mDict[TEALDataSourceKey_WasQueued]){
+        return;
+    }
+    
+    // Set was_queued data source otherwise
     if (wasQueued){
         mDict[TEALDataSourceKey_WasQueued] = TEALDataSourceValue_True;
     } else {

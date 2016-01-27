@@ -19,7 +19,7 @@
 
 @property Tealium *library;
 @property int queueCount;
-
+@property BOOL callBackReceived;
 @end
 
 
@@ -29,6 +29,7 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void)setUp {
     [super setUp];
+    self.callBackReceived = NO;
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -42,11 +43,13 @@ NSString * const versionToTest = @"5.0.0";
 
 #pragma mark - HELPERS
 
-- (void) useLiveLibraryInstanceWithConfig:(TEALConfiguration*)config {
+- (void) useLibraryInstanceWithConfig:(TEALConfiguration*)config {
     
     __block BOOL isReady = NO;
     
-    self.library = [Tealium newInstanceForKey:self.description
+    [Tealium destroyInstanceForKey:@"trackTests"];
+    
+    self.library = [Tealium newInstanceForKey:@"trackTests"
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
@@ -125,8 +128,8 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
-    self.queueCount ++;
-    
+    self.queueCount++;
+    self.callBackReceived = YES;
     NSLog(@"%s queue count:%d", __FUNCTION__, self.queueCount);
     
 }
@@ -167,16 +170,19 @@ NSString * const versionToTest = @"5.0.0";
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                withPayload:testDataSources];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
-    
-    __block BOOL alreadyFulfilled = NO;
-    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchWithTitleAndData"];
+        
     // Title + testData
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                          
-                         NSLog(@"%s dispatch:%@", __FUNCTION__, returnDispatch);
                          
+                         // Skip any initial queueing
+                         if (status != TEALDispatchStatusSent){
+                             return;
+                         }
+                         
+                                                  
                          XCTAssert(!error, @"Error in track call detected:%@", error);
                          
                          NSDictionary *dispatchData = returnDispatch.payload;
@@ -185,13 +191,10 @@ NSString * const versionToTest = @"5.0.0";
                          
                          XCTAssert([dispatchData[TEALDataSourceKey_EventTitle] isEqualToString:testTitle], "Incorrect title processed.");
                          
-                         if (!alreadyFulfilled){
-                             alreadyFulfilled = YES;
-                             [expectation fulfill];
-                         }
+                         [expectation fulfill];
                      }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.5 handler:nil];
     
 }
 
@@ -214,13 +217,18 @@ NSString * const versionToTest = @"5.0.0";
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                withPayload:nil];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchNoTitleNoData"];
 
     __block BOOL alreadyFulfilled = NO;
     
     // Title + testData
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
+                         
+                         
+                         if (status != TEALDispatchStatusSent){
+                             return;
+                         }
                          
                          XCTAssert(!error, @"Error in track call detected:%@", error);
                          
@@ -244,33 +252,31 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) testTrackEventNoTitleWithDataOverwritingAllStandardDataSources {
     
-    [Tealium destroyInstanceForKey:self.description];
-    
-    __block BOOL isReady = NO;
-    
-    self.library = [Tealium newInstanceForKey:self.description
-                                configuration:[TEALTestHelper liveConfig]
-                                   completion:^(BOOL success, NSError * _Nullable error) {
-                                       
-                                       
-                                       isReady = YES;
-                                       
-                                   }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    TEALConfiguration *config = [TEALTestHelper liveConfig];
+
+    [self useLibraryInstanceWithConfig:config];
     
     [self.library.dataSources purgePersistentDataSources];
     
     NSDictionary *payload = [TEALTestHelper overwriteDataSources];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    __block BOOL isReady = NO;
+    __block NSError *dispatchError = nil;
+    __block NSString *incorrectKey = nil;
+    __block NSString *incorrectValue = nil;
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchNoTitleOverwriteDataSources"];
     
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
                                 title:@"blah"
                           dataSources:payload
                            completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
                                
-                               XCTAssert(!error, @"Error in track call detected:%@", error);
+                               
+                               if (status != TEALDispatchStatusSent){
+                                   return;
+                               }
+                               
+                               dispatchError = error;
                                
                                NSDictionary *dispatchData = dispatch.payload;
                                
@@ -280,16 +286,27 @@ NSString * const versionToTest = @"5.0.0";
                                    
                                    NSString *value = dispatchData[key];
                                    
-                                   XCTAssertTrue([value isEqualToString:payload[key]], @"Value for key %@ was not overwritten: overwrite payload: %@:  dispatchDataReceived:%@", key, payload, dispatchData);
+                                   if (![value isEqualToString:payload[key]]){
+                                       incorrectKey = key;
+                                       incorrectValue = value;
+                                   }
                                    
                                }
                                
-                               [expectation fulfill];
+                               isReady = YES;
+//                               [expectation fulfill];
                                
                            }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [TEALTestHelper waitFor:&isReady timeout:1.0];
     
+    XCTAssertTrue(isReady, @"Dispatch never completed.");
+//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+    XCTAssert(!dispatchError, @"Error in track call detected:%@", dispatchError);
+
+    XCTAssertTrue(!incorrectKey, @"Value for key %@ was not overwritten - value: %@ expected value: %@", incorrectKey, incorrectValue, payload[incorrectKey]);
+
 }
 
 - (void) testTrackEventWithVolatileData {
@@ -322,13 +339,18 @@ NSString * const versionToTest = @"5.0.0";
                                       };
     
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchEventVolatileData"];
     
     // Title + testData
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
                                 title:testTitle
                           dataSources:testDataSources
                            completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
+                               
+                               
+                               if (status != TEALDispatchStatusSent){
+                                   return;
+                               }
                                
                                NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
                                
@@ -351,90 +373,94 @@ NSString * const versionToTest = @"5.0.0";
     
 }
 
+
 - (void) testTrackEventWithOverwriteVolatileData {
-    
-    __block BOOL isReady = NO;
     
     TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
     
-    self.library = [Tealium newInstanceForKey:self.description
-                                configuration:config
-                                   completion:^(BOOL success, NSError * _Nullable error) {
-                                       
-                                       
-                                       isReady = YES;
-                                       
-                                   }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    [self useLibraryInstanceWithConfig:config];
     
     NSDictionary * overwriteData = [TEALTestHelper overwriteDataSources];
 
     [self.library addVolatileDataSources:overwriteData];
     
-    NSString *testTitle = @"button_press";
+//    NSString *testTitle = @"button_press";
+//    
+//    NSDictionary *testDataSources = @{
+//                                      TEALDataSourceKey_EventTitle: testTitle,
+//                                      };
     
-    NSDictionary *testDataSources = @{
-                                      TEALDataSourceKey_EventTitle: testTitle,
-                                      };
     
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchEventOverwriteVolatileData"];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+    __block int numberofDispatches = 0;
+    __block BOOL alreadyFulfilled = NO;
+    __block NSError *dispatchError = nil;
+    __block NSString *incorrectKey = nil;
+    __block NSString *incorrectValue = nil;
+    
+    __block BOOL isReady = NO;
     
     // Title + testData
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
-                                title:testTitle
-                          dataSources:testDataSources
+                                title:@"blah"
+                          dataSources:nil
                            completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
-                               
-           NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
-           
-           XCTAssert(!error, @"Error in track call detected:%@", error);
+                             
+           if (status != TEALDispatchStatusSent){
+               return;
+           }
+                              
+           dispatchError = error;
            
            NSDictionary *dispatchData = dispatch.payload;
            
            NSArray *keys = [dispatchData allKeys];
            
            for (NSString *key in keys){
-               
-               if ([key isEqualToString:TEALDataSourceKey_EventTitle]){
-                   
-                  XCTAssertTrue([dispatchData[key] isEqualToString:testTitle], "Incorrect title processed.");
-                   
-               } else {
                    
                NSString *value = dispatchData[key];
                
-               XCTAssertTrue([value isEqualToString:overwriteData[key]], @"Value for key %@ was not overwritten: overwrite payload: %@:  dispatchDataReceived:%@", key, overwriteData, dispatchData);
+               if (![value isEqualToString:overwriteData[key]]){
+                   incorrectKey = key;
+                   incorrectValue = value;
                }
                
            }
            
-           [expectation fulfill];
+           numberofDispatches++;
+                               
+           if (numberofDispatches==1){
+               if (!alreadyFulfilled){
+                   alreadyFulfilled = YES;
+                   
+                   
+                   isReady = YES;
+//                   [expectation fulfill];
+               }
+           }
            
        }];
     
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
+    [TEALTestHelper waitFor:&isReady timeout:1.0];
+    
+    XCTAssertTrue(isReady, @"Dispatch never finished processing.");
+
+    XCTAssert(!dispatchError, @"Error in track call detected:%@", dispatchError);
+
+    XCTAssertTrue(!incorrectKey, @"Value for key %@ was not overwritten, value: %@ - correct value:%@", incorrectKey , incorrectValue, overwriteData[incorrectKey]);
+
+    XCTAssertTrue(numberofDispatches == 1, @"Too many dispatches detected: %i", numberofDispatches);
 }
 
 - (void) testTrackEventWithPersistentData {
     
-    __block BOOL isReady = NO;
-    
     TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"no_minutes_between_refresh"];
-    
-    self.library = [Tealium newInstanceForKey:self.description
-                                configuration:config
-                                   completion:^(BOOL success, NSError * _Nullable error) {
-                                       
-                                       
-                                       isReady = YES;
-                                       
-                                   }];
-    
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+
+    [self useLibraryInstanceWithConfig:config];
     
     NSString *testKey = @"testKey";
     NSString *testValue = @"testValue";
@@ -458,6 +484,11 @@ NSString * const versionToTest = @"5.0.0";
                           dataSources:testDataSources
                            completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
                                
+                               
+                               if (status != TEALDispatchStatusSent){
+                                   return;
+                               }
+                               
                                NSLog(@"%s dispatch:%@", __FUNCTION__, dispatch);
                                
                                XCTAssert(!error, @"Error in track call detected:%@", error);
@@ -477,7 +508,7 @@ NSString * const versionToTest = @"5.0.0";
                                
                            }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.5 handler:nil];
     
 }
 
@@ -509,6 +540,10 @@ NSString * const versionToTest = @"5.0.0";
     [self.library trackDispatch:dispatch
                      completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
                          
+                         
+                         if (status != TEALDispatchStatusSent){
+                             return;
+                         }
                          
                          XCTAssert(!error, @"Error in track call detected");
                          
@@ -545,6 +580,10 @@ NSString * const versionToTest = @"5.0.0";
     
     
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        if (status != TEALDispatchStatusSent){
+            return;
+        }
         
         if (error){
             NSLog(@"%s error:%@", __FUNCTION__, error);
@@ -586,6 +625,10 @@ NSString * const versionToTest = @"5.0.0";
     
     TEALDispatchBlock completion = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
         
+        if (status != TEALDispatchStatusSent){
+            return;
+        }
+        
         if (error){
             NSLog(@"%s error:%@", __FUNCTION__, error);
         }
@@ -606,29 +649,39 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) testEventDispatchWithNoDispatchServices {
     
-    [self useLiveLibraryInstanceWithConfig:[TEALTestHelper configFromTestJSONFile:@"all_options_OFF"]];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper configFromTestJSONFile:@"all_options_OFF"]];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"no_dispatchers"];
     
-    __block BOOL alreadyFulfilled = NO;
+    __block NSError *dispatchError = nil;
+    __block TEALDispatchStatus trackStatus;
+    __block TEALDispatch *trackDispatch = nil;
     
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
                                 title:@"test"
                           dataSources:@{}
                            completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull dispatch, NSError * _Nullable error) {
                                
-                               XCTAssert(status == TEALDispatchStatusQueued, @"Track call was not queued as expected - status:%lul error:%@", (unsigned long)status, error);
-                               
-                               if (!alreadyFulfilled){
-                                   alreadyFulfilled = YES;
-                                   [expectation fulfill];
-                               }
+                               trackStatus = status;
+                               trackDispatch = dispatch;
+                               dispatchError = error;
+
+                               [expectation fulfill];
                                
                            }];
     
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
-   XCTAssertTrue(self.queueCount == 1, @"Queue count not expected - expected 1, got %i", self.queueCount);
+    __block BOOL callBack = self.callBackReceived;
+    
+    [TEALTestHelper waitFor:&callBack timeout:2.0];
+    
+    
+    XCTAssertTrue(callBack, @"Tealium delegate was queued never called.");
+    
+    XCTAssertTrue(self.queueCount == 1, @"Queue count not expected - expected 1, got %i", self.queueCount);
+    
+    XCTAssert(trackStatus == TEALDispatchStatusQueued, @"Track call was not queued as expected - status:%lul error:%@", (unsigned long)trackStatus, dispatchError);
 }
 
 #pragma mark - DISPATCH DATASOURCE TESTS
