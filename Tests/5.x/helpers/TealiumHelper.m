@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
 
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"tagbridge"
+                                                                           profile:@"demo"
                                                                        environment:@"dev"];
     
 //    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
@@ -66,11 +66,12 @@ static TealiumHelper * _sharedInstance;
     
     [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
     
-    [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
-                                               @"link_id":@"tagbridge"}];
+//    [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
+//                                               @"link_id":@"tagbridge"}];
+//    
 //    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
 //                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
-    
+//    
 //    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
 //        
 //            NSLog(@"%s profile:%@ error:%@", __FUNCTION__, profile, error);

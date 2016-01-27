@@ -18,7 +18,9 @@
 
 @import Security;
 
-@interface TEALTagDispatchService() <UIWebViewDelegate, WKScriptMessageHandler, WKNavigationDelegate>
+@interface TEALTagDispatchService() <WKScriptMessageHandler, WKNavigationDelegate>
+
+//@interface TEALTagDispatchService() <UIWebViewDelegate, WKScriptMessageHandler, WKNavigationDelegate>
 
 @property (nonatomic, weak) NSString *publishURLString;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
@@ -41,8 +43,6 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
         
         _publishURLString = urlString;
         _operationManager = operationManager;
-//        _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
-//        [_currentRemoteCommandManager setDelegate:self];
         
     }
     
@@ -78,7 +78,7 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
         wkConfig.allowsInlineMediaPlayback = NO;
         wkConfig.allowsPictureInPictureMediaPlayback = NO;
         
-        [self addUserScriptToUserContentController:wkConfig.userContentController];
+//        [self addUserScriptToUserContentController:wkConfig.userContentController];
         
         weakSelf.wkWebView = [[WKWebView alloc] initWithFrame:CGRectZero
                                                 configuration:wkConfig];
@@ -88,12 +88,12 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     });
 }
 
-- (void) addUserScriptToUserContentController:(WKUserContentController *) userContentController{
-    NSString *jsHandler = [NSString stringWithContentsOfURL:[[NSBundle mainBundle]URLForResource:@"ajaxHandler" withExtension:@"js"] encoding:NSUTF8StringEncoding error:NULL];
-    WKUserScript *ajaxHandler = [[WKUserScript alloc]initWithSource:jsHandler injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
-    [userContentController addScriptMessageHandler:self name:@"callbackHandler"];
-    [userContentController addUserScript:ajaxHandler];
-}
+//- (void) addUserScriptToUserContentController:(WKUserContentController *) userContentController{
+//    NSString *jsHandler = [NSString stringWithContentsOfURL:[[NSBundle mainBundle]URLForResource:@"ajaxHandler" withExtension:@"js"] encoding:NSUTF8StringEncoding error:NULL];
+//    WKUserScript *ajaxHandler = [[WKUserScript alloc]initWithSource:jsHandler injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
+//    [userContentController addScriptMessageHandler:self name:@"callbackHandler"];
+//    [userContentController addUserScript:ajaxHandler];
+//}
 
 #pragma mark - PRIVATE INSTANCE
 
@@ -115,38 +115,38 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     
     if (!utagString) return;
     
-    __block NSString *result = nil;
+//    __block NSString *result = nil;
     
-    __block __weak TEALTagDispatchService *weakSelf = self;
+//    __block __weak TEALTagDispatchService *weakSelf = self;
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        
+//        result = [weakSelf.webView stringByEvaluatingJavaScriptFromString:utagString];
+//        
+//        [weakSelf.operationManager addOperationWithBlock:^{
+//            
+//            if (result.length == 0 || [[result lowercaseString] isEqualToString:@"true"]){
+//                
+//                if (completion) {
+//                    completion(TEALDispatchStatusSent, dispatch, nil);
+//                }
+//                return;
+//            } else {
+//                NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
+//                                              description:@"Dispatch was unsuccessful"
+//                                                   reason:[NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload]
+//                                               suggestion:@"Check TIQ settings and that mobile.html has published correctly."];
+//                if (completion) {
+//                    completion(TEALDispatchStatusFailed, dispatch, error);
+//                }
+//                return;
+//            }
+//        }];
+//    });
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        result = [weakSelf.webView stringByEvaluatingJavaScriptFromString:utagString];
-        
-        [weakSelf.operationManager addOperationWithBlock:^{
-            
-            if (result.length == 0 || [[result lowercaseString] isEqualToString:@"true"]){
-                
-                if (completion) {
-                    completion(TEALDispatchStatusSent, dispatch, nil);
-                }
-                return;
-            } else {
-                NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                              description:@"Dispatch was unsuccessful"
-                                                   reason:[NSString stringWithFormat:@"Javascript returned an unexpected result: %@ for dispatch:%@", result, dispatch.payload]
-                                               suggestion:@"Check TIQ settings and that mobile.html has published correctly."];
-                if (completion) {
-                    completion(TEALDispatchStatusFailed, dispatch, error);
-                }
-                return;
-            }
-        }];
-    });
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [weakSelf.wkWebView evaluateJavaScript:utagString
+        [self.wkWebView evaluateJavaScript:utagString
                              completionHandler:^(id _Nullable response, NSError * _Nullable error) {
         
              if (error){
@@ -185,49 +185,76 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     }
 }
 
+- (void) webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    
+    if (self.delegate){
+        [self.delegate tagDispatchServiceWebView:webView
+                                encounteredError:error];
+    }
+    
+}
+
+- (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    
+    
+    if (self.delegate){
+        if( ![self.delegate tagDispatchServiceShouldPermitRequest:navigationAction.request]){
+            decisionHandler(WKNavigationActionPolicyCancel);
+        }
+    }
+    
+    decisionHandler(WKNavigationActionPolicyAllow);
+}
+
+- (void) webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    
+    
+    decisionHandler(WKNavigationActionPolicyAllow);
+}
+
 #pragma mark - UIWEBVIEW DELEGATE
 
-- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-
-    if (self.delegate){
-        
-        return [self.delegate tagDispatchServiceShouldPermitRequest:request webView:webView];
-        
-    }
-    
-    return YES;
-}
-
-- (void) webViewDidStartLoad:(UIWebView *)webView{
-    
-}
-
-- (void) webViewDidFinishLoad:(UIWebView *)webView{
-    
-
-    // Initial load complete?
-    if (!self.webViewInitialLoadFinished &&
-        ![webView isLoading]){
-        
-        self.webViewInitialLoadFinished = YES;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.privateStatus = TEALDispatchNetworkServiceStatusReady;
-            
-            if (self.delegate) {
-                [self.delegate tagDispatchServiceWebViewReady:webView];
-            }
-        });
-        
-
-    }
-}
-
-- (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    
-    // TODO: retry later?
-
-}
+//- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+//
+//    if (self.delegate){
+//        
+//        return [self.delegate tagDispatchServiceShouldPermitRequest:request];
+//        
+//    }
+//    
+//    return YES;
+//}
+//
+//- (void) webViewDidStartLoad:(UIWebView *)webView{
+//    
+//}
+//
+//- (void) webViewDidFinishLoad:(UIWebView *)webView{
+//    
+//
+//    // Initial load complete?
+//    if (!self.webViewInitialLoadFinished &&
+//        ![webView isLoading]){
+//        
+//        self.webViewInitialLoadFinished = YES;
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.privateStatus = TEALDispatchNetworkServiceStatusReady;
+//            
+//            if (self.delegate) {
+//                [self.delegate tagDispatchServiceWebViewReady:webView];
+//            }
+//        });
+//        
+//
+//    }
+//}
+//
+//- (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+//    
+//    // TODO: retry later?
+//
+//}
 
 #pragma mark - UTAG
 
@@ -351,7 +378,8 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [weakSelf.webView reload];
+        [weakSelf.wkWebView reload];
+//        [weakSelf.webView reload];
         
     });
 
@@ -363,11 +391,28 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     
     __block typeof(self) __weak weakSelf = self;
 
+    __block NSString *killCommand = @"utag.track('kill_visitor_session', { event: 'kill_visitor_session', 'cp.trace_id' : utag.data['cp.trace_id'] });";
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [weakSelf.webView stringByEvaluatingJavaScriptFromString:@"utag.track('kill_visitor_session', { event: 'kill_visitor_session', 'cp.trace_id' : utag.data['cp.trace_id'] });"];
-        
-        [weakSelf.webView reload];
+
+        [weakSelf.wkWebView evaluateJavaScript:killCommand
+                             completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+                                 
+                                 if (error){
+                                     if (weakSelf.delegate){
+                                         [weakSelf.delegate tagDispatchServiceWebView:weakSelf.wkWebView
+                                                                     encounteredError:error];
+                                     }
+                                     return;
+                                 }
+                                 
+                                 [weakSelf.wkWebView reload];
+                                 
+                             }];
+//        [weakSelf.webView stringByEvaluatingJavaScriptFromString:killCommand];
+//        
+//        [weakSelf.webView reload];
 
     });
 

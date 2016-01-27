@@ -28,14 +28,6 @@
 
 #pragma mark - PUBLIC INSTANCE
 
-- (UIWebView *) webView {
-    
-    TEALTagDispatchService *currentService = [self currentTagDispatchService];
-    
-    return currentService.webView;
-    
-}
-
 - (void) addRemoteCommandID:(NSString*)commandID
                 description:(NSString*)description
                 targetQueue:(dispatch_queue_t)queue
@@ -276,6 +268,22 @@
     
 }
 
+//- (UIWebView *) webView {
+//    
+//    TEALTagDispatchService *currentService = [self currentTagDispatchService];
+//    
+//    return currentService.webView;
+//    
+//}
+
+- (WKWebView *) webView {
+    
+    TEALTagDispatchService *currentService = [self currentTagDispatchService];
+    
+    return currentService.wkWebView;
+    
+}
+
 #pragma mark - HELPERS
 
 - (TEALTagDispatchService *) currentTagDispatchService {
@@ -335,21 +343,59 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     __block typeof(self) __weak weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
+    
+        [weakSelf.webView evaluateJavaScript:command
+                           completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+                               
+                               if (!error){
+                                   return;
+                               }
+                               
+                               NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@ - error: %@", command, error];
+                               
+                               NSError *formattedError = [TEALError errorWithCode:TEALErrorCodeFailure
+                                                             description:errorDescription
+                                                                  reason:NSLocalizedString(@"Command did not execute.", @"")
+                                                              suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
+                               
+                               [weakSelf.logger logDev:@"Error executing Tag Bridge Command: %@", formattedError];
+                               
+                           }];
         
-        NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
-        
-        if ([[init lowercaseString] isEqualToString:@"false"]){
-            
-            NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@", command];
-            NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                                          description:errorDescription
-                                               reason:NSLocalizedString(@"Command did not execute.", @"")
-                                           suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
-            
-            [weakSelf.logger logDev:@"Error executing Tag Bridge Command: %@", error];
-        }
+//        NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
+//        
+//        if ([[init lowercaseString] isEqualToString:@"false"]){
+//            
+//            NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@", command];
+//            NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+//                                          description:errorDescription
+//                                               reason:NSLocalizedString(@"Command did not execute.", @"")
+//                                           suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
+//            
+//            [weakSelf.logger logDev:@"Error executing Tag Bridge Command: %@", error];
+//        }
     });
 }
+//- (void) remoteCommandManagerRequestsCommandToWebView:(NSString *)command {
+//    
+//    __block typeof(self) __weak weakSelf = self;
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        
+//        NSString *init = [weakSelf.webView stringByEvaluatingJavaScriptFromString:command];
+//        
+//        if ([[init lowercaseString] isEqualToString:@"false"]){
+//            
+//            NSString *errorDescription = [NSString stringWithFormat:@"Could not process callback command: %@", command];
+//            NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+//                                          description:errorDescription
+//                                               reason:NSLocalizedString(@"Command did not execute.", @"")
+//                                           suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
+//            
+//            [weakSelf.logger logDev:@"Error executing Tag Bridge Command: %@", error];
+//        }
+//    });
+//}
 
 - (void) remoteCommandManagerReportedError:(NSError *)error {
     
@@ -358,8 +404,7 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
 }
 #pragma mark - TEAL TAG DISPATCH SERVICE DELEGATE
 
-- (BOOL) tagDispatchServiceShouldPermitRequest:(NSURLRequest *)request
-                                       webView:(id)webView{
+- (BOOL) tagDispatchServiceShouldPermitRequest:(NSURLRequest *)request{
     
     NSString *urlString = request.URL.absoluteString;
     
@@ -413,27 +458,27 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
 
 }
 
-- (void) tagDispatchServiceWebViewReady:(UIWebView *)webView {
-    
-    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
-        
-        [self.delegate tealium:self webViewIsReady:webView];
-    }
-    
-    [self.logger logDev:@"UIWebView ready: %@", webView];
-
-}
-
+//- (void) tagDispatchServiceWebViewReady:(UIWebView *)webView {
+//    
+//    if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
+//        
+//        [self.delegate tealium:self webViewIsReady:webView];
+//    }
+//    
+//    [self.logger logDev:@"UIWebView ready: %@", webView];
+//
+//}
+//
 - (void) tagDispatchServiceWebView:(UIWebView*)webView encounteredError:(NSError *)error {
     
     [self.logger logQA:@"Tag Management Webview error: %@", error];
     
 }
-
-- (void) tagDispatchServiceWebView:(UIWebView*)webView processedCommandResponse:(TEALRemoteCommandResponse *)response{
-    
-    [self.logger logDev:@"Processed remote command: %@", response];
-    
-}
+//
+//- (void) tagDispatchServiceWebView:(UIWebView*)webView processedCommandResponse:(TEALRemoteCommandResponse *)response{
+//    
+//    [self.logger logDev:@"Processed remote command: %@", response];
+//    
+//}
 
 @end
