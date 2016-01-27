@@ -438,6 +438,13 @@
 
 - (void) tealiumRemoteCommandResponseRequestsSend:(TEALRemoteCommandResponse *)response {
     
+//    NSString *callBackCommand = [NSString stringWithFormat:@"try {\
+//                                 utag.mobile.remote_api.response['%@']('','');\
+//                                 }catch(err) {\
+//                                 console.error(err);\
+//                                 }\
+//                                 ", response.commandId];
+    
     NSString *callBackCommand = [NSString stringWithFormat:@"try {\
                                  utag.mobile.remote_api.response[\"%@\"][\"%@\"](\"%li\", '%@');\
                                  }catch(err) {\
@@ -473,6 +480,7 @@
         if (completion){
             completion(NO, error);
         }
+        [self tealiumRemoteCommandResponseRequestsSend:response];
         return;
     }
     

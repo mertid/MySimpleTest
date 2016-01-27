@@ -77,6 +77,8 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
         wkConfig.allowsAirPlayForMediaPlayback = NO;
         wkConfig.allowsInlineMediaPlayback = NO;
         wkConfig.allowsPictureInPictureMediaPlayback = NO;
+        wkConfig.preferences.javaScriptCanOpenWindowsAutomatically = YES;
+        
         
 //        [self addUserScriptToUserContentController:wkConfig.userContentController];
         
