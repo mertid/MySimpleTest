@@ -124,9 +124,9 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     // Can update to mark was_queued, but never unset in case it was set by client
     //  or other service.
     
+    dispatch.assignedBlock = completionBlock;
+
     if (sendNow == YES){
-        
-        dispatch.assignedBlock = completionBlock;
         
         [self runQueuedDispatches];
         

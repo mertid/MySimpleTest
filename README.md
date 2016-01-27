@@ -19,7 +19,15 @@ Specifically it allows:
 
 *
 
+## Output location
 
+The tealium-ios library will output to a folder named tealium-ios that is at the
+same folder location as the tealium-apple-builder repo.
+
+The watchOS deliverables will output to the tealium-ios/support/watchKit folder
+
+The tealium-tvos library will output to a folder named tealium-tvos on the same
+level as the tealium-apple-builder folder.
 
 ---
 Copyright (C) 2012-2015, Tealium Inc.
