@@ -19,6 +19,7 @@
 
 @property Tealium *library;
 @property int queueCount;
+@property int sentCount;
 @property BOOL callBackReceived;
 @end
 
@@ -37,7 +38,7 @@ NSString * const versionToTest = @"5.0.0";
 
     self.library = nil;
     self.queueCount = 0;
-    
+    self.sentCount = 0;
     [super tearDown];
 }
 
@@ -136,6 +137,8 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) tealium:(Tealium *)tealium didSendDispatch:(TEALDispatch *)dispatch {
     
+    self.sentCount++;
+    self.callBackReceived = YES;
 }
 
 #pragma mark - DISPATCH TESTS
@@ -475,7 +478,7 @@ NSString * const versionToTest = @"5.0.0";
                                       };
     
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatch"];
     
     __block BOOL alreadyFulfilled = NO;
     
@@ -503,12 +506,13 @@ NSString * const versionToTest = @"5.0.0";
                                
                                if (!alreadyFulfilled){
                                    alreadyFulfilled = YES;
-                                   [expectation fulfill];
+//                                   [expectation fulfill];
                                }
                                
                            }];
     
-    [self waitForExpectationsWithTimeout:1.5 handler:nil];
+    [TEALTestHelper waitFor:&alreadyFulfilled timeout:1.0];
+//    [self waitForExpectationsWithTimeout:1.5 handler:nil];
     
 }
 
@@ -651,8 +655,7 @@ NSString * const versionToTest = @"5.0.0";
     
     [self useLibraryInstanceWithConfig:[TEALTestHelper configFromTestJSONFile:@"all_options_OFF"]];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"no_dispatchers"];
-    
+    __block BOOL isReady = NO;
     __block NSError *dispatchError = nil;
     __block TEALDispatchStatus trackStatus;
     __block TEALDispatch *trackDispatch = nil;
@@ -666,22 +669,27 @@ NSString * const versionToTest = @"5.0.0";
                                trackDispatch = dispatch;
                                dispatchError = error;
 
-                               [expectation fulfill];
+                               isReady = YES;
                                
                            }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [TEALTestHelper waitFor:&isReady timeout:1.0];
+    
+    XCTAssertTrue(isReady, @"Dispatch never completed.");
     
     __block BOOL callBack = self.callBackReceived;
     
     [TEALTestHelper waitFor:&callBack timeout:2.0];
     
-    
     XCTAssertTrue(callBack, @"Tealium delegate was queued never called.");
     
     XCTAssertTrue(self.queueCount == 1, @"Queue count not expected - expected 1, got %i", self.queueCount);
     
-    XCTAssert(trackStatus == TEALDispatchStatusQueued, @"Track call was not queued as expected - status:%lul error:%@", (unsigned long)trackStatus, dispatchError);
+    XCTAssertTrue(self.sentCount == 0, @"Sent detected when none should have, sent calls: %i", self.sentCount);
+    
+    XCTAssertTrue(trackStatus == TEALDispatchStatusQueued, @"Track call was not queued as expected - status:%lul", (unsigned long)trackStatus);
+    
+    XCTAssertTrue(!dispatchError, @"Unexpected error encountered: %@", dispatchError);
 }
 
 #pragma mark - DISPATCH DATASOURCE TESTS
