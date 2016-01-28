@@ -64,7 +64,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (void) destroyInstanceForKey:(NSString * _Nonnull)key{
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:staticAllInstances];
     
     [mDict removeObjectForKey:key];
     
@@ -156,7 +156,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 + (void) addInstance:(TEALWKExtension * _Nonnull)instance key:(NSString * _Nonnull)key {
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:staticAllInstances];
     mDict[key] = instance;
     
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
@@ -337,7 +337,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) sendQueueWithTriggerPayload:(NSDictionary *)targetPayload
                      completionBlock:(SuccessBlock)completion {
     
-    for (NSDictionary *payload in [[self.queue allQueuedObjects] copy]){
+    for (NSDictionary *payload in [self.queue allQueuedObjects]){
         
         [self.queue dequeueFirstObject];
         

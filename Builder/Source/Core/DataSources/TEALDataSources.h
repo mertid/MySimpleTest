@@ -36,8 +36,6 @@
 
 - (void) purgePersistentDataSources;
 
-// HELPERS
-
 + (double) deviceBatteryLevel;
 
 + (BOOL) deviceIsCharging;

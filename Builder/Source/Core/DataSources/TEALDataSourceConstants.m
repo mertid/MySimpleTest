@@ -100,6 +100,7 @@ NSString * const TEALDataSourceKey_WebViewURL           = @"webview_url";
 
 NSString * const TEALDataSourceValue_ConnectionCellular = @"cellular";
 NSString * const TEALDataSourceValue_ConnectionWifi     = @"wifi";
+NSString * const TEALDataSourceValue_ConnectionNone     = @"none";
 NSString * const TEALDataSourceValue_EventName          = @"mobile_link";
 NSString * const TEALDataSourceValue_Exception          = @"exception";
 NSString * const TEALDataSourceValue_ExceptionCaught    = @"caught";

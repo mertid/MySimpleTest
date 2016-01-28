@@ -99,6 +99,7 @@ extern NSString * const TEALDataSourceKey_WebViewURL;
 
 extern NSString * const TEALDataSourceValue_ConnectionCellular;
 extern NSString * const TEALDataSourceValue_ConnectionWifi;
+extern NSString * const TEALDataSourceValue_ConnectionNone;
 extern NSString * const TEALDataSourceValue_EventName;
 extern NSString * const TEALDataSourceValue_False;
 extern NSString * const TEALDataSourceValue_IOS;

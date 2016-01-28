@@ -21,6 +21,8 @@
 @property int queueCount;
 @property int sentCount;
 @property BOOL callBackReceived;
+@property BOOL didFetch;
+
 @end
 
 
@@ -31,14 +33,16 @@ NSString * const versionToTest = @"5.0.0";
 - (void)setUp {
     [super setUp];
     self.callBackReceived = NO;
+    self.queueCount = 0;
+    self.sentCount = 0;
+    self.didFetch = NO;
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown {
 
     self.library = nil;
-    self.queueCount = 0;
-    self.sentCount = 0;
+
     [super tearDown];
 }
 
@@ -47,6 +51,8 @@ NSString * const versionToTest = @"5.0.0";
 - (void) useLibraryInstanceWithConfig:(TEALConfiguration*)config {
     
     __block BOOL isReady = NO;
+    __block BOOL initSuccess = NO;
+    __block NSError *initError = nil;
     
     [Tealium destroyInstanceForKey:@"trackTests"];
     
@@ -54,10 +60,9 @@ NSString * const versionToTest = @"5.0.0";
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
-                                       XCTAssertTrue(!error, @"Error detected: %@", error);
-                                       
+                                       initError = error;
+                                       initSuccess = success;
                                        isReady = YES;
-                                       
                                        
                                    }];
     
@@ -65,6 +70,10 @@ NSString * const versionToTest = @"5.0.0";
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
     
+    XCTAssertTrue(initSuccess, @"Library did not init correctly");
+    
+    XCTAssertTrue(!initError, @"Error detected: %@", initError);
+
 }
 
 - (void) startLiveConfigLibrary {
@@ -126,6 +135,12 @@ NSString * const versionToTest = @"5.0.0";
 }
 
 #pragma mark - TEALIUM DELEGATE
+
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium {
+    
+    self.didFetch = YES;
+    
+}
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
@@ -230,7 +245,9 @@ NSString * const versionToTest = @"5.0.0";
                          [expectation fulfill];
                      }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    XCTAssertTrue(self.didFetch, @"Settings never fetched.");
     
     XCTAssertTrue(dispatchReturned, @"No dispatch returned from track call.");
     
@@ -466,7 +483,7 @@ NSString * const versionToTest = @"5.0.0";
                    
                NSString *value = dispatchData[key];
                
-               if (![value isEqualToString:overwriteData[key]]){
+               if (![overwriteData[key] isEqualToString:value]){
                    incorrectKey = key;
                    incorrectValue = value;
                }
@@ -687,6 +704,7 @@ NSString * const versionToTest = @"5.0.0";
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeView
                                                withPayload:@{@"test_key":@"test_value"}];
     
+    
     [self.library.dispatchManager addDispatch:dispatch
                               completionBlock:completion];
     
@@ -698,6 +716,7 @@ NSString * const versionToTest = @"5.0.0";
     [self useLibraryInstanceWithConfig:[TEALTestHelper configFromTestJSONFile:@"all_options_OFF"]];
     
     XCTAssertTrue(self.library.delegate = self, @"Delegate required for callback testing not setup - delegate: %@", self.library.delegate);
+    
     
     __block BOOL isReady = NO;
     __block NSError *dispatchError = nil;

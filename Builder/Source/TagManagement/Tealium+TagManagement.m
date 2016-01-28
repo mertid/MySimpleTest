@@ -99,37 +99,19 @@
 }
 
 - (void) enableTagManagement {
-    
-    if ([[[self currentDispatchServices] copy] teal_containsObjectOfClass:[TEALTagDispatchService class]]){
-        return;
-    }
 
     TEALTagDispatchService *tagService = [self currentTagDispatchService];
-//    [tagService.remoteCommandManager enable];
     
     if (!tagService){
-        tagService = [self newTagDispatchService];
-        [self addNewDispatchService:tagService];
-    }
         
-    if (tagService) {
-        [self.logger logDev:@"TagManagement enabled."];
+        tagService = [self newTagDispatchService];
+        
+        [self addNewDispatchService:tagService];
     }
 
 }
 
 - (void) enableRemoteCommands {
-    
-//    TEALTagDispatchService *service = [self currentTagDispatchService];
-//        
-//    [service.remoteCommandManager enable];
-//    
-//    if (![service.remoteCommandManager isEnabled]){
-    
-//        [self.logger logDev:@"Could not enable remote commands - check that Tag Management services enabled."];
-        
-//        return;
-//    }
 
     if ([[self remoteCommandManager] isEnabled]){
         return;
@@ -150,36 +132,21 @@
         }
     }];
     
-//    [service.remoteCommandManager addReservedCommands:^(BOOL successful) {
-//        
-//        if (successful) {
-//        
-//            [weakSelf.logger logDev:@"Reserved Remote Commands enabled."];
-//            
-//        }
-//    }];
-    
 }
 
 - (void) disableTagManagement {
-
     
-//    TEALTagDispatchService *service = [self currentTagDispatchService];
+    TEALTagDispatchService *service = [self currentTagDispatchService];
     
-    [self removeDispatchService:[self currentTagDispatchService]];
-    
-//    [service.remoteCommandManager disable];
-    
-    
+    if (service){
+        [self removeDispatchService:service];
+    }
 }
 
 - (void) disableRemoteCommands {
     
-//    TEALTagDispatchService *service = [self currentTagDispatchService];
-//
-//    [service.remoteCommandManager disable];
-    
     [[self remoteCommandManager] disable];
+    
 }
 
 - (void) addRemoteCommandID:(NSString*)name
@@ -261,7 +228,7 @@
     
     __block TEALTagDispatchService *targetService = nil;
     
-    NSArray *dispatchServices = [[self currentDispatchServices] copy];
+    NSArray *dispatchServices = [self currentDispatchServices];
     
     if (dispatchServices) {
         

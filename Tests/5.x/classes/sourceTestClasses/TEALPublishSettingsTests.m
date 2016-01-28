@@ -131,7 +131,6 @@
     
     [self.publishSettings updateWithMatchingVersionSettings:mpsData[@"5"]];
     
-//    [self.publishSettings updateWithRawSettings:mpsData];
     
     NSDictionary *privatePublishData = self.publishSettings.privatePublishSettingsData;
     
@@ -165,7 +164,7 @@
     
     XCTAssertTrue(![settings isEqualToPublishSettings:altSettings], @"Should not have matched - settings:%@  altSettings:%@", settings, altSettings);
     
-    TEALPublishSettings *retrievedSettings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+    TEALPublishSettings *retrievedSettings = [TEALPublishSettings archivedPublishSettingForURL:settings1];
     
     XCTAssertTrue([settings isEqualToPublishSettings:retrievedSettings], @"Settings:%@ was not equal to Unarchived settings:%@", settings, retrievedSettings);
     

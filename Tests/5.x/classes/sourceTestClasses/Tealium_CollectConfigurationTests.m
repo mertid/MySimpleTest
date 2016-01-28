@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "TealiumDelegate.h"
 #import "TEALTestHelper.h"
 #import "Tealium+Collect.h"
 #import "TEALConfiguration+Collect.h"
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) Tealium *library;
 @property int queueCount;
 @property int sentCount;
+@property BOOL didFetch;
 
 @end
 
@@ -29,13 +31,15 @@
 
 - (void)setUp {
     [super setUp];
+    self.didFetch = NO;
+    self.queueCount = 0;
+    self.sentCount = 0;
     //...
 }
 
 - (void)tearDown {
     self.library = nil;
-    self.queueCount = 0;
-    self.sentCount = 0;
+
     
     [super tearDown];
 }
@@ -52,29 +56,29 @@
     
     __block BOOL isReady = NO;
     
+    __block BOOL initSuccess = NO;
+    
+    __block NSError *initError = nil;
+    
     self.library = [Tealium newInstanceForKey:self.description
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
-                                       XCTAssertTrue(success, @"Library failed to finish initializing - error:%@", error);
+                                       initSuccess = success;
+                                       initError = error;
+                                       
 
                                        isReady = YES;
                                        
                                    }];
     
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
-    
-    isReady = NO;
-    
-    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-        
-        XCTAssertTrue(!error, @"Library failed to fetch test settings - error:%@", error);
-        
-        isReady = YES;
-        
-    }];
+    [self.library setDelegate:self];
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
+    
+    XCTAssertTrue(initSuccess, @"Library failed to finish initializing");
+    
+    XCTAssertTrue(!initError, @"Error encountered: %@", initError);
 
     
 }
@@ -161,9 +165,9 @@
 
 #pragma mark - GENERAL TESTS
 
-- (void) testCollectEnabledByPublishSettingsAlt {
+- (void) testCollectEnabledByPublishSettings {
     
-    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"collect_ON"]];
     
     __block BOOL isNeverReady = NO;
     
@@ -175,9 +179,12 @@
     
     NSArray *dispatchServices = [self.library currentDispatchServices];
     
+    XCTAssertTrue(self.didFetch, @"Fetch delegate never called.");
+    
+    XCTAssertTrue(dispatchServices.count == 1, @"Incorrect number of dispatch services were enabled: %@", dispatchServices);
+    
     XCTAssertTrue([self collectDispatchServiceInArray:dispatchServices], @"Collect dispatch service NOT found in:%@", dispatchServices);
 }
-
 
 - (void) testCollectDisableByPublishSettings {
     
@@ -222,126 +229,20 @@
     XCTAssertTrue(![self s2SLegacyDispatchServiceInArray:dispatchServices], @"S2S Legacy dispatch service found in:%@", dispatchServices);
 }
 
-//- (void) testJoinAndLeaveTrace {
-//    
-//    [Tealium destroyInstanceForKey:self.description];
-//    
-//    __block BOOL isReady = NO;
-//    
-//    self.library = [Tealium newInstanceForKey:self.description
-//                                configuration:[TEALTestHelper liveConfig]
-//                                   completion:^(BOOL success, NSError * _Nullable error) {
-//      
-//
-//        isReady = YES;
-//        
-//    }];
-//
-//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-//
-//    
-//    NSString *token = @"A1B2C3";
-//    
-//    TEALSettings *settings = [self.library settings];
-//    
-//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource should default to nil");
-//    
-//    isReady = NO;
-//
-//    [self.library joinTraceWithToken:token
-//                          completion:^(BOOL success, NSError * _Nullable error) {
-//        
-//        XCTAssertTrue(success, @"Unexpected error in joining trace:%@", error);
-//                              
-//        isReady = YES;
-//        
-//    }];
-//    
-//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-//
-//    NSString *traceId = [settings traceID];
-//    
-//    XCTAssertTrue(traceId, @"TraceID should have a value - %@ found.", traceId);
-//    
-//    XCTAssertTrue([traceId isEqualToString:token], @"TraceID value: %@ should be same as token passed in: %@", traceId, token);
-//    
-//    isReady = NO;
-//    
-//    [self.library leaveTraceWithCompletion:^(BOOL success, NSError *error) {
-//        
-//        isReady = YES;
-//        
-//    }];
-//    
-//    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
-//    
-//    XCTAssertTrue([settings traceID] == nil, @"TraceID datasource :%@ should now be nil", [settings traceID]);
-//    
-//}
 
 #pragma mark - TRACK TESTS
-
-// Track calls require a dispatch service to run, so we're adding track tests to each of the dispatch service modules
-
-//- (void) testTrackBatchedEvent {
-//
-//    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"batch_5"]];
-//    
-//    self.library.delegate = self;
-//    
-//    
-//    XCTestExpectation *batchExpectation = [self expectationWithDescription:@"batch"];
-//    
-//    __block int finishedDispatches = 0;
-//    
-//    __block int batchLimit = 5;
-//    
-//    // Manually set to match batch_size in above json file
-//    for (__block int i = 0; i < batchLimit; i++) {
-//        
-//        TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent withPayload:@{@"iteration":@(i)}];
-//
-//        [self.library trackDispatch:dispatch
-//                         completion:^(TEALDispatchStatus status, TEALDispatch * _Nonnull returnDispatch, NSError * _Nullable error) {
-//                             
-//             XCTAssert(!error, @"Error in track call detected:%@", error);
-//             
-//             finishedDispatches++;
-//             
-//             if (finishedDispatches < batchLimit ){
-//                 XCTAssertTrue(status == 2, @"Dispatch was not queued as expected:%@", returnDispatch);
-//             }
-//             
-//             if (finishedDispatches == batchLimit ){
-//                 
-//                 [batchExpectation fulfill];
-//                 
-//             }
-//             
-//         }];
-//        
-//    }
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:nil];
-//    
-//    // will send upon 5th dispatch
-//    XCTAssertTrue(self.queueCount == batchLimit - 1, @"4 events did not queue prior to trigger - events triggered:%i", self.queueCount);
-//    
-//    // all 5 should be sent
-//    XCTAssertTrue(self.sentCount == batchLimit, @"5 sent calls did not trigger - events detected: %i", self.sentCount);
-//
-//}
 
 - (void) testTrackBatchEvents {
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"batch_5"]];
     
-    self.library.delegate = self;
+    XCTAssertTrue([self.library currentDispatchServices].count > 0, @"Collect dispatch service not yet ready - %@", [self.library currentDispatchServices]);
     
     XCTestExpectation *e = [self expectationWithDescription:@"queueBatches"];
     XCTestExpectation *eSent = [self expectationWithDescription:@"sendBatches"];
     
     __block int finishedAddingDispatches = 0;
+    __block int finishedSendingDispatches = 0;
     __block int batchLimit = 5;
     __block NSError *dispatchError;
     
@@ -354,32 +255,54 @@
                              
                              dispatchError = error;
                              
-                             finishedAddingDispatches++;
-                             
-                             if (finishedAddingDispatches >= batchLimit){
+                             if (status == TEALDispatchStatusQueued){
                                  
-                                [e fulfill];
+                                 finishedAddingDispatches++;
+                                 
+                                 if (finishedAddingDispatches == batchLimit){
+                                     
+                                     [e fulfill];
+                                 }
                              }
                              
-                             if (finishedAddingDispatches >= (batchLimit * 2)){
+                             if (status == TEALDispatchStatusSent){
                                  
-                                 [eSent fulfill];
+                                 finishedSendingDispatches++;
+                                 
+                                 if (finishedAddingDispatches == batchLimit){
+                                 
+                                     [eSent fulfill];
+                                 }
                              }
                              
                          }];
     }
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
-    XCTAssertTrue(self.queueCount == batchLimit - 1, @"4 events did not queue - instead: %i", self.queueCount);
+    XCTAssertTrue(self.didFetch, @"Override fetch settings did not occur.");
     
-    XCTAssertTrue(self.sentCount == batchLimit, @"5 events did not send - instead: %i", self.sentCount);
+    XCTAssertTrue(!dispatchError, @"Dispatch error encountered: %@", dispatchError);
+    
+    XCTAssertTrue(finishedAddingDispatches == batchLimit - 1, @"%i dispatches were not added to the queue - queued: %i", batchLimit - 1, finishedAddingDispatches);
+    
+    XCTAssertTrue(finishedSendingDispatches == batchLimit, @"%i sent dispatch callbacks not recieved - received: %i", batchLimit, finishedSendingDispatches);
+    
+    XCTAssertTrue(self.queueCount == batchLimit - 1, @"%i events did not queue - instead: %i", (batchLimit -1), self.queueCount);
+    
+    XCTAssertTrue(self.sentCount == batchLimit, @"%i events did not send - instead: %i", batchLimit,self.sentCount);
     
     
 }
 
 
 #pragma mark - TEALIUM DELEGATE
+
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium {
+    
+    self.didFetch = YES;
+    
+}
 
 - (void) tealium:(Tealium *)tealium didQueueDispatch:(TEALDispatch *)dispatch {
     
@@ -392,110 +315,5 @@
     self.sentCount++;
 }
 
-//- (void) testConfigurationPollingFrequency {
-//
-//    TEALVisitorProfilePollingFrequency targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-//
-//    // default
-//    XCTAssertEqual(targetFrequency, self.configuration.pollingFrequency, @"TEALAudienceStreamConfiguration should default to %lu", (unsigned long)targetFrequency);
-//
-//    targetFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
-//
-//    self.configuration.pollingFrequency = targetFrequency;
-//
-//    TEALRemoteSettings *settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-//
-//
-//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
-//
-//
-//    targetFrequency = TEALVisitorProfilePollingFrequencyAfterEveryEvent;
-//
-//    self.configuration.pollingFrequency = targetFrequency;
-//
-//    settings = [self.settingsStore settingsFromConfiguration:self.configuration visitorID:@""];
-//
-//    XCTAssertEqual(targetFrequency, settings.pollingFrequency, @"Settigns Polling Frequency: %lu should be : %lu", (unsigned long)settings.pollingFrequency, (unsigned long)targetFrequency);
-//
-//}
-//
-//- (void) enableSharedInstanceWithConfiguration:(TEALConfiguration *) config {
-//    
-//    if (!config) {
-//        config = self.configuration;
-//    }
-//    
-//    __weak XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingSharedInstance"];
-//    
-//
-//    [Tealium sharedInstanceWithConfiguration:config completion:^(BOOL success, NSError *error) {
-//        
-//        if ([[Tealium sharedInstance] isEnabled]){
-//            [finishedLoading fulfill];
-//        }
-//    }];
-//    
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-//        NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//}
-//- (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
-//    
-//    
-//    if (!config) {
-//        config = self.configuration;
-//    }
-//    
-//    
-//    XCTestExpectation *finishedLoading = [self expectationWithDescription:@"finishLoadingInstance"];
-//    
-//    self.library = [Tealium instanceWithConfiguration:config];
-//    [self.library instanceWithConfiguration:config
-//                                 completion:^(BOOL success, NSError *error) {
-//                                     [finishedLoading fulfill];
-//                                 }];
-//    
-//    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError *error) {
-//        NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//    
-//}
-//
-//- (void) testSharedInstanceEnableTagManagmentWebView {
-//    
-//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_ON" ofType:@"html"];
-//    
-//    
-//    // Default is no tag management so webview should not be initialized
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    
-//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-//    config.logLevel = TEALLogLevelVerbose;
-//    [self enableSharedInstanceWithConfiguration:config];
-//    
-//    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was not initialized when it should have been.");
-//    
-//}
-//
-//- (void) testSharedInstanceDisableTagManagmentWebView {
-//    
-//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"audiencestream_OFF" ofType:@"html"];
-//    
-//    // Default is no tag management so webview should not be initialized
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-//    config.logLevel = TEALLogLevelVerbose;
-//    [self enableSharedInstanceWithConfiguration:config];
-//    
-//    XCTAssertTrue(![[Tealium sharedInstance] visitorIDCopy], @"SharedInstance webview was initialized when it should not have been.");
-//    
-//}
 
 @end

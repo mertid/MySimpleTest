@@ -224,7 +224,8 @@
 - (void) removeRemoteCommandID:(NSString *)name
                     completion:(TEALBooleanCompletionBlock)completion {
     
-    NSDictionary *commands = [self.commands copy];
+    NSDictionary *commands = self.commands;
+    
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
     
     [mDict removeObjectForKey:name];
@@ -245,7 +246,7 @@
 
 - (void) addNewCommands:(NSDictionary *)newCommand {
     
-    NSDictionary *commands = [self.commands copy];
+    NSDictionary *commands = self.commands;
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
     [mDict addEntriesFromDictionary:newCommand];
     NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];

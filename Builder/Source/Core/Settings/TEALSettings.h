@@ -31,6 +31,8 @@
 - (BOOL) goodBatteryLevelOnlySending;
 - (BOOL) isDefaultPublishSettings;
 
+- (int) dispatchServicesEnabled;
+
 - (double) daysDispatchesValid;
 - (double) minutesBetweenRefresh;
 

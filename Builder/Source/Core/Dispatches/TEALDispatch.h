@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, TEALDispatchStatus) {
     /**
      *  Destruction requested.
      */
-    TEALDispatchStatusShouldDestroy,
+    TEALDispatchStatusDestroyed,
     /**
      *  Other failure.
      */

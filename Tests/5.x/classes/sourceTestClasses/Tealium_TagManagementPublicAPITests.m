@@ -33,7 +33,9 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
-    [Tealium destroyInstanceForKey:self.description];
+    NSString *testID = @"CollectAPITests";
+    
+    [Tealium destroyInstanceForKey:testID];
     
     if (!config) {
         config = [TEALTestHelper liveConfig];
@@ -41,7 +43,7 @@
     
     __block BOOL isReady = NO;
     
-    self.library = [Tealium newInstanceForKey:self.description
+    self.library = [Tealium newInstanceForKey:testID
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        

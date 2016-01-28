@@ -190,23 +190,30 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
 #pragma mark - PUBLIC
 
-- (instancetype) initWithURLString:(NSString *)url {
++ (instancetype) archivedPublishSettingForURL:(NSString *)url {
     
-    if (!url) {
+    if (!url){
         return nil;
     }
     
     TEALPublishSettings *archivedSettings = [TEALPublishSettingsStore unarchivePublishSettingsForInstanceID:url];
     
-    if ([archivedSettings isKindOfClass:[TEALPublishSettings class]]){
-        
-        return archivedSettings;
-
-    } else {
-        
-        return [TEALPublishSettings defaultPublishSettingsForURLString:url];
-        
+    if (![archivedSettings isKindOfClass:[TEALPublishSettings class]]){
+        return nil;
     }
+    
+    return archivedSettings;
+    
+}
+
+- (instancetype) initWithURLString:(NSString *)url {
+    
+    if (!url) {
+        return nil;
+    }
+        
+    return [TEALPublishSettings defaultPublishSettingsForURLString:url];
+        
 }
 
 - (instancetype) initDefaultSettingsForURLString:(NSString *)url {

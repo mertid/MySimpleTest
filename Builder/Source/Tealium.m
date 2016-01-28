@@ -29,10 +29,9 @@
 
 @interface Tealium () <
                         TEALDispatchManagerDelegate,
-                        TEALDispatchManagerConfiguration,
                         TEALModulesDelegate>
 
-@property (nonatomic, strong) NSArray *dispatchNetworkServices;
+@property (atomic, strong) NSMutableArray *privateDispatchNetworkServices;
 @property (nonatomic, strong) TEALLogger *logger;
 @property (nonatomic, strong) TEALOperationManager *operationManager;
 @property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
@@ -52,7 +51,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - PUBLIC CLASS METHODS
 
-+ (instancetype) newInstanceForKey:(NSString * _Nonnull)key configuration:(TEALConfiguration *)configuration {
++ (instancetype) newInstanceForKey:(NSString * _Nonnull)key
+                     configuration:(TEALConfiguration *)configuration {
     
     return [Tealium newInstanceForKey:key
                         configuration:configuration
@@ -101,7 +101,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [instance.settings purgeAllArchives];
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:staticAllInstances];
     
     [mDict removeObjectForKey:key];
     
@@ -146,10 +146,39 @@ __strong static NSDictionary *staticAllInstances = nil;
             
 }
 
+- (TEALDispatchBlock) feedbackBlock {
+    
+    __block typeof(self) __weak weakSelf = self;
+
+    TEALDispatchBlock feedbackBlock = ^(TEALDispatchStatus status, TEALDispatch *dispatch, NSError *error) {
+        
+        if ([weakSelf.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
+            [weakSelf.modulesDelegate fetchVisitorProfileAfterEvent];
+        }
+        
+        if (status == TEALDispatchStatusSent){
+            [weakSelf.delegateManager tealium:self didSendDispatch:dispatch];
+        }
+        if (status == TEALDispatchStatusQueued){
+            [weakSelf.delegateManager tealium:self didQueueDispatch:dispatch];
+        }
+        
+        [weakSelf logDispatch:dispatch status:status error:error];
+    };
+    
+    return feedbackBlock;
+}
+
 - (void) trackDispatchOfType:(TEALDispatchType)type
                  title:(NSString *)title
            dataSources:(NSDictionary *) clientDataSources
             completion:(TEALDispatchBlock)completion{
+    
+    
+    if (!completion){
+    
+        completion = [self feedbackBlock];
+    }
     
     [self.operationManager addOperationWithBlock:^{
         
@@ -408,13 +437,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     Tealium *instance = [Tealium instanceWithConfiguration:configuration
                                                   delegate:delegate
-                                                completion:^(BOOL success, NSError *instanceError) {
-        
-        if (completion){
-            completion(success, instanceError);
-        }
-        
-    }];
+                                                completion:completion];
     
     // Unlikely error
     if (!instance) {
@@ -455,22 +478,25 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     __weak Tealium *weakInstance = instance;
     
-    [weakInstance.operationManager addOperationWithBlock:^{
+    [instance.operationManager addOperationWithBlock:^{
         
-        [weakInstance finalizeWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
-            
-            if (success) {
-                
-                [weakInstance.dispatchManager runQueuedDispatches];
-                
-            } else {
-                
-                [weakInstance disable];
-                
-            }
-            
-            if (completion) completion(success, error);
-        }];
+        [weakInstance finalizeWithConfiguration:configuration
+                                     completion:completion];
+        
+//        [weakInstance finalizeWithConfiguration:configuration completion:^(BOOL success, NSError *error) {
+//            
+//            if (success) {
+//                
+//                [weakInstance.dispatchManager runQueuedDispatches];
+//                
+//            } else {
+//                
+//                [weakInstance disable];
+//                
+//            }
+//            
+//            if (completion) completion(success, error);
+//        }];
         
     }];
     
@@ -484,7 +510,8 @@ __strong static NSDictionary *staticAllInstances = nil;
 + (void) addInstance:(Tealium * _Nonnull)instance key:(NSString * _Nonnull)key {
 
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[staticAllInstances copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:staticAllInstances];
+    
     mDict[key] = instance;
     
     NSDictionary *newInstances = [NSDictionary dictionaryWithDictionary:mDict];
@@ -504,7 +531,6 @@ __strong static NSDictionary *staticAllInstances = nil;
         _urlSessionManager.completionQueue = _operationManager.underlyingQueue;
         _delegateManager    = [[TEALDelegateManager alloc] init];
         _dispatchManager = [TEALDispatchManager dispatchManagerWithInstanceID:instanceID
-                                                                    Configuration:self
                                                                          delegate:self];
     }
     
@@ -569,6 +595,10 @@ __strong static NSDictionary *staticAllInstances = nil;
         success = YES;
         [self enable];
 
+    } else {
+        
+        [self disable];
+        
     }
 
     if (setupCompletion) setupCompletion(success, error);
@@ -595,6 +625,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         [self enableCore];
         [self updateModules];
         [self.logger enable];
+
     }
 }
 
@@ -612,7 +643,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) removeModuleDataForKey:(NSString *)key {
     
-    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:[self.moduleData copy]];
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:self.moduleData];
     
     if (![[mDict allKeys] containsObject:key]){
         return;
@@ -744,7 +775,7 @@ __strong static NSDictionary *staticAllInstances = nil;
             case TEALDispatchStatusQueued:
                 statusString = @"Queued";
                 break;
-            case TEALDispatchStatusShouldDestroy:
+            case TEALDispatchStatusDestroyed:
                 statusString = @"Destroyed";
                 break;
             case TEALDispatchStatusFailed:
@@ -784,7 +815,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         case TEALDispatchStatusQueued:
             [self.delegateManager tealium:self didQueueDispatch:dispatch];
             break;
-        case TEALDispatchStatusShouldDestroy:
+        case TEALDispatchStatusDestroyed:
             break;
         default:
             break;
@@ -825,71 +856,79 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self.urlSessionManager.reachabilityManager reachabilityChanged:^(BOOL canReach) {
        
-        if (canReach){
-          
-            [weakSelf.logger logDev:@"Network found."];
-            
-            [weakSelf fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-                
-                if (error){
-                    [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
-                                              [error localizedDescription],
-                                              [error localizedFailureReason],
-                                              [error localizedRecoverySuggestion]
-                                              ]];
-                    
-                }
-                
-                if (success){
-                    
-                    [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-                
-                }
-                
-                if (!success &&
-                    !error){
-                    
-                    [weakSelf.logger logDev:@"No changes in current Remote Publish Settings from server."];
-
-                }
-                
-                // if !success then we're using archived or default version
-                
-                if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-                    
-                    [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-                    
-                }
-                
-                [weakSelf updateCore];
-                [weakSelf updateModules];
-                
-                if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
-                    [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
-                }
-                
-                [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-                
-                [weakSelf.dispatchManager runQueuedDispatches];
-                    
-                
-                
-                if ([weakSelf.settings libraryShouldDisable]){
-                    
-                    [weakSelf disable];
-                    
-                    return;
-                }
-                
-            }];
-            
-        } else {
-            
-            [weakSelf.logger logDev:@"Network unreachable."];
-
-        }
+        [weakSelf reachabilityChanged:canReach];
         
     }];
+    
+}
+
+- (void) reachabilityChanged:(BOOL)canReach {
+ 
+    if (canReach){
+        
+        [self.logger logDev:@"Network found."];
+        
+        __block typeof(self) __weak weakSelf = self;
+
+        [self fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+            
+            if (error){
+                [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                                          [error localizedDescription],
+                                          [error localizedFailureReason],
+                                          [error localizedRecoverySuggestion]
+                                          ]];
+                
+            }
+            
+            if (success){
+                
+                [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+                
+            }
+            
+            if (!success &&
+                !error){
+                
+                [weakSelf.logger logDev:@"No changes in current Remote Publish Settings from server."];
+                
+            }
+            
+            // if !success then we're using archived or default version
+            
+            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
+                
+                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+                
+            }
+            
+            [weakSelf updateCore];
+            [weakSelf updateModules];
+            
+            if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
+                [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
+            }
+            
+            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+            
+            [weakSelf.dispatchManager runQueuedDispatches];
+            
+            
+            
+            if ([weakSelf.settings libraryShouldDisable]){
+                
+                [weakSelf disable];
+                
+                return;
+            }
+            
+        }];
+        
+    } else {
+        
+        [self.logger logDev:@"Network unreachable."];
+        
+    }
     
 }
 
@@ -948,70 +987,124 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - DISPATCH SERVICES
 
-- (NSArray *) currentDispatchServices {
+- (NSMutableArray *) currentDispatchServices {
     
-    NSArray *array = nil;
-    
-    if (!self.dispatchNetworkServices) {
+    if (!self.privateDispatchNetworkServices){
+
+        // Max 3 options at the moment
+        self.privateDispatchNetworkServices = [[NSMutableArray alloc] initWithCapacity:3];
         
-        array = [[NSArray alloc] init];
-        
-    } else {
-        array = self.dispatchNetworkServices;
     }
     
-    return array;
+    return self.privateDispatchNetworkServices;
 }
 
-- (void) setCurrentDispatchServices:(NSArray *)newServices {
-    
-    self.dispatchNetworkServices = nil;
-    self.dispatchNetworkServices = newServices;
-    
-}
-
-- (void) addNewDispatchService:(id)newService {
-    
-    NSArray *dispatchServices = [[self currentDispatchServices] copy];
-    
-    __block NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
-    
-    [newServices addObject:newService];
+- (void) addNewDispatchService:(id<TEALDispatchService>)service {
     
     __block typeof(self) __weak weakSelf = self;
 
-    [self.operationManager addOperationWithBlock:^{
-        
-        [weakSelf setCurrentDispatchServices:[NSArray arrayWithArray:newServices]];
-
-    }];
+    [self addNewDispatchService:service
+                         completion:^(BOOL success, NSError * _Nullable error) {
+                             
+                             if (success){
+                                 [weakSelf.logger logQA:@"Dispatch service enabled: %@", [service name]];
+                             }
+                             
+                             if (error){
+                                 [weakSelf.logger logDev:@"Could not add dispatch service: %@ - error: %@", [service name], error];
+                             }
+                             
+                         }];
     
     
 }
 
-- (void) removeDispatchService:(id)service {
-    
-    NSArray *dispatchServices = [[self currentDispatchServices] copy];
-    
-    __block NSMutableArray *newServices = [NSMutableArray arrayWithArray:dispatchServices];
-    
-    [newServices removeObject:service];
+- (void) removeDispatchService:(id<TEALDispatchService>)service {
     
     __block typeof(self) __weak weakSelf = self;
     
+    [self removeDispatchService:service
+                     completion:^(BOOL success, NSError * _Nullable error) {
+                         
+                         if (success){
+                             [weakSelf.logger logQA:@"Dispatch service disabled: %@", [service name]];
+                         }
+                         
+                         if (error){
+                             [weakSelf.logger logDev:@"Could not remove dispatch service: %@ - error: %@", [service name], error];
+                         }
+                         
+                     }];
+    
+}
+
+- (void) addNewDispatchService:(id<TEALDispatchService>)service
+                    completion:(TEALBooleanCompletionBlock)completion{
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    NSError *error = nil;
+    
+    if ([[self currentDispatchServices] containsObject:service]){
+        if (completion){
+            error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                                 description:NSLocalizedString(@"Could not add dispatch service.", @"")
+                                      reason:NSLocalizedString(@"Dispatch service already present.", @"")
+                                  suggestion:NSLocalizedString(@"Ignore or remove unneeded addDispatchService: call.", @"")];
+            completion(NO, error);
+        }
+        return;
+    }
+    
     [self.operationManager addOperationWithBlock:^{
         
-        [weakSelf setCurrentDispatchServices:dispatchServices];
+        [[weakSelf currentDispatchServices] addObject:service];
+        
+        if (completion){
+            completion(YES, nil);
+        }
         
     }];
     
 }
+
+- (void) removeDispatchService:(id)service
+                    completion:(TEALBooleanCompletionBlock)completion {
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    NSError *error = nil;
+    
+    if (![[self currentDispatchServices] containsObject:service]){
+        if (completion){
+            error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                                 description:NSLocalizedString(@"Could not remove dispatch service.", @"")
+                                      reason:NSLocalizedString(@"Dispatch service already NOT present.", @"")
+                                  suggestion:NSLocalizedString(@"Ignore or remove unneeded removeDispatchService: call.", @"")];
+            completion(NO, error);
+        }
+        return;
+    }
+    
+    [self.operationManager addOperationWithBlock:^{
+        
+        [[weakSelf currentDispatchServices ] removeObject:service];
+        
+        if (completion){
+            completion(YES, nil);
+        }
+        
+    }];
+    
+}
+
 
 #pragma mark - TEALDISPATCHMANAGER DELEGATE
 
  //Agnostic - use configuration
  // TODO: handle wifi only, low battery and other settings
  // ~commHandlers big if else checks
+
 
 - (BOOL) dispatchManagerShouldDispatch:(NSError *__autoreleasing _Nullable)error {
     
@@ -1045,7 +1138,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                               suggestion:NSLocalizedString(@"Charge device.", @"")];
         shouldDispatch = NO;
     }
-    if ([self dispatchNetworkServices].count==0){
+    if ([self currentDispatchServices].count==0){
         error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"No network dispatch services available", @"")
@@ -1053,13 +1146,35 @@ __strong static NSDictionary *staticAllInstances = nil;
         shouldDispatch = NO;
     }
     
+    NSUInteger batchSize = [self.settings dispatchSize];
+    NSUInteger queueSize = [self.dispatchManager queuedDispatches].count;
+    if (batchSize > queueSize){
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                  reason:NSLocalizedString(@"Queue size is smaller than batch size", @"")
+                              suggestion:NSLocalizedString(@"Wait for additional track calls OR adjust publish settings batch size.", @"")];
+        shouldDispatch = NO;
+        
+    }
+    
     return shouldDispatch;
+}
+
+- (BOOL) dispatchManagerShouldDestroyDispatch:(TEALDispatch *)dispatch {
+    
+    return [self.delegateManager tealium:self shouldDropDispatch:dispatch];
+    
+}
+
+- (BOOL) dispatchManagerShouldQueueDispatch:(TEALDispatch *)dispatch {
+    
+    return [self.delegateManager tealium:self shouldQueueDispatch:dispatch];
+    
 }
 
 - (void) dispatchManager:(TEALDispatchManager *)dataManager
         requestsDispatch:(TEALDispatch *)dispatch
          completionBlock:(TEALDispatchBlock)completionBlock {
-        
 
     // Pass dispatch to dispatch services
     for ( id<TEALDispatchService> service in [self currentDispatchServices]) {
@@ -1067,7 +1182,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         [service sendDispatch:dispatch
                    completion:^(TEALDispatchStatus serviceStatus, TEALDispatch *serviceDispatch, NSError *serviceError) {
                        
-                       dispatch.dispatchServiceName = [service name];
+                       serviceDispatch.dispatchServiceName = [service name];
                        
                        if (completionBlock) completionBlock(serviceStatus, serviceDispatch, serviceError);
                        
@@ -1076,37 +1191,37 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch {
-    
-    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
-        [self.modulesDelegate fetchVisitorProfileAfterEvent];
-    }
-    
-    [self.delegateManager tealium:self didSendDispatch:dispatch];
-    
-    [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
-    
-}
+//- (void) dispatchManagerDidSendDispatch:(TEALDispatch *)dispatch {
+//    
+//    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
+//        [self.modulesDelegate fetchVisitorProfileAfterEvent];
+//    }
+//    
+//    [self.delegateManager tealium:self didSendDispatch:dispatch];
+//    
+//    [self logDispatch:dispatch status:TEALDispatchStatusSent error:nil];
+//    
+//}
 
-- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch {
-    
-    // Stub for possible Mobile Companion use
-    
-}
+//- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch *)dispatch {
+//    
+//    // Stub for possible Mobile Companion use
+//    
+//}
 
-- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch {
-    
-    [self.delegateManager tealium:self didQueueDispatch:dispatch];
-    
-    [self logDispatch:dispatch status:TEALDispatchStatusQueued error:nil];
-    
-}
+//- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch *)dispatch {
+//    
+//    [self.delegateManager tealium:self didQueueDispatch:dispatch];
+//    
+//    [self logDispatch:dispatch status:TEALDispatchStatusQueued error:nil];
+//    
+//}
 
-- (void) dispatchManagerDidUpdateDispatchQueues {
-    
-    // Stub for possible Mobile Companion use
-    
-}
+//- (void) dispatchManagerDidUpdateDispatchQueues {
+//    
+//    // Stub for possible Mobile Companion use
+//    
+//}
 
 - (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch *)dispatch {
     
@@ -1138,20 +1253,20 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 }
 
-- (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count {
-    
-    [self.logger logDev:[NSString stringWithFormat:@"Will dispatch queue with %lu dispatches.", (unsigned long)count]];
-    
-}
-
-- (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
-    
-    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
-        [self.modulesDelegate fetchVisitorProfileAfterEvent];
-    }
-    
-    [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
-}
+//- (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count {
+//    
+//    [self.logger logDev:[NSString stringWithFormat:@"Will dispatch queue with %lu dispatches.", (unsigned long)count]];
+//    
+//}
+//
+//- (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count {
+//    
+//    if ([self.modulesDelegate respondsToSelector:@selector(fetchVisitorProfileAfterEvent)]){
+//        [self.modulesDelegate fetchVisitorProfileAfterEvent];
+//    }
+//    
+//    [self.logger logDev:[NSString stringWithFormat:@"Did dispatch queue with %lu dispatches.", (unsigned long)count]];
+//}
 
 #pragma mark - TEALDISPATCHMANAGER CONFIGURATION
 
@@ -1165,59 +1280,59 @@ __strong static NSDictionary *staticAllInstances = nil;
     return [self.settings offlineDispatchQueueSize];
 }
 
-- (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch {
-    
-    // Return an error if the dispatch manager should NOT send now
-
-    NSError *error = nil;
-    NSArray *dispatchServices = [self currentDispatchServices];
-
-    if  ([self.delegateManager tealium:self shouldDropDispatch:dispatch]) {
-        
-        error = [TEALError errorWithCode:999
-                             description:NSLocalizedString(@"Dispatch destroyed.", @"")
-                                  reason:NSLocalizedString(@"Public delegate requested destruction of dispatch.", @"")
-                              suggestion:NSLocalizedString(@"See implemented tealium:shouldDropDispatch delegate method.", @"")];
-        
-    } else if ([self.delegateManager tealium:self shouldQueueDispatch:dispatch]) {
-
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Dispatch queued.", @"")
-                                  reason:NSLocalizedString(@"Public delegate requested queing of dispatch.", @"")
-                              suggestion:NSLocalizedString(@"See implemented tealium:shouldQueueDispatch delegate method.", @"")];
-        
-    } else if (![self networkReadyForDispatch]) {
-            
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Dispatch queued.", @"")
-                                  reason:NSLocalizedString(@"No network detected.", @"")
-                              suggestion:NSLocalizedString(@"Wait for network availability.", @"")];
-        
-    } else if ([self suppressForWifiOnly]) {
-        
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Dispatch queued.", @"")
-                                  reason:NSLocalizedString(@"Queing calls for wifi only.", @"")
-                              suggestion:NSLocalizedString(@"Wait for wifi availability.", @"")];
-        
-    } else if ([self suppressForBetterBatteryLevels]) {
-        
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Dispatch queued.", @"")
-                                  reason:NSLocalizedString(@"Queing calls due to low battery level.", @"")
-                              suggestion:NSLocalizedString(@"Wait for battery levels to be above 20%.", @"")];
-        
-    } else if (!dispatchServices ||
-             [dispatchServices count] == 0) {
-        
-        error = [TEALError errorWithCode:400
-                             description:NSLocalizedString(@"Dispatch queued.", @"")
-                                  reason:NSLocalizedString(@"No active dispatch services enabled to process dispatch.", @"")
-                              suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings and make sure at least one dispatch service option is enabled.", @"")];
-        
-    }
-    
-    return error;
-}
+//- (NSError *) errorSendingDispatch:(TEALDispatch *)dispatch {
+//    
+//    // Return an error if the dispatch manager should NOT send now
+//
+//    NSError *error = nil;
+//    NSArray *dispatchServices = [self currentDispatchServices];
+//
+//    if  ([self.delegateManager tealium:self shouldDropDispatch:dispatch]) {
+//        
+//        error = [TEALError errorWithCode:999
+//                             description:NSLocalizedString(@"Dispatch destroyed.", @"")
+//                                  reason:NSLocalizedString(@"Public delegate requested destruction of dispatch.", @"")
+//                              suggestion:NSLocalizedString(@"See implemented tealium:shouldDropDispatch delegate method.", @"")];
+//        
+//    } else if ([self.delegateManager tealium:self shouldQueueDispatch:dispatch]) {
+//
+//        error = [TEALError errorWithCode:400
+//                             description:NSLocalizedString(@"Dispatch queued.", @"")
+//                                  reason:NSLocalizedString(@"Public delegate requested queing of dispatch.", @"")
+//                              suggestion:NSLocalizedString(@"See implemented tealium:shouldQueueDispatch delegate method.", @"")];
+//        
+//    } else if (![self networkReadyForDispatch]) {
+//            
+//        error = [TEALError errorWithCode:400
+//                             description:NSLocalizedString(@"Dispatch queued.", @"")
+//                                  reason:NSLocalizedString(@"No network detected.", @"")
+//                              suggestion:NSLocalizedString(@"Wait for network availability.", @"")];
+//        
+//    } else if ([self suppressForWifiOnly]) {
+//        
+//        error = [TEALError errorWithCode:400
+//                             description:NSLocalizedString(@"Dispatch queued.", @"")
+//                                  reason:NSLocalizedString(@"Queing calls for wifi only.", @"")
+//                              suggestion:NSLocalizedString(@"Wait for wifi availability.", @"")];
+//        
+//    } else if ([self suppressForBetterBatteryLevels]) {
+//        
+//        error = [TEALError errorWithCode:400
+//                             description:NSLocalizedString(@"Dispatch queued.", @"")
+//                                  reason:NSLocalizedString(@"Queing calls due to low battery level.", @"")
+//                              suggestion:NSLocalizedString(@"Wait for battery levels to be above 20%.", @"")];
+//        
+//    } else if (!dispatchServices ||
+//             [dispatchServices count] == 0) {
+//        
+//        error = [TEALError errorWithCode:400
+//                             description:NSLocalizedString(@"Dispatch queued.", @"")
+//                                  reason:NSLocalizedString(@"No active dispatch services enabled to process dispatch.", @"")
+//                              suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings and make sure at least one dispatch service option is enabled.", @"")];
+//        
+//    }
+//    
+//    return error;
+//}
 
 @end

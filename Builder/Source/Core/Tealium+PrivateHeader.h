@@ -16,6 +16,7 @@
 #import "TEALSettings.h"
 #import "TEALDispatchManager.h"
 #import "TEALURLSessionManager.h"
+#import "TEALDispatchService.h"
 
 @interface Tealium (Private)
 
@@ -41,10 +42,9 @@
 - (void) addModuleData:(NSDictionary * _Nonnull) dictionary;
 - (void) removeModuleDataForKey:(NSString * _Nonnull)key;
 
-- (NSArray * _Nonnull) currentDispatchServices;
-- (void) setCurrentDispatchServices:(NSArray * _Nonnull)newServices;
-- (void) addNewDispatchService:(id _Nonnull)newService;
-- (void) removeDispatchService:(id _Nonnull)service;
+- (NSMutableArray * _Nonnull) currentDispatchServices;
+- (void) addNewDispatchService:(id<TEALDispatchService> _Nonnull)service;
+- (void) removeDispatchService:(id<TEALDispatchService> _Nonnull)service;
 
 - (void) addVolatileDataSources:(NSDictionary * _Nonnull)additionalDataSources
                      completion:(TEALBooleanCompletionBlock _Nullable)completion;

@@ -27,7 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
-      codeCoverageEnabled = "YES">
+      codeCoverageEnabled = "YES"
+      enableAddressSanitizer = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -46,7 +47,13 @@
                   Identifier = "TealiumConfigurationsTests/testAnything">
                </Test>
                <Test
+                  Identifier = "TealiumTrackTests">
+               </Test>
+               <Test
                   Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
+               </Test>
+               <Test
+                  Identifier = "Tealium_CollectConfigurationTests/testTrackBatchEvents">
                </Test>
                <Test
                   Identifier = "Tealium_TagManagementPublicAPITests/testAddAndExecuteRemoteCommandBlock">
@@ -55,16 +62,6 @@
                   Identifier = "__x_FrameworkUITests">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "712BAF321C29BED4007767CD"
-               BuildableName = "UIKitCatalogUITests.xctest"
-               BlueprintName = "UIKitCatalogUITests"
-               ReferencedContainer = "container:UIKitCatalog.xcodeproj">
-            </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>

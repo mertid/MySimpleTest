@@ -208,40 +208,37 @@
     return request;
 }
 
-- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
+- (NSError *) prefetchErrorForRequest:(NSURLRequest *)request
+                                 date:(NSDate *)date {
     
-    // Generate request
-    NSURLRequest *request = [self publishSettingsRequest];
-    NSDate *now = [NSDate date];
-    
-    // Bail out checks:
     NSError *preFetchError = nil;
     
     if (!request) {
         preFetchError = [TEALError errorWithCode:TEALErrorCodeNoContent
-                             description:NSLocalizedString(@"Settings request unsuccessful", @"")
-                                  reason:NSLocalizedString(@"Failed to generate valid request.", @"")
-                              suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
+                                     description:NSLocalizedString(@"Settings request unsuccessful", @"")
+                                          reason:NSLocalizedString(@"Failed to generate valid request.", @"")
+                                      suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
         
     }
     
     if (!preFetchError &&
         !self.configuration){
         preFetchError = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
-                                  reason:NSLocalizedString(@"No configuration available.", @"")
-                              suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
+                                     description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+                                          reason:NSLocalizedString(@"No configuration available.", @"")
+                                      suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
     }
     
-    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:now];
+    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:date];
+    
     if (!preFetchError &&
         minutesToNextFetch > 0.0) {
         
         NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
         preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
-                                  reason:reason
-                              suggestion:NSLocalizedString(@"Wait for end of timeout or change prior minutes between refresh setting.", @"")];
+                                     description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+                                          reason:reason
+                                      suggestion:NSLocalizedString(@"Wait for end of timeout or change prior minutes between refresh setting.", @"")];
         
     }
     
@@ -249,11 +246,63 @@
         !self.urlSessionManager){
         
         preFetchError = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Can not fetch at this time", @"")
-                                  reason:NSLocalizedString(@"TEALURLSessionManager not yet assigned to settings", @"")
-                              suggestion:NSLocalizedString(@"Consult Tealium Mobile engineering", @"")];
+                                     description:NSLocalizedString(@"Can not fetch at this time", @"")
+                                          reason:NSLocalizedString(@"TEALURLSessionManager not yet assigned to settings", @"")
+                                      suggestion:NSLocalizedString(@"Consult Tealium Mobile engineering", @"")];
         
     }
+    
+    return preFetchError;
+}
+
+
+- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
+    
+    // Generate request
+    NSURLRequest *request = [self publishSettingsRequest];
+    NSDate *now = [NSDate date];
+    
+    // Bail out checks:
+    NSError *preFetchError = [self prefetchErrorForRequest:request
+                                                      date:now];
+//    
+//    if (!request) {
+//        preFetchError = [TEALError errorWithCode:TEALErrorCodeNoContent
+//                             description:NSLocalizedString(@"Settings request unsuccessful", @"")
+//                                  reason:NSLocalizedString(@"Failed to generate valid request.", @"")
+//                              suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
+//        
+//    }
+//    
+//    if (!preFetchError &&
+//        !self.configuration){
+//        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
+//                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+//                                  reason:NSLocalizedString(@"No configuration available.", @"")
+//                              suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
+//    }
+//    
+//    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:now];
+//    if (!preFetchError &&
+//        minutesToNextFetch > 0.0) {
+//        
+//        NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
+//        preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
+//                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
+//                                  reason:reason
+//                              suggestion:NSLocalizedString(@"Wait for end of timeout or change prior minutes between refresh setting.", @"")];
+//        
+//    }
+//    
+//    if (!preFetchError &&
+//        !self.urlSessionManager){
+//        
+//        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
+//                             description:NSLocalizedString(@"Can not fetch at this time", @"")
+//                                  reason:NSLocalizedString(@"TEALURLSessionManager not yet assigned to settings", @"")
+//                              suggestion:NSLocalizedString(@"Consult Tealium Mobile engineering", @"")];
+//        
+//    }
     
     if (preFetchError){
         if (completion){
@@ -264,6 +313,7 @@
     
     // Perform request
     self.lastFetch = now;
+    
     __block typeof(self) __weak weakSelf = self;
     
 
@@ -382,13 +432,6 @@
     
 }
 
-- (void) fetchNewRawPublishSettings:(NSURLRequest*) request
-                         completion:(TEALBooleanCompletionBlock)completion{
-    
-#warning Immplement
-    
-}
-
 - (void) purgeAllArchives {
     
     [TEALPublishSettings purgeAllArchives];
@@ -400,32 +443,30 @@
     
     if (!self.privatePublishSettings){
         
-        self.privatePublishSettings = [self newPublishedSettings];
+        self.privatePublishSettings = [self newOrArchivedPublishedSettings];
     }
     
     return self.privatePublishSettings;
     
 }
 
-- (TEALPublishSettings *) newPublishedSettings {
+- (TEALPublishSettings *) newOrArchivedPublishedSettings {
     
     // Will load archive if available
     
     NSString *urlString = [self.configuration publishSettingsURL];
     
+    TEALPublishSettings *archiveSettings = [TEALPublishSettings archivedPublishSettingForURL:urlString];
+    
+    if (archiveSettings){
+        return archiveSettings;
+    }
+    
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     
-//    NSString *override = self.configuration.overridePublishSettingsVersion;
-//    
-//    if (override){
-//        settings.targetVersion = override;
-//    } else {
-        settings.targetVersion = TEALDefaultPublishVersion;
-//    }
+    settings.targetVersion = TEALDefaultPublishVersion;
     
-    self.privatePublishSettings = settings;
-    
-    return self.privatePublishSettings;
+    return settings;
     
 }
 

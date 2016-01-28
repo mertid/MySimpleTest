@@ -323,8 +323,6 @@ static NSDictionary *staticCompileTimeDataSources;
     return uuid;
 }
 
-#warning move this to collect module
-
 - (NSString *) visitorIDCopy {
     
     NSString *visitorID = [self persistentDataSourcesCopy][TEALDataSourceKey_VisitorID];

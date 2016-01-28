@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TEALDataQueue.h"
 #import "TEALDispatch.h"
 #import "TEALSystemProtocols.h"
 
@@ -17,69 +16,50 @@
 @protocol TEALDispatchManagerDelegate <NSObject>
 
 // Internal
+- (BOOL) dispatchManagerShouldDestroyDispatch:(TEALDispatch * _Nonnull)dispatch;
+
+- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing _Nullable)error;
+
+- (BOOL) dispatchManagerShouldQueueDispatch:(TEALDispatch * _Nonnull)dispatch;
+
 - (void) dispatchManager:(TEALDispatchManager * _Nonnull)dataManager
         requestsDispatch:(TEALDispatch * _Nonnull)dispatch
          completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
-- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing _Nullable)error;
-
 - (void) dispatchManagerDidSendDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (void) dispatchManagerWillEnqueueDispatch:(TEALDispatch * _Nonnull)dispatch;
-
 - (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch * _Nonnull)dispatch;
-
-- (void) dispatchManagerDidUpdateDispatchQueues;
 
 - (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
 
 - (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (void) dispatchManagerdWillRunDispatchQueueWithCount:(NSUInteger)count;
-
-- (void) dispatchManagerdDidRunDispatchQueueWithCount:(NSUInteger)count;
-
-@end
-
-@protocol TEALDispatchManagerConfiguration <NSObject>
-
-- (NSUInteger) dispatchBatchSize;
-
-- (NSUInteger) dispatchQueueCapacity;   // Good only for init time
-
-- (NSError * _Nullable) errorSendingDispatch:(TEALDispatch * _Nonnull)dispatch;
-
 @end
 
 @interface TEALDispatchManager : NSObject
 
-@property (strong, nonatomic, readonly) TEALDataQueue * _Nonnull sentDispatches;
-@property (strong, nonatomic, readonly) TEALDataQueue * _Nonnull queuedDispatches;
-
-
 + (instancetype _Nullable) dispatchManagerWithInstanceID:(NSString * _Nonnull) instanceID
-                                 Configuration:(id<TEALDispatchManagerConfiguration> _Nonnull)configuration
-                                      delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
+                                                delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
 
 - (instancetype _Nullable) initWithInstanceID:(NSString * _Nonnull)instanceID
-                                Configuration:(id<TEALDispatchManagerConfiguration> _Nonnull)configuration
                                      delegate:(id<TEALDispatchManagerDelegate> _Nonnull)delegate;
-
-- (void) updateQueuedCapacity:(NSUInteger)capacity;
-
-#pragma mark - enqueue / dequeue dispatches
 
 - (void) addDispatch:(TEALDispatch * _Nonnull)dispatch
      completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
+- (void) autoAdjustQueueSize:(NSMutableArray* _Nonnull)queue;
+
+- (void) disable;
+
+- (void) enable;
+
+- (void) purgeQueuedDispatches;
+
 - (void) runQueuedDispatches;
 
-- (void) disableDispatchQueue;
+- (void) updateQueuedCapacity:(NSUInteger)capacity;
 
-- (void) dequeueAllData;
+- (NSArray * _Nonnull) queuedDispatches;
 
-- (NSArray * _Nonnull) queuedDispatchesCopy;
-
-- (NSArray * _Nonnull) sentDispatchesCopy;
 
 @end

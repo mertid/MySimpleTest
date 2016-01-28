@@ -39,7 +39,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
 
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"tagbridge"
                                                                        environment:@"dev"];
     
 //    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
@@ -143,7 +143,7 @@ static TealiumHelper * _sharedInstance;
     if ([self isTesting]){ return; }
 
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
-     addRemoteCommandID:@"logger"
+     addRemoteCommandID:@"toast"
      description:@"An example remote command block"
      targetQueue:dispatch_get_main_queue()
      responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
@@ -153,6 +153,30 @@ static TealiumHelper * _sharedInstance;
         // modification, A/B testing, etc.
         
     }];
+    
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
+     addRemoteCommandID:@"butter"
+     description:@"An example remote command block"
+     targetQueue:dispatch_get_main_queue()
+     responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
+         
+         NSLog(@"%s response: %@", __FUNCTION__, response);
+         // Put any code here that can execute on the main thread - ie content
+         // modification, A/B testing, etc.
+         
+     }];
+    
+    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
+     addRemoteCommandID:@"jam"
+     description:@"An example remote command block"
+     targetQueue:dispatch_get_main_queue()
+     responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
+         
+         NSLog(@"%s response: %@", __FUNCTION__, response);
+         // Put any code here that can execute on the main thread - ie content
+         // modification, A/B testing, etc.
+         
+     }];
     
 }
 

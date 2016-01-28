@@ -456,14 +456,14 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 - (NSDictionary *) reachabilityDataSources:(NSDictionary *)clientDataSources {
     
     NSString * connectionValue = [self connectionDataSourceValue];
-    NSString * wasQueuedValue = [self wasQueuedDataSourceValue:clientDataSources];
-    
-    if (wasQueuedValue){
-        return @{
-                 TEALDataSourceKey_ConnectionType: connectionValue,
-                 TEALDataSourceKey_WasQueued: wasQueuedValue
-                 };
-    }
+//    NSString * wasQueuedValue = [self wasQueuedDataSourceValue:clientDataSources];
+//    
+//    if (wasQueuedValue){
+//        return @{
+//                 TEALDataSourceKey_ConnectionType: connectionValue,
+//                 TEALDataSourceKey_WasQueued: wasQueuedValue
+//                 };
+//    }
     
     return @{
              TEALDataSourceKey_ConnectionType: connectionValue
@@ -472,7 +472,8 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 - (NSString *)connectionDataSourceValue {
     
-    NSString *connectionType = nil;
+    NSString *connectionType = TEALDataSourceValue_ConnectionNone;
+    
     if ([self isReachableViaWiFi]) connectionType = TEALDataSourceValue_ConnectionWifi;
     if ([self isReachableViaWWAN]) connectionType = TEALDataSourceValue_ConnectionCellular;
     
@@ -480,23 +481,23 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     
 }
 
-- (NSString *)wasQueuedDataSourceValue: (NSDictionary *) clientDataSources {
-    
-    if (clientDataSources[TEALDataSourceKey_WasQueued]) {
-        
-        // Client data sources are always added at the end, so we're going
-        // to for go a response here and simply use the client data instead.
-        return nil;
-    }
-    
-    NSString * value = TEALDataSourceValue_False;
-    
-    if ([self currentReachabilityStatus] == TEALNetworkStatusNotReachable) {
-        value = TEALDataSourceValue_True;
-    }
-    
-    return value;
-    
-}
+//- (NSString *)wasQueuedDataSourceValue: (NSDictionary *) clientDataSources {
+//    
+//    if (clientDataSources[TEALDataSourceKey_WasQueued]) {
+//        
+//        // Client data sources are always added at the end, so we're going
+//        // to for go a response here and simply use the client data instead.
+//        return nil;
+//    }
+//    
+//    NSString * value = TEALDataSourceValue_False;
+//    
+//    if ([self currentReachabilityStatus] == TEALNetworkStatusNotReachable) {
+//        value = TEALDataSourceValue_True;
+//    }
+//    
+//    return value;
+//    
+//}
 
 @end

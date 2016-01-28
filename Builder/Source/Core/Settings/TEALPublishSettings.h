@@ -42,6 +42,9 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 + (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data
                                                          error:(NSError * __autoreleasing _Nullable)error;
 
++ (instancetype _Nullable) archivedPublishSettingForURL:(NSString * _Nonnull)url;
+
+    
 + (TEALPublishSettings * _Nonnull) defaultPublishSettingsForURLString:(NSString * _Nonnull)url;
 
 - (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;

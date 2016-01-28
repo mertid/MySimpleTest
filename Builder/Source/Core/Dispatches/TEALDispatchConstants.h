@@ -12,7 +12,7 @@ typedef NS_ENUM(NSUInteger, TEALDispatchStatus) {
     TEALDispatchStatusUnknown = 0,
     TEALDispatchStatusSent,
     TEALDispatchStatusQueued,
-    TEALDispatchStatusShouldDestroy,
+    TEALDispatchStatusDestroyed,
     TEALDispatchStatusFailed
 };
 

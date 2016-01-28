@@ -193,9 +193,7 @@
     NSString *localPath = [NSString stringWithFormat:@"file://%@", path];
 
     [config setOverridePublishSettingsURL:localPath];
-    
-//    config.overridePublishSettingsURL = path;
-    
+        
     return config;
     
 }

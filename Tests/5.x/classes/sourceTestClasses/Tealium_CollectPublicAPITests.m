@@ -12,16 +12,17 @@
 #import "TEALSettings+Collect.h"
 #import "TEALTestHelper.h"
 
-@interface Tealium_CollectPublicAPITests : XCTestCase
+@interface Tealium_CollectPublicAPITests : XCTestCase<TealiumDelegate>
 
-@property () Tealium *library;
-
+@property Tealium *library;
+@property BOOL didFetch;
 @end
 
 @implementation Tealium_CollectPublicAPITests
 
 - (void)setUp {
     [super setUp];
+    self.didFetch = NO;
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -34,7 +35,9 @@
 
 - (void) enableLibraryWithConfiguration:(TEALConfiguration *)config {
     
-    [Tealium destroyInstanceForKey:self.description];
+    NSString *testID = @"collectConfigurationTests";
+    
+    [Tealium destroyInstanceForKey:testID];
     
     if (!config) {
         config = [TEALTestHelper liveConfig];
@@ -42,7 +45,7 @@
     
     __block BOOL isReady = NO;
     
-    self.library = [Tealium newInstanceForKey:self.description
+    self.library = [Tealium newInstanceForKey:testID
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
@@ -52,17 +55,7 @@
                                        
                                    }];
     
-    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
-    
-    isReady = NO;
-    
-    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-        
-        XCTAssertTrue(!error, @"Library failed to fetch test settings - error:%@", error);
-        
-        isReady = YES;
-        
-    }];
+    [self.library setDelegate:self];
     
     while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){}
     
@@ -76,8 +69,17 @@
     
     [self enableLibraryWithConfiguration:config];
     
+    // Buffer
+    BOOL waiting = NO;
+    [TEALTestHelper waitFor:&waiting timeout:1.0];
+    
     NSString *profileURL = [[self.library profileURL] absoluteString];
-    NSString *expectedURLString = [NSString stringWithFormat:@"https://visitor-service.tealiumiq.com/%@/main/%@", config.accountName, [self.library visitorIDCopy]];
+    
+    NSString *visitorID = [self.library visitorIDCopy];
+    
+    XCTAssertTrue(visitorID, @"Visitor ID missing.");
+    
+    NSString *expectedURLString = [NSString stringWithFormat:@"https://visitor-service.tealiumiq.com/%@/main/%@", config.accountName, visitorID];
     
     XCTAssertTrue([profileURL isEqualToString:expectedURLString], @"profileURL: %@ did not match expected url: %@", profileURL, expectedURLString);
     
@@ -89,7 +91,12 @@
     
     [self enableLibraryWithConfiguration:config];
     
+    // Buffer
+    BOOL waiting = NO;
+    [TEALTestHelper waitFor:&waiting timeout:1.0];
+    
     NSString *profileDefintionsURL = [[self.library profileDefinitionURL] absoluteString];
+    
     NSString *expectedURLString = [NSString stringWithFormat:@"https://visitor-service.tealiumiq.com/datacloudprofiledefinitions/%@/main", config.accountName];
     
     XCTAssertTrue([profileDefintionsURL isEqualToString:expectedURLString], @"profileDefinitionURL: %@ did not match expected url: %@", profileDefintionsURL, expectedURLString);
@@ -104,13 +111,14 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"fetchVisitorProfile"];
 
+    __block TEALVisitorProfile *fetchProfile = nil;
+    __block NSError *fetchError = nil;
+    
     [self.library fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
         
-        NSLog(@"%s:profile:%@, error:%@", __FUNCTION__, profile, error);
+        fetchProfile = profile;
         
-        XCTAssertTrue(profile, @"No profile returned.");
-
-        XCTAssertTrue(!error, @"Error detected: %@.", error);
+        fetchError = error;
         
         [expectation fulfill];
         
@@ -121,6 +129,10 @@
     TEALVisitorProfile *cachedProfile = [self.library cachedVisitorProfileCopy];
     
     XCTAssertTrue(cachedProfile, "No cached profile found.");
+    
+    XCTAssertTrue(fetchProfile, @"No profile returned.");
+    
+    XCTAssertTrue(!fetchError, @"Error detected: %@.", fetchError);
 }
 
 #pragma mark - joinTraceWithToken:completion & leaveTrace TESTS
@@ -194,6 +206,13 @@
 }
 
 
+#pragma mark - TEALIUM DELEGATE
+
+- (void) tealiumInstanceDidUpdatePublishSettings:(Tealium *)tealium {
+    
+    self.didFetch = YES;
+    
+}
 //- (void)testExample {
 //    // This is an example of a functional test case.
 //    // Use XCTAssert and related functions to verify your tests produce the correct results.

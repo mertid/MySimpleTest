@@ -44,11 +44,13 @@
 
 - (void) useLibraryInstanceWithConfig:(TEALConfiguration *)config {
     
-    [Tealium destroyInstanceForKey:self.description];
+    NSString *testID = @"publicAPITests";
+    
+    [Tealium destroyInstanceForKey:testID];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"setupLiveInstance"];
     
-    self.library = [Tealium newInstanceForKey:self.description
+    self.library = [Tealium newInstanceForKey:testID
                                 configuration:config
                                    completion:^(BOOL success, NSError * _Nullable error) {
                                        
@@ -315,12 +317,19 @@
     
     XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
     
-    [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+    __block BOOL success;
+    __block NSError *error;
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self.library fetchNewSettingsWithCompletion:^(BOOL fetchSuccess, NSError * _Nullable fetchError) {
         
-        XCTAssertTrue(success, "Valid mobile.html did not return as expected.");
+        success = fetchSuccess;
+        
+        error = fetchError;
         
         if (success){
-            [self.library.delegate tealiumInstanceDidUpdatePublishSettings:self.library];
+            [weakSelf.library.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf.library];
         }
         
         [fetchExpectation fulfill];
@@ -330,40 +339,34 @@
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
+    XCTAssertTrue(success, @"Did not successfully fetch settings");
+    
+    XCTAssertTrue(!error, @"Unexpected error: %@", error);
+    
     XCTAssertTrue(self.didUpdate, "No update found");
     
 }
 
 - (void) testFailingDidUpdatePublishSettings {
     
-    [Tealium destroyInstanceForKey:@"failSettingsTest"];
-    
-    XCTestExpectation * expectation = [self expectationWithDescription:@"failPublishTest"];
-    
-    XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
-
     TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"ios-no-mls-no-mps"
                                                                 environment:@"dev"];
     
-    self.library = [Tealium newInstanceForKey:@"failSettingsTest"
-                                configuration:config
-                                   completion:^(BOOL success, NSError * _Nullable error) {
-                                            
-        XCTAssertTrue(success, "Test configuration did not start a valid tealium instance");
-        
-        [expectation fulfill];
-        
-    }];
+    [self useLibraryInstanceWithConfig:config];
     
-    self.library.delegate = self;
+    
+    XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
+
+    __block BOOL fetchSuccess = NO;
+    
+    __block NSError *fetchError = nil;
     
     [self.library fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         
+        fetchSuccess = success;
         
-        XCTAssertTrue(!success, "Invalid mobile.html returned non-existent account-profile.");
-        
-        XCTAssertTrue(error, "Error expected was not received.");
+        fetchError = error;
 
         [fetchExpectation fulfill];
         
@@ -371,6 +374,10 @@
     }];
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    XCTAssertTrue(!fetchSuccess, "Invalid mobile.html returned non-existent account-profile.");
+    
+    XCTAssertTrue(fetchError, "Error expected was not received.");
     
     XCTAssertTrue(!self.didUpdate, "No update found");
 }
@@ -445,7 +452,7 @@
     
     // No callback to flip the flag, so we'll always timeout
     
-    [self waitFor:&isAddReady timeout:1.0];
+    [self waitFor:&isAddReady timeout:0.5];
     
     NSDictionary *dataSourcesRetrieved = [self.library persistentDataSourcesCopy];
     
@@ -457,7 +464,7 @@
     
     // No callback to flip the flag, so we'll always timeout
     
-    [self waitFor:&isRemoveReady timeout:1.0];
+    [self waitFor:&isRemoveReady timeout:0.5];
     
     // There will be a short delay here on this thread as the above method is
     // sent to the end of the Tealium BG serial queue

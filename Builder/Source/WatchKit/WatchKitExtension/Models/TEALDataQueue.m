@@ -155,7 +155,8 @@
     [self.dataQueue removeAllObjects];
 }
 
-- (void) dequeueNumberOfObjects:(NSUInteger)numberOfObjects withBlock:(void (^)(id dequeuedObject))block {
+- (void) dequeueNumberOfObjects:(NSUInteger)numberOfObjects
+                      withBlock:(void (^)(id dequeuedObject))block {
     
     if (numberOfObjects <= 0) {
         return;
