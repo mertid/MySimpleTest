@@ -29,5 +29,11 @@ The watchOS deliverables will output to the tealium-ios/support/watchKit folder
 The tealium-tvos library will output to a folder named tealium-tvos on the same
 level as the tealium-apple-builder folder.
 
+## CFBundleSupportedPlatforms
+
+!!! All simulator options need to be stripped from any framework's info.plist !!!
+Possibly some bug with just XCode 7
+
+
 ---
 Copyright (C) 2012-2015, Tealium Inc.
