@@ -40,6 +40,24 @@ typedef void (^tealiumEndBGTask)();
 
 - (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler{
     
+    
+    /*
+     *  Sample message
+     
+    {
+        "com.tealium.watchkit.track" =     {
+            customdata =         {
+                "timestamp_unix" = "1454091210.539742";
+                "was_queued" = false;
+            };
+            instanceid = 1;
+            title = "watch_sleep";
+            type = event;
+        };
+    }
+     
+    */
+    
     NSDictionary *tealiumPayload = message[TEALWKCommandTrackKey];
     
     if (!tealiumPayload){

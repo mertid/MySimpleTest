@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
 @property (nonatomic) TEALPublishSettingsStatus status;
-@property (nonatomic) NSString * _Nonnull targetVersion;
+//@property (nonatomic) NSString * _Nonnull targetVersion;
 @property (nonatomic) NSString * _Nonnull url;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data

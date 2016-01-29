@@ -12,35 +12,35 @@
 
 @implementation NSDictionary (Tealium)
 
-- (NSDictionary *) teal_stringifiedDictionary {
-    
-#warning This is causing crashes
-    
-    NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
-    
-    NSArray *allKeys = [self allKeys];
-    for (unsigned int i = 0; i < [allKeys count]; i++){
-        
-        @autoreleasepool {
-            
-            id key = allKeys[i];
-            id obj = self[key];
-            
-            NSString *newKey = [key teal_stringValue];
-            
-            if ([obj isKindOfClass:[NSArray class]]) {
-                NSArray *ar = (NSArray *)obj;
-                cleanedDict[newKey] = [ar teal_stringifiedArray];
-            } else {
-                
-                cleanedDict[newKey] = [obj teal_stringValue];
-            }
-        }
-    }
-
-    return [NSDictionary dictionaryWithDictionary:cleanedDict];
-
-}
+//- (NSDictionary *) teal_stringifiedDictionary {
+//    
+//#warning This is causing crashes
+//    
+//    NSMutableDictionary *cleanedDict = [NSMutableDictionary dictionary];
+//    
+//    NSArray *allKeys = [self allKeys];
+//    for (unsigned int i = 0; i < [allKeys count]; i++){
+//        
+//        @autoreleasepool {
+//            
+//            id key = allKeys[i];
+//            id obj = self[key];
+//            
+//            NSString *newKey = [key teal_stringValue];
+//            
+//            if ([obj isKindOfClass:[NSArray class]]) {
+//                NSArray *ar = (NSArray *)obj;
+//                cleanedDict[newKey] = [ar teal_stringifiedArray];
+//            } else {
+//                
+//                cleanedDict[newKey] = [obj teal_stringValue];
+//            }
+//        }
+//    }
+//
+//    return [NSDictionary dictionaryWithDictionary:cleanedDict];
+//
+//}
 
 
 - (NSArray *) teal_arrayForDebugDisplay {

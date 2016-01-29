@@ -23,5 +23,7 @@
 + (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename;
 + (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename;
 + (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs;
++ (NSDictionary *) dictionaryFromJSONFile:(NSString *)filename;
+
 
 @end

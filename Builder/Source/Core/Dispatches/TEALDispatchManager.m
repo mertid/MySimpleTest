@@ -20,7 +20,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 @property (atomic, strong) NSMutableArray *privateDispatchesQueued;
 @property (nonatomic, weak) id<TEALDispatchManagerDelegate> delegate;
 @property (nonatomic, strong) dispatch_queue_t ioQueue;
-@property BOOL isEnabled;
+@property BOOL privateIsEnabled;
 
 @end
 
@@ -54,7 +54,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         _privateQueueCapacity = 100;
                 
-        _isEnabled = YES;
+        _privateIsEnabled = YES;
         
     }
     
@@ -64,7 +64,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 - (void) addDispatch:(TEALDispatch *)dispatch
      completionBlock:(TEALDispatchBlock)completionBlock {
     
-    if (!self.isEnabled){
+    if (![self isEnabled]){
         if (completionBlock){
             NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
                                           description:NSLocalizedString(@"Could not add dispatch.", @"")
@@ -110,13 +110,19 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) disable {
     
-    self.isEnabled = NO;
+    self.privateIsEnabled = NO;
     
 }
 
 - (void) enable {
     
-    self.isEnabled = YES;
+    self.privateIsEnabled = YES;
+}
+
+- (BOOL) isEnabled {
+    
+    return self.privateIsEnabled;
+    
 }
 
 - (void) purgeQueuedDispatches {
@@ -157,6 +163,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
             
             [successfullySentArray addObject:dispatch];
             
+        } else {
+            [dispatch queue:YES];
         }
         
     }
@@ -197,6 +205,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         return NO;
     }
     
+    [dispatch queue:NO];
+    
     [self.delegate dispatchManager:self
                   requestsDispatch:dispatch
                    completionBlock:dispatch.assignedBlock];
@@ -217,7 +227,9 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) runDispatches:(NSArray*)dispatches {
     
-    if ([self.delegate dispatchManagerShouldDispatch:nil]){
+    NSError *error = nil;
+    
+    if ([self.delegate dispatchManagerShouldDispatch:error]){
         
         [self beginProcessingDispatches:dispatches];
         
@@ -226,6 +238,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         [self saveDispatches:dispatches];
         
     }
+    
+    
 }
 
 - (void) saveDispatches:(NSArray *)dispatches {

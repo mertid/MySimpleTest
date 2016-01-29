@@ -27,8 +27,5 @@ FOUNDATION_EXPORT const unsigned char TealiumIOSVersionString[];
 #import <TealiumIOS/TEALDataSourceConstants.h>
 #import <TealiumIOS/TEALDispatch.h>
 #import <TealiumIOS/TEALRemoteCommandResponse.h>
-#import <TealiumIOS/TEALSettings+Collect.h>
-#import <TealiumIOS/TEALSettings+TagManagement.h>
-#import <TealiumIOS/TEALSettings.h>
 #import <TealiumIOS/TEALVisitorProfile.h>
 #import <TealiumIOS/TEALVisitorProfileCurrentVisit.h>

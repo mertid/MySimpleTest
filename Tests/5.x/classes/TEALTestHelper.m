@@ -198,6 +198,29 @@
     
 }
 
++ (NSDictionary *) dictionaryFromJSONFile:(NSString *)filename {
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:filename ofType:@"json"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL exists = [fileManager fileExistsAtPath:path];
+    
+    NSAssert(exists, @"Test file %@ does not exist at path:%@", filename, path);
+    
+    NSData *data = [fileManager contentsAtPath:path];
+    
+    NSDictionary *resultDictionary = nil;
+    NSError *error;
+    
+    resultDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                                       options:NSJSONReadingAllowFragments
+                                                         error:&error];
+    
+    return resultDictionary;
+    
+}
+
 + (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs {
     NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:timeoutSecs];
     

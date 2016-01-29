@@ -26,9 +26,17 @@ class TealiumHelper : NSObject {
     
     class func startTracking() {
         
-        let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev")
+        guard let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev") else {
+            
+            print("Problem with Tealium Config Init.")
+            
+            return
+            
+        }
         
         guard let tealium = Tealium.newInstanceForKey(tealiumInstanceID, configuration: config) else {
+            
+            print("Problem with Tealium Init.")
             
             // Any additional failure response here
             
@@ -125,14 +133,14 @@ extension TealiumHelper{
         
     }
     
-    class func enableRemoteCommand() {
-        
-        Tealium.instanceForKey(tealiumInstanceID)?.addRemoteCommandId("testCommand", description: "An example remote command block", targetQueue: dispatch_get_main_queue(), block: { (response: TEALRemoteCommandResponse?) -> Void in
-            
-            // Put any code here that can execute on the main thread - ie content
-            // modification, A/B testing, etc.
-            
-        })
-    }
+//    class func enableRemoteCommand() {
+//        
+//        Tealium.instanceForKey(tealiumInstanceID)?.addRemoteCommandID("testCommand", description: "An example remote command block", targetQueue: dispatch_get_main_queue(), responseBlock: { (response: TEALRemoteCommandResponse?) -> Void in
+//            
+//            // Put any code here that can execute on the main thread - ie content
+//            // modification, A/B testing, etc.
+//            
+//        })
+//    }
     
 }

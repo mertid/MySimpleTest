@@ -13,6 +13,7 @@
 #import "TEALSystemHelpers.h"
 #import "TEALError.h"
 #import "TEALPublishSettingsConstants.h"
+#import "TEALVersion.h"
 
 NSString * const TEALPublishSettingKeyData = @"com.tealium.publishsetting.data";
 NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_description_data";
@@ -232,8 +233,12 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
 - (NSDictionary *) currentPublishSettingsFromRawPublishSettings:(NSDictionary *) rawPublishSettings {
     
-    return rawPublishSettings[self.targetVersion];
-
+    NSUInteger versionNumberStripped = [TEALLibraryVersion integerValue];
+    
+    NSString *targetVersion = [NSString stringWithFormat:@"%lu", versionNumberStripped];
+    
+    return rawPublishSettings[targetVersion];
+    
 }
 
 - (BOOL) isEqualToPublishSettings:(TEALPublishSettings *)otherPublishSettings {
@@ -375,8 +380,6 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
         
         _privatePublishSettingsData = [aDecoder decodeObjectForKey:TEALPublishSettingKeyData];
         
-        _targetVersion = [aDecoder decodeObjectForKey:@"version"];
-        
         TEALPublishSettingsStatus status = [aDecoder decodeIntegerForKey:@"status"];
         if (status == TEALPublishSettingsStatusLoadedRemote) {
             status = TEALPublishSettingsStatusLoadedArchive;
@@ -407,7 +410,7 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     [aCoder encodeObject:self.url forKey:@"url"];
     
-    [aCoder encodeObject:self.targetVersion forKey:@"targetVersion"];
+//    [aCoder encodeObject:TEALLibraryVersion forKey:@"targetVersion"];
     
     [aCoder encodeObject:[self publishSettingsData] forKey:TEALPublishSettingKeyData];
         
@@ -446,7 +449,12 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
     NSMutableDictionary *description = [NSMutableDictionary dictionaryWithDictionary:[[self publishSettingsData] copy]];
     
-    description[@"mps version"] = [NSString teal_dictionarySafeString:self.targetVersion];
+    NSUInteger versionInt = [TEALLibraryVersion integerValue];
+    
+    NSString *versionAsInt = [NSString stringWithFormat:@"%lu", (unsigned long)versionInt];
+    
+    description[@"mps version"] = [NSString teal_dictionarySafeString:versionAsInt];
+    
     description[@"url"] = [NSString teal_dictionarySafeString:self.url];
     
     NSString *descriptionHeader = [NSString stringWithFormat:@"Remote settings from %@", [self statusAsString]];

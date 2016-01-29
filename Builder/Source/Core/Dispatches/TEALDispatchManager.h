@@ -26,10 +26,6 @@
         requestsDispatch:(TEALDispatch * _Nonnull)dispatch
          completionBlock:(TEALDispatchBlock _Nullable)completionBlock;
 
-- (void) dispatchManagerDidSendDispatch:(TEALDispatch * _Nonnull)dispatch;
-
-- (void) dispatchManagerDidEnqueueDispatch:(TEALDispatch * _Nonnull)dispatch;
-
 - (BOOL) dispatchManagerShouldPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
 
 - (void) dispatchManagerdDidPurgeDispatch:(TEALDispatch * _Nonnull)dispatch;
@@ -52,6 +48,8 @@
 - (void) disable;
 
 - (void) enable;
+
+- (BOOL) isEnabled;
 
 - (void) purgeQueuedDispatches;
 

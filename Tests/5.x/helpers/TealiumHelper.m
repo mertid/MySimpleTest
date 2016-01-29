@@ -38,13 +38,13 @@ static TealiumHelper * _sharedInstance;
     
     // Configure Tealium
 
-    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"tagbridge"
-                                                                       environment:@"dev"];
-    
-//    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
-//                                                                           profile:@"mobile"
+//    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                           profile:@"tagbridge"
 //                                                                       environment:@"dev"];
+    
+    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
+                                                                           profile:@"mobile"
+                                                                       environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
 

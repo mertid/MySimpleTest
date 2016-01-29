@@ -79,6 +79,9 @@ class MenuTableViewController: UITableViewController {
         let performSegueOperation = NSBlockOperation()
         let segueIdentifier = segueIdentifierMap[indexPath.section][indexPath.row]
         
+        TealiumHelper.trackEvent("selected: \(segueIdentifier)", dataSources: [String:String]())
+
+        
         performSegueOperation.addExecutionBlock { [weak self, unowned performSegueOperation] in
             // Pause the block so the segue isn't immediately performed.
             NSThread.sleepForTimeInterval(MenuTableViewController.performSegueDelay)

@@ -77,7 +77,8 @@
 
 - (void) updateTagManagement {
     
-    if ([self.settings tagManagementEnabled]){
+    if (![self.settings libraryShouldDisable] &&
+        [self.settings tagManagementEnabled]){
         
         [self enableTagManagement];
         

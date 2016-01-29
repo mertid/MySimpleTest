@@ -99,21 +99,11 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
         
         [[weakSelf profileStore] fetchProfileWithCompletion:^(TEALVisitorProfile *profile, NSError *error) {
            
-            if (profile) {
-                
                 [weakSelf collect_setCachedProfile:profile];
-                
+            
                 if (completion){
-                    completion(weakSelf.collect_cachedProfile, nil);
+                    completion(weakSelf.collect_cachedProfile, error);
                 }
-                
-            } else {
-                
-#warning Move this error message to callback
-                
-                [weakSelf.logger logDev:@"problem fetching profile: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]];
-                
-            }
             
         }];
         
@@ -124,7 +114,8 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) updateCollect {
     
-    if ([self.settings collectEnabled]){
+    if (![self.settings libraryShouldDisable] &&
+        [self.settings collectEnabled]){
         [self enableCollect];
     } else {
         [self disableCollect];

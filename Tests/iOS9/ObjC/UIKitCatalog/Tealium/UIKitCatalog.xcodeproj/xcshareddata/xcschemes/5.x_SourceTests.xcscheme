@@ -27,6 +27,9 @@
                   Identifier = "TEALRemoteCommandManagerTests/testTriggerRemoteCommand">
                </Test>
                <Test
+                  Identifier = "TealiumPrivateAPITests/testDisable">
+               </Test>
+               <Test
                   Identifier = "TealiumTrackTests/testEventDispatchSendNow">
                </Test>
                <Test

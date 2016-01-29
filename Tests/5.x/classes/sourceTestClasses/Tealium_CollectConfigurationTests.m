@@ -14,6 +14,7 @@
 #import "TEALConfiguration+Collect.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings.h"
+#import "TEALSettings+Collect.h"
 #import "TEALDispatch+PrivateHeader.h"
 #import "TEALCollectDispatchService.h"
 #import "TEALS2SLegacyDispatchService.h"

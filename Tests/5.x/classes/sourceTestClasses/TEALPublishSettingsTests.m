@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TEALPublishSettingsConstants.h"
 #import "TEALPublishSettings+PrivateHeader.h"
+#import "TEALTestHelper.h"
 
 @interface TEALPublishSettingsTests : XCTestCase
 
@@ -20,7 +21,11 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    NSString *settings1 = @"publishSettingsTests";
+    
+    self.publishSettings = [[TEALPublishSettings alloc] initWithURLString:settings1];
+    
 }
 
 - (void)tearDown {
@@ -127,7 +132,7 @@
     
     [self useSamplePublishSettings];
     
-    self.publishSettings.targetVersion = targetVersion;
+//    self.publishSettings.targetVersion = targetVersion;
     
     [self.publishSettings updateWithMatchingVersionSettings:mpsData[@"5"]];
     
@@ -186,41 +191,22 @@
     
 }
 
-
-
-#warning Add test to provide mock responses to fetchPublishSettingsCommand
-
-//- (void) testFetchRemoteSettingsWithSettings {
-//    
-//    NSString *settings1 = @"settings1";
-//    
-//    TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:settings1];
-//    
-//    [settings updateWithMatchingVersionSettings:[self sampleSettings]];
-//    
-//    XCTestExpectation *finishedFetching = [self expectationWithDescription:@"finishFetching"];
-//    
-//    [settings fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-//        
-//        [finishedFetching fulfill];
-//        
-//    }];
-//    
-//    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError *error) {
-//        NSLog(@"%s error:%@", __FUNCTION__, error);
-//    }];
-//}
-
-//- (void)testExample {
-//    // This is an example of a functional test case.
-//    // Use XCTAssert and related functions to verify your tests produce the correct results.
-//}
-//
-//- (void)testPerformanceExample {
-//    // This is an example of a performance test case.
-//    [self measureBlock:^{
-//        // Put the code you want to measure the time of here.
-//    }];
-//}
+- (void) testCurrentSettingsFromRawPublishSettings {
+    
+    NSDictionary *mps = [TEALTestHelper dictionaryFromJSONFile:@"library_MISSING"];
+    
+    NSDictionary *mpsRetrieved = [self.publishSettings currentPublishSettingsFromRawPublishSettings:mps];
+    
+    XCTAssertTrue(!mpsRetrieved, @"MPS data retrieved when none should have: %@", mpsRetrieved);
+    
+    
+    NSDictionary *mpsOFF = [TEALTestHelper dictionaryFromJSONFile:@"library_OFF"];
+    
+    NSDictionary *mpsOFFRetrieved = [self.publishSettings currentPublishSettingsFromRawPublishSettings:mpsOFF];
+    
+    XCTAssertTrue(mpsOFFRetrieved, @"MPS data note retrieved when should have: %@", mpsOFFRetrieved);
+    
+    
+}
 
 @end

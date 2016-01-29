@@ -110,7 +110,7 @@ NSString * const versionToTest = @"5.0.0";
     
     // ios_data_sources.json needs to be added to Test Target's Build Phases: Copy Bundle Resources
     
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources" ofType:@"json"];
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"ios_data_sources_before_queueing" ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];
     
@@ -124,7 +124,7 @@ NSString * const versionToTest = @"5.0.0";
     id content = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     
     if (![content isKindOfClass:[NSDictionary class]]){
-        XCTFail("ios_data_sources.json not of correct dictionary format, error: %@", error);
+        XCTFail("ios_data_sources_before_queueing.json not of correct dictionary format, error: %@", error);
         return nil;
     }
     
@@ -759,7 +759,9 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) testFinalDispatchDataSourceKeysForEvents {
     
-    [self startLiveConfigLibrary];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
+    
+//    [self startLiveConfigLibrary];
     
     NSDictionary *requiredEventDataSources = [self dataSourcesForCurrentVersion][@"event"];
     
@@ -782,7 +784,9 @@ NSString * const versionToTest = @"5.0.0";
 
 - (void) testFinalDispatchDataSourceKeysForViews {
     
-    [self startLiveConfigLibrary];
+    [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
+
+//    [self startLiveConfigLibrary];
     
     NSDictionary *requiredEventDataSources = [self dataSourcesForCurrentVersion][@"view"];
     

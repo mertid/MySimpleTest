@@ -13,7 +13,6 @@
 #import "Tealium.h"
 #import "TEALVisitorProfile.h"
 #import "TEALConfiguration+Collect.h"
-#import "TEALSettings+Collect.h"
 
 @interface Tealium (Collect)
 

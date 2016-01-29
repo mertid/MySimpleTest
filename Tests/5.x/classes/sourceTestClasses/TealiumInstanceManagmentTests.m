@@ -92,7 +92,6 @@
     
 }
 
-
 - (NSDictionary *) mixedDataSources {
     
     NSString *testKey = TEAL_TEST_DATASOURCE_KEY;
@@ -107,7 +106,6 @@
                                       };
     return testDataSources;
 }
-
 
 - (NSDictionary *) dataSourcesWithTimestampUnixOverride {
     
@@ -379,7 +377,7 @@
     
     XCTAssertTrue(fetchError, "Error expected was not received.");
     
-    XCTAssertTrue(!self.didUpdate, "No update found");
+    XCTAssertTrue(self.didUpdate, "No update found");
 }
 
 #pragma mark - trackEventWithTitle:dataSources & trackViewWithTitle:dataSources: TESTS
@@ -506,55 +504,5 @@
     
     self.didUpdate = YES;
 }
-
-#pragma mark - WebView Tests
-
-//- (void) testSharedInstanceDefaultWebView {
-//    // Default is no tag management so webview should not be initialized
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    
-//    [self enableSharedInstanceWithConfiguration:config];
-//
-//    XCTAssertTrue(![[Tealium instanceForKey:@"test"] webView], @"SharedInstance webview was not initialized when it should not have been.");
-//
-//}
-//
-//- (void) testSharedInstanceEnableTagManagmentWebView {
-//    
-//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tagmanagement_ON" ofType:@"html"];
-//    
-//    
-//    // Default is no tag management so webview should not be initialized
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    
-//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-//    config.logLevel = TEALLogLevelVerbose;
-//    [self enableSharedInstanceWithConfiguration:config];
-//    
-//    XCTAssertTrue(![[Tealium instanceForKey:@"test"] webView], @"SharedInstance webview was not initialized when it should have been.");
-//    
-//}
-//
-//- (void) testSharedInstanceDisableTagManagmentWebView {
-//    
-//    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"tagmanagement_OFF" ofType:@"html"];
-//    
-//    // Default is no tag management so webview should not be initialized
-//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                    profile:@"demo"
-//                                                                environment:@"dev"];
-//    NSString *encoded = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//    config.overridePublishSettingsURL = [NSString stringWithFormat:@"file://%@", encoded];
-//    config.logLevel = TEALLogLevelVerbose;
-//    [self enableSharedInstanceWithConfiguration:config];
-//    
-//    XCTAssertTrue(![[Tealium instanceForKey:@"test"] webView], @"SharedInstance webview was initialized when it should not have been.");
-//    
-//}
 
 @end

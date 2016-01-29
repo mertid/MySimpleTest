@@ -258,51 +258,11 @@
 
 - (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
     
-    // Generate request
     NSURLRequest *request = [self publishSettingsRequest];
     NSDate *now = [NSDate date];
     
-    // Bail out checks:
     NSError *preFetchError = [self prefetchErrorForRequest:request
                                                       date:now];
-//    
-//    if (!request) {
-//        preFetchError = [TEALError errorWithCode:TEALErrorCodeNoContent
-//                             description:NSLocalizedString(@"Settings request unsuccessful", @"")
-//                                  reason:NSLocalizedString(@"Failed to generate valid request.", @"")
-//                              suggestion:NSLocalizedString(@"Check the Account/Profile/Enviroment values in your configuration", @"")];
-//        
-//    }
-//    
-//    if (!preFetchError &&
-//        !self.configuration){
-//        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
-//                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
-//                                  reason:NSLocalizedString(@"No configuration available.", @"")
-//                              suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
-//    }
-//    
-//    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:now];
-//    if (!preFetchError &&
-//        minutesToNextFetch > 0.0) {
-//        
-//        NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
-//        preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
-//                             description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
-//                                  reason:reason
-//                              suggestion:NSLocalizedString(@"Wait for end of timeout or change prior minutes between refresh setting.", @"")];
-//        
-//    }
-//    
-//    if (!preFetchError &&
-//        !self.urlSessionManager){
-//        
-//        preFetchError = [TEALError errorWithCode:TEALErrorCodeException
-//                             description:NSLocalizedString(@"Can not fetch at this time", @"")
-//                                  reason:NSLocalizedString(@"TEALURLSessionManager not yet assigned to settings", @"")
-//                              suggestion:NSLocalizedString(@"Consult Tealium Mobile engineering", @"")];
-//        
-//    }
     
     if (preFetchError){
         if (completion){
@@ -311,12 +271,10 @@
         return;
     }
     
-    // Perform request
     self.lastFetch = now;
     
     __block typeof(self) __weak weakSelf = self;
     
-
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
@@ -354,19 +312,21 @@
         if (!error){
             publishSettings = [weakSelf publishSettings];;
         }
-                                
-        if (!error){
-            // For future MPS config location - currently ignoring any error from this
-            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
-        }
-                                
+          
         if (!error &&
             !parsedData){
-         
+            
             // Fallback to current mobile.html MPS var
             parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:error];
             
         }
+                                
+        if (!error &&
+            !parsedData){
+            // For future MPS config location - currently ignoring any error from this
+            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
+        }
+                                
                                 
         if (!error &&
             !parsedData){
@@ -464,7 +424,7 @@
     
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     
-    settings.targetVersion = TEALDefaultPublishVersion;
+//    settings.targetVersion = TEALDefaultPublishVersion;
     
     return settings;
     

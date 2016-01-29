@@ -19,6 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     */
     func application(app: UIApplication, openURL url: NSURL, options: [String: AnyObject]) -> Bool {
         print("Application launched with URL: \(url)")
+        
+
+        return true
+    }
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        
+        
+        TealiumHelper.startTracking()
+        
+        TealiumHelper.trackEvent("launch", dataSources: [String:String]())
+        
         return true
     }
 }

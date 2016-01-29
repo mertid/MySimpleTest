@@ -30,13 +30,4 @@
     
 }
 
-//+ (NSString *) mpsVersionNumber {
-//    // Version number with .x and .x.x versions stripped
-//    NSString *version = TEALLibraryVersion;
-//    
-//#warning CORRECT for double dot increments, ie 1.1.1 -> 1
-//    
-//    return [NSString stringWithFormat:@"%i", [version intValue]];
-//}
-
 @end

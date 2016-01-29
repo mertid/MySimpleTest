@@ -47,6 +47,9 @@
                   Identifier = "TealiumConfigurationsTests/testAnything">
                </Test>
                <Test
+                  Identifier = "TealiumPrivateAPITests/testDisable">
+               </Test>
+               <Test
                   Identifier = "TealiumTrackTests">
                </Test>
                <Test
