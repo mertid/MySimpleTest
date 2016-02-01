@@ -1,0 +1,3 @@
+[submodule "appledoc"]
+	path = appledoc
+	url = https://github.com/tomaz/appledoc.git

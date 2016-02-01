@@ -1,26 +1,38 @@
-# Tealium Mobile Library for iOS
+# Tealium Mobile Library Builder for Apple Platforms
 
-Tealium is a mobile library that leverages the power of [AudienceStream](http://tealium.com/products/audiencestream/) natively in iOS.
+This repo contains all the code + projects needed to develop, maintain and deploy the Tealium iOS & tvOS frameworks.
 
-## What is Audience Stream ?
 
-The [Tealium AudienceStream](http://tealium.com/resources/tealium-audiencestream/)™ Influence DMP (data management platform) enables you to build a universal 360-degree customer profile to better influence and engage visitors in your web or mobile channels in real time. AudienceStream leverages the richest source of real-time, first-party data to help you deliver more relevant and timely interactions, thereby improving loyalty and conversions and creating new opportunities for growth.
+Specifically it allows:
 
-## How To Get Started
+- For the update/maintenance/editing of the source library files
+- For unit testing of the source library files within development test apps
+- For the creation of the final framework deliverable
+- For the testing of the framework deliverable in deployable test apps
 
-* Check out the [Getting Started](http://tealium.github.io/collect-ios/getting-started.html) guide for a step by step walkthough of adding Collect to an extisting project.  
-* The public API can viewed online [here](http://tealium.github.io/collect-ios/documentation/html/), it is also provied in the [documentation directory](/tree/master/documentation) of this repo as html and docset for Xcode and Dash integration.
-* There are many other useful articles on the [documentation site](http://tealium.github.io/collect-ios).
 
-## Communication
+## How to Build Frameworks
 
-* If you have **code questions** or have experienced **errors** please post an issue in the [issues page](../../issues)
-* If you have **general questions** or want to network with other users please visit the [Tealium Learning Community](https://community.tealiumiq.com)
-* If you have **account specific questions** please contact your Tealium account manager
+* 
 
-## License
+## How to run UI Automation Tests
 
-Use of this software is subject to the terms and conditions of the license agreement contained in the file titled "LICENSE.txt".  Please read the license before downloading or using any of the files contained in this repository. By downloading or using any of these files, you are agreeing to be bound by and comply with the license agreement.
+*
+
+## Output location
+
+The tealium-ios library will output to a folder named tealium-ios that is at the
+same folder location as the tealium-apple-builder repo.
+
+The watchOS deliverables will output to the tealium-ios/support/watchKit folder
+
+The tealium-tvos library will output to a folder named tealium-tvos on the same
+level as the tealium-apple-builder folder.
+
+## CFBundleSupportedPlatforms
+
+!!! All simulator options need to be stripped from any framework's info.plist !!!
+Possibly some bug with just XCode 7
 
 
 ---
