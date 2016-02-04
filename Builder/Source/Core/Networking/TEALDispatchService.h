@@ -10,8 +10,6 @@
 
 #import "TEALDispatch.h"
 
-//#import "TEALDispatchConstants.h"
-
 typedef NS_ENUM(NSUInteger, TEALDispatchNetworkServiceStatus){
     TEALDispatchNetworkServiceStatusUnknown = 0,
     TEALDispatchNetworkServiceStatusReady

@@ -23,19 +23,16 @@
     splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
     [TealiumHelper startTracking];
-
-    
-//    Tealium *tealiumInstance1 = [Tealium instanceForKey:@"1"];
-//    
-//    [tealiumInstance1 addVolatileDataSources:@{@"zzz":@"testValue"}];
-
-    
-    [TealiumHelper trackEventWithTitle:@"launch" dataSources:nil];
-    
+        
     [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
     
     [TealiumHelper enableRemoteCommandBlock];
 
+//    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
+//        
+//        NSLog(@"2nd Fetch request: %s profile:%@ error:%@", __FUNCTION__, profile, error);
+//        
+//    }];
     
     return YES;
 }

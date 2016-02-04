@@ -11,6 +11,7 @@
 #import "Tealium+PrivateHeader.h"
 #import "Tealium+TagManagement+PrivateHeader.h"
 #import "TEALTagDispatchService.h"
+#import "TEALRemoteCommand.h"
 
 @interface Tealium_TagManagementPublicAPITests : XCTestCase
 
@@ -72,40 +73,32 @@
 
 #pragma mark - PUBLIC API TESTS
 
-- (void) testAddAndExecuteRemoteCommandBlock {
-    
+- (void) testAddSingleRemoteCommandBlock {
+  
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
-    
+
     XCTestExpectation *expectationAddCommand = [self expectationWithDescription:@"remoteCommandAdded"];
-    
-    __block BOOL hasExecuted = NO;
-    __block TEALRemoteCommandResponse *blockResponse = nil;
-    __block TEALTagDispatchService *blockTagDispatchService = nil;
+
     __block NSError *completionError = nil;
+
+    __block TEALTagDispatchService *blockTagDispatchService = [self.library newTagDispatchService];
     
-    blockTagDispatchService = [self.library currentTagDispatchService];
+    [self.library addNewDispatchService:blockTagDispatchService];
+
+    XCTAssertTrue([self.library remoteCommandManager], @"Remote command manager NOT available.");
     
-    [[self.library remoteCommandManager] enable];
-    
-    XCTAssertTrue([[self.library remoteCommandManager] isEnabled], @"Remote command manager NOT enabled.");
-    
+    // First add the remote command to the tealium instance
     [self.library addRemoteCommandID:@"test"
                          description:nil
                          targetQueue:dispatch_get_main_queue()
                        responseBlock:^(TEALRemoteCommandResponse *response) {
-                           
-                           if (response.status == 200){
-                            
-                               blockResponse = response;
-                               
-                               hasExecuted = YES;
-                               
-                           }
-                           
+
+                           // Ignoring any responses for this test
+
                        } completion:^(BOOL success, NSError * _Nullable error) {
-                           
+
                            completionError = error;
-                           
+
                            [expectationAddCommand fulfill];
 
                        }];
@@ -113,57 +106,181 @@
     
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
-    XCTAssertTrue(!completionError, @"Unexpected error when adding remote command block: %@", completionError);
-    
-    // Execute the call
+    XCTAssertTrue(blockTagDispatchService, @"Tag Dispatch Service did not enable.");
 
-    XCTAssertTrue(blockTagDispatchService.webView, @"Webview not ready.");
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-    
-        [blockTagDispatchService.webView stringByEvaluatingJavaScriptFromString:@"window.open('tealium://test?request=' + encodeURIComponent(JSON.stringify({config : {response_id : \"testCommand\"},payload : {testKey : \"testValue\"}})), '_self');"];
-        
-//    });
-    
-    [TEALTestHelper waitFor:&hasExecuted timeout:3.0];
-    
-    // Check response
-    
-    XCTAssertTrue(hasExecuted, @"Response never triggered.");
-    
-    XCTAssertTrue(blockResponse, @"No response received.");
-    
-    NSDictionary *payload = blockResponse.requestPayload;
-    
-    XCTAssertTrue([payload[@"testKey"] isEqualToString:@"testValue"], @"Payload check failed: %@", payload);
-    
-    XCTAssertTrue(blockTagDispatchService, @"Tag Dispatch Service never became available.");
+    XCTAssertTrue(!completionError, "Unexpected problem adding remote command:%@", completionError);
     
     
 }
+
+
+- (void) testAddMultpleRemoteCommandBlocks {
+    
+    
+    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
+    
+    XCTestExpectation *expectationAddCommandAlpha = [self expectationWithDescription:@"remoteCommandAddedAlpha"];
+    XCTestExpectation *expectationAddCommandBravo = [self expectationWithDescription:@"remoteCommandAddedBravo"];
+    XCTestExpectation *expectationAddCommandCharlie = [self expectationWithDescription:@"remoteCommandAddedCharlie"];
+
+    
+    __block NSError *completionErrorAlpha = nil;
+    __block NSError *completionErrorBravo = nil;
+    __block NSError *completionErrorCharlie = nil;
+    
+    TEALTagDispatchService *blockTagDispatchService = [self.library newTagDispatchService];
+    [self.library addNewDispatchService:blockTagDispatchService];
+    
+    XCTAssertTrue([self.library remoteCommandManager], @"Remote command manager NOT available.");
+    
+    // First add the remote command to the tealium instance
+    [self.library addRemoteCommandID:@"alpha"
+                         description:nil
+                         targetQueue:dispatch_get_main_queue()
+                       responseBlock:^(TEALRemoteCommandResponse *response) {
+                           
+                           // Ignoring any responses for this test
+                           
+                       } completion:^(BOOL success, NSError * _Nullable error) {
+                           
+                           completionErrorAlpha = error;
+                           
+                           [expectationAddCommandAlpha fulfill];
+                           
+                       }];
+    
+    [self.library addRemoteCommandID:@"bravo"
+                         description:nil
+                         targetQueue:dispatch_get_main_queue()
+                       responseBlock:^(TEALRemoteCommandResponse *response) {
+                           
+                           // Ignoring any responses for this test
+                           
+                       } completion:^(BOOL success, NSError * _Nullable error) {
+                           
+                           completionErrorBravo = error;
+                           
+                           [expectationAddCommandBravo fulfill];
+                           
+                       }];
+    
+    [self.library addRemoteCommandID:@"charlie"
+                         description:nil
+                         targetQueue:dispatch_get_main_queue()
+                       responseBlock:^(TEALRemoteCommandResponse *response) {
+                           
+                           // Ignoring any responses for this test
+                           
+                       } completion:^(BOOL success, NSError * _Nullable error) {
+                           
+                           completionErrorCharlie = error;
+                           
+                           [expectationAddCommandCharlie fulfill];
+                           
+                       }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+    XCTAssertTrue(blockTagDispatchService, @"Tag Dispatch Service did not enable.");
+
+    XCTAssertTrue(!completionErrorAlpha, "Unexpected problem adding remote command:%@", completionErrorAlpha);
+    
+    
+}
+
+//- (void) testAddAndExecuteRemoteCommandBlock {
+//    
+//    [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
+//    
+//    XCTestExpectation *expectationAddCommand = [self expectationWithDescription:@"remoteCommandAdded"];
+//    
+//    __block BOOL hasExecuted = NO;
+//    __block TEALRemoteCommandResponse *blockResponse = nil;
+//    __block TEALTagDispatchService *blockTagDispatchService = nil;
+//    __block NSError *completionError = nil;
+//    
+//    blockTagDispatchService = [self.library currentTagDispatchService];
+//    
+//    [[self.library remoteCommandManager] enable];
+//    
+//    XCTAssertTrue([[self.library remoteCommandManager] isEnabled], @"Remote command manager NOT enabled.");
+//    XCTAssertTrue(blockTagDispatchService, @"Tag Management dispatch service not ready.");
+//    
+//    // First add the remote command to the tealium instance
+//    [self.library addRemoteCommandID:@"alpha"
+//                         description:nil
+//                         targetQueue:dispatch_get_main_queue()
+//                       responseBlock:^(TEALRemoteCommandResponse *response) {
+//                           
+//                           if (response.status == 200){
+//                            
+//                               blockResponse = response;
+//                               
+//                               hasExecuted = YES;
+//                               
+//                           }
+//                           
+//                       } completion:^(BOOL success, NSError * _Nullable error) {
+//                           
+//                           completionError = error;
+//                           
+//                           [expectationAddCommand fulfill];
+//
+//                       }];
+//
+//    
+//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+//    
+//    XCTAssertTrue(!completionError, @"Unexpected error when adding remote command block: %@", completionError);
+//    
+//    // Second execute a call to trigger the command block
+//
+//    XCTAssertTrue(blockTagDispatchService.webView, @"Webview not ready.");
+//    
+//    [blockTagDispatchService.webView stringByEvaluatingJavaScriptFromString:@"window.open('tealium://test?request=' + encodeURIComponent(JSON.stringify({config : {response_id : \"alpha\"},payload : {testKey : \"testValue\"}})), '_self');"];
+//        
+//    
+//    [TEALTestHelper waitFor:&hasExecuted timeout:3.0];
+//    
+//    // Check response
+//    
+//    XCTAssertTrue(hasExecuted, @"Response never triggered.");
+//    
+//    XCTAssertTrue(blockResponse, @"No response received.");
+//    
+//    NSDictionary *payload = blockResponse.requestPayload;
+//    
+//    XCTAssertTrue([payload[@"testKey"] isEqualToString:@"testValue"], @"Payload check failed: %@", payload);
+//    
+//    XCTAssertTrue(blockTagDispatchService, @"Tag Dispatch Service never became available.");
+//    
+//    
+//}
 
 #pragma mark - PRIVATE API TESTS
 
 - (void) testRemoveCommandBlockFromRemoteCommandManager {
     
+    // This test only passes individually - multithreading issue?
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
     
-    XCTestExpectation *expectationCallSent = [self expectationWithDescription:@"remoteCommandExecute"];
+    XCTestExpectation *expectationAdd = [self expectationWithDescription:@"remoteCommandAdded"];
     XCTestExpectation *expectationRemoval = [self expectationWithDescription:@"remoteCommandRemove"];
-
-    // Let modules spin up
-    __block BOOL waiting = NO;
-    [TEALTestHelper waitFor:&waiting timeout:1.0];
     
-    __block typeof(self) __weak weakSelf = self;
     __block TEALRemoteCommandResponse *weakResponse = nil;
-    __block TEALTagDispatchService *weakService = nil;
+    __block TEALTagDispatchService *weakService = [self.library newTagDispatchService];
+    [self.library addNewDispatchService:weakService];
+    
     __block BOOL didRemove = NO;
     __block NSError *weakAddError = nil;
     __block NSError *weakRemovalError = nil;
     
-    [self.library addRemoteCommandID:@"test"
+    NSString *commandID = @"test";
+    
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.library addRemoteCommandID:commandID
                          description:@""
                          targetQueue:dispatch_get_main_queue()
                        responseBlock:^(TEALRemoteCommandResponse *response) {
@@ -177,31 +294,29 @@
            // Going to immediately remove
            weakAddError = error;
            
-           [weakSelf.library removeRemoteCommandID:@"logger"
-                                        completion:^(BOOL success, NSError * _Nullable error) {
-                                            
-                                            didRemove = success;
-                                            weakRemovalError = error;
-                                            
-                                            [expectationRemoval fulfill];
-                                            
-                                            // Make a call to see what happens
-                                            weakService = [weakSelf.library currentTagDispatchService];
-                                            
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                
-                                                [weakService.webView stringByEvaluatingJavaScriptFromString:@"window.open('tealium://logger?request=' + encodeURIComponent(JSON.stringify({config : {response_id : \"testCommand\"},payload : {testKey : \"testValue\"}})), '_self');"];
-                                                
-                                                [expectationCallSent fulfill];
-                                                
-                                            });
-                                            
-                                        }];
+           [expectationAdd fulfill];
+           
+           
+           [weakSelf.library removeRemoteCommandID:commandID
+                                    completion:^(BOOL success, NSError * _Nullable error) {
+                                        
+                                        didRemove = success;
+                                        weakRemovalError = error;
+                                        
+                                        [expectationRemoval fulfill];
+                                        
+                                    }];
            
        }];
+    
+
 
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    TEALRemoteCommand *command = [self.library.remoteCommandManager commands][commandID];
+    
+    XCTAssertTrue(!command, @"Command was not removed: %@", command);
     
     XCTAssertTrue(!weakResponse, @"Unexpected response detected: %@", weakResponse);
     

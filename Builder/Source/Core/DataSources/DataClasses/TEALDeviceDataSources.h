@@ -13,6 +13,7 @@
 + (NSDictionary *) backgroundDataSources;
 + (NSDictionary *) mainThreadDataSources;
 
++ (NSString *) deviceOSVersion;
 + (BOOL) isCharging;
 + (double) batteryLevel;
 

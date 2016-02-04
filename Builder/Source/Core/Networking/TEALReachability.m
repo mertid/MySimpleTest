@@ -453,17 +453,9 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 #pragma mark - TEALIUM
 
-- (NSDictionary *) reachabilityDataSources:(NSDictionary *)clientDataSources {
+- (NSDictionary *) reachabilityDataSources {
     
     NSString * connectionValue = [self connectionDataSourceValue];
-//    NSString * wasQueuedValue = [self wasQueuedDataSourceValue:clientDataSources];
-//    
-//    if (wasQueuedValue){
-//        return @{
-//                 TEALDataSourceKey_ConnectionType: connectionValue,
-//                 TEALDataSourceKey_WasQueued: wasQueuedValue
-//                 };
-//    }
     
     return @{
              TEALDataSourceKey_ConnectionType: connectionValue

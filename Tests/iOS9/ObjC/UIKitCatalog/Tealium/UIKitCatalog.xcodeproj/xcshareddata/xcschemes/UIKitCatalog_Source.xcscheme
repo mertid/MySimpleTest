@@ -50,16 +50,25 @@
                   Identifier = "TealiumPrivateAPITests/testDisable">
                </Test>
                <Test
-                  Identifier = "TealiumTrackTests">
+                  Identifier = "TealiumTrackTests/testEventDispatchSendNow">
+               </Test>
+               <Test
+                  Identifier = "TealiumTrackTests/testEventDispatchWithNoDispatchServices">
+               </Test>
+               <Test
+                  Identifier = "TealiumTrackTests/testTrackEventDispatchWithTitleAndData">
                </Test>
                <Test
                   Identifier = "TealiumTrackTests/testTrackEventsNoTitleNoData">
                </Test>
                <Test
-                  Identifier = "Tealium_CollectConfigurationTests/testTrackBatchEvents">
+                  Identifier = "TealiumTrackTests/testTrackViews">
                </Test>
                <Test
-                  Identifier = "Tealium_TagManagementPublicAPITests/testAddAndExecuteRemoteCommandBlock">
+                  Identifier = "TealiumTrackTests/testViewDispatchSendNow">
+               </Test>
+               <Test
+                  Identifier = "Tealium_CollectConfigurationTests/testTrackBatchEvents">
                </Test>
                <Test
                   Identifier = "__x_FrameworkUITests">

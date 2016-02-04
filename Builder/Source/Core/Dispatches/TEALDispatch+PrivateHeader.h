@@ -6,11 +6,6 @@
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
-#ifndef TEALDispatch_PrivateHeader_h
-#define TEALDispatch_PrivateHeader_h
-
-#endif /* TEALDispatch_PrivateHeader_h */
-
 #import "TEALDispatch.h"
 
 @interface TEALDispatch (Private)

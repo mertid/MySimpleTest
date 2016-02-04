@@ -36,25 +36,7 @@
                   Identifier = "TealiumTrackTests/testEventDispatchWithNoDispatchServices">
                </Test>
                <Test
-                  Identifier = "TealiumTrackTests/testQueueEventDispatchWithTitleAndData">
-               </Test>
-               <Test
-                  Identifier = "TealiumTrackTests/testTrackEventDispatchNoTitleNoData">
-               </Test>
-               <Test
                   Identifier = "TealiumTrackTests/testTrackEventDispatchWithTitleAndData">
-               </Test>
-               <Test
-                  Identifier = "TealiumTrackTests/testTrackEventNoTitleWithDataOverwritingAllStandardDataSources">
-               </Test>
-               <Test
-                  Identifier = "TealiumTrackTests/testTrackEventWithOverwriteVolatileData">
-               </Test>
-               <Test
-                  Identifier = "TealiumTrackTests/testTrackEventWithPersistentData">
-               </Test>
-               <Test
-                  Identifier = "TealiumTrackTests/testTrackEventWithVolatileData">
                </Test>
                <Test
                   Identifier = "TealiumTrackTests/testTrackViews">

@@ -45,24 +45,26 @@
 
 
 - (BOOL) isReachable {
-    
-    BOOL canReach = YES;
-    
+
 #ifndef TEAL_TARGET_WATCHOS
     
+    
+    return self.reachability.isReachable;
+
+#else
+
 #warning TODO
+
     // Use simple NSURL check
     
-    
-#else
-    
-#warning TODO
-    // Use reachability manager
+    return YES;
     
 #endif
     
+    // default - dispatch managers will report false sends, but will continue
+    // running.
     
-    return canReach;
+    return YES;
     
 }
 
@@ -121,10 +123,10 @@
     
 }
 
-- (NSDictionary *) reachabilityDataSources: (NSDictionary *) clientDataSources {
+- (NSDictionary *) reachabilityDataSources {
     
 #ifndef TEAL_TARGET_WATCHOS
-    return [self.reachability reachabilityDataSources:clientDataSources];
+    return [self.reachability reachabilityDataSources];
 #endif
     
     return @{};

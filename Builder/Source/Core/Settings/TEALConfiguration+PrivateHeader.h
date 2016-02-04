@@ -43,7 +43,7 @@
 
 //@property (nonatomic) NSString *overridePublishSettingsVersion;
 
-- (NSString *) publishSettingsURL;
+//- (NSString *) publishSettingsURL;
 
 - (NSMutableDictionary *) moduleData;
 - (NSMutableDictionary *) moduleDescriptionData;
@@ -62,6 +62,9 @@
     
 - (void) removeModuleDescriptionForKey:(id<NSCopying, NSSecureCoding>)aKey;
 
+- (NSString *) basePublishSettingsURL;
+
+- (NSURLRequest *) publishSettingsRequestWithParams:(NSDictionary *)params;
 
 
 @end

@@ -26,6 +26,9 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
         ![enable respondsToSelector:@selector(boolValue)]){
         
         // Default
+        
+        [self setRemoteCommandsEnabled:YES];
+        
         return YES;
         
     }
@@ -58,7 +61,6 @@ NSString * const TEALRemoteCommandsEnableKey = @"com.tealium.remotecommands.enab
 }
 
 - (void) setRemoteCommandsEnabled:(BOOL)enabled {
-    
     
     [self setModuleObject:@(enabled)
                    forKey:TEALRemoteCommandsEnableKey

@@ -68,32 +68,73 @@
 
 }
 
+
 - (void) sendDispatch:(TEALDispatch *)dispatch
            completion:(TEALDispatchBlock)completion {
     
     NSError *error = nil;
-
+    
+    // Dispatch Service ready?
     if (![self isReady]) {
         // TODO: add error details
+        
+        error = [TEALError errorWithCode:TEALErrorCodeException
+                             description:NSLocalizedString(@"S2S Legacy Dispatch failed", @"")
+                                  reason:NSLocalizedString(@"S2S Legacy Dispatch Service not ready.", @"")
+                              suggestion:NSLocalizedString(@"Check that S2S Legacy Dispatch Service was initialized with correct dispatch URL String (check overrideS2SLegacyDispatchURL) OR try again later.", @"")];
+        
         if (completion) {
             completion( TEALDispatchStatusFailed, dispatch, error);
         }
         return;
     }
-
-    // Set HTTP Config
-    NSString *originURLString = self.dispatchURLString;
     
-    NSString *dataQueryString = [self dataQueryString:dispatch.payload error:&error];
-    
-    if (error != nil) {
-        if (completion) {
-            completion( TEALDispatchStatusFailed, dispatch, error);
+    // Request valid?
+    NSURLRequest *request = [self requestForDispatch:dispatch
+                                               error:&error];
+    if (!request){
+        if (completion){
+            completion(TEALDispatchStatusFailed, dispatch, error);
         }
         return;
+    }
+    
+    // Okay - fire away
+    [self.sessionManager performRequest:request
+                         withCompletion:^(NSHTTPURLResponse *response,
+                                          NSData *data,
+                                          NSError *connectionError) {
+                             
+         if (completion) {
+             
+             // Should really be looking at the response code instead
+             
+             TEALDispatchStatus status = (connectionError) ? TEALDispatchStatusFailed : TEALDispatchStatusSent;
+             
+             completion( status, dispatch, connectionError );
+         }
+         
+     }];
+    
+}
+
+- (NSURLRequest *) requestForDispatch:(TEALDispatch *) dispatch
+                                error:(NSError *__autoreleasing *)error {
+    
+    NSString *originURLString = self.dispatchURLString;
+    
+    NSString *dataQueryString = [self dataQueryString:dispatch.payload error:error];
+    
+    if (!dataQueryString) {
+        // S2S Legacy won't work without the additioanl query data
+        return nil;
     }
     
     NSString *encodedDataQueryString = [dataQueryString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
+    
+    if (![originURLString hasSuffix:@"?"]){
+        originURLString = [originURLString stringByAppendingString:@"?"];
+    }
     
     NSString *fullURLString = [NSString stringWithFormat:@"%@%@", originURLString, encodedDataQueryString];
     
@@ -105,23 +146,30 @@
     [request setHTTPMethod:@"GET"];
     [request setHTTPShouldHandleCookies:YES];
     
-    [self.sessionManager performRequest:request
-                         withCompletion:^(NSHTTPURLResponse *response,
-                                          NSData *data,
-                                          NSError *connectionError) {
-                             
-         if (completion) {
-             
-             TEALDispatchStatus status = (connectionError) ? TEALDispatchStatusFailed : TEALDispatchStatusSent;
-             
-             completion( status, dispatch, connectionError );
-         }
-         
-     }];
-
+    return request;
 }
 
-- (NSString *) dataQueryString:(NSDictionary *)data error:(NSError * __autoreleasing *)error{
++ (NSURLRequest *) requestWithURLString:(NSString *)urlString {
+    
+    // Options different than networkHelpers options
+    
+    if (!urlString) {
+        return nil;
+    }
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPShouldHandleCookies = YES;
+    request.networkServiceType = NSURLNetworkServiceTypeBackground;
+    request.HTTPMethod = @"GET";
+    
+    return request;
+}
+
+- (NSString *) dataQueryString:(NSDictionary *)data
+                         error:(NSError * __autoreleasing *)error{
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:data];
     

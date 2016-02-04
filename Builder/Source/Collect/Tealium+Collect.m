@@ -73,24 +73,20 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 
 - (void) fetchVisitorProfileWithCompletion:(void (^)(TEALVisitorProfile *profile, NSError *error))completion {
     
-    if (![self isCollectEnabled]) {
-        if (completion){
-            NSError *error = [TEALError errorWithCode:400 description:@"Fetch Visitor Profile request ignored." reason:@"Collect module not enabled." suggestion:@"Check Publish Settings."];
-            completion(nil, error);
-        }
-        return;
-    }
-    
     __weak Tealium *weakSelf = self;
     
     [weakSelf.operationManager addOperationWithBlock:^{
         
-        if (![weakSelf.settings collectEnabled]) {
+        if (![weakSelf isCollectEnabled]) {
             
-            [weakSelf.logger logDev:@"Audience Stream disabled, Ignoring: %s", __func__];
+            NSError *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                          description:NSLocalizedString(@"Fetch visitor request failed.", @"")
+                                               reason:NSLocalizedString(@"Collect module disabled or not finished initializing.", @"")
+                                           suggestion:NSLocalizedString(@"Enable collect in your TIQ Mobile Publish Settings OR make fetch request later.", @"")];
+            
             if (completion) {
                 
-                completion(nil, nil);
+                completion(nil, error);
             }
             
             return;

@@ -24,32 +24,26 @@ typedef NS_ENUM(NSUInteger, TEALPublishSettingsStatus) {
      *  Unarchived from storage - last new remote settings found.
      */
     TEALPublishSettingsStatusLoadedArchive,
-    /**
-     *  Publish settings requests library disable.
-     */
-    TEALPublishSettingsStatusDisable,
 };
 
 @interface TEALPublishSettings : NSObject <NSSecureCoding>
 
 @property (nonatomic) TEALPublishSettingsStatus status;
-//@property (nonatomic) NSString * _Nonnull targetVersion;
 @property (nonatomic) NSString * _Nonnull url;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromJSONFile:(NSData * _Nullable)data
-                                                         error:(NSError * __autoreleasing _Nullable)error;
+                                                         error:(NSError * __autoreleasing *)error;
 
 + (NSDictionary * _Nullable) mobilePublishSettingsFromHTMLData:(NSData * _Nullable)data
-                                                         error:(NSError * __autoreleasing _Nullable)error;
+                                                         error:(NSError * __autoreleasing *)error;
+
++ (NSDictionary * _Nullable) currentPublishSettingsFromRawPublishSettings:(NSDictionary * _Nullable) rawPublishSettings;
 
 + (instancetype _Nullable) archivedPublishSettingForURL:(NSString * _Nonnull)url;
-
     
 + (TEALPublishSettings * _Nonnull) defaultPublishSettingsForURLString:(NSString * _Nonnull)url;
 
 - (instancetype _Nullable) initWithURLString: (NSString * _Nonnull)url;
-
-- (NSDictionary * _Nullable) currentPublishSettingsFromRawPublishSettings:(NSDictionary * _Nullable) rawPublishSettings;
 
 - (BOOL) enableLowBatterySuppress;
 

@@ -85,7 +85,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         [dispatches addObject:dispatch];
         
-        [self runDispatches:dispatches];
+        [self runDispatches:dispatches reportLast:YES];
         
     }
     
@@ -94,7 +94,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 - (void) autoAdjustQueueSize:(NSMutableArray*)queue {
     
     // Resize to match capacity
-    long diff = queue.count - self.privateQueueCapacity;
+    NSInteger diff = queue.count - self.privateQueueCapacity;
     
     if (diff > 0) {
         
@@ -133,11 +133,16 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) runQueuedDispatches {
     
-    [self runDispatches:[self dispatchesQueued]];
+    [self runDispatches:[self dispatchesQueued]
+             reportLast:NO];
     
 }
 
 - (void) updateQueuedCapacity:(NSUInteger)capacity {
+    
+    if (capacity >= NSIntegerMax){
+        capacity = NSIntegerMax;
+    }
     
     self.privateQueueCapacity = capacity;
     
@@ -225,20 +230,25 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     
 }
 
-- (void) runDispatches:(NSArray*)dispatches {
+- (void) runDispatches:(NSArray*)dispatches
+            reportLast:(BOOL)report{
     
     NSError *error = nil;
     
-    if ([self.delegate dispatchManagerShouldDispatch:error]){
+    if ([self.delegate dispatchManagerShouldDispatch:&error]){
         
         [self beginProcessingDispatches:dispatches];
         
     } else {
         
+        if (report){
+            TEALDispatch *lastDispatchAdded = [dispatches lastObject];
+            lastDispatchAdded.assignedBlock(TEALDispatchStatusQueued, lastDispatchAdded, nil);
+        }
+        
         [self saveDispatches:dispatches];
         
     }
-    
     
 }
 

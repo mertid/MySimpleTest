@@ -10,6 +10,8 @@
 
 @interface NSDictionary (Tealium)
 
++ (NSDictionary*) teal_compositeDictionaries:(NSArray*)dictionaries;
+
 - (NSArray *) teal_arrayForDebugDisplay;
 
 

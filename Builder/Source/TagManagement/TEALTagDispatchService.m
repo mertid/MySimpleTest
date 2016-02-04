@@ -41,8 +41,6 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
         
         _publishURLString = urlString;
         _operationManager = operationManager;
-//        _currentRemoteCommandManager = [[TEALRemoteCommandManager alloc] initWithOperationManager:operationManager];
-//        [_currentRemoteCommandManager setDelegate:self];
         
     }
     

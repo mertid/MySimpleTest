@@ -315,18 +315,15 @@
     
     XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
     
-    __block BOOL success;
     __block NSError *error;
     
     __block typeof(self) __weak weakSelf = self;
     
     [self.library fetchNewSettingsWithCompletion:^(BOOL fetchSuccess, NSError * _Nullable fetchError) {
         
-        success = fetchSuccess;
-        
         error = fetchError;
         
-        if (success){
+        if (fetchSuccess){
             [weakSelf.library.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf.library];
         }
         
@@ -337,7 +334,6 @@
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
     
-    XCTAssertTrue(success, @"Did not successfully fetch settings");
     
     XCTAssertTrue(!error, @"Unexpected error: %@", error);
     
@@ -352,7 +348,6 @@
                                                                 environment:@"dev"];
     
     [self useLibraryInstanceWithConfig:config];
-    
     
     XCTestExpectation * fetchExpectation = [self expectationWithDescription:@"fetchComplete"];
 
@@ -377,7 +372,6 @@
     
     XCTAssertTrue(fetchError, "Error expected was not received.");
     
-    XCTAssertTrue(self.didUpdate, "No update found");
 }
 
 #pragma mark - trackEventWithTitle:dataSources & trackViewWithTitle:dataSources: TESTS

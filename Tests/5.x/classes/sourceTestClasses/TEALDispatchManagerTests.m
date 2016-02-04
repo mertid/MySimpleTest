@@ -107,7 +107,37 @@
     
     [self.manager autoAdjustQueueSize:sampleQueue];
     
-    XCTAssertTrue(sampleQueue.count == self.queueCapacityToTest, @"End queued dispatches was %lu - not the expected %lu", sampleQueue.count, self.queueCapacityToTest);
+    XCTAssertTrue(sampleQueue.count <= self.queueCapacityToTest, @"End queued dispatches was %lu - not the expected %lu", sampleQueue.count, self.queueCapacityToTest);
+    
+}
+
+- (void) testAutoAdjustQueueSizeWithExtremelyLargeCapacity {
+    
+    self.sampleQueueSizeToTest = 20;
+    self.queueCapacityToTest = NSUIntegerMax;
+    
+    NSMutableArray *sampleQueue = [self sampleDispatchQueue];
+    
+    [self.manager updateQueuedCapacity:self.queueCapacityToTest];
+    
+    [self.manager autoAdjustQueueSize:sampleQueue];
+    
+    XCTAssertTrue(sampleQueue.count <= self.queueCapacityToTest, @"End queued dispatches was %lu - not the expected %lu", sampleQueue.count, self.queueCapacityToTest);
+    
+}
+
+- (void) testAutoAdjustQueueSizeWithDefaultQueue {
+    
+    self.sampleQueueSizeToTest = 100;
+    self.queueCapacityToTest = 10;
+    
+    NSMutableArray *sampleQueue = [self sampleDispatchQueue];
+    
+    [self.manager updateQueuedCapacity:self.queueCapacityToTest];
+    
+    [self.manager autoAdjustQueueSize:sampleQueue];
+    
+    XCTAssertTrue(sampleQueue.count <= self.queueCapacityToTest, @"End queued dispatches was %lu - not the expected %lu", sampleQueue.count, self.queueCapacityToTest);
     
 }
 

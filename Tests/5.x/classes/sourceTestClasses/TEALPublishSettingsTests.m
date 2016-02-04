@@ -87,7 +87,7 @@
     NSError *error = nil;
     
     NSDictionary *mpsData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data
-                                                                             error:error];
+                                                                             error:&error];
 
     NSDictionary *manualCopy = @{
         @"5": @{
@@ -126,7 +126,7 @@
     NSError *error = nil;
     
     NSDictionary *mpsData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data
-                                                                             error:error];
+                                                                             error:&error];
     
     XCTAssertTrue(!error, @"Error detected:%@", error);
     
@@ -195,14 +195,14 @@
     
     NSDictionary *mps = [TEALTestHelper dictionaryFromJSONFile:@"library_MISSING"];
     
-    NSDictionary *mpsRetrieved = [self.publishSettings currentPublishSettingsFromRawPublishSettings:mps];
+    NSDictionary *mpsRetrieved = [TEALPublishSettings currentPublishSettingsFromRawPublishSettings:mps];
     
     XCTAssertTrue(!mpsRetrieved, @"MPS data retrieved when none should have: %@", mpsRetrieved);
     
     
     NSDictionary *mpsOFF = [TEALTestHelper dictionaryFromJSONFile:@"library_OFF"];
     
-    NSDictionary *mpsOFFRetrieved = [self.publishSettings currentPublishSettingsFromRawPublishSettings:mpsOFF];
+    NSDictionary *mpsOFFRetrieved = [TEALPublishSettings currentPublishSettingsFromRawPublishSettings:mpsOFF];
     
     XCTAssertTrue(mpsOFFRetrieved, @"MPS data note retrieved when should have: %@", mpsOFFRetrieved);
     

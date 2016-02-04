@@ -35,7 +35,6 @@ static double deviceBatteryLevel;
     if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
     if (deviceModel)        mDict[TEALDataSourceKey_Device] = deviceModel;
     if (language)           mDict[TEALDataSourceKey_DeviceLanguage] = language;
-
     
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
@@ -52,7 +51,9 @@ static double deviceBatteryLevel;
 #endif
     
 #ifndef TEAL_TARGET_WATCHOS
+    
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
     if (systemVersion){
         
         mDict[TEALDataSourceKey_DeviceOSVersion] = systemVersion;
@@ -90,6 +91,15 @@ static double deviceBatteryLevel;
 
     return deviceBatteryLevel;
     
+}
+
+#pragma mark - PUBLIC MAIN
+
++ (NSString *) deviceOSVersion {
+    
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
+    return systemVersion;
 }
 
 #pragma mark - PRIVATE BACKGROUND SAFE

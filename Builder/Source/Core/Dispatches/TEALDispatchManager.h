@@ -18,7 +18,7 @@
 // Internal
 - (BOOL) dispatchManagerShouldDestroyDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing _Nullable)error;
+- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing *)error;
 
 - (BOOL) dispatchManagerShouldQueueDispatch:(TEALDispatch * _Nonnull)dispatch;
 
