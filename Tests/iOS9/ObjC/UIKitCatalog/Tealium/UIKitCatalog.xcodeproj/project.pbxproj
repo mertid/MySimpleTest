@@ -41,6 +41,7 @@
 		535682BE18F3670300BAAD62 /* AAPLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A418F3670300BAAD62 /* AAPLWebViewController.m */; };
 		535682BF18F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */; };
 		53874F9918F36B1800510922 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53874F9718F36B1800510922 /* Localizable.strings */; };
+		710198201C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */; };
 		7104CF0F1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */; };
 		710E1C3F1C29ABD7007BABF7 /* lifecycle_events.xml in Resources */ = {isa = PBXBuildFile; fileRef = 710E1C201C29ABD7007BABF7 /* lifecycle_events.xml */; };
 		710E1DD51C29AC0F007BABF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */; };
@@ -104,7 +105,6 @@
 		7118DCA31C5929B100D3B612 /* TEALWKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC441C5929B100D3B612 /* TEALWKConstants.m */; };
 		7118DCAD1C5936D700D3B612 /* TEALDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DCA91C5936D700D3B612 /* TEALDispatch.m */; };
 		7118DCAE1C5936D700D3B612 /* TEALDispatchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DCAC1C5936D700D3B612 /* TEALDispatchManager.m */; };
-		712BAEDF1C29B6AB007767CD /* TealiumIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710E1DD71C29B29B007BABF7 /* TealiumIOS.framework */; };
 		712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C2F1C29ABD7007BABF7 /* TealiumDelegateTestObject.m */; };
 		712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */; };
 		712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */; };
@@ -347,6 +347,7 @@
 		535682A518F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AAPLApplicationSpecific.h"; sourceTree = "<group>"; };
 		535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AAPLApplicationSpecific.m"; sourceTree = "<group>"; };
 		53874F9818F36B1800510922 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALS2SLegacyDispatchServiceTests.m; sourceTree = "<group>"; };
 		7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectConfigurationTests.m; sourceTree = "<group>"; };
 		710E1C201C29ABD7007BABF7 /* lifecycle_events.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = lifecycle_events.xml; sourceTree = "<group>"; };
 		710E1C2E1C29ABD7007BABF7 /* TealiumDelegateTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegateTestObject.h; sourceTree = "<group>"; };
@@ -359,7 +360,6 @@
 		710E1C381C29ABD7007BABF7 /* TealiumHelperImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumHelperImports.h; sourceTree = "<group>"; };
 		710E1C3E1C29ABD7007BABF7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		710E1DD71C29B29B007BABF7 /* TealiumIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TealiumIOS.framework; path = ../../../../../../builds/TealiumIOS.framework; sourceTree = "<group>"; };
 		7118DB8D1C5929B100D3B612 /* TEALVisitorProfile+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALVisitorProfile+PrivateHeader.h"; sourceTree = "<group>"; };
 		7118DB8E1C5929B100D3B612 /* TEALVisitorProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfile.h; sourceTree = "<group>"; };
 		7118DB8F1C5929B100D3B612 /* TEALVisitorProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfile.m; sourceTree = "<group>"; };
@@ -456,7 +456,6 @@
 		7118DC011C5929B100D3B612 /* TEALSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemHelpers.h; sourceTree = "<group>"; };
 		7118DC021C5929B100D3B612 /* TEALSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSystemHelpers.m; sourceTree = "<group>"; };
 		7118DC031C5929B100D3B612 /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
-		7118DC041C5929B100D3B612 /* TEALVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVersion.h; sourceTree = "<group>"; };
 		7118DC051C5929B100D3B612 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
 		7118DC061C5929B100D3B612 /* TealiumDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegate.h; sourceTree = "<group>"; };
 		7118DC271C5929B100D3B612 /* TEALRemoteCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommand.h; sourceTree = "<group>"; };
@@ -540,6 +539,7 @@
 		716CC9DE1C53569000510B21 /* override_log_EMPTY.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_EMPTY.json; sourceTree = "<group>"; };
 		716CC9DF1C53569000510B21 /* override_log_PROD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_PROD.json; sourceTree = "<group>"; };
 		716CC9E01C53569000510B21 /* override_log_QA.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_QA.json; sourceTree = "<group>"; };
+		716F2F8D1C6BCEF000A7F947 /* TEALVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVersion.h; sourceTree = "<group>"; };
 		718546DA1C2876C3009CF93E /* 5.x_SourceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 5.x_SourceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718546DC1C2876C4009CF93E /* SourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceTests.m; sourceTree = "<group>"; };
 		718546DE1C2876C4009CF93E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -605,7 +605,6 @@
 				71854AA31C287CD0009CF93E /* CoreGraphics.framework in Frameworks */,
 				71854AA41C287CD0009CF93E /* UIKit.framework in Frameworks */,
 				71854AA51C287CD0009CF93E /* Foundation.framework in Frameworks */,
-				712BAEDF1C29B6AB007767CD /* TealiumIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1051,7 +1050,7 @@
 				7118DC011C5929B100D3B612 /* TEALSystemHelpers.h */,
 				7118DC021C5929B100D3B612 /* TEALSystemHelpers.m */,
 				7118DC031C5929B100D3B612 /* TEALSystemProtocols.h */,
-				7118DC041C5929B100D3B612 /* TEALVersion.h */,
+				716F2F8D1C6BCEF000A7F947 /* TEALVersion.h */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -1137,6 +1136,7 @@
 		715C4A041C52EB6A006B39EF /* sourceTestClasses */ = {
 			isa = PBXGroup;
 			children = (
+				7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */,
 				71F6B3F71C5A9A8F00439A79 /* TealiumPrivateAPITests.m */,
 				7145B0B61C59A37500842A4D /* TEALDispatchManagerTests.m */,
 				716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */,
@@ -1236,7 +1236,6 @@
 		718547341C287B6B009CF93E /* Tealium */ = {
 			isa = PBXGroup;
 			children = (
-				710E1DD71C29B29B007BABF7 /* TealiumIOS.framework */,
 				7118DB681C5929B100D3B612 /* Source */,
 				710E1C1E1C29ABD7007BABF7 /* 5.x */,
 			);
@@ -1650,6 +1649,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				716AD98C1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m in Sources */,
+				710198201C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m in Sources */,
 				7145B0B71C59A37500842A4D /* TEALDispatchManagerTests.m in Sources */,
 				715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */,
 				71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */,
@@ -1905,10 +1905,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UIKitCatalog/UIKitCatalog-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
+					"TEAL_TARGET_IOS=\"5.0.1\"",
+					"${inherited}",
 					"TEAL_TEST_TARGET_SOURCE=1",
-					"TEAL_TARGET_IOS=\"5.0.0\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/UIKitCatalog-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1927,8 +1926,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UIKitCatalog/UIKitCatalog-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TEAL_TARGET_IOS=\"5.0.1\"",
+					"${inherited}",
 					"TEAL_TEST_TARGET_SOURCE=1",
-					"TEAL_TARGET_IOS=\"5.0.0\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/UIKitCatalog-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

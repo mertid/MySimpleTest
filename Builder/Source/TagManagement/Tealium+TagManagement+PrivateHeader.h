@@ -6,12 +6,6 @@
 //
 //
 
-#ifndef Tealium_TagManagement_PrivateHeader_h
-#define Tealium_TagManagement_PrivateHeader_h
-
-
-#endif /* Tealium_TagManagement_PrivateHeader_h */
-
 #import "Tealium+TagManagement.h"
 #import "TEALRemoteCommandManager.h"
 #import "TEALTagDispatchService.h"
@@ -19,6 +13,8 @@
 @interface Tealium (TagManagementPrivate)
 
 - (TEALTagDispatchService *) currentTagDispatchService;
+
+- (TEALTagDispatchService *) newTagDispatchService;
 
 - (TEALRemoteCommandManager *) remoteCommandManager;
 

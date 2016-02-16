@@ -2118,7 +2118,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"TEAL_TARGET_WATCHOS=\"1.0.0\"",
+					"TEAL_TARGET_WATCHOS=\"5.0.1\"",
 				);
 				INFOPLIST_FILE = TealiumWATCHOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2145,7 +2145,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_WATCHOS=\"1.0.0\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_WATCHOS=\"5.0.1\"";
 				INFOPLIST_FILE = TealiumWATCHOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2245,7 +2245,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"TEAL_TARGET_TVOS=\"5.0.0\"",
+					"TEAL_TARGET_TVOS=\"5.0.1\"",
 				);
 				INFOPLIST_FILE = TealiumTVOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2271,7 +2271,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_TVOS=\"5.0.0\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_TVOS=\"5.0.1\"";
 				INFOPLIST_FILE = TealiumTVOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2301,7 +2301,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"TEAL_TARGET_IOS=\"5.0.0\"",
+					"TEAL_TARGET_IOS=\"5.0.1\"",
 				);
 				INFOPLIST_FILE = TealiumIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2328,7 +2328,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_IOS=\"5.0.0\"";
+				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_IOS=\"5.0.1\"";
 				INFOPLIST_FILE = TealiumIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

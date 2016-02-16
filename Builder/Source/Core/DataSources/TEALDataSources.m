@@ -13,6 +13,7 @@
 #import "TEALDeviceDataSources.h"
 #import "TEALSharedDataSources.h"
 #import "TEALSystemHelpers.h"
+#import "TEALTimestampDataSources.h"
 #import "TEALDispatch+PrivateHeader.h"
 #import "TEALVersion.h"
 
@@ -28,6 +29,17 @@
 
 #pragma mark - PUBLIC METHODS
 
++ (double) deviceBatteryLevel {
+    
+    return [TEALDeviceDataSources batteryLevel];
+}
+
++ (BOOL) deviceIsCharging {
+    
+    return [TEALDeviceDataSources isCharging];
+    
+}
+
 - (instancetype) initWithInstanceID:(NSString *) instanceID {
     
     if (!instanceID) {
@@ -42,12 +54,97 @@
     return self;
 }
 
-+ (NSDictionary *) applicationInfoDataSources {
+- (NSDictionary *) mainThreadDataSources {
     
-    return [[TEALApplicationDataSources dataSources] copy];
+    NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+
+    if (!self.disableDeviceInfo) [dataSources addEntriesFromDictionary:[TEALDeviceDataSources mainThreadDataSources]];
+    if (!self.disableTimestampInfo) [dataSources addEntriesFromDictionary:[TEALDataSources timestampDataSourcesForDate:[NSDate date]]];
+
+    return [NSDictionary dictionaryWithDictionary:dataSources];
+}
+
+- (NSDictionary *) backgroundSafeDataSources {
+    
+    NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+    
+    if (!self.disableApplicationInfo) [dataSources addEntriesFromDictionary:[TEALApplicationDataSources dataSources]];
+    if (!self.disableCarrierInfo) [dataSources addEntriesFromDictionary:[TEALDataSources carrierInfoDataSources]];
+    if (!self.disableDeviceInfo) [dataSources addEntriesFromDictionary:[TEALDeviceDataSources backgroundDataSources]];
+    if (!self.disableTealiumInfo) [dataSources addEntriesFromDictionary:[TEALDataSources tealiumInfoDataSources]];
+
+    dataSources[TEALDataSourceKey_UUID] = [self uuid];
+    dataSources[TEALDataSourceKey_VisitorID] = [self visitorIDCopy];
+    
+    [dataSources addEntriesFromDictionary:[self persistentDataSources]];
+
+    [dataSources addEntriesFromDictionary:[self clientVolatileDataSources]];
+    
+    return [NSDictionary dictionaryWithDictionary:dataSources];
+}
+
+- (NSDictionary *) fetchQueryStringDataSources {
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary new];
+    
+    if (!self.disableDeviceInfo){
+        NSDictionary *deviceInfo = [TEALDeviceDataSources mainThreadDataSources];
+        NSString *osVersion = deviceInfo[TEALDataSourceKey_DeviceOSVersion];
+        if (osVersion) mDict[TEALDataSourceKey_DeviceOSVersion] = osVersion;
+    }
+    
+    if (!self.disableTimestampInfo){
+        NSDictionary *timestampInfo = [TEALDataSources timestampDataSourcesForDate:[NSDate date]];
+        NSString *unix = timestampInfo[TEALDataSourceKey_TimestampUnix];
+        if (unix) mDict[TEALDataSourceKey_TimestampUnix] = unix;
+    }
+    
+    if (!self.disableTealiumInfo){
+        NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
+        NSString *libraryInfo = tealiumInfo[TEALDataSourceKey_LibraryVersion];
+        NSString *platform = tealiumInfo[TEALDataSourceKey_Platform];
+        
+        if (libraryInfo) mDict[TEALDataSourceKey_LibraryVersion] = libraryInfo;
+        if (platform) mDict[TEALDataSourceKey_Platform] = platform;
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:mDict];
     
 }
 
+- (NSString *) uuid {
+    
+    NSString *uuid = [[self instanceStore] allDataSources][TEALDataSourceKey_UUID];
+    
+    if (!uuid) {
+        uuid = [[NSUUID UUID] UUIDString];
+        
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID:uuid}];
+    }
+    
+    return uuid;
+}
+
+- (NSString *) visitorIDCopy {
+    
+    NSString *visitorID = [self persistentDataSources][TEALDataSourceKey_VisitorID];
+    
+    if (!visitorID) {
+        
+        NSString *uuid = [self uuid];
+        
+        if (![uuid isKindOfClass:([NSString class])]) {
+            return nil;
+        }
+        
+        visitorID = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
+    }
+    
+    return visitorID;
+}
+
+#pragma mark - PRIVATE CLASS
 + (NSDictionary *) carrierInfoDataSources {
     
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
@@ -108,33 +205,6 @@
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
-+ (NSDictionary *) deviceInfoDataSources{
-    
-    NSDictionary *deviceInfo =
-    [TEALSystemHelpers compositeDictionaries:
-     @[
-       [TEALDeviceDataSources mainThreadDataSources],
-       [TEALDeviceDataSources backgroundDataSources]
-       ]];
-    return deviceInfo;
-    
-}
-
-//+ (NSDictionary *) queueDataSources:(NSDictionary *)existingPayload {
-//    
-//    if (existingPayload[TEALDataSourceKey_WasQueued]){
-//        return @{TEALDataSourceKey_WasQueued : existingPayload[TEALDataSourceKey_WasQueued]};
-//    }
-//    
-//    NSString *wasQueued = TEALDataSourceValue_False;
-//    
-//    if (![self isReachable]){
-//        wasQueued = TEALDataSourceValue_True;
-//    }
-//    
-//    return @{TEALDataSourceKey_WasQueued:wasQueued};
-//}
-
 // Hardcoded platform data
 
 static NSDictionary *staticCompileTimeDataSources;
@@ -163,7 +233,13 @@ static NSDictionary *staticCompileTimeDataSources;
     
 }
 
-
++ (NSDictionary *) timestampDataSourcesForDate:(id)date {
+    
+    NSDictionary *data = [TEALTimestampDataSources dataSourcesForDate:date];
+    
+    return data;
+    
+}
 
 + (NSString *) titleForViewEventWithObject:(NSObject *)obj {
     
@@ -197,32 +273,8 @@ static NSDictionary *staticCompileTimeDataSources;
     return [title copy];
 }
 
-//- (NSDictionary *) transmissionTimeDatasourcesForEventType:(TEALDispatchType)eventType {
-//    
-//    NSMutableDictionary *datasources = [NSMutableDictionary new];
-//    
-//    [datasources addEntriesFromDictionary:[self staticDatasources]];
-//    [datasources addEntriesFromDictionary:[self compileTimeDataSources]];
-//
-//    switch (eventType) {
-//        case TEALDispatchTypeEvent:
-//            datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
-//            break;
-//        case TEALDispatchTypeView:
-//            datasources[TEALDataSourceKey_Pagetype] = TEALDataSourceValue_Pagetype;
-//            break;
-//        default:
-//            break;
-//    }
-//    
-//    NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
-//    
-//    if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
-//    
-//    return datasources;
-//}
-
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title {
++ (NSDictionary *) dispatchDatasourcesForEventType:(TEALDispatchType)eventType
+                                             title:(NSString *)title {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
         
@@ -241,12 +293,11 @@ static NSDictionary *staticCompileTimeDataSources;
     
     NSString *dispatchType = [TEALDispatch stringFromDispatchType:eventType];
     if (dispatchType) datasources[TEALDataSourceKey_CallType] = dispatchType;
-
-    // TODO: 5.1
-//    datasources[TEALDataSourceKey_Autotracked] = TEALDataSourceValue_False;
     
     return datasources;
 }
+
+#pragma mark - PRIVATE INSTANCE
 
 - (NSMutableDictionary *) clientVolatileDataSources {
     if (!self.privateVolatileDataSources){
@@ -258,23 +309,24 @@ static NSDictionary *staticCompileTimeDataSources;
     return self.privateVolatileDataSources;
 }
 
-- (NSDictionary *) persistentDataSourcesCopy {
+- (NSDictionary *) persistentDataSources {
     
-    NSDictionary *copy = [[self instanceStore] dataSourcesCopy];
+    NSDictionary *dataSources = [[self instanceStore] allDataSources];
 
+#warning Something redundant here with UUID method
+    
     // Add UUID here if not already available
-    NSString *uuid = copy[TEALDataSourceKey_UUID];
+    NSString *uuid = dataSources[TEALDataSourceKey_UUID];
     
     if (!uuid){
         
-        NSMutableDictionary *mutableCopy = [NSMutableDictionary dictionaryWithDictionary:[[self instanceStore] dataSourcesCopy]];
-        mutableCopy[TEALDataSourceKey_UUID] = [self uuid];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID : [self uuid]}];
         
-        copy = [NSDictionary dictionaryWithDictionary:mutableCopy];
+        dataSources = [[self instanceStore] allDataSources];
         
     }
     
-    return copy;
+    return dataSources;
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
@@ -296,53 +348,6 @@ static NSDictionary *staticCompileTimeDataSources;
     [[self instanceStore] removeAllDataSources];
     
 }
-
-#pragma mark - PUBLIC HELPERS
-
-+ (double) deviceBatteryLevel {
-    
-    return [TEALDeviceDataSources batteryLevel];
-}
-
-+ (BOOL) deviceIsCharging {
-    
-    return [TEALDeviceDataSources isCharging];
-    
-}
-
-- (NSString *) uuid {
-    
-    NSString *uuid = [self instanceStore].dataSourcesCopy[TEALDataSourceKey_UUID];
-    
-    if (!uuid) {
-        uuid = [[NSUUID UUID] UUIDString];
-        
-        [[self instanceStore] addDataSources:@{TEALDataSourceKey_UUID:uuid}];
-    }
-    
-    return uuid;
-}
-
-- (NSString *) visitorIDCopy {
-    
-    NSString *visitorID = [self persistentDataSourcesCopy][TEALDataSourceKey_VisitorID];
-    
-    if (!visitorID) {
-
-        NSString *uuid = [self uuid];
-        
-        if (![uuid isKindOfClass:([NSString class])]) {
-            return nil;
-        }
-        
-        visitorID = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        [[self instanceStore] addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
-    }
-    
-    return visitorID;
-}
-
-#pragma mark - PRIVATE METHODS
 
 - (TEALDataSourceStore *) instanceStore {
     

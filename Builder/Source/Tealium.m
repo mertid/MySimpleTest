@@ -15,6 +15,7 @@
 #import "TEALDispatchService.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
+#import "NSDictionary+Tealium.h"
 #import "TEALError.h"
 #import "TEALOperationManager.h"
 #import "TEALLogger.h"
@@ -22,8 +23,6 @@
 #import "TEALNetworkHelpers.h"
 #import "TEALOperationManager.h"
 #import "TEALSettings+PrivateHeader.h"
-#import "TEALSystemHelpers.h"
-#import "TEALTimestampDataSources.h"
 #import "TEALURLSessionManager.h"
 #import "TEALVersion.h"
 
@@ -42,6 +41,7 @@
 @property (nonatomic, weak) id<TEALModulesDelegate> modulesDelegate;
 
 @property (nonatomic, strong) NSDictionary *moduleData;
+@property BOOL isEnabled;
 
 @end
 
@@ -124,8 +124,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     @synchronized(self){
         
         [self.delegateManager updateWithDelegate:delegate];
+        
     }
-    
 }
 
 - (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
@@ -135,6 +135,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                       dataSources:clientDataSources
                        completion:nil];
     
+    
 }
 
 - (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
@@ -143,7 +144,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                             title:title
                       dataSources:clientDataSources
                        completion:nil];
-            
+        
 }
 
 - (TEALDispatchBlock) feedbackBlock {
@@ -175,20 +176,35 @@ __strong static NSDictionary *staticAllInstances = nil;
             completion:(TEALDispatchBlock)completion{
     
     
+    // Default behavior is to log the dispatch result
     if (!completion){
-    
         completion = [self feedbackBlock];
     }
     
+    // Data that should be captured on the main thread or nearest to time of call
+    __block NSDictionary *captureData = [self captureTimeDataSourcesForType:type
+                                                              title:title];
+    __block NSDictionary *clientData = [clientDataSources copy];
+    
+    __weak Tealium *weakSelf = self;
+
+    
     [self.operationManager addOperationWithBlock:^{
         
-        NSDictionary *compositeDataSources = [self finalDispatchDataSourcesForDispatchType:type
-                                                                                     title:title
-                                                                               dataSources:clientDataSources];
+        /*
+         Add remaining data sources for static data, background-thread safe data,
+         volatile and persistent data. Client data from the track call datasources
+         argument should always supercede any other automatically generated or
+         retrieved data.
+         */
+        NSDictionary *backgroundData = [self.dataSources backgroundSafeDataSources];
+        NSDictionary *payload = [NSDictionary teal_compositeDictionaries:@[
+                                                                           captureData,
+                                                                           backgroundData,
+                                                                           clientData? clientData : @{}
+                                                                           ]];
         
-        TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:compositeDataSources];
-        
-        __weak Tealium *weakSelf = self;
+        TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:payload];
         
         [weakSelf trackDispatch:dispatch completion:completion];
         
@@ -196,50 +212,23 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 }
 
-- (NSDictionary *) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
-                                                     title:(NSString *)title
-                                               dataSources:(NSDictionary *)dataSources {
-        
-    // Configurable Options
-    NSDictionary *applicationInfo = self.settings.autotrackingApplicationInfoEnabled? [TEALDataSources applicationInfoDataSources]:@{};
-    NSDictionary *carrierInfo = self.settings.autotrackingCarrierInfoEnabled? [TEALDataSources carrierInfoDataSources]:@{};
-    NSDictionary *connectionInfo = [self.urlSessionManager.reachabilityManager reachabilityDataSources:dataSources];
-    NSDictionary *deviceInfo = self.settings.autotrackingDeviceInfoEnabled? [TEALDataSources deviceInfoDataSources]:@{};
-    
-    // Non-configurable Options
-    NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
-    NSDictionary *persistentDataSources = [self persistentDataSourcesCopy];
-    NSDictionary *volatileDataSources = [self volatileDataSourcesCopy];
-    NSDictionary *timestampDataSources = [self timestampDataSourcesForDataSources:dataSources];
-    NSDictionary *captureTimeDataSources = [self.dataSources captureTimeDatasourcesForEventType:type title:title];
-    NSDictionary *clientDataSources = dataSources? dataSources: @{};
-    
-    NSDictionary *compositeDataSources = [TEALSystemHelpers compositeDictionaries:@[
-                                                                                    applicationInfo,
-                                                                                    carrierInfo,
-                                                                                    connectionInfo,
-                                                                                    deviceInfo,
-                                                                                    tealiumInfo,
-                                                                                    timestampDataSources,
-                                                                                    captureTimeDataSources,
-                                                                                    persistentDataSources,
-                                                                                    volatileDataSources,
-                                                                                    clientDataSources
-                                                                                    ]];
-    
-    
-    
-    return compositeDataSources;
-}
+- (NSDictionary *) captureTimeDataSourcesForType:(TEALDispatchType)type
+                                           title:(NSString *)title {
 
-- (NSDictionary *) timestampDataSourcesForDataSources:(NSDictionary *)dataSources {
+    NSDictionary *dispatchData = [TEALDataSources dispatchDatasourcesForEventType:type
+                                                                            title:title];
     
-    if ([self.settings autotrackingTimestampInfoEnabled]) {
-        NSString *dateString = dataSources[TEALDataSourceKey_TimestampUnix];
-        return [TEALTimestampDataSources dataSourcesForDate:dateString];
-    }
+    NSDictionary *connectionData = [self.urlSessionManager.reachabilityManager reachabilityDataSources];
     
-    return @{};
+    NSDictionary *mainThreadData = [self.dataSources mainThreadDataSources];
+    
+    NSDictionary *compositeDataSources = [NSDictionary teal_compositeDictionaries:@[
+                                                                                    dispatchData,
+                                                                                    connectionData,
+                                                                                    mainThreadData,
+                                                                                    ]];
+    return compositeDataSources;
+    
 }
 
 - (NSDictionary *) volatileDataSourcesCopy {
@@ -250,24 +239,27 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources {
     
-    NSError *error = nil;
-    
     __block typeof(self) __weak weakSelf = self;
 
     __block NSDictionary *dataSources = [additionalDataSources copy];
     
-    [self addVolatileDataSources:dataSources
-                      completion:^(BOOL success, NSError * _Nullable error) {
-        
-              [weakSelf.logger logDev:@"Volatile DataSources added: %@", dataSources];
+    [self.operationManager addOperationWithBlock:^{
 
+        [self addVolatileDataSources:dataSources
+                          completion:^(BOOL success, NSError * _Nullable error) {
+            
+                  if (success){
+                      [weakSelf.logger logDev:@"Volatile DataSources added: %@", dataSources];
+                  }
+                  if (error){
+                      [weakSelf.logger logQA:@"%@", error];
+                  }
+        }];
+        
     }];
     
-    if (error){
-        [self.logger logQA:@"%@", error];
-    }
-}
 
+}
 
 - (void) removeVolatileDataSourcesForKeys:(NSArray *)dataSourceKeys {
     
@@ -275,34 +267,44 @@ __strong static NSDictionary *staticAllInstances = nil;
 
     [self removeVolatileDataSourcesForKeys:dataSourceKeys
                                 completion:^(BOOL success, NSError * _Nullable error) {
-                                   
+              
+    if (!success ||
+        error){
+        
         [weakSelf.logger logDev:@"Unable to remove volatile data sources. Error: %@", error];
+        
+    } else {
+        [weakSelf.logger logDev:@"Volatile dataSources removed for keys:%@", dataSourceKeys];
+
+    }
                                     
     }];
     
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {
-    return [self.dataSources persistentDataSourcesCopy];
+    return [[self.dataSources persistentDataSources] copy];
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {
 
+    __block NSDictionary *dataCopy = [additionalDataSources copy];
     __block typeof(self) __weak weakSelf = self;
-
+    
     [self.operationManager addOperationWithBlock:^{
-        [weakSelf.dataSources addPersistentDataSources:additionalDataSources];
-
+        [weakSelf.dataSources addPersistentDataSources:dataCopy];
+        [weakSelf.logger logDev:@"Persistent DataSources added: %@", dataCopy];
     }];
     
 }
 
 - (void) removePersistentDataSourcesForKeys:(NSArray *)dataSourceKeys {
-    
+  
     __block typeof(self) __weak weakSelf = self;
 
     [self.operationManager addOperationWithBlock:^{
         [weakSelf.dataSources removePersistentDataSourceForKeys:dataSourceKeys];
+        [weakSelf.logger logDev:@"Persistent dataSources removed for keys:%@", dataSourceKeys];
 
     }];
 }
@@ -326,8 +328,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSError *error = nil;
     
     if (!self.dataSources){
+        
+        NSString *description = [NSString stringWithFormat:@"Unable to add volatile data sources:%@", additionalDataSources];
         error = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
+                             description:description
                                   reason:NSLocalizedString(@"DataSources object not yet ready.", @"")
                               suggestion:NSLocalizedString(@"Try again later.", @"")];
         
@@ -336,28 +340,13 @@ __strong static NSDictionary *staticAllInstances = nil;
         return;
     }
     
-    if (!self.operationManager){
-        error = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Unable to add volatile data sources", @"")
-                                  reason:NSLocalizedString(@"Operation Manager not yet ready.", @"")
-                              suggestion:NSLocalizedString(@"Try again later.", @"")];
-        
-        if (completion) completion(NO, error);
-        
-        return;
-    }
+    NSDictionary *additionalDataSourcesCopy = [additionalDataSources copy];
     
-    __block typeof(self) __weak weakSelf = self;
+    [[self.dataSources clientVolatileDataSources] addEntriesFromDictionary:additionalDataSourcesCopy];
     
-    __block NSDictionary *additionalDataSourcesCopy = [additionalDataSources copy];
-    
-    [self.operationManager addOperationWithBlock:^{
+    if (completion) completion(YES, nil);
         
-        [[weakSelf.dataSources clientVolatileDataSources] addEntriesFromDictionary:additionalDataSourcesCopy];
-        
-        if (completion) completion(YES, nil);
-        
-    }];
+
     
 }
 
@@ -381,7 +370,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     __block NSArray *keys = [dataSourceKeys copy];
     
     [self.operationManager addOperationWithBlock:^{
-        
+    
         [[weakSelf.dataSources clientVolatileDataSources] removeObjectsForKeys:keys];
         
         [weakSelf.logger logDev:@"Volatile Data Sources removed with keys: %@", keys];
@@ -417,40 +406,9 @@ __strong static NSDictionary *staticAllInstances = nil;
      *  from other Tealium instances.
     */
     
-    // Bail out check
-    NSError *error = nil;
-    
-    if (![TEALConfiguration isValidConfiguration:configuration]) {
-        
-        // Check configuration
-        
-        NSError *error = [TEALError errorWithCode:TEALErrorCodeMalformed
-                                      description:@"Could not initialize instance."
-                                           reason:@"Invalid Configuration."
-                                       suggestion:@"Check the account, profile and environment options."];
-        
-        
-        if (completion) { completion(NO, error);}
-        
-        return nil;
-    }
-    
     Tealium *instance = [Tealium instanceWithConfiguration:configuration
                                                   delegate:delegate
                                                 completion:completion];
-    
-    // Unlikely error
-    if (!instance) {
-        
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Failed to create new Tealium instance", @"")
-                                  reason:NSLocalizedString(@"Unknown failure in newInstanceForKey:configuration:completion: call.", @"")
-                              suggestion:NSLocalizedString(@"Consult Tealium Engineering", @"")];
-        
-        if (completion) { completion(NO, error);}
-        
-        return nil;
-    }
     
     [Tealium addInstance:instance key:key];
     
@@ -559,8 +517,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     // Init logger
     self.logger = [[TEALLogger alloc] initWithInstanceID:configuration.instanceID];
     
-    [self updateCore];
-
+    [self updateLogger];
+    
     if (!error &&
         !self.logger) {
         
@@ -571,8 +529,8 @@ __strong static NSDictionary *staticAllInstances = nil;
         
     } else {
     
-        [self.logger logDev:@"Configuration: %@", [self.settings configurationDescription]];
-        [self.logger logDev:@"Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
+        [self.logger logQA:@"Configuration: %@", [self.settings configurationDescription]];
+        [self.logger logQA:@"Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
     }
 
     // Finalize
@@ -597,23 +555,31 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) disable {
     
     @synchronized(self) {
-        
+
         [self disableCore];
         [self disableModules];
         
+        if (!self.isEnabled){
+            return;
+        }
+        self.isEnabled = NO;
         [self.logger logQA:@"Library Disabled. New configuration check will continue running, all other subsystems disabled"];
-        [self.logger disable];
     }
 }
 
 - (void) enable {
     
-    [self.logger logQA:@"Library Enabled."];
-    
     @synchronized(self) {
+        
         [self enableCore];
         [self updateModules];
-        [self.logger enable];
+        [self updateLogger];
+        
+        if (self.isEnabled){
+            return;
+        }
+        self.isEnabled = YES;
+        [self.logger logQA:@"Library Enabled."];
 
     }
 }
@@ -647,14 +613,12 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (void) enableCore {
-
-//    [self setupSettingsReachabilityCallbacks];
     
     [self.dispatchManager enable];
     
 }
 
-- (void) updateCore {
+- (void) updateLogger {
     
     if ([self.logger updateLogLevel:[self.settings logLevelString]]){
         [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
@@ -690,9 +654,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-/*
- *  Force disables all modules
- */
 - (void) disableModules {
     
     // Lifecycle
@@ -740,56 +701,45 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) trackDispatch:(TEALDispatch *) dispatch completion:(TEALDispatchBlock)completion {
+- (void) trackDispatch:(TEALDispatch *) dispatch
+            completion:(TEALDispatchBlock)completion {
     
     [self.dispatchManager addDispatch:dispatch
                       completionBlock:completion];
     
 }
 
-- (void) logDispatch:(TEALDispatch *) dispatch status:(TEALDispatchStatus) status error:(NSError *)error{
+- (void) logDispatch:(TEALDispatch *)dispatch
+              status:(TEALDispatchStatus)status
+               error:(NSError *)error{
     
     TEALLogLevel logLevel = [TEALLogger logLevelFromString:[self.settings logLevelString]];
-    if (logLevel >= TEALLogLevelNone) {
+    
+    if (logLevel == TEALLogLevelNone){
+        return;
+    }
+    
+    NSString *statusString = [TEALDispatch stringFromDispatchStatus:status];
+    
+    NSString *errorInfo = @"";
+    
+    if (error != nil){
+        errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
+    }
+    
+    if ([dispatch.payload isKindOfClass:[NSString class]]) {
         
-        NSString *statusString = nil;
+        [self.logger logDev:@"%@ dispatch with payload %@%@",
+             statusString,
+             dispatch.payload,
+             errorInfo];
         
-        switch (status) {
-            case TEALDispatchStatusSent:
-                statusString = @"Sent";
-                break;
-            case TEALDispatchStatusQueued:
-                statusString = @"Queued";
-                break;
-            case TEALDispatchStatusDestroyed:
-                statusString = @"Destroyed";
-                break;
-            case TEALDispatchStatusFailed:
-                statusString = @"Failed to send";
-                break;
-            case TEALDispatchStatusUnknown:
-                statusString = @"Unknown status for";
-                break;
-        }
+    } else {
         
-        NSString *errorInfo = @"";
-        
-        if (error != nil){
-            errorInfo = [NSString stringWithFormat:@"\r Error:%@", error.userInfo];
-        }
-        
-        if ([dispatch.payload isKindOfClass:[NSString class]]) {
-            
-            [self.logger logDev:@"%@ dispatch with payload %@%@",
-                 statusString,
-                 dispatch.payload,
-                 errorInfo];
-            
-        } else {
-            
-            [self.logger logDev:@"%@ dispatch: %@%@", statusString, dispatch, errorInfo];
-            
-        }
+        // Verbosity level to report
+        [self.logger logQA:@"%@ dispatch.", statusString];
+        [self.logger logDev:@"Dispatch: %@ error: %@", dispatch, errorInfo];
+
     }
 }
 
@@ -825,7 +775,17 @@ __strong static NSDictionary *staticAllInstances = nil;
         return;
     }
     
-    [self.settings fetchNewRawPublishSettingsWithCompletion:completion];
+    __block NSDictionary *fetchParameters = [self.dataSources fetchQueryStringDataSources];
+    
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+        
+        [weakSelf.settings fetchNewRawPublishSettingsWithURLParameters:fetchParameters
+                                                            completion:completion];
+        
+    }];
+
     
 }
 
@@ -841,12 +801,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     __weak Tealium *weakSelf = self;
     
     [self.urlSessionManager.reachabilityManager reachabilityChanged:^(BOOL canReach) {
-       
-        [weakSelf.operationManager addOperationWithBlock:^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             
             [weakSelf reachabilityChanged:canReach];
 
-        }];
+        });
         
     }];
     
@@ -854,71 +814,66 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) reachabilityChanged:(BOOL)canReach {
  
-    if (canReach){
-        
-        [self.logger logDev:@"Network found."];
-        
-        __block typeof(self) __weak weakSelf = self;
-
-        [self fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
-            
-            if (error){
-                [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
-                                          [error localizedDescription],
-                                          [error localizedFailureReason],
-                                          [error localizedRecoverySuggestion]
-                                          ]];
-                
-            }
-            
-            if (success){
-                
-                [weakSelf.logger logDev:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
-                
-            }
-            
-            if (!success &&
-                !error){
-                
-                [weakSelf.logger logDev:@"No changes in current Remote Publish Settings from server."];
-                
-            }
-            
-            // if !success then we're using archived or default version
-            
-            if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-                
-                [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-                
-            }
-            
-            [weakSelf updateCore];
-            [weakSelf updateModules];
-            
-            if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
-                [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
-            }
-            
-            [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-            
-            [weakSelf.dispatchManager runQueuedDispatches];
-            
-            
-            
-            if ([weakSelf.settings libraryShouldDisable]){
-                
-                [weakSelf disable];
-                
-                return;
-            }
-            
-        }];
-        
-    } else {
-        
-        [self.logger logDev:@"Network unreachable."];
-        
+    [self.logger logQA:@"Network %@", canReach? @"found": @"unreachable"];
+    
+    if (!canReach){
+        return;
     }
+    
+    __block typeof(self) __weak weakSelf = self;
+    
+    [self fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        
+        if (error){
+            [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
+                                      [error localizedDescription],
+                                      [error localizedFailureReason],
+                                      [error localizedRecoverySuggestion]
+                                      ]];
+            
+        }
+        
+        if (success){
+            
+            [weakSelf.logger logQA:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+            
+        }
+        
+        if (!success &&
+            !error){
+            
+            [weakSelf.logger logQA:@"No changes in current Remote Publish Settings from server."];
+            
+        }
+        
+        // if !success then we're using archived or default version
+        
+        if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
+            
+            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
+            
+        }
+        
+        if ([weakSelf.settings libraryShouldDisable]){
+            
+            [weakSelf disable];
+            
+            return;
+            
+        }
+        
+        [weakSelf enable];
+        
+        if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
+            [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
+        }
+        
+        [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+        
+        [weakSelf.dispatchManager runQueuedDispatches];
+        
+        
+    }];
     
 }
 
@@ -958,7 +913,6 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (NSString *) description {
     
     NSString *version = TEALLibraryVersion;
-    
     
     NSString *accountProfileEnvironment = [NSString stringWithFormat:@"%@/%@/%@", self.settings.account, self.settings.tiqProfile, self.settings.environment];
     
@@ -1035,19 +989,11 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) addNewDispatchService:(id<TEALDispatchService>)service
                     completion:(TEALBooleanCompletionBlock)completion{
     
+    // Source call needs to have put this in a background operation block
+
     NSError *error = nil;
     
-//    if ([[self currentDispatchServices] containsObject:service]){
-//        if (completion){
-//            error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-//                                 description:NSLocalizedString(@"Could not add dispatch service.", @"")
-//                                      reason:NSLocalizedString(@"Dispatch service already present.", @"")
-//                                  suggestion:NSLocalizedString(@"Ignore or remove unneeded addDispatchService: call.", @"")];
-//            completion(NO, error);
-//        }
-//        return;
-//    }
-    
+    // Stop if service already available for Tealium instance
     NSString *serviceName = [service name];
     
     for (id<TEALDispatchService> service in [self currentDispatchServices]) {
@@ -1059,8 +1005,6 @@ __strong static NSDictionary *staticAllInstances = nil;
             return;
         }
     }
-    
-    // Source call needs to put this on the operation block
     
     [[self currentDispatchServices] addObject:service];
     
@@ -1097,40 +1041,40 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - TEALDISPATCHMANAGER DELEGATE
 
-- (BOOL) dispatchManagerShouldDispatch:(NSError *__autoreleasing _Nullable)error {
+- (BOOL) dispatchManagerShouldDispatch:(NSError *__autoreleasing *)error {
     
     BOOL shouldDispatch = YES;
     
     if (!self.settings){
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"Settings not ready.", @"")
                               suggestion:NSLocalizedString(@"Wait.", @"")];
         shouldDispatch = NO;
     }
     if (![self networkReadyForDispatch]){
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"Network not ready.", @"")
                               suggestion:NSLocalizedString(@"Check network access.", @"")];
         shouldDispatch = NO;
     }
     if ([self suppressForWifiOnly]){
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"Suppressing calls until WIFI available.", @"")
                               suggestion:NSLocalizedString(@"Check network access.", @"")];
         shouldDispatch = NO;
     }
     if ([self suppressForBetterBatteryLevels]){
-        error = [TEALError errorWithCode:TEALErrorCodeFailure
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"Suppressing for better battery levels.", @"")
                               suggestion:NSLocalizedString(@"Charge device.", @"")];
         shouldDispatch = NO;
     }
     if ([self currentDispatchServices].count==0){
-        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"No network dispatch services available", @"")
                               suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings.", @"")];
@@ -1140,7 +1084,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     NSUInteger batchSize = [self.settings dispatchSize];
     NSUInteger queueSize = [self.dispatchManager queuedDispatches].count;
     if (batchSize > queueSize){
-        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
                                   reason:NSLocalizedString(@"Queue size is smaller than batch size", @"")
                               suggestion:NSLocalizedString(@"Wait for additional track calls OR adjust publish settings batch size.", @"")];

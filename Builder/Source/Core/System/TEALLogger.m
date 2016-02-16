@@ -83,6 +83,12 @@
     
 }
 
+- (BOOL) isEnabled {
+
+    return !self.isDisabled;
+    
+}
+
 - (BOOL) updateLogLevel:(NSString *)logLevelString {
     
     if (!logLevelString ||

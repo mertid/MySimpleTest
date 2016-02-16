@@ -12,33 +12,45 @@
 
 @interface TEALDataSources : NSObject
 
+@property BOOL disableApplicationInfo;
+@property BOOL disableCarrierInfo;
+@property BOOL disableDeviceInfo;
+@property BOOL disableTealiumInfo;
+@property BOOL disableTimestampInfo;
+
+
++ (NSDictionary *) dispatchDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
+
++ (double) deviceBatteryLevel;
+
++ (BOOL) deviceIsCharging;
+
+/**
+ *  Returns a dictionary of the timestamp formats from the argument date
+ *
+ *  @param date Can be an NSDate or an NSString representation of a date
+ *
+ *  @return dictionary with the requested data
+ */
++ (NSDictionary *) timestampDataSourcesForDate:(id)date;
+
 - (instancetype) initWithInstanceID:(NSString *) instanceID;
 
-+ (NSDictionary *) applicationInfoDataSources;
+- (NSDictionary *) mainThreadDataSources;
 
-+ (NSDictionary *) carrierInfoDataSources;
+- (NSDictionary *) backgroundSafeDataSources;
 
-+ (NSDictionary *) deviceInfoDataSources;
-
-+ (NSDictionary *) tealiumInfoDataSources;
-
-+ (NSString *) titleForViewEventWithObject:(NSObject *)obj;
-
-- (NSDictionary *) captureTimeDatasourcesForEventType:(TEALDispatchType)eventType title:(NSString *)title;
+- (NSDictionary *) fetchQueryStringDataSources;
 
 - (NSMutableDictionary *) clientVolatileDataSources;
 
-- (NSDictionary *) persistentDataSourcesCopy;
+- (NSDictionary *) persistentDataSources;
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources;
 
 - (void) removePersistentDataSourceForKeys:(NSArray *)dataSourceKeys;
 
 - (void) purgePersistentDataSources;
-
-+ (double) deviceBatteryLevel;
-
-+ (BOOL) deviceIsCharging;
 
 - (NSString *) uuid;
 

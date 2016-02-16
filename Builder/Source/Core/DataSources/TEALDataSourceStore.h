@@ -22,7 +22,7 @@
 
 - (void) setObject:(id)obj forKeyedSubscript:(id <NSCopying, NSSecureCoding>)key;
 
-- (NSDictionary *) dataSourcesCopy;
+- (NSDictionary *) allDataSources;
 
 - (void) addDataSources:(NSDictionary *)additionalDataSources;
 

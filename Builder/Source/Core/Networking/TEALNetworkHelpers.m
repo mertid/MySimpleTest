@@ -16,6 +16,10 @@
 
 + (NSString *) urlParamStringFromDictionary:(NSDictionary *)data {
 
+    if (!data){
+        return @"";
+    }
+    
     NSMutableArray *paramArray = [NSMutableArray array];
     
     [data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -30,6 +34,8 @@
 }
 
 + (NSString *) appendUrlParamString:(NSString *)urlString withDictionary:(NSDictionary *)data {
+    
+#warning return original string if !data?
     
     NSString *stringToAppend = [TEALNetworkHelpers urlParamStringFromDictionary:data];
     
@@ -95,6 +101,8 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     request.HTTPShouldHandleCookies = NO;
+    request.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    request.networkServiceType = NSURLNetworkServiceTypeBackground;
     
     return request;
 }

@@ -8,6 +8,7 @@
 
 #import "TEALConfiguration.h"
 #import "NSString+Tealium.h"
+#import "TEALNetworkHelpers.h"
 
 @interface TEALConfiguration()
 
@@ -44,10 +45,6 @@
     
     TEALConfiguration *configuration = [[TEALConfiguration alloc] init];
     
-    if (!configuration) {
-        return nil;
-    }
-    
     // Default configuration
     configuration.accountName       = [accountName lowercaseString];
     configuration.profileName       = [profileName lowercaseString];
@@ -63,7 +60,6 @@
     configuration.autotrackingCrashesEnabled = YES;
     configuration.mobileCompanionEnabled = YES;
     configuration.overridePublishSettingsURL = nil;
-//    configuration.overridePublishSettingsVersion = nil;
     configuration.overrideTagManagementURL = nil;
     
     NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];
@@ -100,6 +96,30 @@
     return self.privateInstanceID;
     
 }
+
+- (NSURLRequest *) publishSettingsRequestWithParams:(NSDictionary *)params {
+    
+    NSString *requestString = nil;
+    
+    if (self.overridePublishSettingsURL) {
+        
+        requestString = self.overridePublishSettingsURL;
+        
+    } else {
+        
+        NSString *baseDefault = [self defaultPublishSettingsURL];
+        
+        NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
+        
+        requestString = [baseDefault stringByAppendingString:queryString];
+        
+    }
+
+    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:requestString];
+    
+    return request;
+}
+
 
 #pragma mark - MODULE DATA
 - (NSMutableDictionary *) moduleData {
@@ -181,29 +201,51 @@
 
 #pragma mark - PRIVATE CLASS
 
-+ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
+//+ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
+//    
+//    if (configuration.overridePublishSettingsURL) {
+//        return configuration.overridePublishSettingsURL;
+//    }
+//    
+//    // Default
+//    NSString *urlPrefix = @"https:";
+//    
+//    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+//            urlPrefix,
+//            configuration.accountName,
+//            configuration.profileName,
+//            configuration.environmentName];
+//}
+
+- (NSString *) basePublishSettingsURL {
     
-    if (configuration.overridePublishSettingsURL) {
-        return configuration.overridePublishSettingsURL;
+    if (self.overridePublishSettingsURL){
+        return self.overridePublishSettingsURL;
     }
     
-    // Default
-    NSString *urlPrefix = @"https:";
+    return [self defaultPublishSettingsURL];
     
-    return [NSString stringWithFormat:@"%@//tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
-            urlPrefix,
-            configuration.accountName,
-            configuration.profileName,
-            configuration.environmentName];
+}
+
+- (NSString *) defaultPublishSettingsURL{
+    
+    NSString *urlString = [NSString stringWithFormat:@"https://tags.tiqcdn.com/utag/%@/%@/%@/mobile.html?",
+            self.accountName,
+            self.profileName,
+            self.environmentName];
+    
+    return urlString;
+    
 }
 
 #pragma mark - PRIVATE INSTANCE
 
-- (NSString *) publishSettingsURL {
-    
-    return [TEALConfiguration publishSettingsURLFromConfiguration:self];
-    
-}
+//- (NSString *) publishSettingsURL {
+//    
+//    return [TEALConfiguration publishSettingsURLFromConfiguration:self];
+//    
+//}
+
 
 - (NSDictionary *) baseDescriptionData {
     

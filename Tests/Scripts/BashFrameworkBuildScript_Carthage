@@ -1,0 +1,35 @@
+# Bash script for kicking of a Carthage library build
+
+set -e
+set +u
+
+# RECURSION AVOIDANCE
+if [[ $MASTER_SCRIPT_RUNNING ]]
+then
+exit 0
+fi
+set -u
+export MASTER_SCRIPT_RUNNING=1
+
+echo "Starting Carthage Ready Script..."
+
+# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE
+carthage build --no-skip-current
+
+# CREATE ZIP FILE FOR CARTHAGE while we're at it
+carthage archive "${TARGET_NAME}"
+
+# COPY OUTPUTS TO LOCAL RELEASE REPO
+CARTHAGE_BUILD_FOLDER="${PROJECT_DIR}/Carthage/Build/iOS"
+SOURCE_FRAMEWORK_PATH="${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework"
+SOURCE_FRAMEWORK_ARCHIVE_PATH="${PROJECT_DIR}/${TARGET_NAME}.framework.zip"
+OUTPUT_FOLDER="${PROJECT_DIR}/../../tealium-ios"
+OUTPUT_FRAMEWORK_PATH="${OUTPUT_FOLDER}/${TARGET_NAME}.framework"
+OUTPUT_ARCHIVE_PATH="${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip"
+
+mv -f "${SOURCE_FRAMEWORK_PATH}" "${OUTPUT_FRAMEWORK_PATH}"
+mv -f "${SOURCE_ARCHIVE_PATH}" "${OUTPUT_ARCHIVE_PATH}"
+
+
+echo "Carthage Ready Script Complete."
+

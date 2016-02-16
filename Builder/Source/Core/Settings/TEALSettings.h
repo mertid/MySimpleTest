@@ -29,7 +29,6 @@
 - (BOOL) isValid;
 - (BOOL) wifiOnlySending;
 - (BOOL) goodBatteryLevelOnlySending;
-- (BOOL) isDefaultPublishSettings;
 
 - (double) daysDispatchesValid;
 - (double) minutesBetweenRefresh;
@@ -45,18 +44,20 @@
 
 - (NSString * _Nullable) configurationDescription;
 - (NSString * _Nullable) publishSettingsDescription;
-- (NSString * _Nullable) publishSettingsURLString;
 
 - (TEALPublishSettings * _Nonnull) publishSettings;
 
 /*
  *  Trigger settings to check for new publish settings
  *
+ *  @param paramaters Optional data that will be converted to url query string
+ *      params to the URL used to get new mobile publish settings.
  *  @param completion Returns a completion block when complete. Success equals
  *      true if new settings found, false if no settings found or if no change
  *      in settings found.
  */
-- (void) fetchNewRawPublishSettingsWithCompletion:(void (^ _Nonnull)(BOOL success, NSError * _Nullable error))completion;
+- (void) fetchNewRawPublishSettingsWithURLParameters:(NSDictionary * _Nullable)parameters
+                                          completion:(void (^ _Nonnull)(BOOL success, NSError * _Nullable error))completion;
 
 /**
  *  Removes all publish settings from archive.

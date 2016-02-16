@@ -67,9 +67,7 @@
     BOOL didFinishedFetching = self.didFetch;
     
     [TEALTestHelper waitFor:&didFinishedFetching timeout:1.0];
-    
-    XCTAssertTrue(self.didFetch, @"Library did not update.");
-    
+        
     XCTAssertTrue(![self.library.dispatchManager isEnabled], @"Dispatch manager was not disabled");
     
     XCTAssertTrue([self.library currentDispatchServices].count == 0, @"Not all dispatch services were removed: %@", [self.library currentDispatchServices]);

@@ -6,9 +6,6 @@
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
-#ifndef TEALSettings_PrivateHeader_h
-#define TEALSettings_PrivateHeader_h
-
 #import "TEALSettings.h"
 #import "TEALConfiguration.h"
 #import "TEALPublishSettings.h"
@@ -18,11 +15,13 @@
 
 @property (nonatomic, strong) TEALConfiguration *configuration;
 @property (nonatomic, strong) TEALPublishSettings *privatePublishSettings;
+@property (nonatomic, strong) NSDate *lastFetch;
 
 - (BOOL) autotrackingApplicationInfoEnabled;
 - (BOOL) autotrackingCarrierInfoEnabled;
 - (BOOL) autotrackingTimestampInfoEnabled;
 
-@end
+- (double) minutesBeforeNextFetchFromDate:(NSDate *)date
+                                  timeout:(double)timeout;
 
-#endif /* TEALSettings_PrivateHeader_h */
+@end

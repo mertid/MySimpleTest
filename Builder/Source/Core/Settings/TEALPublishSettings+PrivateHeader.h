@@ -6,9 +6,6 @@
 //
 //
 
-#ifndef TEALPublishSettings_PrivateHeader_h
-#define TEALPublishSettings_PrivateHeader_h
-
 #import "TEALPublishSettings.h"
 
 @interface TEALPublishSettings (Private)
@@ -24,6 +21,3 @@
 
 
 @end
-
-
-#endif /* TEALPublishSettings_PrivateHeader_h */

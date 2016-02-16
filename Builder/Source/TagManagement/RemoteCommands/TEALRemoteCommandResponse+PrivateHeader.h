@@ -6,12 +6,6 @@
 //  Copyright © 2015 Tealium Inc. All rights reserved.
 //
 
-#ifndef TEALRemoteCommandResponse_PrivateHeader_h
-#define TEALRemoteCommandResponse_PrivateHeader_h
-
-
-#endif /* TEALRemoteCommandResponse_PrivateHeader_h */
-
 #import "TEALRemoteCommandResponse.h"
 
 @interface TEALRemoteCommandResponse (Private)

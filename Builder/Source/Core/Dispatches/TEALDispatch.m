@@ -44,6 +44,30 @@ NSString * const TEALDispatchTypeViewStringValue = @"view";
     return eventString;
 }
 
++ (NSString *) stringFromDispatchStatus:(TEALDispatchStatus)dispatchStatus {
+    
+    NSString *statusString = nil;
+    
+    switch (dispatchStatus) {
+        case TEALDispatchStatusSent:
+            statusString = @"Sent";
+            break;
+        case TEALDispatchStatusQueued:
+            statusString = @"Queued";
+            break;
+        case TEALDispatchStatusDestroyed:
+            statusString = @"Destroyed";
+            break;
+        case TEALDispatchStatusFailed:
+            statusString = @"Failed to send";
+            break;
+        case TEALDispatchStatusUnknown:
+            statusString = @"Unknown status for";
+            break;
+    }
+    return statusString;
+}
+
 - (void) queue:(BOOL)wasQueued {
 
     

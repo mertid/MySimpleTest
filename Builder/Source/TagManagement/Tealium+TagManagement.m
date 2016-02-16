@@ -50,10 +50,10 @@
                   completion:^(BOOL success, NSError * _Nullable error) {
                       
                       if (success){
-                          [weakSelf.logger logDev:@"Added remote command for id: %@", commandID];
+                          [weakSelf.logger logQA:@"Added remote command for id: %@", commandID];
                       }
                       if (error){
-                          [weakSelf.logger logDev:@"Error adding remote command block %@: %@", commandID, error];
+                          [weakSelf.logger logQA:@"Error adding remote command block %@: %@", commandID, error];
                       }
                   }];
 
@@ -114,14 +114,13 @@
 
 - (void) enableRemoteCommands {
 
-    if ([[self remoteCommandManager] isEnabled]){
+    NSUInteger commandCount = [[[self remoteCommandManager] commands] count];
+    
+    // Remote commands already in play
+    if (commandCount > 0){
         return;
     }
     
-    [[self remoteCommandManager] enable];
-    
-    [self.logger logDev:@"Remote Commands enabled."];
-
     __block typeof(self) __weak weakSelf = self;
     
     [[self remoteCommandManager] addReservedCommands:^(BOOL successful) {
@@ -132,6 +131,9 @@
             
         }
     }];
+    
+    [self.logger logDev:@"Remote Commands enabled."];
+
     
 }
 
@@ -146,7 +148,11 @@
 
 - (void) disableRemoteCommands {
     
-    [[self remoteCommandManager] disable];
+    if (!privateRemoteCommandManager){
+        return;
+    }
+    
+    [[self remoteCommandManager] removeAllCommands];
     
 }
 
@@ -170,6 +176,7 @@
                                           reason:NSLocalizedString(@"Remote Command Manager did not start.", @"")
                                       suggestion:NSLocalizedString(@"Consult Tealium Engineering - addRemoteCommandID:description:targetQueue:responseBlock:completion:", @"")];
                 completion(NO, error);
+                return;
             }
         }
         
@@ -177,12 +184,7 @@
                         description:description
                         targetQueue:queue
                       responseBlock:responseBlock
-                         completion:^(BOOL success, NSError * _Nullable error) {
-                             
-                             if (completion){
-                                 completion(success, error);
-                             }
-                         }];
+                         completion:completion];
         
     }];
     
@@ -211,13 +213,7 @@
         TEALRemoteCommandManager *remoteCommandManager = [weakSelf remoteCommandManager];
 
         [remoteCommandManager removeRemoteCommandID:commandID
-                                         completion:^(BOOL success, NSError * _Nullable error) {
-                                             
-                                             if (completion){
-                                                 completion(success, error);
-                                             }
-                                             
-                                         }];
+                                         completion:completion];
         
     }];
     
@@ -303,36 +299,40 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
 - (BOOL) tagDispatchServiceShouldPermitRequest:(NSURLRequest *)request
                                        webView:(id)webView{
     
+    NSError *error = nil;
+
     NSString *urlString = request.URL.absoluteString;
     
-    NSError *error = nil;
+    __block NSString *commandString = [TEALRemoteCommandManager commandStringFromURLString:urlString
+                                                                                     error:error];
     
-    __block NSString *commandString = [TEALRemoteCommandManager commandStringFromURLString:urlString error:error];
-
+    // URL request not a tagbridge request
     if (!commandString){
         return YES;
     }
     
+    // URL request was meant for tagbridge, but formatting error detected
     if (error){
-        [self.logger logDev:@"Remote command processing error: %@", error];
+        [self.logger logQA:@"Remote command processing error: %@", error];
+        return NO;
     }
-
+    
+    // Execute and report
     __block typeof(self) __weak weakSelf = self;
 
     [self.remoteCommandManager processCommandString:commandString
                                       responseBlock:^(TEALRemoteCommandResponse *response) {
-                                          
-                                          [weakSelf.logger logDev:@"Processed command: %@ - response: %@", commandString, response];
-                                        
-                                          
-                                      } completion:^(BOOL success, NSError * _Nullable error) {
-                                          
-                                          if (error){
-                                              [weakSelf.logger logDev:@"Error encountered trying to process Tag Bridge command: %@", error];
-                                          }
-                                          
-                                      }];
-        
+                                      
+          [weakSelf.logger logQA:@"Processed command: %@", response.commandId];
+          [weakSelf.logger logDev:@"Response: %@", response];
+
+      } completion:^(BOOL success, NSError * _Nullable error) {
+          
+          if (error){
+              [weakSelf.logger logDev:@"Error encountered trying to process Tag Bridge command: %@", error];
+          }
+          
+      }];
     
     return NO;
 }

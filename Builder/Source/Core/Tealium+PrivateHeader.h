@@ -6,9 +6,6 @@
 //  Copyright (c) 2015 Tealium Inc. All rights reserved.
 //
 
-#ifndef Tealium_Tealium_PrivateHeader_h
-#define Tealium_Tealium_PrivateHeader_h
-
 #import "Tealium.h"
 #import "TEALDataSources.h"
 #import "TEALLogger.h"
@@ -53,9 +50,12 @@
 
 - (NSDictionary * _Nonnull) moduleDataCopy;
 
-- (NSDictionary * _Nonnull) finalDispatchDataSourcesForDispatchType:(TEALDispatchType)type
-                                                              title:(NSString * _Nonnull)title
-                                                        dataSources:(NSDictionary * _Nullable)dataSources;
+- (NSDictionary * _Nonnull) dispatchReadyDataSourcesFrom:(NSDictionary* _Nullable)captureData;
+
+- (NSDictionary * _Nonnull) captureTimeDataSourcesForType:(TEALDispatchType)type
+                                                    title:(NSString * _Nonnull)title;
+
+- (NSDictionary * _Nullable) fetchQueryStringData;
 
 - (void) fetchNewSettingsWithCompletion:(TEALBooleanCompletionBlock _Nullable)completion;
 
@@ -67,5 +67,3 @@
                   completion:(TEALDispatchBlock _Nullable)completion;
 
 @end
-
-#endif

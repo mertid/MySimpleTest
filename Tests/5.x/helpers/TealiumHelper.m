@@ -28,7 +28,12 @@ static TealiumHelper * _sharedInstance;
 
 + (void) startTracking {
 
-    if ([self isTesting]){ return; }
+    if ([self isTesting]){
+    
+        NSLog(@"%s In test mode, application instance of tealium disabled.", __FUNCTION__);
+        
+        return;
+    }
     
     Tealium *instance = [Tealium instanceForKey:TEALIUM_INSTANCE_ID];
     
@@ -36,15 +41,16 @@ static TealiumHelper * _sharedInstance;
         return;
     }
     
+    
     // Configure Tealium
 
-//    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-//                                                                           profile:@"tagbridge"
-//                                                                       environment:@"dev"];
+    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                           profile:@"demo"
+                                                                       environment:@"qa"];
     
-    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
-                                                                           profile:@"mobile"
-                                                                       environment:@"dev"];
+//    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
+//                                                                           profile:@"mobile"
+//                                                                       environment:@"dev"];
     
 //    configuration.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
 
@@ -52,23 +58,43 @@ static TealiumHelper * _sharedInstance;
 
 //    configuration.overrideS2SLegacyDispatchURL = @"testS2sOverrideURL";
     
+//    configuration.overridePublishSettingsURL = @"http://localhost:4321/json/5/?minutes_between_refresh=0.0&enable_collect=true";
+
+//    configuration.overrideS2SLegacyDispatchURL = @"https://www.test.com?";
+    
 //    configuration.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_dispatchers_ON.json";
     
 //    configuration.overridePublishSettingsURL = @"https://chadhartman.github.io/tealium-ios/mps_collect_batch.json";
     
 //    configuration.overridePublishSettingsURL = @"https://www.tealium.com/this_page_does_not_exists";
-    
+
+//    configuration.overridePublishSettingsURL = @"http://localhost:4321/json/5/?minutes_between_refresh=0.0&flux_key=_is_enabled&flux_values=true,false";
+
 //    configuration.remoteCommandsEnabled = YES;
     
     configuration.collectPollingFrequency = TEALVisitorProfilePollingFrequencyOnRequest;
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
-    [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
+    [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
+                                               @"afterDelegateSet":@"NO"}];
     
-//    [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
-//                                               @"link_id":@"tagbridge"}];
-//    
+    [tealiumInstance1 setDelegate:[TealiumHelper sharedInstance]];
+
+    
+    [tealiumInstance1 addVolatileDataSources:@{
+                                               @"afterDelegateSet":@"YES"}];
+    
+    [tealiumInstance1 addPersistentDataSources:@{@"persistentKey":@"added"}];
+    
+    
+    [tealiumInstance1 trackEventWithTitle:@"launch" dataSources:@{@"addWithLaunchCall":@"someValue"}];
+    
+    [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"persistentKey"]];
+    
+//    [tealiumInstance1 trackEventWithTitle:@"anotherLaunchWherePersistentKeyShouldBeGone" dataSources:nil];
+
+//
 //    [tealiumInstance1 addVolatileDataSources:@{TEALDataSourceKey_Origin:@"newOrigin",
 //                                               TEALDataSourceKey_Platform:@"mySoapBox"}];
 //    
@@ -143,7 +169,7 @@ static TealiumHelper * _sharedInstance;
     if ([self isTesting]){ return; }
 
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
-     addRemoteCommandID:@"toast"
+     addRemoteCommandID:@"logger"
      description:@"An example remote command block"
      targetQueue:dispatch_get_main_queue()
      responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
@@ -155,7 +181,7 @@ static TealiumHelper * _sharedInstance;
     }];
     
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
-     addRemoteCommandID:@"butter"
+     addRemoteCommandID:@"flogger"
      description:@"An example remote command block"
      targetQueue:dispatch_get_main_queue()
      responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {
@@ -167,7 +193,7 @@ static TealiumHelper * _sharedInstance;
      }];
     
     [[Tealium instanceForKey:TEALIUM_INSTANCE_ID]
-     addRemoteCommandID:@"jam"
+     addRemoteCommandID:@"blogger"
      description:@"An example remote command block"
      targetQueue:dispatch_get_main_queue()
      responseBlock:^(TEALRemoteCommandResponse * _Nullable response) {

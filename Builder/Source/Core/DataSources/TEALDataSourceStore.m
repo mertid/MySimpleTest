@@ -90,14 +90,15 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
              forKey:key];
 }
 
-- (NSDictionary *) dataSourcesCopy {
+- (NSDictionary *) allDataSources {
     
-    return [self.dataSources copy];
+    return self.dataSources;
 }
 
 - (void) addDataSources:(NSDictionary *)additionalDataSources {
 
         [self.dataSources addEntriesFromDictionary:additionalDataSources];
+    
         [self archiveWithStorageKey:self.instanceID];
     
 }

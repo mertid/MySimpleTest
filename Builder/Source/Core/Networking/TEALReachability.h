@@ -77,6 +77,6 @@ typedef void (^NetworkUnreachable)(TEALReachability * reachability);
 -(NSString*)currentReachabilityString;
 -(NSString*)currentReachabilityFlags;
 
-- (NSDictionary *) reachabilityDataSources:(NSDictionary *)clientDataSources;
+- (NSDictionary *) reachabilityDataSources;
 
 @end

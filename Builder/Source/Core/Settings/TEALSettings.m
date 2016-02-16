@@ -8,7 +8,6 @@
 //  BRIEF: Composite of Configurations and Publish Settings (new, default or archived)
 
 #import "TEALSettings.h"
-#import "TEALNetworkHelpers.h"
 #import "TEALError.h"
 #import "TEALBlocks.h"
 #import "TEALConfiguration+PrivateHeader.h"
@@ -60,8 +59,6 @@
     
     return true;
     
-//    if ([self publishSettings].disableDeviceInfoAutotracking) return NO;
-//    return self.configuration.autotrackingDeviceInfoEnabled;
 }
 
 - (BOOL) autotrackingIvarsEnabled {
@@ -91,7 +88,10 @@
 
 - (BOOL) libraryShouldDisable {
 
-    return ([self publishSettings].status == TEALPublishSettingsStatusDisable);
+    BOOL disable = [[self publishSettings] disableLibrary];
+    
+    return disable;
+    
 }
 
 - (BOOL) mobileCompanionEnabled {
@@ -100,7 +100,7 @@
 
 - (BOOL) isValid {
     return ([TEALConfiguration isValidConfiguration:self.configuration] &&
-            [self publishSettings].status != TEALPublishSettingsStatusDisable);
+            [self publishSettings]);
 }
 
 - (BOOL) wifiOnlySending {
@@ -113,12 +113,6 @@
     BOOL response = [[self publishSettings] enableLowBatterySuppress];
     
     return response;
-}
-
-- (BOOL) isDefaultPublishSettings {
-    
-    return ([self publishSettings].status == TEALPublishSettingsStatusDefault);
-    
 }
 
 - (double) daysDispatchesValid {
@@ -155,21 +149,6 @@
     return [[self publishSettings] description];
 }
 
-- (NSString *) publishSettingsURLString {
-    if (!self.mobilePublishSettingsURLString){
-        
-        self.mobilePublishSettingsURLString = [self.configuration publishSettingsURL];
-    }
-    return self.mobilePublishSettingsURLString;
-}
-
-- (NSString *) publishURLString {
-    if (!self.tiqPublishURLString){
-        self.tiqPublishURLString = [self.configuration publishSettingsURL];
-    }
-    return self.tiqPublishURLString;
-}
-
 - (NSUInteger) dispatchSize {
     return [self publishSettings].dispatchSize;
 }
@@ -197,16 +176,15 @@
     return [[self publishSettings] offlineDispatchQueueSize];
 }
 
-- (NSURLRequest *) publishSettingsRequest {
-    
-    NSString *baseURL = [self.configuration publishSettingsURL];
-    NSDictionary *params = @{}; //[self.configuration mobilePublishSettingsURLParams];
-    NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];
-    NSString *settingsURLString = [baseURL stringByAppendingString:queryString];
-    NSURLRequest *request = [TEALNetworkHelpers requestWithURLString:settingsURLString];
-    
-    return request;
-}
+//- (NSString *) cacheBuster {
+//    
+//    NSUInteger random = arc4random_uniform(100);
+//    
+//    NSString *randomString = [NSString stringWithFormat:@"%lu", (unsigned long)random];
+//    
+//    return randomString;
+//    
+//}
 
 - (NSError *) prefetchErrorForRequest:(NSURLRequest *)request
                                  date:(NSDate *)date {
@@ -229,12 +207,13 @@
                                       suggestion:NSLocalizedString(@"Wait for configuration to become available.", @"")];
     }
     
-    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:date];
+    double minutesToNextFetch = [self minutesBeforeNextFetchFromDate:date
+                                                             timeout:self.publishSettings.minutesBetweenRefresh];
     
     if (!preFetchError &&
         minutesToNextFetch > 0.0) {
         
-        NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time - %f minutes to end of refresh timeout.", minutesToNextFetch];
+        NSString * reason = [NSString stringWithFormat:@"Can not fetch at this time: %f minutes to end of refresh timeout.", minutesToNextFetch];
         preFetchError = [TEALError errorWithCode:TEALErrorCodeFailure
                                      description:NSLocalizedString(@"Unable to fetch new publish settings", @"")
                                           reason:reason
@@ -255,10 +234,80 @@
     return preFetchError;
 }
 
-
-- (void) fetchNewRawPublishSettingsWithCompletion:(TEALBooleanCompletionBlock)completion{
+- (NSError *) urlRequestErrorFor:(NSHTTPURLResponse *)response
+                            data:(NSData *)data
+                 connectionError:(NSError *)connectionError {
     
-    NSURLRequest *request = [self publishSettingsRequest];
+    
+    if (connectionError) {
+        
+        return connectionError;
+        
+    }
+    
+    NSError *error = nil;
+
+    if ([response respondsToSelector:@selector(statusCode)]){
+        
+        NSInteger statusCode = response.statusCode;
+        
+        if (statusCode != 200){
+            
+            NSString *reason = [NSString stringWithFormat:@"Unexpected response code recieved: %ld", (long)statusCode];
+            
+            error = [TEALError errorWithCode:TEALErrorCodeFailure
+                                 description:NSLocalizedString(@"Failed to fetch new publish settings.", @"")
+                                      reason:reason
+                                  suggestion:NSLocalizedString(@"Make certain that the account-profile from TIQ has the Mobile Publish Settings enabled OR that the overridePublishURL configuration option is valid.", @"")];
+            
+        }
+        
+    }
+    
+    return error;
+
+}
+
+- (NSDictionary *) matchingPublishSettingsFromData:(NSData *)data
+                                             error:(NSError * __autoreleasing *)error {
+    
+    NSDictionary *parsedData = nil;
+    
+    // Extract all publish settings data from source data
+    
+    parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:error];
+    
+    if (!parsedData){
+        // For future MPS config location
+        parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:error];
+    }
+    
+    if (!parsedData){
+        
+        *error = [TEALError errorWithCode:TEALErrorCodeNoContent
+                             description:NSLocalizedString(@"No mobile publish settings for current library version found.", @"")
+                                  reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
+                              suggestion:NSLocalizedString(@"Activate the correct Mobile Publish Setting version in TIQ, re-publish, or update library.", @"")];
+        
+        return nil;
+        
+    }
+    
+    // Extract only the publish settings matching the current library veresion
+    
+    NSDictionary *matchingPublishSettings = [TEALPublishSettings currentPublishSettingsFromRawPublishSettings:parsedData];
+    
+    return matchingPublishSettings;
+    
+}
+
+- (void) fetchNewRawPublishSettingsWithURLParameters:(NSDictionary *)parameters
+                                          completion:(void (^)(BOOL, NSError * _Nullable))completion {
+    
+    
+    
+    NSURLRequest *request = [self.configuration publishSettingsRequestWithParams:parameters];
+    
     NSDate *now = [NSDate date];
     
     NSError *preFetchError = [self prefetchErrorForRequest:request
@@ -278,114 +327,62 @@
     [self.urlSessionManager performRequest:request
                             withCompletion:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
                              
-                                                                
-        NSError *error = nil;
-                  
-        NSDictionary *parsedData = nil;
-
-        TEALPublishSettings *publishSettings = nil;
-                      
-        if (connectionError) {
-            error = connectionError;
-        }
-                                
-        if (!error &&
-            [response respondsToSelector:@selector(statusCode)]){
-            
-            NSInteger statusCode = response.statusCode;
-            
-            if (statusCode != 200){
-                
-                NSString *reason = [NSString stringWithFormat:@"Unexpected response code recieved: %ld", (long)statusCode];
-                
-                error = [TEALError errorWithCode:TEALErrorCodeFailure
-                                     description:NSLocalizedString(@"Failed to fetch new publish settings.", @"")
-                                          reason:reason
-                                      suggestion:NSLocalizedString(@"Make certain that the account-profile from TIQ has the Mobile Publish Settings enabled OR that the overridePublishURL configuration option is valid.", @"")];
-                
-
-                
-            }
-                                    
-        }
-                                
-        if (!error){
-            publishSettings = [weakSelf publishSettings];;
-        }
-          
-        if (!error &&
-            !parsedData){
-            
-            // Fallback to current mobile.html MPS var
-            parsedData = [TEALPublishSettings mobilePublishSettingsFromHTMLData:data error:error];
-            
-        }
-                                
-        if (!error &&
-            !parsedData){
-            // For future MPS config location - currently ignoring any error from this
-            parsedData = [TEALPublishSettings mobilePublishSettingsFromJSONFile:data error:nil];
-        }
-                                
-                                
-        if (!error &&
-            !parsedData){
-            
-            error = [TEALError errorWithCode:TEALErrorCodeException
-                                 description:NSLocalizedString(@"Failed to fetch new publish settings", @"")
-                                      reason:NSLocalizedString(@"Unable to parse json or html data from request target", @"")
-                                  suggestion:NSLocalizedString(@"Check account/profile or overridePublishSettingsURL", @"")];
-            
-        }
-            
-        NSDictionary *matchingPublishSettings = [publishSettings currentPublishSettingsFromRawPublishSettings:parsedData];
-                                
-        if (!error &&
-            !matchingPublishSettings) {
-            
-            // No MPS Settings for current library version
-            error = [TEALError errorWithCode:TEALErrorCodeNoContent
-                                 description:NSLocalizedString(@"No mobile publish settings for current library version found.", @"")
-                                      reason:NSLocalizedString(@"Mobile Publish Settings for current version may not have been published.", @"")
-                                  suggestion:NSLocalizedString(@"Activate the correct Mobile Publish Setting version in TIQ, re-publish, or update library.", @"")];
-        }
-        
-                                
-        if (!error &&
-            !publishSettings){
-            
-            NSString *urlString = [self.configuration publishSettingsURL];
-            
-            NSString *errorReaseon = [NSString stringWithFormat:@"Could not init publish settings with url: %@", urlString];
-            
-            error = [TEALError errorWithCode:TEALErrorCodeException
-                                  description:NSLocalizedString(@"Unable to update Publish Settings.", @"")
-                                       reason:errorReaseon
-                                   suggestion:NSLocalizedString(@"Check override publish setting.", @"")];
-        }
-                                
-                                
-        // Bail out
-        if (error){
+        // Request OK?
+        NSError *requestError = [weakSelf urlRequestErrorFor:response
+                                                        data:data
+                                             connectionError:connectionError];
+        if (requestError){
             if (completion){
-                completion( NO, error);
+                completion(NO, requestError);
             }
             return;
         }
-            
-        // Init or Update Publish Settings
                                 
-        BOOL newPublishSettings = ![publishSettings isEqualToRawPublishSettings:matchingPublishSettings];
-
-        if (newPublishSettings){
-
-            [publishSettings updateWithMatchingVersionSettings:matchingPublishSettings];
+        // Get publish settings matching this library version
+        NSError *error = nil;
+        NSDictionary *publishData = [weakSelf matchingPublishSettingsFromData:data
+                                                                        error:&error];
+        if (!publishData){
+            if (completion){
+                completion(NO, error);
+            }
+            return;
+        }
+                            
+        //  Is publish settings ready to process?
+        TEALPublishSettings *publishSettings = [self publishSettings];
+                                
+        if (!publishSettings){
             
+            NSString *errorReaseon = [NSString stringWithFormat:@"Could not init publish settings with configuration: %@", self.configuration];
+            
+            NSError *error = [TEALError errorWithCode:TEALErrorCodeException
+                                          description:NSLocalizedString(@"Unable to update Publish Settings.", @"")
+                                               reason:errorReaseon
+                                           suggestion:NSLocalizedString(@"Check override publish setting.", @"")];
+            
+            if (completion){
+                completion(NO, error);
+            }
+            return;
+        }
+              
+        // Are remote publish settings new?
+        BOOL newPublishSettings = ![publishSettings isEqualToRawPublishSettings:publishData];
+        
+        if (!newPublishSettings){
+            // Remote publish setting same as what's loaded / existing
+            if (completion){
+                completion(NO, nil);
+            }
+            return;
         }
         
-        // Return successful completion if new settings found
-        if (completion) {
-            completion( newPublishSettings, error);
+        // Yay! We have new settings
+        [publishSettings updateWithMatchingVersionSettings:publishData];
+            
+        if (completion){
+            completion(YES, nil);
         }
         
     }];
@@ -414,7 +411,7 @@
     
     // Will load archive if available
     
-    NSString *urlString = [self.configuration publishSettingsURL];
+    NSString *urlString = [self.configuration basePublishSettingsURL];
     
     TEALPublishSettings *archiveSettings = [TEALPublishSettings archivedPublishSettingForURL:urlString];
     
@@ -424,21 +421,43 @@
     
     TEALPublishSettings *settings = [[TEALPublishSettings alloc] initWithURLString:urlString];
     
-//    settings.targetVersion = TEALDefaultPublishVersion;
-    
     return settings;
     
 }
 
-- (double) minutesBeforeNextFetchFromDate:(NSDate *)date {
+
+- (double) minutesBeforeNextFetchFromDate:(NSDate *)date
+                                  timeout:(double)timeout {
+    
+    if (!self.lastFetch){
+        return 0.0;
+    }
     
     double currentTimeElapsed = [date timeIntervalSinceDate:self.lastFetch];
     
-    double timeRemaining = self.publishSettings.minutesBetweenRefresh - currentTimeElapsed;
+    double currentTimeElapsedInMinutes = currentTimeElapsed / 60;
+    
+    double timeRemaining =  timeout - currentTimeElapsedInMinutes;
     
     return timeRemaining;
     
 }
+
+//- (double) minutesBeforeNextFetchFromDate:(NSDate *)date {
+//    
+//    if (!self.lastFetch){
+//        return 0.0;
+//    }
+//    
+//    double currentTimeElapsed = [date timeIntervalSinceDate:self.lastFetch];
+//    
+//    double currentTimeElapsedInMinutes = currentTimeElapsed / 60;
+//    
+//    double timeRemaining =  self.publishSettings.minutesBetweenRefresh - currentTimeElapsedInMinutes;
+//    
+//    return timeRemaining;
+//    
+//}
 
 - (NSString *) description {
     

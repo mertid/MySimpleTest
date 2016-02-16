@@ -42,6 +42,19 @@
 //
 //}
 
++ (NSDictionary*) teal_compositeDictionaries:(NSArray*)dictionaries {
+    
+    NSMutableDictionary *compositeDictionary = [NSMutableDictionary dictionary];
+    
+    for (NSDictionary *dictionary in dictionaries) {
+        if ([dictionary isKindOfClass:([NSDictionary class])]){
+            [compositeDictionary addEntriesFromDictionary:dictionary];
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:compositeDictionary];
+    
+}
 
 - (NSArray *) teal_arrayForDebugDisplay {
 

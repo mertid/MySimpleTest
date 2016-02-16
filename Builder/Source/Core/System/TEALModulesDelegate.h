@@ -7,9 +7,6 @@
 //
 //  Brief: All optional commands to enable/disable modules listed here
 
-#ifndef Tealium_TEALModulesDelegate_h
-#define Tealium_TEALModulesDelegate_h
-
 @protocol TEALModulesDelegate <NSObject>
 
 @optional
@@ -44,5 +41,3 @@
 
 
 @end
-
-#endif

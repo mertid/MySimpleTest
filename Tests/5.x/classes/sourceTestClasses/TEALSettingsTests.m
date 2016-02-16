@@ -47,7 +47,8 @@
 
     self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
 
-    NSString *publishURLString = [self.settings publishSettingsURLString] ;
+    NSString *publishURLString = [self.configuration basePublishSettingsURL];
+    
     NSString *defaultURLString = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?";
 
     XCTAssertTrue(self.settings, @"Settings failed to initialize correctly");
@@ -63,7 +64,7 @@
     
     self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
     
-    NSString * publishSettingsURLString = [self.settings publishSettingsURLString];
+    NSString * publishSettingsURLString = [self.configuration basePublishSettingsURL];
     
     XCTAssertTrue([publishSettingsURLString isEqualToString:overrideURL], @"Override url %@ did not set settings publishSettingsURLString:%@.", overrideURL, publishSettingsURLString);
     
@@ -201,25 +202,117 @@
 
 #pragma mark - FETCH TESTS
 
-- (void) testFetchNewRemoteSettings {
+- (void) testPublishSettingsWithParams {
     
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+    // This is currently a hardcoded test - Update to be dynamic
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
     
-    config.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_options_ON.json";
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+    
+    NSDictionary *params = @{
+                             @"alpha": @"alphaValue",
+                             @"bravo": @"bravoValue",
+                             @"charlie": @"charlieValue"
+                             };
+    
+    NSURLRequest *request = [self.configuration publishSettingsRequestWithParams:params];
+    
+    NSString *requestString = request.URL.absoluteString;
+    
+    NSString *expectedRequestString = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?alpha=alphaValue&bravo=bravoValue&charlie=charlieValue";
+    
+    XCTAssertTrue([expectedRequestString isEqualToString:requestString], @"Unexpected request string: %@", requestString);
+    
+    
+}
+
+- (void) testPublishSettingsOverrideURLIgnoreParams {
+    
+    // This is currently a hardcoded test - Update to be dynamic
+    
+    NSString *baseOverrideURLString = @"https://www.google.com";
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    self.configuration.overridePublishSettingsURL = baseOverrideURLString;
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+    
+    NSDictionary *params = @{
+                             @"alpha": @"alphaValue",
+                             @"bravo": @"bravoValue",
+                             @"charlie": @"charlieValue"
+                             };
+    
+    NSURLRequest *request = [self.configuration publishSettingsRequestWithParams:params];
+    
+    NSString *requestString = request.URL.absoluteString;
+    
+//    NSLog(@"%s \nbaseOverrideURLString:%@ \nrequestString:%@", __FUNCTION__, baseOverrideURLString, requestString);
+    
+    XCTAssertTrue([baseOverrideURLString isEqualToString:requestString], @"Unexpected request string: %@", requestString);
+    
+    
+}
+
+- (void) testMinutesBeforeNextFetch {
+    
+    self.configuration = [TEALTestHelper configFromTestJSONFile:@"all_number_options_1"];
+    
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+    
+    self.settings.lastFetch = nil;
+    
+    NSDate *now = [NSDate date];
+    
+    double minutesBetweenRefresh = 1.0;
+    
+    double minutes = [self.settings minutesBeforeNextFetchFromDate:now
+                                                           timeout:minutesBetweenRefresh];
+    
+    XCTAssertTrue(minutes == 0, @"Unexpected minutes remaining: %f", minutes);
+    
+    self.settings.lastFetch = now;
+    
+    NSTimeInterval interval = [now timeIntervalSince1970];
+    
+    interval = interval + 30;
+    
+    NSDate *now30SecondsLater = [NSDate dateWithTimeIntervalSince1970:interval];
+    
+    double newMinutes = [self.settings minutesBeforeNextFetchFromDate:now30SecondsLater
+                                                              timeout:minutesBetweenRefresh];
+    
+    NSString *newMinutesString = [NSString stringWithFormat:@"%.2f", newMinutes];
+    
+    XCTAssertTrue([newMinutesString isEqualToString:@"0.50"], @"Was expecting 30 seconds - minutes remaining returned: %@", newMinutesString);
+}
+
+- (void) testFetchNewRemoteSettings {
+    
+    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+                                                                    profile:@"demo"
+                                                                environment:@"dev"];
+    
+    self.configuration.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_options_ON.json";
     
     TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
     
     [TEALPublishSettings purgeAllArchives];
     
-    self.settings = [[TEALSettings alloc] initWithConfiguration:config];
+    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
     
     self.settings.urlSessionManager = sessionManager;
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
     
-    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+    [self.settings fetchNewRawPublishSettingsWithURLParameters:nil
+                                                    completion:^(BOOL success, NSError * _Nullable error) {
         
         NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
         
@@ -251,7 +344,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
     
-    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+    [self.settings fetchNewRawPublishSettingsWithURLParameters:nil
+                                                    completion:^(BOOL success, NSError * _Nullable error) {
         
         NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
         
@@ -280,7 +374,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
     
-    [self.settings fetchNewRawPublishSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+    [self.settings fetchNewRawPublishSettingsWithURLParameters:nil
+completion:^(BOOL success, NSError * _Nullable error) {
         
         NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
         

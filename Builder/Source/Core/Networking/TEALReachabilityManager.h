@@ -22,6 +22,6 @@
 
 - (void) reachabilityChanged:(void (^)(BOOL canReach))responseBlock;
 
-- (NSDictionary *) reachabilityDataSources:(NSDictionary *)clientDataSources;
+- (NSDictionary *) reachabilityDataSources;
 
 @end

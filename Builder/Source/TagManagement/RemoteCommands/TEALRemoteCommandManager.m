@@ -16,7 +16,6 @@
 
 @interface TEALRemoteCommandManager()
 
-@property (nonatomic) BOOL ivarIsEnabled;
 @property (nonatomic, weak) TEALOperationManager *operationManager;
 
 @end
@@ -66,30 +65,26 @@
     
 }
 
-- (void) enable {
+- (void) removeAllCommands {
     
-    if (!self.ivarIsEnabled) {
-        self.ivarIsEnabled = YES;
-    }
-    
-}
+    __block typeof(self) __weak weakSelf = self;
 
-- (void) disable {
-    if (self.ivarIsEnabled) {
-        self.ivarIsEnabled = NO;
-    }
-}
+    [self.operationManager addOperationWithBlock:^{
+        
+        weakSelf.commands = nil;
+        weakSelf.commands = [NSDictionary dictionary];
+        
+    }];
 
-- (BOOL) isEnabled {
-    return self.ivarIsEnabled;
 }
 
 - (void) processCommandString:(NSString *)commandString
                 responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
                    completion:(TEALBooleanCompletionBlock)completion {
     
-    NSError *error;
+    NSError *error = nil;
     
+    // CommandID in the command string?
     NSString *commandID = [TEALRemoteCommandManager commandIDFromCommandString:commandString];
     if (!commandID){
         
@@ -106,6 +101,24 @@
         return;
     }
     
+    // Actual command for command id available?
+    TEALRemoteCommand *command = [self commands][commandID];
+    if (!command){
+        
+        NSString *description = [NSString stringWithFormat:@"Could not trigger command id: %@", commandID];
+        
+        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                             description:description
+                                  reason:NSLocalizedString(@"Command block not yet added via the addRemoteCommandID:description:targetQueue:responseBlock: method.", @"")
+                              suggestion:NSLocalizedString(@"Check that command block with the command id has been added OR Adjust timing of command in TIQ OR add remote command block earlier.", @"")];
+        
+        if (completion){
+            completion(NO, error);
+        }
+        return;
+    }
+    
+    // Command formatted correctly with data?
     NSDictionary *requestData = [TEALRemoteCommandManager requestDataFromCommandString:commandString error:error];
     if (!requestData ||
         error){
@@ -115,7 +128,6 @@
         }
         return;
     }
-    
     NSDictionary *payload = [TEALRemoteCommandManager payloadFromRequestData:requestData error:error];
     if (!payload ||
         error){
@@ -129,6 +141,7 @@
     // Optional
     NSString *responseID = [TEALRemoteCommandManager responseIDFromRequestData:requestData error:error];
     
+    // Create a reponse object to execute actual command block originally added by user
     TEALRemoteCommandResponse *response = [[TEALRemoteCommandResponse alloc] init];
     if (!response){
         
@@ -153,9 +166,11 @@
     response.commandId = commandID;
     [response setDelegate:self];
     
-    [self triggerCommandWithResponse:response
-                       responseBlock:responseBlock
-                          completion:completion];
+    [self triggerCommand:command
+                response:response
+           responseBlock:responseBlock
+              completion:completion];
+
 }
 
 - (void) addRemoteCommandID:(NSString*)commandID
@@ -166,16 +181,7 @@
     
     NSError *error = nil;
     
-    if (!self.isEnabled){
-        error = [TEALError errorWithCode:TEALErrorCodeException
-                             description:NSLocalizedString(@"Could not add remote command.", @"")
-                                  reason:NSLocalizedString(@"Remote Command Manager not enabled.", @"")
-                              suggestion:NSLocalizedString(@"Make sure Tag Management is enabled in Publish settings & Remote Commands are enabled in configuration object.", @"")];
-        if (completion){
-            completion(NO, error);
-        }
-        return;
-    }
+    // Drop request if command id and response
     
     if (!commandID){
         error = [TEALError errorWithCode:TEALErrorCodeMalformed
@@ -213,8 +219,14 @@
     command.responseBlock = responseBlock;
     command.queue = queue;
     
-    [self addNewCommands:@{commandID:command}];
-    
+    __block typeof(self) __weak weakSelf = self;
+
+    [self.operationManager addOperationWithBlock:^{
+
+        [weakSelf addNewCommands:@{commandID:command}];
+        
+    }];
+     
     if (completion){
         completion(YES, nil);
     }
@@ -232,14 +244,9 @@
     
     NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
     
-    __block typeof(self) __weak weakSelf = self;
-    
-    [self.operationManager addOperationWithBlock:^{
+    self.commands = newCommands;
+    if (completion) completion(YES, nil);
         
-        weakSelf.commands = newCommands;
-        if (completion) completion(YES, nil);
-        
-    }];
 }
 
 #pragma mark - PRIVATE INSTANCE
@@ -250,12 +257,8 @@
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:commands];
     [mDict addEntriesFromDictionary:newCommand];
     NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
+    self.commands = newCommands;
     
-    __block typeof(self) __weak weakSelf = self;
-
-    [self.operationManager addOperationWithBlock:^{
-        weakSelf.commands = newCommands;
-    }];
 }
 
 #pragma mark - PUBLIC CLASS
@@ -416,29 +419,11 @@
 
 #pragma mark - TRIGGER REMOTE COMMANDS
 
-- (void) triggerCommandWithResponse:(TEALRemoteCommandResponse*)response
-                      responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
-                         completion:(TEALBooleanCompletionBlock)completion{
+- (void) triggerCommand:(TEALRemoteCommand*)command
+               response:(TEALRemoteCommandResponse*)response
+          responseBlock:(TEALRemoteCommandResponseBlock)responseBlock
+             completion:(TEALBooleanCompletionBlock)completion{
 
-    NSError *error = nil;
-    
-    __block TEALRemoteCommand *command = [self commands][response.commandId];
-
-    if (!command){
-        
-        NSString *description = [NSString stringWithFormat:@"Could not trigger command id: %@", response.commandId];
-        
-        error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-                             description:description
-                                  reason:NSLocalizedString(@"Command block not yet added via the addRemoteCommandID:description:targetQueue:responseBlock: method.", @"")
-                              suggestion:NSLocalizedString(@"Adjust timing of command in TIQ or add remote command block earlier.", @"")];
-        
-        if (completion){
-            completion(NO, error);
-        }
-        return;
-    }
-    
     dispatch_queue_t queue = command.queue;
 
     // If no queue was provided in addRemoteCommandID... method, default to main thread
@@ -450,6 +435,8 @@
     
     response.status = TEALErrorCodeSuccess;
     
+    __block typeof(self) __weak weakSelf = self;
+
     // Trigger the dispatch
     dispatch_async(queue, ^{
         
@@ -458,9 +445,10 @@
         if (responseBlock)responseBlock(response);
         if (completion)completion(YES, nil);
         
+        [weakSelf tealiumRemoteCommandResponseRequestsSend:response];
+
     });
     
-    [self tealiumRemoteCommandResponseRequestsSend:response];
     
 }
 
