@@ -97,9 +97,9 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
 
 - (void) addDataSources:(NSDictionary *)additionalDataSources {
 
-        [self.dataSources addEntriesFromDictionary:additionalDataSources];
+    [self.dataSources addEntriesFromDictionary:additionalDataSources];
     
-        [self archiveWithStorageKey:self.instanceID];
+    [self archiveWithStorageKey:self.instanceID];
     
 }
 
@@ -137,6 +137,8 @@ static NSString * const TEALDatasourceStoreBaseQueueName = @"com.tealium.datasou
 - (void) archiveWithStorageKey:(NSString *)key {
     
     __block NSDictionary *dataCopy = nil;
+    
+#warning Add protection?
     
     dispatch_barrier_sync(self.queue, ^{
         dataCopy = [self.dataSources copy];

@@ -23,5 +23,5 @@
 - (NSString * _Nullable) dispatchURLStringCopy;
 
 - (NSURLRequest * _Nullable) requestForDispatch:(TEALDispatch * _Nonnull) dispatch
-                                error:(NSError * __autoreleasing *)error;
+                                error:(NSError * _Nullable * _Nullable)error;
 @end

@@ -71,6 +71,12 @@
                   Identifier = "Tealium_CollectConfigurationTests/testTrackBatchEvents">
                </Test>
                <Test
+                  Identifier = "Tealium_CollectPublicAPITests/testFetchVisitorProfileWithCompletionAndCachedVisitorProfile">
+               </Test>
+               <Test
+                  Identifier = "Tealium_TagManagementPublicAPITests/testRemoveCommandBlockFromRemoteCommandManager">
+               </Test>
+               <Test
                   Identifier = "__x_FrameworkUITests">
                </Test>
             </SkippedTests>

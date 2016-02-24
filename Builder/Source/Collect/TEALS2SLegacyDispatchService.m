@@ -119,7 +119,7 @@
 }
 
 - (NSURLRequest *) requestForDispatch:(TEALDispatch *) dispatch
-                                error:(NSError *__autoreleasing *)error {
+                                error:(NSError **)error {
     
     NSString *originURLString = self.dispatchURLString;
     

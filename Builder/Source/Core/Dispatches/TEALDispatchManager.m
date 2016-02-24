@@ -96,7 +96,8 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     // Resize to match capacity
     NSInteger diff = queue.count - self.privateQueueCapacity;
     
-    if (diff > 0) {
+    if (diff > 0 &&
+        diff <= queue.count) {
         
         NSRange range;
         range.location = 0;
@@ -138,13 +139,28 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     
 }
 
-- (void) updateQueuedCapacity:(NSUInteger)capacity {
+- (NSUInteger) limitToMaxCapacity:(NSUInteger)capacityToUse {
     
-    if (capacity >= NSIntegerMax){
-        capacity = NSIntegerMax;
+    NSUInteger maxCapacity = NSIntegerMax / 2;
+    
+    if (capacityToUse >=  maxCapacity){
+        capacityToUse = maxCapacity;
     }
     
-    self.privateQueueCapacity = capacity;
+    return capacityToUse;
+}
+
+- (void) updateQueuedCapacity:(NSUInteger)capacity {
+    
+    NSUInteger queueCapacity = [self limitToMaxCapacity:capacity];
+    
+    self.privateQueueCapacity = queueCapacity;
+    
+}
+
+- (NSUInteger) queueCapacity {
+    
+    return self.privateQueueCapacity;
     
 }
 
@@ -254,6 +270,14 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (void) saveDispatches:(NSArray *)dispatches {
     
+    [self saveDispatches:dispatches
+              completion:nil];
+    
+}
+
+- (void) saveDispatches:(NSArray *)dispatches
+             completion:(void(^)(BOOL success, NSError * _Nullable error))completion {
+    
     NSMutableArray *dataObjects = [NSMutableArray arrayWithCapacity:dispatches.count];
     
     for (id<NSCoding> obj in dispatches) {
@@ -267,6 +291,10 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
                                                   forKey:Tealium_DispatchQueueKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
+        if (completion){
+            completion(true, nil);
+        }
+        
     });
     
 }
@@ -275,7 +303,9 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     
     NSMutableArray *archivedDispatches = [[NSUserDefaults standardUserDefaults] objectForKey:Tealium_DispatchQueueKey];
 
-    NSMutableArray *loadedDispatches = [[NSMutableArray alloc] initWithCapacity:self.privateQueueCapacity];
+    NSUInteger initCapacity = [self limitToMaxCapacity:[archivedDispatches count]];
+    
+    NSMutableArray *loadedDispatches = [[NSMutableArray alloc] initWithCapacity:initCapacity];
 
     for (id obj in archivedDispatches) {
 

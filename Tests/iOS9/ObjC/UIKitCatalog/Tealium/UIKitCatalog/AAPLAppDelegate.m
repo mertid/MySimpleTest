@@ -24,15 +24,15 @@
 
     [TealiumHelper startTracking];
         
-    [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
+//    [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
     
     [TealiumHelper enableRemoteCommandBlock];
 
-//    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
-//        
-//        NSLog(@"2nd Fetch request: %s profile:%@ error:%@", __FUNCTION__, profile, error);
-//        
-//    }];
+    [[Tealium instanceForKey:@"1"] fetchVisitorProfileWithCompletion:^(TEALVisitorProfile * _Nullable profile, NSError * _Nullable error) {
+        
+        NSLog(@"Fetch request: %s profile:%@ error:%@", __FUNCTION__, profile, error);
+        
+    }];
     
     return YES;
 }
@@ -41,7 +41,7 @@
     
     [TealiumHelper trackEventWithTitle:@"sleep" dataSources:nil];
     
-    [TealiumHelper incrementLifetimeValueForKey:@"sleeps" amount:1];
+//    [TealiumHelper incrementLifetimeValueForKey:@"sleeps" amount:1];
 
 }
 
@@ -49,7 +49,7 @@
 
     [TealiumHelper trackEventWithTitle:@"wake" dataSources:nil];
     
-    [TealiumHelper incrementLifetimeValueForKey:@"wakes" amount:1];
+//    [TealiumHelper incrementLifetimeValueForKey:@"wakes" amount:1];
 
 }
 #pragma mark - UISplitViewControllerDelegate

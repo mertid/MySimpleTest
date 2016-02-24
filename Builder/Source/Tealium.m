@@ -15,7 +15,6 @@
 #import "TEALDispatchService.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALDataSources.h"
-#import "NSDictionary+Tealium.h"
 #import "TEALError.h"
 #import "TEALOperationManager.h"
 #import "TEALLogger.h"
@@ -101,6 +100,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [instance.settings purgeAllArchives];
     
+    [instance.dataSources purgePersistentDataSources];
+    
     NSMutableDictionary *mDict = [NSMutableDictionary dictionaryWithDictionary:staticAllInstances];
     
     [mDict removeObjectForKey:key];
@@ -128,7 +129,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
 }
 
-- (void) trackEventWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+- (void) trackEventWithTitle:(NSString *)title
+                 dataSources:(NSDictionary *)clientDataSources {
     
         [self trackDispatchOfType:TEALDispatchTypeEvent
                             title:title
@@ -138,7 +140,8 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
-- (void) trackViewWithTitle:(NSString *)title dataSources:(NSDictionary *)clientDataSources {
+- (void) trackViewWithTitle:(NSString *)title
+                dataSources:(NSDictionary *)clientDataSources {
     
         [self trackDispatchOfType:TEALDispatchTypeView
                             title:title
@@ -184,6 +187,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     // Data that should be captured on the main thread or nearest to time of call
     __block NSDictionary *captureData = [self captureTimeDataSourcesForType:type
                                                               title:title];
+    
     __block NSDictionary *clientData = [clientDataSources copy];
     
     __weak Tealium *weakSelf = self;
@@ -198,11 +202,16 @@ __strong static NSDictionary *staticAllInstances = nil;
          retrieved data.
          */
         NSDictionary *backgroundData = [self.dataSources backgroundSafeDataSources];
-        NSDictionary *payload = [NSDictionary teal_compositeDictionaries:@[
-                                                                           captureData,
-                                                                           backgroundData,
-                                                                           clientData? clientData : @{}
-                                                                           ]];
+        
+        if (!backgroundData){
+            [weakSelf.logger logDev:@"TrackDispatchOfType:title:dataSources:completion: backgroundData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+        }
+        
+        NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+        
+        [payload addEntriesFromDictionary:captureData];
+        [payload addEntriesFromDictionary:backgroundData];
+        [payload addEntriesFromDictionary:clientData];
         
         TEALDispatch *dispatch = [TEALDispatch dispatchForType:type withPayload:payload];
         
@@ -222,11 +231,26 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSDictionary *mainThreadData = [self.dataSources mainThreadDataSources];
     
-    NSDictionary *compositeDataSources = [NSDictionary teal_compositeDictionaries:@[
-                                                                                    dispatchData,
-                                                                                    connectionData,
-                                                                                    mainThreadData,
-                                                                                    ]];
+    if (!dispatchData){
+        [self.logger logDev:@"CaptureTimeDataSources: dispatchData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+    }
+    
+    if (!connectionData){
+        [self.logger logDev:@"CaptureTimeDataSources: connectionData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+    }
+    
+    if (!mainThreadData){
+        [self.logger logDev:@"CaptureTimeDataSources: mainThreadData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+    }
+    
+    NSMutableDictionary *compositeDataSources = [NSMutableDictionary dictionary];
+    
+    [compositeDataSources addEntriesFromDictionary:dispatchData];
+    
+    [compositeDataSources addEntriesFromDictionary:connectionData];
+    
+    [compositeDataSources addEntriesFromDictionary:mainThreadData];
+    
     return compositeDataSources;
     
 }
@@ -283,7 +307,9 @@ __strong static NSDictionary *staticAllInstances = nil;
 }
 
 - (NSDictionary *) persistentDataSourcesCopy {
+    
     return [[self.dataSources persistentDataSources] copy];
+    
 }
 
 - (void) addPersistentDataSources:(NSDictionary *)additionalDataSources {

@@ -9,6 +9,7 @@
 #import "TealiumDelegate.h"
 #import "Tealium.h"
 #import "Tealium+Collect.h"
+#import "Tealium+Lifecycle.h"
 #import "TEALDispatch.h"
 
 #import "TEALConfiguration+Collect.h"

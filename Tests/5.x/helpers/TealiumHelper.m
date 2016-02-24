@@ -45,8 +45,8 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
 
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
-                                                                       environment:@"qa"];
+                                                                           profile:@"batching"
+                                                                       environment:@"dev"];
     
 //    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
 //                                                                           profile:@"mobile"
@@ -76,6 +76,8 @@ static TealiumHelper * _sharedInstance;
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
+    [tealiumInstance1 setLifecycleAutotrackingIsEnabled:TRUE];
+
     [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
                                                @"afterDelegateSet":@"NO"}];
     
@@ -88,7 +90,7 @@ static TealiumHelper * _sharedInstance;
     [tealiumInstance1 addPersistentDataSources:@{@"persistentKey":@"added"}];
     
     
-    [tealiumInstance1 trackEventWithTitle:@"launch" dataSources:@{@"addWithLaunchCall":@"someValue"}];
+//    [tealiumInstance1 trackEventWithTitle:@"launch" dataSources:@{@"addWithLaunchCall":@"someValue"}];
     
     [tealiumInstance1 removePersistentDataSourcesForKeys:@[@"persistentKey"]];
     
@@ -148,21 +150,21 @@ static TealiumHelper * _sharedInstance;
 
 #pragma mark - EXAMPLE METHODS USING OTHER TEALIUM APIS
 
-+ (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number{
-    
-    if ([self isTesting]){ return; }
-
-    NSDictionary *persistentData = [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] persistentDataSourcesCopy];
-    
-    int oldNumber = [persistentData[key] intValue];
-
-    int newNumber = oldNumber + number;
-    
-    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addPersistentDataSources:@{key:@(newNumber)}];
-    
-    NSLog(@"%s Current lifetime value for %@ is: %i", __FUNCTION__, key, newNumber);
-    
-}
+//+ (void) incrementLifetimeValueForKey:(NSString *)key amount:(int)number{
+//    
+//    if ([self isTesting]){ return; }
+//
+//    NSDictionary *persistentData = [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] persistentDataSourcesCopy];
+//    
+//    int oldNumber = [persistentData[key] intValue];
+//
+//    int newNumber = oldNumber + number;
+//    
+//    [[Tealium instanceForKey:TEALIUM_INSTANCE_ID] addPersistentDataSources:@{key:@(newNumber)}];
+//    
+//    NSLog(@"%s Current lifetime value for %@ is: %i", __FUNCTION__, key, newNumber);
+//    
+//}
 
 + (void) enableRemoteCommandBlock {
 

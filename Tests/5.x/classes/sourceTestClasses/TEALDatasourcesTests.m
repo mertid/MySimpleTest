@@ -58,6 +58,36 @@
     XCTAssertTrue([self acceptableUUID:uuid], @"Incorrect UUID format found: %@.", uuid);
 }
 
+- (void) testAddAndPurgePersistentDataSources {
+    
+    NSDictionary *dataSources = @{
+                                  @"testKey":@"testValue"
+                                  };
+
+    [self.dataSources addPersistentDataSources:dataSources];
+    
+    NSDictionary *retrieved = [self.dataSources persistentDataSources];
+    
+    // Checking just for the keys added
+    for (NSString *key in [dataSources allKeys]) {
+     
+        NSString *dataSourceValue = dataSources[key];
+        NSString *retrievedValue = retrieved[key];
+        
+        XCTAssertTrue([dataSourceValue isEqualToString:retrievedValue], @"Mismatch for key: %@, retrieved value: %@ expected value: %@", key, retrievedValue, dataSourceValue);
+        
+    }
+    
+    [self.dataSources purgePersistentDataSources];
+    
+    NSDictionary *purgedDataSources = [self.dataSources persistentDataSources];
+    
+    // UUID is always regenerated
+    XCTAssertTrue([[purgedDataSources allKeys] count] == 1, @"Non empy persistent data found: %@", purgedDataSources);
+    XCTAssertTrue(purgedDataSources[@"uuid"], @"Unexpected persistent data contente: %@", purgedDataSources);
+
+}
+
 #pragma mark - HELPERS
 
 - (BOOL) acceptableUUID:(NSString *)uuid {

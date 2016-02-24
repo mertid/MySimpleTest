@@ -10,7 +10,6 @@
 #import "TEALPublishSettings.h"
 #import "NSString+Tealium.h"
 #import "TEALPublishSettingsStore.h"
-#import "TEALSystemHelpers.h"
 #import "TEALError.h"
 #import "TEALPublishSettingsConstants.h"
 #import "TEALVersion.h"
@@ -31,7 +30,8 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
 
 #pragma mark - PUBLIC CLASS
 
-+ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data error:(NSError  * __autoreleasing *)error {
++ (NSDictionary *) mobilePublishSettingsFromJSONFile:(NSData *)data
+                                               error:(NSError **)error {
     
     if (!data){
         *error = [TEALError errorWithCode:TEALErrorCodeMalformed
@@ -57,7 +57,8 @@ NSString * const TEALPublishSettingKeyModuleDescriptionData = @"module_descripti
     
 }
 
-+ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data error:(NSError * __autoreleasing *)error {
++ (NSDictionary *) mobilePublishSettingsFromHTMLData:(NSData *)data
+                                               error:(NSError **)error {
     
     if (!data){
         *error = [TEALError errorWithCode:TEALErrorCodeMalformed

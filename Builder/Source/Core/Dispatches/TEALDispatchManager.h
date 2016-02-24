@@ -18,7 +18,7 @@
 // Internal
 - (BOOL) dispatchManagerShouldDestroyDispatch:(TEALDispatch * _Nonnull)dispatch;
 
-- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing *)error;
+- (BOOL) dispatchManagerShouldDispatch:(NSError * _Nullable * _Nullable)error;
 
 - (BOOL) dispatchManagerShouldQueueDispatch:(TEALDispatch * _Nonnull)dispatch;
 
@@ -56,6 +56,13 @@
 - (void) runQueuedDispatches;
 
 - (void) updateQueuedCapacity:(NSUInteger)capacity;
+
+- (void) saveDispatches:(NSArray * _Nonnull)dispatches
+             completion:(void(^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+
+- (NSMutableArray * _Nonnull) savedDispatches;
+
+- (NSUInteger) queueCapacity;
 
 - (NSArray * _Nonnull) queuedDispatches;
 

@@ -266,7 +266,6 @@
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
     
     XCTestExpectation *expectationAdd = [self expectationWithDescription:@"remoteCommandAdded"];
-    XCTestExpectation *expectationRemoval = [self expectationWithDescription:@"remoteCommandRemove"];
     
     __block TEALRemoteCommandResponse *weakResponse = nil;
     __block TEALTagDispatchService *weakService = [self.library newTagDispatchService];
@@ -278,8 +277,6 @@
     
     NSString *commandID = @"test";
     
-    __block typeof(self) __weak weakSelf = self;
-
     [self.library addRemoteCommandID:commandID
                          description:@""
                          targetQueue:dispatch_get_main_queue()
@@ -296,26 +293,33 @@
            
            [expectationAdd fulfill];
            
-           
-           [weakSelf.library removeRemoteCommandID:commandID
-                                    completion:^(BOOL success, NSError * _Nullable error) {
-                                        
-                                        didRemove = success;
-                                        weakRemovalError = error;
-                                        
-                                        [expectationRemoval fulfill];
-                                        
-                                    }];
-           
        }];
-    
-
-
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     TEALRemoteCommand *command = [self.library.remoteCommandManager commands][commandID];
+
+    XCTAssertTrue(command, @"Added command missing: %@", [self.library.remoteCommandManager commands]);
     
+    __block BOOL removeFinished = NO;
+    
+    [self.library removeRemoteCommandID:commandID
+                                 completion:^(BOOL success, NSError * _Nullable error) {
+                                     
+                                     didRemove = success;
+                                     weakRemovalError = error;
+                                     
+                                     removeFinished = YES;
+                                     
+                                 }];
+    
+    
+    //+ (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs;
+
+    [TEALTestHelper waitFor:&removeFinished timeout:1.0];
+    
+    command = [self.library.remoteCommandManager commands][commandID];
+
     XCTAssertTrue(!command, @"Command was not removed: %@", command);
     
     XCTAssertTrue(!weakResponse, @"Unexpected response detected: %@", weakResponse);

@@ -36,4 +36,4 @@ Possibly some bug with just XCode 7
 
 
 ---
-Copyright (C) 2012-2015, Tealium Inc.
+Copyright (C) 2012-2016, Tealium Inc.

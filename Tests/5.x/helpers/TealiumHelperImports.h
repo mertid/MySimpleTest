@@ -7,10 +7,11 @@
 //
 
 
-#ifdef TEAL_TEST_TARGET_SOURCE
+#ifdef TEAL__SOURCE
 
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
+#import "Tealium+Lifecycle.h"
 #import "Tealium+WatchKit.h"
 #import "TealiumDelegate.h"
 #import "TEALConfiguration.h"
@@ -23,7 +24,7 @@
 
 #endif
 
-#ifdef TEAL_TEST_TARGET_FRAMEWORK
+#ifdef TEAL_FRAMEWORK
 
 @import TealiumIOS;
 

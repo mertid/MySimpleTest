@@ -26,26 +26,14 @@ class TealiumHelper : NSObject {
     
     class func startTracking() {
         
-        guard let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev") else {
-            
-            print("Problem with Tealium Config Init.")
-            
-            return
-            
-        }
+        let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev")
         
-        guard let tealium = Tealium.newInstanceForKey(tealiumInstanceID, configuration: config) else {
-            
-            print("Problem with Tealium Init.")
-            
-            // Any additional failure response here
-            
-            return
-        }
+        let tealium = Tealium.newInstanceForKey(tealiumInstanceID, configuration: config)
         
         tealium.setDelegate(sharedInstance())
         
-        TealiumHelper.incrementLifetimeValue(tealium, key: "launches", value: 1)
+        tealium.setLifecycleAutotrackingIsEnabled(true)
+        
         
     }
     

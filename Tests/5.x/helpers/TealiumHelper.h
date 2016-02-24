@@ -54,7 +54,7 @@
  *  @param key An NSString identifier for the value to increment.
  *  @param number Int value to increment last saved value by.
  */
-+ (void) incrementLifetimeValueForKey:(NSString * _Nonnull)key amount:(int)number;
+//+ (void) incrementLifetimeValueForKey:(NSString * _Nonnull)key amount:(int)number;
 
 /**
  *  Turn on a remote command block that can be triggered when certain conditions are met - configured in the TIQ Dashboard.

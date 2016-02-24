@@ -72,8 +72,6 @@
 		711CEE981C692040001E2161 /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDC81C692040001E2161 /* TEALSettings+Collect.m */; };
 		711CEE991C692040001E2161 /* NSArray+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCB1C692040001E2161 /* NSArray+Tealium.h */; };
 		711CEE9A1C692040001E2161 /* NSArray+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDCC1C692040001E2161 /* NSArray+Tealium.m */; };
-		711CEE9B1C692040001E2161 /* NSDictionary+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCD1C692040001E2161 /* NSDictionary+Tealium.h */; };
-		711CEE9C1C692040001E2161 /* NSDictionary+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDCE1C692040001E2161 /* NSDictionary+Tealium.m */; };
 		711CEE9D1C692040001E2161 /* NSObject+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCF1C692040001E2161 /* NSObject+Tealium.h */; };
 		711CEE9E1C692040001E2161 /* NSObject+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDD01C692040001E2161 /* NSObject+Tealium.m */; };
 		711CEE9F1C692040001E2161 /* NSString+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDD11C692040001E2161 /* NSString+Tealium.h */; };
@@ -135,8 +133,6 @@
 		711CEED71C692040001E2161 /* TEALNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE101C692040001E2161 /* TEALNotifications.m */; };
 		711CEED81C692040001E2161 /* TEALOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE111C692040001E2161 /* TEALOperationManager.h */; };
 		711CEED91C692040001E2161 /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE121C692040001E2161 /* TEALOperationManager.m */; };
-		711CEEDA1C692040001E2161 /* TEALSystemHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE131C692040001E2161 /* TEALSystemHelpers.h */; };
-		711CEEDB1C692040001E2161 /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE141C692040001E2161 /* TEALSystemHelpers.m */; };
 		711CEEDC1C692040001E2161 /* TEALSystemProtocols.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE151C692040001E2161 /* TEALSystemProtocols.h */; };
 		711CEEDE1C692040001E2161 /* Tealium+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE171C692040001E2161 /* Tealium+PrivateHeader.h */; };
 		711CEEDF1C692040001E2161 /* TealiumDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE181C692040001E2161 /* TealiumDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -172,7 +168,6 @@
 		711CEF1B1C6921A2001E2161 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 711CEF191C6921A2001E2161 /* Info.plist */; };
 		711CEF1C1C6921A2001E2161 /* TealiumIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEF1A1C6921A2001E2161 /* TealiumIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		716F2F8F1C6BCEF600A7F947 /* TEALVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 716F2F8E1C6BCEF600A7F947 /* TEALVersion.h */; };
-		716F2F991C6BE04800A7F947 /* TealiumTVOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 716F2F981C6BE04800A7F947 /* TealiumTVOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		716F2FA01C6BE04900A7F947 /* TealiumTVOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 716F2F961C6BE04800A7F947 /* TealiumTVOS.framework */; };
 		716F2FA51C6BE04900A7F947 /* TealiumTVOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716F2FA41C6BE04900A7F947 /* TealiumTVOSTests.m */; };
 		716F2FAE1C6BE5D500A7F947 /* TEALVisitorProfile+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDA51C692040001E2161 /* TEALVisitorProfile+PrivateHeader.h */; };
@@ -213,8 +208,6 @@
 		716F2FD11C6BE5D500A7F947 /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDC81C692040001E2161 /* TEALSettings+Collect.m */; };
 		716F2FD21C6BE5E700A7F947 /* NSArray+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCB1C692040001E2161 /* NSArray+Tealium.h */; };
 		716F2FD31C6BE5E700A7F947 /* NSArray+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDCC1C692040001E2161 /* NSArray+Tealium.m */; };
-		716F2FD41C6BE5E700A7F947 /* NSDictionary+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCD1C692040001E2161 /* NSDictionary+Tealium.h */; };
-		716F2FD51C6BE5E700A7F947 /* NSDictionary+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDCE1C692040001E2161 /* NSDictionary+Tealium.m */; };
 		716F2FD61C6BE5E700A7F947 /* NSObject+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDCF1C692040001E2161 /* NSObject+Tealium.h */; };
 		716F2FD71C6BE5E700A7F947 /* NSObject+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEDD01C692040001E2161 /* NSObject+Tealium.m */; };
 		716F2FD81C6BE5E700A7F947 /* NSString+Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEDD11C692040001E2161 /* NSString+Tealium.h */; };
@@ -276,14 +269,13 @@
 		716F30101C6BE60500A7F947 /* TEALNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE101C692040001E2161 /* TEALNotifications.m */; };
 		716F30111C6BE60500A7F947 /* TEALOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE111C692040001E2161 /* TEALOperationManager.h */; };
 		716F30121C6BE60500A7F947 /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE121C692040001E2161 /* TEALOperationManager.m */; };
-		716F30131C6BE60500A7F947 /* TEALSystemHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE131C692040001E2161 /* TEALSystemHelpers.h */; };
-		716F30141C6BE60500A7F947 /* TEALSystemHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE141C692040001E2161 /* TEALSystemHelpers.m */; };
 		716F30151C6BE60500A7F947 /* TEALSystemProtocols.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE151C692040001E2161 /* TEALSystemProtocols.h */; };
 		716F30161C6BE60500A7F947 /* TEALVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 716F2F8E1C6BCEF600A7F947 /* TEALVersion.h */; };
 		716F30171C6BE60500A7F947 /* Tealium+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE171C692040001E2161 /* Tealium+PrivateHeader.h */; };
 		716F30181C6BE60500A7F947 /* TealiumDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE181C692040001E2161 /* TealiumDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		716F30191C6BE60A00A7F947 /* Tealium.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEE501C692040001E2161 /* Tealium.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		716F301A1C6BE60A00A7F947 /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 711CEE511C692040001E2161 /* Tealium.m */; };
+		71E21C141C8F85C70019DF45 /* TealiumTVOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEF261C6968B1001E2161 /* TealiumTVOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -348,8 +340,6 @@
 		711CEDC81C692040001E2161 /* TEALSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALSettings+Collect.m"; sourceTree = "<group>"; };
 		711CEDCB1C692040001E2161 /* NSArray+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Tealium.h"; sourceTree = "<group>"; };
 		711CEDCC1C692040001E2161 /* NSArray+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Tealium.m"; sourceTree = "<group>"; };
-		711CEDCD1C692040001E2161 /* NSDictionary+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Tealium.h"; sourceTree = "<group>"; };
-		711CEDCE1C692040001E2161 /* NSDictionary+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Tealium.m"; sourceTree = "<group>"; };
 		711CEDCF1C692040001E2161 /* NSObject+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tealium.h"; sourceTree = "<group>"; };
 		711CEDD01C692040001E2161 /* NSObject+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Tealium.m"; sourceTree = "<group>"; };
 		711CEDD11C692040001E2161 /* NSString+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Tealium.h"; sourceTree = "<group>"; };
@@ -411,8 +401,6 @@
 		711CEE101C692040001E2161 /* TEALNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNotifications.m; sourceTree = "<group>"; };
 		711CEE111C692040001E2161 /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
 		711CEE121C692040001E2161 /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
-		711CEE131C692040001E2161 /* TEALSystemHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemHelpers.h; sourceTree = "<group>"; };
-		711CEE141C692040001E2161 /* TEALSystemHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSystemHelpers.m; sourceTree = "<group>"; };
 		711CEE151C692040001E2161 /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
 		711CEE171C692040001E2161 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
 		711CEE181C692040001E2161 /* TealiumDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegate.h; sourceTree = "<group>"; };
@@ -453,8 +441,6 @@
 		711CEF341C6968B1001E2161 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		716F2F8E1C6BCEF600A7F947 /* TEALVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVersion.h; sourceTree = "<group>"; };
 		716F2F961C6BE04800A7F947 /* TealiumTVOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		716F2F981C6BE04800A7F947 /* TealiumTVOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumTVOS.h; sourceTree = "<group>"; };
-		716F2F9A1C6BE04800A7F947 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		716F2F9F1C6BE04900A7F947 /* TealiumTVOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumTVOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		716F2FA41C6BE04900A7F947 /* TealiumTVOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumTVOSTests.m; sourceTree = "<group>"; };
 		716F2FA61C6BE04900A7F947 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -503,7 +489,6 @@
 				711CED741C69200D001E2161 /* FrameworkBuilderTests */,
 				711CEF251C6968B1001E2161 /* TealiumTVOS */,
 				711CEF311C6968B1001E2161 /* TealiumTVOSTests */,
-				716F2F971C6BE04800A7F947 /* TealiumTVOS */,
 				716F2FA31C6BE04900A7F947 /* TealiumTVOSTests */,
 				711CED671C69200D001E2161 /* Products */,
 			);
@@ -544,9 +529,9 @@
 				711CEDA21C692040001E2161 /* Collect */,
 				711CEDC91C692040001E2161 /* Core */,
 				711CEE371C692040001E2161 /* TagManagement */,
+				711CEE521C692040001E2161 /* WatchKit */,
 				711CEE501C692040001E2161 /* Tealium.h */,
 				711CEE511C692040001E2161 /* Tealium.m */,
-				711CEE521C692040001E2161 /* WatchKit */,
 			);
 			name = Source;
 			path = ../Builder/Source;
@@ -632,8 +617,6 @@
 			children = (
 				711CEDCB1C692040001E2161 /* NSArray+Tealium.h */,
 				711CEDCC1C692040001E2161 /* NSArray+Tealium.m */,
-				711CEDCD1C692040001E2161 /* NSDictionary+Tealium.h */,
-				711CEDCE1C692040001E2161 /* NSDictionary+Tealium.m */,
 				711CEDCF1C692040001E2161 /* NSObject+Tealium.h */,
 				711CEDD01C692040001E2161 /* NSObject+Tealium.m */,
 				711CEDD11C692040001E2161 /* NSString+Tealium.h */,
@@ -745,8 +728,6 @@
 				711CEE101C692040001E2161 /* TEALNotifications.m */,
 				711CEE111C692040001E2161 /* TEALOperationManager.h */,
 				711CEE121C692040001E2161 /* TEALOperationManager.m */,
-				711CEE131C692040001E2161 /* TEALSystemHelpers.h */,
-				711CEE141C692040001E2161 /* TEALSystemHelpers.m */,
 				711CEE151C692040001E2161 /* TEALSystemProtocols.h */,
 				716F2F8E1C6BCEF600A7F947 /* TEALVersion.h */,
 			);
@@ -829,15 +810,6 @@
 			path = TealiumTVOSTests;
 			sourceTree = "<group>";
 		};
-		716F2F971C6BE04800A7F947 /* TealiumTVOS */ = {
-			isa = PBXGroup;
-			children = (
-				716F2F981C6BE04800A7F947 /* TealiumTVOS.h */,
-				716F2F9A1C6BE04800A7F947 /* Info.plist */,
-			);
-			path = TealiumTVOS;
-			sourceTree = "<group>";
-		};
 		716F2FA31C6BE04900A7F947 /* TealiumTVOSTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -870,7 +842,6 @@
 				711CEE7E1C692040001E2161 /* TEALVisitorProfileCurrentVisit.h in Headers */,
 				711CEECF1C692040001E2161 /* TEALDelegateManager.h in Headers */,
 				711CEEA11C692040001E2161 /* TEALApplicationDataSources.h in Headers */,
-				711CEEDA1C692040001E2161 /* TEALSystemHelpers.h in Headers */,
 				711CEF0C1C692040001E2161 /* TEALPublishSettings+TagManagement.h in Headers */,
 				711CEF161C692040001E2161 /* TEALWKConstants.h in Headers */,
 				711CEEB01C692040001E2161 /* TEALDispatch+PrivateHeader.h in Headers */,
@@ -909,7 +880,6 @@
 				711CEE7C1C692040001E2161 /* TEALVisitorProfileBaseAttribute.h in Headers */,
 				711CEEBF1C692040001E2161 /* TEALConfiguration+PrivateHeader.h in Headers */,
 				711CEEB31C692040001E2161 /* TEALDispatchConstants.h in Headers */,
-				711CEE9B1C692040001E2161 /* NSDictionary+Tealium.h in Headers */,
 				711CEED81C692040001E2161 /* TEALOperationManager.h in Headers */,
 				711CEECE1C692040001E2161 /* TEALBlocks.h in Headers */,
 				711CEEFF1C692040001E2161 /* TEALRemoteCommandConstants.h in Headers */,
@@ -940,13 +910,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				716F2FC81C6BE5D500A7F947 /* TEALConfiguration+Collect.h in Headers */,
-				716F30131C6BE60500A7F947 /* TEALSystemHelpers.h in Headers */,
 				716F2FE01C6BE5EB00A7F947 /* TEALDataSourceConstants.h in Headers */,
 				716F2FF91C6BE5FC00A7F947 /* TEALConfiguration.h in Headers */,
 				716F30181C6BE60500A7F947 /* TealiumDelegate.h in Headers */,
 				716F2FEA1C6BE5F200A7F947 /* TEALDispatch.h in Headers */,
 				716F2FCA1C6BE5D500A7F947 /* Tealium+Collect.h in Headers */,
 				716F2FB71C6BE5D500A7F947 /* TEALVisitorProfileCurrentVisit.h in Headers */,
+				71E21C141C8F85C70019DF45 /* TealiumTVOS.h in Headers */,
 				716F2FAF1C6BE5D500A7F947 /* TEALVisitorProfile.h in Headers */,
 				716F30191C6BE60A00A7F947 /* Tealium.h in Headers */,
 				716F300F1C6BE60500A7F947 /* TEALNotifications.h in Headers */,
@@ -984,8 +954,6 @@
 				716F30081C6BE60500A7F947 /* TEALDelegateManager.h in Headers */,
 				716F2FB31C6BE5D500A7F947 /* TEALVisitorProfileBadgeAttribute.h in Headers */,
 				716F2FE51C6BE5EB00A7F947 /* TEALDataSourceStore.h in Headers */,
-				716F2FD41C6BE5E700A7F947 /* NSDictionary+Tealium.h in Headers */,
-				716F2F991C6BE04800A7F947 /* TealiumTVOS.h in Headers */,
 				716F2FFE1C6BE5FC00A7F947 /* TEALPublishSettingsConstants.h in Headers */,
 				716F2FD01C6BE5D500A7F947 /* TEALSettings+Collect.h in Headers */,
 				716F2FC21C6BE5D500A7F947 /* TEALVisitorProfileHelpers.h in Headers */,
@@ -1177,7 +1145,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform iOS\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\ncarthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/iOS\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-ios\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform iOS\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/iOS\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-ios\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		715536D01C6BBD5100154DD5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1190,7 +1158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumIOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"iphoneos\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-ios/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--ignore \"TEALWKConstants.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
+			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumIOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"iphoneos\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-ios/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--ignore \"TEALWKConstants.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
 		};
 		715536D51C6BC3D300154DD5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1203,7 +1171,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumTVOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"appletv\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-tvos/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"WatchKit\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
+			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumTVOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"appletv\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-tvos/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"WatchKit\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
 		};
 		716F2FAD1C6BE05500A7F947 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1216,7 +1184,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\ncarthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1232,7 +1200,6 @@
 				711CEEFE1C692040001E2161 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */,
 				711CEEBE1C692040001E2161 /* TEALURLSessionManager.m in Sources */,
 				711CEEC81C692040001E2161 /* TEALPublishSettingsStore.m in Sources */,
-				711CEE9C1C692040001E2161 /* NSDictionary+Tealium.m in Sources */,
 				711CEF081C692040001E2161 /* TEALConfiguration+TagManagement.m in Sources */,
 				711CEF0F1C692040001E2161 /* TEALSettings+TagManagement.m in Sources */,
 				711CEE8A1C692040001E2161 /* TEALVisitorProfileHelpers.m in Sources */,
@@ -1275,7 +1242,6 @@
 				711CEEC41C692040001E2161 /* TEALPublishSettings.m in Sources */,
 				711CEE7F1C692040001E2161 /* TEALVisitorProfileCurrentVisit.m in Sources */,
 				711CEEAF1C692040001E2161 /* TEALSharedDataSources.m in Sources */,
-				711CEEDB1C692040001E2161 /* TEALSystemHelpers.m in Sources */,
 				711CEF011C692040001E2161 /* TEALRemoteCommandErrors.m in Sources */,
 				711CEEC61C692040001E2161 /* TEALPublishSettingsConstants.m in Sources */,
 				711CEEBA1C692040001E2161 /* TEALReachability.m in Sources */,
@@ -1308,7 +1274,6 @@
 				716F2FDB1C6BE5EB00A7F947 /* TEALApplicationDataSources.m in Sources */,
 				716F30101C6BE60500A7F947 /* TEALNotifications.m in Sources */,
 				716F2FF51C6BE5F600A7F947 /* TEALReachabilityManager.m in Sources */,
-				716F30141C6BE60500A7F947 /* TEALSystemHelpers.m in Sources */,
 				716F2FF31C6BE5F600A7F947 /* TEALReachability.m in Sources */,
 				716F30091C6BE60500A7F947 /* TEALDelegateManager.m in Sources */,
 				716F2FC51C6BE5D500A7F947 /* TEALVisitorProfileStore.m in Sources */,
@@ -1345,7 +1310,6 @@
 				716F30121C6BE60500A7F947 /* TEALOperationManager.m in Sources */,
 				716F2FFD1C6BE5FC00A7F947 /* TEALPublishSettings.m in Sources */,
 				716F300B1C6BE60500A7F947 /* TEALError.m in Sources */,
-				716F2FD51C6BE5E700A7F947 /* NSDictionary+Tealium.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1470,7 +1434,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"TEAL_TARGET_IOS=\"5.0.1\"",
+					"TEAL_TARGET_IOS=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = TealiumIOS/Info.plist;
@@ -1494,7 +1458,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"TEAL_TARGET_IOS=\"5.0.1\"",
+					"TEAL_TARGET_IOS=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = TealiumIOS/Info.plist;
@@ -1561,12 +1525,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 5;
+				DYLIB_CURRENT_VERSION = 5.0.2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGETED_DEVICE_FAMILY=4",
-					"TEAL_TARGET_TVOS=\"5.0.1\"",
+					"TEAL_TARGET_TVOS=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = TealiumTVOS/Info.plist;
@@ -1586,12 +1550,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 5;
+				DYLIB_CURRENT_VERSION = 5.0.2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGETED_DEVICE_FAMILY=4",
-					"TEAL_TARGET_TVOS=\"5.0.1\"",
+					"TEAL_TARGET_TVOS=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = TealiumTVOS/Info.plist;
