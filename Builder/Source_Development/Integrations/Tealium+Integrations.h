@@ -10,6 +10,6 @@
 
 @interface Tealium(Integrations)
 
-- (void) integrateWithFramework:(id)framework;
+- (void) integrateWithFramework:(id)framework name:(NSString*)frameworkName;
 
 @end

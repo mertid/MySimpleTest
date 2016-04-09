@@ -28,7 +28,9 @@ NSString * const TEALTraceIDKey = @"com.tealium.traceid";
     NSString *dispatchURL = nil;
     
     if (moduleData){
-        dispatchURL = [moduleData[TEALCollectOverrideDispatchURLKey] copy];
+        if (moduleData[TEALCollectOverrideDispatchURLKey]){
+            dispatchURL = moduleData[TEALCollectOverrideDispatchURLKey];
+        }
     }
     
     return dispatchURL;
