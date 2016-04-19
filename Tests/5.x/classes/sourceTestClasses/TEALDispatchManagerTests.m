@@ -50,6 +50,10 @@
 - (void)tearDown {
     
     self.manager = nil;
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"com.tealium.dispatch_queue"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
@@ -93,6 +97,44 @@
     XCTAssertTrue(addedDispatch, @"Missing dispatch in completion.");
     
     XCTAssertTrue(!addedError, @"Unexpected error: %@", addedError);
+    
+}
+
+- (void) testUpdateQueueCapacityWithNegativeNumber {
+    
+    [self.manager updateQueuedCapacity:-1];
+    
+        NSLog(@"%s queue capacity: %lu", __FUNCTION__, (unsigned long)self.manager.queueCapacity);
+//    XCTAssertTrue(self.manager.queueCapacity 
+}
+
+- (void) testUpdateQueueCapacityWithZero {
+    
+    [self.manager updateQueuedCapacity:0];
+    
+    XCTAssertTrue(self.manager.queueCapacity == 0);
+}
+
+- (void) testUpdateQueueCapacityWithExtrememlyLargeNumber {
+    
+    [self.manager updateQueuedCapacity:NSIntegerMax];
+    
+    XCTAssertTrue(self.manager.queueCapacity == NSIntegerMax / 2);
+}
+
+
+- (void) testAutoAdjustCapacitySizeWithNegativeNumber {
+    
+    self.sampleQueueSizeToTest = 20;
+    self.queueCapacityToTest = -1;
+    
+    NSMutableArray *sampleQueue = [self sampleDispatchQueue];
+    
+    [self.manager updateQueuedCapacity:self.queueCapacityToTest];
+    
+    [self.manager autoAdjustQueueSize:sampleQueue];
+    
+    XCTAssertTrue(sampleQueue.count <= self.queueCapacityToTest, @"End queued dispatches was %lu - not the expected %lu", sampleQueue.count, self.queueCapacityToTest);
     
 }
 
@@ -158,6 +200,40 @@
     return samples;
     
 }
+
+- (void) testLoadEmptyDispatches {
+    
+    NSMutableArray *dispatches = [self.manager savedDispatches];
+    
+    XCTAssertTrue(dispatches.count == 0);
+    
+}
+
+- (void) testSaveAndLoadDispatches {
+    
+    self.sampleQueueSizeToTest = 10;
+    
+    NSMutableArray *sampleQueue = [self sampleDispatchQueue];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"saveDispatches"];
+    
+    [self.manager saveDispatches:sampleQueue
+                      completion:^(BOOL success, NSError *error){
+                      
+                          [expectation fulfill];
+                          
+                      }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+    NSArray *savedDispatches = [self.manager savedDispatches];
+    
+    XCTAssertTrue(savedDispatches.count == sampleQueue.count);
+    
+    // TODO: expand test to check values of objects between arrays.  The equalToArray
+    // method falsely returns false.
+    
+}
 //#pragma mark - DISPATCH MANAGER CONFIGURATION
 //
 //- (NSUInteger) dispatchBatchSize {
@@ -186,7 +262,7 @@
     }
 }
 
-- (BOOL) dispatchManagerShouldDispatch:(NSError * _Nullable __autoreleasing)error {
+- (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing *)error {
     
     return self.shouldDispatch;
     

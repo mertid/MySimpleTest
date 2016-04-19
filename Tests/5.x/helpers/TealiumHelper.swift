@@ -38,7 +38,9 @@ class TealiumHelper : NSObject {
         
         tealium.setDelegate(sharedInstance())
         
-        TealiumHelper.incrementLifetimeValue(tealium, key: "launches", value: 1)
+        
+        
+//        TealiumHelper.incrementLifetimeValue(tealium, key: "launches", value: 1)
         
     }
     

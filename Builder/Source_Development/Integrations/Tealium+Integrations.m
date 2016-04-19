@@ -10,4 +10,23 @@
 
 @implementation Tealium (Integrations)
 
+static NSMapTable *frameworks;
+
+- (void) integrateWithFramework:(id)framework
+                           name:(NSString*)frameworkName{
+    
+    [self integratedFrameworks][frameworkName] = framework;
+    
+}
+
+- (NSMapTable *) integratedFrameworks {
+    
+    if (!frameworks){
+        frameworks = [[NSMapTable alloc] init];
+    }
+    
+    return frameworks;
+    
+}
+
 @end

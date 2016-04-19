@@ -215,16 +215,25 @@
     NSDictionary *params = @{
                              @"alpha": @"alphaValue",
                              @"bravo": @"bravoValue",
-                             @"charlie": @"charlieValue"
                              };
     
     NSURLRequest *request = [self.configuration publishSettingsRequestWithParams:params];
     
     NSString *requestString = request.URL.absoluteString;
     
-    NSString *expectedRequestString = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?alpha=alphaValue&bravo=bravoValue&charlie=charlieValue";
+    // Exact order of params not guaranteed
     
-    XCTAssertTrue([expectedRequestString isEqualToString:requestString], @"Unexpected request string: %@", requestString);
+    NSString *expectedRequestString1 = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?alpha=alphaValue&bravo=bravoValue";
+    NSString *expectedRequestString2 = @"https://tags.tiqcdn.com/utag/tealiummobile/demo/dev/mobile.html?bravo=bravoValue&alpha=alphaValue";
+
+    BOOL pass = NO;
+    
+    if ([expectedRequestString1 isEqualToString:requestString] ||
+        [expectedRequestString2 isEqualToString:requestString]){
+        pass = YES;
+    }
+    
+    XCTAssertTrue(pass, @"Unexpected request string: %@", requestString);
     
     
 }

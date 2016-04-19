@@ -14,7 +14,6 @@
 #import "TEALLogger.h"
 #import "TEALDispatch.h"
 #import "TEALOperationManager.h"
-#import "NSDictionary+Tealium.h"
 
 @import Security;
 

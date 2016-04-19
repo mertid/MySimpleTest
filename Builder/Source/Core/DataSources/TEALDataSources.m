@@ -12,7 +12,6 @@
 #import "TEALApplicationDataSources.h"
 #import "TEALDeviceDataSources.h"
 #import "TEALSharedDataSources.h"
-#import "TEALSystemHelpers.h"
 #import "TEALTimestampDataSources.h"
 #import "TEALDispatch+PrivateHeader.h"
 #import "TEALVersion.h"
@@ -314,6 +313,8 @@ static NSDictionary *staticCompileTimeDataSources;
     NSDictionary *dataSources = [[self instanceStore] allDataSources];
 
 #warning Something redundant here with UUID method
+    
+#warning Move the app version info here
     
     // Add UUID here if not already available
     NSString *uuid = dataSources[TEALDataSourceKey_UUID];

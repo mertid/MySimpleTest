@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 
 #import <Foundation/Foundation.h>
-#import "NSDictionary+Tealium.h"
 #import "TEALTestHelper.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALSettings+PrivateHeader.h"
@@ -226,9 +225,9 @@ NSString * const versionToTest = @"5.0.0";
     TEALDispatch *dispatch = [TEALDispatch dispatchForType:TEALDispatchTypeEvent
                                                withPayload:nil];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchNoTitleNoData"];
-
-    __block BOOL alreadyFulfilled = NO;
+    __block BOOL dispatchComplete = NO;
+    __block NSError *dispatchError = nil;
+    __block NSDictionary *dispatchData = nil;
     
     // Title + testData
     [self.library trackDispatch:dispatch
@@ -239,22 +238,20 @@ NSString * const versionToTest = @"5.0.0";
                              return;
                          }
                          
-                         XCTAssert(!error, @"Error in track call detected:%@", error);
+                         dispatchError = error;
                          
-                         NSDictionary *dispatchData = returnDispatch.payload;
+                         dispatchData = returnDispatch.payload;
                          
-                         XCTAssert(!dispatchData[TEAL_TEST_DATASOURCE_KEY], @"Test value in payload when none should have been.");
-                         
-                         XCTAssert(!dispatchData[TEALDataSourceKey_EventTitle], "Title found when none should have been.");
-                         
-                         if (!alreadyFulfilled){
-                             alreadyFulfilled = YES;
-                             [expectation fulfill];
-                         }
+                         dispatchComplete = YES;
                      }];
  
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
-
+    [TEALTestHelper waitFor:&dispatchComplete timeout:1.0];
+    
+    XCTAssert(!dispatchError, @"Error in track call detected:%@", dispatchError);
+    
+    XCTAssert(!dispatchData[TEAL_TEST_DATASOURCE_KEY], @"Test value in payload when none should have been.");
+    
+    XCTAssert(!dispatchData[TEALDataSourceKey_EventTitle], "Title found when none should have been.");
 }
 
 #pragma mark - TRACK TESTS
@@ -273,7 +270,6 @@ NSString * const versionToTest = @"5.0.0";
     __block NSError *dispatchError = nil;
     __block NSString *incorrectKey = nil;
     __block NSString *incorrectValue = nil;
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"dispatchNoTitleOverwriteDataSources"];
     
     [self.library trackDispatchOfType:TEALDispatchTypeEvent
                                 title:@"blah"
@@ -303,14 +299,12 @@ NSString * const versionToTest = @"5.0.0";
                                }
                                
                                isReady = YES;
-//                               [expectation fulfill];
                                
                            }];
     
     [TEALTestHelper waitFor:&isReady timeout:1.0];
     
     XCTAssertTrue(isReady, @"Dispatch never completed.");
-//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
     XCTAssert(!dispatchError, @"Error in track call detected:%@", dispatchError);
 
@@ -528,11 +522,12 @@ NSString * const versionToTest = @"5.0.0";
     NSDictionary *clientData = [clientDataSources copy];
     
     NSDictionary *backgroundData = [self.library.dataSources backgroundSafeDataSources];
-    NSDictionary *payload = [NSDictionary teal_compositeDictionaries:@[
-                                                                       captureData,
-                                                                       backgroundData,
-                                                                       clientData? clientData : @{}
-                                                                       ]];
+    
+    NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+    
+    if (captureData) [payload addEntriesFromDictionary:captureData];
+    if (backgroundData) [payload addEntriesFromDictionary:backgroundData];
+    if (clientData) [payload addEntriesFromDictionary:clientData];
     
     return payload;
 }
@@ -563,8 +558,6 @@ NSString * const versionToTest = @"5.0.0";
 - (void) testExpectedDispatchDataSourceKeysForViewsNoClientData {
     
     [self useLibraryInstanceWithConfig:[TEALTestHelper liveConfig]];
-
-//    [self startLiveConfigLibrary];
     
     NSDictionary *requiredEventDataSources = [self dataSourcesForCurrentVersion][@"view"];
     

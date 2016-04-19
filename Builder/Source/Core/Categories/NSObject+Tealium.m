@@ -8,7 +8,6 @@
 
 #import "NSObject+Tealium.h"
 #import <objc/runtime.h>
-#import "NSDictionary+Tealium.h"
 
 char const * const TEALKVOObjectCustomData =  "com.tealium.kvo.customdata";
 

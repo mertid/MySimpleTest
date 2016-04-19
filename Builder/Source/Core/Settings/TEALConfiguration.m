@@ -16,11 +16,9 @@
 @property (nonatomic) BOOL autotrackingApplicationInfoEnabled;
 @property (nonatomic) BOOL autotrackingCarrierInfoEnabled;
 @property (nonatomic) BOOL autotrackingTimestampInfoEnabled;
-//@property (nonatomic) NSString *overridePublishSettingsVersion;
 @property (nonatomic) NSString *privateInstanceID;
 @property (nonatomic) NSMutableDictionary *privateModuleData;
 @property (nonatomic) NSMutableDictionary *privateModuleDescriptionData;
-//@property () NSString *privateTraceID;
 @property (nonatomic) dispatch_queue_t queue;
 
 

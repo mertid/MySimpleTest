@@ -171,8 +171,20 @@ char const * const TEALKVOAutotrackCollectProfileStore = "com.tealium.kvo.collec
 }
 
 - (void) enableCollect {
+    
+    NSString *vid = [[self dataSources] visitorIDCopy];
+    
+    if (!vid) {
+        [self.logger logQA:@"Could not enable Collect. Visitor id not yet assigned from dataSources for generating target Collect URL endpoint."];
+        return;
+    }
 
-    NSString *collectDispatchString = [self.settings collectDispatchURLStringForVisitorID:[[self dataSources] visitorIDCopy]];
+    NSString *collectDispatchString = [self.settings collectDispatchURLStringForVisitorID:vid];
+    
+    if (!collectDispatchString){
+        [self.logger logQA:@"Could not enable Collect Dispatch Service. Settings could not generate the dispatch URL string for visitor id:%@", vid];
+        return;
+    }
     
     TEALCollectDispatchService *dispatchService = [[TEALCollectDispatchService alloc] initWithDispatchURLString:collectDispatchString
                                                                                                  sessionManager:self.urlSessionManager];

@@ -245,6 +245,7 @@
     NSDictionary *newCommands = [NSDictionary dictionaryWithDictionary:mDict];
     
     self.commands = newCommands;
+    
     if (completion) completion(YES, nil);
         
 }
