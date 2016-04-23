@@ -842,7 +842,7 @@
 				710E1C3E1C29ABD7007BABF7 /* README.md */,
 			);
 			name = 5.x;
-			path = ../../../../../5.x;
+			path = ../../Tests/5.x;
 			sourceTree = "<group>";
 		};
 		710E1C211C29ABD7007BABF7 /* classes */ = {
@@ -876,6 +876,7 @@
 				7118DC251C5929B100D3B612 /* TagManagement */,
 				717EBB011C90D09900031237 /* Lifecycle */,
 				7118DC401C5929B100D3B612 /* WatchKit */,
+				710E1C1E1C29ABD7007BABF7 /* 5.x */,
 				7118DC3E1C5929B100D3B612 /* Tealium.h */,
 				7118DC3F1C5929B100D3B612 /* Tealium.m */,
 			);
@@ -1265,7 +1266,6 @@
 				71E74B641C9084CD0079A955 /* TealiumHelper.m */,
 				71E74B661C9085310079A955 /* TealiumHelperImports.h */,
 				7118DB681C5929B100D3B612 /* Source */,
-				710E1C1E1C29ABD7007BABF7 /* 5.x */,
 			);
 			name = Tealium;
 			sourceTree = "<group>";

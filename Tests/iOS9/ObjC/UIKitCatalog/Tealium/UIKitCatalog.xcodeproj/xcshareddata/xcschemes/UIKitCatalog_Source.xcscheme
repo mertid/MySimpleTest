@@ -26,9 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "NO"
-      codeCoverageEnabled = "YES"
-      enableAddressSanitizer = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -78,6 +76,24 @@
                </Test>
                <Test
                   Identifier = "__x_FrameworkUITests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "712BAF321C29BED4007767CD"
+               BuildableName = "UIKitCatalogUITests.xctest"
+               BlueprintName = "UIKitCatalogUITests"
+               ReferencedContainer = "container:UIKitCatalog.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "UIKitCatalogUITests/testButtons">
+               </Test>
+               <Test
+                  Identifier = "UIKitCatalogUITests/testMultiLaunch">
                </Test>
             </SkippedTests>
          </TestableReference>

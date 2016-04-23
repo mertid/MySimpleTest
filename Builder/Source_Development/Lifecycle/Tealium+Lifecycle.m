@@ -458,7 +458,7 @@ NSString * const TealiumPriorSecondsAwakeTemp = @"lifecycle_priorsecondsawake_te
 
 - (NSDictionary *) updateLaunchDataSources:(NSDate *)date
                             persistentData:(NSDictionary *)persistentData{
-
+    
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
     [data addEntriesFromDictionary:[self newPersistentLifecycleDataSourcesForWakesAt:date
@@ -468,9 +468,9 @@ NSString * const TealiumPriorSecondsAwakeTemp = @"lifecycle_priorsecondsawake_te
     data[TEALDataSourceKey_LifecycleLastLaunchDate] = [TEALLifecycleDataSources isoStringFromDate:date];
     data[TEALDataSourceKey_LifecycleLastWakeDate] = [TEALLifecycleDataSources isoStringFromDate:date];
     data[TealiumPriorSecondsAwakeTemp] = @"0";
-
+    [data removeObjectForKey:TEALDataSourceKey_LifecycleIsFirstLaunch];
     [self addPersistentDataSources:data];
-
+    [self removePersistentDataSourcesForKeys:@[TEALDataSourceKey_LifecycleIsFirstLaunch]];
     return data;
 }
 

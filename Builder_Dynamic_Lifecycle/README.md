@@ -5,6 +5,8 @@ simulator supported framework.
 
 Scripts output to the Carthage/ subfolder and them oves them to the target tealium-ios and tealium-tvos folders (same heirarchy level as the top level builder folder)
 
+Copies of the dSYMs produced are placed in this repo's Build folder.
+
 # Build Notes
 
 Select any simulator to build the framework from - issues when building from a Generic device scheme.

@@ -45,7 +45,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
 
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
+                                                                           profile:@"ios-tagbridge"
                                                                        environment:@"dev"];
     
 //    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
@@ -146,6 +146,11 @@ static TealiumHelper * _sharedInstance;
     
         NSLog(@"%s: tealium instance: %@", __FUNCTION__, tealium);
     
+}
+
+- (void) tealium:(Tealium *)tealium webViewIsReady:(id)webView {
+    
+        NSLog(@"%s webview was initialized.", __FUNCTION__);
 }
 
 #pragma mark - EXAMPLE METHODS USING OTHER TEALIUM APIS

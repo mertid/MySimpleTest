@@ -302,38 +302,38 @@
     XCTAssertTrue([newMinutesString isEqualToString:@"0.50"], @"Was expecting 30 seconds - minutes remaining returned: %@", newMinutesString);
 }
 
-- (void) testFetchNewRemoteSettings {
-    
-    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                    profile:@"demo"
-                                                                environment:@"dev"];
-    
-    self.configuration.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_options_ON.json";
-    
-    TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
-    
-    [TEALPublishSettings purgeAllArchives];
-    
-    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
-    
-    self.settings.urlSessionManager = sessionManager;
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
-    
-    [self.settings fetchNewRawPublishSettingsWithURLParameters:nil
-                                                    completion:^(BOOL success, NSError * _Nullable error) {
-        
-        NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
-        
-        XCTAssertTrue(!error, @"Error detected: %@", error);
-        
-        [expectation fulfill];
-        
-    }];
-    
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    
-}
+//- (void) testFetchNewRemoteSettings {
+//    
+//    self.configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
+//                                                                    profile:@"demo"
+//                                                                environment:@"dev"];
+//    
+//    self.configuration.overridePublishSettingsURL = @"https://jalakoo.github.io/tealium-ios/test_mps/5/all_options_ON.json";
+//    
+//    TEALURLSessionManager *sessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:nil];
+//    
+//    [TEALPublishSettings purgeAllArchives];
+//    
+//    self.settings = [[TEALSettings alloc] initWithConfiguration:self.configuration];
+//    
+//    self.settings.urlSessionManager = sessionManager;
+//    
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"override"];
+//    
+//    [self.settings fetchNewRawPublishSettingsWithURLParameters:nil
+//                                                    completion:^(BOOL success, NSError * _Nullable error) {
+//        
+//        NSLog(@"%s success:%@, error:%@", __FUNCTION__, success?@"YES":@"NO", error);
+//        
+//        XCTAssertTrue(!error, @"Error detected: %@", error);
+//        
+//        [expectation fulfill];
+//        
+//    }];
+//    
+//    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+//    
+//}
 
 - (void) testFetchNonExistentRemoteSettings {
     

@@ -35,6 +35,7 @@
 - (void) addReservedCommands:(TEALBooleanBlock)successBlock;
 
 - (void) removeAllCommands;
+
 /**
  *  Called by webview if Tag Bridge formatted url request string found.
  *
