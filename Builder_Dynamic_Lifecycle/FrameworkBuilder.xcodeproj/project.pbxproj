@@ -1278,18 +1278,21 @@
 				TargetAttributes = {
 					711CED651C69200D001E2161 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = XC939GDC9P;
 					};
 					711CED6F1C69200D001E2161 = {
 						CreatedOnToolsVersion = 7.2;
 					};
 					713620201C90D49A0082F8FF = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = XC939GDC9P;
 					};
 					713620291C90D49B0082F8FF = {
 						CreatedOnToolsVersion = 7.2;
 					};
 					7136204A1C90D5990082F8FF = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = XC939GDC9P;
 					};
 					713620531C90D5990082F8FF = {
 						CreatedOnToolsVersion = 7.2;
@@ -1302,6 +1305,7 @@
 					};
 					716F2F951C6BE04800A7F947 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = XC939GDC9P;
 					};
 					716F2F9E1C6BE04900A7F947 = {
 						CreatedOnToolsVersion = 7.2;
@@ -1406,7 +1410,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform iOS\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/iOS\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-ios\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform iOS\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/iOS\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\n\n\n# TARGET REPO\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-ios\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\nOUTPUT_DSYM_PATH=\"${SRCROOT}/../Builds/${TARGET_NAME}.framework.dSYM\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\n# CLEAN\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\n# MOVE\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\nmv -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		713620381C90D4C60082F8FF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1419,7 +1423,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"iOS\"\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"iOS\"\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# If fail from XCode, run the above carthage command from the terminal.  Known issue with xcode build retaining environment arguments\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\n\n# TARGET REPO\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\nOUTPUT_DSYM_PATH=\"${SRCROOT}/../Builds/${TARGET_NAME}.framework.dSYM\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\n# CLEAN\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\nmv -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		713620631C90D6240082F8FF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1432,7 +1436,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\n\n# TARGET REPO & ARCHIVE\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\nOUTPUT_DSYM_PATH=\"${SRCROOT}/../Builds/${TARGET_NAME}.framework.dSYM\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\nmv -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		715536D01C6BBD5100154DD5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1445,7 +1449,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumIOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"iphoneos\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-ios/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--ignore \"TEALWKConstants.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
+			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumIOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"iphoneos\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-ios/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--ignore \"TEALWKConstants.h\" \\\n--ignore \"TEALRemoteCommandManager.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
 		};
 		715536D51C6BC3D300154DD5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1458,7 +1462,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumTVOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"appletv\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-tvos/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"WatchKit\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
+			shellScript = "# REFERENCE: https://github.com/tomaz/appledoc/blob/master/XcodeIntegrationScript.markdown\n\n#appledoc Xcode script\n\n# Start constants\nname=\"TealiumTVOS\"\ncompany=\"Tealium\";\ncompanyID=\"com.Tealium\";\ncompanyURL=\"http://www.tealium.com\";\ntarget=\"appletv\";\n#target=\"macosx\";\noutputPath=\"${PROJECT_DIR}/../../tealium-tvos/Documentation/\";\n#outputPath=\"${PROJECT_DIR}/../Builds/Documentation/\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${name}\" \\\n--project-company \"${company}\" \\\n--company-id \"${companyID}\" \\\n--ignore \"NSObject+Tealium.h\" \\\n--ignore \"Tealium+Lifecycle.h\" \\\n--ignore \"Tealium+PrivateHeader.h\" \\\n--ignore \"Tealium+TagManagement.h\" \\\n--ignore \"TEALConfiguration+TagManagement.h\" \\\n--ignore \"TEALDataSources.h\" \\\n--ignore \"TEALDelegateManager.h\" \\\n--ignore \"TEALDispatchService.h\" \\\n--ignore \"TEALLifecycleDataSources.h\" \\\n--ignore \"TEALLogger.h\" \\\n--ignore \"TEALNetworkStatus\" \\\n--ignore \"TEALPublishSettings.h\" \\\n--ignore \"TEALReachability.h\" \\\n--ignore \"TEALReachabilityManager.h\" \\\n--ignore \"TEALRemoteCommandManager.h\" \\\n--ignore \"TEALRemoteCommandResponse.h\" \\\n--ignore \"TEALRemoteCommandResponse+PrivateHeader.h\" \\\n--ignore \"TEALRemoteCommandConstants.h\" \\\n--ignore \"TEALSettings.h\" \\\n--ignore \"TEALSettings+Collect.h\" \\\n--ignore \"TEALSettings+TagManagement.h\" \\\n--ignore \"WatchKit\" \\\n--docset-atom-filename \"${company}.atom\" \\\n--docset-feed-url \"${companyURL}/${company}/%DOCSETATOMFILENAME\" \\\n--docset-package-url \"${companyURL}/${company}/%DOCSETPACKAGEFILENAME\" \\\n--docset-fallback-url \"${companyURL}/${company}\" \\\n--output \"${outputPath}\" \\\n--clean-output \\\n--publish-docset \\\n--docset-platform-family \"${target}\" \\\n--logformat xcode \\\n--keep-intermediate-files \\\n--merge-categories \\\n--prefix-merged-sections \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--verbose 6 \\\n--exit-threshold 2 \\\n\"${PROJECT_DIR}/../Builder/Source/\"";
 		};
 		716F2FAD1C6BE05500A7F947 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1471,7 +1475,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\n\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n\n# TARGET REPO & ARCHIVES\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\nOUTPUT_DSYM_PATH=\"${SRCROOT}/../Builds/${TARGET_NAME}.framework.dSYM\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\n# CLEAN\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\n# MOVE\nmv -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\nmv -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1757,7 +1761,7 @@
 		711CED7B1C69200D001E2161 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1781,7 +1785,7 @@
 		711CED7C1C69200D001E2161 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1826,6 +1830,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1850,6 +1855,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1895,6 +1901,7 @@
 		7136205D1C90D5990082F8FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1918,6 +1925,7 @@
 		7136205E1C90D5990082F8FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1993,6 +2001,7 @@
 		716F2FA81C6BE04900A7F947 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 5;
 				DYLIB_CURRENT_VERSION = 5.0.2;
@@ -2018,6 +2027,7 @@
 		716F2FA91C6BE04900A7F947 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 5;
 				DYLIB_CURRENT_VERSION = 5.0.2;

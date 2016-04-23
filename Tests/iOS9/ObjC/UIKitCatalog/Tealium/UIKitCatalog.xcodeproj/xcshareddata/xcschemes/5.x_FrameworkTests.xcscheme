@@ -22,6 +22,16 @@
                ReferencedContainer = "container:UIKitCatalog.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "71D61A991C28B62200F298AE"
+               BuildableName = "5.x+FrameworkUITests.xctest"
+               BlueprintName = "5.x+FrameworkUITests"
+               ReferencedContainer = "container:UIKitCatalog.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <AdditionalOptions>
       </AdditionalOptions>

@@ -24,7 +24,7 @@
 
     [TealiumHelper startTracking];
         
-//    [TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
+  //[TealiumHelper incrementLifetimeValueForKey:@"launches" amount:1];
     
     [TealiumHelper enableRemoteCommandBlock];
 

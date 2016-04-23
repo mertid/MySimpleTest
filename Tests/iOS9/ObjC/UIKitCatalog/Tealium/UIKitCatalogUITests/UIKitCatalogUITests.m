@@ -32,10 +32,15 @@
     [super tearDown];
 }
 
+
 - (void) testButtons {
     
     XCUIApplication *app = [[XCUIApplication alloc] init];
+    //[self waitForExpectationsWithTimeout:5 handler:nil];
+
+    [[app.buttons elementBoundByIndex: 0] tap];
     [app.navigationBars[@"UIView"].buttons[@"UIKitCatalog"] tap];
+   
     
     XCTAssert([app.tables count] == 1, @"Too many tables in the view.");
     
@@ -65,4 +70,21 @@
     
 }
 
+- (void) testMultiLaunch {
+    
+    NSLog(@"%s Launch 1", __FUNCTION__);
+    
+    for (int x = 1; x <= 100; x++) {
+        
+        [self setUp];
+        
+        NSLog(@"%s Launch %d", __FUNCTION__, x);
+        
+        sleep(1);
+        
+        [self tearDown];
+        
+    }
+    
+}
 @end

@@ -33,13 +33,6 @@
 @property (readwrite, nonatomic) TEALVisitorProfileCurrentVisit *currentVisit;
 
 
-/**
- *  AudienceStream visitor profile object.
- *
- *  @param visitorID String unique identifier, currently UUID with "-"'s stripped out.
- *
- *  @return valid profile object.
- */
 - (instancetype) initWithVisitorID:(NSString *)visitorID;
 
 @end
