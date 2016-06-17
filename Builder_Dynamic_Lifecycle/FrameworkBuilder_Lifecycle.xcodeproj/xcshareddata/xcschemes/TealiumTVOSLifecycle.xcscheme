@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0720"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "716F2F951C6BE04800A7F947"
-               BuildableName = "TealiumTVOS.framework"
-               BlueprintName = "TealiumTVOS"
-               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "715536D11C6BC3CA00154DD5"
-               BuildableName = "TealiumTVOSDocumentation"
-               BlueprintName = "TealiumTVOSDocumentation"
-               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+               BlueprintIdentifier = "7136204A1C90D5990082F8FF"
+               BuildableName = "TealiumTVOSLifecycle.framework"
+               BlueprintName = "TealiumTVOSLifecycle"
+               ReferencedContainer = "container:FrameworkBuilder_Lifecycle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -43,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "716F2F951C6BE04800A7F947"
-            BuildableName = "TealiumTVOS.framework"
-            BlueprintName = "TealiumTVOS"
-            ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -68,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "716F2F951C6BE04800A7F947"
-            BuildableName = "TealiumTVOS.framework"
-            BlueprintName = "TealiumTVOS"
-            ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            BlueprintIdentifier = "7136204A1C90D5990082F8FF"
+            BuildableName = "TealiumTVOSLifecycle.framework"
+            BlueprintName = "TealiumTVOSLifecycle"
+            ReferencedContainer = "container:FrameworkBuilder_Lifecycle.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -86,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "716F2F951C6BE04800A7F947"
-            BuildableName = "TealiumTVOS.framework"
-            BlueprintName = "TealiumTVOS"
-            ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            BlueprintIdentifier = "7136204A1C90D5990082F8FF"
+            BuildableName = "TealiumTVOSLifecycle.framework"
+            BlueprintName = "TealiumTVOSLifecycle"
+            ReferencedContainer = "container:FrameworkBuilder_Lifecycle.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
