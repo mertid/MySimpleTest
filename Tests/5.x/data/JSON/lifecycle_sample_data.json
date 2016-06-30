@@ -1,0 +1,24 @@
+{
+    "launches_volatile":{
+        "0":{
+            "source":{
+                "lifecycle_priorsecondsawake":"0"
+            },
+            "output":{
+                "lifecycle_type":"launch",
+                "lifecycle_priorsecondsawake":"0",
+                "lifecycle_isfirstlaunch":"true"
+            }
+        },
+        "1":{
+            "source":{
+                "lifecycle_firstlaunchdate":"2013-07-11T17:55:04Z",
+                "lifecycle_priorsecondsawake":"1"
+            },
+            "output":{
+                "lifecycle_type":"launch",
+                "lifecycle_priorsecondsawake":"1"
+            }
+        }
+    }
+}

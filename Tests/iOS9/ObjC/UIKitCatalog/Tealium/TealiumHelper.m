@@ -45,7 +45,7 @@ static TealiumHelper * _sharedInstance;
     // Configure Tealium
 
     TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"ios-tagbridge"
+                                                                           profile:@"demo"
                                                                        environment:@"dev"];
     
 //    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"

@@ -10,18 +10,35 @@ Specifically it allows:
 - For the creation of the final framework deliverable
 - For the testing of the framework deliverable in deployable test apps
 
+## SubModules
+The following directories are submodules of the top level git repo:
+- appledoc (for document generation)
+- Carthage (for simulator supported framework builds)
+- Reachability (base reference for TEALReachability.h & .m)
+
+The modules are copies of code libraries provided by their respective developers. No modification of these libraries are intended, they are kept in sync with our repo for up-to-date-reference and use.
 
 ## How to Build Frameworks
-There are 3 available projects for building the iOS frameworks:
+There is a Buildall.sh bash script in the root folder that will kick off xcode command line operations to build all the frameworks for the various platforms:
+- iOS
+- tvOS
+
+including simulator supported frameworks & device only frameworks
+
+## Updating Build Projects
+There are 3 available projects for building the Apple frameworks:
 - Builder
 - Builder_dynamic
-_ Builder_dynamic_lifecycle
+- Builder_dynamic_lifecycle
+- Builder_dynamic_Master
 
-The builder project uses custom build script to build the fat libraries. But it can not create the modules correctly and most be build against a simulator target to work. Subsequently the simulator reference must be removed from info.plist generated and from the final app prior to store submission. This is currently the only folder with the watchOSExtension framework target.
+The builder project uses custom build script to build the fat libraries. But it can not create the modules correctly and must be built against a simulator target to work. Subsequently the simulator reference must be removed from info.plist generated and from the final app prior to store submission. This is currently the only folder with the watchOSExtension framework target.
 
 The builder_dynamic project uses a Carthage script to generate the fat libraries, which can create the expected module map correctly, and no modification to the framework's info.plist is necessary.  However, the final app must still strip out the simulator slice from the framework prior to stores submission.
 
-The builder_dynamic_lifecycle is the same as the builder_dynamic except it also has targets for the lifecycle modules.  The builder_dynamic_lifecycle is the most recent and is the recommended builder project to use.  Within it is a buildall.sh script which can be run ($./builall.sh) from the command line which will build all the expected frameworks (iOS, tvOS, iOSLifecycle, tvOSLifecycle) to their respective repos.
+The builder_dynamic_lifecycle is for building the lifecycle modules.
+
+Builder_Dynamic_Master is a workplace that includes both the Builder_dynamic and Builder_dynamic_lifecycle projects. It is the current workspace/xcode project from which the library builds should run.
 
 ## How to run UI Automation Tests
 
@@ -128,6 +145,11 @@ Available destinations for the "TealiumIOS" scheme:
 
 { platform:tvOS Simulator, id:A2D98159-DF38-4D8E-85C5-D101CA0F9A64, OS:9.0, name:Apple TV 1080p }
 { platform:tvOS Simulator, id:59CB080B-29AE-4ED3-B798-DCDA2AA58F13, OS:9.2, name:Apple TV 1080p }
+
+
+## Tests
+- The Builder_Dynamic/FrameworkBuilder project contains all the class units tests broken up by modules 
+- The Tests/ folders contain sample apps to run integrations and any UI tests
 
 ## DEPLOYMENT CHECKLIST
 

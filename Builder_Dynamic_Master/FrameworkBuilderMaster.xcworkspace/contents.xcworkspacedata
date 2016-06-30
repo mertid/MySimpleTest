@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:../Builder_Dynamic_Lifecycle"
+      name = "Builder_Dynamic_Lifecycle">
+      <FileRef
+         location = "group:buildlifecycle.sh">
+      </FileRef>
+      <Group
+         location = "group:Carthage"
+         name = "Carthage">
+         <Group
+            location = "group:Build"
+            name = "Build">
+            <Group
+               location = "group:iOS"
+               name = "iOS">
+               <FileRef
+                  location = "group:1C3029CD-A628-3E02-8ED0-6819F3C1344D.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:75D5A79C-810B-3A67-8722-E783B2C3293E.bcsymbolmap">
+               </FileRef>
+               <Group
+                  location = "group:TealiumIOSLifecycle.framework"
+                  name = "TealiumIOSLifecycle.framework">
+                  <Group
+                     location = "group:Headers"
+                     name = "Headers">
+                     <FileRef
+                        location = "group:Tealium+Lifecycle.h">
+                     </FileRef>
+                     <FileRef
+                        location = "group:TealiumIOSLifecycle.h">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Info.plist">
+                  </FileRef>
+                  <Group
+                     location = "group:Modules"
+                     name = "Modules">
+                     <FileRef
+                        location = "group:module.modulemap">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:TealiumIOSLifecycle">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:TealiumIOSLifecycle.framework.dSYM">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:tvOS"
+               name = "tvOS">
+               <FileRef
+                  location = "group:029A568D-B698-3EEB-A795-438648576B51.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:53C743B2-9C51-357B-BF9E-DE72289E1CB7.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:9E0EFF6F-9258-39A4-89B1-0A5C620AA922.bcsymbolmap">
+               </FileRef>
+               <Group
+                  location = "group:TealiumTVOSLifecycl_DevicesOnly.framework"
+                  name = "TealiumTVOSLifecycl_DevicesOnly.framework">
+                  <Group
+                     location = "group:Headers"
+                     name = "Headers">
+                     <FileRef
+                        location = "group:Tealium+Lifecycle.h">
+                     </FileRef>
+                     <FileRef
+                        location = "group:TealiumTVOSLifecycle.h">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Info.plist">
+                  </FileRef>
+                  <FileRef
+                     location = "group:TealiumTVOSLifecycl_DevicesOnly">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:TealiumTVOSLifecycl_DevicesOnly.framework.dSYM">
+               </FileRef>
+               <Group
+                  location = "group:TealiumTVOSLifecycle.framework"
+                  name = "TealiumTVOSLifecycle.framework">
+                  <Group
+                     location = "group:Headers"
+                     name = "Headers">
+                     <FileRef
+                        location = "group:Tealium+Lifecycle.h">
+                     </FileRef>
+                     <FileRef
+                        location = "group:TealiumTVOSLifecycle.h">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Info.plist">
+                  </FileRef>
+                  <Group
+                     location = "group:Modules"
+                     name = "Modules">
+                     <FileRef
+                        location = "group:module.modulemap">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:TealiumTVOSLifecycle">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:TealiumTVOSLifecycle.framework.dSYM">
+               </FileRef>
+            </Group>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:FrameworkBuilder_Lifecycle.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+      <Group
+         location = "group:TealiumIOSLifecycle"
+         name = "TealiumIOSLifecycle">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumIOSLifecycle.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumIOSLifecycleTests"
+         name = "TealiumIOSLifecycleTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumIOSLifecycleTests.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumTVOSLifecycle"
+         name = "TealiumTVOSLifecycle">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumTVOSLifecycle.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumTVOSLifecycleTests"
+         name = "TealiumTVOSLifecycleTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumTVOSLifecycleTests.m">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:../Builder_Dynamic"
+      name = "Builder_Dynamic">
+      <FileRef
+         location = "group:buildlibs.sh">
+      </FileRef>
+      <Group
+         location = "group:Carthage"
+         name = "Carthage">
+         <Group
+            location = "group:Build"
+            name = "Build">
+            <Group
+               location = "group:iOS"
+               name = "iOS">
+               <FileRef
+                  location = "group:12B8747B-62CA-3256-822D-7BDEA6EB209C.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:23C644C1-BD60-3B73-BA4A-5F30236DB5CD.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:269ECB19-B72B-3FF7-A446-CDD53F43D1E6.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:30180FCB-5108-3129-9BCC-1368DC612853.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:78D8B9C4-C782-3E4D-83CE-9A2CCF7DE7C7.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:9EA9A751-B240-352D-AFBA-686F0BEC181E.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:A40117E2-0A35-33D7-8DC0-AD668A670B9D.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:B38704DC-60F0-38C3-9C92-237FFD38FC91.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:D77AB6A0-D2B8-3379-AD5F-31F2DBAF00C1.bcsymbolmap">
+               </FileRef>
+               <FileRef
+                  location = "group:ECDB396F-B2DE-332D-9E1F-FA44FA21F99A.bcsymbolmap">
+               </FileRef>
+               <Group
+                  location = "group:TealiumIOS.framework"
+                  name = "TealiumIOS.framework">
+                  <Group
+                     location = "group:Headers"
+                     name = "Headers">
+                     <FileRef
+                        location = "group:TealiumIOS.h">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Info.plist">
+                  </FileRef>
+                  <Group
+                     location = "group:Modules"
+                     name = "Modules">
+                     <FileRef
+                        location = "group:module.modulemap">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:TealiumIOS">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:TealiumIOS.framework.dSYM">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:tvOS"
+               name = "tvOS">
+               <FileRef
+                  location = "group:22201C5F-BC7C-326F-9FBC-63575FCF25F2.bcsymbolmap">
+               </FileRef>
+               <Group
+                  location = "group:TealiumTVOS.framework"
+                  name = "TealiumTVOS.framework">
+                  <Group
+                     location = "group:Headers"
+                     name = "Headers">
+                     <FileRef
+                        location = "group:TealiumTVOS.h">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Info.plist">
+                  </FileRef>
+                  <Group
+                     location = "group:Modules"
+                     name = "Modules">
+                     <FileRef
+                        location = "group:module.modulemap">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:TealiumTVOS">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:TealiumTVOS.framework.dSYM">
+               </FileRef>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:FrameworkBuilder"
+         name = "FrameworkBuilder">
+         <FileRef
+            location = "group:FrameworkBuilder.h">
+         </FileRef>
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:FrameworkBuilder.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+      <Group
+         location = "group:TealiumALLTests"
+         name = "TealiumALLTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumCollectTests"
+         name = "TealiumCollectTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumCollectTests.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumCoreTests"
+         name = "TealiumCoreTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumIOS"
+         name = "TealiumIOS">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumIOS.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumLifecycleTests"
+         name = "TealiumLifecycleTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumLifecycleTests.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumTagManagementTests"
+         name = "TealiumTagManagementTests">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumTagManagementTests.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:TealiumTVOS"
+         name = "TealiumTVOS">
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+         <FileRef
+            location = "group:TealiumTVOS.h">
+         </FileRef>
+      </Group>
+   </Group>
+</Workspace>
