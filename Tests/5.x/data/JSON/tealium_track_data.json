@@ -1,0 +1,18 @@
+{
+    "0":{
+        "source":{
+            "customKey":"customValue"
+        },
+        "output":{
+            "customKey":"customValue"
+        }
+    },
+    "1":{
+        "source":{
+            "app_name":"customAppName"
+        },
+        "output":{
+            "app_name":"customAppName"
+        }
+    }
+}

@@ -1,3 +1,9 @@
 [submodule "appledoc"]
 	path = appledoc
 	url = https://github.com/tomaz/appledoc.git
+[submodule "Reachability"]
+	path = Reachability
+	url = https://github.com/tonymillion/Reachability.git
+[submodule "Carthage"]
+	path = Carthage
+	url = https://github.com/Carthage/Carthage.git
