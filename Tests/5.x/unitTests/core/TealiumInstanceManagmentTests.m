@@ -191,11 +191,12 @@
 
 #warning Update to use the completion blocks
     
+    // Clear an persisted instances
     [Tealium destroyInstanceForKey:@"instance1"];
     [Tealium destroyInstanceForKey:@"instance2"];
     [Tealium destroyInstanceForKey:@"instance3"];
 
-    
+    // Spin up different configurations for each new instance
     TEALConfiguration *config1 = [TEALConfiguration configurationWithAccount:@"tealiummobile"
                                                                     profile:@"demo"
                                                                 environment:@"dev"];
@@ -214,14 +215,31 @@
     [Tealium newInstanceForKey:@"instance3" configuration:config3];
 
     
+    // Check private instance ids of each config, they should all be different
+    XCTAssertFalse([config1.instanceID isEqualToString:config2.instanceID], @"");
+    XCTAssertFalse([config1.instanceID isEqualToString:config3.instanceID], @"");
+    XCTAssertFalse([config2.instanceID isEqualToString:config3.instanceID], @"");
+    
+    // Spin up the instances
     Tealium *instance1 = [Tealium instanceForKey:@"instance1"];
     Tealium *instance2 = [Tealium instanceForKey:@"instance2"];
     Tealium *instance3 = [Tealium instanceForKey:@"instance3"];
     
+    // Instances initialized?
     XCTAssertTrue(instance1, @"Instance1 was not initialized.");
     XCTAssertTrue(instance2, @"Instance2 was not initialized.");
     XCTAssertTrue(instance3, @"Instance3 was not initialized.");
     
+    // Compare vids while we're at it - should all be different
+    NSString *visitorId1 = [instance1.dataSources visitorIDCopy];
+    NSString *visitorId2 = [instance2.dataSources visitorIDCopy];
+    NSString *visitorId3 = [instance3.dataSources visitorIDCopy];
+    
+    XCTAssertFalse([visitorId1 isEqualToString:visitorId2], @"");
+    XCTAssertFalse([visitorId1 isEqualToString:visitorId3], @"");
+    XCTAssertFalse([visitorId2 isEqualToString:visitorId3], @"");
+    
+    NSLog(@"%s vid1: %@, vid2: %@, vid3: %@", __FUNCTION__, visitorId1, visitorId2, visitorId3);
 }
 
 #pragma mark - destoryInstanceForKey: TESTS

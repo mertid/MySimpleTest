@@ -78,16 +78,16 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     NSDictionary *persistentData = [self persistentDataSourcesCopy];
     
+    // Aggregate persistent and volatile event data & trigger track event
     [self trackLifecycleEventForType:type
                                 date:date
                       persistentData:persistentData
                          dataSources:dataSources];
-        
-    NSDictionary *dataToPersist = [TEALLifecycleDataSources updatePersistentDataSourcesForType:type
-                                                                      date:date
-                                                            persistentData:persistentData];
     
-    [self addPersistentDataSources:dataToPersist];
+    // Updates persistent data only
+    [self persistNewDataSourcesForType:type
+                                  date:date
+                        persistentData:persistentData];
     
 }
 
@@ -112,6 +112,18 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self trackEventWithTitle:title
                   dataSources:lifecycleDataSources];
+    
+}
+
+- (void) persistNewDataSourcesForType:(TEALLifecycleType)type
+                                 date:(NSDate*)date
+                       persistentData:(NSDictionary*)persistentData{
+    
+    NSDictionary *dataToPersist = [TEALLifecycleDataSources updatePersistentDataSourcesForType:type
+                                                                                          date:date
+                                                                                persistentData:persistentData];
+    
+    [self addPersistentDataSources:dataToPersist];
     
 }
 

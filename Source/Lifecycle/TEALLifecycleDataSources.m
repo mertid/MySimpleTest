@@ -53,7 +53,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
 
 /**
  *  Returns all lifecycle related data for a given call type. Does NOT set any
- *  lifecycle data, use the updateLifecycleDataWithDate: method to set.
+ *  lifecycle data, use the updatePersistentDataSourcesForType: method to set.
  *
  *  @param type The TEALLifecycleType of call.
  *  @param date An optional NSDate override for the method call. If not provided,
@@ -71,6 +71,9 @@ static NSDateFormatter *_mmddyyyyFormatter;
         date = [NSDate date];
     }
     
+    [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSources:date
+                                                                 persistentData:persistentData]];
+    
     if (type == TEALLifecycleTypeWake ||
         type == TEALLifecycleTypeLaunch){
         
@@ -79,7 +82,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
         [dataSources addEntriesFromDictionary:[TEALLifecycleDataSources newPersistentLifecycleDataSourcesForWakesAt:date
                                                                                                      persistentData:persistentData]];
         [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForWakesAt:date
-                                                                               persistentData:persistentData]];
+                                                                               persistentData:dataSources]];
         
     }
     
@@ -90,7 +93,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
         [dataSources addEntriesFromDictionary:[TEALLifecycleDataSources newPersistentLifecycleDataSourcesForLaunchesAt:date
                                                                                                         persistentData:persistentData]];
         [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForLaunchesAt:date
-                                                                                  persistentData:persistentData]];
+                                                                                  persistentData:dataSources]];
         
     }
     
@@ -103,8 +106,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
         
     }
     
-    [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSources:date
-                                                                 persistentData:persistentData]];
+
     
     return [NSDictionary dictionaryWithDictionary:dataSources];
     
@@ -260,7 +262,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
                                      TEALDataSourceKey_LifecycleSleepCount : @"0",
                                      TEALDataSourceKey_LifecycleTotalSleepCount : @"0",
                                      TEALDataSourceKey_LifecyclePriorSecondsAwake : @"0",
-                                     @"lifecycle_totalsecondsawake" : @"0"
+                                     TEALDataSourceKey_LifecycleTotalSecondsAwake : @"0"
                                      }];
     
     return [NSDictionary dictionaryWithDictionary:data];
@@ -272,6 +274,11 @@ static NSDateFormatter *_mmddyyyyFormatter;
     NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
     
     mDict[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate] = TEALDataSourceValue_True;
+    mDict[TEALDataSourceKey_LifecycleWakeCount] = @"1";
+    mDict[TEALDataSourceKey_LifecycleLaunchCount] = @"1";
+    mDict[TEALDataSourceKey_LifecycleSleepCount] = @"0";
+    mDict[TEALDataSourceKey_LifecycleDaysSinceUpdate] = @"0";
+    mDict[TEALDataSourceKey_LifecycleUpdateLaunchDate] = [TEALLifecycleDataSources isoStringFromDate:date];
     
     NSString *appVersion = [self bundleVersion];
     
@@ -446,8 +453,8 @@ static NSDateFormatter *_mmddyyyyFormatter;
     if (priorSecondsAwake) data[TEALDataSourceKey_LifecyclePriorSecondsAwake] = priorSecondsAwake;
     
     // isFirstLaunch value
-    NSString *firstLaunch = persistentData[TEALDataSourceKey_LifecycleFirstLaunchDate];
-    if (!firstLaunch){
+    NSString *totalLaunchCount = persistentData[TEALDataSourceKey_LifecycleTotalLaunchCount];
+    if ([totalLaunchCount integerValue] == 1){
         data[TEALDataSourceKey_LifecycleIsFirstLaunch] = TEALDataSourceValue_True;
     }
     
@@ -475,7 +482,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
         dataSources[TEALDataSourceKey_LifecycleIsFirstWakeThisMonth] = TEALDataSourceValue_True;
         
     }
-    
+        
     dataSources[TEALDataSourceKey_LifecycleType] = TEALDataSourceValue_LifecycleWake;
     
     return dataSources;
@@ -483,11 +490,13 @@ static NSDateFormatter *_mmddyyyyFormatter;
 
 + (NSMutableDictionary *) newVolatileLifecycleDataSources:(NSDate *)date
                                            persistentData:(NSDictionary *)persistentData {
-    
+
+    // Prep return mutable dictionary for return
+    NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+
     // Days since launch
     NSString *firstLaunchDateString = persistentData[TEALDataSourceKey_LifecycleFirstLaunchDate];
     NSString *daysSinceLaunch = @"0";
-    
     if (firstLaunchDateString){
         NSDate *firstLaunchDate = [TEALLifecycleDataSources dateFromISOString:firstLaunchDateString];
         if (firstLaunchDate){
@@ -495,6 +504,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
                                                               toDate:date];
         }
     }
+    if (daysSinceLaunch) dataSources[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
     
     // Days since last wake
     NSString *lastWakeString = persistentData[TEALDataSourceKey_LifecycleLastWakeDate];
@@ -506,25 +516,27 @@ static NSDateFormatter *_mmddyyyyFormatter;
             daysSinceLastWake = [TEALLifecycleDataSources daysFromDate:lastWakeDate toDate:date];
         }
     }
+    if (daysSinceLastWake) dataSources[TEALDataSourceKey_LifecycleDaysSinceLastWake] = daysSinceLastWake;
+
+    // Days since last update - if update previously occurred
+    NSString *updateDateString = persistentData[TEALDataSourceKey_LifecycleUpdateLaunchDate];
+    if (updateDateString){
+        NSDate *updateDate = [TEALLifecycleDataSources dateFromISOString:updateDateString];
+        NSString *daysSinceUpdate = [TEALLifecycleDataSources daysFromDate:updateDate toDate:date];
+        if (daysSinceUpdate) dataSources[TEALDataSourceKey_LifecycleDaysSinceUpdate] = daysSinceUpdate;
+    }
     
-    NSString *dayOfWeek = [TEALLifecycleDataSources dayOfWeekForDate:date];
-    NSString *hourOfDayLocal = [TEALLifecycleDataSources hourOfDayLocalFromDate:date];
-    
+    // Dynamic data based on persistent data
     NSString *lastWakeDateString = persistentData[TEALDataSourceKey_LifecycleLastWakeDate];
     NSDate *lastWakeDate = [TEALLifecycleDataSources dateFromISOString:lastWakeDateString];
     NSString *secondsAwake = [TEALLifecycleDataSources secondsAwakeTo:date
                                                      fromLastWakeDate:lastWakeDate];
-    
-    NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
-    
-    // Safely set all Lifecycle data
+    NSString *dayOfWeek = [TEALLifecycleDataSources dayOfWeekForDate:date];
+    NSString *hourOfDayLocal = [TEALLifecycleDataSources hourOfDayLocalFromDate:date];
     if (dayOfWeek) dataSources[TEALDataSourceKey_LifecycleDayOfWeek] = dayOfWeek;
     if (hourOfDayLocal) dataSources[TEALDataSourceKey_LifecycleHourOfDayLocal] = hourOfDayLocal;
     if (secondsAwake) dataSources[TEALDataSourceKey_LifecycleSecondsAwake] = secondsAwake;
-    
-    dataSources[@"lifecycle_dayssincelastwake"] = daysSinceLastWake;
-    dataSources[TEALDataSourceKey_LifecycleDaysSinceLaunch] = daysSinceLaunch;
-    
+
     return dataSources;
 }
 
@@ -561,23 +573,50 @@ static NSDateFormatter *_mmddyyyyFormatter;
         return YES;
     }
     
+    // This will be nil if running unit tests
     NSString *currentVersion = [self bundleVersion];
+    if (currentVersion){
+        return ![currentVersion isEqualToString:savedVersion];
+    }
     
-    return ![currentVersion isEqualToString:savedVersion];
+    // Testing override - Least amount of code update to support version udpate testing -
+    // But this seems potentially disasterous
+    NSString *isFirstUpdateSinceLaunchOverride = persistentData[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate];
+    if (isFirstUpdateSinceLaunchOverride){
+        if ([[isFirstUpdateSinceLaunchOverride lowercaseString] isEqualToString:@"true"]){
+            return YES;
+        }
+    }
     
+    return NO;
 }
 
 + (NSString* _Nonnull) daysFromDate:(NSDate * _Nonnull)earlierDate
                              toDate:(NSDate * _Nonnull)laterDate {
     
-    unsigned int unitFlags = NSCalendarUnitDay;
+    unsigned int unitFlags = NSCalendarUnitSecond;
     
     NSDateComponents *components = [[NSCalendar autoupdatingCurrentCalendar] components:unitFlags fromDate:earlierDate toDate:laterDate  options:0];
     
-    NSString *days = [NSString stringWithFormat:@"%li", (long)components.day];
+    NSInteger days = components.second / (60 * 60 *24);
     
-    return days;
+    NSString *daysString = [NSString stringWithFormat:@"%li", (long)days];
+    
+    return daysString;
 }
+
+#warning Is this trully the method we should be using?
+//+ (NSString* _Nonnull) daysFromDate:(NSDate * _Nonnull)earlierDate
+//                             toDate:(NSDate * _Nonnull)laterDate {
+//    
+//    unsigned int unitFlags = NSCalendarUnitDay;
+//    
+//    NSDateComponents *components = [[NSCalendar autoupdatingCurrentCalendar] components:unitFlags fromDate:earlierDate toDate:laterDate  options:0];
+//    
+//    NSString *days = [NSString stringWithFormat:@"%li", (long)components.day];
+//    
+//    return days;
+//}
 
 + (NSString*) hourOfDayLocalFromDate:(NSDate*)date{
     if (!_hourOfDayFormatter){
