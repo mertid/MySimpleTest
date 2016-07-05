@@ -198,21 +198,23 @@
 
     NSMutableDictionary *persistentDataMock = [NSMutableDictionary dictionary];
 
-//    for (int i = 0; i < [sampleData count]; i++) {
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < [sampleData count]; i++) {
+//    for (int i = 0; i < 670; i++) {
 
         NSDictionary *expectedData = sampleData[i][@"expected_data"];
 
         NSString *type = expectedData[TEALDataSourceKey_LifecycleType];
 
-        // Override our App version number with the sample version
-
-        if (i == 0){
-            NSString *appVersion = sampleData[i][TEALDataSourceKey_ApplicationVersion];
-
-            [persistentDataMock addEntriesFromDictionary:@{
-                                                           TEALDataSourceKey_ApplicationVersion : appVersion
-                                                           }];
+        // Override internal app version update detection
+        NSString *appVersion = sampleData[i][TEALDataSourceKey_ApplicationVersion];
+        
+        if (i>0){
+            NSString *priorVersion = sampleData[i-1][TEALDataSourceKey_ApplicationVersion];
+            if (![appVersion isEqualToString:priorVersion]){
+                persistentDataMock[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate] = @"true";
+            }
+        } else {
+            persistentDataMock[TEALDataSourceKey_ApplicationVersion] = appVersion;
         }
 
 
@@ -235,7 +237,6 @@
 
         [data addEntriesFromDictionary:lifecycleData];
 
-#warning daysSinceLaunch & priorsecondsawake are not returning the expected values
 
         for (NSString *key in [expectedData allKeys]) {
 
@@ -253,6 +254,9 @@
                                                                              persistentData:persistentDataMock];
 
         [persistentDataMock addEntriesFromDictionary:updateData];
+        
+        // Reset any app version update trigger
+        [persistentDataMock removeObjectForKey:TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate];
 
     }
 

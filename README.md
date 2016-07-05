@@ -23,7 +23,10 @@ There is a Buildall.sh bash script in the root folder that will kick off xcode c
 - iOS
 - tvOS
 
-including simulator supported frameworks & device only frameworks
+to run from the command line:
+```
+$ ./buildall.sh
+```
 
 ## Updating Build Projects
 There are 3 available projects for building the Apple frameworks:
