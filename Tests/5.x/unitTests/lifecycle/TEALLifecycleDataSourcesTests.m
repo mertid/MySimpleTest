@@ -188,6 +188,22 @@
     XCTAssertTrue(success);
 }
 
+- (void) testMostRecentDateFromPersistentData {
+    
+    NSDictionary *persistentData = @{
+                                     TEALDataSourceKey_LifecycleLastSleepDate : @"1970-02-02T09:04:39Z",
+                                     TEALDataSourceKey_LifecycleLastLaunchDate : @"1970-01-13T09:32:41Z",
+                                     TEALDataSourceKey_LifecycleLastWakeDate : @"1970-02-08T14:13:12Z"
+                                     };
+    
+    TEALLifecycleType type = [TEALLifecycleDataSources mostRecentDateFromPersistentData:persistentData];
+    
+    XCTAssertTrue(type == TEALLifecycleTypeWake, @"Incorrect type returned: %@", [TEALLifecycleDataSources stringFromLifecyleType:type]);
+
+}
+
+
+
 #pragma mark - LONG RUNNING TESTS
 
 - (void) testLongRunningEvents {
@@ -260,6 +276,79 @@
 
     }
 
+}
+
+
+- (void) testLongRunningEventsWithCrashes {
+    
+    // Going to test input and outputs over 1000 sequential launch/sleep/wake events
+    NSDictionary *allSampleData = [TEALTestHelper dictionaryFromJSONFile:@"lifecycle_events_with_crashes"];
+    NSArray *sampleData = allSampleData[@"events"];
+    
+    NSMutableDictionary *persistentDataMock = [NSMutableDictionary dictionary];
+    
+    for (int i = 0; i < [sampleData count]; i++) {
+//            for (int i = 0; i < 22; i++) {
+        
+        NSDictionary *expectedData = sampleData[i][@"expected_data"];
+        
+        NSString *type = expectedData[TEALDataSourceKey_LifecycleType];
+        
+        // Override internal app version update detection
+        NSString *appVersion = sampleData[i][TEALDataSourceKey_ApplicationVersion];
+        
+        if (i>0){
+            NSString *priorVersion = sampleData[i-1][TEALDataSourceKey_ApplicationVersion];
+            if (![appVersion isEqualToString:priorVersion]){
+                persistentDataMock[TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate] = @"true";
+            }
+        } else {
+            persistentDataMock[TEALDataSourceKey_ApplicationVersion] = appVersion;
+        }
+        
+        
+        // Use the date of test event
+        NSString *unixString = sampleData[i][TEALDataSourceKey_TimestampUnix];
+        NSInteger unixInterval = [unixString integerValue];
+        NSDate *unixDate = [NSDate dateWithTimeIntervalSince1970:unixInterval];
+        
+        XCTAssertTrue(unixDate, @"Could not retrieve date from sample data.");
+        
+        TEALLifecycleType lifecycleType = [TEALLifecycleDataSources lifecycleTypeFromString:type];
+        
+        NSMutableDictionary *data = [NSMutableDictionary dictionary];
+        
+        [data addEntriesFromDictionary:persistentDataMock];
+        
+        NSDictionary *lifecycleData = [TEALLifecycleDataSources newLifecycleDataSourcesForType:lifecycleType
+                                                                                          date:unixDate
+                                                                                persistentData:persistentDataMock];
+        
+        [data addEntriesFromDictionary:lifecycleData];
+        
+        
+        for (NSString *key in [expectedData allKeys]) {
+            
+            NSString *value = [NSString stringWithFormat:@"%@",data[key]];
+            if (!value || value == NULL) value = @"";
+            
+            NSString *expectedValue = [NSString stringWithFormat:@"%@", expectedData[key]];
+            
+            XCTAssertTrue([value isEqualToString:expectedValue], @"Discrepancy in record %i (%@)\n Key:%@ \n Returned Value:%@ \n Expected Value:%@", i, unixString, key, value, expectedValue);
+            
+        }
+        
+        NSDictionary *updateData = [TEALLifecycleDataSources updatePersistentDataSourcesForType:lifecycleType
+                                                                                           date:unixDate
+                                                                                 persistentData:persistentDataMock];
+        
+        [persistentDataMock addEntriesFromDictionary:updateData];
+        
+        // Reset any app version update trigger
+        [persistentDataMock removeObjectForKey:TEALDataSourceKey_LifecycleIsFirstLaunchAfterUpdate];
+        
+    }
+    
 }
 
 @end

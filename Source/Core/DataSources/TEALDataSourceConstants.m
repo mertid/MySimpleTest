@@ -49,6 +49,7 @@ NSString * const TEALDataSourceKey_ExcludeClasses       = @"exclude_classes";
 NSString * const TEALDataSourceKey_LibraryVersion       = @"library_version";
 
 // TODO: Move to lifecycle module
+NSString * const TEALDataSourceKey_LifecycleDidDetectCrash   = @"lifecycle_diddetectcrash";
 NSString * const TEALDataSourceKey_LifecycleDayOfWeek   = @"lifecycle_dayofweek_local";
 NSString * const TEALDataSourceKey_LifecycleDaysSinceLaunch=@"lifecycle_dayssincelaunch";
 NSString * const TEALDataSourceKey_LifecycleDaysSinceUpdate=@"lifecycle_dayssinceupdate";
@@ -68,6 +69,7 @@ NSString * const TEALDataSourceKey_LifecyclePriorSecondsAwake=@"lifecycle_priors
 NSString * const TEALDataSourceKey_LifecycleSecondsAwake= @"lifecycle_secondsawake";
 NSString * const TEALDataSourceKey_LifecycleSleepCount  = @"lifecycle_sleepcount";
 NSString * const TEALDataSourceKey_LifecycleType        = @"lifecycle_type";
+NSString * const TEALDataSourceKey_LifecycleTotalCrashCount  = @"lifecycle_totalcrashcount";
 NSString * const TEALDataSourceKey_LifecycleTotalLaunchCount=@"lifecycle_totallaunchcount";
 NSString * const TEALDataSourceKey_LifecycleTotalWakeCount=@"lifecycle_totalwakecount";
 NSString * const TEALDataSourceKey_LifecycleTotalSleepCount=@"lifecycle_totalsleepcount";

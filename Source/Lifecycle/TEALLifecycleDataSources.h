@@ -44,9 +44,11 @@ typedef NS_ENUM(NSUInteger, TEALLifecycleType) {
                                                  date:(NSDate* _Nonnull)date
                                        persistentData:(NSDictionary * _Nullable)persistentData;
 
-+ (NSString * _Nonnull)stringFromLifecyleType:(TEALLifecycleType)type;
++ (NSString * _Nonnull) stringFromLifecyleType:(TEALLifecycleType)type;
 
-+ (TEALLifecycleType)lifecycleTypeFromString:(NSString * _Nonnull)string;
++ (TEALLifecycleType) lifecycleTypeFromString:(NSString * _Nonnull)string;
+
++ (TEALLifecycleType) mostRecentDateFromPersistentData:(NSDictionary * _Nonnull)persistentData;
 
 + (BOOL) isFirstWakeTodayForDate:(NSDate* _Nonnull)date
                        priorDate:(NSDate* _Nullable)earlierDate;

@@ -156,11 +156,10 @@ Available destinations for the "TealiumIOS" scheme:
 
 ## DEPLOYMENT CHECKLIST
 
-Each Target Repo
+- Build all Platforms (iOS, tvOS, watchOS) - Use the buildall.sh script
+- Check all framework archs are correct (lipo -info <framework_name>
 - Documentation: all public header classes
 - Documentation: no apparent typos or omissions
-- Framework: info.plist correct
-- Framework: arch correct
 - Sample Apps: all compile
 - Sample App: events received in Live Events as expected
 - Sample App: archives for ad hoc deployment successfully

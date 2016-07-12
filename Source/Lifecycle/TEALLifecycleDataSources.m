@@ -78,22 +78,25 @@ static NSDateFormatter *_mmddyyyyFormatter;
         type == TEALLifecycleTypeLaunch){
         
         // Launches are also considered wakes - thank you Adobe
+        [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForWakesAt:date
+                                                                               persistentData:dataSources]];
         
         [dataSources addEntriesFromDictionary:[TEALLifecycleDataSources newPersistentLifecycleDataSourcesForWakesAt:date
                                                                                                      persistentData:persistentData]];
-        [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForWakesAt:date
-                                                                               persistentData:dataSources]];
+
         
     }
     
     if (type == TEALLifecycleTypeLaunch){
         
         // Place after wake check as initial launch will change the lifecycle_type
+        [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForLaunchesAt:date
+                                                                                  persistentData:dataSources]];
         
         [dataSources addEntriesFromDictionary:[TEALLifecycleDataSources newPersistentLifecycleDataSourcesForLaunchesAt:date
                                                                                                         persistentData:persistentData]];
-        [dataSources addEntriesFromDictionary:[self newVolatileLifecycleDataSourcesForLaunchesAt:date
-                                                                                  persistentData:dataSources]];
+
+       
         
     }
     
@@ -106,11 +109,10 @@ static NSDateFormatter *_mmddyyyyFormatter;
         
     }
     
-
-    
     return [NSDictionary dictionaryWithDictionary:dataSources];
     
 }
+
 
 + (NSDictionary *) updatePersistentDataSourcesForType:(TEALLifecycleType)type
                                                  date:(NSDate*)date
@@ -258,7 +260,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
     if (mmddyyyDateString) data[TEALDataSourceKey_LifecycleFirstLaunchDate_MMDDYYYY] = mmddyyyDateString;
     
     [data addEntriesFromDictionary:@{
-                                     //                                    TEALDataSourceKey_LifecycleIsFirstLaunch : TEALDataSourceValue_True,
+                                     TEALDataSourceKey_LifecycleTotalCrashCount : @"0",
                                      TEALDataSourceKey_LifecycleSleepCount : @"0",
                                      TEALDataSourceKey_LifecycleTotalSleepCount : @"0",
                                      TEALDataSourceKey_LifecyclePriorSecondsAwake : @"0",
@@ -293,14 +295,15 @@ static NSDateFormatter *_mmddyyyyFormatter;
 + (NSMutableDictionary *) newPersistentLifecycleDataSourcesForLaunchesAt:(NSDate *)date
                                                           persistentData:(NSDictionary *)persistentData{
     
-    
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    NSMutableArray *incrementArray = [NSMutableArray array];
+    
+    [incrementArray addObject:TEALDataSourceKey_LifecycleLaunchCount];
+    [incrementArray addObject:TEALDataSourceKey_LifecycleTotalLaunchCount];
+
     
     // Launch & Wake Counts
-    [data addEntriesFromDictionary:[self incrementedLifetimeValuesForKeys:@[
-                                                                            TEALDataSourceKey_LifecycleLaunchCount,
-                                                                            TEALDataSourceKey_LifecycleTotalLaunchCount,
-                                                                            ]
+    [data addEntriesFromDictionary:[self incrementedLifetimeValuesForKeys:incrementArray
                                                                    amount:1
                                                            persistentData:persistentData]];
     
@@ -316,7 +319,6 @@ static NSDateFormatter *_mmddyyyyFormatter;
         
     }
     
-    
     return data;
     
 }
@@ -326,11 +328,17 @@ static NSDateFormatter *_mmddyyyyFormatter;
     
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    NSMutableArray *incrementArray = [NSMutableArray array];
+
+    if([TEALLifecycleDataSources didDetectCrashFromPersistentData:persistentData
+                                            currentLifecycleEvent:TEALLifecycleTypeWake]) {
+        [incrementArray addObject:TEALDataSourceKey_LifecycleTotalCrashCount];
+    }
     
-    NSDictionary *increments = [self incrementedLifetimeValuesForKeys:@[
-                                                                        TEALDataSourceKey_LifecycleWakeCount,
-                                                                        TEALDataSourceKey_LifecycleTotalWakeCount
-                                                                        ]
+    [incrementArray addObject:TEALDataSourceKey_LifecycleWakeCount];
+    [incrementArray addObject:TEALDataSourceKey_LifecycleTotalWakeCount];
+    
+    NSDictionary *increments = [self incrementedLifetimeValuesForKeys:incrementArray
                                                                amount:1
                                                        persistentData:persistentData];
     
@@ -388,6 +396,7 @@ static NSDateFormatter *_mmddyyyyFormatter;
                                                                                           persistentData:persistentData]];
     [data addEntriesFromDictionary:[TEALLifecycleDataSources newPersistentLifecycleDataSourcesForLaunchesAt:date
                                                                                              persistentData:persistentData]];
+    
     data[TEALDataSourceKey_LifecycleLastLaunchDate] = [TEALLifecycleDataSources isoStringFromDate:date];
     data[TEALDataSourceKey_LifecycleLastWakeDate] = [TEALLifecycleDataSources isoStringFromDate:date];
     data[TEALDataSourceKey_LifecyclePriorSecondsAwake] = @"0";
@@ -454,11 +463,49 @@ static NSDateFormatter *_mmddyyyyFormatter;
     
     // isFirstLaunch value
     NSString *totalLaunchCount = persistentData[TEALDataSourceKey_LifecycleTotalLaunchCount];
-    if ([totalLaunchCount integerValue] == 1){
+    if (!totalLaunchCount ||
+        [totalLaunchCount integerValue] == 1){
         data[TEALDataSourceKey_LifecycleIsFirstLaunch] = TEALDataSourceValue_True;
     }
     
     return data;
+}
+
++ (BOOL)didDetectCrashFromPersistentData:(NSDictionary *)persistentData currentLifecycleEvent:(TEALLifecycleType)type {
+  
+    TEALLifecycleType lastEvent = [TEALLifecycleDataSources mostRecentDateFromPersistentData:persistentData];
+    
+    // Only correct lastEvent currentEvent combinations
+    if (lastEvent == TEALLifecycleTypeSleep &&
+        (type == TEALLifecycleTypeWake || type == TEALLifecycleTypeLaunch)){
+        return NO;
+    }
+    if ((lastEvent == TEALLifecycleTypeWake || lastEvent == TEALLifecycleTypeLaunch) &&
+        type == TEALLifecycleTypeSleep){
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (TEALLifecycleType) mostRecentDateFromPersistentData:(NSDictionary *)persistentData {
+
+    NSDate *lastLaunch = [TEALLifecycleDataSources dateFromISOString:persistentData[TEALDataSourceKey_LifecycleLastLaunchDate]];
+    NSDate *lastSleep = [TEALLifecycleDataSources dateFromISOString:persistentData[TEALDataSourceKey_LifecycleLastSleepDate]];
+    NSDate *lastWake = [TEALLifecycleDataSources dateFromISOString:persistentData[TEALDataSourceKey_LifecycleLastWakeDate]];
+    
+    NSMutableArray *mArray = [NSMutableArray arrayWithCapacity:3];
+    if (lastLaunch) { [mArray addObject:lastLaunch]; }
+    if (lastSleep) { [mArray addObject:lastSleep]; }
+    if (lastWake) { [mArray addObject:lastWake]; }
+    
+    NSDate *mostRecent = [mArray valueForKeyPath:@"@max.self"];
+    
+    if ([mostRecent isEqualToDate:lastLaunch]) { return TEALLifecycleTypeLaunch; }
+    if ([mostRecent isEqualToDate:lastSleep]) { return TEALLifecycleTypeSleep; }
+    if ([mostRecent isEqualToDate:lastWake]) { return TEALLifecycleTypeWake; }
+    
+    return TEALLifecycleTypeNone;
 }
 
 + (NSMutableDictionary *) newVolatileLifecycleDataSourcesForWakesAt:(NSDate *)date
@@ -482,8 +529,16 @@ static NSDateFormatter *_mmddyyyyFormatter;
         dataSources[TEALDataSourceKey_LifecycleIsFirstWakeThisMonth] = TEALDataSourceValue_True;
         
     }
-        
+    
     dataSources[TEALDataSourceKey_LifecycleType] = TEALDataSourceValue_LifecycleWake;
+    
+    //crashDetection
+    if ([TEALLifecycleDataSources didDetectCrashFromPersistentData:persistentData
+                                             currentLifecycleEvent:TEALLifecycleTypeWake]) {
+        
+        dataSources[TEALDataSourceKey_LifecycleDidDetectCrash] = TEALDataSourceValue_True;
+        
+    }
     
     return dataSources;
 }
