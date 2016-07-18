@@ -233,4 +233,61 @@
     while (!*flag);
     return *flag;
 }
+
++ (BOOL)doesDictionary :(NSDictionary *)sourceDict containDictionary:(NSDictionary *)targetDict{
+    
+    BOOL doesContain = true;
+    
+    for(id key in targetDict) {
+        
+        if (![sourceDict objectForKey:key]) {
+            return NO;
+            
+        }else {
+            id valueForDictA = [targetDict objectForKey:key];
+            id valueForContaining = [sourceDict objectForKey:key];
+            
+            BOOL valuesAreEqual = [self valuesEqual:valueForDictA and:valueForContaining];
+            
+            if (!valuesAreEqual){
+                return NO;
+                
+            }else {
+                doesContain = true;
+
+            }
+        }
+    }
+    return doesContain;
+    
+}
+
+
++ (BOOL)valuesEqual: (id)firstObject and:(id)secondObject{
+    
+    BOOL isValuesEqual = false;
+    
+    if ([firstObject isKindOfClass:[NSString class]] &&
+        [secondObject isKindOfClass:[NSString class]]){
+        if ([firstObject isEqualToString: secondObject]){
+            isValuesEqual = true;
+        }
+    } else if([firstObject isKindOfClass:[NSNumber class]] &&
+              [secondObject isKindOfClass:[NSNumber class]]) {
+        if ([firstObject isEqualToNumber:secondObject]){
+            isValuesEqual = true;
+            
+        }
+        
+    }else {
+        if (firstObject == secondObject){
+            isValuesEqual = true;
+        
+        }
+    }
+    
+    return isValuesEqual;
+
+}
+
 @end

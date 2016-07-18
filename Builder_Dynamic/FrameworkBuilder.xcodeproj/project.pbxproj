@@ -32,6 +32,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2273716F1D3D8D8A00D73C54 /* tealium_track_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 716D5DDC1D09E8ED00E765F6 /* tealium_track_data.json */; };
 		711BB03B1D0773F500A3C1F0 /* Tealium_TagManagmentPrivateAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 711BB03A1D0773F500A3C1F0 /* Tealium_TagManagmentPrivateAPITests.m */; };
 		711BB03D1D0776E600A3C1F0 /* tag_management_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 711BB03C1D0776E600A3C1F0 /* tag_management_ON.json */; };
 		711CEF1C1C6921A2001E2161 /* TealiumIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEF1A1C6921A2001E2161 /* TealiumIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1766,6 +1767,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2273716F1D3D8D8A00D73C54 /* tealium_track_data.json in Resources */,
 				712FD5941CFE643E00984F98 /* s2s_OFF.html in Resources */,
 				712FD59B1CFE643E00984F98 /* all_number_options_1.json in Resources */,
 				712FD5B01CFE643E00984F98 /* sample_utag_track in Resources */,

@@ -9,10 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "TEALDataSources.h"
+#import "TEALTestHelper.h"
+#import "Tealium+PrivateHeader.h"
+#import "TEALDispatch+PrivateHeader.h"
+
 
 @interface TEALDatasourcesTests : XCTestCase
 
 @property (nonatomic, strong) TEALDataSources *dataSources;
+@property Tealium *library;
 
 @end
 
@@ -75,6 +80,68 @@
     XCTAssertTrue(purgedDataSources[@"uuid"], @"Unexpected persistent data contente: %@", purgedDataSources);
 
 }
+
+- (void) testTrackEventUniversalDataSources {
+    
+    __block BOOL isReady = NO;
+    
+    self.library = [Tealium newInstanceForKey:self.description
+                                configuration:[TEALTestHelper liveConfig]
+                                   completion:^(BOOL success, NSError * _Nullable error) {
+                                       
+                                       isReady = YES;
+                                       
+                                   }];
+    
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+    
+    
+    NSDictionary *allSampleData = [TEALTestHelper dictionaryFromJSONFile:@"tealium_track_data"];
+    NSArray *sampleData = allSampleData[@"events"];
+    
+    
+    NSMutableDictionary *inputData = [[NSMutableDictionary alloc]init];
+    
+    [inputData setValue:@"test" forKey:@"event_name"];
+    
+    //call track event
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"testtrackeventuniversaldatasources"];
+    
+    for (int i = 0; i < sampleData.count; i++) {
+        
+        NSDictionary *testData = sampleData[i][@"input_data"][@"test_data"];
+        __block NSDictionary *expectedOutput = sampleData[i][@"expected_data"];
+        
+        [inputData setValue:testData forKey:@"test_data"];
+        
+        
+        [self.library trackDispatchOfType:TEALDispatchTypeEvent title:@"test" dataSources:inputData
+                               completion:^(TEALDispatchStatus status,
+                                            TEALDispatch * _Nonnull dispatch,
+                                            NSError * _Nullable error) {
+            
+            BOOL doesContain = [TEALTestHelper doesDictionary:[dispatch payload] containDictionary:expectedOutput];
+            
+            NSString *function = @"testTrackEventUniversalDataSources";
+            
+            NSString *inputDebug = [NSString stringWithFormat:@"Input data : %@ ", inputData];
+            NSString *dispatchDebug = [NSString stringWithFormat:@"Return Dispatch : %@ ", [dispatch payload]];
+            NSString *outputDebug = [NSString stringWithFormat:@"Expected output : %@ ", expectedOutput];
+            
+            XCTAssertTrue(doesContain, @" %@, %@,  %@, %@", inputDebug, dispatchDebug, outputDebug, function);
+            
+            if (i == sampleData.count){
+                [expectation fulfill];
+                
+            }
+        }];
+    }
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+}
+
 
 #pragma mark - HELPERS
 
