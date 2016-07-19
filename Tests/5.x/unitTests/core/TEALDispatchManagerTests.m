@@ -275,7 +275,6 @@
     
 }
 
-
 - (BOOL) dispatchManagerShouldQueueDispatch:(TEALDispatch *)dispatch {
 
     return self.shouldQueue;

@@ -41,124 +41,9 @@
 		535682BE18F3670300BAAD62 /* AAPLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A418F3670300BAAD62 /* AAPLWebViewController.m */; };
 		535682BF18F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m in Sources */ = {isa = PBXBuildFile; fileRef = 535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */; };
 		53874F9918F36B1800510922 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53874F9718F36B1800510922 /* Localizable.strings */; };
-		710198201C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */; };
-		7104CF0F1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */; };
 		710E1DD51C29AC0F007BABF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */; };
 		710E1DDB1C29B2A6007BABF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */; };
-		7118DC5A1C5929B100D3B612 /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB8F1C5929B100D3B612 /* TEALVisitorProfile.m */; };
-		7118DC5B1C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB911C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.m */; };
-		7118DC5C1C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB931C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.m */; };
-		7118DC5D1C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB951C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.m */; };
-		7118DC5E1C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB971C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.m */; };
-		7118DC5F1C5929B100D3B612 /* TEALVisitorProfileDateAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB991C5929B100D3B612 /* TEALVisitorProfileDateAttribute.m */; };
-		7118DC601C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB9B1C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.m */; };
-		7118DC611C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB9D1C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.m */; };
-		7118DC621C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DB9F1C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.m */; };
-		7118DC631C5929B100D3B612 /* TEALVisitorProfileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBA21C5929B100D3B612 /* TEALVisitorProfileHelpers.m */; };
-		7118DC641C5929B100D3B612 /* TEALVisitorProfileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBA41C5929B100D3B612 /* TEALVisitorProfileStore.m */; };
-		7118DC651C5929B100D3B612 /* TEALCollectDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBA61C5929B100D3B612 /* TEALCollectDispatchService.m */; };
-		7118DC661C5929B100D3B612 /* TEALConfiguration+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBA81C5929B100D3B612 /* TEALConfiguration+Collect.m */; };
-		7118DC671C5929B100D3B612 /* Tealium+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBAA1C5929B100D3B612 /* Tealium+Collect.m */; };
-		7118DC681C5929B100D3B612 /* TEALPublishSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBAC1C5929B100D3B612 /* TEALPublishSettings+Collect.m */; };
-		7118DC691C5929B100D3B612 /* TEALS2SLegacyDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBAE1C5929B100D3B612 /* TEALS2SLegacyDispatchService.m */; };
-		7118DC6A1C5929B100D3B612 /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBB01C5929B100D3B612 /* TEALSettings+Collect.m */; };
-		7118DC6B1C5929B100D3B612 /* NSArray+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBB41C5929B100D3B612 /* NSArray+Tealium.m */; };
-		7118DC6D1C5929B100D3B612 /* NSObject+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBB81C5929B100D3B612 /* NSObject+Tealium.m */; };
-		7118DC6E1C5929B100D3B612 /* NSString+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBBA1C5929B100D3B612 /* NSString+Tealium.m */; };
-		7118DC6F1C5929B100D3B612 /* TEALApplicationDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBBE1C5929B100D3B612 /* TEALApplicationDataSources.m */; };
-		7118DC701C5929B100D3B612 /* TEALDeviceDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC01C5929B100D3B612 /* TEALDeviceDataSources.m */; };
-		7118DC711C5929B100D3B612 /* TEALTimestampDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC21C5929B100D3B612 /* TEALTimestampDataSources.m */; };
-		7118DC721C5929B100D3B612 /* TEALDataSourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC41C5929B100D3B612 /* TEALDataSourceConstants.m */; };
-		7118DC731C5929B100D3B612 /* TEALDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC71C5929B100D3B612 /* TEALDataSources.m */; };
-		7118DC741C5929B100D3B612 /* TEALDataSourceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC91C5929B100D3B612 /* TEALDataSourceStore.m */; };
-		7118DC751C5929B100D3B612 /* TEALSharedDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBCB1C5929B100D3B612 /* TEALSharedDataSources.m */; };
-		7118DC791C5929B100D3B612 /* TEALNetworkHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBDA1C5929B100D3B612 /* TEALNetworkHelpers.m */; };
-		7118DC7A1C5929B100D3B612 /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBDC1C5929B100D3B612 /* TEALReachability.m */; };
-		7118DC7B1C5929B100D3B612 /* TEALReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBDE1C5929B100D3B612 /* TEALReachabilityManager.m */; };
-		7118DC7C1C5929B100D3B612 /* TEALURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBE01C5929B100D3B612 /* TEALURLSessionManager.m */; };
-		7118DC7D1C5929B100D3B612 /* TEALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBE41C5929B100D3B612 /* TEALConfiguration.m */; };
-		7118DC7E1C5929B100D3B612 /* TEALPublishSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBE71C5929B100D3B612 /* TEALPublishSettings.m */; };
-		7118DC7F1C5929B100D3B612 /* TEALPublishSettingsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBE91C5929B100D3B612 /* TEALPublishSettingsConstants.m */; };
-		7118DC801C5929B100D3B612 /* TEALPublishSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBEB1C5929B100D3B612 /* TEALPublishSettingsStore.m */; };
-		7118DC811C5929B100D3B612 /* TEALSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBEE1C5929B100D3B612 /* TEALSettings.m */; };
-		7118DC821C5929B100D3B612 /* TEALDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBF11C5929B100D3B612 /* TEALDataStore.m */; };
-		7118DC841C5929B100D3B612 /* TEALDelegateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBF71C5929B100D3B612 /* TEALDelegateManager.m */; };
-		7118DC851C5929B100D3B612 /* TEALError.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBF91C5929B100D3B612 /* TEALError.m */; };
-		7118DC861C5929B100D3B612 /* TEALLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBFB1C5929B100D3B612 /* TEALLogger.m */; };
-		7118DC881C5929B100D3B612 /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC001C5929B100D3B612 /* TEALOperationManager.m */; };
-		7118DC971C5929B100D3B612 /* TEALRemoteCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC281C5929B100D3B612 /* TEALRemoteCommand.m */; };
-		7118DC981C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2A1C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m */; };
-		7118DC991C5929B100D3B612 /* TEALRemoteCommandErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2D1C5929B100D3B612 /* TEALRemoteCommandErrors.m */; };
-		7118DC9A1C5929B100D3B612 /* TEALRemoteCommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2F1C5929B100D3B612 /* TEALRemoteCommandManager.m */; };
-		7118DC9B1C5929B100D3B612 /* TEALRemoteCommandResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC321C5929B100D3B612 /* TEALRemoteCommandResponse.m */; };
-		7118DC9C1C5929B100D3B612 /* TEALConfiguration+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC341C5929B100D3B612 /* TEALConfiguration+TagManagement.m */; };
-		7118DC9D1C5929B100D3B612 /* Tealium+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC371C5929B100D3B612 /* Tealium+TagManagement.m */; };
-		7118DC9E1C5929B100D3B612 /* TEALPublishSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC391C5929B100D3B612 /* TEALPublishSettings+TagManagement.m */; };
-		7118DC9F1C5929B100D3B612 /* TEALSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3B1C5929B100D3B612 /* TEALSettings+TagManagement.m */; };
-		7118DCA01C5929B100D3B612 /* TEALTagDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3D1C5929B100D3B612 /* TEALTagDispatchService.m */; };
-		7118DCA11C5929B100D3B612 /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3F1C5929B100D3B612 /* Tealium.m */; };
-		7118DCA21C5929B100D3B612 /* Tealium+WatchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC421C5929B100D3B612 /* Tealium+WatchKit.m */; };
-		7118DCA31C5929B100D3B612 /* TEALWKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC441C5929B100D3B612 /* TEALWKConstants.m */; };
-		7118DCAD1C5936D700D3B612 /* TEALDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DCA91C5936D700D3B612 /* TEALDispatch.m */; };
-		7118DCAE1C5936D700D3B612 /* TEALDispatchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DCAC1C5936D700D3B612 /* TEALDispatchManager.m */; };
-		712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C2F1C29ABD7007BABF7 /* TealiumDelegateTestObject.m */; };
-		712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */; };
-		712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */; };
 		712BAF361C29BED4007767CD /* UIKitCatalogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */; };
-		7145B0B71C59A37500842A4D /* TEALDispatchManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7145B0B61C59A37500842A4D /* TEALDispatchManagerTests.m */; };
-		715C4A111C52EB6A006B39EF /* TEALConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */; };
-		715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */; };
-		715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */; };
-		715C4A161C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */; };
-		715C4A171C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */; };
-		715C4A181C52EB6A006B39EF /* TealiumInstanceManagmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0C1C52EB6A006B39EF /* TealiumInstanceManagmentTests.m */; };
-		715C4A191C52EB6A006B39EF /* TealiumTrackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0D1C52EB6A006B39EF /* TealiumTrackTests.m */; };
-		715C4A1A1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0E1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m */; };
-		715C4A1B1C52EB6A006B39EF /* TEALPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A0F1C52EB6A006B39EF /* TEALPublishSettingsTests.m */; };
-		715C4A1C1C52EB6A006B39EF /* TEALSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 715C4A101C52EB6A006B39EF /* TEALSettingsTests.m */; };
-		716AD98A1C56D558007D7E7C /* TEALRemoteCommandManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */; };
-		716AD98C1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */; };
-		716CC9C41C53513500510B21 /* audiencestream_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9A91C53513500510B21 /* audiencestream_OFF.html */; };
-		716CC9C51C53513500510B21 /* audiencestream_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AA1C53513500510B21 /* audiencestream_ON.html */; };
-		716CC9C61C53513500510B21 /* collect_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AB1C53513500510B21 /* collect_OFF.html */; };
-		716CC9C71C53513500510B21 /* collect_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AC1C53513500510B21 /* collect_ON.html */; };
-		716CC9C81C53513500510B21 /* no_minutes_between_refresh.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AD1C53513500510B21 /* no_minutes_between_refresh.html */; };
-		716CC9C91C53513500510B21 /* no_mps.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AE1C53513500510B21 /* no_mps.html */; };
-		716CC9CA1C53513500510B21 /* s2s_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9AF1C53513500510B21 /* s2s_OFF.html */; };
-		716CC9CB1C53513500510B21 /* s2s_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B01C53513500510B21 /* s2s_ON.html */; };
-		716CC9CC1C53513500510B21 /* tagmanagement_OFF.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B11C53513500510B21 /* tagmanagement_OFF.html */; };
-		716CC9CD1C53513500510B21 /* tagmanagement_ON.html in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B21C53513500510B21 /* tagmanagement_ON.html */; };
-		716CC9CE1C53513500510B21 /* all_dispatchers_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B41C53513500510B21 /* all_dispatchers_ON.json */; };
-		716CC9CF1C53513500510B21 /* all_number_options_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B51C53513500510B21 /* all_number_options_0.json */; };
-		716CC9D01C53513500510B21 /* all_number_options_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B61C53513500510B21 /* all_number_options_1.json */; };
-		716CC9D11C53513500510B21 /* all_options_OFF.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B71C53513500510B21 /* all_options_OFF.json */; };
-		716CC9D21C53513500510B21 /* all_options_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B81C53513500510B21 /* all_options_ON.json */; };
-		716CC9D31C53513500510B21 /* batch_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9B91C53513500510B21 /* batch_5.json */; };
-		716CC9D41C53513500510B21 /* collect_ON.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9BA1C53513500510B21 /* collect_ON.json */; };
-		716CC9D51C53513500510B21 /* library_EMPTY.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9BB1C53513500510B21 /* library_EMPTY.json */; };
-		716CC9D61C53513500510B21 /* library_MISSING.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9BC1C53513500510B21 /* library_MISSING.json */; };
-		716CC9D71C53513500510B21 /* library_OFF.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9BD1C53513500510B21 /* library_OFF.json */; };
-		716CC9DA1C53513500510B21 /* offline_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9C01C53513500510B21 /* offline_5.json */; };
-		716CC9DB1C53513500510B21 /* override_log_DEV.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9C11C53513500510B21 /* override_log_DEV.json */; };
-		716CC9DC1C53513500510B21 /* override_log_SILENT.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9C21C53513500510B21 /* override_log_SILENT.json */; };
-		716CC9DD1C53513500510B21 /* ListOfLiveRemoteJSONMPS in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9C31C53513500510B21 /* ListOfLiveRemoteJSONMPS */; };
-		716CC9E11C53569000510B21 /* override_log_EMPTY.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9DE1C53569000510B21 /* override_log_EMPTY.json */; };
-		716CC9E21C53569000510B21 /* override_log_PROD.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9DF1C53569000510B21 /* override_log_PROD.json */; };
-		716CC9E31C53569000510B21 /* override_log_QA.json in Resources */ = {isa = PBXBuildFile; fileRef = 716CC9E01C53569000510B21 /* override_log_QA.json */; };
-		717EBAC41C90953400031237 /* TEALRemoteCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC281C5929B100D3B612 /* TEALRemoteCommand.m */; };
-		717EBAC51C90953400031237 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2A1C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m */; };
-		717EBAC61C90953400031237 /* TEALRemoteCommandErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2D1C5929B100D3B612 /* TEALRemoteCommandErrors.m */; };
-		717EBAC71C90953400031237 /* TEALRemoteCommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC2F1C5929B100D3B612 /* TEALRemoteCommandManager.m */; };
-		717EBAC81C90953400031237 /* TEALRemoteCommandResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC321C5929B100D3B612 /* TEALRemoteCommandResponse.m */; };
-		717EBAC91C90953400031237 /* TEALConfiguration+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC341C5929B100D3B612 /* TEALConfiguration+TagManagement.m */; };
-		717EBACA1C90953400031237 /* Tealium+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC371C5929B100D3B612 /* Tealium+TagManagement.m */; };
-		717EBACB1C90953400031237 /* TEALPublishSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC391C5929B100D3B612 /* TEALPublishSettings+TagManagement.m */; };
-		717EBACC1C90953400031237 /* TEALSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3B1C5929B100D3B612 /* TEALSettings+TagManagement.m */; };
-		717EBACD1C90953400031237 /* TEALTagDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3D1C5929B100D3B612 /* TEALTagDispatchService.m */; };
-		717EBB071C90D09900031237 /* Tealium+Lifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 717EBB041C90D09900031237 /* Tealium+Lifecycle.m */; };
-		717EBB081C90D09900031237 /* Tealium+Lifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 717EBB041C90D09900031237 /* Tealium+Lifecycle.m */; };
-		717EBB091C90D09900031237 /* TEALLifecycleDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 717EBB061C90D09900031237 /* TEALLifecycleDataSources.m */; };
-		717EBB0A1C90D09900031237 /* TEALLifecycleDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 717EBB061C90D09900031237 /* TEALLifecycleDataSources.m */; };
 		718546DD1C2876C4009CF93E /* SourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546DC1C2876C4009CF93E /* SourceTests.m */; };
 		718546EB1C2876D5009CF93E /* FrameworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718546EA1C2876D5009CF93E /* FrameworkTests.m */; };
 		71854A481C287CD0009CF93E /* AAPLSearchShowResultsInSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E8CF103196DBE6800420B6B /* AAPLSearchShowResultsInSourceViewController.m */; };
@@ -197,6 +82,66 @@
 		71854AAA1C287CD0009CF93E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */; };
 		71854AAB1C287CD0009CF93E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5356825818F3656900BAAD62 /* Images.xcassets */; };
 		71854AAF1C287CD0009CF93E /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C805721B1A7BDE00C110F1 /* Search.storyboard */; };
+		71AA43411D3D2051002D329D /* TEALVisitorProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42AD1D3D2051002D329D /* TEALVisitorProfile.m */; };
+		71AA43421D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42AF1D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.m */; };
+		71AA43431D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42B11D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.m */; };
+		71AA43441D3D2051002D329D /* TEALVisitorProfileBaseAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42B31D3D2051002D329D /* TEALVisitorProfileBaseAttribute.m */; };
+		71AA43451D3D2051002D329D /* TEALVisitorProfileCurrentVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42B51D3D2051002D329D /* TEALVisitorProfileCurrentVisit.m */; };
+		71AA43461D3D2051002D329D /* TEALVisitorProfileDateAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42B71D3D2051002D329D /* TEALVisitorProfileDateAttribute.m */; };
+		71AA43471D3D2051002D329D /* TEALVisitorProfileFlagAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42B91D3D2051002D329D /* TEALVisitorProfileFlagAttribute.m */; };
+		71AA43481D3D2051002D329D /* TEALVisitorProfileMetricAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42BB1D3D2051002D329D /* TEALVisitorProfileMetricAttribute.m */; };
+		71AA43491D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42BD1D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.m */; };
+		71AA434A1D3D2051002D329D /* TEALVisitorProfileHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42C01D3D2051002D329D /* TEALVisitorProfileHelpers.m */; };
+		71AA434B1D3D2051002D329D /* TEALVisitorProfileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42C21D3D2051002D329D /* TEALVisitorProfileStore.m */; };
+		71AA434C1D3D2051002D329D /* TEALCollectDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42C41D3D2051002D329D /* TEALCollectDispatchService.m */; };
+		71AA434D1D3D2051002D329D /* TEALConfiguration+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42C61D3D2051002D329D /* TEALConfiguration+Collect.m */; };
+		71AA434E1D3D2051002D329D /* Tealium+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42C81D3D2051002D329D /* Tealium+Collect.m */; };
+		71AA434F1D3D2051002D329D /* TEALPublishSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42CA1D3D2051002D329D /* TEALPublishSettings+Collect.m */; };
+		71AA43501D3D2051002D329D /* TEALS2SLegacyDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42CC1D3D2051002D329D /* TEALS2SLegacyDispatchService.m */; };
+		71AA43511D3D2051002D329D /* TEALSettings+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42CE1D3D2051002D329D /* TEALSettings+Collect.m */; };
+		71AA43521D3D2051002D329D /* NSArray+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42D21D3D2051002D329D /* NSArray+Tealium.m */; };
+		71AA43531D3D2051002D329D /* NSObject+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42D41D3D2051002D329D /* NSObject+Tealium.m */; };
+		71AA43541D3D2051002D329D /* NSString+Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42D61D3D2051002D329D /* NSString+Tealium.m */; };
+		71AA43551D3D2051002D329D /* TEALApplicationDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42DA1D3D2051002D329D /* TEALApplicationDataSources.m */; };
+		71AA43561D3D2051002D329D /* TEALDeviceDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42DC1D3D2051002D329D /* TEALDeviceDataSources.m */; };
+		71AA43571D3D2051002D329D /* TEALTimestampDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42DE1D3D2051002D329D /* TEALTimestampDataSources.m */; };
+		71AA43581D3D2051002D329D /* TEALDataSourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42E01D3D2051002D329D /* TEALDataSourceConstants.m */; };
+		71AA43591D3D2051002D329D /* TEALDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42E31D3D2051002D329D /* TEALDataSources.m */; };
+		71AA435A1D3D2051002D329D /* TEALDataSourceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42E51D3D2051002D329D /* TEALDataSourceStore.m */; };
+		71AA435B1D3D2051002D329D /* TEALSharedDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42E71D3D2051002D329D /* TEALSharedDataSources.m */; };
+		71AA435C1D3D2051002D329D /* TEALDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42EB1D3D2051002D329D /* TEALDispatch.m */; };
+		71AA435D1D3D2051002D329D /* TEALDispatchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42EE1D3D2051002D329D /* TEALDispatchManager.m */; };
+		71AA435E1D3D2051002D329D /* TEALNetworkHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42F21D3D2051002D329D /* TEALNetworkHelpers.m */; };
+		71AA435F1D3D2051002D329D /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42F41D3D2051002D329D /* TEALReachability.m */; };
+		71AA43601D3D2051002D329D /* TEALReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42F61D3D2051002D329D /* TEALReachabilityManager.m */; };
+		71AA43611D3D2051002D329D /* TEALURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42F81D3D2051002D329D /* TEALURLSessionManager.m */; };
+		71AA43621D3D2051002D329D /* TEALConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42FC1D3D2051002D329D /* TEALConfiguration.m */; };
+		71AA43631D3D2051002D329D /* TEALPublishSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA42FF1D3D2051002D329D /* TEALPublishSettings.m */; };
+		71AA43641D3D2051002D329D /* TEALPublishSettingsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43011D3D2051002D329D /* TEALPublishSettingsConstants.m */; };
+		71AA43651D3D2051002D329D /* TEALPublishSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43031D3D2051002D329D /* TEALPublishSettingsStore.m */; };
+		71AA43661D3D2051002D329D /* TEALSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43061D3D2051002D329D /* TEALSettings.m */; };
+		71AA43671D3D2051002D329D /* TEALDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43091D3D2051002D329D /* TEALDataStore.m */; };
+		71AA43681D3D2051002D329D /* TEALDelegateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA430D1D3D2051002D329D /* TEALDelegateManager.m */; };
+		71AA43691D3D2051002D329D /* TEALError.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA430F1D3D2051002D329D /* TEALError.m */; };
+		71AA436A1D3D2051002D329D /* TEALLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43111D3D2051002D329D /* TEALLogger.m */; };
+		71AA436B1D3D2051002D329D /* TEALNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43141D3D2051002D329D /* TEALNotifications.m */; };
+		71AA436C1D3D2051002D329D /* TEALOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43161D3D2051002D329D /* TEALOperationManager.m */; };
+		71AA436D1D3D2051002D329D /* Tealium+Lifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA431E1D3D2051002D329D /* Tealium+Lifecycle.m */; };
+		71AA436E1D3D2051002D329D /* TEALLifecycleDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43201D3D2051002D329D /* TEALLifecycleDataSources.m */; };
+		71AA436F1D3D2051002D329D /* TEALRemoteCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43241D3D2051002D329D /* TEALRemoteCommand.m */; };
+		71AA43701D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43261D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.m */; };
+		71AA43711D3D2051002D329D /* TEALRemoteCommandErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43291D3D2051002D329D /* TEALRemoteCommandErrors.m */; };
+		71AA43721D3D2051002D329D /* TEALRemoteCommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA432B1D3D2051002D329D /* TEALRemoteCommandManager.m */; };
+		71AA43731D3D2051002D329D /* TEALRemoteCommandResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA432E1D3D2051002D329D /* TEALRemoteCommandResponse.m */; };
+		71AA43741D3D2051002D329D /* TEALConfiguration+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43301D3D2051002D329D /* TEALConfiguration+TagManagement.m */; };
+		71AA43751D3D2051002D329D /* Tealium+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43331D3D2051002D329D /* Tealium+TagManagement.m */; };
+		71AA43761D3D2051002D329D /* TEALPublishSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43351D3D2051002D329D /* TEALPublishSettings+TagManagement.m */; };
+		71AA43771D3D2051002D329D /* TEALSettings+TagManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43371D3D2051002D329D /* TEALSettings+TagManagement.m */; };
+		71AA43781D3D2051002D329D /* TEALTagDispatchService.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43391D3D2051002D329D /* TEALTagDispatchService.m */; };
+		71AA43791D3D2051002D329D /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA433B1D3D2051002D329D /* Tealium.m */; };
+		71AA437A1D3D2051002D329D /* Tealium+WatchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA433E1D3D2051002D329D /* Tealium+WatchKit.m */; };
+		71AA437B1D3D2051002D329D /* TEALWKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AA43401D3D2051002D329D /* TEALWKConstants.m */; };
+		71AA437C1D3D258E002D329D /* TEALLifecycleDataSources.h in Sources */ = {isa = PBXBuildFile; fileRef = 71AA431F1D3D2051002D329D /* TEALLifecycleDataSources.h */; };
 		71BB33A31C29CA3A0075689C /* AAPLSearchShowResultsInSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E8CF103196DBE6800420B6B /* AAPLSearchShowResultsInSourceViewController.m */; };
 		71BB33A81C29CA3A0075689C /* AAPLDatePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5356828418F3670300BAAD62 /* AAPLDatePickerController.m */; };
 		71BB33AF1C29CA3A0075689C /* AAPLSearchPresentOverNavigationBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE0A032196DDDF70059F740 /* AAPLSearchPresentOverNavigationBarViewController.m */; };
@@ -234,20 +179,8 @@
 		71BB34001C29CA3A0075689C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */; };
 		71BB34011C29CA3A0075689C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5356825818F3656900BAAD62 /* Images.xcassets */; };
 		71BB34031C29CA3A0075689C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C805721B1A7BDE00C110F1 /* Search.storyboard */; };
-		71C578381C88A532002AF643 /* Tealium_LifecycleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C578361C88A532002AF643 /* Tealium_LifecycleTests.m */; };
-		71C578391C88A532002AF643 /* TEALLifecycleDataSourcesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71C578371C88A532002AF643 /* TEALLifecycleDataSourcesTests.m */; };
-		71C578B71C88B209002AF643 /* lifecycle_events.json in Resources */ = {isa = PBXBuildFile; fileRef = 71C578B41C88B209002AF643 /* lifecycle_events.json */; };
-		71C578B81C88B209002AF643 /* lifecycle_sample_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 71C578B51C88B209002AF643 /* lifecycle_sample_data.json */; };
-		71C578B91C88B209002AF643 /* lifecycle_sample_volatile_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 71C578B61C88B209002AF643 /* lifecycle_sample_volatile_data.json */; };
 		71D61A9D1C28B62200F298AE /* __x_FrameworkUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D61A9C1C28B62200F298AE /* __x_FrameworkUITests.m */; };
-		71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */ = {isa = PBXBuildFile; fileRef = 71DC9BCE1C3F168E0038855D /* ios_data_sources.json */; };
-		71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */ = {isa = PBXBuildFile; fileRef = 71DC9BCE1C3F168E0038855D /* ios_data_sources.json */; };
 		71E74B651C9084CD0079A955 /* TealiumHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E74B641C9084CD0079A955 /* TealiumHelper.m */; };
-		71E74B671C9088740079A955 /* TEALDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBC71C5929B100D3B612 /* TEALDataSources.m */; };
-		71E74B681C9091810079A955 /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DC3F1C5929B100D3B612 /* Tealium.m */; };
-		71E74B691C9091890079A955 /* Tealium+Collect.m in Sources */ = {isa = PBXBuildFile; fileRef = 7118DBAA1C5929B100D3B612 /* Tealium+Collect.m */; };
-		71F6B3F81C5A9A8F00439A79 /* TealiumPrivateAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F6B3F71C5A9A8F00439A79 /* TealiumPrivateAPITests.m */; };
-		71F6B3FA1C5AA81D00439A79 /* ios_data_sources_before_queueing.json in Resources */ = {isa = PBXBuildFile; fileRef = 71F6B3F91C5AA81D00439A79 /* ios_data_sources_before_queueing.json */; };
 		B5C300DF1B0FC4F1003B05A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */; };
 		B5C805741B1A7BDE00C110F1 /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C805721B1A7BDE00C110F1 /* Search.storyboard */; };
 		B5E280FA1B1D03F800920B27 /* AAPLStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E280F91B1D03F800920B27 /* AAPLStackViewController.m */; };
@@ -363,197 +296,12 @@
 		535682A518F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AAPLApplicationSpecific.h"; sourceTree = "<group>"; };
 		535682A618F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AAPLApplicationSpecific.m"; sourceTree = "<group>"; };
 		53874F9818F36B1800510922 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALS2SLegacyDispatchServiceTests.m; sourceTree = "<group>"; };
-		7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectConfigurationTests.m; sourceTree = "<group>"; };
-		710E1C2E1C29ABD7007BABF7 /* TealiumDelegateTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegateTestObject.h; sourceTree = "<group>"; };
-		710E1C2F1C29ABD7007BABF7 /* TealiumDelegateTestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumDelegateTestObject.m; sourceTree = "<group>"; };
-		710E1C301C29ABD7007BABF7 /* TEALTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTestHelper.h; sourceTree = "<group>"; };
-		710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTestHelper.m; sourceTree = "<group>"; };
-		710E1C321C29ABD7007BABF7 /* TEALTestHelperConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTestHelperConstants.h; sourceTree = "<group>"; };
-		710E1C381C29ABD7007BABF7 /* TealiumHelperImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumHelperImports.h; sourceTree = "<group>"; };
-		710E1C3E1C29ABD7007BABF7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		710E1DD41C29AC0F007BABF7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		7118DB8D1C5929B100D3B612 /* TEALVisitorProfile+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALVisitorProfile+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DB8E1C5929B100D3B612 /* TEALVisitorProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfile.h; sourceTree = "<group>"; };
-		7118DB8F1C5929B100D3B612 /* TEALVisitorProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfile.m; sourceTree = "<group>"; };
-		7118DB901C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileAudienceAttribute.h; sourceTree = "<group>"; };
-		7118DB911C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileAudienceAttribute.m; sourceTree = "<group>"; };
-		7118DB921C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBadgeAttribute.h; sourceTree = "<group>"; };
-		7118DB931C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBadgeAttribute.m; sourceTree = "<group>"; };
-		7118DB941C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBaseAttribute.h; sourceTree = "<group>"; };
-		7118DB951C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBaseAttribute.m; sourceTree = "<group>"; };
-		7118DB961C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileCurrentVisit.h; sourceTree = "<group>"; };
-		7118DB971C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileCurrentVisit.m; sourceTree = "<group>"; };
-		7118DB981C5929B100D3B612 /* TEALVisitorProfileDateAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDateAttribute.h; sourceTree = "<group>"; };
-		7118DB991C5929B100D3B612 /* TEALVisitorProfileDateAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileDateAttribute.m; sourceTree = "<group>"; };
-		7118DB9A1C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileFlagAttribute.h; sourceTree = "<group>"; };
-		7118DB9B1C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileFlagAttribute.m; sourceTree = "<group>"; };
-		7118DB9C1C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileMetricAttribute.h; sourceTree = "<group>"; };
-		7118DB9D1C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileMetricAttribute.m; sourceTree = "<group>"; };
-		7118DB9E1C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfilePropertyAttribute.h; sourceTree = "<group>"; };
-		7118DB9F1C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfilePropertyAttribute.m; sourceTree = "<group>"; };
-		7118DBA01C5929B100D3B612 /* TEALVisitorProfileDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDelegate.h; sourceTree = "<group>"; };
-		7118DBA11C5929B100D3B612 /* TEALVisitorProfileHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileHelpers.h; sourceTree = "<group>"; };
-		7118DBA21C5929B100D3B612 /* TEALVisitorProfileHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileHelpers.m; sourceTree = "<group>"; };
-		7118DBA31C5929B100D3B612 /* TEALVisitorProfileStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileStore.h; sourceTree = "<group>"; };
-		7118DBA41C5929B100D3B612 /* TEALVisitorProfileStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileStore.m; sourceTree = "<group>"; };
-		7118DBA51C5929B100D3B612 /* TEALCollectDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALCollectDispatchService.h; sourceTree = "<group>"; };
-		7118DBA61C5929B100D3B612 /* TEALCollectDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALCollectDispatchService.m; sourceTree = "<group>"; };
-		7118DBA71C5929B100D3B612 /* TEALConfiguration+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+Collect.h"; sourceTree = "<group>"; };
-		7118DBA81C5929B100D3B612 /* TEALConfiguration+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALConfiguration+Collect.m"; sourceTree = "<group>"; };
-		7118DBA91C5929B100D3B612 /* Tealium+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Collect.h"; sourceTree = "<group>"; };
-		7118DBAA1C5929B100D3B612 /* Tealium+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Collect.m"; sourceTree = "<group>"; };
-		7118DBAB1C5929B100D3B612 /* TEALPublishSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+Collect.h"; sourceTree = "<group>"; };
-		7118DBAC1C5929B100D3B612 /* TEALPublishSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALPublishSettings+Collect.m"; sourceTree = "<group>"; };
-		7118DBAD1C5929B100D3B612 /* TEALS2SLegacyDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALS2SLegacyDispatchService.h; sourceTree = "<group>"; };
-		7118DBAE1C5929B100D3B612 /* TEALS2SLegacyDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALS2SLegacyDispatchService.m; sourceTree = "<group>"; };
-		7118DBAF1C5929B100D3B612 /* TEALSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+Collect.h"; sourceTree = "<group>"; };
-		7118DBB01C5929B100D3B612 /* TEALSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALSettings+Collect.m"; sourceTree = "<group>"; };
-		7118DBB31C5929B100D3B612 /* NSArray+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Tealium.h"; sourceTree = "<group>"; };
-		7118DBB41C5929B100D3B612 /* NSArray+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Tealium.m"; sourceTree = "<group>"; };
-		7118DBB71C5929B100D3B612 /* NSObject+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tealium.h"; sourceTree = "<group>"; };
-		7118DBB81C5929B100D3B612 /* NSObject+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Tealium.m"; sourceTree = "<group>"; };
-		7118DBB91C5929B100D3B612 /* NSString+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Tealium.h"; sourceTree = "<group>"; };
-		7118DBBA1C5929B100D3B612 /* NSString+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Tealium.m"; sourceTree = "<group>"; };
-		7118DBBD1C5929B100D3B612 /* TEALApplicationDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALApplicationDataSources.h; sourceTree = "<group>"; };
-		7118DBBE1C5929B100D3B612 /* TEALApplicationDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALApplicationDataSources.m; sourceTree = "<group>"; };
-		7118DBBF1C5929B100D3B612 /* TEALDeviceDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDeviceDataSources.h; sourceTree = "<group>"; };
-		7118DBC01C5929B100D3B612 /* TEALDeviceDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDeviceDataSources.m; sourceTree = "<group>"; };
-		7118DBC11C5929B100D3B612 /* TEALTimestampDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTimestampDataSources.h; sourceTree = "<group>"; };
-		7118DBC21C5929B100D3B612 /* TEALTimestampDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTimestampDataSources.m; sourceTree = "<group>"; };
-		7118DBC31C5929B100D3B612 /* TEALDataSourceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceConstants.h; sourceTree = "<group>"; };
-		7118DBC41C5929B100D3B612 /* TEALDataSourceConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceConstants.m; sourceTree = "<group>"; };
-		7118DBC51C5929B100D3B612 /* TEALDataSources+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDataSources+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DBC61C5929B100D3B612 /* TEALDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSources.h; sourceTree = "<group>"; };
-		7118DBC71C5929B100D3B612 /* TEALDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSources.m; sourceTree = "<group>"; };
-		7118DBC81C5929B100D3B612 /* TEALDataSourceStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceStore.h; sourceTree = "<group>"; };
-		7118DBC91C5929B100D3B612 /* TEALDataSourceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceStore.m; sourceTree = "<group>"; };
-		7118DBCA1C5929B100D3B612 /* TEALSharedDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSharedDataSources.h; sourceTree = "<group>"; };
-		7118DBCB1C5929B100D3B612 /* TEALSharedDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSharedDataSources.m; sourceTree = "<group>"; };
-		7118DBD81C5929B100D3B612 /* TEALDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchService.h; sourceTree = "<group>"; };
-		7118DBD91C5929B100D3B612 /* TEALNetworkHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALNetworkHelpers.h; sourceTree = "<group>"; };
-		7118DBDA1C5929B100D3B612 /* TEALNetworkHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNetworkHelpers.m; sourceTree = "<group>"; };
-		7118DBDB1C5929B100D3B612 /* TEALReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachability.h; sourceTree = "<group>"; };
-		7118DBDC1C5929B100D3B612 /* TEALReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachability.m; sourceTree = "<group>"; };
-		7118DBDD1C5929B100D3B612 /* TEALReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachabilityManager.h; sourceTree = "<group>"; };
-		7118DBDE1C5929B100D3B612 /* TEALReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachabilityManager.m; sourceTree = "<group>"; };
-		7118DBDF1C5929B100D3B612 /* TEALURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALURLSessionManager.h; sourceTree = "<group>"; };
-		7118DBE01C5929B100D3B612 /* TEALURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALURLSessionManager.m; sourceTree = "<group>"; };
-		7118DBE21C5929B100D3B612 /* TEALConfiguration+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DBE31C5929B100D3B612 /* TEALConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALConfiguration.h; sourceTree = "<group>"; };
-		7118DBE41C5929B100D3B612 /* TEALConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfiguration.m; sourceTree = "<group>"; };
-		7118DBE51C5929B100D3B612 /* TEALPublishSettings+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DBE61C5929B100D3B612 /* TEALPublishSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettings.h; sourceTree = "<group>"; };
-		7118DBE71C5929B100D3B612 /* TEALPublishSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettings.m; sourceTree = "<group>"; };
-		7118DBE81C5929B100D3B612 /* TEALPublishSettingsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettingsConstants.h; sourceTree = "<group>"; };
-		7118DBE91C5929B100D3B612 /* TEALPublishSettingsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsConstants.m; sourceTree = "<group>"; };
-		7118DBEA1C5929B100D3B612 /* TEALPublishSettingsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettingsStore.h; sourceTree = "<group>"; };
-		7118DBEB1C5929B100D3B612 /* TEALPublishSettingsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsStore.m; sourceTree = "<group>"; };
-		7118DBEC1C5929B100D3B612 /* TEALSettings+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DBED1C5929B100D3B612 /* TEALSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSettings.h; sourceTree = "<group>"; };
-		7118DBEE1C5929B100D3B612 /* TEALSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettings.m; sourceTree = "<group>"; };
-		7118DBF01C5929B100D3B612 /* TEALDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataStore.h; sourceTree = "<group>"; };
-		7118DBF11C5929B100D3B612 /* TEALDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataStore.m; sourceTree = "<group>"; };
-		7118DBF51C5929B100D3B612 /* TEALBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALBlocks.h; sourceTree = "<group>"; };
-		7118DBF61C5929B100D3B612 /* TEALDelegateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDelegateManager.h; sourceTree = "<group>"; };
-		7118DBF71C5929B100D3B612 /* TEALDelegateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDelegateManager.m; sourceTree = "<group>"; };
-		7118DBF81C5929B100D3B612 /* TEALError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALError.h; sourceTree = "<group>"; };
-		7118DBF91C5929B100D3B612 /* TEALError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALError.m; sourceTree = "<group>"; };
-		7118DBFA1C5929B100D3B612 /* TEALLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLogger.h; sourceTree = "<group>"; };
-		7118DBFB1C5929B100D3B612 /* TEALLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLogger.m; sourceTree = "<group>"; };
-		7118DBFC1C5929B100D3B612 /* TEALModulesDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALModulesDelegate.h; sourceTree = "<group>"; };
-		7118DBFF1C5929B100D3B612 /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
-		7118DC001C5929B100D3B612 /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
-		7118DC031C5929B100D3B612 /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
-		7118DC051C5929B100D3B612 /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DC061C5929B100D3B612 /* TealiumDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegate.h; sourceTree = "<group>"; };
-		7118DC271C5929B100D3B612 /* TEALRemoteCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommand.h; sourceTree = "<group>"; };
-		7118DC281C5929B100D3B612 /* TEALRemoteCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommand.m; sourceTree = "<group>"; };
-		7118DC291C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALRemoteCommandConstants+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DC2A1C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALRemoteCommandConstants+PrivateHeader.m"; sourceTree = "<group>"; };
-		7118DC2B1C5929B100D3B612 /* TEALRemoteCommandConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandConstants.h; sourceTree = "<group>"; };
-		7118DC2C1C5929B100D3B612 /* TEALRemoteCommandErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandErrors.h; sourceTree = "<group>"; };
-		7118DC2D1C5929B100D3B612 /* TEALRemoteCommandErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandErrors.m; sourceTree = "<group>"; };
-		7118DC2E1C5929B100D3B612 /* TEALRemoteCommandManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandManager.h; sourceTree = "<group>"; };
-		7118DC2F1C5929B100D3B612 /* TEALRemoteCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManager.m; sourceTree = "<group>"; };
-		7118DC301C5929B100D3B612 /* TEALRemoteCommandResponse+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALRemoteCommandResponse+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DC311C5929B100D3B612 /* TEALRemoteCommandResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandResponse.h; sourceTree = "<group>"; };
-		7118DC321C5929B100D3B612 /* TEALRemoteCommandResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandResponse.m; sourceTree = "<group>"; };
-		7118DC331C5929B100D3B612 /* TEALConfiguration+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+TagManagement.h"; sourceTree = "<group>"; };
-		7118DC341C5929B100D3B612 /* TEALConfiguration+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALConfiguration+TagManagement.m"; sourceTree = "<group>"; };
-		7118DC351C5929B100D3B612 /* Tealium+TagManagement+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+TagManagement+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DC361C5929B100D3B612 /* Tealium+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+TagManagement.h"; sourceTree = "<group>"; };
-		7118DC371C5929B100D3B612 /* Tealium+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+TagManagement.m"; sourceTree = "<group>"; };
-		7118DC381C5929B100D3B612 /* TEALPublishSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+TagManagement.h"; sourceTree = "<group>"; };
-		7118DC391C5929B100D3B612 /* TEALPublishSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALPublishSettings+TagManagement.m"; sourceTree = "<group>"; };
-		7118DC3A1C5929B100D3B612 /* TEALSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+TagManagement.h"; sourceTree = "<group>"; };
-		7118DC3B1C5929B100D3B612 /* TEALSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALSettings+TagManagement.m"; sourceTree = "<group>"; };
-		7118DC3C1C5929B100D3B612 /* TEALTagDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTagDispatchService.h; sourceTree = "<group>"; };
-		7118DC3D1C5929B100D3B612 /* TEALTagDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchService.m; sourceTree = "<group>"; };
-		7118DC3E1C5929B100D3B612 /* Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tealium.h; sourceTree = "<group>"; };
-		7118DC3F1C5929B100D3B612 /* Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium.m; sourceTree = "<group>"; };
-		7118DC411C5929B100D3B612 /* Tealium+WatchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+WatchKit.h"; sourceTree = "<group>"; };
-		7118DC421C5929B100D3B612 /* Tealium+WatchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+WatchKit.m"; sourceTree = "<group>"; };
-		7118DC431C5929B100D3B612 /* TEALWKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKConstants.h; sourceTree = "<group>"; };
-		7118DC441C5929B100D3B612 /* TEALWKConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKConstants.m; sourceTree = "<group>"; };
-		7118DCA71C5936D700D3B612 /* TEALDispatch+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDispatch+PrivateHeader.h"; sourceTree = "<group>"; };
-		7118DCA81C5936D700D3B612 /* TEALDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatch.h; sourceTree = "<group>"; };
-		7118DCA91C5936D700D3B612 /* TEALDispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatch.m; sourceTree = "<group>"; };
-		7118DCAA1C5936D700D3B612 /* TEALDispatchConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchConstants.h; sourceTree = "<group>"; };
-		7118DCAB1C5936D700D3B612 /* TEALDispatchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchManager.h; sourceTree = "<group>"; };
-		7118DCAC1C5936D700D3B612 /* TEALDispatchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatchManager.m; sourceTree = "<group>"; };
-		712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTestHelperConstants.m; sourceTree = "<group>"; };
 		712BAF2C1C29BE10007767CD /* 5.x_SourceTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "5.x_SourceTests copy-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-apple-builder/tests/iOS9/objc/UIKitCatalog/Tealium/5.x_SourceTests copy-Info.plist"; sourceTree = "<absolute>"; };
 		712BAF331C29BED4007767CD /* UIKitCatalogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitCatalogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		712BAF351C29BED4007767CD /* UIKitCatalogUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitCatalogUITests.m; sourceTree = "<group>"; };
 		712BAF371C29BED4007767CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7134F0181C4EB746006AACEF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		7145B0B61C59A37500842A4D /* TEALDispatchManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatchManagerTests.m; sourceTree = "<group>"; };
-		715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfigurationTests.m; sourceTree = "<group>"; };
-		715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDatasourcesTests.m; sourceTree = "<group>"; };
-		715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_CollectPublicAPITests.m; sourceTree = "<group>"; };
-		715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagementPublicAPITests.m; sourceTree = "<group>"; };
-		715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagmentConfigurationTests.m; sourceTree = "<group>"; };
-		715C4A0C1C52EB6A006B39EF /* TealiumInstanceManagmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumInstanceManagmentTests.m; sourceTree = "<group>"; };
-		715C4A0D1C52EB6A006B39EF /* TealiumTrackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumTrackTests.m; sourceTree = "<group>"; };
-		715C4A0E1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsStoreTests.m; sourceTree = "<group>"; };
-		715C4A0F1C52EB6A006B39EF /* TEALPublishSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsTests.m; sourceTree = "<group>"; };
-		715C4A101C52EB6A006B39EF /* TEALSettingsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettingsTests.m; sourceTree = "<group>"; };
-		716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManagerTests.m; sourceTree = "<group>"; };
-		716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchServiceTests.m; sourceTree = "<group>"; };
-		716CC9A91C53513500510B21 /* audiencestream_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = audiencestream_OFF.html; sourceTree = "<group>"; };
-		716CC9AA1C53513500510B21 /* audiencestream_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = audiencestream_ON.html; sourceTree = "<group>"; };
-		716CC9AB1C53513500510B21 /* collect_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = collect_OFF.html; sourceTree = "<group>"; };
-		716CC9AC1C53513500510B21 /* collect_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = collect_ON.html; sourceTree = "<group>"; };
-		716CC9AD1C53513500510B21 /* no_minutes_between_refresh.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_minutes_between_refresh.html; sourceTree = "<group>"; };
-		716CC9AE1C53513500510B21 /* no_mps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_mps.html; sourceTree = "<group>"; };
-		716CC9AF1C53513500510B21 /* s2s_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = s2s_OFF.html; sourceTree = "<group>"; };
-		716CC9B01C53513500510B21 /* s2s_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = s2s_ON.html; sourceTree = "<group>"; };
-		716CC9B11C53513500510B21 /* tagmanagement_OFF.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tagmanagement_OFF.html; sourceTree = "<group>"; };
-		716CC9B21C53513500510B21 /* tagmanagement_ON.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tagmanagement_ON.html; sourceTree = "<group>"; };
-		716CC9B41C53513500510B21 /* all_dispatchers_ON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_dispatchers_ON.json; sourceTree = "<group>"; };
-		716CC9B51C53513500510B21 /* all_number_options_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_number_options_0.json; sourceTree = "<group>"; };
-		716CC9B61C53513500510B21 /* all_number_options_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_number_options_1.json; sourceTree = "<group>"; };
-		716CC9B71C53513500510B21 /* all_options_OFF.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_options_OFF.json; sourceTree = "<group>"; };
-		716CC9B81C53513500510B21 /* all_options_ON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_options_ON.json; sourceTree = "<group>"; };
-		716CC9B91C53513500510B21 /* batch_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = batch_5.json; sourceTree = "<group>"; };
-		716CC9BA1C53513500510B21 /* collect_ON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = collect_ON.json; sourceTree = "<group>"; };
-		716CC9BB1C53513500510B21 /* library_EMPTY.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = library_EMPTY.json; sourceTree = "<group>"; };
-		716CC9BC1C53513500510B21 /* library_MISSING.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = library_MISSING.json; sourceTree = "<group>"; };
-		716CC9BD1C53513500510B21 /* library_OFF.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = library_OFF.json; sourceTree = "<group>"; };
-		716CC9C01C53513500510B21 /* offline_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = offline_5.json; sourceTree = "<group>"; };
-		716CC9C11C53513500510B21 /* override_log_DEV.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_DEV.json; sourceTree = "<group>"; };
-		716CC9C21C53513500510B21 /* override_log_SILENT.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_SILENT.json; sourceTree = "<group>"; };
-		716CC9C31C53513500510B21 /* ListOfLiveRemoteJSONMPS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ListOfLiveRemoteJSONMPS; sourceTree = "<group>"; };
-		716CC9DE1C53569000510B21 /* override_log_EMPTY.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_EMPTY.json; sourceTree = "<group>"; };
-		716CC9DF1C53569000510B21 /* override_log_PROD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_PROD.json; sourceTree = "<group>"; };
-		716CC9E01C53569000510B21 /* override_log_QA.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = override_log_QA.json; sourceTree = "<group>"; };
-		716F2F8D1C6BCEF000A7F947 /* TEALVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVersion.h; sourceTree = "<group>"; };
-		717EBB021C90D09900031237 /* Tealium+Lifecycle+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Lifecycle+PrivateHeader.h"; sourceTree = "<group>"; };
-		717EBB031C90D09900031237 /* Tealium+Lifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Lifecycle.h"; sourceTree = "<group>"; };
-		717EBB041C90D09900031237 /* Tealium+Lifecycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Lifecycle.m"; sourceTree = "<group>"; };
-		717EBB051C90D09900031237 /* TEALLifecycleDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleDataSources.h; sourceTree = "<group>"; };
-		717EBB061C90D09900031237 /* TEALLifecycleDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleDataSources.m; sourceTree = "<group>"; };
 		718546DA1C2876C3009CF93E /* 5.x_SourceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 5.x_SourceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718546DC1C2876C4009CF93E /* SourceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceTests.m; sourceTree = "<group>"; };
 		718546DE1C2876C4009CF93E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -564,23 +312,152 @@
 		718546FA1C2876E4009CF93E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71854AB41C287CD0009CF93E /* UIKitCatalog_Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitCatalog_Framework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71854AB51C287CD0009CF93E /* UIKitCatalog_Source copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog_Source copy-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-apple-builder/tests/iOS9/Objective-C/UIKitCatalog_Source copy-Info.plist"; sourceTree = "<absolute>"; };
+		71AA42AB1D3D2051002D329D /* TEALVisitorProfile+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALVisitorProfile+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA42AC1D3D2051002D329D /* TEALVisitorProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfile.h; sourceTree = "<group>"; };
+		71AA42AD1D3D2051002D329D /* TEALVisitorProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfile.m; sourceTree = "<group>"; };
+		71AA42AE1D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileAudienceAttribute.h; sourceTree = "<group>"; };
+		71AA42AF1D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileAudienceAttribute.m; sourceTree = "<group>"; };
+		71AA42B01D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBadgeAttribute.h; sourceTree = "<group>"; };
+		71AA42B11D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBadgeAttribute.m; sourceTree = "<group>"; };
+		71AA42B21D3D2051002D329D /* TEALVisitorProfileBaseAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileBaseAttribute.h; sourceTree = "<group>"; };
+		71AA42B31D3D2051002D329D /* TEALVisitorProfileBaseAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileBaseAttribute.m; sourceTree = "<group>"; };
+		71AA42B41D3D2051002D329D /* TEALVisitorProfileCurrentVisit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileCurrentVisit.h; sourceTree = "<group>"; };
+		71AA42B51D3D2051002D329D /* TEALVisitorProfileCurrentVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileCurrentVisit.m; sourceTree = "<group>"; };
+		71AA42B61D3D2051002D329D /* TEALVisitorProfileDateAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDateAttribute.h; sourceTree = "<group>"; };
+		71AA42B71D3D2051002D329D /* TEALVisitorProfileDateAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileDateAttribute.m; sourceTree = "<group>"; };
+		71AA42B81D3D2051002D329D /* TEALVisitorProfileFlagAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileFlagAttribute.h; sourceTree = "<group>"; };
+		71AA42B91D3D2051002D329D /* TEALVisitorProfileFlagAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileFlagAttribute.m; sourceTree = "<group>"; };
+		71AA42BA1D3D2051002D329D /* TEALVisitorProfileMetricAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileMetricAttribute.h; sourceTree = "<group>"; };
+		71AA42BB1D3D2051002D329D /* TEALVisitorProfileMetricAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileMetricAttribute.m; sourceTree = "<group>"; };
+		71AA42BC1D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfilePropertyAttribute.h; sourceTree = "<group>"; };
+		71AA42BD1D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfilePropertyAttribute.m; sourceTree = "<group>"; };
+		71AA42BE1D3D2051002D329D /* TEALVisitorProfileDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileDelegate.h; sourceTree = "<group>"; };
+		71AA42BF1D3D2051002D329D /* TEALVisitorProfileHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileHelpers.h; sourceTree = "<group>"; };
+		71AA42C01D3D2051002D329D /* TEALVisitorProfileHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileHelpers.m; sourceTree = "<group>"; };
+		71AA42C11D3D2051002D329D /* TEALVisitorProfileStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVisitorProfileStore.h; sourceTree = "<group>"; };
+		71AA42C21D3D2051002D329D /* TEALVisitorProfileStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALVisitorProfileStore.m; sourceTree = "<group>"; };
+		71AA42C31D3D2051002D329D /* TEALCollectDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALCollectDispatchService.h; sourceTree = "<group>"; };
+		71AA42C41D3D2051002D329D /* TEALCollectDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALCollectDispatchService.m; sourceTree = "<group>"; };
+		71AA42C51D3D2051002D329D /* TEALConfiguration+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+Collect.h"; sourceTree = "<group>"; };
+		71AA42C61D3D2051002D329D /* TEALConfiguration+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALConfiguration+Collect.m"; sourceTree = "<group>"; };
+		71AA42C71D3D2051002D329D /* Tealium+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Collect.h"; sourceTree = "<group>"; };
+		71AA42C81D3D2051002D329D /* Tealium+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Collect.m"; sourceTree = "<group>"; };
+		71AA42C91D3D2051002D329D /* TEALPublishSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+Collect.h"; sourceTree = "<group>"; };
+		71AA42CA1D3D2051002D329D /* TEALPublishSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALPublishSettings+Collect.m"; sourceTree = "<group>"; };
+		71AA42CB1D3D2051002D329D /* TEALS2SLegacyDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALS2SLegacyDispatchService.h; sourceTree = "<group>"; };
+		71AA42CC1D3D2051002D329D /* TEALS2SLegacyDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALS2SLegacyDispatchService.m; sourceTree = "<group>"; };
+		71AA42CD1D3D2051002D329D /* TEALSettings+Collect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+Collect.h"; sourceTree = "<group>"; };
+		71AA42CE1D3D2051002D329D /* TEALSettings+Collect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALSettings+Collect.m"; sourceTree = "<group>"; };
+		71AA42D11D3D2051002D329D /* NSArray+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Tealium.h"; sourceTree = "<group>"; };
+		71AA42D21D3D2051002D329D /* NSArray+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Tealium.m"; sourceTree = "<group>"; };
+		71AA42D31D3D2051002D329D /* NSObject+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tealium.h"; sourceTree = "<group>"; };
+		71AA42D41D3D2051002D329D /* NSObject+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Tealium.m"; sourceTree = "<group>"; };
+		71AA42D51D3D2051002D329D /* NSString+Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Tealium.h"; sourceTree = "<group>"; };
+		71AA42D61D3D2051002D329D /* NSString+Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Tealium.m"; sourceTree = "<group>"; };
+		71AA42D91D3D2051002D329D /* TEALApplicationDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALApplicationDataSources.h; sourceTree = "<group>"; };
+		71AA42DA1D3D2051002D329D /* TEALApplicationDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALApplicationDataSources.m; sourceTree = "<group>"; };
+		71AA42DB1D3D2051002D329D /* TEALDeviceDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDeviceDataSources.h; sourceTree = "<group>"; };
+		71AA42DC1D3D2051002D329D /* TEALDeviceDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDeviceDataSources.m; sourceTree = "<group>"; };
+		71AA42DD1D3D2051002D329D /* TEALTimestampDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTimestampDataSources.h; sourceTree = "<group>"; };
+		71AA42DE1D3D2051002D329D /* TEALTimestampDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTimestampDataSources.m; sourceTree = "<group>"; };
+		71AA42DF1D3D2051002D329D /* TEALDataSourceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceConstants.h; sourceTree = "<group>"; };
+		71AA42E01D3D2051002D329D /* TEALDataSourceConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceConstants.m; sourceTree = "<group>"; };
+		71AA42E11D3D2051002D329D /* TEALDataSources+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDataSources+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA42E21D3D2051002D329D /* TEALDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSources.h; sourceTree = "<group>"; };
+		71AA42E31D3D2051002D329D /* TEALDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSources.m; sourceTree = "<group>"; };
+		71AA42E41D3D2051002D329D /* TEALDataSourceStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataSourceStore.h; sourceTree = "<group>"; };
+		71AA42E51D3D2051002D329D /* TEALDataSourceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataSourceStore.m; sourceTree = "<group>"; };
+		71AA42E61D3D2051002D329D /* TEALSharedDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSharedDataSources.h; sourceTree = "<group>"; };
+		71AA42E71D3D2051002D329D /* TEALSharedDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSharedDataSources.m; sourceTree = "<group>"; };
+		71AA42E91D3D2051002D329D /* TEALDispatch+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALDispatch+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA42EA1D3D2051002D329D /* TEALDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatch.h; sourceTree = "<group>"; };
+		71AA42EB1D3D2051002D329D /* TEALDispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatch.m; sourceTree = "<group>"; };
+		71AA42EC1D3D2051002D329D /* TEALDispatchConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchConstants.h; sourceTree = "<group>"; };
+		71AA42ED1D3D2051002D329D /* TEALDispatchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchManager.h; sourceTree = "<group>"; };
+		71AA42EE1D3D2051002D329D /* TEALDispatchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDispatchManager.m; sourceTree = "<group>"; };
+		71AA42F01D3D2051002D329D /* TEALDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDispatchService.h; sourceTree = "<group>"; };
+		71AA42F11D3D2051002D329D /* TEALNetworkHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALNetworkHelpers.h; sourceTree = "<group>"; };
+		71AA42F21D3D2051002D329D /* TEALNetworkHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNetworkHelpers.m; sourceTree = "<group>"; };
+		71AA42F31D3D2051002D329D /* TEALReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachability.h; sourceTree = "<group>"; };
+		71AA42F41D3D2051002D329D /* TEALReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachability.m; sourceTree = "<group>"; };
+		71AA42F51D3D2051002D329D /* TEALReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachabilityManager.h; sourceTree = "<group>"; };
+		71AA42F61D3D2051002D329D /* TEALReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachabilityManager.m; sourceTree = "<group>"; };
+		71AA42F71D3D2051002D329D /* TEALURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALURLSessionManager.h; sourceTree = "<group>"; };
+		71AA42F81D3D2051002D329D /* TEALURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALURLSessionManager.m; sourceTree = "<group>"; };
+		71AA42FA1D3D2051002D329D /* TEALConfiguration+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA42FB1D3D2051002D329D /* TEALConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALConfiguration.h; sourceTree = "<group>"; };
+		71AA42FC1D3D2051002D329D /* TEALConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALConfiguration.m; sourceTree = "<group>"; };
+		71AA42FD1D3D2051002D329D /* TEALPublishSettings+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA42FE1D3D2051002D329D /* TEALPublishSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettings.h; sourceTree = "<group>"; };
+		71AA42FF1D3D2051002D329D /* TEALPublishSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettings.m; sourceTree = "<group>"; };
+		71AA43001D3D2051002D329D /* TEALPublishSettingsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettingsConstants.h; sourceTree = "<group>"; };
+		71AA43011D3D2051002D329D /* TEALPublishSettingsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsConstants.m; sourceTree = "<group>"; };
+		71AA43021D3D2051002D329D /* TEALPublishSettingsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALPublishSettingsStore.h; sourceTree = "<group>"; };
+		71AA43031D3D2051002D329D /* TEALPublishSettingsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALPublishSettingsStore.m; sourceTree = "<group>"; };
+		71AA43041D3D2051002D329D /* TEALSettings+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA43051D3D2051002D329D /* TEALSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSettings.h; sourceTree = "<group>"; };
+		71AA43061D3D2051002D329D /* TEALSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALSettings.m; sourceTree = "<group>"; };
+		71AA43081D3D2051002D329D /* TEALDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDataStore.h; sourceTree = "<group>"; };
+		71AA43091D3D2051002D329D /* TEALDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDataStore.m; sourceTree = "<group>"; };
+		71AA430B1D3D2051002D329D /* TEALBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALBlocks.h; sourceTree = "<group>"; };
+		71AA430C1D3D2051002D329D /* TEALDelegateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALDelegateManager.h; sourceTree = "<group>"; };
+		71AA430D1D3D2051002D329D /* TEALDelegateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALDelegateManager.m; sourceTree = "<group>"; };
+		71AA430E1D3D2051002D329D /* TEALError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALError.h; sourceTree = "<group>"; };
+		71AA430F1D3D2051002D329D /* TEALError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALError.m; sourceTree = "<group>"; };
+		71AA43101D3D2051002D329D /* TEALLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLogger.h; sourceTree = "<group>"; };
+		71AA43111D3D2051002D329D /* TEALLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLogger.m; sourceTree = "<group>"; };
+		71AA43121D3D2051002D329D /* TEALModulesDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALModulesDelegate.h; sourceTree = "<group>"; };
+		71AA43131D3D2051002D329D /* TEALNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALNotifications.h; sourceTree = "<group>"; };
+		71AA43141D3D2051002D329D /* TEALNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALNotifications.m; sourceTree = "<group>"; };
+		71AA43151D3D2051002D329D /* TEALOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALOperationManager.h; sourceTree = "<group>"; };
+		71AA43161D3D2051002D329D /* TEALOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALOperationManager.m; sourceTree = "<group>"; };
+		71AA43171D3D2051002D329D /* TEALSystemProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALSystemProtocols.h; sourceTree = "<group>"; };
+		71AA43181D3D2051002D329D /* TEALVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALVersion.h; sourceTree = "<group>"; };
+		71AA43191D3D2051002D329D /* Tealium+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA431A1D3D2051002D329D /* TealiumDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumDelegate.h; sourceTree = "<group>"; };
+		71AA431C1D3D2051002D329D /* Tealium+Lifecycle+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Lifecycle+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA431D1D3D2051002D329D /* Tealium+Lifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+Lifecycle.h"; sourceTree = "<group>"; };
+		71AA431E1D3D2051002D329D /* Tealium+Lifecycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+Lifecycle.m"; sourceTree = "<group>"; };
+		71AA431F1D3D2051002D329D /* TEALLifecycleDataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALLifecycleDataSources.h; sourceTree = "<group>"; };
+		71AA43201D3D2051002D329D /* TEALLifecycleDataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleDataSources.m; sourceTree = "<group>"; };
+		71AA43231D3D2051002D329D /* TEALRemoteCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommand.h; sourceTree = "<group>"; };
+		71AA43241D3D2051002D329D /* TEALRemoteCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommand.m; sourceTree = "<group>"; };
+		71AA43251D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALRemoteCommandConstants+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA43261D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALRemoteCommandConstants+PrivateHeader.m"; sourceTree = "<group>"; };
+		71AA43271D3D2051002D329D /* TEALRemoteCommandConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandConstants.h; sourceTree = "<group>"; };
+		71AA43281D3D2051002D329D /* TEALRemoteCommandErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandErrors.h; sourceTree = "<group>"; };
+		71AA43291D3D2051002D329D /* TEALRemoteCommandErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandErrors.m; sourceTree = "<group>"; };
+		71AA432A1D3D2051002D329D /* TEALRemoteCommandManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandManager.h; sourceTree = "<group>"; };
+		71AA432B1D3D2051002D329D /* TEALRemoteCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManager.m; sourceTree = "<group>"; };
+		71AA432C1D3D2051002D329D /* TEALRemoteCommandResponse+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALRemoteCommandResponse+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA432D1D3D2051002D329D /* TEALRemoteCommandResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALRemoteCommandResponse.h; sourceTree = "<group>"; };
+		71AA432E1D3D2051002D329D /* TEALRemoteCommandResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandResponse.m; sourceTree = "<group>"; };
+		71AA432F1D3D2051002D329D /* TEALConfiguration+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALConfiguration+TagManagement.h"; sourceTree = "<group>"; };
+		71AA43301D3D2051002D329D /* TEALConfiguration+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALConfiguration+TagManagement.m"; sourceTree = "<group>"; };
+		71AA43311D3D2051002D329D /* Tealium+TagManagement+PrivateHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+TagManagement+PrivateHeader.h"; sourceTree = "<group>"; };
+		71AA43321D3D2051002D329D /* Tealium+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+TagManagement.h"; sourceTree = "<group>"; };
+		71AA43331D3D2051002D329D /* Tealium+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+TagManagement.m"; sourceTree = "<group>"; };
+		71AA43341D3D2051002D329D /* TEALPublishSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALPublishSettings+TagManagement.h"; sourceTree = "<group>"; };
+		71AA43351D3D2051002D329D /* TEALPublishSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALPublishSettings+TagManagement.m"; sourceTree = "<group>"; };
+		71AA43361D3D2051002D329D /* TEALSettings+TagManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TEALSettings+TagManagement.h"; sourceTree = "<group>"; };
+		71AA43371D3D2051002D329D /* TEALSettings+TagManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TEALSettings+TagManagement.m"; sourceTree = "<group>"; };
+		71AA43381D3D2051002D329D /* TEALTagDispatchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALTagDispatchService.h; sourceTree = "<group>"; };
+		71AA43391D3D2051002D329D /* TEALTagDispatchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchService.m; sourceTree = "<group>"; };
+		71AA433A1D3D2051002D329D /* Tealium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tealium.h; sourceTree = "<group>"; };
+		71AA433B1D3D2051002D329D /* Tealium.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium.m; sourceTree = "<group>"; };
+		71AA433D1D3D2051002D329D /* Tealium+WatchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tealium+WatchKit.h"; sourceTree = "<group>"; };
+		71AA433E1D3D2051002D329D /* Tealium+WatchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Tealium+WatchKit.m"; sourceTree = "<group>"; };
+		71AA433F1D3D2051002D329D /* TEALWKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALWKConstants.h; sourceTree = "<group>"; };
+		71AA43401D3D2051002D329D /* TEALWKConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALWKConstants.m; sourceTree = "<group>"; };
 		71BB34071C29CA3A0075689C /* PerformanceTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PerformanceTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71BB34081C29CA3B0075689C /* UIKitCatalog_Source copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog_Source copy2-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-apple-builder/tests/iOS9/objc/UIKitCatalog/Tealium/UIKitCatalog_Source copy2-Info.plist"; sourceTree = "<absolute>"; };
-		71C578361C88A532002AF643 /* Tealium_LifecycleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tealium_LifecycleTests.m; sourceTree = "<group>"; };
-		71C578371C88A532002AF643 /* TEALLifecycleDataSourcesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALLifecycleDataSourcesTests.m; sourceTree = "<group>"; };
 		71C578AB1C88AEEC002AF643 /* UIKitCatalog_Source copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UIKitCatalog_Source copy3-Info.plist"; path = "/Users/jasonkoo/Jason/tealium-apple-builder/Tests/iOS9/ObjC/UIKitCatalog/Tealium/UIKitCatalog_Source copy3-Info.plist"; sourceTree = "<absolute>"; };
-		71C578B41C88B209002AF643 /* lifecycle_events.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lifecycle_events.json; sourceTree = "<group>"; };
-		71C578B51C88B209002AF643 /* lifecycle_sample_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lifecycle_sample_data.json; sourceTree = "<group>"; };
-		71C578B61C88B209002AF643 /* lifecycle_sample_volatile_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lifecycle_sample_volatile_data.json; sourceTree = "<group>"; };
 		71D61A9A1C28B62200F298AE /* 5.x+FrameworkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "5.x+FrameworkUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D61A9C1C28B62200F298AE /* __x_FrameworkUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = __x_FrameworkUITests.m; sourceTree = "<group>"; };
 		71D61A9E1C28B62200F298AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71DC9BCE1C3F168E0038855D /* ios_data_sources.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ios_data_sources.json; sourceTree = "<group>"; };
 		71E74B631C9084CD0079A955 /* TealiumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumHelper.h; sourceTree = SOURCE_ROOT; };
 		71E74B641C9084CD0079A955 /* TealiumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumHelper.m; sourceTree = SOURCE_ROOT; };
 		71E74B661C9085310079A955 /* TealiumHelperImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumHelperImports.h; sourceTree = SOURCE_ROOT; };
-		71F6B3F71C5A9A8F00439A79 /* TealiumPrivateAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TealiumPrivateAPITests.m; sourceTree = "<group>"; };
-		71F6B3F91C5AA81D00439A79 /* ios_data_sources_before_queueing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ios_data_sources_before_queueing.json; sourceTree = "<group>"; };
 		B5C300DE1B0FC4F1003B05A0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B5C805731B1A7BDE00C110F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Search.storyboard; sourceTree = "<group>"; };
 		B5E280F81B1D03F800920B27 /* AAPLStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLStackViewController.h; sourceTree = "<group>"; };
@@ -758,6 +635,7 @@
 			isa = PBXGroup;
 			children = (
 				718547341C287B6B009CF93E /* Tealium */,
+				71AA42A71D3D2051002D329D /* Source */,
 				535682C018F3680D00BAAD62 /* View Controllers */,
 				53874F9A18F36B6900510922 /* Application */,
 				5356825818F3656900BAAD62 /* Images.xcassets */,
@@ -832,309 +710,6 @@
 			name = Application;
 			sourceTree = "<group>";
 		};
-		710E1C1E1C29ABD7007BABF7 /* 5.x */ = {
-			isa = PBXGroup;
-			children = (
-				710E1C211C29ABD7007BABF7 /* classes */,
-				71DC9BCD1C3F168E0038855D /* DataSources */,
-				710E1C351C29ABD7007BABF7 /* helpers */,
-				716CC9A71C53513500510B21 /* mps */,
-				710E1C3E1C29ABD7007BABF7 /* README.md */,
-			);
-			name = 5.x;
-			path = ../../Tests/5.x;
-			sourceTree = "<group>";
-		};
-		710E1C211C29ABD7007BABF7 /* classes */ = {
-			isa = PBXGroup;
-			children = (
-				712BAEE11C29BA02007767CD /* frameworkTestClasses */,
-				715C4A041C52EB6A006B39EF /* sourceTestClasses */,
-				710E1C2E1C29ABD7007BABF7 /* TealiumDelegateTestObject.h */,
-				710E1C2F1C29ABD7007BABF7 /* TealiumDelegateTestObject.m */,
-				710E1C301C29ABD7007BABF7 /* TEALTestHelper.h */,
-				710E1C311C29ABD7007BABF7 /* TEALTestHelper.m */,
-				710E1C321C29ABD7007BABF7 /* TEALTestHelperConstants.h */,
-				712BAEFA1C29BBF1007767CD /* TEALTestHelperConstants.m */,
-			);
-			path = classes;
-			sourceTree = "<group>";
-		};
-		710E1C351C29ABD7007BABF7 /* helpers */ = {
-			isa = PBXGroup;
-			children = (
-				710E1C381C29ABD7007BABF7 /* TealiumHelperImports.h */,
-			);
-			path = helpers;
-			sourceTree = "<group>";
-		};
-		7118DB681C5929B100D3B612 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				7118DB8A1C5929B100D3B612 /* Collect */,
-				7118DBB11C5929B100D3B612 /* Core */,
-				7118DC251C5929B100D3B612 /* TagManagement */,
-				717EBB011C90D09900031237 /* Lifecycle */,
-				7118DC401C5929B100D3B612 /* WatchKit */,
-				710E1C1E1C29ABD7007BABF7 /* 5.x */,
-				7118DC3E1C5929B100D3B612 /* Tealium.h */,
-				7118DC3F1C5929B100D3B612 /* Tealium.m */,
-			);
-			name = Source;
-			path = ../../../../../../Builder/Source;
-			sourceTree = "<group>";
-		};
-		7118DB8A1C5929B100D3B612 /* Collect */ = {
-			isa = PBXGroup;
-			children = (
-				7118DB8B1C5929B100D3B612 /* Profile */,
-				7118DBA51C5929B100D3B612 /* TEALCollectDispatchService.h */,
-				7118DBA61C5929B100D3B612 /* TEALCollectDispatchService.m */,
-				7118DBA71C5929B100D3B612 /* TEALConfiguration+Collect.h */,
-				7118DBA81C5929B100D3B612 /* TEALConfiguration+Collect.m */,
-				7118DBA91C5929B100D3B612 /* Tealium+Collect.h */,
-				7118DBAA1C5929B100D3B612 /* Tealium+Collect.m */,
-				7118DBAB1C5929B100D3B612 /* TEALPublishSettings+Collect.h */,
-				7118DBAC1C5929B100D3B612 /* TEALPublishSettings+Collect.m */,
-				7118DBAD1C5929B100D3B612 /* TEALS2SLegacyDispatchService.h */,
-				7118DBAE1C5929B100D3B612 /* TEALS2SLegacyDispatchService.m */,
-				7118DBAF1C5929B100D3B612 /* TEALSettings+Collect.h */,
-				7118DBB01C5929B100D3B612 /* TEALSettings+Collect.m */,
-			);
-			path = Collect;
-			sourceTree = "<group>";
-		};
-		7118DB8B1C5929B100D3B612 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				7118DB8C1C5929B100D3B612 /* Model */,
-				7118DBA01C5929B100D3B612 /* TEALVisitorProfileDelegate.h */,
-				7118DBA11C5929B100D3B612 /* TEALVisitorProfileHelpers.h */,
-				7118DBA21C5929B100D3B612 /* TEALVisitorProfileHelpers.m */,
-				7118DBA31C5929B100D3B612 /* TEALVisitorProfileStore.h */,
-				7118DBA41C5929B100D3B612 /* TEALVisitorProfileStore.m */,
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
-		7118DB8C1C5929B100D3B612 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				7118DB8D1C5929B100D3B612 /* TEALVisitorProfile+PrivateHeader.h */,
-				7118DB8E1C5929B100D3B612 /* TEALVisitorProfile.h */,
-				7118DB8F1C5929B100D3B612 /* TEALVisitorProfile.m */,
-				7118DB901C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.h */,
-				7118DB911C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.m */,
-				7118DB921C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.h */,
-				7118DB931C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.m */,
-				7118DB941C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.h */,
-				7118DB951C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.m */,
-				7118DB961C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.h */,
-				7118DB971C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.m */,
-				7118DB981C5929B100D3B612 /* TEALVisitorProfileDateAttribute.h */,
-				7118DB991C5929B100D3B612 /* TEALVisitorProfileDateAttribute.m */,
-				7118DB9A1C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.h */,
-				7118DB9B1C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.m */,
-				7118DB9C1C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.h */,
-				7118DB9D1C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.m */,
-				7118DB9E1C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.h */,
-				7118DB9F1C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		7118DBB11C5929B100D3B612 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBB21C5929B100D3B612 /* Categories */,
-				7118DBBB1C5929B100D3B612 /* DataSources */,
-				7118DCA61C5936D700D3B612 /* Dispatches */,
-				7118DBD71C5929B100D3B612 /* Networking */,
-				7118DBE11C5929B100D3B612 /* Settings */,
-				7118DBEF1C5929B100D3B612 /* Stores */,
-				7118DBF21C5929B100D3B612 /* System */,
-				7118DC051C5929B100D3B612 /* Tealium+PrivateHeader.h */,
-				7118DC061C5929B100D3B612 /* TealiumDelegate.h */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		7118DBB21C5929B100D3B612 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBB31C5929B100D3B612 /* NSArray+Tealium.h */,
-				7118DBB41C5929B100D3B612 /* NSArray+Tealium.m */,
-				7118DBB71C5929B100D3B612 /* NSObject+Tealium.h */,
-				7118DBB81C5929B100D3B612 /* NSObject+Tealium.m */,
-				7118DBB91C5929B100D3B612 /* NSString+Tealium.h */,
-				7118DBBA1C5929B100D3B612 /* NSString+Tealium.m */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		7118DBBB1C5929B100D3B612 /* DataSources */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBBC1C5929B100D3B612 /* DataClasses */,
-				7118DBC31C5929B100D3B612 /* TEALDataSourceConstants.h */,
-				7118DBC41C5929B100D3B612 /* TEALDataSourceConstants.m */,
-				7118DBC51C5929B100D3B612 /* TEALDataSources+PrivateHeader.h */,
-				7118DBC61C5929B100D3B612 /* TEALDataSources.h */,
-				7118DBC71C5929B100D3B612 /* TEALDataSources.m */,
-				7118DBC81C5929B100D3B612 /* TEALDataSourceStore.h */,
-				7118DBC91C5929B100D3B612 /* TEALDataSourceStore.m */,
-				7118DBCA1C5929B100D3B612 /* TEALSharedDataSources.h */,
-				7118DBCB1C5929B100D3B612 /* TEALSharedDataSources.m */,
-			);
-			path = DataSources;
-			sourceTree = "<group>";
-		};
-		7118DBBC1C5929B100D3B612 /* DataClasses */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBBD1C5929B100D3B612 /* TEALApplicationDataSources.h */,
-				7118DBBE1C5929B100D3B612 /* TEALApplicationDataSources.m */,
-				7118DBBF1C5929B100D3B612 /* TEALDeviceDataSources.h */,
-				7118DBC01C5929B100D3B612 /* TEALDeviceDataSources.m */,
-				7118DBC11C5929B100D3B612 /* TEALTimestampDataSources.h */,
-				7118DBC21C5929B100D3B612 /* TEALTimestampDataSources.m */,
-			);
-			path = DataClasses;
-			sourceTree = "<group>";
-		};
-		7118DBD71C5929B100D3B612 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBD81C5929B100D3B612 /* TEALDispatchService.h */,
-				7118DBD91C5929B100D3B612 /* TEALNetworkHelpers.h */,
-				7118DBDA1C5929B100D3B612 /* TEALNetworkHelpers.m */,
-				7118DBDB1C5929B100D3B612 /* TEALReachability.h */,
-				7118DBDC1C5929B100D3B612 /* TEALReachability.m */,
-				7118DBDD1C5929B100D3B612 /* TEALReachabilityManager.h */,
-				7118DBDE1C5929B100D3B612 /* TEALReachabilityManager.m */,
-				7118DBDF1C5929B100D3B612 /* TEALURLSessionManager.h */,
-				7118DBE01C5929B100D3B612 /* TEALURLSessionManager.m */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		7118DBE11C5929B100D3B612 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBE21C5929B100D3B612 /* TEALConfiguration+PrivateHeader.h */,
-				7118DBE31C5929B100D3B612 /* TEALConfiguration.h */,
-				7118DBE41C5929B100D3B612 /* TEALConfiguration.m */,
-				7118DBE51C5929B100D3B612 /* TEALPublishSettings+PrivateHeader.h */,
-				7118DBE61C5929B100D3B612 /* TEALPublishSettings.h */,
-				7118DBE71C5929B100D3B612 /* TEALPublishSettings.m */,
-				7118DBE81C5929B100D3B612 /* TEALPublishSettingsConstants.h */,
-				7118DBE91C5929B100D3B612 /* TEALPublishSettingsConstants.m */,
-				7118DBEA1C5929B100D3B612 /* TEALPublishSettingsStore.h */,
-				7118DBEB1C5929B100D3B612 /* TEALPublishSettingsStore.m */,
-				7118DBEC1C5929B100D3B612 /* TEALSettings+PrivateHeader.h */,
-				7118DBED1C5929B100D3B612 /* TEALSettings.h */,
-				7118DBEE1C5929B100D3B612 /* TEALSettings.m */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		7118DBEF1C5929B100D3B612 /* Stores */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBF01C5929B100D3B612 /* TEALDataStore.h */,
-				7118DBF11C5929B100D3B612 /* TEALDataStore.m */,
-			);
-			path = Stores;
-			sourceTree = "<group>";
-		};
-		7118DBF21C5929B100D3B612 /* System */ = {
-			isa = PBXGroup;
-			children = (
-				7118DBF51C5929B100D3B612 /* TEALBlocks.h */,
-				7118DBF61C5929B100D3B612 /* TEALDelegateManager.h */,
-				7118DBF71C5929B100D3B612 /* TEALDelegateManager.m */,
-				7118DBF81C5929B100D3B612 /* TEALError.h */,
-				7118DBF91C5929B100D3B612 /* TEALError.m */,
-				7118DBFA1C5929B100D3B612 /* TEALLogger.h */,
-				7118DBFB1C5929B100D3B612 /* TEALLogger.m */,
-				7118DBFC1C5929B100D3B612 /* TEALModulesDelegate.h */,
-				7118DBFF1C5929B100D3B612 /* TEALOperationManager.h */,
-				7118DC001C5929B100D3B612 /* TEALOperationManager.m */,
-				7118DC031C5929B100D3B612 /* TEALSystemProtocols.h */,
-				716F2F8D1C6BCEF000A7F947 /* TEALVersion.h */,
-			);
-			path = System;
-			sourceTree = "<group>";
-		};
-		7118DC251C5929B100D3B612 /* TagManagement */ = {
-			isa = PBXGroup;
-			children = (
-				7118DC261C5929B100D3B612 /* RemoteCommands */,
-				7118DC331C5929B100D3B612 /* TEALConfiguration+TagManagement.h */,
-				7118DC341C5929B100D3B612 /* TEALConfiguration+TagManagement.m */,
-				7118DC351C5929B100D3B612 /* Tealium+TagManagement+PrivateHeader.h */,
-				7118DC361C5929B100D3B612 /* Tealium+TagManagement.h */,
-				7118DC371C5929B100D3B612 /* Tealium+TagManagement.m */,
-				7118DC381C5929B100D3B612 /* TEALPublishSettings+TagManagement.h */,
-				7118DC391C5929B100D3B612 /* TEALPublishSettings+TagManagement.m */,
-				7118DC3A1C5929B100D3B612 /* TEALSettings+TagManagement.h */,
-				7118DC3B1C5929B100D3B612 /* TEALSettings+TagManagement.m */,
-				7118DC3C1C5929B100D3B612 /* TEALTagDispatchService.h */,
-				7118DC3D1C5929B100D3B612 /* TEALTagDispatchService.m */,
-			);
-			path = TagManagement;
-			sourceTree = "<group>";
-		};
-		7118DC261C5929B100D3B612 /* RemoteCommands */ = {
-			isa = PBXGroup;
-			children = (
-				7118DC271C5929B100D3B612 /* TEALRemoteCommand.h */,
-				7118DC281C5929B100D3B612 /* TEALRemoteCommand.m */,
-				7118DC291C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.h */,
-				7118DC2A1C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m */,
-				7118DC2B1C5929B100D3B612 /* TEALRemoteCommandConstants.h */,
-				7118DC2C1C5929B100D3B612 /* TEALRemoteCommandErrors.h */,
-				7118DC2D1C5929B100D3B612 /* TEALRemoteCommandErrors.m */,
-				7118DC2E1C5929B100D3B612 /* TEALRemoteCommandManager.h */,
-				7118DC2F1C5929B100D3B612 /* TEALRemoteCommandManager.m */,
-				7118DC301C5929B100D3B612 /* TEALRemoteCommandResponse+PrivateHeader.h */,
-				7118DC311C5929B100D3B612 /* TEALRemoteCommandResponse.h */,
-				7118DC321C5929B100D3B612 /* TEALRemoteCommandResponse.m */,
-			);
-			path = RemoteCommands;
-			sourceTree = "<group>";
-		};
-		7118DC401C5929B100D3B612 /* WatchKit */ = {
-			isa = PBXGroup;
-			children = (
-				7118DC411C5929B100D3B612 /* Tealium+WatchKit.h */,
-				7118DC421C5929B100D3B612 /* Tealium+WatchKit.m */,
-				7118DC431C5929B100D3B612 /* TEALWKConstants.h */,
-				7118DC441C5929B100D3B612 /* TEALWKConstants.m */,
-			);
-			path = WatchKit;
-			sourceTree = "<group>";
-		};
-		7118DCA61C5936D700D3B612 /* Dispatches */ = {
-			isa = PBXGroup;
-			children = (
-				7118DCA71C5936D700D3B612 /* TEALDispatch+PrivateHeader.h */,
-				7118DCA81C5936D700D3B612 /* TEALDispatch.h */,
-				7118DCA91C5936D700D3B612 /* TEALDispatch.m */,
-				7118DCAA1C5936D700D3B612 /* TEALDispatchConstants.h */,
-				7118DCAB1C5936D700D3B612 /* TEALDispatchManager.h */,
-				7118DCAC1C5936D700D3B612 /* TEALDispatchManager.m */,
-			);
-			path = Dispatches;
-			sourceTree = "<group>";
-		};
-		712BAEE11C29BA02007767CD /* frameworkTestClasses */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = frameworkTestClasses;
-			sourceTree = "<group>";
-		};
 		712BAF341C29BED4007767CD /* UIKitCatalogUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1142,94 +717,6 @@
 				712BAF371C29BED4007767CD /* Info.plist */,
 			);
 			path = UIKitCatalogUITests;
-			sourceTree = "<group>";
-		};
-		715C4A041C52EB6A006B39EF /* sourceTestClasses */ = {
-			isa = PBXGroup;
-			children = (
-				7101981F1C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m */,
-				71F6B3F71C5A9A8F00439A79 /* TealiumPrivateAPITests.m */,
-				7145B0B61C59A37500842A4D /* TEALDispatchManagerTests.m */,
-				716AD98B1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m */,
-				716AD9891C56D558007D7E7C /* TEALRemoteCommandManagerTests.m */,
-				715C4A051C52EB6A006B39EF /* TEALConfigurationTests.m */,
-				715C4A061C52EB6A006B39EF /* TEALDatasourcesTests.m */,
-				7104CF0E1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m */,
-				715C4A091C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m */,
-				71C578361C88A532002AF643 /* Tealium_LifecycleTests.m */,
-				715C4A0A1C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m */,
-				715C4A0B1C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m */,
-				715C4A0C1C52EB6A006B39EF /* TealiumInstanceManagmentTests.m */,
-				715C4A0D1C52EB6A006B39EF /* TealiumTrackTests.m */,
-				71C578371C88A532002AF643 /* TEALLifecycleDataSourcesTests.m */,
-				715C4A0E1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m */,
-				715C4A0F1C52EB6A006B39EF /* TEALPublishSettingsTests.m */,
-				715C4A101C52EB6A006B39EF /* TEALSettingsTests.m */,
-			);
-			path = sourceTestClasses;
-			sourceTree = "<group>";
-		};
-		716CC9A71C53513500510B21 /* mps */ = {
-			isa = PBXGroup;
-			children = (
-				716CC9A81C53513500510B21 /* HTML */,
-				716CC9B31C53513500510B21 /* JSON */,
-				716CC9C31C53513500510B21 /* ListOfLiveRemoteJSONMPS */,
-			);
-			path = mps;
-			sourceTree = "<group>";
-		};
-		716CC9A81C53513500510B21 /* HTML */ = {
-			isa = PBXGroup;
-			children = (
-				716CC9A91C53513500510B21 /* audiencestream_OFF.html */,
-				716CC9AA1C53513500510B21 /* audiencestream_ON.html */,
-				716CC9AB1C53513500510B21 /* collect_OFF.html */,
-				716CC9AC1C53513500510B21 /* collect_ON.html */,
-				716CC9AD1C53513500510B21 /* no_minutes_between_refresh.html */,
-				716CC9AE1C53513500510B21 /* no_mps.html */,
-				716CC9AF1C53513500510B21 /* s2s_OFF.html */,
-				716CC9B01C53513500510B21 /* s2s_ON.html */,
-				716CC9B11C53513500510B21 /* tagmanagement_OFF.html */,
-				716CC9B21C53513500510B21 /* tagmanagement_ON.html */,
-			);
-			path = HTML;
-			sourceTree = "<group>";
-		};
-		716CC9B31C53513500510B21 /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				716CC9B41C53513500510B21 /* all_dispatchers_ON.json */,
-				716CC9B51C53513500510B21 /* all_number_options_0.json */,
-				716CC9B61C53513500510B21 /* all_number_options_1.json */,
-				716CC9B71C53513500510B21 /* all_options_OFF.json */,
-				716CC9B81C53513500510B21 /* all_options_ON.json */,
-				716CC9B91C53513500510B21 /* batch_5.json */,
-				716CC9BA1C53513500510B21 /* collect_ON.json */,
-				716CC9BB1C53513500510B21 /* library_EMPTY.json */,
-				716CC9BC1C53513500510B21 /* library_MISSING.json */,
-				716CC9BD1C53513500510B21 /* library_OFF.json */,
-				716CC9C01C53513500510B21 /* offline_5.json */,
-				716CC9C11C53513500510B21 /* override_log_DEV.json */,
-				716CC9DE1C53569000510B21 /* override_log_EMPTY.json */,
-				716CC9DF1C53569000510B21 /* override_log_PROD.json */,
-				716CC9E01C53569000510B21 /* override_log_QA.json */,
-				716CC9C21C53513500510B21 /* override_log_SILENT.json */,
-			);
-			path = JSON;
-			sourceTree = "<group>";
-		};
-		717EBB011C90D09900031237 /* Lifecycle */ = {
-			isa = PBXGroup;
-			children = (
-				717EBB021C90D09900031237 /* Tealium+Lifecycle+PrivateHeader.h */,
-				717EBB031C90D09900031237 /* Tealium+Lifecycle.h */,
-				717EBB041C90D09900031237 /* Tealium+Lifecycle.m */,
-				717EBB051C90D09900031237 /* TEALLifecycleDataSources.h */,
-				717EBB061C90D09900031237 /* TEALLifecycleDataSources.m */,
-			);
-			name = Lifecycle;
-			path = ../Source_Development/Lifecycle;
 			sourceTree = "<group>";
 		};
 		718546DB1C2876C3009CF93E /* SourceTests */ = {
@@ -1265,9 +752,281 @@
 				71E74B631C9084CD0079A955 /* TealiumHelper.h */,
 				71E74B641C9084CD0079A955 /* TealiumHelper.m */,
 				71E74B661C9085310079A955 /* TealiumHelperImports.h */,
-				7118DB681C5929B100D3B612 /* Source */,
 			);
 			name = Tealium;
+			sourceTree = "<group>";
+		};
+		71AA42A71D3D2051002D329D /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42A81D3D2051002D329D /* Collect */,
+				71AA42CF1D3D2051002D329D /* Core */,
+				71AA431B1D3D2051002D329D /* Lifecycle */,
+				71AA43211D3D2051002D329D /* TagManagement */,
+				71AA433A1D3D2051002D329D /* Tealium.h */,
+				71AA433B1D3D2051002D329D /* Tealium.m */,
+				71AA433C1D3D2051002D329D /* WatchKit */,
+			);
+			name = Source;
+			path = ../../../../../../Source;
+			sourceTree = "<group>";
+		};
+		71AA42A81D3D2051002D329D /* Collect */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42A91D3D2051002D329D /* Profile */,
+				71AA42C31D3D2051002D329D /* TEALCollectDispatchService.h */,
+				71AA42C41D3D2051002D329D /* TEALCollectDispatchService.m */,
+				71AA42C51D3D2051002D329D /* TEALConfiguration+Collect.h */,
+				71AA42C61D3D2051002D329D /* TEALConfiguration+Collect.m */,
+				71AA42C71D3D2051002D329D /* Tealium+Collect.h */,
+				71AA42C81D3D2051002D329D /* Tealium+Collect.m */,
+				71AA42C91D3D2051002D329D /* TEALPublishSettings+Collect.h */,
+				71AA42CA1D3D2051002D329D /* TEALPublishSettings+Collect.m */,
+				71AA42CB1D3D2051002D329D /* TEALS2SLegacyDispatchService.h */,
+				71AA42CC1D3D2051002D329D /* TEALS2SLegacyDispatchService.m */,
+				71AA42CD1D3D2051002D329D /* TEALSettings+Collect.h */,
+				71AA42CE1D3D2051002D329D /* TEALSettings+Collect.m */,
+			);
+			path = Collect;
+			sourceTree = "<group>";
+		};
+		71AA42A91D3D2051002D329D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42AA1D3D2051002D329D /* Model */,
+				71AA42BE1D3D2051002D329D /* TEALVisitorProfileDelegate.h */,
+				71AA42BF1D3D2051002D329D /* TEALVisitorProfileHelpers.h */,
+				71AA42C01D3D2051002D329D /* TEALVisitorProfileHelpers.m */,
+				71AA42C11D3D2051002D329D /* TEALVisitorProfileStore.h */,
+				71AA42C21D3D2051002D329D /* TEALVisitorProfileStore.m */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		71AA42AA1D3D2051002D329D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42AB1D3D2051002D329D /* TEALVisitorProfile+PrivateHeader.h */,
+				71AA42AC1D3D2051002D329D /* TEALVisitorProfile.h */,
+				71AA42AD1D3D2051002D329D /* TEALVisitorProfile.m */,
+				71AA42AE1D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.h */,
+				71AA42AF1D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.m */,
+				71AA42B01D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.h */,
+				71AA42B11D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.m */,
+				71AA42B21D3D2051002D329D /* TEALVisitorProfileBaseAttribute.h */,
+				71AA42B31D3D2051002D329D /* TEALVisitorProfileBaseAttribute.m */,
+				71AA42B41D3D2051002D329D /* TEALVisitorProfileCurrentVisit.h */,
+				71AA42B51D3D2051002D329D /* TEALVisitorProfileCurrentVisit.m */,
+				71AA42B61D3D2051002D329D /* TEALVisitorProfileDateAttribute.h */,
+				71AA42B71D3D2051002D329D /* TEALVisitorProfileDateAttribute.m */,
+				71AA42B81D3D2051002D329D /* TEALVisitorProfileFlagAttribute.h */,
+				71AA42B91D3D2051002D329D /* TEALVisitorProfileFlagAttribute.m */,
+				71AA42BA1D3D2051002D329D /* TEALVisitorProfileMetricAttribute.h */,
+				71AA42BB1D3D2051002D329D /* TEALVisitorProfileMetricAttribute.m */,
+				71AA42BC1D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.h */,
+				71AA42BD1D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		71AA42CF1D3D2051002D329D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42D01D3D2051002D329D /* Categories */,
+				71AA42D71D3D2051002D329D /* DataSources */,
+				71AA42E81D3D2051002D329D /* Dispatches */,
+				71AA42EF1D3D2051002D329D /* Networking */,
+				71AA42F91D3D2051002D329D /* Settings */,
+				71AA43071D3D2051002D329D /* Stores */,
+				71AA430A1D3D2051002D329D /* System */,
+				71AA43191D3D2051002D329D /* Tealium+PrivateHeader.h */,
+				71AA431A1D3D2051002D329D /* TealiumDelegate.h */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		71AA42D01D3D2051002D329D /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42D11D3D2051002D329D /* NSArray+Tealium.h */,
+				71AA42D21D3D2051002D329D /* NSArray+Tealium.m */,
+				71AA42D31D3D2051002D329D /* NSObject+Tealium.h */,
+				71AA42D41D3D2051002D329D /* NSObject+Tealium.m */,
+				71AA42D51D3D2051002D329D /* NSString+Tealium.h */,
+				71AA42D61D3D2051002D329D /* NSString+Tealium.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		71AA42D71D3D2051002D329D /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42D81D3D2051002D329D /* DataClasses */,
+				71AA42DF1D3D2051002D329D /* TEALDataSourceConstants.h */,
+				71AA42E01D3D2051002D329D /* TEALDataSourceConstants.m */,
+				71AA42E11D3D2051002D329D /* TEALDataSources+PrivateHeader.h */,
+				71AA42E21D3D2051002D329D /* TEALDataSources.h */,
+				71AA42E31D3D2051002D329D /* TEALDataSources.m */,
+				71AA42E41D3D2051002D329D /* TEALDataSourceStore.h */,
+				71AA42E51D3D2051002D329D /* TEALDataSourceStore.m */,
+				71AA42E61D3D2051002D329D /* TEALSharedDataSources.h */,
+				71AA42E71D3D2051002D329D /* TEALSharedDataSources.m */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
+		71AA42D81D3D2051002D329D /* DataClasses */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42D91D3D2051002D329D /* TEALApplicationDataSources.h */,
+				71AA42DA1D3D2051002D329D /* TEALApplicationDataSources.m */,
+				71AA42DB1D3D2051002D329D /* TEALDeviceDataSources.h */,
+				71AA42DC1D3D2051002D329D /* TEALDeviceDataSources.m */,
+				71AA42DD1D3D2051002D329D /* TEALTimestampDataSources.h */,
+				71AA42DE1D3D2051002D329D /* TEALTimestampDataSources.m */,
+			);
+			path = DataClasses;
+			sourceTree = "<group>";
+		};
+		71AA42E81D3D2051002D329D /* Dispatches */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42E91D3D2051002D329D /* TEALDispatch+PrivateHeader.h */,
+				71AA42EA1D3D2051002D329D /* TEALDispatch.h */,
+				71AA42EB1D3D2051002D329D /* TEALDispatch.m */,
+				71AA42EC1D3D2051002D329D /* TEALDispatchConstants.h */,
+				71AA42ED1D3D2051002D329D /* TEALDispatchManager.h */,
+				71AA42EE1D3D2051002D329D /* TEALDispatchManager.m */,
+			);
+			path = Dispatches;
+			sourceTree = "<group>";
+		};
+		71AA42EF1D3D2051002D329D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42F01D3D2051002D329D /* TEALDispatchService.h */,
+				71AA42F11D3D2051002D329D /* TEALNetworkHelpers.h */,
+				71AA42F21D3D2051002D329D /* TEALNetworkHelpers.m */,
+				71AA42F31D3D2051002D329D /* TEALReachability.h */,
+				71AA42F41D3D2051002D329D /* TEALReachability.m */,
+				71AA42F51D3D2051002D329D /* TEALReachabilityManager.h */,
+				71AA42F61D3D2051002D329D /* TEALReachabilityManager.m */,
+				71AA42F71D3D2051002D329D /* TEALURLSessionManager.h */,
+				71AA42F81D3D2051002D329D /* TEALURLSessionManager.m */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		71AA42F91D3D2051002D329D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				71AA42FA1D3D2051002D329D /* TEALConfiguration+PrivateHeader.h */,
+				71AA42FB1D3D2051002D329D /* TEALConfiguration.h */,
+				71AA42FC1D3D2051002D329D /* TEALConfiguration.m */,
+				71AA42FD1D3D2051002D329D /* TEALPublishSettings+PrivateHeader.h */,
+				71AA42FE1D3D2051002D329D /* TEALPublishSettings.h */,
+				71AA42FF1D3D2051002D329D /* TEALPublishSettings.m */,
+				71AA43001D3D2051002D329D /* TEALPublishSettingsConstants.h */,
+				71AA43011D3D2051002D329D /* TEALPublishSettingsConstants.m */,
+				71AA43021D3D2051002D329D /* TEALPublishSettingsStore.h */,
+				71AA43031D3D2051002D329D /* TEALPublishSettingsStore.m */,
+				71AA43041D3D2051002D329D /* TEALSettings+PrivateHeader.h */,
+				71AA43051D3D2051002D329D /* TEALSettings.h */,
+				71AA43061D3D2051002D329D /* TEALSettings.m */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		71AA43071D3D2051002D329D /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				71AA43081D3D2051002D329D /* TEALDataStore.h */,
+				71AA43091D3D2051002D329D /* TEALDataStore.m */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		71AA430A1D3D2051002D329D /* System */ = {
+			isa = PBXGroup;
+			children = (
+				71AA430B1D3D2051002D329D /* TEALBlocks.h */,
+				71AA430C1D3D2051002D329D /* TEALDelegateManager.h */,
+				71AA430D1D3D2051002D329D /* TEALDelegateManager.m */,
+				71AA430E1D3D2051002D329D /* TEALError.h */,
+				71AA430F1D3D2051002D329D /* TEALError.m */,
+				71AA43101D3D2051002D329D /* TEALLogger.h */,
+				71AA43111D3D2051002D329D /* TEALLogger.m */,
+				71AA43121D3D2051002D329D /* TEALModulesDelegate.h */,
+				71AA43131D3D2051002D329D /* TEALNotifications.h */,
+				71AA43141D3D2051002D329D /* TEALNotifications.m */,
+				71AA43151D3D2051002D329D /* TEALOperationManager.h */,
+				71AA43161D3D2051002D329D /* TEALOperationManager.m */,
+				71AA43171D3D2051002D329D /* TEALSystemProtocols.h */,
+				71AA43181D3D2051002D329D /* TEALVersion.h */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		71AA431B1D3D2051002D329D /* Lifecycle */ = {
+			isa = PBXGroup;
+			children = (
+				71AA431C1D3D2051002D329D /* Tealium+Lifecycle+PrivateHeader.h */,
+				71AA431D1D3D2051002D329D /* Tealium+Lifecycle.h */,
+				71AA431E1D3D2051002D329D /* Tealium+Lifecycle.m */,
+				71AA431F1D3D2051002D329D /* TEALLifecycleDataSources.h */,
+				71AA43201D3D2051002D329D /* TEALLifecycleDataSources.m */,
+			);
+			path = Lifecycle;
+			sourceTree = "<group>";
+		};
+		71AA43211D3D2051002D329D /* TagManagement */ = {
+			isa = PBXGroup;
+			children = (
+				71AA43221D3D2051002D329D /* RemoteCommands */,
+				71AA432F1D3D2051002D329D /* TEALConfiguration+TagManagement.h */,
+				71AA43301D3D2051002D329D /* TEALConfiguration+TagManagement.m */,
+				71AA43311D3D2051002D329D /* Tealium+TagManagement+PrivateHeader.h */,
+				71AA43321D3D2051002D329D /* Tealium+TagManagement.h */,
+				71AA43331D3D2051002D329D /* Tealium+TagManagement.m */,
+				71AA43341D3D2051002D329D /* TEALPublishSettings+TagManagement.h */,
+				71AA43351D3D2051002D329D /* TEALPublishSettings+TagManagement.m */,
+				71AA43361D3D2051002D329D /* TEALSettings+TagManagement.h */,
+				71AA43371D3D2051002D329D /* TEALSettings+TagManagement.m */,
+				71AA43381D3D2051002D329D /* TEALTagDispatchService.h */,
+				71AA43391D3D2051002D329D /* TEALTagDispatchService.m */,
+			);
+			path = TagManagement;
+			sourceTree = "<group>";
+		};
+		71AA43221D3D2051002D329D /* RemoteCommands */ = {
+			isa = PBXGroup;
+			children = (
+				71AA43231D3D2051002D329D /* TEALRemoteCommand.h */,
+				71AA43241D3D2051002D329D /* TEALRemoteCommand.m */,
+				71AA43251D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.h */,
+				71AA43261D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.m */,
+				71AA43271D3D2051002D329D /* TEALRemoteCommandConstants.h */,
+				71AA43281D3D2051002D329D /* TEALRemoteCommandErrors.h */,
+				71AA43291D3D2051002D329D /* TEALRemoteCommandErrors.m */,
+				71AA432A1D3D2051002D329D /* TEALRemoteCommandManager.h */,
+				71AA432B1D3D2051002D329D /* TEALRemoteCommandManager.m */,
+				71AA432C1D3D2051002D329D /* TEALRemoteCommandResponse+PrivateHeader.h */,
+				71AA432D1D3D2051002D329D /* TEALRemoteCommandResponse.h */,
+				71AA432E1D3D2051002D329D /* TEALRemoteCommandResponse.m */,
+			);
+			path = RemoteCommands;
+			sourceTree = "<group>";
+		};
+		71AA433C1D3D2051002D329D /* WatchKit */ = {
+			isa = PBXGroup;
+			children = (
+				71AA433D1D3D2051002D329D /* Tealium+WatchKit.h */,
+				71AA433E1D3D2051002D329D /* Tealium+WatchKit.m */,
+				71AA433F1D3D2051002D329D /* TEALWKConstants.h */,
+				71AA43401D3D2051002D329D /* TEALWKConstants.m */,
+			);
+			path = WatchKit;
 			sourceTree = "<group>";
 		};
 		71D61A9B1C28B62200F298AE /* 5.x+FrameworkUITests */ = {
@@ -1277,18 +1036,6 @@
 				71D61A9E1C28B62200F298AE /* Info.plist */,
 			);
 			path = "5.x+FrameworkUITests";
-			sourceTree = "<group>";
-		};
-		71DC9BCD1C3F168E0038855D /* DataSources */ = {
-			isa = PBXGroup;
-			children = (
-				71DC9BCE1C3F168E0038855D /* ios_data_sources.json */,
-				71F6B3F91C5AA81D00439A79 /* ios_data_sources_before_queueing.json */,
-				71C578B41C88B209002AF643 /* lifecycle_events.json */,
-				71C578B51C88B209002AF643 /* lifecycle_sample_data.json */,
-				71C578B61C88B209002AF643 /* lifecycle_sample_volatile_data.json */,
-			);
-			path = DataSources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1498,38 +1245,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				716CC9CC1C53513500510B21 /* tagmanagement_OFF.html in Resources */,
-				71DC9BCF1C3F168E0038855D /* ios_data_sources.json in Resources */,
-				716CC9C41C53513500510B21 /* audiencestream_OFF.html in Resources */,
-				716CC9D21C53513500510B21 /* all_options_ON.json in Resources */,
-				716CC9D31C53513500510B21 /* batch_5.json in Resources */,
-				716CC9D51C53513500510B21 /* library_EMPTY.json in Resources */,
-				71F6B3FA1C5AA81D00439A79 /* ios_data_sources_before_queueing.json in Resources */,
-				716CC9DA1C53513500510B21 /* offline_5.json in Resources */,
-				716CC9E11C53569000510B21 /* override_log_EMPTY.json in Resources */,
-				716CC9CE1C53513500510B21 /* all_dispatchers_ON.json in Resources */,
-				716CC9DC1C53513500510B21 /* override_log_SILENT.json in Resources */,
-				716CC9C91C53513500510B21 /* no_mps.html in Resources */,
-				716CC9E21C53569000510B21 /* override_log_PROD.json in Resources */,
-				716CC9D01C53513500510B21 /* all_number_options_1.json in Resources */,
-				716CC9C81C53513500510B21 /* no_minutes_between_refresh.html in Resources */,
-				716CC9DB1C53513500510B21 /* override_log_DEV.json in Resources */,
-				716CC9CD1C53513500510B21 /* tagmanagement_ON.html in Resources */,
-				716CC9D41C53513500510B21 /* collect_ON.json in Resources */,
-				71C578B81C88B209002AF643 /* lifecycle_sample_data.json in Resources */,
-				716CC9CB1C53513500510B21 /* s2s_ON.html in Resources */,
-				71C578B91C88B209002AF643 /* lifecycle_sample_volatile_data.json in Resources */,
-				716CC9C71C53513500510B21 /* collect_ON.html in Resources */,
-				716CC9D11C53513500510B21 /* all_options_OFF.json in Resources */,
-				716CC9E31C53569000510B21 /* override_log_QA.json in Resources */,
-				716CC9CF1C53513500510B21 /* all_number_options_0.json in Resources */,
-				71C578B71C88B209002AF643 /* lifecycle_events.json in Resources */,
-				716CC9C51C53513500510B21 /* audiencestream_ON.html in Resources */,
-				716CC9C61C53513500510B21 /* collect_OFF.html in Resources */,
-				716CC9D61C53513500510B21 /* library_MISSING.json in Resources */,
-				716CC9CA1C53513500510B21 /* s2s_OFF.html in Resources */,
-				716CC9DD1C53513500510B21 /* ListOfLiveRemoteJSONMPS in Resources */,
-				716CC9D71C53513500510B21 /* library_OFF.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1576,94 +1291,96 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71AA437C1D3D258E002D329D /* TEALLifecycleDataSources.h in Sources */,
+				71AA43691D3D2051002D329D /* TEALError.m in Sources */,
+				71AA43721D3D2051002D329D /* TEALRemoteCommandManager.m in Sources */,
 				3E8CF104196DBE6800420B6B /* AAPLSearchShowResultsInSourceViewController.m in Sources */,
-				7118DC721C5929B100D3B612 /* TEALDataSourceConstants.m in Sources */,
+				71AA43571D3D2051002D329D /* TEALTimestampDataSources.m in Sources */,
 				535682AE18F3670300BAAD62 /* AAPLDatePickerController.m in Sources */,
-				7118DC5B1C5929B100D3B612 /* TEALVisitorProfileAudienceAttribute.m in Sources */,
-				7118DC9B1C5929B100D3B612 /* TEALRemoteCommandResponse.m in Sources */,
-				7118DC5A1C5929B100D3B612 /* TEALVisitorProfile.m in Sources */,
 				3EE0A033196DDDF70059F740 /* AAPLSearchPresentOverNavigationBarViewController.m in Sources */,
-				7118DC681C5929B100D3B612 /* TEALPublishSettings+Collect.m in Sources */,
-				7118DC7B1C5929B100D3B612 /* TEALReachabilityManager.m in Sources */,
-				7118DC7C1C5929B100D3B612 /* TEALURLSessionManager.m in Sources */,
+				71AA436C1D3D2051002D329D /* TEALOperationManager.m in Sources */,
 				535682AB18F3670300BAAD62 /* AAPLButtonViewController.m in Sources */,
-				7118DC7A1C5929B100D3B612 /* TEALReachability.m in Sources */,
-				7118DC981C5929B100D3B612 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */,
+				71AA437A1D3D2051002D329D /* Tealium+WatchKit.m in Sources */,
+				71AA43441D3D2051002D329D /* TEALVisitorProfileBaseAttribute.m in Sources */,
 				535682B618F3670300BAAD62 /* AAPLSegmentedControlViewController.m in Sources */,
-				717EBB071C90D09900031237 /* Tealium+Lifecycle.m in Sources */,
-				7118DCAE1C5936D700D3B612 /* TEALDispatchManager.m in Sources */,
-				7118DC851C5929B100D3B612 /* TEALError.m in Sources */,
 				535682B018F3670300BAAD62 /* AAPLDefaultToolbarViewController.m in Sources */,
-				7118DC9C1C5929B100D3B612 /* TEALConfiguration+TagManagement.m in Sources */,
+				71AA43541D3D2051002D329D /* NSString+Tealium.m in Sources */,
+				71AA434D1D3D2051002D329D /* TEALConfiguration+Collect.m in Sources */,
 				535682BD18F3670300BAAD62 /* AAPLTintedToolbarViewController.m in Sources */,
-				7118DC841C5929B100D3B612 /* TEALDelegateManager.m in Sources */,
-				7118DCA01C5929B100D3B612 /* TEALTagDispatchService.m in Sources */,
-				7118DCA21C5929B100D3B612 /* Tealium+WatchKit.m in Sources */,
-				7118DC7D1C5929B100D3B612 /* TEALConfiguration.m in Sources */,
-				7118DC6A1C5929B100D3B612 /* TEALSettings+Collect.m in Sources */,
-				717EBB091C90D09900031237 /* TEALLifecycleDataSources.m in Sources */,
 				535682B318F3670300BAAD62 /* AAPLPageControlViewController.m in Sources */,
-				7118DC801C5929B100D3B612 /* TEALPublishSettingsStore.m in Sources */,
-				7118DC5E1C5929B100D3B612 /* TEALVisitorProfileCurrentVisit.m in Sources */,
-				7118DC5F1C5929B100D3B612 /* TEALVisitorProfileDateAttribute.m in Sources */,
-				7118DC861C5929B100D3B612 /* TEALLogger.m in Sources */,
-				7118DC9D1C5929B100D3B612 /* Tealium+TagManagement.m in Sources */,
+				71AA43611D3D2051002D329D /* TEALURLSessionManager.m in Sources */,
 				535682BA18F3670300BAAD62 /* AAPLSwitchViewController.m in Sources */,
 				3E73CE46193318F7000F43D0 /* AAPLAlertControllerViewController.m in Sources */,
+				71AA435A1D3D2051002D329D /* TEALDataSourceStore.m in Sources */,
+				71AA43461D3D2051002D329D /* TEALVisitorProfileDateAttribute.m in Sources */,
+				71AA435F1D3D2051002D329D /* TEALReachability.m in Sources */,
+				71AA43551D3D2051002D329D /* TEALApplicationDataSources.m in Sources */,
+				71AA435B1D3D2051002D329D /* TEALSharedDataSources.m in Sources */,
 				535682AF18F3670300BAAD62 /* AAPLDefaultSearchBarViewController.m in Sources */,
+				71AA43761D3D2051002D329D /* TEALPublishSettings+TagManagement.m in Sources */,
+				71AA434E1D3D2051002D329D /* Tealium+Collect.m in Sources */,
+				71AA43781D3D2051002D329D /* TEALTagDispatchService.m in Sources */,
 				535682BC18F3670300BAAD62 /* AAPLTextViewController.m in Sources */,
+				71AA436E1D3D2051002D329D /* TEALLifecycleDataSources.m in Sources */,
+				71AA43601D3D2051002D329D /* TEALReachabilityManager.m in Sources */,
+				71AA43631D3D2051002D329D /* TEALPublishSettings.m in Sources */,
 				535682B418F3670300BAAD62 /* AAPLPickerViewController.m in Sources */,
-				7118DC6B1C5929B100D3B612 /* NSArray+Tealium.m in Sources */,
+				71AA43511D3D2051002D329D /* TEALSettings+Collect.m in Sources */,
+				71AA43791D3D2051002D329D /* Tealium.m in Sources */,
 				B5E280FA1B1D03F800920B27 /* AAPLStackViewController.m in Sources */,
-				7118DC971C5929B100D3B612 /* TEALRemoteCommand.m in Sources */,
-				7118DC6F1C5929B100D3B612 /* TEALApplicationDataSources.m in Sources */,
-				7118DC741C5929B100D3B612 /* TEALDataSourceStore.m in Sources */,
-				7118DC6D1C5929B100D3B612 /* NSObject+Tealium.m in Sources */,
-				7118DCA11C5929B100D3B612 /* Tealium.m in Sources */,
+				71AA436A1D3D2051002D329D /* TEALLogger.m in Sources */,
 				535682BE18F3670300BAAD62 /* AAPLWebViewController.m in Sources */,
-				7118DC661C5929B100D3B612 /* TEALConfiguration+Collect.m in Sources */,
-				7118DC7E1C5929B100D3B612 /* TEALPublishSettings.m in Sources */,
-				7118DC671C5929B100D3B612 /* Tealium+Collect.m in Sources */,
-				7118DC751C5929B100D3B612 /* TEALSharedDataSources.m in Sources */,
-				7118DC711C5929B100D3B612 /* TEALTimestampDataSources.m in Sources */,
-				7118DC821C5929B100D3B612 /* TEALDataStore.m in Sources */,
-				7118DC791C5929B100D3B612 /* TEALNetworkHelpers.m in Sources */,
-				7118DC811C5929B100D3B612 /* TEALSettings.m in Sources */,
+				71AA43561D3D2051002D329D /* TEALDeviceDataSources.m in Sources */,
+				71AA43451D3D2051002D329D /* TEALVisitorProfileCurrentVisit.m in Sources */,
+				71AA434C1D3D2051002D329D /* TEALCollectDispatchService.m in Sources */,
+				71AA43701D3D2051002D329D /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */,
+				71AA43741D3D2051002D329D /* TEALConfiguration+TagManagement.m in Sources */,
+				71AA43711D3D2051002D329D /* TEALRemoteCommandErrors.m in Sources */,
+				71AA43661D3D2051002D329D /* TEALSettings.m in Sources */,
+				71AA43581D3D2051002D329D /* TEALDataSourceConstants.m in Sources */,
+				71AA43431D3D2051002D329D /* TEALVisitorProfileBadgeAttribute.m in Sources */,
 				535682BB18F3670300BAAD62 /* AAPLTextFieldViewController.m in Sources */,
-				7118DC611C5929B100D3B612 /* TEALVisitorProfileMetricAttribute.m in Sources */,
+				71AA43501D3D2051002D329D /* TEALS2SLegacyDispatchService.m in Sources */,
 				535682BF18F3670300BAAD62 /* UIColor+AAPLApplicationSpecific.m in Sources */,
-				7118DC631C5929B100D3B612 /* TEALVisitorProfileHelpers.m in Sources */,
-				7118DC691C5929B100D3B612 /* TEALS2SLegacyDispatchService.m in Sources */,
+				71AA43751D3D2051002D329D /* Tealium+TagManagement.m in Sources */,
+				71AA43671D3D2051002D329D /* TEALDataStore.m in Sources */,
 				71E74B651C9084CD0079A955 /* TealiumHelper.m in Sources */,
-				7118DC651C5929B100D3B612 /* TEALCollectDispatchService.m in Sources */,
-				7118DC9E1C5929B100D3B612 /* TEALPublishSettings+TagManagement.m in Sources */,
+				71AA435E1D3D2051002D329D /* TEALNetworkHelpers.m in Sources */,
+				71AA435D1D3D2051002D329D /* TEALDispatchManager.m in Sources */,
+				71AA43471D3D2051002D329D /* TEALVisitorProfileFlagAttribute.m in Sources */,
+				71AA435C1D3D2051002D329D /* TEALDispatch.m in Sources */,
+				71AA43531D3D2051002D329D /* NSObject+Tealium.m in Sources */,
 				535682B718F3670300BAAD62 /* AAPLSliderViewController.m in Sources */,
-				7118DC991C5929B100D3B612 /* TEALRemoteCommandErrors.m in Sources */,
 				3E1D56F5194F6BBD00D8298E /* AAPLSearchResultsViewController.m in Sources */,
-				7118DC731C5929B100D3B612 /* TEALDataSources.m in Sources */,
+				71AA436D1D3D2051002D329D /* Tealium+Lifecycle.m in Sources */,
+				71AA43771D3D2051002D329D /* TEALSettings+TagManagement.m in Sources */,
+				71AA43621D3D2051002D329D /* TEALConfiguration.m in Sources */,
+				71AA43651D3D2051002D329D /* TEALPublishSettingsStore.m in Sources */,
+				71AA43731D3D2051002D329D /* TEALRemoteCommandResponse.m in Sources */,
 				3E1D56F2194F68F600D8298E /* AAPLSearchControllerBaseViewController.m in Sources */,
-				7118DC9A1C5929B100D3B612 /* TEALRemoteCommandManager.m in Sources */,
+				71AA43681D3D2051002D329D /* TEALDelegateManager.m in Sources */,
+				71AA436B1D3D2051002D329D /* TEALNotifications.m in Sources */,
 				535682B918F3670300BAAD62 /* AAPLStepperViewController.m in Sources */,
-				7118DC621C5929B100D3B612 /* TEALVisitorProfilePropertyAttribute.m in Sources */,
-				7118DC7F1C5929B100D3B612 /* TEALPublishSettingsConstants.m in Sources */,
-				7118DC6E1C5929B100D3B612 /* NSString+Tealium.m in Sources */,
-				7118DCA31C5929B100D3B612 /* TEALWKConstants.m in Sources */,
 				535682AA18F3670300BAAD62 /* AAPLAppDelegate.m in Sources */,
-				7118DC5D1C5929B100D3B612 /* TEALVisitorProfileBaseAttribute.m in Sources */,
-				7118DC5C1C5929B100D3B612 /* TEALVisitorProfileBadgeAttribute.m in Sources */,
-				7118DCAD1C5936D700D3B612 /* TEALDispatch.m in Sources */,
+				71AA43491D3D2051002D329D /* TEALVisitorProfilePropertyAttribute.m in Sources */,
 				535682B518F3670300BAAD62 /* AAPLProgressViewController.m in Sources */,
-				7118DC9F1C5929B100D3B612 /* TEALSettings+TagManagement.m in Sources */,
+				71AA43411D3D2051002D329D /* TEALVisitorProfile.m in Sources */,
+				71AA43641D3D2051002D329D /* TEALPublishSettingsConstants.m in Sources */,
+				71AA43421D3D2051002D329D /* TEALVisitorProfileAudienceAttribute.m in Sources */,
+				71AA434B1D3D2051002D329D /* TEALVisitorProfileStore.m in Sources */,
+				71AA434A1D3D2051002D329D /* TEALVisitorProfileHelpers.m in Sources */,
+				71AA434F1D3D2051002D329D /* TEALPublishSettings+Collect.m in Sources */,
+				71AA43521D3D2051002D329D /* NSArray+Tealium.m in Sources */,
 				535682AD18F3670300BAAD62 /* AAPLCustomToolbarViewController.m in Sources */,
-				7118DC641C5929B100D3B612 /* TEALVisitorProfileStore.m in Sources */,
+				71AA436F1D3D2051002D329D /* TEALRemoteCommand.m in Sources */,
+				71AA43591D3D2051002D329D /* TEALDataSources.m in Sources */,
 				535682A818F3670300BAAD62 /* AAPLActivityIndicatorViewController.m in Sources */,
 				535682AC18F3670300BAAD62 /* AAPLCustomSearchBarViewController.m in Sources */,
-				7118DC701C5929B100D3B612 /* TEALDeviceDataSources.m in Sources */,
-				7118DC601C5929B100D3B612 /* TEALVisitorProfileFlagAttribute.m in Sources */,
 				5356824A18F3656900BAAD62 /* main.m in Sources */,
 				3E8CF107196DD83A00420B6B /* AAPLSearchBarEmbeddedInNavigationBarViewController.m in Sources */,
+				71AA437B1D3D2051002D329D /* TEALWKConstants.m in Sources */,
 				535682B118F3670300BAAD62 /* AAPLImageViewController.m in Sources */,
-				7118DC881C5929B100D3B612 /* TEALOperationManager.m in Sources */,
+				71AA43481D3D2051002D329D /* TEALVisitorProfileMetricAttribute.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1679,44 +1396,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71E74B681C9091810079A955 /* Tealium.m in Sources */,
-				717EBAC71C90953400031237 /* TEALRemoteCommandManager.m in Sources */,
-				716AD98C1C56DB72007D7E7C /* TEALTagDispatchServiceTests.m in Sources */,
-				710198201C6B8CAB0072D7C6 /* TEALS2SLegacyDispatchServiceTests.m in Sources */,
-				71C578391C88A532002AF643 /* TEALLifecycleDataSourcesTests.m in Sources */,
-				717EBAC41C90953400031237 /* TEALRemoteCommand.m in Sources */,
-				7145B0B71C59A37500842A4D /* TEALDispatchManagerTests.m in Sources */,
-				715C4A121C52EB6A006B39EF /* TEALDatasourcesTests.m in Sources */,
-				71DC9BD01C3F1FFE0038855D /* ios_data_sources.json in Sources */,
-				712BAF071C29BCBD007767CD /* TealiumDelegateTestObject.m in Sources */,
-				71C578381C88A532002AF643 /* Tealium_LifecycleTests.m in Sources */,
-				717EBACB1C90953400031237 /* TEALPublishSettings+TagManagement.m in Sources */,
-				717EBAC81C90953400031237 /* TEALRemoteCommandResponse.m in Sources */,
-				712BAF091C29BCBD007767CD /* TEALTestHelper.m in Sources */,
-				717EBACA1C90953400031237 /* Tealium+TagManagement.m in Sources */,
-				717EBAC51C90953400031237 /* TEALRemoteCommandConstants+PrivateHeader.m in Sources */,
-				712BAF0B1C29BCBD007767CD /* TEALTestHelperConstants.m in Sources */,
-				715C4A171C52EB6A006B39EF /* Tealium_TagManagmentConfigurationTests.m in Sources */,
-				715C4A1C1C52EB6A006B39EF /* TEALSettingsTests.m in Sources */,
-				715C4A111C52EB6A006B39EF /* TEALConfigurationTests.m in Sources */,
-				71E74B691C9091890079A955 /* Tealium+Collect.m in Sources */,
-				715C4A1A1C52EB6A006B39EF /* TEALPublishSettingsStoreTests.m in Sources */,
-				715C4A161C52EB6A006B39EF /* Tealium_TagManagementPublicAPITests.m in Sources */,
-				7104CF0F1C57F8E1008AA63E /* Tealium_CollectConfigurationTests.m in Sources */,
-				71E74B671C9088740079A955 /* TEALDataSources.m in Sources */,
-				717EBB0A1C90D09900031237 /* TEALLifecycleDataSources.m in Sources */,
-				717EBB081C90D09900031237 /* Tealium+Lifecycle.m in Sources */,
-				715C4A191C52EB6A006B39EF /* TealiumTrackTests.m in Sources */,
-				715C4A181C52EB6A006B39EF /* TealiumInstanceManagmentTests.m in Sources */,
-				717EBAC91C90953400031237 /* TEALConfiguration+TagManagement.m in Sources */,
 				718546DD1C2876C4009CF93E /* SourceTests.m in Sources */,
-				71F6B3F81C5A9A8F00439A79 /* TealiumPrivateAPITests.m in Sources */,
-				717EBACC1C90953400031237 /* TEALSettings+TagManagement.m in Sources */,
-				717EBACD1C90953400031237 /* TEALTagDispatchService.m in Sources */,
-				715C4A1B1C52EB6A006B39EF /* TEALPublishSettingsTests.m in Sources */,
-				717EBAC61C90953400031237 /* TEALRemoteCommandErrors.m in Sources */,
-				715C4A151C52EB6A006B39EF /* Tealium_CollectPublicAPITests.m in Sources */,
-				716AD98A1C56D558007D7E7C /* TEALRemoteCommandManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

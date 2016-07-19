@@ -14,7 +14,7 @@
 
 #elif defined(TEAL_TARGET_IOS)
 
-// Can't target module for some reason
+// Does not target module correctly - reason unknown
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
 #import "Tealium+WatchKit.h"
@@ -28,8 +28,6 @@
 #import "TEALRemoteCommandResponse.h"
 #import "TEALVisitorProfile.h"
 #import "TEALVisitorProfileCurrentVisit.h"
-
-//#import <TealiumIOS/TealiumIOS.h>
 
 #elif defined(TEAL_TARGET_TVOS)
 
@@ -51,7 +49,7 @@
  *
  *  @param autotracking Boolean indicating whether to use autotracking or not. Default is NO.
  */
-- (void) setLifecycleAutotrackingIsEnabled:(BOOL)autotracking;
+- (void) setLifecycleAutotrackingIsEnabled:(BOOL)autotracking __attribute__((deprecated("Use the TEALConfiguration setLifecycleAutotrackingEnabled option instead")));
     
 /**
  *  Use to manually record an app launch event. This command is ignored if the

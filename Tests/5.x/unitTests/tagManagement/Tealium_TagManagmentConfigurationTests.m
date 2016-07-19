@@ -130,6 +130,8 @@
 
 - (void) testDisableByPublishSettings {
     
+    // TODO: Can fail in group tests - passes individually
+    
     TEALConfiguration *config = [TEALTestHelper configFromTestHTMLFile:@"collect_OFF"];
     
     [self enableLibraryWithConfiguration:config];

@@ -7,7 +7,9 @@
 //
 
 #import "Tealium+Lifecycle.h"
+#import "Tealium+PrivateHeader.h"
 #import "TEALDataSourceConstants.h"
+#import "TEALSettings+Lifecycle.h"
 #import "TEALLifecycleDataSources.h"
 
 @implementation Tealium (Lifecycle)
@@ -59,6 +61,19 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
 
 #pragma mark - PRIVATE INSTANCE
 
+- (void) updateLifecycle {
+    
+    if (![self.settings libraryShouldDisable] &&
+        [self.settings autotrackingLifecycleEnabled]){
+        
+        [self enableLifecycleAutotracking];
+        
+    } else {
+        [self disableLifecycleAutotracking];
+    }
+    
+}
+
 - (void) executeLifecycleCommandForType:(TEALLifecycleType)type
                            overrideDate:(NSDate *)date
                             autoTracked:(BOOL)autoTracked{
@@ -108,7 +123,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [lifecycleDataSources addEntriesFromDictionary:dataSources];
     
-    NSString *title = [TEALLifecycleDataSources stringFromLifecyleType:type];
+    NSString *title = [TEALLifecycleDataSources stringLifecycleType:type];
     
     [self trackEventWithTitle:title
                   dataSources:lifecycleDataSources];
@@ -171,6 +186,10 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
 
 - (void) enableLifecycleAutotracking {
     
+    if (TealiumLifecycleAutotrackingIsEnabled) {
+        return;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(lifecycleAutotrackingLaunchDetected)
                                                  name:UIApplicationDidFinishLaunchingNotification
@@ -186,13 +205,19 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
                                                  name:UIApplicationWillResignActiveNotification
                                                object:nil];
     
-    
+    TealiumLifecycleAutotrackingIsEnabled = YES;
     
 }
 
 - (void) disableLifecycleAutotracking {
     
+    if (!TealiumLifecycleAutotrackingIsEnabled){
+        return;
+    }
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    TealiumLifecycleAutotrackingIsEnabled = NO;
     
 }
 

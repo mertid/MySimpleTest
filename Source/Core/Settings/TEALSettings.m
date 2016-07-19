@@ -66,10 +66,6 @@
     return false;
 }
 
-- (BOOL) autotrackingLifecycleEnabled {
-    return false;
-}
-
 - (BOOL) autotrackingTimestampInfoEnabled {
     return true;
 }

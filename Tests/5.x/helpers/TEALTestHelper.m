@@ -150,6 +150,7 @@
     
 }
 
+
 + (TEALConfiguration *) configFromTestHTMLFile:(NSString *)filename{
     
     NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:filename ofType:@"html"];

@@ -60,46 +60,93 @@
 //    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 //}
 
-#pragma mark - TRACK TESTS
+#pragma mark - CLASS TESTS
 
-- (void) testTrackDictionaryIsTrullyACopy {
+- (void) testSuppressForQueueSize {
     
-    // Spin up an instance of tealium
-    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"test" profile:@"test" environment:@"test"];
-    Tealium *tealium = [Tealium newInstanceForKey:@"test" configuration:config];
-    self.shouldQueueAll = YES;
+    // limit greater than current - Should suppress
+    XCTAssertTrue([Tealium suppressForQueueSize:10
+                               currentQueueSize:1]);
     
-    // create a mutable dictionary with test keys from file source
-    NSDictionary *trackData = [TEALTestHelper dictionaryFromJSONFile:@"tealium_track_data"];
-    NSArray *keys = [trackData allKeys];
+    // sizes equal - Should NOT suppress
+    XCTAssertFalse([Tealium suppressForQueueSize:1
+                                currentQueueSize:1]);
     
-    // Iterate over every test option in file
-    for (int i  = 0; i < [keys count]; i++) {
-     
-        NSString *key = keys[i];
-        NSDictionary *sourceOriginal = trackData[key];
-        NSMutableDictionary *source = [NSMutableDictionary dictionaryWithDictionary:sourceOriginal];
+    // current greater than limit - Should NOT suppress
+    XCTAssertFalse([Tealium suppressForQueueSize:1
+                                currentQueueSize:10]);
+    
+}
 
-        BOOL processed = self.dispatchProcessed;
-        
-        // Make a track call
-        [tealium trackEventWithTitle:@"testEvent" dataSources:source];
-        
-        // wait for dispatch callback with modified payload
-        [TEALTestHelper waitFor:&processed timeout:1.0];
-        
-        // TODO: Modify the mutable dictionary originally passed in
-        
-        
-        // Check dispatch payload did not change
-        
-        
-    }
+- (void) testDispatchManagerShouldDispatchDelegateProcessing {
     
-
+    // TODO: Read configuration from json file: dispatch_permitted_scenarios
+    
+    // TODO: Loop through all test scenarios
+    
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"stub"
+//                                                                    profile:@"stub"
+//                                                                environment:@"stub"];
+//    TEALSettings *settings = [[TEALSettings alloc] initWithConfiguration:config];
+//    TEALDispatchManager *dispatchManager = [[TEALDispatchManager alloc] initWithInstanceID:@"stub"
+//                                                                                  delegate:self];
+//    
+//    TEALURLSessionManager *urlSessionManager = [[TEALURLSessionManager alloc] initWithConfiguration:__fill_in__];
+//    
+//    NSArray id<TEALDispatchService> * dispatchServices = @[@"__fill_in___"];
+//    
+//    NSError *error = nil;
+//    
+//    BOOL dispatchPermissable = [Tealium dispatchPermissableBasedOnSettings:settings
+//                                                           dispatchManager:dispatchManager
+//                                                         urlSessionManager:urlSessionManager
+//                                                          dispatchServices:dispatchServices error:error];
+    
+    // TODO: check that dispatchPermissable matches scenario expected 'dispath_permitted' bool value
     
     
 }
+
+#pragma mark - TRACK TESTS
+
+//- (void) testTrackDictionaryIsTrullyACopy {
+//    
+//    // Spin up an instance of tealium
+//    TEALConfiguration *config = [TEALConfiguration configurationWithAccount:@"test" profile:@"test" environment:@"test"];
+//    Tealium *tealium = [Tealium newInstanceForKey:@"test" configuration:config];
+//    self.shouldQueueAll = YES;
+//    
+//    // create a mutable dictionary with test keys from file source
+//    NSDictionary *trackData = [TEALTestHelper dictionaryFromJSONFile:@"tealium_track_data"];
+//    NSArray *keys = [trackData allKeys];
+//    
+//    // Iterate over every test option in file
+//    for (int i  = 0; i < [keys count]; i++) {
+//     
+//        NSString *key = keys[i];
+//        NSDictionary *sourceOriginal = trackData[key];
+//        NSMutableDictionary *source = [NSMutableDictionary dictionaryWithDictionary:sourceOriginal];
+//
+//        BOOL processed = self.dispatchProcessed;
+//        
+//        // Make a track call
+//        [tealium trackEventWithTitle:@"testEvent" dataSources:source];
+//        
+//        // wait for dispatch callback with modified payload
+//        [TEALTestHelper waitFor:&processed timeout:1.0];
+//        
+//        // TODO: Modify the mutable dictionary originally passed in
+//        
+//        
+//        // Check dispatch payload did not change
+//        
+//        
+//    }
+//    
+//
+//    
+//    
+//}
 
 #pragma mark - TEALIUM DELEGATE
 
@@ -129,17 +176,5 @@
     self.didFetch = YES;
     
 }
-
-//- (void)testExample {
-//    // This is an example of a functional test case.
-//    // Use XCTAssert and related functions to verify your tests produce the correct results.
-//}
-//
-//- (void)testPerformanceExample {
-//    // This is an example of a performance test case.
-//    [self measureBlock:^{
-//        // Put the code you want to measure the time of here.
-//    }];
-//}
 
 @end

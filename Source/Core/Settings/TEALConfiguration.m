@@ -60,9 +60,7 @@
     configuration.overridePublishSettingsURL = nil;
     configuration.overrideTagManagementURL = nil;
     
-    NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", accountName, profileName, environmentName];
-    const char * queueName = [fullQueueName UTF8String];
-    configuration.queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
+    [configuration queue];
     
     return configuration;
 }
@@ -134,7 +132,7 @@
     
     __block id obj = nil;
     
-    dispatch_sync(self.queue, ^{
+    dispatch_sync([self processingQueue], ^{
         obj = [self moduleData][key];
     });
     
@@ -145,7 +143,7 @@
                   forKey:(id<NSCopying, NSSecureCoding>)aKey
               completion:(void(^)(BOOL successful, NSError *error))completion {
     
-    dispatch_barrier_async(self.queue, ^{
+    dispatch_barrier_async([self processingQueue], ^{
         
         [self moduleData][aKey] = object;
         
@@ -158,7 +156,7 @@
 - (void) removeModuleObjectForKey:(id<NSCopying, NSSecureCoding>)aKey
                        completion:(void(^)(BOOL successful, NSError *error))completion{
     
-    dispatch_barrier_async(self.queue, ^{
+    dispatch_barrier_async([self processingQueue], ^{
         
         [[self moduleData] removeObjectForKey:aKey];
         
@@ -181,7 +179,7 @@
 - (void) setModuleDescription:(NSString *) description
                   forKey:(NSString *)aKey {
     
-    dispatch_barrier_async(self.queue, ^{
+    dispatch_barrier_async([self processingQueue], ^{
     
         [self moduleDescriptionData][aKey] = description;
         
@@ -190,7 +188,7 @@
 
 - (void) removeModuleDescriptionForKey:(id<NSCopying, NSSecureCoding>)aKey {
     
-    dispatch_barrier_async(self.queue, ^{
+    dispatch_barrier_async([self processingQueue], ^{
         
         [[self moduleDescriptionData] removeObjectForKey:aKey];
         
@@ -198,6 +196,17 @@
 }
 
 #pragma mark - PRIVATE CLASS
+
+- (dispatch_queue_t) processingQueue {
+    
+    if (!self.queue){
+        NSString *fullQueueName = [NSString stringWithFormat:@"tealium.configuration.queue.%@.%@.%@", self.accountName, self.profileName, self.environmentName];
+        const char * queueName = [fullQueueName UTF8String];
+        self.queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
+    }
+    
+    return self.queue;
+}
 
 //+ (NSString *) publishSettingsURLFromConfiguration:(TEALConfiguration *)configuration {
 //    

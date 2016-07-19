@@ -136,6 +136,14 @@ static NSDateFormatter *_mmddyyyyFormatter;
     return @{};
 }
 
++ (NSString * _Nonnull) stringLifecycleType:(TEALLifecycleType)type {
+    
+    if (type == TEALLifecycleTypeLaunch) return @"launch";
+    if (type == TEALLifecycleTypeWake) return @"wake";
+    if (type == TEALLifecycleTypeSleep) return @"sleep";
+    return @"none";
+    
+}
 
 + (NSString *)stringFromLifecycleType:(TEALLifecycleType)type {
     

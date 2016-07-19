@@ -29,7 +29,7 @@
                         TEALDispatchManagerDelegate,
                         TEALModulesDelegate>
 
-@property (atomic, strong) NSMutableArray *privateDispatchNetworkServices;
+@property (atomic, strong) NSMutableArray<TEALDispatchService> *privateDispatchNetworkServices;
 @property (nonatomic, strong) TEALLogger *logger;
 @property (nonatomic, strong) TEALOperationManager *operationManager;
 @property (nonatomic, strong) TEALURLSessionManager *urlSessionManager;
@@ -593,19 +593,26 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
 }
 
+- (void) refresh {
+    
+    [self updateModules];
+    [self updateLogger];
+    
+}
+
 - (void) enable {
     
     @synchronized(self) {
-        
-        [self enableCore];
-        [self updateModules];
-        [self updateLogger];
-        
+       
         if (self.isEnabled){
             return;
         }
-        self.isEnabled = YES;
+        
+        [self enableCore];
+        [self refresh];
         [self.logger logQA:@"Library Enabled."];
+        
+        self.isEnabled = YES;
 
     }
 }
@@ -656,6 +663,11 @@ __strong static NSDictionary *staticAllInstances = nil;
     // TODO: Optimize this
     
     self.modulesDelegate = self;
+    
+    // Lifecycle
+    if ([self.modulesDelegate respondsToSelector:@selector(updateLifecycle)]){
+        [self.modulesDelegate updateLifecycle];
+    }
     
     // Tag Management
     if ([self.modulesDelegate respondsToSelector:@selector(updateTagManagement)]){
@@ -850,6 +862,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [self fetchNewSettingsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         
+        // Error only in fetching new config - continue running after to load archive or default mode
         if (error){
             [weakSelf.logger logProd:[NSString stringWithFormat:@"%@ \nReason:%@ \nSuggestion:%@",
                                       [error localizedDescription],
@@ -858,76 +871,101 @@ __strong static NSDictionary *staticAllInstances = nil;
                                       ]];
         }
         
+        // New, saved, or default publish settings?
         if (success){
             
-            [weakSelf.logger logQA:@"New Remote Publish Settings: %@", [weakSelf.settings publishSettingsDescription]];
+            [weakSelf processNewSettings];
+            
+        } else if (!success &&
+                   !error){
+            
+            [weakSelf processSavedSettings];
             
         }
-        
-        if (!success &&
-            !error){
-            
-            [weakSelf.logger logQA:@"No changes in current Remote Publish Settings from server."];
-            
-        }
-        
-        // if !success then we're using archived or default version
-        
-        if ([weakSelf.logger updateLogLevel:[weakSelf.settings logLevelString]]){
-            
-            [weakSelf.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[weakSelf.logger currentLogLevel]]]];
-            
-        }
-        
-        if ([weakSelf.settings libraryShouldDisable]){
-            
-            [weakSelf disable];
-            
-            return;
-            
-        }
-        
-        [weakSelf enable];
-        
-        if ([weakSelf.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
-            [weakSelf.delegate tealiumInstanceDidUpdatePublishSettings:weakSelf];
-        }
-        
-        [weakSelf.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
-        
-        [weakSelf.dispatchManager runQueuedDispatches];
-        
         
     }];
     
 }
 
-- (BOOL) networkReadyForDispatch {
+- (void) processSavedSettings {
     
-    BOOL reachable = [self.urlSessionManager.reachabilityManager isReachable];
+    [self.logger logQA:@"No changes in current Remote Publish Settings from server."];
+
+    if (!self.isEnabled){
+        [self enable];
+    } else {
+        [self refresh];
+    }
+    
+}
+
+- (void) processNewSettings {
+    
+    // New, saved, or default publish settings?
+    
+    [self.logger logQA:@"New Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
+        
+    
+    // Update logger
+    if ([self.logger updateLogLevel:[self.settings logLevelString]]){
+        
+        [self.logger logDev:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
+        
+    }
+    
+    // Settings disabling library?
+    if ([self.settings libraryShouldDisable]){
+        
+        [self disable];
+        
+        return;
+        
+    }
+    
+    // Enable library or just update to settings
+    if (!self.isEnabled){
+        [self enable];
+    } else {
+        [self refresh];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(tealiumInstanceDidUpdatePublishSettings:)]) {
+        [self.delegate tealiumInstanceDidUpdatePublishSettings:self];
+    }
+    
+    [self.dispatchManager updateQueuedCapacity:[self.settings offlineDispatchQueueSize]];
+    
+    [self.dispatchManager runQueuedDispatches];
+    
+}
+
++ (BOOL) networkReadyForDispatchWithUrlSessionManager:(TEALURLSessionManager*)urlSessionManager{
+    
+    BOOL reachable = [urlSessionManager.reachabilityManager isReachable];
     
     return reachable;
     
 }
 
-- (BOOL) suppressForWifiOnly {
++ (BOOL) suppressForWifiOnlyWithSettings:(TEALSettings*)settings
+                       urlSessionManager:(TEALURLSessionManager*)urlSessionManager{
     
     BOOL suppress = NO;
-    if ([self.settings wifiOnlySending]){
-        suppress = ![self.urlSessionManager.reachabilityManager isReachableViaWifi];
+    if ([settings wifiOnlySending]){
+        suppress = ![urlSessionManager.reachabilityManager isReachableViaWifi];
     }
     
     return suppress;
 }
 
-- (BOOL) suppressForBetterBatteryLevels {
++ (BOOL) suppressForBetterBatteryLevelsWithSettings:(TEALSettings*)settings{
     // 20% is cutoff
     
     double batteryLevel = [TEALDataSources deviceBatteryLevel];
     
     BOOL isCharging = [TEALDataSources deviceIsCharging];
     
-    BOOL batterySaveOn = [self.settings goodBatteryLevelOnlySending];
+    BOOL batterySaveOn = [settings goodBatteryLevelOnlySending];
     
     return (!isCharging &&
             batterySaveOn &&
@@ -960,19 +998,18 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 #pragma mark - DISPATCH SERVICES
 
-- (NSMutableArray *) currentDispatchServices {
+- (NSMutableArray <TEALDispatchService> *) currentDispatchServices {
     
     if (!self.privateDispatchNetworkServices){
 
         // Max 3 options at the moment
-        self.privateDispatchNetworkServices = [[NSMutableArray alloc] initWithCapacity:3];
+        self.privateDispatchNetworkServices = [[NSMutableArray <TEALDispatchService> alloc] initWithCapacity:3];
         
     }
     
     return self.privateDispatchNetworkServices;
 }
 
-// TODO:
 - (BOOL) currentDispatchServicesReady {
 
     return false;
@@ -987,7 +1024,7 @@ __strong static NSDictionary *staticAllInstances = nil;
                          completion:^(BOOL success, NSError * _Nullable error) {
                              
                              if (success){
-                                 [weakSelf.logger logQA:@"Dispatch service enabled: %@", [service name]];
+                                 [weakSelf.logger logQA:@"Dispatch service added: %@ current status: %@", [service name], [service status]];
                              }
                              
                              if (error){
@@ -1075,56 +1112,159 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (BOOL) dispatchManagerShouldDispatch:(NSError *__autoreleasing *)error {
     
-    BOOL shouldDispatch = YES;
+    // Errors are passed back up to original trackDispatch message's completion block
     
-    if (!self.settings){
-        *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"Settings not ready.", @"")
-                              suggestion:NSLocalizedString(@"Wait.", @"")];
-        shouldDispatch = NO;
-    }
-    if (![self networkReadyForDispatch]){
-        *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"Network not ready.", @"")
-                              suggestion:NSLocalizedString(@"Check network access.", @"")];
-        shouldDispatch = NO;
-    }
-    if ([self suppressForWifiOnly]){
-        *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"Suppressing calls until WIFI available.", @"")
-                              suggestion:NSLocalizedString(@"Check network access.", @"")];
-        shouldDispatch = NO;
-    }
-    if ([self suppressForBetterBatteryLevels]){
-        *error = [TEALError errorWithCode:TEALErrorCodeFailure
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"Suppressing for better battery levels.", @"")
-                              suggestion:NSLocalizedString(@"Charge device.", @"")];
-        shouldDispatch = NO;
-    }
-    if ([self currentDispatchServices].count==0){
-        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"No network dispatch services available", @"")
-                              suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings.", @"")];
-        shouldDispatch = NO;
-    }
-    
-    NSUInteger batchSize = [self.settings dispatchSize];
-    NSUInteger queueSize = [self.dispatchManager queuedDispatches].count;
-    if (batchSize > queueSize){
-        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
-                             description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
-                                  reason:NSLocalizedString(@"Queue size is smaller than batch size", @"")
-                              suggestion:NSLocalizedString(@"Wait for additional track calls OR adjust publish settings batch size.", @"")];
-        shouldDispatch = NO;
+    return [Tealium dispatchPermissableBasedOnSettings:self.settings
+                                       dispatchManager:self.dispatchManager
+                                     urlSessionManager:self.urlSessionManager
+                                      dispatchServices:[self currentDispatchServices]
+                                                 error:error];
+
+}
+
++ (BOOL) suppressForQueueSize:(NSUInteger)sizeLimit
+             currentQueueSize:(NSUInteger)currentSize {
+
+    if (currentSize >= sizeLimit){
+        
+        return NO;
         
     }
     
-    return shouldDispatch;
+    return YES;
+}
+
++ (BOOL) dispatchServicesReady:(NSArray <TEALDispatchService >*)dispatchServices {
+    
+    // Nothing to send with
+    if (dispatchServices.count == 0)  { return NO; }
+    
+    // Are all ready?
+    for (id<TEALDispatchService>service in dispatchServices) {
+        if ([service status] == TEALDispatchNetworkServiceStatusUnknown){
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
++ (BOOL) dispatchPermissableBasedOnSettings:(TEALSettings *)settings
+                            dispatchManager:(TEALDispatchManager *)dispatchManager
+                          urlSessionManager:(TEALURLSessionManager *)urlSessionManager
+                           dispatchServices:(NSArray <TEALDispatchService>*)dispatchServices
+                                      error:(NSError * __autoreleasing *)error {
+    
+    // Check that all required instances are running
+    BOOL allComponentsReady = [Tealium dispatchPermissableComponentsReadySettings:settings
+                                                                  dispatchManager:dispatchManager
+                                                                urlSessionManager:urlSessionManager
+                                                                            error:error];
+    if (!allComponentsReady) { return NO; }
+    
+    // Check all flags
+    BOOL batchingOk = ![Tealium suppressForQueueSize:[settings dispatchSize]
+                                    currentQueueSize:[dispatchManager queuedDispatches].count];
+    BOOL networkOk = [Tealium networkReadyForDispatchWithUrlSessionManager:urlSessionManager];
+    BOOL wifiOnlyOk = ![self suppressForWifiOnlyWithSettings:settings
+                                           urlSessionManager:urlSessionManager];
+    BOOL batteryLevelOk = ![self suppressForBetterBatteryLevelsWithSettings:settings];
+    BOOL dispatchServicesOk = [Tealium dispatchServicesReady:dispatchServices];
+    
+    return [Tealium dispatchPermissableBatchingCheckPassed:batchingOk
+                                        batteryLevelPassed:batteryLevelOk
+                                        dispatchServicesOk:dispatchServicesOk
+                                        networkReadyPassed:networkOk
+                                            wifiOnlyPassed:wifiOnlyOk
+                                             dispatchError:error];
+    
+    
+    return NO;
+}
+
++ (BOOL) dispatchPermissableComponentsReadySettings:(TEALSettings*)settings
+                                    dispatchManager:(TEALDispatchManager*)dispatchManager
+                                  urlSessionManager:(TEALURLSessionManager*)urlSessionManager
+                                              error:(NSError * __autoreleasing *)error {
+
+    if (!settings){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Settings not ready.", @"")
+                               suggestion:NSLocalizedString(@"Consult Tealium Engineering.", @"")];
+        return NO;
+    }
+    
+    if (!dispatchManager){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Dispatch manager not ready", @"")
+                               suggestion:NSLocalizedString(@"Consult Tealium Engineering.", @"")];
+        return NO;
+        
+    }
+    
+    if (!urlSessionManager){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"URL Session manager not ready", @"")
+                               suggestion:NSLocalizedString(@"Consult Tealium Engineering.", @"")];
+        return NO;
+        
+    }
+    
+    return YES;
+}
+
++ (BOOL) dispatchPermissableBatchingCheckPassed:(BOOL)batchingOk
+                             batteryLevelPassed:(BOOL)batteryLevelOk
+                             dispatchServicesOk:(BOOL)dispatchServicesOk
+                             networkReadyPassed:(BOOL)networkOk
+                                 wifiOnlyPassed:(BOOL)wifiOnlyOk
+                                  dispatchError:(NSError * __autoreleasing *)error {
+    
+    if (!batchingOk){
+        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Queue size is smaller than batch size", @"")
+                               suggestion:NSLocalizedString(@"Wait for additional track calls OR adjust publish settings batch size.", @"")];
+        return NO;
+        
+    }
+    
+    if (!batteryLevelOk){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Suppressing for better battery levels.", @"")
+                               suggestion:NSLocalizedString(@"Charge device.", @"")];
+        return NO;
+    }
+    
+    if (!dispatchServicesOk){
+        *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Dispatch services not ready", @"")
+                               suggestion:NSLocalizedString(@"Check TIQ Mobile Publish Settings.", @"")];
+        return NO;
+    }
+    
+
+    if (!networkOk){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Network not ready.", @"")
+                               suggestion:NSLocalizedString(@"Check network access.", @"")];
+        return NO;
+    }
+    if (!wifiOnlyOk){
+        *error = [TEALError errorWithCode:TEALErrorCodeFailure
+                              description:NSLocalizedString(@"Dispatch Manager should not dispatch", @"")
+                                   reason:NSLocalizedString(@"Suppressing calls until WIFI available.", @"")
+                               suggestion:NSLocalizedString(@"Check network access.", @"")];
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL) dispatchManagerShouldDestroyDispatch:(TEALDispatch *)dispatch {

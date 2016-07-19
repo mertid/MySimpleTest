@@ -14,6 +14,7 @@
 - (void) updateCollect;
 - (void) updateS2SLegacy;
 - (void) updateTagManagement;
+- (void) updateLifecycle;
 
 //- (void) enableCollect;
 //- (void) enableS2SLegacy;
