@@ -259,7 +259,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         if (report){
             TEALDispatch *lastDispatchAdded = [dispatches lastObject];
-            lastDispatchAdded.assignedBlock(TEALDispatchStatusQueued, lastDispatchAdded, nil);
+            lastDispatchAdded.assignedBlock(TEALDispatchStatusQueued, lastDispatchAdded, error);
         }
         
         [self saveDispatches:dispatches];

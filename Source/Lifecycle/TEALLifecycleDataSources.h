@@ -44,6 +44,8 @@ typedef NS_ENUM(NSUInteger, TEALLifecycleType) {
                                                  date:(NSDate* _Nonnull)date
                                        persistentData:(NSDictionary * _Nullable)persistentData;
 
++ (NSString * _Nonnull) stringLifecycleType:(TEALLifecycleType)type;
+
 + (NSString * _Nonnull) stringFromLifecyleType:(TEALLifecycleType)type;
 
 + (TEALLifecycleType) lifecycleTypeFromString:(NSString * _Nonnull)string;

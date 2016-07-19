@@ -341,6 +341,9 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     
     if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
         
+        // TODO: trigger sending dispatches
+        [self.dispatchManager runQueuedDispatches];
+        
         [self.delegate tealium:self webViewIsReady:webView];
     }
 }

@@ -28,6 +28,7 @@ NSString *const kTEALReachabilityChangedNotification = @"kTEALReachabilityChange
 #endif
 
 @property (nonatomic, strong) id                        reachabilityObject;
+@property (nonatomic)         BOOL                      wasPreviouslyReachable;
 
 -(void)reachabilityChanged:(SCNetworkReachabilityFlags)flags;
 -(BOOL)isReachableWithFlags:(SCNetworkReachabilityFlags)flags;
@@ -424,14 +425,20 @@ static void TMReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
     {
         if(self.reachableBlock)
         {
-            self.reachableBlock(self);
+            if (self.wasPreviouslyReachable == false){
+                self.reachableBlock(self);
+                self.wasPreviouslyReachable = true;
+            }
         }
     }
     else
     {
         if(self.unreachableBlock)
         {
-            self.unreachableBlock(self);
+            if (self.wasPreviouslyReachable == true){
+                self.unreachableBlock(self);
+                self.wasPreviouslyReachable = false;
+            }
         }
     }
     

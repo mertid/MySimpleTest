@@ -57,28 +57,28 @@
     
 }
 
-#pragma mark - TESTS
+#pragma mark - INSTANCE TESTS
 
-- (void) testTagManagementDispatchServiceReady {
-    
-    // Create tealium instance
-    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"tag_management_ON"];
-
-    Tealium *tealium = [self enableLibraryWithConfiguration:config];
-    
-    BOOL waiting = false;
-    
-    // Give the startup sequence a second to complete
-    [TEALTestHelper waitFor:&waiting timeout:1.0];
-
-    // run protocol check to see if bool false returned from check
-    NSError *error;
-    
-    BOOL canSend = [tealium dispatchManagerShouldDispatch:&error];
-    
-    XCTAssertTrue(canSend == true, @"Dispatch manager should have return true.");
-    
-}
+//- (void) testTagManagementDispatchServiceReady {
+//    
+//    // Create tealium instance
+//    TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"tag_management_ON"];
+//
+//    Tealium *tealium = [self enableLibraryWithConfiguration:config];
+//    
+//    BOOL waiting = false;
+//    
+//    // Give the startup sequence a second to complete
+//    [TEALTestHelper waitFor:&waiting timeout:1.0];
+//
+//    // run protocol check to see if bool false returned from check
+//    NSError *error;
+//    
+//    BOOL canSend = [tealium dispatchManagerShouldDispatch:&error];
+//    
+//    XCTAssertTrue(canSend == true, @"Dispatch manager should have return true.");
+//    
+//}
 
 
 #pragma mark - TEALIUM DELEGATE

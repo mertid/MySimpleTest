@@ -266,7 +266,7 @@
 
 - (void) testRemoveCommandBlockFromRemoteCommandManager {
     
-    // This test only passes individually - multithreading issue?
+    // TODO: Refactor? This test only passes individually, never with multiple - multithreading issue?
     
     [self enableLibraryWithConfiguration:[TEALTestHelper configFromTestJSONFile:@"all_options_ON"]];
     

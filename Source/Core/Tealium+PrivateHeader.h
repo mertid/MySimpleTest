@@ -36,6 +36,17 @@
 
 + (NSDictionary * _Nonnull) allInstances;
 
++ (BOOL) suppressForQueueSize:(NSUInteger)sizeLimit
+             currentQueueSize:(NSUInteger)currentSize;
++ (BOOL) dispatchServicesReady:(NSArray <TEALDispatchService >* _Nullable)dispatchServices;
+
++ (BOOL) dispatchPermissableBasedOnSettings:(TEALSettings * _Nullable)settings
+                            dispatchManager:(TEALDispatchManager * _Nullable)dispatchManager
+                          urlSessionManager:(TEALURLSessionManager * _Nullable)urlSessionManager
+                                dataSources:(TEALDataSources * _Nullable)dataSources
+                           dispatchServices:(NSArray <TEALDispatchService>* _Nullable)dispatchServices
+                                      error:(NSError * __autoreleasing *)error;
+
 - (void) addModuleData:(NSDictionary * _Nonnull) dictionary;
 - (void) removeModuleDataForKey:(NSString * _Nonnull)key;
 

@@ -1,0 +1,76 @@
+{
+	"scenarios" : [{
+		"description":"all dispatch services disabled",
+		"event_number": "0",
+		"configuration":{
+	        "_is_enabled":"true",
+	        "battery_saver":"true",
+	        "dispatch_expiration":"-1",
+	        "enable_collect":"false",
+	        "enable_s2s_legacy":"false",
+	        "enable_tag_management":"false",
+	        "event_batch_size":"1",
+	        "minutes_between_refresh":"0.0",
+	        "offline_dispatch_limit":"100",
+	        "override_log":"",
+	        "wifi_only_sending":"true"},
+		"state" : {
+			"current_queue_size" : "1",
+			"settings_available" : "true",
+			"network_reachable" : "true",
+			"carrier_type" : "wifi",
+			"battery_level" : "0.3",
+		},
+		"dispatch_permitted" : "false"
+	},
+	{
+		"description":"tag management dispatch services enabled - webview not ready",
+		"event_number": "0",
+		"configuration":{
+	        "_is_enabled":"true",
+	        "battery_saver":"true",
+	        "dispatch_expiration":"-1",
+	        "enable_collect":"false",
+	        "enable_s2s_legacy":"false",
+	        "enable_tag_management":"true",
+	        "event_batch_size":"1",
+	        "minutes_between_refresh":"0.0",
+	        "offline_dispatch_limit":"100",
+	        "override_log":"",
+	        "wifi_only_sending":"true"},
+		"state" : {
+			"current_queue_size" : "1",
+			"settings_available" : "true",
+			"network_reachable" : "true",
+			"tag_management_ready" : "false",
+			"carrier_type" : "wifi",
+			"battery_level" : "0.3",
+		},
+		"dispatch_permitted" : "false"
+	},
+	{
+		"description":"tag management dispatch services enabled - webview ready",
+		"event_number": "0",
+		"configuration":{
+	        "_is_enabled":"true",
+	        "battery_saver":"true",
+	        "dispatch_expiration":"-1",
+	        "enable_collect":"false",
+	        "enable_s2s_legacy":"false",
+	        "enable_tag_management":"true",
+	        "event_batch_size":"1",
+	        "minutes_between_refresh":"0.0",
+	        "offline_dispatch_limit":"100",
+	        "override_log":"",
+	        "wifi_only_sending":"true"},
+		"state" : {
+			"current_queue_size" : "1",
+			"settings_available" : "true",
+			"network_reachable" : "true",
+			"tag_management_ready" : "true",
+			"carrier_type" : "wifi",
+			"battery_level" : "0.3",
+		},
+		"dispatch_permitted" : "true"
+	}]
+}

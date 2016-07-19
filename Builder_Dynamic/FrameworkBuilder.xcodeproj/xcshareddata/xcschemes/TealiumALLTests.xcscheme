@@ -22,6 +22,46 @@
                ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "712FD5EA1CFE695500984F98"
+               BuildableName = "TealiumCollectTests.xctest"
+               BlueprintName = "TealiumCollectTests"
+               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "71B03C421CFE2F9C007A71C9"
+               BuildableName = "TealiumCoreTests.xctest"
+               BlueprintName = "TealiumCoreTests"
+               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "71734C3D1CFF51B3008F1294"
+               BuildableName = "TealiumLifecycleTests.xctest"
+               BlueprintName = "TealiumLifecycleTests"
+               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "712FD69C1CFE6C1B00984F98"
+               BuildableName = "TealiumTagManagementTests.xctest"
+               BlueprintName = "TealiumTagManagementTests"
+               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <AdditionalOptions>
       </AdditionalOptions>

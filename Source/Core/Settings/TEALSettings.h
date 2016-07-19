@@ -20,7 +20,6 @@
 
 - (BOOL) autotrackingDeviceInfoEnabled;
 - (BOOL) autotrackingIvarsEnabled;
-- (BOOL) autotrackingLifecycleEnabled;
 - (BOOL) autotrackingUIEventsEnabled;
 - (BOOL) autotrackingViewsEnabled;
 - (BOOL) autotrackingCrashesEnabled;
