@@ -31,7 +31,17 @@
 
 #elif defined(TEAL_TARGET_TVOS)
 
-#import <TealiumTVOS/TealiumTVOS.h>
+//#import <TealiumTVOS/TealiumTVOS.h>
+// Does not target module correctly - reason unknown
+#import "Tealium+Collect.h"
+#import "TealiumDelegate.h"
+
+#import "TEALConfiguration+Collect.h"
+#import "TEALConfiguration.h"
+#import "TEALDataSourceConstants.h"
+#import "TEALDispatch.h"
+#import "TEALVisitorProfile.h"
+#import "TEALVisitorProfileCurrentVisit.h"
 
 #endif
 
