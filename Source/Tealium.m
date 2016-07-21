@@ -1023,12 +1023,15 @@ __strong static NSDictionary *staticAllInstances = nil;
     [self addNewDispatchService:service
                          completion:^(BOOL success, NSError * _Nullable error) {
                              
+                             NSString *name = [service name];
+                             NSString *status = [service status]?@"ready":@"not ready";
+                             
                              if (success){
-                                 [weakSelf.logger logQA:@"Dispatch service added: %@ current status: %@", [service name], [service status]];
+                                 [weakSelf.logger logQA:@"Dispatch service added: %@ current status: %@", name, status];
                              }
                              
                              if (error){
-                                 [weakSelf.logger logDev:@"Could not add dispatch service: %@ - error: %@", [service name], error];
+                                 [weakSelf.logger logDev:@"Could not add dispatch service: %@ - error: %@", name, error];
                              }
                              
                          }];

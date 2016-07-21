@@ -29,6 +29,7 @@
     if (self) {
         _dispatchURLString = dispatchURLString;
         _sessionManager = sessionManager;
+        _privateStatus = TEALDispatchNetworkServiceStatusReady;
     }
     return self;
 }
@@ -42,6 +43,7 @@
 
 #pragma mark - PRIVATE
 
+#warning isReady and status seems redundant
 - (BOOL) isReady {
     
     if (!self.dispatchURLString || !self.sessionManager) {

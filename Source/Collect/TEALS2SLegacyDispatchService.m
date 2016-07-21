@@ -33,6 +33,8 @@
         _dispatchURLString = dispatchURLString;
         _sessionManager = sessionManager;
         _visitorID = visitorID;
+        _privateStatus = TEALDispatchNetworkServiceStatusReady;
+
     }
     return self;
 }
