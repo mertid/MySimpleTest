@@ -111,8 +111,9 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         
         NSMutableDictionary *params = [NSMutableDictionary new];
         
-        params[TEALCollectKey_Account]   = [settings account];
-        params[TEALCollectKey_Profile]   = [settings asProfile];
+        
+        params[TEALDataSourceKey_Tealium_Account]   = [settings account];
+        params[TEALDataSourceKey_Tealium_Profile]   = [settings asProfile];
         params[TEALCollectKey_VisitorID] = visitorID;
         
         NSString *queryString = [TEALNetworkHelpers urlParamStringFromDictionary:params];

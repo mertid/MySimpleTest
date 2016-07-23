@@ -16,5 +16,6 @@
 + (NSString *) deviceOSVersion;
 + (BOOL) isCharging;
 + (double) batteryLevel;
++ (NSString *)randomNumber;
 
 @end

@@ -8,12 +8,11 @@
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "library_version",
+			"tealium_visitor_id": "12345",
 			"tealium_timestamp_epoch": "timestamp",
 			"test_data": "this is a really long string that we t expect to handle so hopefully our dispatch service will parse it correctly didn't expect to handle so hopefully our dispatch service will parse it correctly. t expect to handle so hopefully our dispatch service will parse it correctly"
-
 		}
 	}, {
 		"input_data": {
@@ -24,10 +23,11 @@
 			"event_name": "test",
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
+			"tealium_session_id" : "sessionId",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "library_version",
+			"tealium_visitor_id": "12345",
 			"tealium_timestamp_epoch": "timestamp",
 			"test_data": "2012-04-23T18:25:43.511Z"
 		}
@@ -41,13 +41,13 @@
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
+			"tealium_session_id" : "sessionId",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "library_version",
+			"tealium_visitor_id": "12345",
 			"tealium_timestamp_epoch": "timestamp"
 		}
 	}, {
-
 		"input_data": {
 			"event_name": "test",
 			"test_data": ["objects", "objects"]
@@ -57,8 +57,9 @@
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
+			"tealium_visitor_id": "12345",
 			"tealium_library_name": "library_name",
+			"tealium_session_id" : "sessionId",
 			"tealium_library_version": "library_version",
 			"tealium_timestamp_epoch": "timestamp",
 			"test_data": ["objects", "objects"]
@@ -75,8 +76,9 @@
 			"event_name": "test",
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
+			"tealium_visitor_id": "12345",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
+			"tealium_session_id" : "sessionId",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "library_version",
 			"tealium_timestamp_epoch": "timestamp",
@@ -94,8 +96,9 @@
 			"event_name": "test",
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
+			"tealium_visitor_id": "12345",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
+			"tealium_session_id" : "sessionId",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "library_version",
 			"tealium_timestamp_epoch": "timestamp",
@@ -113,7 +116,8 @@
 			"tealium_account": "tealiummobile",
 			"tealium_environment": "dev",
 			"tealium_profile": "demo",
-			"tealium_visitor_id": "test",
+			"tealium_session_id" : "sessionId",
+			"tealium_visitor_id": "12345",
 			"tealium_library_name": "library_name",
 			"tealium_library_version": "OurCompany",
 			"tealium_timestamp_epoch": "timestamp"

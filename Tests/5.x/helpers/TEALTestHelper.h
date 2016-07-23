@@ -24,6 +24,16 @@
 + (TEALConfiguration *) configFromTestJSONFile:(NSString *)filename;
 + (BOOL)waitFor:(BOOL *)flag timeout:(NSTimeInterval)timeoutSecs;
 + (NSDictionary *) dictionaryFromJSONFile:(NSString *)filename;
-+ (BOOL)doesDictionary :(NSDictionary *)sourceDict containDictionary:(NSDictionary *)targetDict;
+
++ (BOOL)doesDictionary :(NSDictionary *)sourceDict
+  containDictionaryKeys:(NSDictionary *)targetDict
+                  error:(NSError * __autoreleasing *)error;
+
++ (BOOL)doesDictionary :(NSDictionary*)sourceDict
+        containsDictionary:(NSDictionary *)targetDict
+        error:(NSError * __autoreleasing *)error;
+
+
 
 @end
+ 

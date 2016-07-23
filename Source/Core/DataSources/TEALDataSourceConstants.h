@@ -37,7 +37,6 @@ extern NSString * const TEALDataSourceKey_DeviceResolution;
 extern NSString * const TEALDataSourceKey_DeviceOrientation;
 extern NSString * const TEALDataSourceKey_DeviceOSVersion;
 extern NSString * const TEALDataSourceKey_DeviceToken;
-extern NSString * const TEALDataSourceKey_EventName;
 extern NSString * const TEALDataSourceKey_EventTitle;
 extern NSString * const TEALDataSourceKey_ExceptionName;
 extern NSString * const TEALDataSourceKey_ExceptionReason;
@@ -86,6 +85,16 @@ extern NSString * const TEALDataSourceKey_Timestamp;
 extern NSString * const TEALDataSourceKey_TimestampLocal;
 extern NSString * const TEALDataSourceKey_TimestampOffset;
 extern NSString * const TEALDataSourceKey_TimestampUnix;
+extern NSString * const TEALDataSourceKey_Tealium_Account;
+extern NSString * const TEALDataSourceKey_Tealium_Environment;
+extern NSString * const TEALDataSourceKey_Tealium_Event_Name;
+extern NSString * const TEALDataSourceKey_Tealium_Library_Name;
+extern NSString * const TEALDataSourceKey_Tealium_Library_Version;
+extern NSString * const TEALDataSourceKey_Tealium_Profile;
+extern NSString * const TEALDataSourceKey_Tealium_Random;
+extern NSString * const TEALDataSourceKey_Tealium_Session_Id;
+extern NSString * const TEALDataSourceKey_Tealium_Timestamp_Epoch;
+extern NSString * const TEALDataSourceKey_Tealium_Visitor_Id;
 extern NSString * const TEALDataSourceKey_TealiumID;
 extern NSString * const TEALDataSourceKey_TraceID;
 extern NSString * const TEALDataSourceKey_UUID;
@@ -103,7 +112,6 @@ extern NSString * const TEALDataSourceKey_WebViewURL;
 extern NSString * const TEALDataSourceValue_ConnectionCellular;
 extern NSString * const TEALDataSourceValue_ConnectionWifi;
 extern NSString * const TEALDataSourceValue_ConnectionNone;
-extern NSString * const TEALDataSourceValue_EventName;
 extern NSString * const TEALDataSourceValue_False;
 extern NSString * const TEALDataSourceValue_IOS;
 extern NSString * const TEALDataSourceValue_LifecycleLaunch;
@@ -127,9 +135,6 @@ extern NSString * const TEALDataSourceValue_Wearable;
 
 #pragma mark - Collect API Keys
 
-extern NSString * const TEALCollectKey_Account;
-extern NSString * const TEALCollectKey_Environment;
-extern NSString * const TEALCollectKey_Profile;
 extern NSString * const TEALCollectKey_TraceID;
 extern NSString * const TEALCollectKey_VisitorID;
 

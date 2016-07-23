@@ -27,12 +27,14 @@
     }
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
+    NSString *unixDateString = [TEALTimestampDataSources stringOfTimestampAsUnixFrom:date];
     
     dataSources[TEALDataSourceKey_Timestamp] = [TEALTimestampDataSources stringOfTimestampAsISOFrom:date];
     dataSources[TEALDataSourceKey_TimestampLocal] = [TEALTimestampDataSources stringOfTimestampAsISOLocalFrom:date];
     dataSources[TEALDataSourceKey_TimestampOffset] = [TEALTimestampDataSources stringOfLocalGMTOffset];
-    dataSources[TEALDataSourceKey_TimestampUnix] = [TEALTimestampDataSources stringOfTimestampAsUnixFrom:date];
- 
+    dataSources[TEALDataSourceKey_TimestampUnix] = unixDateString;
+    dataSources[TEALDataSourceKey_Tealium_Timestamp_Epoch] = unixDateString;
+    
     return dataSources;
 }
 
