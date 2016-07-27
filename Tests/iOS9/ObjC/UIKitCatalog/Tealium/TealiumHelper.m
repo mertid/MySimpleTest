@@ -76,7 +76,6 @@ static TealiumHelper * _sharedInstance;
     
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
     
-    [tealiumInstance1 setLifecycleAutotrackingIsEnabled:TRUE];
 
     [tealiumInstance1 addVolatileDataSources:@{@"idfa":@"testIDFA",
                                                @"afterDelegateSet":@"NO"}];

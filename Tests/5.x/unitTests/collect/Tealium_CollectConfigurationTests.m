@@ -130,7 +130,7 @@
     
     TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
     
-    NSString *checkString= @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid=83D8F6217A29466EBEEF4E97C5D9ADDF";
+    NSString *checkString= @"https://collect.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid=83D8F6217A29466EBEEF4E97C5D9ADDF";
 
     config.overrideCollectDispatchURL = checkString;
     
@@ -148,7 +148,7 @@
     
     TEALConfiguration *config = [TEALTestHelper configFromTestJSONFile:@"collect_ON"];
     
-    config.overrideCollectDispatchURL = @"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
+    config.overrideCollectDispatchURL = @"https://collect.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main";
     
     [self enableLibraryWithConfiguration:config];
     
@@ -156,7 +156,7 @@
     
     NSString *finalString = [self.library.settings collectDispatchURLStringForVisitorID:visitorID];
     
-    NSMutableString *checkStringBase = [NSMutableString stringWithFormat:@"https://datacloud.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid="];
+    NSMutableString *checkStringBase = [NSMutableString stringWithFormat:@"https://collect.tealiumiq.com/vdata/i.gif?tealium_account=tealiummobile-tagbridge&tealium_profile=main&tealium_vid="];
     
     NSString *checkString = [checkStringBase stringByAppendingString:visitorID];
     
@@ -169,7 +169,7 @@
     /*
      Sample encoded output for account - tealiummobile
      
-     @"https://datacloud.tealiumiq.com/tealiummobile/main/8/i.gif?data=%7B%22data%22%3A%7B%22device_battery_percent%22%3A%22-100%22,%22link_id%22%3A%22launch%22,%22event_name%22%3A%22mobile_link%22,%22app_name%22%3A%22UIKitCatalog%22,%22device_os_version%22%3A%229.0%22,%22app_version%22%3A%2212.0%22,%22device_language%22%3A%22en-US%22,%22connection_type%22%3A%22wifi%22,%22timestamp_offset%22%3A%22-8%22,%22library_version%22%3A%225.0.0%22,%22uuid%22%3A%22749C7B66-65E5-49A3-83EB-5F61D5E523B9%22,%22device_ischarging%22%3A%22false%22,%22origin%22%3A%22mobile%22,%22timestamp_local%22%3A%222016-02-10T07%3A07%3A40%22,%22visitor_id%22%3A%22749C7B6665E549A383EB5F61D5E523B9%22,%22call_type%22%3A%22link%22,%22was_queued%22%3A%22false%22,%22device_cputype%22%3A%22x86%20%22,%22resolution%22%3A%223x2%22,%22platform%22%3A%22iOS%22,%22dom.domain%22%3A%22tealium.com%22,%22orientation%22%3A%22Portrait%22,%22device_orientation%22%3A%22Portrait%22,%22app_rdns%22%3A%22com.example.apple-samplecode.UIKitCatalog%22,%22timestamp%22%3A%222016-02-10T15%3A07%3A40Z%22,%22os_version%22%3A%229.0%22,%22device_resolution%22%3A%22750x1334%22,%22launches%22%3A1,%22cp.utag_main_v_id%22%3A%22749C7B6665E549A383EB5F61D5E523B9%22,%22device_architecture%22%3A%2264%22,%22timestamp_unix%22%3A%221455116860%22,%22device%22%3A%22Simulator%22%7D%7D"
+     @"https://collect.tealiumiq.com/tealiummobile/main/8/i.gif?data=%7B%22data%22%3A%7B%22device_battery_percent%22%3A%22-100%22,%22link_id%22%3A%22launch%22,%22event_name%22%3A%22mobile_link%22,%22app_name%22%3A%22UIKitCatalog%22,%22device_os_version%22%3A%229.0%22,%22app_version%22%3A%2212.0%22,%22device_language%22%3A%22en-US%22,%22connection_type%22%3A%22wifi%22,%22timestamp_offset%22%3A%22-8%22,%22library_version%22%3A%225.0.0%22,%22uuid%22%3A%22749C7B66-65E5-49A3-83EB-5F61D5E523B9%22,%22device_ischarging%22%3A%22false%22,%22origin%22%3A%22mobile%22,%22timestamp_local%22%3A%222016-02-10T07%3A07%3A40%22,%22visitor_id%22%3A%22749C7B6665E549A383EB5F61D5E523B9%22,%22call_type%22%3A%22link%22,%22was_queued%22%3A%22false%22,%22device_cputype%22%3A%22x86%20%22,%22resolution%22%3A%223x2%22,%22platform%22%3A%22iOS%22,%22dom.domain%22%3A%22tealium.com%22,%22orientation%22%3A%22Portrait%22,%22device_orientation%22%3A%22Portrait%22,%22app_rdns%22%3A%22com.example.apple-samplecode.UIKitCatalog%22,%22timestamp%22%3A%222016-02-10T15%3A07%3A40Z%22,%22os_version%22%3A%229.0%22,%22device_resolution%22%3A%22750x1334%22,%22launches%22%3A1,%22cp.utag_main_v_id%22%3A%22749C7B6665E549A383EB5F61D5E523B9%22,%22device_architecture%22%3A%2264%22,%22timestamp_unix%22%3A%221455116860%22,%22device%22%3A%22Simulator%22%7D%7D"
      */
     
     

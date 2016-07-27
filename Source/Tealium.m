@@ -1039,11 +1039,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     return self.privateDispatchNetworkServices;
 }
 
-- (BOOL) currentDispatchServicesReady {
-
-    return false;
-
-}
 
 - (void) addNewDispatchService:(id<TEALDispatchService>)service {
     

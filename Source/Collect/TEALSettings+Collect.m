@@ -107,7 +107,7 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         
         NSString *urlPrefix = @"https";
         
-        NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/vdata/i.gif?", urlPrefix];
+        NSString *baseURLString = [NSString stringWithFormat:@"%@://collect.tealiumiq.com/vdata/i.gif?", urlPrefix];
         
         NSMutableDictionary *params = [NSMutableDictionary new];
         
@@ -134,7 +134,7 @@ static NSString * defaultLegacyS2SDispatchURLString = nil;
         NSString *profile = [settings asProfile];
         NSString *queue = @"8"; // 2-AS Live Events, 8-Legacy S2S, 10-both
         
-        NSString *baseURLString = [NSString stringWithFormat:@"%@://datacloud.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
+        NSString *baseURLString = [NSString stringWithFormat:@"%@://collect.tealiumiq.com/%@/%@/%@/i.gif?", urlPrefix, account, profile, queue];
         
         defaultLegacyS2SDispatchURLString = baseURLString;
     }
