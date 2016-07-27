@@ -56,10 +56,10 @@
 - (NSDictionary *) mainThreadDataSources {
     
     NSMutableDictionary *dataSources = [NSMutableDictionary dictionary];
-
+    
     if (!self.disableDeviceInfo) [dataSources addEntriesFromDictionary:[TEALDeviceDataSources mainThreadDataSources]];
     if (!self.disableTimestampInfo) [dataSources addEntriesFromDictionary:[TEALDataSources timestampDataSourcesForDate:[NSDate date]]];
-
+    
     return [NSDictionary dictionaryWithDictionary:dataSources];
 }
 
@@ -71,12 +71,15 @@
     if (!self.disableCarrierInfo) [dataSources addEntriesFromDictionary:[TEALDataSources carrierInfoDataSources]];
     if (!self.disableDeviceInfo) [dataSources addEntriesFromDictionary:[TEALDeviceDataSources backgroundDataSources]];
     if (!self.disableTealiumInfo) [dataSources addEntriesFromDictionary:[TEALDataSources tealiumInfoDataSources]];
-
+    
+    NSString *visitorId = [self visitorIDCopy];
+    
     dataSources[TEALDataSourceKey_UUID] = [self uuid];
-    dataSources[TEALDataSourceKey_VisitorID] = [self visitorIDCopy];
+    dataSources[TEALDataSourceKey_VisitorID] = visitorId;
+    dataSources[TEALDataSourceKey_Tealium_Visitor_Id] = visitorId;
+    dataSources[TEALDataSourceKey_Tealium_Session_Id] = [TEALDataSources resetSessionID: [NSDate date]];
     
     [dataSources addEntriesFromDictionary:[self persistentDataSources]];
-
     [dataSources addEntriesFromDictionary:[self clientVolatileDataSources]];
     
     return [NSDictionary dictionaryWithDictionary:dataSources];
@@ -95,16 +98,24 @@
     if (!self.disableTimestampInfo){
         NSDictionary *timestampInfo = [TEALDataSources timestampDataSourcesForDate:[NSDate date]];
         NSString *unix = timestampInfo[TEALDataSourceKey_TimestampUnix];
-        if (unix) mDict[TEALDataSourceKey_TimestampUnix] = unix;
+        if (unix){
+            mDict[TEALDataSourceKey_TimestampUnix] = unix;
+            mDict[TEALDataSourceKey_Tealium_Timestamp_Epoch] = unix;
+        }
     }
     
     if (!self.disableTealiumInfo){
         NSDictionary *tealiumInfo = [TEALDataSources tealiumInfoDataSources];
         NSString *libraryInfo = tealiumInfo[TEALDataSourceKey_LibraryVersion];
         NSString *platform = tealiumInfo[TEALDataSourceKey_Platform];
+        NSString *libraryTealVersion = tealiumInfo[TEALDataSourceKey_Tealium_Library_Version];
+        NSString *libraryTealName = tealiumInfo[TEALDataSourceKey_Tealium_Library_Name];
+        
         
         if (libraryInfo) mDict[TEALDataSourceKey_LibraryVersion] = libraryInfo;
         if (platform) mDict[TEALDataSourceKey_Platform] = platform;
+        if (libraryTealVersion) mDict[TEALDataSourceKey_Tealium_Library_Version] = libraryTealVersion;
+        if (libraryTealName) mDict[TEALDataSourceKey_Tealium_Library_Name] = libraryTealName;
     }
     
     return [NSDictionary dictionaryWithDictionary:mDict];
@@ -127,7 +138,7 @@
 - (NSString *) visitorIDCopy {
     
     NSString *visitorID = [self persistentDataSources][TEALDataSourceKey_VisitorID];
-    
+
     if (!visitorID) {
         
         NSString *uuid = [self uuid];
@@ -138,6 +149,7 @@
         
         visitorID = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
         [[self instanceStore] addDataSources:@{TEALDataSourceKey_VisitorID: visitorID}];
+        [[self instanceStore] addDataSources:@{TEALDataSourceKey_Tealium_Visitor_Id: visitorID}];
     }
     
     return visitorID;
@@ -199,7 +211,6 @@
     if (carrierIso) mDict[TEALDataSourceKey_CarrierISO] = carrierIso;
     if (mobileCountryCode) mDict[TEALDataSourceKey_CarrierMCC] = mobileCountryCode;
     if (mobileNetworkCode) mDict[TEALDataSourceKey_CarrierMNC] = mobileNetworkCode;
-
     
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
@@ -214,17 +225,22 @@ static NSDictionary *staticCompileTimeDataSources;
         NSMutableDictionary *mDict = [NSMutableDictionary new];
         
         mDict[TEALDataSourceKey_LibraryVersion] = TEALLibraryVersion;
+        mDict[TEALDataSourceKey_Tealium_Library_Version] = TEALLibraryVersion;
+        mDict[TEALDataSourceKey_Tealium_Library_Name] = TEALDataSourceValue_IOS;
+
         
 #ifdef TEAL_TARGET_TVOS
         mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_TvOS;
+        mDict[TEALDataSourceKey_Tealium_Library_Name] = TEALDataSourceValue_TvOS;
         mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_TV;
 #endif
         
 #ifdef TEAL_TARGET_IOS
         mDict[TEALDataSourceKey_Platform] = TEALDataSourceValue_IOS;
+        mDict[TEALDataSourceKey_Tealium_Library_Name] = TEALDataSourceValue_IOS;
         mDict[TEALDataSourceKey_Origin] = TEALDataSourceValue_Mobile;
 #endif
-
+        
         staticCompileTimeDataSources = [NSDictionary dictionaryWithDictionary:mDict];
     }
     
@@ -276,11 +292,13 @@ static NSDictionary *staticCompileTimeDataSources;
                                              title:(NSString *)title {
     
     NSMutableDictionary *datasources = [NSMutableDictionary new];
-        
+    
     switch (eventType) {
         case TEALDispatchTypeEvent:
-            if (title) datasources[TEALDataSourceKey_EventTitle] = title;
-            datasources[TEALDataSourceKey_EventName] = TEALDataSourceValue_EventName;
+            if (title){
+                datasources[TEALDataSourceKey_EventTitle] = title;
+                datasources[TEALDataSourceKey_Tealium_Event_Name] = title;
+            }
             break;
         case TEALDispatchTypeView:
             if (title) datasources[TEALDataSourceKey_ViewTitle] = title;
@@ -296,7 +314,18 @@ static NSDictionary *staticCompileTimeDataSources;
     return datasources;
 }
 
+
 #pragma mark - PRIVATE INSTANCE
+
++ (NSString *)resetSessionID: (NSDate *)date{
+    
+    double timestamp = [date timeIntervalSince1970];
+    double milliSeconds = timestamp *1000;
+        
+    NSString *millisecsEpochString = [NSString stringWithFormat: @"%.0f", milliSeconds];
+    
+    return millisecsEpochString;
+}
 
 - (NSMutableDictionary *) clientVolatileDataSources {
     if (!self.privateVolatileDataSources){
@@ -311,7 +340,7 @@ static NSDictionary *staticCompileTimeDataSources;
 - (NSDictionary *) persistentDataSources {
     
     NSDictionary *dataSources = [[self instanceStore] allDataSources];
-
+    
 #warning Something redundant here with UUID method
     
 #warning Move the app version info here
@@ -355,11 +384,13 @@ static NSDictionary *staticCompileTimeDataSources;
     if (!self.privateStore){
         
         self.privateStore = [[TEALDataSourceStore alloc] initWithInstanceID:self.privateInstanceID];
-
+        
     }
     
     return self.privateStore;
+    
 }
+
 
 
 @end

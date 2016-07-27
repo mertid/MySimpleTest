@@ -104,6 +104,8 @@ typedef void (^tealiumEndBGTask)();
     NSMutableDictionary *newCustomDataPayload = [NSMutableDictionary dictionaryWithDictionary:existingCustomDataPayload];
     
     newCustomDataPayload[TEALDataSourceKey_Platform] = TEALDataSourceValue_WatchOS;
+    newCustomDataPayload[TEALDataSourceKey_Tealium_Library_Version] = TEALDataSourceValue_WatchOS;
+
     newCustomDataPayload[TEALDataSourceKey_Origin] = TEALDataSourceValue_Wearable;
     
     originalPayload[TEALWKCommandTrackArgumentCustomDataKey] = newCustomDataPayload;

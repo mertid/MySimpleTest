@@ -39,7 +39,6 @@ NSString * const TEALDataSourceKey_DeviceResolution     = @"device_resolution";
 NSString * const TEALDataSourceKey_DeviceOrientation    = @"device_orientation";
 NSString * const TEALDataSourceKey_DeviceOSVersion      = @"device_os_version";
 NSString * const TEALDataSourceKey_DeviceToken          = @"device_push_token";
-NSString * const TEALDataSourceKey_EventName            = @"event_name";
 NSString * const TEALDataSourceKey_EventTitle           = @"link_id";
 NSString * const TEALDataSourceKey_ExceptionName        = @"exception_name";
 NSString * const TEALDataSourceKey_ExceptionReason      = @"exception_reason";
@@ -86,6 +85,16 @@ NSString * const TEALDataSourceKey_SelectedSection      = @"selected_section";
 NSString * const TEALDataSourceKey_SelectedTitle        = @"selected_title";
 NSString * const TEALDataSourceKey_SelectedValue        = @"selected_value";
 NSString * const TEALDataSourceKey_SystemVersion        = @"os_version";
+NSString * const TEALDataSourceKey_Tealium_Account      = @"tealium_account";
+NSString * const TEALDataSourceKey_Tealium_Environment  = @"tealium_environment";
+NSString * const TEALDataSourceKey_Tealium_Event_Name   = @"event_name";
+NSString * const TEALDataSourceKey_Tealium_Library_Name = @"tealium_library_name";
+NSString * const TEALDataSourceKey_Tealium_Library_Version = @"tealium_library_version";
+NSString * const TEALDataSourceKey_Tealium_Profile      = @"tealium_profile";
+NSString * const TEALDataSourceKey_Tealium_Random       = @"tealium_random";
+NSString * const TEALDataSourceKey_Tealium_Session_Id   = @"tealium_session_id";
+NSString * const TEALDataSourceKey_Tealium_Timestamp_Epoch = @"tealium_timestamp_epoch";
+NSString * const TEALDataSourceKey_Tealium_Visitor_Id      = @"tealium_visitor_id";
 NSString * const TEALDataSourceKey_Timestamp            = @"timestamp";
 NSString * const TEALDataSourceKey_TimestampLocal       = @"timestamp_local";
 NSString * const TEALDataSourceKey_TimestampOffset      = @"timestamp_offset";
@@ -101,12 +110,12 @@ NSString * const TEALDataSourceKey_WasQueued            = @"was_queued";
 NSString * const TEALDataSourceKey_WebViewServiceType   = @"webview_servicetype";
 NSString * const TEALDataSourceKey_WebViewURL           = @"webview_url";
 
+
 #pragma mark - UDO / Datasource Values
 
 NSString * const TEALDataSourceValue_ConnectionCellular = @"cellular";
 NSString * const TEALDataSourceValue_ConnectionWifi     = @"wifi";
 NSString * const TEALDataSourceValue_ConnectionNone     = @"none";
-NSString * const TEALDataSourceValue_EventName          = @"mobile_link";
 NSString * const TEALDataSourceValue_Exception          = @"exception";
 NSString * const TEALDataSourceValue_ExceptionCaught    = @"caught";
 NSString * const TEALDataSourceValue_ExceptionUncaught  = @"uncaught";
@@ -131,9 +140,7 @@ NSString * const TEALDataSourceValue_Wearable           = @"wearable";
 
 #pragma mark - AudienceStream API Keys
 
-NSString * const TEALCollectKey_Account      = @"tealium_account";
-NSString * const TEALCollectKey_Environment  = @"tealium_environment";
-NSString * const TEALCollectKey_Profile      = @"tealium_profile";
+
 NSString * const TEALCollectKey_TraceID      = @"tealium_trace_id";
 NSString * const TEALCollectKey_VisitorID    = @"tealium_vid";
 

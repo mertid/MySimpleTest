@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Tealium+Lifecycle+PrivateHeader.h"
+#import "Tealium+Lifecycle.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALLifecycleDataSources.h"
 #import "TEALTestHelper.h"

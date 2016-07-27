@@ -7,6 +7,7 @@
 //
 
 #import "TEALTestHelper.h"
+#import "TEALError.h"
 
 @implementation TEALTestHelper
 
@@ -33,6 +34,7 @@
              TEALDataSourceKey_SystemVersion,
              TEALDataSourceKey_Pagetype,
              TEALDataSourceKey_Platform,
+             TEALDataSourceKey_Tealium_Library_Name,
              TEALDataSourceKey_ViewTitle,
              TEALDataSourceKey_Timestamp,
              TEALDataSourceKey_TimestampLocal,
@@ -66,7 +68,7 @@
              TEALDataSourceKey_Origin,
              TEALDataSourceKey_SystemVersion,
              TEALDataSourceKey_Platform,
-             TEALDataSourceKey_EventName,
+             TEALDataSourceKey_Tealium_Library_Name,
              TEALDataSourceKey_EventTitle,
              TEALDataSourceKey_Timestamp,
              TEALDataSourceKey_TimestampLocal,
@@ -102,11 +104,11 @@
                                       TEALDataSourceKey_DeviceOSVersion: value,
                                       TEALDataSourceKey_DeviceResolution: value,
                                       TEALDataSourceKey_LibraryVersion: value,
+                                      TEALDataSourceKey_Tealium_Library_Name: value,
                                       TEALDataSourceKey_EventTitle: value,
                                       TEALDataSourceKey_Orientation: value,
                                       TEALDataSourceKey_Origin: value,
                                       TEALDataSourceKey_SystemVersion: value,
-                                      TEALDataSourceKey_EventName: value,
                                       TEALDataSourceKey_Pagetype: value,
                                       TEALDataSourceKey_Platform: value,
                                       TEALDataSourceKey_ViewTitle: value,
@@ -235,32 +237,59 @@
     return *flag;
 }
 
-+ (BOOL)doesDictionary :(NSDictionary *)sourceDict containDictionary:(NSDictionary *)targetDict{
+
+
++ (BOOL)doesDictionary :(NSDictionary *)sourceDict containDictionaryKeys:(NSDictionary *)targetDict error:(NSError *__autoreleasing *)error{
+   
+    BOOL doesContain = true;
+    
+    for(id key in targetDict) {
+        
+        if (![sourceDict objectForKey:key]) {
+            *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                                 description:[NSString stringWithFormat:@"Dictionaries did not match at key: %@ ", key]
+                                      reason:@"No value for target dictionary key in source dictionary"
+                                  suggestion:@"Check spelling"];
+            return NO;
+        }
+    }
+
+    return doesContain;
+}
+
++ (BOOL)doesDictionary:(NSDictionary *)sourceDict containsDictionary:(NSDictionary *)targetDict error:(NSError *__autoreleasing *)error {
     
     BOOL doesContain = true;
     
     for(id key in targetDict) {
         
         if (![sourceDict objectForKey:key]) {
+            *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                                  description:[NSString stringWithFormat:@"Dictionaries did not match at key: %@ ", key]
+                                       reason:@"No value for target dictionary key in source dictionary"
+                                   suggestion:@"Check spelling"];
+            
             return NO;
             
         }else {
+            
             id valueForDictA = [targetDict objectForKey:key];
             id valueForContaining = [sourceDict objectForKey:key];
             
             BOOL valuesAreEqual = [self valuesEqual:valueForDictA and:valueForContaining];
             
             if (!valuesAreEqual){
-                return NO;
+                *error = [TEALError errorWithCode:TEALErrorCodeNotAcceptable
+                                      description:[NSString stringWithFormat:@"Dictionaries did not match at values: %@ and %@ ", valueForDictA, valueForContaining]
+                                           reason:@"Issue with dictionary value"
+                                       suggestion:@"Check spelling and data types"];
                 
-            }else {
-                doesContain = true;
-
+                return NO;
             }
         }
     }
-    return doesContain;
     
+    return doesContain;
 }
 
 

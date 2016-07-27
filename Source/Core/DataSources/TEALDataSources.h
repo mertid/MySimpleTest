@@ -25,6 +25,9 @@
 
 + (BOOL) deviceIsCharging;
 
++ (NSString *)resetSessionID:(NSDate * __nonnull )date;
+
+
 /**
  *  Returns a dictionary of the timestamp formats from the argument date
  *

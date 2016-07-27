@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		229D79EB1D42F41A0078D12E /* TealiumIOSLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713620211C90D49A0082F8FF /* TealiumIOSLifecycle.framework */; };
 		71310A7E1D22DFF100C3951C /* Tealium+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 713109F21D22DFF100C3951C /* Tealium+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		713620451C90D5550082F8FF /* TealiumIOSLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7192DCDA1C8E4154000F15A4 /* TealiumIOSLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		713620551C90D5990082F8FF /* TealiumTVOSLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7136204B1C90D5990082F8FF /* TealiumTVOSLifecycle.framework */; };
@@ -1074,6 +1075,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				229D79EB1D42F41A0078D12E /* TealiumIOSLifecycle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,12 +12,12 @@
 #import "TEALTestHelper.h"
 #import "Tealium+PrivateHeader.h"
 #import "TEALDispatch+PrivateHeader.h"
-
+#import "TEALDeviceDataSources.h"
 
 @interface TEALDatasourcesTests : XCTestCase
 
 @property (nonatomic, strong) TEALDataSources *dataSources;
-@property Tealium *library;
+@property __block Tealium *library;
 
 @end
 
@@ -81,7 +81,7 @@
 
 }
 
-- (void) testTrackEventUniversalDataSources {
+- (void) testUniversalDataSourcesKeyExist{
     
     __block BOOL isReady = NO;
     
@@ -115,30 +115,227 @@
         
         [inputData setValue:testData forKey:@"test_data"];
         
-        
+        __block int interation = i;
+        __block int lastIndex = sampleData.count -1;
+       
         [self.library trackDispatchOfType:TEALDispatchTypeEvent title:@"test" dataSources:inputData
                                completion:^(TEALDispatchStatus status,
                                             TEALDispatch * _Nonnull dispatch,
                                             NSError * _Nullable error) {
             
-            BOOL doesContain = [TEALTestHelper doesDictionary:[dispatch payload] containDictionary:expectedOutput];
+                                   NSError *dictionaryError = nil;
+                                  
+                                   BOOL doesContain = [TEALTestHelper doesDictionary:[dispatch payload] containDictionaryKeys:expectedOutput error:&dictionaryError];
+                                   
+                                   NSString *function = @"testTrackEventUniversalDataSources";
             
-            NSString *function = @"testTrackEventUniversalDataSources";
+                                   NSString *inputDebug = [NSString stringWithFormat:@"Input data : %@ ", inputData];
+                                   NSString *dispatchDebug = [NSString stringWithFormat:@"Return Dispatch : %@ ", [dispatch payload]];
+                                   NSString *outputDebug = [NSString stringWithFormat:@"Expected output : %@ ", expectedOutput];
             
-            NSString *inputDebug = [NSString stringWithFormat:@"Input data : %@ ", inputData];
-            NSString *dispatchDebug = [NSString stringWithFormat:@"Return Dispatch : %@ ", [dispatch payload]];
-            NSString *outputDebug = [NSString stringWithFormat:@"Expected output : %@ ", expectedOutput];
+                                   XCTAssertTrue(doesContain, @" %@, %@,  %@, %@", inputDebug, dispatchDebug, outputDebug, function);
             
-            XCTAssertTrue(doesContain, @" %@, %@,  %@, %@", inputDebug, dispatchDebug, outputDebug, function);
-            
-            if (i == sampleData.count){
+            if (interation == lastIndex){
+                
                 [expectation fulfill];
                 
             }
         }];
     }
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    
+}
+
+-(void) testRandomValue{
+    
+    //verify not repeated values
+    NSMutableArray *randomArray = [NSMutableArray new];
+
+    for (int i = 0; i < 1000; i++){
+        NSString *randomNumber = [TEALDeviceDataSources randomNumber];
+        
+        if(![randomArray containsObject:randomNumber]){
+            [randomArray addObject:randomNumber];
+        
+        }else{
+            XCTAssert(@"Randomness is not occurring %@");
+        
+        }
+        
+    }
+
+}
+
+-(void) testSessionId {
+    
+    NSString *function = @"testSessionID";
+//    
+//    for (int unixTimeStamp = -10000; unixTimeStamp < 10000; unixTimeStamp+=100){
+//
+//        int convertTimeStamp = unixTimeStamp *1000;
+//        NSString *testTimeStampString = [NSString stringWithFormat:@"%d", convertTimeStamp];
+//        NSDate *testdate = [NSDate dateWithTimeIntervalSince1970:unixTimeStamp];
+//        NSString *sessionIdString = [TEALDataSources resetSessionID:testdate];
+//        
+//        XCTAssertEqual(sessionIdString, testTimeStampString, @"%@", function);
+//        
+//        }
+    
+    int testDateUnix = -500000;    // 7/27/1955 14:51:34
+    
+    NSString *dateValue = @"1969.12.31 AD at 23:51:40 UTC";
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSString *formatString = @"yyyy.MM.dd G 'at' HH:mm:ss zzz";
+    [formatter setDateFormat:formatString];
+    NSDate *date = [formatter dateFromString:dateValue];
+    
+    NSString *sessionId = [TEALDataSources resetSessionID:date];
+    NSString *testDateUnixString = [NSString stringWithFormat:@"%d", testDateUnix];
+    
+    XCTAssertEqual(sessionId, testDateUnixString,  @"%@ SessionID %@  Hardcoded TimeStamp %@", function, sessionId, testDateUnixString);
+}
+
+-(void) testDictionaryContainsKeys{
+  
+    NSError *error = nil;
+    
+//  String as Keys
+    NSDictionary *dict1 = @{
+                            @"Mercedes-Benz SLK250" : @13,
+                            @"Mercedes-Benz E350" : @22,
+                            @"BMW M3 Coupe" : @19
+                            };
+
+    NSDictionary *dict2 = @{
+                            @"Mercedes-Benz SLK250" : @13,
+                            @"BMW M3 Coupe" : @19
+                            };
+
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict1 containDictionaryKeys:dict2 error:&error], @"%@" , error);
+
+// Numbers as Keys
+    NSDictionary *dict3 = @{
+                            @13 : @13,
+                            @"BMW X6" : @16,
+                            };
+    
+    
+    NSDictionary *dict4 = @{
+                            @13 : @13,
+                            };
+    
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict3 containDictionaryKeys:dict4 error:&error], @"%@", error);
+
+// Compare a Number to a String - Should Evaluate to false
+    NSDictionary *dict5 = @{
+                            @13 : @13,
+                            @"BMW X6" : @16,
+                            };
+    
+    
+    NSDictionary *dict6 = @{
+                            @"13" : @13,
+                            };
+    
+    XCTAssertFalse([TEALTestHelper doesDictionary:dict5 containDictionaryKeys:dict6 error:&error], @"%@", error);
+    
+// Compare a String to a Number - Should Evaluate to false
+    NSDictionary *dict7 = @{
+                            @"13" : @13,
+                            };
+    
+    NSDictionary *dict8 = @{
+                            @13: @13,
+                            @"BMW X6" : @16,
+                            };
+    
+    XCTAssertFalse([TEALTestHelper doesDictionary:dict7 containDictionaryKeys:dict8 error:&error], @"%@", error);
+
+}
+
+-(void) testDictionaryContainsDictionary {
+    
+    NSError *error = nil;
+
+// String as Values
+    NSDictionary *dict1 = @{
+                            @"Mercedes-Benz SLK250" : @"foo",
+                            @"Mercedes-Benz E350" : @"bar",
+                            @"BMW M3 Coupe" : @16
+                            };
+    
+    NSDictionary *dict2 = @{
+                            @"Mercedes-Benz SLK250" : @"foo",
+                            };
+    
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict1 containsDictionary:dict2 error:&error], @"%@", error);
+    
+// Compare a Number to a String --should evaluate to false
+    NSDictionary *dict3 = @{
+                            @13 : @13,
+                            @"BMW X6" : @16
+                            };
+    
+    NSDictionary *dict4 = @{
+                            @13 : @"13"
+                            };
+    
+    XCTAssertFalse([TEALTestHelper doesDictionary:dict3 containsDictionary:dict4 error:&error], @"%@", error);
+
+// Compare a String to number --should evaluate to false
+    NSDictionary *dict5 = @{
+                            @13 : @"13",
+                            };
+    
+    NSDictionary *dict6 = @{
+                            @13 : @13
+                            };
+    
+    XCTAssertFalse([TEALTestHelper doesDictionary:dict5 containsDictionary:dict6 error:&error], @"%@", error);
+    
+// NSArray of strings value check
+    NSArray *testArray = @[@"foo", @"bar"];
+    
+    NSDictionary *dict7 = @{
+                            @13 : testArray
+                            };
+    
+    NSDictionary *dict8 = @{
+                            @13 : testArray
+                            };
+
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict7 containsDictionary:dict8 error:&error], @"%@", error);
+
+// NSArray of numbers value check
+    NSArray *testArray2 = @[@10, @11];
+    
+    NSDictionary *dict9 = @{
+                            @13 : testArray2,
+                            };
+    
+    NSDictionary *dict10 = @{
+                             @13 : testArray2
+                             };
+    
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict9 containsDictionary:dict10 error:&error], @"%@", error);
+    
+// Compare Number and String Values in an array
+    NSNumber *number1 = @45;
+    NSNumber *number2 = @40;
+    NSString *testString = @"bar";
+   
+    NSArray *testArray3 = @[number1, number2, testString];
+    
+    NSDictionary *dict13 = @{
+                            @"Foo": testArray3,
+                            };
+    
+    NSDictionary *dict14 = @{
+                             @"Foo": testArray3,
+                            };
+    
+    XCTAssertTrue([TEALTestHelper doesDictionary:dict13 containsDictionary:dict14 error:&error], @"%@", error);
     
 }
 

@@ -150,6 +150,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
 }
 
+
 - (TEALDispatchBlock) feedbackBlock {
     
     __block typeof(self) __weak weakSelf = self;
@@ -202,13 +203,17 @@ __strong static NSDictionary *staticAllInstances = nil;
          retrieved data.
          */
         NSDictionary *backgroundData = [self.dataSources backgroundSafeDataSources];
+        NSDictionary *accountSettings  = [self getTealiumAccountInfo:self.settings];
+  
+        
         
         if (!backgroundData){
             [weakSelf.logger logDev:@"TrackDispatchOfType:title:dataSources:completion: backgroundData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
         }
         
         NSMutableDictionary *payload = [NSMutableDictionary dictionary];
-        
+
+        [payload addEntriesFromDictionary:accountSettings];
         [payload addEntriesFromDictionary:captureData];
         [payload addEntriesFromDictionary:backgroundData];
         [payload addEntriesFromDictionary:clientData];
@@ -219,6 +224,17 @@ __strong static NSDictionary *staticAllInstances = nil;
         
     }];
 
+}
+
+- (NSMutableDictionary *) getTealiumAccountInfo: (TEALSettings *)settings {
+    
+    NSMutableDictionary *tealiumSettingsDict = [NSMutableDictionary dictionary];
+    
+    [tealiumSettingsDict setValue: settings.environment forKey:TEALDataSourceKey_Tealium_Environment];
+    [tealiumSettingsDict setValue: settings.tiqProfile forKey: TEALDataSourceKey_Tealium_Profile];
+    [tealiumSettingsDict setValue: settings.account forKey:TEALDataSourceKey_Tealium_Account];
+    
+    return tealiumSettingsDict;
 }
 
 - (NSDictionary *) captureTimeDataSourcesForType:(TEALDispatchType)type
@@ -346,6 +362,21 @@ __strong static NSDictionary *staticAllInstances = nil;
     
 }
 
+- (NSString *)resetSessionID {
+    
+    NSString *newSessionID = [TEALDataSources resetSessionID: [NSDate date]];
+    
+    NSDictionary *sessionDict = @{
+                                  TEALDataSourceKey_Tealium_Session_Id: newSessionID
+                                  };
+    
+    [self addVolatileDataSources: sessionDict];
+    
+    return newSessionID;
+       
+}
+
+
 #pragma mark - PRIVATE INSTANCE METHODS
 
 - (void) addVolatileDataSources:(NSDictionary *)additionalDataSources
@@ -372,8 +403,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     if (completion) completion(YES, nil);
         
-
-    
 }
 
 

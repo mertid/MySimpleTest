@@ -27,7 +27,8 @@ static double deviceBatteryLevel;
     NSString *cpuType = [self cpuType];
     NSString *deviceModel = [self devicePlatform];
     NSString *language = [self currentLanguage];
-
+    NSString *random = [self randomNumber];
+    
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
     
     // if particular data is not available, skip
@@ -35,7 +36,8 @@ static double deviceBatteryLevel;
     if (cpuType)            mDict[TEALDataSourceKey_DeviceCPUType] = cpuType;
     if (deviceModel)        mDict[TEALDataSourceKey_Device] = deviceModel;
     if (language)           mDict[TEALDataSourceKey_DeviceLanguage] = language;
-    
+    if (random)             mDict[TEALDataSourceKey_Tealium_Random] = random;
+        
     return [NSDictionary dictionaryWithDictionary:mDict];
 }
 
@@ -268,6 +270,20 @@ static NSString *staticDeviceArchitecture;
     if(language) return language;
     return nil;
 }
+
++ (NSString *)randomNumber {
+    NSInteger length = 16;
+    NSString *numbers = @"0123456789";
+    NSMutableString *random = [NSMutableString stringWithCapacity: length];
+    
+    for (int i = 0; i < length; i++){
+        [random appendFormat:@"%C", [numbers characterAtIndex:arc4random() % [numbers length]]];
+    }
+    if(random) return random;
+    return nil;
+}
+
+
 
 #pragma mark - PRIVATE MAIN THREAD ONLY
 
