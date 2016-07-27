@@ -11,7 +11,7 @@
 
 #import "Tealium+Collect.h"
 #import "Tealium+TagManagement.h"
-#import "Tealium+Lifecycle.h"
+//#import "Tealium+Lifecycle.h"
 #import "Tealium+WatchKit.h"
 #import "TealiumDelegate.h"
 #import "TEALConfiguration.h"
