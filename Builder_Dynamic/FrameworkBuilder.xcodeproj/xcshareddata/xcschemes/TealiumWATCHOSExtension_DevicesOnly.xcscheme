@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "714B82D01D4122470019ABD1"
-               BuildableName = "TealiumIOS_Lifecycle_DevicesOnly.framework"
-               BlueprintName = "TealiumIOS_Lifecycle_DevicesOnly"
+               BlueprintIdentifier = "71F7A0A41D4951DC00813100"
+               BuildableName = "TealiumWATCHOSExtension_DevicesOnly.framework"
+               BlueprintName = "TealiumWATCHOSExtension_DevicesOnly"
                ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "714B82D91D4122470019ABD1"
-               BuildableName = "TealiumIOS_Lifecycle_DevicesOnlyTests.xctest"
-               BlueprintName = "TealiumIOS_Lifecycle_DevicesOnlyTests"
-               ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82D01D4122470019ABD1"
-            BuildableName = "TealiumIOS_Lifecycle_DevicesOnly.framework"
-            BlueprintName = "TealiumIOS_Lifecycle_DevicesOnly"
-            ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -64,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82D01D4122470019ABD1"
-            BuildableName = "TealiumIOS_Lifecycle_DevicesOnly.framework"
-            BlueprintName = "TealiumIOS_Lifecycle_DevicesOnly"
+            BlueprintIdentifier = "71F7A0A41D4951DC00813100"
+            BuildableName = "TealiumWATCHOSExtension_DevicesOnly.framework"
+            BlueprintName = "TealiumWATCHOSExtension_DevicesOnly"
             ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82D01D4122470019ABD1"
-            BuildableName = "TealiumIOS_Lifecycle_DevicesOnly.framework"
-            BlueprintName = "TealiumIOS_Lifecycle_DevicesOnly"
+            BlueprintIdentifier = "71F7A0A41D4951DC00813100"
+            BuildableName = "TealiumWATCHOSExtension_DevicesOnly.framework"
+            BlueprintName = "TealiumWATCHOSExtension_DevicesOnly"
             ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
