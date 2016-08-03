@@ -16,7 +16,6 @@ FOUNDATION_EXPORT const unsigned char TealiumTVOS_LifecycleVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <TealiumTVOS_Lifecycle/PublicHeader.h>
 
-
 @import TealiumTVOS;
 
 #import <TealiumTVOS_Lifecycle/Tealium+Lifecycle.h>

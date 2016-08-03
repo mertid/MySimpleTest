@@ -8,6 +8,7 @@
 
 #import "Tealium+Lifecycle.h"
 #import "Tealium+PrivateHeader.h"
+#import "TEALConfiguration+Lifecycle.h"
 #import "TEALDataSourceConstants.h"
 #import "TEALSettings+Lifecycle.h"
 #import "TEALLifecycleDataSources.h"
@@ -207,6 +208,8 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     TealiumLifecycleAutotrackingIsEnabled = YES;
     
+    [self.logger logQA:@"Autotracking Lifecycle enabled."];
+    
 }
 
 - (void) disableLifecycleAutotracking {
@@ -219,6 +222,8 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     TealiumLifecycleAutotrackingIsEnabled = NO;
     
+    [self.logger logQA:@"Autotracking Lifecycle enabled."];
+
 }
 
 - (void) lifecycleAutotrackingLaunchDetected {
