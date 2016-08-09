@@ -50,7 +50,7 @@
                   completion:^(BOOL success, NSError * _Nullable error) {
                       
                       if (success){
-                          [weakSelf.logger logQA:@"Added remote command for id: %@", commandID];
+                          [weakSelf.logger logDev:@"Added remote command for id: %@", commandID];
                       }
                       if (error){
                           [weakSelf.logger logQA:@"Error adding remote command block %@: %@", commandID, error];
@@ -289,7 +289,7 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
                                                reason:NSLocalizedString(@"Command did not execute.", @"")
                                            suggestion:NSLocalizedString(@"Check command id in TIQ", @"")];
             
-            [weakSelf.logger logDev:@"Error executing Tag Bridge Command: %@", error];
+            [weakSelf.logger logQA:@"Error executing Tag Bridge Command: %@", error];
         }
     });
 }
@@ -323,13 +323,13 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
     [self.remoteCommandManager processCommandString:commandString
                                       responseBlock:^(TEALRemoteCommandResponse *response) {
                                       
-          [weakSelf.logger logQA:@"Processed command: %@", response.commandId];
+          [weakSelf.logger logDev:@"Processed command: %@", response.commandId];
           [weakSelf.logger logDev:@"Response: %@", response];
 
       } completion:^(BOOL success, NSError * _Nullable error) {
           
           if (error){
-              [weakSelf.logger logDev:@"Error encountered trying to process Tag Bridge command: %@", error];
+              [weakSelf.logger logQA:@"Error encountered trying to process Tag Bridge command: %@", error];
           }
           
       }];
@@ -339,13 +339,16 @@ static TEALRemoteCommandManager *privateRemoteCommandManager;
 
 - (void) tagDispatchServiceWebViewReady:(UIWebView *)webView {
     
+    [self.logger logDev:@"Tag Management Dispatch Service Ready."];
+
     if ([self.delegate respondsToSelector:@selector(tealium:webViewIsReady:)]) {
         
-        // TODO: trigger sending dispatches
-        [self.dispatchManager runQueuedDispatches];
-        
         [self.delegate tealium:self webViewIsReady:webView];
+        
     }
+
+    [self.dispatchManager runQueuedDispatches];
+
 }
 
 - (void) tagDispatchServiceWebView:(UIWebView*)webView encounteredError:(NSError *)error {

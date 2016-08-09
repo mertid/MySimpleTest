@@ -106,8 +106,10 @@
     
     //call track event
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"testtrackeventuniversaldatasources"];
+//    XCTestExpectation *expectation = [self expectationWithDescription:@"testtrackeventuniversaldatasources"];
     
+    __block BOOL areAllTrackCallsComplete = NO;
+
     for (int i = 0; i < sampleData.count; i++) {
         
         NSDictionary *testData = sampleData[i][@"input_data"][@"test_data"];
@@ -137,13 +139,16 @@
             
             if (interation == lastIndex){
                 
-                [expectation fulfill];
+                areAllTrackCallsComplete = YES;
+//                [expectation fulfill];
                 
             }
         }];
     }
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    while (CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true) && !isReady){};
+
+//    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
 }
 
@@ -193,7 +198,12 @@
     NSString *sessionId = [TEALDataSources resetSessionID:date];
     NSString *testDateUnixString = [NSString stringWithFormat:@"%d", testDateUnix];
     
-    XCTAssertEqual(sessionId, testDateUnixString,  @"%@ SessionID %@  Hardcoded TimeStamp %@", function, sessionId, testDateUnixString);
+    // Replace with
+    if (![sessionId isEqualToString:testDateUnixString]){
+        XCTFail(@"%@ SessionID %@ did not match Hardcoded TimeStamp %@.", function, sessionId, testDateUnixString);
+    }
+    
+//    XCTAssertEqual(sessionId, testDateUnixString,  @"%@ SessionID %@  Hardcoded TimeStamp %@", function, sessionId, testDateUnixString);
 }
 
 -(void) testDictionaryContainsKeys{

@@ -133,7 +133,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 }
 
 - (void) runQueuedDispatches {
-    
+
     [self runDispatches:[self dispatchesQueued]
              reportLast:NO];
     
@@ -166,6 +166,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
 
 - (NSArray *) queuedDispatches {
     
+    // TODO: This array assignment unnecessary
     return [NSArray arrayWithArray:[self dispatchesQueued]];
     
 }
@@ -242,6 +243,7 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
         
         [[self dispatchesQueued] removeObjectsInArray:dispatches];
         
+        [self saveDispatches:[self dispatchesQueued]];
     }
     
 }
@@ -250,13 +252,13 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
             reportLast:(BOOL)report{
     
     NSError *error = nil;
-    
+
     if ([self.delegate dispatchManagerShouldDispatch:&error]){
-        
+
         [self beginProcessingDispatches:dispatches];
         
     } else {
-        
+
         if (report){
             TEALDispatch *lastDispatchAdded = [dispatches lastObject];
             lastDispatchAdded.assignedBlock(TEALDispatchStatusQueued, lastDispatchAdded, error);
@@ -303,10 +305,12 @@ static NSString * const TEALIODispatchBaseQueueName = @"com.tealium.dispatch.ioq
     
     NSMutableArray *archivedDispatches = [[NSUserDefaults standardUserDefaults] objectForKey:Tealium_DispatchQueueKey];
 
-    NSUInteger initCapacity = [self limitToMaxCapacity:[archivedDispatches count]];
-    
-    NSMutableArray *loadedDispatches = [[NSMutableArray alloc] initWithCapacity:initCapacity];
+//    NSUInteger initCapacity = [self limitToMaxCapacity:[archivedDispatches count]];
+//    
+//    NSMutableArray *loadedDispatches = [[NSMutableArray alloc] initWithCapacity:initCapacity];
 
+    NSMutableArray *loadedDispatches = [[NSMutableArray alloc] init];
+    
     for (id obj in archivedDispatches) {
 
         TEALDispatch *dispatch = nil;

@@ -25,9 +25,9 @@ static TealiumHelper * _sharedInstance;
 
 + (void) startTracking {
     
-    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"tealiummobile"
-                                                                           profile:@"demo"
-                                                                       environment:@"dev"];
+    TEALConfiguration *configuration = [TEALConfiguration configurationWithAccount:@"services-crouse"
+                                                                           profile:@"mobile"
+                                                                       environment:@"qa"];
         
     Tealium *tealiumInstance1 = [Tealium newInstanceForKey:TEALIUM_INSTANCE_ID configuration:configuration];
 

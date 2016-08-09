@@ -1080,6 +1080,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"TEAL_TARGET_IOS=1",
+					"TEAL_SOURCE=1",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/UIKitCatalog-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1101,7 +1102,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UIKitCatalog/UIKitCatalog-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "TEAL_TARGET_IOS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TEAL_TARGET_IOS=1",
+					"TEAL_SOURCE=1",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/UIKitCatalog/UIKitCatalog-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "";

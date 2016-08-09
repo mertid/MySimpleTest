@@ -140,9 +140,9 @@ __strong static NSDictionary *staticAllInstances = nil;
     }
     
     
-    [instance.logger logQA:[configuration description]];
+    [instance.logger logDev:[configuration description]];
     
-    [instance.logger logQA:[instance description]];
+    [instance.logger logDev:[instance description]];
     
     [self addInstance:instance key:key];
     
@@ -364,7 +364,7 @@ __strong static NSDictionary *staticAllInstances = nil;
            replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                
                
-               [weakSelf.logger logQA:[NSString stringWithFormat:@"Track message sent to host app: %@ reply: %@", payload, replyMessage]];
+               [weakSelf.logger logDev:[NSString stringWithFormat:@"Track message sent to host app: %@ reply: %@", payload, replyMessage]];
             
                if (completion){
                    completion(TRUE, nil);

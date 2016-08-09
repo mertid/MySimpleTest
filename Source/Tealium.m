@@ -193,7 +193,6 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     __weak Tealium *weakSelf = self;
 
-    
     [self.operationManager addOperationWithBlock:^{
         
         /*
@@ -208,7 +207,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         
         if (!backgroundData){
-            [weakSelf.logger logDev:@"TrackDispatchOfType:title:dataSources:completion: backgroundData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+            [weakSelf.logger logQA:@"TrackDispatchOfType:title:dataSources:completion: backgroundData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
         }
         
         NSMutableDictionary *payload = [NSMutableDictionary dictionary];
@@ -247,16 +246,20 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     NSDictionary *mainThreadData = [self.dataSources mainThreadDataSources];
     
+    NSDictionary *persistentData = [self.dataSources persistentDataSources];
+    
+    NSDictionary *clientVolatileData = [self.dataSources clientVolatileDataSources];
+    
     if (!dispatchData){
-        [self.logger logDev:@"CaptureTimeDataSources: dispatchData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+        [self.logger logQA:@"CaptureTimeDataSources: dispatchData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
     }
     
     if (!connectionData){
-        [self.logger logDev:@"CaptureTimeDataSources: connectionData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+        [self.logger logQA:@"CaptureTimeDataSources: connectionData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
     }
     
     if (!mainThreadData){
-        [self.logger logDev:@"CaptureTimeDataSources: mainThreadData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
+        [self.logger logQA:@"CaptureTimeDataSources: mainThreadData could not be retrieved at this time. Some data sources may not be available in the next dispatch."];
     }
     
     NSMutableDictionary *compositeDataSources = [NSMutableDictionary dictionary];
@@ -267,6 +270,10 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     [compositeDataSources addEntriesFromDictionary:mainThreadData];
     
+    [compositeDataSources addEntriesFromDictionary:persistentData];
+
+    [compositeDataSources addEntriesFromDictionary:clientVolatileData];
+
     return compositeDataSources;
     
 }
@@ -311,7 +318,7 @@ __strong static NSDictionary *staticAllInstances = nil;
     if (!success ||
         error){
         
-        [weakSelf.logger logDev:@"Unable to remove volatile data sources. Error: %@", error];
+        [weakSelf.logger logQA:@"Unable to remove volatile data sources. Error: %@", error];
         
     } else {
         [weakSelf.logger logDev:@"Volatile dataSources removed for keys:%@", dataSourceKeys];
@@ -584,8 +591,8 @@ __strong static NSDictionary *staticAllInstances = nil;
         
     } else {
     
-        [self.logger logQA:@"Configuration: %@", [self.settings configurationDescription]];
-        [self.logger logQA:@"Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
+        [self.logger logDev:@"Configuration: %@", [self.settings configurationDescription]];
+        [self.logger logDev:@"Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
     }
 
     // Finalize
@@ -618,7 +625,7 @@ __strong static NSDictionary *staticAllInstances = nil;
             return;
         }
         self.isEnabled = NO;
-        [self.logger logQA:@"Library Disabled. New configuration check will continue running, all other subsystems disabled"];
+        [self.logger logDev:@"Library Disabled. New configuration check will continue running, all other subsystems disabled"];
     }
 }
 
@@ -639,7 +646,7 @@ __strong static NSDictionary *staticAllInstances = nil;
         
         [self enableCore];
         [self refresh];
-        [self.logger logQA:@"Library Enabled."];
+        [self.logger logDev:@"Library Enabled."];
         
         self.isEnabled = YES;
 
@@ -683,7 +690,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 - (void) updateLogger {
     
     if ([self.logger updateLogLevel:[self.settings logLevelString]]){
-        [self.logger logQA:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
+        [self.logger logProd:[NSString stringWithFormat:@"Log level: %@", [TEALLogger stringFromLogLevel:[self.logger currentLogLevel]]]];
     }
 }
 
@@ -804,8 +811,12 @@ __strong static NSDictionary *staticAllInstances = nil;
     } else {
         
         // Verbosity level to report
-        [self.logger logQA:@"%@ dispatch.", statusString];
-        [self.logger logDev:@"Dispatch: %@ error: %@", dispatch, errorInfo];
+        [self.logger logDev:@"%@ dispatch.", statusString];
+        [self.logger logDev:@"Dispatch: %@", dispatch];
+
+        if (error){
+            [self.logger logDev:@"Dispatch error: %@", errorInfo];
+        }
 
     }
 }
@@ -881,7 +892,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) reachabilityChanged:(BOOL)canReach {
  
-    [self.logger logQA:@"Network %@", canReach? @"found": @"unreachable"];
+    [self.logger logDev:@"Network %@", canReach? @"found": @"unreachable"];
     
     if (!canReach){
         return;
@@ -918,7 +929,7 @@ __strong static NSDictionary *staticAllInstances = nil;
 
 - (void) processSavedSettings {
     
-    [self.logger logQA:@"No changes in current Remote Publish Settings from server."];
+    [self.logger logDev:@"No changes in current Remote Publish Settings from server."];
 
     if (!self.isEnabled){
         [self enable];
@@ -926,13 +937,15 @@ __strong static NSDictionary *staticAllInstances = nil;
         [self refresh];
     }
     
+    [self.dispatchManager runQueuedDispatches];
+    
 }
 
 - (void) processNewSettings {
     
     // New, saved, or default publish settings?
     
-    [self.logger logQA:@"New Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
+    [self.logger logDev:@"New Remote Publish Settings: %@", [self.settings publishSettingsDescription]];
         
     
     // Update logger
@@ -1051,11 +1064,11 @@ __strong static NSDictionary *staticAllInstances = nil;
                              NSString *status = [service status]?@"ready":@"not ready";
                              
                              if (success){
-                                 [weakSelf.logger logQA:@"Dispatch service added: %@ current status: %@", name, status];
+                                 [weakSelf.logger logDev:@"Dispatch service added: %@ current status: %@", name, status];
                              }
                              
                              if (error){
-                                 [weakSelf.logger logDev:@"Could not add dispatch service: %@ - error: %@", name, error];
+                                 [weakSelf.logger logQA:@"Could not add dispatch service: %@ - error: %@", name, error];
                              }
                              
                          }];
@@ -1071,11 +1084,11 @@ __strong static NSDictionary *staticAllInstances = nil;
                      completion:^(BOOL success, NSError * _Nullable error) {
                          
                          if (success){
-                             [weakSelf.logger logQA:@"Dispatch service disabled: %@", [service name]];
+                             [weakSelf.logger logDev:@"Dispatch service disabled: %@", [service name]];
                          }
                          
                          if (error){
-                             [weakSelf.logger logDev:@"Could not remove dispatch service: %@ - error: %@", [service name], error];
+                             [weakSelf.logger logQA:@"Could not remove dispatch service: %@ - error: %@", [service name], error];
                          }
                          
                      }];

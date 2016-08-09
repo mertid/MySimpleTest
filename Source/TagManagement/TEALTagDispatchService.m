@@ -99,7 +99,7 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
     __block __weak TEALTagDispatchService *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+
         result = [weakSelf.webView stringByEvaluatingJavaScriptFromString:utagString];
         
         [weakSelf.operationManager addOperationWithBlock:^{
@@ -143,22 +143,23 @@ static NSString * const Tealium_TraceIdCookieKey = @"trace_id";
 }
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
-    
 
     // Initial load complete?
     if (!self.webViewInitialLoadFinished &&
         ![webView isLoading]){
-        
-        self.webViewInitialLoadFinished = YES;
+
+        __block TEALTagDispatchService *weakSelf = self;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.privateStatus = TEALDispatchNetworkServiceStatusReady;
+        
+            weakSelf.webViewInitialLoadFinished = YES;
             
-            if (self.delegate) {
-                [self.delegate tagDispatchServiceWebViewReady:webView];
+            weakSelf.privateStatus = TEALDispatchNetworkServiceStatusReady;
+            
+            if (weakSelf.delegate) {
+                [weakSelf.delegate tagDispatchServiceWebViewReady:webView];
             }
         });
-        
 
     }
 }

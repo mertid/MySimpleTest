@@ -18,4 +18,5 @@ FOUNDATION_EXPORT const unsigned char TealiumIOS_Lifecycle_DevicesOnlyVersionStr
 
 @import TealiumIOS;
 
-#import <TealiumIOS_Lifecycle/Tealium+Lifecycle.h>
+#import <TealiumIOSLifecycle/Tealium+Lifecycle.h>
+#import <TealiumIOSLifecycle/TEALConfiguration+Lifecycle.h>

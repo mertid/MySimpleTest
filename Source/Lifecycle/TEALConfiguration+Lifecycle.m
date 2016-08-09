@@ -40,7 +40,7 @@ NSString * const TEALLifecycleEnableKey = @"com.tealium.lifecycleautotracking.en
                    forKey:TEALLifecycleEnableKey
                completion:nil];
     
-    [self setModuleDescription:enable?@"YES":@"NO" forKey:@"lifecycle autotracking enabled"];
+    [self setModuleDescription:enable?@"YES":@"NO" forKey:@"Autotracking lifecycle enabled"];
     
 }
 

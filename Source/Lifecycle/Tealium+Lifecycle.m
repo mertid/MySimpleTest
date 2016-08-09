@@ -24,6 +24,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self executeLifecycleCommandForType:TEALLifecycleTypeLaunch
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:NO];
     
 }
@@ -32,6 +33,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self executeLifecycleCommandForType:TEALLifecycleTypeWake
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:NO];
 }
 
@@ -39,9 +41,38 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self executeLifecycleCommandForType:TEALLifecycleTypeSleep
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:NO];
 
 }
+
+- (void) launchWithDataSources:(NSDictionary *)dataSources {
+    
+    [self executeLifecycleCommandForType:TEALLifecycleTypeLaunch
+                            overrideDate:nil
+                             dataSources:dataSources
+                             autoTracked:NO];
+    
+}
+
+- (void) wakeWithDataSources:(NSDictionary *)dataSources {
+    
+    [self executeLifecycleCommandForType:TEALLifecycleTypeWake
+                            overrideDate:nil
+                             dataSources:dataSources
+                             autoTracked:NO];
+    
+}
+
+- (void) sleepWithDataSources:(NSDictionary *)dataSources {
+    
+    [self executeLifecycleCommandForType:TEALLifecycleTypeSleep
+                            overrideDate:nil
+                             dataSources:dataSources
+                             autoTracked:NO];
+    
+}
+
 
 - (void) incrementLifetimeValuesForKeys:(NSArray *)keys
                                  amount:(int)number{
@@ -77,18 +108,25 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
 
 - (void) executeLifecycleCommandForType:(TEALLifecycleType)type
                            overrideDate:(NSDate *)date
+                            dataSources:(NSDictionary *)dataSources
                             autoTracked:(BOOL)autoTracked{
     
-    if (!autoTracked &&
-        TealiumLifecycleAutotrackingIsEnabled) return;
+//    if (!autoTracked &&
+//        TealiumLifecycleAutotrackingIsEnabled) return;
     
-    NSDictionary *dataSources = nil;
-    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+
     if (autoTracked){
-        dataSources = @{
-                        TEALDataSourceKey_Autotracked : TEALDataSourceValue_True
-                        };
+        NSArray *keys = [dataSources allKeys];
+        if (![keys containsObject:TEALDataSourceKey_Autotracked]){
+        
+            [mDict addEntriesFromDictionary:@{
+                            TEALDataSourceKey_Autotracked : TEALDataSourceValue_True
+                            }];
+        }
     }
+    
+    [mDict addEntriesFromDictionary:dataSources];
     
     if (!date) date = [NSDate date];
     
@@ -98,7 +136,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     [self trackLifecycleEventForType:type
                                 date:date
                       persistentData:persistentData
-                         dataSources:dataSources];
+                         dataSources:mDict];
     
     // Updates persistent data only
     [self persistNewDataSourcesForType:type
@@ -111,7 +149,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
                                date:(NSDate* _Nonnull)date
                      persistentData:(NSDictionary *)persistentData
                         dataSources:(NSDictionary *)dataSources{
-    
+
     if (type == TEALDispatchTypeNone) return;
     
     if (!date) return;
@@ -174,14 +212,14 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
 
 - (void) setLifecycleAutotrackingIsEnabled:(BOOL)autotracking {
     
-    if (TealiumLifecycleAutotrackingIsEnabled == FALSE &&
-        autotracking == TRUE){
+    if (TealiumLifecycleAutotrackingIsEnabled == FALSE){
         
         [self enableLifecycleAutotracking];
         
+    } else {
+        
+        [self disableLifecycleAutotracking];
     }
-    
-    TealiumLifecycleAutotrackingIsEnabled = autotracking;
     
 }
 
@@ -191,10 +229,12 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
         return;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(lifecycleAutotrackingLaunchDetected)
-                                                 name:UIApplicationDidFinishLaunchingNotification
-                                               object:nil];
+    [self lifecycleAutotrackingLaunchDetected];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(lifecycleAutotrackingLaunchDetected)
+//                                                 name:UIApplicationDidFinishLaunchingNotification
+//                                               object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(lifecycleAutotrackingWakeDetected)
@@ -203,13 +243,13 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(lifecycleAutotrackingSleepDetected)
-                                                 name:UIApplicationWillResignActiveNotification
+                                                 name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
     
     TealiumLifecycleAutotrackingIsEnabled = YES;
     
-    [self.logger logQA:@"Autotracking Lifecycle enabled."];
-    
+    [self.logger logDev:@"Autotracking Lifecycle enabled."];
+
 }
 
 - (void) disableLifecycleAutotracking {
@@ -222,14 +262,15 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     TealiumLifecycleAutotrackingIsEnabled = NO;
     
-    [self.logger logQA:@"Autotracking Lifecycle enabled."];
+    [self.logger logDev:@"Autotracking Lifecycle enabled."];
 
 }
 
 - (void) lifecycleAutotrackingLaunchDetected {
-    
+
     [self executeLifecycleCommandForType:TEALLifecycleTypeLaunch
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:YES];
     
 }
@@ -238,6 +279,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self executeLifecycleCommandForType:TEALLifecycleTypeWake
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:YES];
     
     
@@ -247,6 +289,7 @@ static BOOL TealiumLifecycleAutotrackingIsEnabled = NO;
     
     [self executeLifecycleCommandForType:TEALLifecycleTypeSleep
                             overrideDate:nil
+                             dataSources:nil
                              autoTracked:YES];
     
 }

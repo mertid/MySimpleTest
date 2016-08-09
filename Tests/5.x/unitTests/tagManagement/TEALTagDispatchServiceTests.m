@@ -63,7 +63,7 @@
     [service setDelegate:self];
     
     [service setup];
-    
+
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
     XCTAssertTrue(service.status == TEALDispatchNetworkServiceStatusReady, @"service not ready.");

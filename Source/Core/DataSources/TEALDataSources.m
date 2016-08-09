@@ -79,9 +79,6 @@
     dataSources[TEALDataSourceKey_Tealium_Visitor_Id] = visitorId;
     dataSources[TEALDataSourceKey_Tealium_Session_Id] = [TEALDataSources resetSessionID: [NSDate date]];
     
-    [dataSources addEntriesFromDictionary:[self persistentDataSources]];
-    [dataSources addEntriesFromDictionary:[self clientVolatileDataSources]];
-    
     return [NSDictionary dictionaryWithDictionary:dataSources];
 }
 

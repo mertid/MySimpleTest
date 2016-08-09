@@ -45,6 +45,7 @@
 
 - (void) performRequest:(NSURLRequest *)request withCompletion:(TEALHTTPResponseBlock)completion {
     
+    // TODO: stop if no url present with completion block return
     TEALURLTaskResponseBlock taskCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 
         dispatch_queue_t targetQueue = self.completionQueue;

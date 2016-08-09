@@ -118,8 +118,6 @@
                                      arguments:args];
     va_end(args);
     
-//    NSString *warning = NSLocalizedString(@"!!! WARNING !!!", @"Console log string prefix for warning messages.");
-//    NSString *finalMessage = [NSString stringWithFormat:@"%@: %@", warning, message];
     [self logVerbosity:TEALLogLevelProd message:message];
 }
 

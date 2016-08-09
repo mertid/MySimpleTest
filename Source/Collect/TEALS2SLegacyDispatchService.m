@@ -78,7 +78,6 @@
     
     // Dispatch Service ready?
     if (![self isReady]) {
-        // TODO: add error details
         
         error = [TEALError errorWithCode:TEALErrorCodeException
                              description:NSLocalizedString(@"S2S Legacy Dispatch failed", @"")

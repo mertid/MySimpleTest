@@ -28,12 +28,13 @@ class TealiumHelper : NSObject {
         
         let config = TEALConfiguration.init(account: "tealiummobile", profile: "demo", environment: "dev")
         
+//        if config.respondsToSelector(Selector("setAutotrackingLifecycleEnabled:")) {
+//            config.performSelector("setAutotrackingLifecycleEnabled",withObject: false)
+//        }
+
         let tealium = Tealium.newInstanceForKey(tealiumInstanceID, configuration: config)
         
         tealium.setDelegate(sharedInstance())
-        
-        tealium.setLifecycleAutotrackingIsEnabled(true)
-        
         
     }
     

@@ -57,7 +57,7 @@
 		711C9B841D52869300F76F24 /* TEALLifecycleDataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 229D7A0F1D42FA210078D12E /* TEALLifecycleDataSources.m */; };
 		711C9B851D52869300F76F24 /* TEALSettings+Lifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 229D79C51D42EBC20078D12E /* TEALSettings+Lifecycle.m */; };
 		711C9B861D52869300F76F24 /* Tealium+Lifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 711F54421D49317900A27134 /* Tealium+Lifecycle.m */; };
-		711C9B871D528E3900F76F24 /* TealiumTVOS_Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 714B826A1D41198F0019ABD1 /* TealiumTVOS_Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		711C9B871D528E3900F76F24 /* TealiumTVOSLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 714B826A1D41198F0019ABD1 /* TealiumTVOSLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		711CEF1C1C6921A2001E2161 /* TealiumIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 711CEF1A1C6921A2001E2161 /* TealiumIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		711F543C1D49314600A27134 /* TealiumWATCHOSExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F543B1D49314600A27134 /* TealiumWATCHOSExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		711F54431D49317900A27134 /* Tealium+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F54411D49317900A27134 /* Tealium+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -210,10 +210,10 @@
 		713A3BCE1D37CEFB0059E010 /* TEALPublishSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7146D24C1D36C0280032FB4C /* TEALPublishSettingsTests.m */; };
 		713A3BCF1D37CEFB0059E010 /* TEALSettingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7146D24D1D36C0280032FB4C /* TEALSettingsTests.m */; };
 		713A3BD01D37E4080059E010 /* lifecycle_events_with_crashes.json in Resources */ = {isa = PBXBuildFile; fileRef = 712FD5831CFE643D00984F98 /* lifecycle_events_with_crashes.json */; };
-		714B82DB1D4122480019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714B82D11D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework */; };
+		714B82DB1D4122480019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714B82D11D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework */; };
 		714B82E01D4122480019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 714B82DF1D4122480019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.m */; };
 		714B82E81D4122620019ABD1 /* TealiumIOS_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199AD8E1D218A68004C8213 /* TealiumIOS_DevicesOnly.framework */; };
-		714B82F91D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714B82EF1D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework */; };
+		714B82F91D41232A0019ABD1 /* TealiumTVOSLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714B82EF1D41232A0019ABD1 /* TealiumTVOSLifecycle.framework */; };
 		71684C2F1D08C15500ECD72B /* TEALTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 712FD52B1CFE629200984F98 /* TEALTestHelper.m */; };
 		71684C301D08C60B00ECD72B /* lifecycle_sample_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 712FD5851CFE643D00984F98 /* lifecycle_sample_data.json */; };
 		7168E04D1D5392B800BC3252 /* Tealium+WatchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 71734B131CFF4E00008F1294 /* Tealium+WatchKit.m */; };
@@ -476,8 +476,8 @@
 		71734C631CFF5202008F1294 /* Tealium.m in Sources */ = {isa = PBXBuildFile; fileRef = 71734B101CFF4E00008F1294 /* Tealium.m */; };
 		71734C6B1CFF81FD008F1294 /* tealiummobile_demo_dev.webarchive in Resources */ = {isa = PBXBuildFile; fileRef = 71734C6A1CFF81FD008F1294 /* tealiummobile_demo_dev.webarchive */; };
 		71734C6C1CFF822E008F1294 /* tealiummobile_demo_dev.webarchive in Sources */ = {isa = PBXBuildFile; fileRef = 71734C6A1CFF81FD008F1294 /* tealiummobile_demo_dev.webarchive */; };
-		717679701D3D700C002ABE94 /* TealiumIOS_Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7176796F1D3D700C002ABE94 /* TealiumIOS_Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		717679771D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7176796D1D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework */; };
+		717679701D3D700C002ABE94 /* TealiumIOSLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7176796F1D3D700C002ABE94 /* TealiumIOSLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		717679771D3D700C002ABE94 /* TealiumIOSLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7176796D1D3D700C002ABE94 /* TealiumIOSLifecycle.framework */; };
 		7176797C1D3D700C002ABE94 /* TealiumIOS_LifecycleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7176797B1D3D700C002ABE94 /* TealiumIOS_LifecycleTests.m */; };
 		7176798A1D3D7038002ABE94 /* TealiumIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711CED661C69200D001E2161 /* TealiumIOS.framework */; };
 		7180F3E31D1DA47B00E0C6F0 /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7180F3E01D1DA47B00E0C6F0 /* TEALReachability.m */; };
@@ -488,7 +488,7 @@
 		7180F3E81D1DA68600E0C6F0 /* TEALReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 7180F3E01D1DA47B00E0C6F0 /* TEALReachability.m */; };
 		7180F3EE1D1DA7E500E0C6F0 /* TEALDispatchService.h in Headers */ = {isa = PBXBuildFile; fileRef = 71734ACB1CFF4E00008F1294 /* TEALDispatchService.h */; };
 		718341961D414A6800EE1ABF /* TealiumTVOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 716F2F961C6BE04800A7F947 /* TealiumTVOS.framework */; };
-		718342801D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 718342761D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework */; };
+		718342801D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 718342761D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework */; };
 		7183428D1D41799400EE1ABF /* TealiumTVOS_DevicesOnly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7199ADC91D21A379004C8213 /* TealiumTVOS_DevicesOnly.framework */; };
 		718342951D417A4300EE1ABF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 718342931D417A4300EE1ABF /* Info.plist */; };
 		718342961D417A4300EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.h in Headers */ = {isa = PBXBuildFile; fileRef = 718342941D417A4300EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -874,7 +874,7 @@
 		71F7A0B21D4951FE00813100 /* TEALWKExtensionConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F54511D49330200A27134 /* TEALWKExtensionConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F7A0B31D49521D00813100 /* TEALDataQueue+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F544B1D49330200A27134 /* TEALDataQueue+PrivateHeader.h */; };
 		71F7A0B41D49522100813100 /* TEALWKExtension+PrivateHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F544E1D49330200A27134 /* TEALWKExtension+PrivateHeader.h */; };
-		71F7A0B61D4957C800813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; };
+		71F7A0B61D4957C800813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F7A0B71D4957CA00813100 /* TEALLifecycleDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D7A0E1D42FA210078D12E /* TEALLifecycleDataSources.h */; };
 		71F7A0B81D4957CC00813100 /* TEALSettings+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C41D42EBC20078D12E /* TEALSettings+Lifecycle.h */; };
 		71F7A0B91D4957CF00813100 /* Tealium+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F54411D49317900A27134 /* Tealium+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -882,11 +882,11 @@
 		71F7A0BB1D4957ED00813100 /* TEALLifecycleDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D7A0E1D42FA210078D12E /* TEALLifecycleDataSources.h */; };
 		71F7A0BC1D4957EF00813100 /* TEALSettings+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C41D42EBC20078D12E /* TEALSettings+Lifecycle.h */; };
 		71F7A0BD1D4957F100813100 /* Tealium+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 711F54411D49317900A27134 /* Tealium+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71F7A0BE1D4957FF00813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; };
+		71F7A0BE1D4957FF00813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F7A0BF1D49580200813100 /* TEALLifecycleDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D7A0E1D42FA210078D12E /* TEALLifecycleDataSources.h */; };
 		71F7A0C01D49580500813100 /* TEALSettings+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C41D42EBC20078D12E /* TEALSettings+Lifecycle.h */; };
-		71F7A0C11D49581B00813100 /* TealiumIOS_Lifecycle_DevicesOnly.h in Headers */ = {isa = PBXBuildFile; fileRef = 714B82D31D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		71F7A0C21D49582000813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; };
+		71F7A0C11D49581B00813100 /* TealiumIOSLifecycle_DevicesOnly.h in Headers */ = {isa = PBXBuildFile; fileRef = 714B82D31D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		71F7A0C21D49582000813100 /* TEALConfiguration+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C21D42EBC20078D12E /* TEALConfiguration+Lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71F7A0C31D49582400813100 /* TEALLifecycleDataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D7A0E1D42FA210078D12E /* TEALLifecycleDataSources.h */; };
 		71F7A0C41D49582500813100 /* TEALSettings+Lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 229D79C41D42EBC20078D12E /* TEALSettings+Lifecycle.h */; };
 		71FC3CE11D3BDEBA00C502F4 /* dispatch_permitted_scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 71FC3CE01D3BDEBA00C502F4 /* dispatch_permitted_scenarios.json */; };
@@ -1025,17 +1025,17 @@
 		7146D2531D36C0280032FB4C /* Tealium_TagManagmentPrivateAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tealium_TagManagmentPrivateAPITests.m; sourceTree = "<group>"; };
 		7146D2541D36C0280032FB4C /* TEALRemoteCommandManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEALRemoteCommandManagerTests.m; sourceTree = "<group>"; };
 		7146D2551D36C0280032FB4C /* TEALTagDispatchServiceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEALTagDispatchServiceTests.m; sourceTree = "<group>"; };
-		714B826A1D41198F0019ABD1 /* TealiumTVOS_Lifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumTVOS_Lifecycle.h; sourceTree = "<group>"; };
+		714B826A1D41198F0019ABD1 /* TealiumTVOSLifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumTVOSLifecycle.h; sourceTree = "<group>"; };
 		714B826C1D41198F0019ABD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		714B82761D41198F0019ABD1 /* TealiumTVOS_LifecycleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumTVOS_LifecycleTests.m; sourceTree = "<group>"; };
 		714B82781D41198F0019ABD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		714B82D11D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumIOS_Lifecycle_DevicesOnly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		714B82D31D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumIOS_Lifecycle_DevicesOnly.h; sourceTree = "<group>"; };
+		714B82D11D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumIOSLifecycle_DevicesOnly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		714B82D31D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumIOSLifecycle_DevicesOnly.h; sourceTree = "<group>"; };
 		714B82D51D4122470019ABD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		714B82DA1D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumIOS_Lifecycle_DevicesOnlyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		714B82DF1D4122480019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumIOS_Lifecycle_DevicesOnlyTests.m; sourceTree = "<group>"; };
 		714B82E11D4122480019ABD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		714B82EF1D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOS_Lifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		714B82EF1D41232A0019ABD1 /* TealiumTVOSLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOSLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		714B82F81D41232A0019ABD1 /* TealiumTVOS_LifecycleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumTVOS_LifecycleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		716D5DDC1D09E8ED00E765F6 /* tealium_track_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tealium_track_data.json; sourceTree = "<group>"; };
 		716F2F961C6BE04800A7F947 /* TealiumTVOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1173,15 +1173,15 @@
 		71734C401CFF51B3008F1294 /* TealiumLifecycleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumLifecycleTests.m; sourceTree = "<group>"; };
 		71734C421CFF51B3008F1294 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71734C6A1CFF81FD008F1294 /* tealiummobile_demo_dev.webarchive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = tealiummobile_demo_dev.webarchive; sourceTree = "<group>"; };
-		7176796D1D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumIOS_Lifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7176796F1D3D700C002ABE94 /* TealiumIOS_Lifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumIOS_Lifecycle.h; sourceTree = "<group>"; };
+		7176796D1D3D700C002ABE94 /* TealiumIOSLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumIOSLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7176796F1D3D700C002ABE94 /* TealiumIOSLifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TealiumIOSLifecycle.h; sourceTree = "<group>"; };
 		717679711D3D700C002ABE94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		717679761D3D700C002ABE94 /* TealiumIOS_LifecycleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumIOS_LifecycleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7176797B1D3D700C002ABE94 /* TealiumIOS_LifecycleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TealiumIOS_LifecycleTests.m; sourceTree = "<group>"; };
 		7176797D1D3D700C002ABE94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7180F3E01D1DA47B00E0C6F0 /* TEALReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEALReachability.m; sourceTree = "<group>"; };
 		7180F3EA1D1DA7B800E0C6F0 /* TEALReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEALReachability.h; sourceTree = "<group>"; };
-		718342761D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOS_Lifecycle_DevicesOnly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		718342761D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TealiumTVOSLifecycle_DevicesOnly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7183427F1D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnlyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TealiumTVOS_Lifecycle_DevicesOnlyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718342931D417A4300EE1ABF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		718342941D417A4300EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TealiumTVOS_Lifecycle_DevicesOnly.h; sourceTree = "<group>"; };
@@ -1244,7 +1244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				714B82DB1D4122480019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework in Frameworks */,
+				714B82DB1D4122480019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1260,7 +1260,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				714B82F91D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework in Frameworks */,
+				714B82F91D41232A0019ABD1 /* TealiumTVOSLifecycle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1290,7 +1290,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				717679771D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework in Frameworks */,
+				717679771D3D700C002ABE94 /* TealiumIOSLifecycle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1306,7 +1306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				718342801D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework in Frameworks */,
+				718342801D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1381,13 +1381,13 @@
 				71734C3E1CFF51B3008F1294 /* TealiumLifecycleTests.xctest */,
 				7199AD8E1D218A68004C8213 /* TealiumIOS_DevicesOnly.framework */,
 				7199ADC91D21A379004C8213 /* TealiumTVOS_DevicesOnly.framework */,
-				7176796D1D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework */,
+				7176796D1D3D700C002ABE94 /* TealiumIOSLifecycle.framework */,
 				717679761D3D700C002ABE94 /* TealiumIOS_LifecycleTests.xctest */,
-				714B82D11D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework */,
+				714B82D11D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework */,
 				714B82DA1D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.xctest */,
-				714B82EF1D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework */,
+				714B82EF1D41232A0019ABD1 /* TealiumTVOSLifecycle.framework */,
 				714B82F81D41232A0019ABD1 /* TealiumTVOS_LifecycleTests.xctest */,
-				718342761D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework */,
+				718342761D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework */,
 				7183427F1D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnlyTests.xctest */,
 				711F54391D49314500A27134 /* TealiumWATCHOSExtension.framework */,
 				71F7A0A51D4951DC00813100 /* TealiumWATCHOSExtension_DevicesOnly.framework */,
@@ -1657,7 +1657,7 @@
 		714B82691D41198F0019ABD1 /* TealiumTVOS_Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				714B826A1D41198F0019ABD1 /* TealiumTVOS_Lifecycle.h */,
+				714B826A1D41198F0019ABD1 /* TealiumTVOSLifecycle.h */,
 				714B826C1D41198F0019ABD1 /* Info.plist */,
 			);
 			path = TealiumTVOS_Lifecycle;
@@ -1675,7 +1675,7 @@
 		714B82D21D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly */ = {
 			isa = PBXGroup;
 			children = (
-				714B82D31D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.h */,
+				714B82D31D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.h */,
 				714B82D51D4122470019ABD1 /* Info.plist */,
 			);
 			path = TealiumIOS_Lifecycle_DevicesOnly;
@@ -1987,7 +1987,7 @@
 		7176796E1D3D700C002ABE94 /* TealiumIOS_Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				7176796F1D3D700C002ABE94 /* TealiumIOS_Lifecycle.h */,
+				7176796F1D3D700C002ABE94 /* TealiumIOSLifecycle.h */,
 				717679711D3D700C002ABE94 /* Info.plist */,
 			);
 			path = TealiumIOS_Lifecycle;
@@ -2135,7 +2135,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71F7A0C11D49581B00813100 /* TealiumIOS_Lifecycle_DevicesOnly.h in Headers */,
+				71F7A0C11D49581B00813100 /* TealiumIOSLifecycle_DevicesOnly.h in Headers */,
 				711F54441D49317900A27134 /* Tealium+Lifecycle.h in Headers */,
 				71F7A0C21D49582000813100 /* TEALConfiguration+Lifecycle.h in Headers */,
 				71F7A0C31D49582400813100 /* TEALLifecycleDataSources.h in Headers */,
@@ -2147,7 +2147,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				711C9B871D528E3900F76F24 /* TealiumTVOS_Lifecycle.h in Headers */,
+				711C9B871D528E3900F76F24 /* TealiumTVOSLifecycle.h in Headers */,
 				71F7A0B91D4957CF00813100 /* Tealium+Lifecycle.h in Headers */,
 				71F7A0B61D4957C800813100 /* TEALConfiguration+Lifecycle.h in Headers */,
 				71F7A0B71D4957CA00813100 /* TEALLifecycleDataSources.h in Headers */,
@@ -2227,7 +2227,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				717679701D3D700C002ABE94 /* TealiumIOS_Lifecycle.h in Headers */,
+				717679701D3D700C002ABE94 /* TealiumIOSLifecycle.h in Headers */,
 				711F54431D49317900A27134 /* Tealium+Lifecycle.h in Headers */,
 				71F7A0BE1D4957FF00813100 /* TEALConfiguration+Lifecycle.h in Headers */,
 				71F7A0BF1D49580200813100 /* TEALLifecycleDataSources.h in Headers */,
@@ -2506,9 +2506,9 @@
 			productReference = 712FD69D1CFE6C1B00984F98 /* TealiumTagManagementTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		714B82D01D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly */ = {
+		714B82D01D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 714B82E21D4122480019ABD1 /* Build configuration list for PBXNativeTarget "TealiumIOS_Lifecycle_DevicesOnly" */;
+			buildConfigurationList = 714B82E21D4122480019ABD1 /* Build configuration list for PBXNativeTarget "TealiumIOSLifecycle_DevicesOnly" */;
 			buildPhases = (
 				714B82CC1D4122470019ABD1 /* Sources */,
 				714B82CD1D4122470019ABD1 /* Frameworks */,
@@ -2520,9 +2520,9 @@
 			);
 			dependencies = (
 			);
-			name = TealiumIOS_Lifecycle_DevicesOnly;
+			name = TealiumIOSLifecycle_DevicesOnly;
 			productName = TealiumIOS_Lifecycle_DevicesOnly;
-			productReference = 714B82D11D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly.framework */;
+			productReference = 714B82D11D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		714B82D91D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests */ = {
@@ -2543,9 +2543,9 @@
 			productReference = 714B82DA1D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		714B82EE1D41232A0019ABD1 /* TealiumTVOS_Lifecycle */ = {
+		714B82EE1D41232A0019ABD1 /* TealiumTVOSLifecycle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 714B83001D41232A0019ABD1 /* Build configuration list for PBXNativeTarget "TealiumTVOS_Lifecycle" */;
+			buildConfigurationList = 714B83001D41232A0019ABD1 /* Build configuration list for PBXNativeTarget "TealiumTVOSLifecycle" */;
 			buildPhases = (
 				714B82EA1D41232A0019ABD1 /* Sources */,
 				714B82EB1D41232A0019ABD1 /* Frameworks */,
@@ -2557,9 +2557,9 @@
 			);
 			dependencies = (
 			);
-			name = TealiumTVOS_Lifecycle;
+			name = TealiumTVOSLifecycle;
 			productName = TealiumTVOS_Lifecycle;
-			productReference = 714B82EF1D41232A0019ABD1 /* TealiumTVOS_Lifecycle.framework */;
+			productReference = 714B82EF1D41232A0019ABD1 /* TealiumTVOSLifecycle.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		714B82F71D41232A0019ABD1 /* TealiumTVOS_LifecycleTests */ = {
@@ -2616,9 +2616,9 @@
 			productReference = 71734C3E1CFF51B3008F1294 /* TealiumLifecycleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7176796C1D3D700C002ABE94 /* TealiumIOS_Lifecycle */ = {
+		7176796C1D3D700C002ABE94 /* TealiumIOSLifecycle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 717679821D3D700C002ABE94 /* Build configuration list for PBXNativeTarget "TealiumIOS_Lifecycle" */;
+			buildConfigurationList = 717679821D3D700C002ABE94 /* Build configuration list for PBXNativeTarget "TealiumIOSLifecycle" */;
 			buildPhases = (
 				717679681D3D700C002ABE94 /* Sources */,
 				717679691D3D700C002ABE94 /* Frameworks */,
@@ -2630,9 +2630,9 @@
 			);
 			dependencies = (
 			);
-			name = TealiumIOS_Lifecycle;
+			name = TealiumIOSLifecycle;
 			productName = TealiumIOS_Lifecycle;
-			productReference = 7176796D1D3D700C002ABE94 /* TealiumIOS_Lifecycle.framework */;
+			productReference = 7176796D1D3D700C002ABE94 /* TealiumIOSLifecycle.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		717679751D3D700C002ABE94 /* TealiumIOS_LifecycleTests */ = {
@@ -2653,9 +2653,9 @@
 			productReference = 717679761D3D700C002ABE94 /* TealiumIOS_LifecycleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		718342751D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly */ = {
+		718342751D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 718342871D41797900EE1ABF /* Build configuration list for PBXNativeTarget "TealiumTVOS_Lifecycle_DevicesOnly" */;
+			buildConfigurationList = 718342871D41797900EE1ABF /* Build configuration list for PBXNativeTarget "TealiumTVOSLifecycle_DevicesOnly" */;
 			buildPhases = (
 				718342711D41797900EE1ABF /* Sources */,
 				718342721D41797900EE1ABF /* Frameworks */,
@@ -2667,9 +2667,9 @@
 			);
 			dependencies = (
 			);
-			name = TealiumTVOS_Lifecycle_DevicesOnly;
+			name = TealiumTVOSLifecycle_DevicesOnly;
 			productName = TealiumTVOS_Lifecycle_DevicesOnly;
-			productReference = 718342761D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly.framework */;
+			productReference = 718342761D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7183427E1D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnlyTests */ = {
@@ -2853,15 +2853,15 @@
 				711CED651C69200D001E2161 /* TealiumIOS */,
 				715536CC1C6BBD4B00154DD5 /* TealiumIOSDocumentation */,
 				7199AD4C1D218A68004C8213 /* TealiumIOS_DevicesOnly */,
-				7176796C1D3D700C002ABE94 /* TealiumIOS_Lifecycle */,
-				714B82D01D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly */,
+				7176796C1D3D700C002ABE94 /* TealiumIOSLifecycle */,
+				714B82D01D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly */,
 				717679751D3D700C002ABE94 /* TealiumIOS_LifecycleTests */,
 				714B82D91D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnlyTests */,
 				716F2F951C6BE04800A7F947 /* TealiumTVOS */,
 				7199AD921D21A379004C8213 /* TealiumTVOS_DevicesOnly */,
 				715536D11C6BC3CA00154DD5 /* TealiumTVOSDocumentation */,
-				714B82EE1D41232A0019ABD1 /* TealiumTVOS_Lifecycle */,
-				718342751D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly */,
+				714B82EE1D41232A0019ABD1 /* TealiumTVOSLifecycle */,
+				718342751D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly */,
 				714B82F71D41232A0019ABD1 /* TealiumTVOS_LifecycleTests */,
 				7183427E1D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnlyTests */,
 				711F54381D49314500A27134 /* TealiumWATCHOSExtension */,
@@ -3156,7 +3156,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\n# GET PLATFORM NAME\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# CORRECT TARGET PLATFORM?\nif [[ \"$SDK_PLATFORM\" = \"appletvos\" ]]\nthen\necho \"Build script must be ran with a simulator target selected. Detected: $SDK_PLATFORM\"\nexit 1\nelse\nSDK_OTHER_PLATFORM=\"appletvos\"\nfi\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\necho \"SRCROOT: ${SRCROOT}\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\n# Project directory arg needed or it will attempt to build other schemes\ncarthage build --no-skip-current --platform ${PLATFORM} --verbose --project-directory ${SRCROOT}\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\n\n# TARGET REPO & ARCHIVE\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_DSYM_PATH=\"${OUTPUT_FRAMEWORK_PATH}.dSYM\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\ncp -R -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\ncp -R -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\n# GET PLATFORM NAME\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# CORRECT TARGET PLATFORM?\nif [[ \"$SDK_PLATFORM\" = \"appletvos\" ]]\nthen\necho \"Build script must be ran with a simulator target selected. Detected: $SDK_PLATFORM\"\nexit 1\nelse\nSDK_OTHER_PLATFORM=\"appletvos\"\nfi\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\necho \"SRCROOT: ${SRCROOT}\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\n# Project directory arg needed or it will attempt to build other schemes\ncarthage build --no-skip-current --platform ${PLATFORM} --verbose\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\n# COPY OUTPUTS\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\nSOURCE_DSYM_PATH=\"${SOURCE_FRAMEWORK_PATH}.dSYM\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\n\n# TARGET REPO & ARCHIVE\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-${PLATFORM}/Support/Lifecycle/\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_DSYM_PATH=\"${OUTPUT_FRAMEWORK_PATH}.dSYM\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\ncp -R -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\ncp -R -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		715536D01C6BBD5100154DD5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3195,7 +3195,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\n# GET PLATFORM NAME\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\necho \"SDK_PLATFORM: ${SDK_PLATFORM}\"\n\n\nif [[ \"$SDK_PLATFORM\" = \"appletvos\" ]]\nthen\necho \"Build script must be ran with a simulator target selected. Detected: $SDK_PLATFORM\"\nexit 1\nelse\nSDK_OTHER_PLATFORM=\"appletvos\"\nfi\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\necho \"SRCROOT: ${SRCROOT}\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM} --project-directory ${SRCROOT}\n\necho \"Carthage build complete.\"\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\necho \"Copying files from build directories to destination directories...\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nSOURCE_DSYM_PATH=\"${CARTHAGE_BUILD_FOLDER}/${PRODUCT_NAME}.framework.dSYM\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-tvos\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_DSYM_PATH=\"${OUTPUT_FRAMEWORK_PATH}.dSYM\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"TARGET_NAME: ${TARGET_NAME}\"\necho \"PRODUCT_NAME: ${PRODUCT_NAME}\"\necho \"CARTHAGE_BUILD_FOLDER: ${CARTHAGE_BUILD_FOLDER}\"\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\ncp -R -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\ncp -R -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\necho \"Copying complete.\"\n\necho \"Carthage Ready Script Complete.\"\n\n";
+			shellScript = "# Temp XCode 7.3 workaround for failed Bitcode inclusion\nunset TOOLCHAINS\n\n# Bash script for kicking of a Carthage library build\n\nset -e\nset +u\n\n# RECURSION AVOIDANCE\nif [[ $MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport MASTER_SCRIPT_RUNNING=1\n\n# GET PLATFORM NAME\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\necho \"SDK_PLATFORM: ${SDK_PLATFORM}\"\n\n\nif [[ \"$SDK_PLATFORM\" = \"appletvos\" ]]\nthen\necho \"Build script must be ran with a simulator target selected. Detected: $SDK_PLATFORM\"\nexit 1\nelse\nSDK_OTHER_PLATFORM=\"appletvos\"\nfi\n\necho \"Starting Carthage Ready Script...\"\n\nPLATFORM=\"tvOS\"\n\necho \"SRCROOT: ${SRCROOT}\"\n\n# BUILD FRAMEWORK w/ SIMULATOR SUPPORT via CARTHAGE\ncarthage build --no-skip-current --platform ${PLATFORM}\n\necho \"Carthage build complete.\"\n\n# CREATE ZIP FILE FOR CARTHAGE while we're at it\n#carthage archive \"${TARGET_NAME}\"\n\necho \"Copying files from build directories to destination directories...\"\n\n# COPY OUTPUTS TO LOCAL RELEASE REPO\nCARTHAGE_BUILD_FOLDER=\"${PROJECT_DIR}/Carthage/Build/${PLATFORM}\"\nSOURCE_FRAMEWORK_PATH=\"${CARTHAGE_BUILD_FOLDER}/${TARGET_NAME}.framework\"\n#SOURCE_ARCHIVE_PATH=\"${PROJECT_DIR}/${TARGET_NAME}.framework.zip\"\nSOURCE_DSYM_PATH=\"${CARTHAGE_BUILD_FOLDER}/${PRODUCT_NAME}.framework.dSYM\"\nOUTPUT_FOLDER=\"${PROJECT_DIR}/../../tealium-tvos\"\nOUTPUT_FRAMEWORK_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework\"\nOUTPUT_DSYM_PATH=\"${OUTPUT_FRAMEWORK_PATH}.dSYM\"\n#OUTPUT_ARCHIVE_PATH=\"${OUTPUT_FOLDER}/${TARGET_NAME}.framework.zip\"\n\necho \"TARGET_NAME: ${TARGET_NAME}\"\necho \"PRODUCT_NAME: ${PRODUCT_NAME}\"\necho \"CARTHAGE_BUILD_FOLDER: ${CARTHAGE_BUILD_FOLDER}\"\necho \"OUTPUT_FOLDER: ${OUTPUT_FOLDER}\"\n\nrm -rf \"${OUTPUT_FRAMEWORK_PATH}\"\nrm -rf \"${OUTPUT_DSYM_PATH}\"\n\ncp -R -f \"${SOURCE_FRAMEWORK_PATH}\" \"${OUTPUT_FRAMEWORK_PATH}\"\ncp -R -f \"${SOURCE_DSYM_PATH}\" \"${OUTPUT_DSYM_PATH}\"\n#mv -f \"${SOURCE_ARCHIVE_PATH}\" \"${OUTPUT_ARCHIVE_PATH}\"\necho \"Copying complete.\"\n\necho \"Carthage Ready Script Complete.\"\n\n";
 		};
 		7176798B1D3D704D002ABE94 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3842,22 +3842,22 @@
 /* Begin PBXTargetDependency section */
 		714B82DD1D4122480019ABD1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 714B82D01D4122470019ABD1 /* TealiumIOS_Lifecycle_DevicesOnly */;
+			target = 714B82D01D4122470019ABD1 /* TealiumIOSLifecycle_DevicesOnly */;
 			targetProxy = 714B82DC1D4122480019ABD1 /* PBXContainerItemProxy */;
 		};
 		714B82FB1D41232A0019ABD1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 714B82EE1D41232A0019ABD1 /* TealiumTVOS_Lifecycle */;
+			target = 714B82EE1D41232A0019ABD1 /* TealiumTVOSLifecycle */;
 			targetProxy = 714B82FA1D41232A0019ABD1 /* PBXContainerItemProxy */;
 		};
 		717679791D3D700C002ABE94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7176796C1D3D700C002ABE94 /* TealiumIOS_Lifecycle */;
+			target = 7176796C1D3D700C002ABE94 /* TealiumIOSLifecycle */;
 			targetProxy = 717679781D3D700C002ABE94 /* PBXContainerItemProxy */;
 		};
 		718342821D41797900EE1ABF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 718342751D41797900EE1ABF /* TealiumTVOS_Lifecycle_DevicesOnly */;
+			target = 718342751D41797900EE1ABF /* TealiumTVOSLifecycle_DevicesOnly */;
 			targetProxy = 718342811D41797900EE1ABF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -4778,7 +4778,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		714B82E21D4122480019ABD1 /* Build configuration list for PBXNativeTarget "TealiumIOS_Lifecycle_DevicesOnly" */ = {
+		714B82E21D4122480019ABD1 /* Build configuration list for PBXNativeTarget "TealiumIOSLifecycle_DevicesOnly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				714B82E31D4122480019ABD1 /* Debug */,
@@ -4796,7 +4796,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		714B83001D41232A0019ABD1 /* Build configuration list for PBXNativeTarget "TealiumTVOS_Lifecycle" */ = {
+		714B83001D41232A0019ABD1 /* Build configuration list for PBXNativeTarget "TealiumTVOSLifecycle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				714B83011D41232A0019ABD1 /* Debug */,
@@ -4850,7 +4850,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		717679821D3D700C002ABE94 /* Build configuration list for PBXNativeTarget "TealiumIOS_Lifecycle" */ = {
+		717679821D3D700C002ABE94 /* Build configuration list for PBXNativeTarget "TealiumIOSLifecycle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7176797E1D3D700C002ABE94 /* Debug */,
@@ -4868,7 +4868,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		718342871D41797900EE1ABF /* Build configuration list for PBXNativeTarget "TealiumTVOS_Lifecycle_DevicesOnly" */ = {
+		718342871D41797900EE1ABF /* Build configuration list for PBXNativeTarget "TealiumTVOSLifecycle_DevicesOnly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				718342881D41797900EE1ABF /* Debug */,

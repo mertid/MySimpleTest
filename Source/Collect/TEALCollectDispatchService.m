@@ -11,10 +11,11 @@
 #import "TEALURLSessionManager.h"
 #import "TEALDispatch.h"
 #import "TEALBlocks.h"
+#import "TEALError.h"
 
 @interface TEALCollectDispatchService ()
 
-@property (nonatomic, weak) NSString *dispatchURLString;
+@property (nonatomic, strong) NSString *dispatchURLString;
 @property (nonatomic, weak) TEALURLSessionManager *sessionManager;
 @property (nonatomic) TEALDispatchNetworkServiceStatus privateStatus;
 
@@ -24,7 +25,8 @@
 
 #pragma mark - PUBLIC
 
-- (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString sessionManager:(TEALURLSessionManager *)sessionManager {
+- (instancetype) initWithDispatchURLString:(NSString *)dispatchURLString
+                            sessionManager:(TEALURLSessionManager *)sessionManager {
     self = [super init];
     if (self) {
         _dispatchURLString = dispatchURLString;
@@ -71,7 +73,12 @@
     
     
     if (![self isReady]) {
-        NSError *error = nil; // TODO: make error helper
+        NSError *error = [TEALError errorWithCode:400
+                                      description:@"Dispatch failure"
+                                           reason:@"Collect dispatch service not yet ready."
+                                       suggestion:@"Try sending again later."];
+        
+        
         if (completion) {
             completion( TEALDispatchStatusFailed, dispatch, error);
         }
@@ -80,12 +87,17 @@
     
     NSString *baseURLString = self.dispatchURLString;
     
-    NSError *error = nil;
-    
     NSString *urlString = [TEALNetworkHelpers appendUrlParamString:baseURLString withDictionary:dispatch.payload];
     
     if (!urlString && completion) {
+        
+        NSError *error = [TEALError errorWithCode:400
+                                      description:@"Dispatch failure"
+                                           reason:@"Unknown issue with collect dispatch URL."
+                                       suggestion:@"Trying using the default dispatch URL."];
+
         completion(TEALDispatchStatusFailed, dispatch, error);
+        
         return;
     }
     

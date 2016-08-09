@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "714B82EE1D41232A0019ABD1"
-               BuildableName = "TealiumTVOS_Lifecycle.framework"
-               BlueprintName = "TealiumTVOS_Lifecycle"
+               BlueprintIdentifier = "714B82D01D4122470019ABD1"
+               BuildableName = "TealiumIOSLifecycle_DevicesOnly.framework"
+               BlueprintName = "TealiumIOSLifecycle_DevicesOnly"
                ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "714B82F71D41232A0019ABD1"
-               BuildableName = "TealiumTVOS_LifecycleTests.xctest"
-               BlueprintName = "TealiumTVOS_LifecycleTests"
+               BlueprintIdentifier = "714B82D91D4122470019ABD1"
+               BuildableName = "TealiumIOS_Lifecycle_DevicesOnlyTests.xctest"
+               BlueprintName = "TealiumIOS_Lifecycle_DevicesOnlyTests"
                ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82EE1D41232A0019ABD1"
-            BuildableName = "TealiumTVOS_Lifecycle.framework"
-            BlueprintName = "TealiumTVOS_Lifecycle"
+            BlueprintIdentifier = "714B82D01D4122470019ABD1"
+            BuildableName = "TealiumIOSLifecycle_DevicesOnly.framework"
+            BlueprintName = "TealiumIOSLifecycle_DevicesOnly"
             ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82EE1D41232A0019ABD1"
-            BuildableName = "TealiumTVOS_Lifecycle.framework"
-            BlueprintName = "TealiumTVOS_Lifecycle"
+            BlueprintIdentifier = "714B82D01D4122470019ABD1"
+            BuildableName = "TealiumIOSLifecycle_DevicesOnly.framework"
+            BlueprintName = "TealiumIOSLifecycle_DevicesOnly"
             ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "714B82EE1D41232A0019ABD1"
-            BuildableName = "TealiumTVOS_Lifecycle.framework"
-            BlueprintName = "TealiumTVOS_Lifecycle"
+            BlueprintIdentifier = "714B82D01D4122470019ABD1"
+            BuildableName = "TealiumIOSLifecycle_DevicesOnly.framework"
+            BlueprintName = "TealiumIOSLifecycle_DevicesOnly"
             ReferencedContainer = "container:FrameworkBuilder.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

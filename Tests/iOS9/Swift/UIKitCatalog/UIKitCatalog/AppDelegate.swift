@@ -22,6 +22,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UISplitViewControllerDelegat
         splitViewController.delegate = self
         splitViewController.preferredDisplayMode = .AllVisible
 
+        TealiumHelper .startTracking()
+        
+        TealiumHelper.trackEvent("app_start", dataSources: ["autotracked":"false"])
+        
         return true
     }
     

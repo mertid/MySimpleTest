@@ -52,6 +52,10 @@
 
 - (NSMutableArray * _Nonnull) currentDispatchServices;
 - (void) addNewDispatchService:(id<TEALDispatchService> _Nonnull)service;
+
+- (void) addNewDispatchService:(id<TEALDispatchService> _Nonnull)service
+                    completion:(TEALBooleanCompletionBlock _Nullable)completion;
+
 - (void) removeDispatchService:(id<TEALDispatchService> _Nonnull)service;
 
 - (BOOL) dispatchManagerShouldDispatch:(NSError * __autoreleasing *)error;
