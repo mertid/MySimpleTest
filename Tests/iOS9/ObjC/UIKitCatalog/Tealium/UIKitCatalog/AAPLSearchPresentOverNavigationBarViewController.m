@@ -11,6 +11,7 @@
 
 @interface AAPLSearchPresentOverNavigationBarViewController ()
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *searchButton;
 @property (nonatomic, strong) UISearchController *searchController;
 
 @end
@@ -18,6 +19,12 @@
 @implementation AAPLSearchPresentOverNavigationBarViewController
 
 #pragma mark - View Life Cycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.searchButton.accessibilityLabel = @"Search Navigation Button";
+
+}
 
 - (IBAction)searchButtonClicked:(UIBarButtonItem *)sender {
     // Create the search results view controller and use it for the UISearchController.

@@ -26,6 +26,7 @@
 
     [self configureDefaultSwitch];
     [self configureTintedSwitch];
+
 }
 
 - (void) viewDidAppear:(BOOL)animated{
