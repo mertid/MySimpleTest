@@ -29,7 +29,8 @@
     [self configureDefaultSegmentedControl];
     [self configureTintedSegmentedControl];
     [self configureCustomSegmentsSegmentedControl];
-    [self configureCustomBackgroundSegmentedControl];
+    [self configureCustomBackgroundSegmentedControl];    
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated{

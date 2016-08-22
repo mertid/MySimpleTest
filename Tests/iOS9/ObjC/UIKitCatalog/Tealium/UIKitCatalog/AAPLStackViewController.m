@@ -28,6 +28,8 @@
     
     self.furtherDetailStackView.hidden = YES;
     self.plusButton.hidden = NO;
+    self.plusButton.accessibilityLabel = @"Plus Button";
+
 }
 
 - (void) viewDidAppear:(BOOL)animated{
