@@ -9,6 +9,8 @@
 
 @protocol TEALModulesDelegate <NSObject>
 
+// TODO: Can we extend this?
+
 @optional
 
 - (void) updateCollect;

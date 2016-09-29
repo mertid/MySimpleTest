@@ -700,6 +700,9 @@ __strong static NSDictionary *staticAllInstances = nil;
     
     self.modulesDelegate = self;
     
+    // TODO: ideally lets do this...
+//    [self.modulesDelegate updateALL];
+    
     // Lifecycle
     if ([self.modulesDelegate respondsToSelector:@selector(updateLifecycle)]){
         [self.modulesDelegate updateLifecycle];
